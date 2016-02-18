@@ -457,7 +457,7 @@ var Main;
 
             if (Main.selectedElement === id)
                 return;
-            if (event.ctrlKey)
+            if (e.ctrlKey)
             {
                 KeyControl.ctrlClickOnElement(id);
             }
