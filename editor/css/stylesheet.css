@@ -1,0 +1,1190 @@
+/*
+//This program has been developed by students from the bachelor Computer Science at Utrecht University 
+//within the Software and Game project courses 2013-2015
+//©Copyright Utrecht University (Department of Information and Computing Sciences) 
+*/
+
+html, body
+{
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: MyriadPro-Regular, "Myriad Pro", sans-serif;
+}
+
+button
+{
+  font-family: inherit;
+}
+
+.zoomTreeButton
+{
+  float: left;
+  width: 50px;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 2em;
+}
+
+  .zoomTreeButton:hover
+  {
+    background-color: yellow;
+    color: black;
+  }
+
+textarea
+{
+  font-family: inherit;
+  resize: none;
+}
+
+.statementText
+{
+  max-width: 93%;
+}
+
+/* Used to test length of string in node */
+.lengthTest
+{
+  position: absolute;
+  visibility: hidden;
+  width: auto;
+  height: auto;
+  white-space: nowrap;
+  font-size: 11px;
+  /* Thanks to Herb Caudill comment */
+}
+
+textarea.nodestatement
+{
+  margin: auto;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font: inherit;
+}
+
+textarea.text
+{
+  width: 420px;
+}
+
+#languages
+{
+  float: right;
+}
+
+#sidebar textarea
+{
+  width: 300px;
+  resize: vertical;
+}
+
+a[data-disabled]
+{
+  text-decoration: line-through;
+}
+
+.clickable:hover
+{
+  cursor: pointer;
+}
+
+/* Utility screen */
+.formTable select, .formTable input
+{
+  width: 100%;
+}
+.formTable
+{
+  width: 100%;
+}
+.formTable h3 {
+  display: table-caption;
+}
+  .formTable .sub-formTable
+  {
+    width: 100%;
+    display: table;
+  }
+  .formTable label {
+    width: 200px;
+  }
+  .formTable .sub-formTable >div {
+    display: table-row;
+  }
+
+    .formTable >div> div > *
+    {
+      display: table-cell;
+    }
+    .formTable #scriptDescription {
+      display: block;
+    }
+    .formTable #scriptDescription-container {
+    }
+
+#gridIndicator
+{
+  position: absolute;
+  display: none;
+  width: 250px;
+  height: 50px;
+  -moz-border-radius: 0.5em;
+  -webkit-border-radius: 0.5em;
+  border-radius: 0.5em;
+  background-color: blue;
+  opacity: 0.2;
+  pointer-events: none;
+  /*start invisible, main.js will show on mouse enter of #main*/
+}
+
+#categorySelect
+{
+  min-width: 4em;
+}
+
+#wrap
+{
+  position: absolute;
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+
+  #wrap > div
+  {
+    display: table-row;
+  }
+
+    #wrap > div > div
+    {
+      display: table-cell;
+      vertical-align: top;
+    }
+
+#content
+{
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+
+  #content > div
+  {
+    display: table-row;
+  }
+
+    #content > div > div
+    {
+      display: table-cell;
+    }
+
+#mainCell
+{
+  overflow: hidden;
+  height: 100%;
+}
+
+#main
+{
+  position: relative;
+  overflow: auto;
+  height: 100%;
+}
+
+#toolbar
+{
+  background-color: #d6d6d6;
+}
+
+button img
+{
+  vertical-align: middle;
+}
+
+button.enabled
+{
+  background-color: Highlight !important;
+}
+
+#buttons button,
+#properties button,
+#general button,
+#sidebar button,
+#parameterScreen button,
+#feedbackScreen button
+{
+  border: 0;
+  background: none;
+}
+
+#properties button,
+#sidebar button
+{
+  padding-right: 1px;
+  padding-left: 1px;
+  color: white;
+  font-size: 16px;
+}
+
+#properties h1
+{
+  font-size: 40px;
+}
+
+.mediaLabel
+{
+  clear: left;
+  padding-right: 10px;
+  width: 50px;
+}
+
+.mediaSelect
+{
+  min-width: 150px;
+}
+
+.mediaLabel, .mediaSelect
+{
+  float: left;
+}
+
+#conversationButtonSpan
+{
+  display: block;
+  clear: both;
+  margin-bottom: 0;
+  width: 100%;
+  height: 60px;
+}
+
+#conversationDiv
+{
+  display: block;
+  overflow: auto;
+  height: 370px;
+}
+
+  #conversationDiv button,
+  .conversation > img
+  {
+    vertical-align: top;
+  }
+
+#buttons button
+{
+  margin: 1px;
+  padding: 0;
+  height: 69px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  /*padding-left: 1px;
+    padding-right: 1px;*/
+}
+
+#buttons .small-buttons
+{
+  float: left;
+  padding: 1px;
+}
+
+  #buttons .small-buttons *
+  {
+    margin: 0;
+    padding: 2px;
+  }
+
+  #buttons .small-buttons button
+  {
+    display: block;
+    width: 120px;
+    height: 23px;
+    text-align: left;
+  }
+
+  #buttons .small-buttons img
+  {
+    margin: 0 3px;
+    width: 10px;
+    height: 10px;
+  }
+
+#buttons .big-buttons
+{
+  float: left;
+  padding: 1px;
+}
+
+  #buttons .big-buttons *
+  {
+    margin: 0;
+  }
+
+  #buttons .big-buttons button
+  {
+    min-width: 50px;
+  }
+
+  #buttons .big-buttons div
+  {
+    margin: 0px 1px;
+  }
+
+  #buttons .big-buttons img
+  {
+    margin: auto;
+    margin-bottom: 5px;
+    width: 30px;
+    height: 30px;
+    display: block;
+  }
+
+#buttons button div
+{
+  margin: 3px;
+  font-weight: normal;
+  font-size: 12px;
+}
+
+#buttons button:hover, #buttons button.hovered
+{
+  background-color: #2ecc71;
+  color: #fff;
+  cursor: pointer;
+}
+
+#buttons :disabled, #buttons :disabled:hover
+{
+  outline: none;
+  border: none;
+  background-color: transparent;
+  color: #000;
+  opacity: 0.3;
+  cursor: default !important;
+}
+
+#buttons #manual
+{
+  float: right;
+  overflow: hidden;
+  margin: 5px;
+  width: 25px;
+  height: 25px;
+  -moz-border-radius: 100%;
+  -webkit-border-radius: 100%;
+  border-radius: 100%;
+}
+
+  #buttons #manual img, #buttons #manual div
+  {
+    margin: 0;
+    padding: 0;
+    width: 25px;
+    height: 25px;
+  }
+
+#buttons .separator
+{
+  margin: 5px 0;
+  padding: 0;
+  width: 125px;
+  height: 3px;
+  background-color: #ecf0f1;
+}
+
+#labelText.intents > div:nth-child(1)
+{
+  display: none;
+}
+
+#labelText.statements > div:nth-child(2)
+{
+  display: none;
+}
+
+#sidebar
+{
+  width: 375px;
+  height: 100%;
+  background-color: #bdc3c7;
+  color: #666;
+}
+
+  #sidebar > div
+  {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+    #sidebar > div > div
+    {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      overflow: auto;
+      padding: 5px;
+    }
+
+      #sidebar > div > div > div
+      {
+        display: inline-block;
+        min-width: 100%;
+      }
+
+.header h1
+{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  font-size: 55px;
+}
+
+.header img
+{
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.sub-header h2
+{
+  margin-top: 0px;
+  margin-bottom: 7px;
+  white-space: nowrap;
+  font-size: 20px;
+}
+
+.sub-header img
+{
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.w.treeContainer
+{
+  overflow: hidden;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0px;
+  width: 250px;
+  height: 50px;
+  border-color: #000000;
+}
+
+  .w.treeContainer.zoom
+  {
+    z-index: 100;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: black;
+    opacity: 1;
+    cursor: default;
+  }
+
+    .w.treeContainer.zoom:hover
+    {
+      background-color: white;
+      cursor: default;
+    }
+
+  .w.treeContainer .subjectNameSpan
+  {
+    margin-left: 5px;
+    font-weight: bold;
+    font-size: 17px;
+    line-height: 50px;
+  }
+
+.treeDiv
+{
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  position: relative;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+
+#properties.player > #allConversationsHTML,
+#properties.player > #headerComputer,
+#properties.player > #headerConversation,
+#properties.player > #treeSubject,
+#properties.player > #jumpNode,
+#properties.player > #initsNode,
+#properties.player > #optionalSubject
+{
+  display: none;
+}
+
+#properties.computer > #allConversationsHTML,
+#properties.computer > #allEffectHTML,
+#properties.computer > #allIntentionsHTML,
+#properties.computer > #headerPlayer,
+#properties.computer > #headerConversation,
+#properties.computer > #treeSubject,
+#properties.computer > #optionalSubject
+{
+  display: none;
+}
+
+#properties.conversation > #statementHTML,
+#properties.conversation > #allEffectHTML,
+#properties.conversation > #allIntentionsHTML,
+#properties.conversation > #headerPlayer,
+#properties.conversation > #headerComputer,
+#properties.conversation > #treeSubject,
+#properties.conversation > #jumpNode,
+#properties.conversation > #initsNode,
+#properties.conversation > #optionalSubject
+{
+  display: none;
+}
+
+#properties.tree > #statementHTML,
+#properties.tree > #allEffectHTML,
+#properties.tree > #allIntentionsHTML,
+#properties.tree > #allConversationsHTML,
+#properties.tree > #allPreconditionsHTML,
+#properties.tree > #feedbackHTML,
+#properties.tree > #commentHTML,
+#properties.tree > #headerPlayer,
+#properties.tree > #headerComputer,
+#properties.tree > #headerConversation,
+#properties.tree > #mediaSelector,
+#properties.tree > #endNode,
+#properties.tree > #initsNode,
+#properties.tree > #jumpNode,
+#properties.tree > #calculateScore
+{
+  display: none;
+}
+
+
+#statement, #comment, #feedback, #treeNameBox
+{
+  display: block;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.conversation.computerText > .computerText,
+.conversation.playerText > .playerText,
+.conversation.situationText > .situationText
+{
+  display: inline-block;
+}
+
+.hidden, .toBeRemoved
+{
+  display: none;
+}
+
+.sidebarSection
+{
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-top: 2px solid white;
+}
+
+  .sidebarSection.withMarginTop
+  {
+    margin-top: 5px;
+  }
+
+.groupPreconditionDiv
+{
+  margin: 0px;
+  margin-left: 12px;
+  padding: 0px;
+  padding-left: 10px;
+  border-left: 2px solid white;
+}
+
+.precondition > button
+{
+  display: block;
+}
+
+.precondition > .value + button
+{
+  display: inline-block;
+}
+
+.precondition > .emptyLabel,
+.precondition > .singleLabel,
+.precondition > .multipleLabel
+{
+  display: none;
+}
+
+.precondition.empty > .emptyLabel,
+.precondition.single > .singleLabel,
+.precondition.multiple > .multipleLabel
+{
+  display: block;
+}
+
+.groupPreconditionRadioDiv
+{
+  display: none;
+}
+
+.precondition.multiple > .groupPreconditionRadioDiv
+{
+  display: block;
+}
+
+#allPreconditionsHTML
+{
+  white-space: nowrap;
+}
+
+  #allPreconditionsHTML > #preconditionsDiv > .precondition > .deleteParent
+  {
+    display: none;
+  }
+
+#bestPathTable td
+{
+  cursor: pointer;
+}
+
+#bestPathTable th
+{
+  text-align: left;
+  font-weight: bold;
+  cursor: default;
+}
+
+#scriptNameTab
+{
+  display: inline-block;
+  margin: 0;
+  padding: 5px 0;
+  width: calc(100% - 35px);
+  background-color: #ecf0f1;
+  color: #888;
+  text-align: center;
+  font-size: 1.3em;
+  /*-moz-border-radius-topleft: 12px;
+  -moz-border-radius-topright: 12px;
+    display: inline-block;
+    margin-left: 16px;
+    padding: 4px 12px;
+    -webkit-border-top-left-radius: 12px;
+    border-top-left-radius: 12px;
+    -webkit-border-top-right-radius: 12px;
+    border-top-right-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 20px;*/
+  margin-left: 265px;
+  /*padding: 5px 40%;*/
+  width: calc(100% - 300px);
+}
+
+  #scriptNameTab span
+  {
+    margin: 3px 0;
+    padding: 0px 10px;
+    min-width: 50px;
+    height: 1em;
+    color: #000;
+  }
+
+    #scriptNameTab span:hover
+    {
+      background-color: #f8f8f8;
+      color: #101010;
+    }
+
+    #scriptNameTab span input[type=text]
+    {
+      height: 1em;
+      font: inherit;
+    }
+
+span.noSelect
+{
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* IE10+ */
+  /* mozilla browsers */
+  /* webkit (konqueror) browsers */
+  /* webkit (safari, chrome) browsers */
+}
+
+#tabDock #validationReport
+{
+  position: relative;
+  display: none;
+  overflow: auto;
+  padding: 20px 20px 0 20px;
+  max-height: 200px;
+}
+
+#validationReport h2
+{
+  margin-top: 0px;
+}
+
+#validationReport table
+{
+  margin-bottom: 20px;
+  width: 100%;
+  border: 1px solid black;
+  border-collapse: collapse;
+  background-color: white;
+  table-layout: fixed;
+}
+
+  #validationReport table td
+  {
+    padding: 5px;
+    border: 1px solid black;
+  }
+
+  #validationReport table tr td:nth-child(1)
+  {
+    width: 15%;
+  }
+
+  #validationReport table tr td:nth-child(2)
+  {
+    width: 85%;
+  }
+
+/*.buttonSeperator
+{
+  position: relative;
+    display: inline;
+  margin: 0px 8px;
+  width: 2px;
+    height: 64px;
+    background-color: black;
+}*/
+
+.buttonGroup
+{
+  display: inline-block;
+  overflow: hidden;
+  margin: 5px 1px;
+  padding: 0;
+  height: 78px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background-color: #ecf0f1;
+  vertical-align: top;
+  -ms-word-wrap: break-word;
+  word-wrap: break-word;
+  /*width: 400px;*/
+}
+
+  .buttonGroup::after
+  {
+    float: left;
+    width: 100%;
+    height: 7px;
+    background-color: #8C9194;
+    content: "";
+  }
+
+#buttons
+{
+  margin: 0;
+  padding: 0;
+  background-color: #bdc3c7;
+}
+
+  #buttons .dropdown
+  {
+    position: absolute;
+    top: 0;
+    z-index: 101;
+    margin: 3px;
+    width: auto;
+    height: auto;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    background-color: #bdc3c7;
+  }
+
+.dropdown::after
+{
+  height: 4px;
+}
+
+#buttons .dropdown button, #buttons .dropdown div
+{
+  width: 130px;
+  /*padding: 2px 5px;*/
+}
+
+#buttons .dropdown .dropdownItems
+{
+  display: none;
+  margin: 0;
+  padding: 0;
+  height: auto;
+}
+
+.buttonGroup:hover::after
+{
+  background-color: #27ae60;
+}
+
+#tabDock
+{
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #aaa;
+  background: -moz-linear-gradient(top, #fafafa 0, #ffffff 100%);
+  background: -ms-linear-gradient(top, #fafafa 0,#ffffff 100%);
+  background: -o-linear-gradient(top, #fafafa 0,#ffffff 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0,#fafafa), color-stop(100%,#ffffff));
+  background: -webkit-linear-gradient(top, #fafafa 0,#ffffff 100%);
+  background: linear-gradient(to bottom, #fafafa 0,#ffffff 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fafafa', endColorstr='#ffffff',GradientType=0 );
+}
+
+  #tabDock div
+  {
+    overflow: auto;
+    max-height: 250px;
+    background-color: inherit;
+  }
+
+  #tabDock #closeTabDock
+  {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    background-color: transparent;
+    cursor: pointer;
+  }
+
+.ui-tabs
+{
+  padding: 0px !important;
+  border: 0px;
+}
+
+  .ui-tabs .ui-tabs-nav
+  {
+    position: relative;
+    padding: 3px;
+    list-style: none;
+  }
+
+    .ui-tabs .ui-tabs-nav li
+    {
+      position: relative;
+      float: left;
+      margin: 0 3px 0 0;
+      padding: 0;
+      border-bottom-width: 1px;
+    }
+
+    .ui-tabs .ui-tabs-nav .ui-tabs-anchor
+    {
+      padding-right: 0;
+      padding-left: 0;
+      outline: none;
+      text-align: center;
+    }
+
+.ui-resizable-n
+{
+  height: 10px;
+}
+
+#content > #draftScreen
+{
+  position: absolute;
+  right: 366px;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  display: none;
+  overflow-y: scroll;
+  height: 300px;
+}
+
+div#tableSizeFixer
+{
+  overflow-y: auto;
+  max-height: 140px;
+}
+
+#draftTable
+{
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+}
+
+#draftTableHeaders th
+{
+  border: 1px solid #bbb;
+  background-color: white;
+}
+
+#draftTable td
+{
+  vertical-align: top;
+}
+
+#draftTable tr:nth-child(odd) td
+{
+  background-color: #ccc;
+}
+
+  #draftTable tr:nth-child(odd) td:hover
+  {
+    background-color: #ccf;
+  }
+
+#draftTable tr:nth-child(even) td
+{
+  background-color: #aaa;
+}
+
+  #draftTable tr:nth-child(even) td:hover
+  {
+    background-color: #aaf;
+  }
+
+#draftTable td.disabled
+{
+  position: relative;
+  color: #666;
+  font-style: italic;
+  cursor: default;
+  /* muhahahaha */
+}
+
+#addDraftItem
+{
+  width: 100%;
+  background-color: #888;
+  color: #eee;
+  text-align: center;
+}
+
+  #addDraftItem:hover
+  {
+    background-color: #666;
+    color: white;
+  }
+
+.disabled span.disabled-text
+{
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: inherit;
+  text-align: center;
+}
+
+#draftTable textarea, #draftTable input, #draftTable select
+{
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 21px;
+  border: none;
+}
+
+#draftTable textarea
+{
+  height: 18px;
+  resize: vertical;
+}
+
+td.dragHandle
+{
+  -webkit-touch-callout: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  text-align: center;
+  cursor: move;
+}
+
+#draftTable td.dragHandle.disabled
+{
+  font-style: normal !important;
+  cursor: default;
+  /*color: #d44;*/
+}
+
+#draftTableHeaders th#draftDragAll
+{
+  -webkit-touch-callout: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  background-color: #f7f7f7;
+  color: #111;
+  text-align: center;
+  cursor: move;
+}
+
+  #draftTableHeaders th#draftDragAll:hover
+  {
+    background-color: #e7e7ff;
+  }
+
+#itemControls
+{
+  display: block !important;
+  float: right;
+  margin: 0;
+  width: 100%;
+  font-size: 14px;
+}
+
+  #itemControls button
+  {
+    display: inline-block;
+    float: right;
+    width: 15%;
+    text-align: center;
+  }
+
+#dragBox
+{
+  position: absolute;
+  z-index: 999;
+  margin: 0;
+  padding: 3px;
+  border: 1px solid black;
+  background-color: #eee;
+  color: black;
+  font-size: 12px;
+  cursor: move;
+  pointer-events: none;
+}
+
+#dragBox.error
+{
+  background-color: #c66;
+}
+
+#scores > .scores > .name
+{
+  padding: 3px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+#scores > .scores > .score
+{
+  margin-left: 8px;
+  vertical-align: top;
+  font-size: 14px;
+}
+
+input[type=checkbox][disabled]
+{
+  color: #ccc;
+  opacity: .8;
+}
+
+  input[type=checkbox][disabled] + label
+  {
+    color: #ccc;
+    opacity: .8;
+  }
+
+#miniwrap
+{
+  display: none;
+}
+
+#minimap
+{
+  position: relative;
+  float: right;
+  overflow: scroll;
+  margin: 10px;
+  padding: 0;
+  background-color: white;
+  /*float:right;*/
+  /*margin-left:auto;
+  margin-right:auto;*/
+}
+
+  #minimap:hover
+  {
+    cursor: pointer;
+  }
+
+#minimapSelector
+{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 296px;
+  height: 296px;
+  border: 2px solid #27ae60;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+#scaledDiv
+{
+  /*-moz-pointer-events:none;
+  -o-pointer-events:none;
+  -webkit-pointer-events:none;*/
+  pointer-events: none;
+  /*zoom: 0.8;
+  -moz-transform: scale(0.8);
+  -moz-transform-origin: 0 0;
+  -o-transform: scale(0.8);
+  -o-transform-origin: 0 0;
+  -webkit-transform: scale(0.8);
+  -webkit-transform-origin: 0 0;*/
+}
+
+  #scaledDiv *
+  {
+    opacity: 0.8;
+  }
+
+/* Parameters */
+#paramTabs > div > div > select
+{
+  width: auto;
+}

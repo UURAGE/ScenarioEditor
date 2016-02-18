@@ -1,0 +1,23 @@
+/*
+//This program has been developed by students from the bachelor Computer Science at Utrecht University 
+//within the Software and Game project courses 2013-2015
+//©Copyright Utrecht University (Department of Information and Computing Sciences) 
+*/
+
+.xselectable-glass
+{
+	background-color: transparent;
+	z-index: 1000;
+	cursor: hand;
+	cursor: pointer;
+}
+
+.xselectable-box
+{
+	border: 1px dotted black;
+	background-color: rgba(255, 255, 255, 0.5);
+	cursor: hand;
+	cursor: pointer;
+}
+
+div.ui-state-disabled.ui-draggable-disabled { cursor: pointer; opacity: 1;}

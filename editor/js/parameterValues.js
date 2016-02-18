@@ -1,0 +1,54 @@
+/*
+//This program has been developed by students from the bachelor Computer Science at Utrecht University 
+//within the Software and Game project courses 2013-2015
+//©Copyright Utrecht University (Department of Information and Computing Sciences) 
+*/
+
+// In this file you can find most of the constants
+var ParameterValues;
+
+(function()
+{
+    // Values for the meta dialog
+    var heightMetaScreen = 600;
+    var widthMetaScreen = 600;
+
+    // Values for the media dialog
+    var heightMedia = 500;
+    var widthMedia =  500;
+
+    // Values for the return dialog
+    var heightReturn = 300;
+    var widthReturn = 570;
+
+    // Values for the parameter dialog
+    var heightParameterScreen = 600;
+    var widthParameterScreen = 800;
+
+    // Values for feedback form dialog
+    var heightFeedbackFormScreen = 600;
+    var widthFeedbackFormScreen = 800;
+
+    // Values for the message box
+    var messageColors =
+    {
+        error: '#F00',
+        warning: '#F80',
+        info: '#05F'
+    };
+    
+    ParameterValues =
+    {
+        heightMetaScreen : heightMetaScreen,
+        widthMetaScreen : widthMetaScreen,
+        heightMedia : heightMedia,
+        widthMedia : widthMedia,
+        heightReturn : heightReturn,
+        widthReturn : widthReturn,
+        heightParameterScreen : heightParameterScreen,
+        widthParameterScreen : widthParameterScreen,
+        heightFeedbackFormScreen : heightFeedbackFormScreen,
+        widthFeedbackFormScreen : widthFeedbackFormScreen,
+        messageColors : messageColors
+    };    
+})();
