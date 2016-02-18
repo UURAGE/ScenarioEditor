@@ -69,6 +69,8 @@ var Zoom;
 
             });
         }
+
+        Main.updateButtons();
     }
 
     function zoomOut(tree)
