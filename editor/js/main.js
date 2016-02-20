@@ -74,7 +74,7 @@ var Main;
             
             var nameInput = $('#scriptNameTab .scriptNameInput input');
 
-            if(cancel === false)
+            if(cancel === false || cancel === undefined)
             {
                 var inputName = nameInput.val().trim().replace(/[^a-z0-9_,\.\s\|\!\&\\\/\'\"\[\]\{\+\=\(\)\}]/gi, '');
                 if(inputName !== "" && inputName.length <= 35)
@@ -427,22 +427,38 @@ var Main;
         var changeNameInput = $('<input type="text" class="subjectNameInput" maxlength="20">');
         changeNameInput.val(defaultName);
         changeNameInput.hide();
-        changeNameInput.on('focusout', function()
+        changeNameInput.on('focusout', function(e, cancel)
         {
             KeyControl.hotKeysActive = true;
-            // save subject on defocus of textbox
+            console.log(cancel);
             var subDiv = $("#"+id);
             var onderName = subDiv.find('.subjectName').show();
             var input = subDiv.find('.subjectNameInput').hide();
 
-            Main.trees[id].subject = Main.escapeTags(input.val());
-            onderName.text(Main.unEscapeTags(Main.trees[id].subject));
+            if(cancel === true)
+            {
+                onderName.text(Main.trees[id].subject);
+                input.text(Main.trees[id].subject);
+                input.val(Main.trees[id].subject);
+            }
+
+            // save subject on defocus of textbox
+            if(cancel === false || cancel == undefined)//focusout may be thrown by any number of points not in our code
+            {
+                Main.trees[id].subject = Main.escapeTags(input.val());
+                onderName.text(Main.unEscapeTags(Main.trees[id].subject));
+            }
         });
         changeNameInput.on('keydown', function(e)
         {
             if(e.keyCode === 13) // enter
             {                    
-                changeNameInput.trigger('focusout');
+                changeNameInput.trigger('focusout', [false]);
+                $("#main").focus();
+            }
+            if(e.keyCode === 27) // escape
+            {                    
+                changeNameInput.trigger('focusout', [true]);
                 $("#main").focus();
             }
         });
