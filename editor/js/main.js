@@ -430,7 +430,7 @@ var Main;
         changeNameInput.on('focusout', function(e, cancel)
         {
             KeyControl.hotKeysActive = true;
-            console.log(cancel);
+            
             var subDiv = $("#"+id);
             var onderName = subDiv.find('.subjectName').show();
             var input = subDiv.find('.subjectNameInput').hide();
