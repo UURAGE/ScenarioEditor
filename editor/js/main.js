@@ -68,26 +68,34 @@ var Main;
         
         var scriptNameInput = $('<input type="text" maxlength="35">');
         var scriptNameInputSpan = $('<span>', { class: "scriptNameInput" }).append(scriptNameInput);
-        scriptNameInputSpan.on('focusout', function()
+        scriptNameInputSpan.on('focusout', function(e, cancel)
         {
             KeyControl.hotKeysActive = true;
             
             var nameInput = $('#scriptNameTab .scriptNameInput input');
-            var inputName = nameInput.val().trim().replace(/[^a-z0-9_,\.\s\|\!\&\\\/\'\"\[\]\{\+\=\(\)\}]/gi, '');
-            if(inputName !== "" && inputName.length <= 35)
+
+            if(cancel === false)
             {
-                Metadata.metaObject.name = escapeTags(inputName);
+                var inputName = nameInput.val().trim().replace(/[^a-z0-9_,\.\s\|\!\&\\\/\'\"\[\]\{\+\=\(\)\}]/gi, '');
+                if(inputName !== "" && inputName.length <= 35)
+                {
+                    Metadata.metaObject.name = escapeTags(inputName);
+                }
+                $('#scriptNameTab .scriptName').text(unEscapeTags(Metadata.metaObject.name));
             }
-            $('#scriptNameTab .scriptName').text(unEscapeTags(Metadata.metaObject.name));
-            
+
             $(this).hide();
             $('#scriptNameTab .scriptName').show();
         });            
         scriptNameInputSpan.on('keydown', function(e)
         {
-            if(e.keyCode === 13) // enter
+            if(e.keyCode === 13)// enter
             {
-                $(this).trigger('focusout');
+                $(this).trigger('focusout',[false]);
+            }
+            if(e.keyCode === 27)// escape
+            {
+                $(this).trigger('focusout',[true]);   
             }
         });        
         scriptNameInputSpan.hide();
