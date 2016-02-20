@@ -123,7 +123,7 @@ var Load;
                 {
                     var treeID = this.getAttribute('id');
                     Main.maxTreeNumber = Math.max(parseInt(treeID.substring(4)) + 1, Main.maxTreeNumber);
-                    var tree = Main.createEmptyTree(treeID, false);
+                    var tree = Main.createEmptyTree(treeID, false, 0, 0);
 
                     // get the subject from the XML
                     tree.subject = $(this).children('subject')[0].textContent; 
@@ -180,7 +180,7 @@ var Load;
 
     function generateGraphLegacy(xml)
     {
-        var tree = Main.createEmptyTree();
+        var tree = Main.createEmptyTree(null, false, 0, 0);
         var connections = {};
 
         $('script', xml).children().each(function()

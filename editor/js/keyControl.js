@@ -76,7 +76,7 @@ var KeyControl;
         R: function()
         {
             if(!Zoom.isZoomed()) 
-                Main.addNewTree(null, true);
+                Main.addNewTree(null, true, 0, 0);
         },
         M: function()
         {

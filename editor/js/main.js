@@ -150,7 +150,7 @@ var Main;
         $('#main').on('dblclick', function()
         {
             if(!Zoom.isZoomed()) 
-                addNewTree(null, true);//first argument of false generates a new id
+                addNewTree(null, true, 0, 0);//first argument of false generates a new id
         });
         $('#manual').on('click', function()
         {
@@ -172,7 +172,7 @@ var Main;
 
             DragBox.startDragging(e, text, function(pos)
             {
-                addNewTree(null, true);
+                addNewTree(null, true, 0, 0);
                 return true;
             });
             
@@ -391,7 +391,7 @@ var Main;
      ** Public Functions
      */
 
-    function createEmptyTree(id, indicatorSnap)
+    function createEmptyTree(id, indicatorSnap, offsetX, offsetY)
     {
         if (!id) //id is false (NaN)
         {
@@ -526,8 +526,8 @@ var Main;
         if (indicatorSnap)
         {
             var position = $("#gridIndicator").position();
-            var leftOffsetPos = position.left + $("#main").scrollLeft();
-            var topOffsetPos = position.top + $("#main").scrollTop();
+            var leftOffsetPos = position.left + Main.gridX*offsetX; //+ $("#main").scrollLeft()
+            var topOffsetPos = position.top  + Main.gridY*offsetY; //+ $("#main").scrollTop()
             dragDiv.css(
             {
                 "top": topOffsetPos,
@@ -562,7 +562,7 @@ var Main;
         return Main.trees[id];
     }
 
-    function addNewTree(id, indicatorSnap) 
+    function addNewTree(id, indicatorSnap, offsetX, offsetY) 
     {
         if(Zoom.isZoomed()) 
         {   //user is currently zoomed in    
@@ -571,7 +571,7 @@ var Main;
             MiniMap.update(true);
         }
         //creates empty tree and selects it
-        var tree = createEmptyTree(id, indicatorSnap);
+        var tree = createEmptyTree(id, indicatorSnap, offsetX, offsetY);
         selectTree(tree.id);  
 
         // Triggers the input for a subject name
@@ -590,7 +590,7 @@ var Main;
             if(maxY < t.topPos)
                 maxY = t.topPos;
         });
-        var newT = addNewTree(null, false);
+        var newT = addNewTree(null, false, 0, 0);
         newT.topPos = maxY+1;
         newT.level = Math.round(newT.topPos);
         newT.dragDiv.css({"top":newT.topPos*Main.gridY});
@@ -1333,8 +1333,8 @@ var Main;
             return;
 
         var position = $("#gridIndicator").position();
-        var leftOffsetPos = position.left + $("#main").scrollLeft();
-        var topOffsetPos = position.top + $("#main").scrollTop();
+        var leftOffsetPos = position.left; // + $("#main").scrollLeft();
+        var topOffsetPos = position.top; //+ $("#main").scrollTop();
         tree.dragDiv.css(
         {
             "top": topOffsetPos,

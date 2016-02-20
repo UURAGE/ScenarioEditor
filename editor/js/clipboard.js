@@ -124,7 +124,7 @@ var Clipboard;
         {
             if (copiedTrees && !Zoom.isZoomed())
             {
-                pasteTree(copiedElement);
+                pasteTree(copiedElement, 0, 0);
             }
             else if (Zoom.isZoomed() && !copiedTrees)
             {
@@ -136,9 +136,30 @@ var Clipboard;
         {
             if (copiedTrees && !Zoom.isZoomed())
             {
-                $.each(copiedElements, function(index, treeId)
+                // In grid positions
+                var minY = Number.MAX_VALUE;
+                var minX = Number.MAX_VALUE;
+                var offSetY = [];
+                var offSetX = [];
+
+                $.each(copiedElements, function(index, tree)
                 {
-                    pasteTree(treeId);
+                    if(tree.leftPos < minX)
+                        minX = tree.leftPos;
+                    if(tree.topPos < minY)
+                        minY = tree.topPos;
+                });
+
+                $.each(copiedElements, function(index, tree)
+                {
+                    offSetY[index] = tree.topPos-minY;
+                    offSetX[index] = tree.leftPos-minX;
+                });
+
+                // Paste trees relative to top left of smallest bounding box
+                $.each(copiedElements, function(index, tree)
+                {
+                    pasteTree(tree, offSetX[index], offSetY[index]);
                 });
             }
             else if (Zoom.isZoomed() && !copiedTrees)
@@ -220,13 +241,13 @@ var Clipboard;
         return node;
     }
 
-    function pasteTree(toCopy)
+    function pasteTree(toCopy, offSetX, offSetY)
     {
         var idMappings = {}; //record wich original node id was copied to which id
         //idmappings[originalID] = copyID
         //all other information like dom elements and position should not be copied
 
-        var newTree = Main.placeNewTree();
+        var newTree = Main.addNewTree(null, true, offSetX, offSetY);
 
         newTree.subject = LanguageManager.fLang("edt_clipboard_copy_of", [toCopy.subject]);
         newTree.optional = toCopy.optional;
