@@ -788,7 +788,7 @@ var Main;
             });
             input.append(txtArea);
             
-            input.on('focusout',function()
+            input.on('focusout',function(e, cancel)
             {
                 // Turn hotkeys on again (they are turned off while typing in the node)
                 KeyControl.hotKeysActive = true;
@@ -796,17 +796,26 @@ var Main;
 
                 var val = thisNode.find('textarea').val();
                 var text = val ? val : "";  
-                Main.nodes[id].text = Main.escapeTags(text);
+                
 
                 thisNode.find('.statementInput').hide();
                 thisNode.find('.statementText').text(text).show();
 
-                //Can only save changes for selected node
-                selectElement(id);
-                applyChanges();
-                //Deselect node when finished editor
-                //selectElement(null);
+                if(cancel === true)
+                {
+                    thisNode.find('textarea').text(Main.unEscapeTags(Main.nodes[id].text));
+                    thisNode.find('textarea').val(Main.unEscapeTags(Main.nodes[id].text));
+                }
 
+                if(cancel === false || cancel === undefined)
+                {
+                    Main.nodes[id].text = Main.escapeTags(text);
+                    //Can only save changes for selected node
+                    selectElement(id);
+                    applyChanges();
+                    //Deselect node when finished editor
+                    //selectElement(null);
+                }
                 //Enable dragging for this component
                 jsPlumb.setDraggable(thisNode, true);
             });
@@ -815,7 +824,11 @@ var Main;
             {
                 if(e.ctrlKey && e.keyCode === 13) // enter
                 {
-                    input.trigger('focusout');
+                    input.trigger('focusout', [false]);
+                }
+                if(e.keyCode === 27) // escape
+                {
+                    input.trigger('focusout', [true]);
                 }
             });
         }
