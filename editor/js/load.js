@@ -18,6 +18,13 @@ var Load;
     };
 
     var loadedMetaObject;
+    
+    $(document).ready(function()
+    {
+        // At the beginning no XML is loaded, so we need to define a metaObject
+        Metadata.getNewDefaultMetaObject();
+        loadedMetaObject = Metadata.metaObject;
+    });
 
     /*
      ** Public Functions
