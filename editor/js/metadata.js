@@ -81,7 +81,8 @@ var Metadata;
             character: "", //character is defined in properties by free form input text 
             description: "",
             parameterObject: pObj,
-            scriptVersion: 2 //version 2: with treeweaving. no version: legacy without tree weaving
+            scriptVersion: 3, 
+            defaultChangeType: LanguageManager.sLang("edt_parts_delta"),
         };
     }
 
@@ -126,6 +127,8 @@ var Metadata;
         $("#scriptDescription").val(Main.unEscapeTags(Metadata.metaObject.description));
         
         $("#character").val(Main.unEscapeTags(Metadata.metaObject.character));
+        
+        $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
     }
 
     function parameterDialog()
@@ -202,7 +205,9 @@ var Metadata;
         }
         if ($("#params").children().length > 0)
             $("#paramsTableHead").removeClass("hidden");
+        
         $("#scriptDescription").val(Main.unEscapeTags(Metadata.metaObject.description));
+        $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
     }
 
     function atLeastOneParameter(type)
@@ -322,13 +327,13 @@ var Metadata;
         Main.selectNode(null);
 
         Metadata.metaObject.character = Main.escapeTags($("#character").val());
+        
+        Metadata.metaObject.defaultChangeType = $("#defaultChangeTypeSelect").val();
 
         // Save all values in the dialog to the metaObject.
         Metadata.metaObject.name = Main.escapeTags($("#scriptName").val());
         Metadata.metaObject.difficulty = $("#scriptDifficulty").val();
-
-        Metadata.metaObject.description = Main.escapeTags($(
-            "#scriptDescription").val());
+        Metadata.metaObject.description = Main.escapeTags($("#scriptDescription").val());
 
         var truncatedName;
         if (Metadata.metaObject.name.length > 20)

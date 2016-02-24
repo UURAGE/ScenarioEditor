@@ -225,10 +225,6 @@ var Load;
     function loadMetadata(metadata)
     {
         var character;
-
-        //these all need files that may or may not have been removed since exporting the script
-        //so these must remain default is we import
-        
         character = $(metadata).find('character').attr('id');
 
         var version = parseInt($(metadata).find('version').text());
@@ -239,6 +235,10 @@ var Load;
         var difficulty = $(metadata).find('difficulty').text();
         var parameterObject = {};
         var parameters = $(metadata).find('parameters').children();
+        var defaultChangeType = $(metadata).find('defaultChangeType').text();
+        // Allows the editor to load older XML versions without defaultChangeType
+        if (defaultChangeType === "")
+            defaultChangeType = LanguageManager.sLang("edt_parts_delta");
         
         for (var i = 0; i < parameters.length; i++)
         {
@@ -291,7 +291,8 @@ var Load;
             character: character,
             description: description,
             parameterObject: parameterObject,
-            scriptVersion: version
+            scriptVersion: version,
+            defaultChangeType: defaultChangeType
         };
     }
 

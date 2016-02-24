@@ -32,6 +32,7 @@ var Save;
         addAndReturnElement("date", nameSpace, metadataEl).textContent =new Date().toISOString();
         addAndReturnElement("description", nameSpace, metadataEl).textContent = Metadata.metaObject.description;
         addAndReturnElement("difficulty", nameSpace, metadataEl).textContent = Metadata.metaObject.difficulty;
+        addAndReturnElement("defaultChangeType", nameSpace, metadataEl).textContent = Metadata.metaObject.defaultChangeType;
         addAndReturnElement("version", nameSpace, metadataEl).textContent = Metadata.metaObject.scriptVersion;
         addAndReturnElement("character", nameSpace, metadataEl).setAttribute("id", Metadata.metaObject.character);
         
