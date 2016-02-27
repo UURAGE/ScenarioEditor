@@ -36,11 +36,11 @@ var Metadata;
         var parameterScreenHTML = Parts.getParameterScreenHTML();
         $("#parameterScreen").html(parameterScreenHTML);
 
-        $("#params").on("focus", ".parameterDescription", function()
+        $("#params").on("focus", ".description", function()
         {
             $(this).animate({ height: "10em" }, 500);
         });
-        $("#params").on("focusout", ".parameterDescription", function()
+        $("#params").on("focusout", ".description", function()
         {
             $(this).animate({height:"1em"}, 500);
         });
@@ -195,7 +195,7 @@ var Metadata;
             addedDiv.find(".weightForFinalScore").val(parameter.weightForFinalScore);
             addedDiv.find(".minimumScore").val(parameter.minimumScore);
             addedDiv.find(".maximumScore").val(parameter.maximumScore);
-            addedDiv.find(".parameterDescription").val(parameter.parameterDescription);
+            addedDiv.find(".description").val(parameter.description);
         }
         if ($("#params").children().length > 0)
             $("#paramsTableHead").removeClass("hidden");

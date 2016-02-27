@@ -51,7 +51,7 @@ var ObjectGenerator;
                 ".weightForFinalScore").val(), 0),
             minimumScore: minimumScore,
             maximumScore: maximumScore,
-            parameterDescription: div.find(".parameterDescription").val()        };
+            description: div.find(".description").val()        };
     }
 
     function PreconditionObject(preconditionDiv)

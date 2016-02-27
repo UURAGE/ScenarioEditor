@@ -1,161 +1,18 @@
 /* ©Copyright Utrecht University (Department of Information and Computing Sciences) */
 
-var Load;
+var Load3;
 
 (function()
 {
     "use strict";
 
-    Load =
+    Load3 =
     {
-        importScript: importScript,
-        suspendedly: suspendedly,
-        nullIfMissing: nullIfMissing
+        generateGraph: generateGraph,
+        loadMetadata: loadMetadata,
+        loadFeedbackForm: loadFeedbackForm,
+        loadStatement: loadStatement
     };
-
-    var loadedMetaObject;
-
-    $(document).ready(function()
-    {
-        $("#importScreen").html(Parts.getImportScreenHTML());
-        $("#importScript").on('click', function()
-        {
-            $("#importScreen").dialog(
-            {
-                title : LanguageManager.sLang("edt_load_import_title"),
-                height: ParameterValues.heightMedia,
-                width: ParameterValues.widthMedia,
-                modal: true,
-                buttons:
-                [{
-                    text: LanguageManager.sLang("edt_load_import"),
-                    click: function()
-                    {
-                        importScript();
-                        $("#importScreen").dialog('close');
-                    }
-                },
-                {
-                    text: LanguageManager.sLang("edt_common_close"),
-                    click: function()
-                    {
-                        $("#importScreen").dialog('close');
-                    }
-                }]
-            });
-        });
-
-        // At the beginning no XML is loaded, so we need to define a metaObject
-        Metadata.getNewDefaultMetaObject();
-        loadedMetaObject = Metadata.metaObject;
-    });
-
-    /*
-     ** Public Functions
-     */
-
-    // Creates a graph and metadata from xml file provided by user
-    function importScript()
-    {
-        var input = document.getElementById("import").files;
-
-        if (input.length < 1)
-            return;
-
-        var reader = new FileReader();
-
-        $("#loading").show();
-        reader.onload = function()
-        {
-            var xml;
-            try
-            {
-                xml = $($.parseXML(reader.result));
-            }
-            catch (err)
-            {
-                alert(LanguageManager.sLang("edt_load_invalid_xml"));
-                return;
-            }
-
-            prepareRebuild();
-
-            // Try to find the schemaVersion of the XML and to find the old version
-            var schemaVersion = parseInt($('script', xml).attr('schemaVersion'));
-            var oldVersion = parseInt($($('metadata', xml)[0]).find('version').text());
-
-            // Load with the newest version of the schema
-            if (schemaVersion)
-            {
-                loadMetadata($($('metadata', xml)[0]));
-                loadFeedbackForm($($('feedbackForm', xml)[0]));
-                suspendedly(generateGraph, jsPlumb)(xml);
-            }
-            // Load versions 2 and 3
-            else if (oldVersion)
-            {
-                Load3.loadMetadata($($('metadata', xml)[0]));
-                Load3.loadFeedbackForm($($('feedbackform', xml)[0]));
-                suspendedly(Load3.generateGraph, jsPlumb)(xml);
-            }
-            // Load version 1
-            else
-            {
-                Load1.generateGraph(xml);
-            }
-        };
-
-        reader.readAsText(input[0]);
-
-        //Loading of script complete, hide loading div:
-        $("#loading").hide();
-    }
-
-    // Wraps a function so that it is executed while jsPlumb drawing is suspended.
-    function suspendedly(func, plumbInstance)
-    {
-        return function()
-        {
-            var args = Array.prototype.slice.call(arguments);
-            plumbInstance.doWhileSuspended(function()
-            {
-                func.apply(this, args);
-            });
-        };
-    }
-
-    /*
-     ** Private Functions
-     */
-
-    function prepareRebuild()
-    {
-        Main.selectElement(null);
-
-        if (loadedMetaObject === undefined)
-        {
-            Metadata.getNewDefaultMetaObject();
-            loadedMetaObject = Metadata.metaObject;
-        }
-        else
-        {
-            if(Main.nodes.length !== 0)
-            {
-                $.each(Main.trees, function(id, tree)
-                {
-                    tree.plumbInstance.deleteEveryEndpoint();
-                });
-            }
-
-            Main.trees = {};
-            Main.nodes = {};
-            $(".w").remove();
-
-            Main.jsPlumbCounter = 0;
-            Main.maxTreeNumber = 0;
-            Metadata.parameterCounter = 0;
-        }
-    }
 
     // Generates the entire graph, including the objects.
     function generateGraph(xml)
@@ -262,7 +119,7 @@ var Load;
                 weightForFinalScore: 0,
                 minimumScore: parameter.attributes.minimumScore.value,
                 maximumScore: parameter.attributes.maximumScore.value,
-                description: parameter.hasAttribute("description") ? Main.unEscapeTags(parameter.attributes.description.value) : ""
+                description: parameter.hasAttribute("parameterDescription") ? Main.unEscapeTags(parameter.attributes.parameterDescription.value) : ""
             };
         }
 
@@ -300,7 +157,7 @@ var Load;
     {
         var allConditions = {};
         $(feedbackForm).find("parameter").each(function() {
-            var paramID = $(this).attr("idref");
+            var paramID = $(this).attr("id");
             var conditions = [];
             $(this).find("condition").each(function() {
 
@@ -539,15 +396,5 @@ var Load;
             type: preconditionType,
             preconditions: preconditionsArray
         };
-    }
-
-    function nullIfMissing(elements)
-    {
-        if (elements === undefined || elements.length === 0)
-            return null;
-        else if (typeof elements == "string")
-            return elements;
-        else
-            return elements.text();
     }
 })();

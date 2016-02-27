@@ -260,7 +260,7 @@ var Parts;
                     '<input type="number" class="maximumScore" min="0" pattern="[+\-]?\\d*" style="width:40px" value="10" />' +
                 '</td>' +
                 '<td>' +
-                    '<textarea class="parameterDescription" style="height:1em;">' +
+                    '<textarea class="description" style="height:1em;">' +
                     '</textarea>' +
                 '</td>' +
                 '<td>' +

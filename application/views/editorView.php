@@ -65,6 +65,8 @@
       "js/parts.js",
       "js/plumbGenerator.js",
       "js/load.js",
+      "js/load/load1.js",
+      "js/load/load3.js",
       "js/save.js",
       "js/media.js",
       "js/metadata.js",

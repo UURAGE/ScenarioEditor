@@ -53,7 +53,7 @@ var Save;
             parameterEl.setAttribute("initialValue", parameterObj.initialValue);
             parameterEl.setAttribute("minimumScore", parameterObj.minimumScore);
             parameterEl.setAttribute("maximumScore", parameterObj.maximumScore);
-            parameterEl.setAttribute("parameterDescription", Main.escapeTags(parameterObj.parameterDescription));
+            parameterEl.setAttribute("description", Main.escapeTags(parameterObj.description));
 
             if (parameterObj.weightForFinalScore !== 0)
                 parameterEl.setAttribute("scored", "true");
@@ -76,11 +76,11 @@ var Save;
         }
 
         // This part saves the feedback form.
-        var feedbackFormEl = addAndReturnElement("feedbackform", nameSpace, doc.documentElement);
+        var feedbackFormEl = addAndReturnElement("feedbackForm", nameSpace, doc.documentElement);
         for (var parameter in FeedbackForm.conditions)
         {
             var currentParamEl = addAndReturnElement("parameter", nameSpace, feedbackFormEl);
-            currentParamEl.setAttribute("id", parameter);
+            currentParamEl.setAttribute("idref", parameter);
 
             for (var loopCounter = 0; loopCounter < FeedbackForm.conditions[parameter].length; loopCounter++)
             {
