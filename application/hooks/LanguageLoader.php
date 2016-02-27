@@ -21,9 +21,62 @@ class LanguageLoader
 
         $language = $this->CI->session->userdata('language');
 
-        if($language === FALSE)//strict equality to prevent nasty behaviour
+        // Strict equality to prevent nasty behaviour
+        if($language === FALSE)
         {            
-            $language = config_item('language');
+            $browserLang = explode(",",$_SERVER['HTTP_ACCEPT_LANGUAGE']);
+
+            $languages = array();
+
+            for($i = 0; $i< sizeof($browserLang); $i++)
+            {
+                $lang = explode(";", $browserLang[$i]);
+
+                if(sizeof($lang) == 2)
+                {
+                    // This contains a priority value in the format "q=<priority>"
+                    $lang[1] = substr($lang[1], 2);
+                }
+                else
+                {
+                    // The first language entry has no priority
+                    $lang[1] = "1";
+                }
+
+                $languages[$i] = $lang;
+            }
+
+            $maxPriority = -1;
+            $acceptedLang = config_item('language');
+
+            for($i = 0; $i<sizeof($languages); $i++)
+            {
+                $currentLang = $languages[$i][0];
+                $currentPriority = $languages[$i][1];
+                $tempAccepted = "";
+
+                switch ($currentLang)
+                {
+                    case "nl":
+                        $tempAccepted = "dutch";
+                        break;
+                    default:
+                        $tempAccepted = "english";
+                        break;
+                }
+
+                if($currentPriority > $maxPriority)
+                {
+                    $acceptedLang = $tempAccepted;
+                    $maxPriority = $currentPriority;
+                }
+            }
+
+            $language = $acceptedLang;
+            $this->CI->session->set_userdata('language', $language);
+        }
+        else
+        {
             $this->CI->session->set_userdata('language', $language);
         }
 
