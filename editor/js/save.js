@@ -161,8 +161,6 @@ var Save;
                     break;
             }
 
-            interleave.setAttribute("level", parseInt(Math.round(treeArray[0].level))); // parseInt because float
-
             //for each tree at this level, make the xml
             $.each(treeArray, makeTreeXML);
         }

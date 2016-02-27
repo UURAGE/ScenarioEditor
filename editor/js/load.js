@@ -122,10 +122,9 @@ var Load;
         }
         else
         {
+            var level = 0;
             $('interleave', xml).each(function()
             {
-                var level = parseDecimalIntWithDefault(this.getAttribute(
-                    'level'), 0);
                 $(this).children('tree').each(function()
                 {
                     var treeID = this.getAttribute('id');
@@ -170,6 +169,8 @@ var Load;
                         }
                     });
                 });
+                
+                level++;
             });
         }
 
