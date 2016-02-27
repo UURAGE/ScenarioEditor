@@ -326,21 +326,21 @@
                   </div>
                 </div>
 
-                <div class="sidebarSection" id="endNode">
-                  <div class="sub-header clickable">
-                    <h2 title="<?php sLang('edt_end_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/end.png");?>" alt=""><?php sLang('edt_end_header');?></h2>
-                  </div>
-                  <div class="collapsable">
-                    <input type="checkbox" id="endNodeCheckbox"/><label for="endNodeCheckbox"><?php sLang('edt_end_description');?></label>
-                  </div>
-                </div>
-
                 <div class="sidebarSection" id="initsNode">
                   <div class="sub-header clickable">
                     <h2 title="<?php sLang('edt_inits_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/premature_end.png");?>" alt=""><?php sLang('edt_inits_header');?></h2>
                   </div>
                   <div class="collapsable">
                     <input type="checkbox" id="initsNodeCheckbox"/><label for="initsNodeCheckbox"><?php sLang('edt_inits_description');?></label>
+                  </div>
+                </div>
+
+                <div class="sidebarSection" id="endNode">
+                  <div class="sub-header clickable">
+                    <h2 title="<?php sLang('edt_end_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/end.png");?>" alt=""><?php sLang('edt_end_header');?></h2>
+                  </div>
+                  <div class="collapsable">
+                    <input type="checkbox" id="endNodeCheckbox"/><label for="endNodeCheckbox"><?php sLang('edt_end_description');?></label>
                   </div>
                 </div>
 
