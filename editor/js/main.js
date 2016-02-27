@@ -342,14 +342,6 @@ var Main;
             $("#main").focus();
         });
 
-        $("#addLink").on('click', function ()
-        {
-            var feedbackTxt = $('#feedback').val(),
-            url = prompt(LanguageManager.sLang("edt_main_input_link"));
-            feedbackTxt += '[url="' + url + '"]'+LanguageManager.sLang("edt_main_link_name")+'[/url]';
-            $("#feedback").val(feedbackTxt);
-        });
-
         $(document).on('keydown', function(e)
         {
             if (e.which === 8 && !$(e.target).is('input, textarea'))
@@ -626,7 +618,6 @@ var Main;
             video: null,
             image: null,
             audio: null,
-            feedback: "",
             comment: "",
             endNode: false,
             initsNode: false,
@@ -1189,9 +1180,6 @@ var Main;
         // Save jumpPoint.
         node.jumpPoint = $("#jumpNodeCheckbox").prop("checked");
 
-        // Save feedback.
-        node.feedback = escapeTags($("textarea#feedback").val());
-
         // Save comment.
         node.comment = escapeTags($("textarea#comment").val());
 
@@ -1379,7 +1367,7 @@ var Main;
     }
 
     // Change the text of the node. 
-    // also inputs images that show if the node has feedback/audio/visuals. 
+    // also inputs images that show if the node has audio/visuals. 
     // We might want to refactor the function name
     function changeNodeText(nodeID)
     {
@@ -1451,11 +1439,9 @@ var Main;
 
         // get the node
         var nodeHTML = $('#' + nodeID);
-        // fill div that can hold the images that visualize if the node has feedback/video/audio 
+        // fill div that can hold the images that visualize if the node has video/audio 
         var imageDiv = $('.imgDiv', nodeHTML);
-        imageDiv.empty();        
-        if (node.feedback !== "")
-            imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_feedback.png'>");
+        imageDiv.empty();
         if (node.comment !== "")                         
             imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_comments.png'>");
         if (node.audio !== null)                         
@@ -1632,8 +1618,6 @@ var Main;
             $("#videoOptions").val(HtmlGenerator.nullToHTMLValue(node.video));
             $("#imageOptions").val(HtmlGenerator.nullToHTMLValue(node.image));
             $("#audioOptions").val(HtmlGenerator.nullToHTMLValue(node.audio));
-
-            $("textarea#feedback").val(unEscapeTags(node.feedback));
 
             $("textarea#comment").val(unEscapeTags(node.comment));
             $("#scores").empty();

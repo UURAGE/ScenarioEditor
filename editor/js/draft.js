@@ -512,7 +512,6 @@
         // (otherwise chages will be oversaved with empty values)
         Main.selectElement(null);
         node.text = props.statement;
-        node.feedback = props.feedback;
 
         if (props.type === Main.playerType)
         {

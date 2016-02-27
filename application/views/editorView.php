@@ -299,15 +299,6 @@
                     <select name="Audio" id="audioOptions" class="mediaSelect"></select>
                   </div>
                 </div>
-                <div id="feedbackHTML" class="sidebarSection">
-                  <div class="sub-header clickable">
-                    <h2 title="<?php sLang('edt_feedback_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/feedback.png");?>" alt=""><?php sLang('edt_feedback');?></h2>
-                  </div>
-                  <div class="collapsable">
-                    <textarea id="feedback"></textarea>
-                    <input type="button" id="addLink" value="<?php sLang('edt_add_link');?>"/>
-                  </div>
-                </div>
                 <div id="commentHTML" class="sidebarSection">
                   <div class="sub-header clickable">
                     <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/comments.png");?>" alt=""><?php sLang('edt_authors_note');?></h2>

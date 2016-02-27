@@ -250,11 +250,6 @@ var Save;
             if (!visible)
                 $("#" + node.id).hide();
 
-            // Save the feedback.
-            if (node.feedback !== "")
-                addAndReturnElement("feedback", nameSpace,
-                    statementEl).textContent = node.feedback;
-
             // Save the comment.
             if (node.comment !== "")
                 addAndReturnElement("comment", nameSpace,
