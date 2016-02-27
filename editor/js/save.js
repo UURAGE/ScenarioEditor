@@ -27,6 +27,8 @@ var Save;
         var nameSpace = "urn:uurage-temporary";
         var doc = document.implementation.createDocument(nameSpace,'script', null);
 
+        doc.documentElement.setAttribute("schemaVersion", 4);
+
         // Handles the metadata.
         var metadataEl = addAndReturnElement("metadata", nameSpace, doc.documentElement);
         addAndReturnElement("name", nameSpace, metadataEl).textContent = Main.escapeTags(Metadata.metaObject.name);
@@ -34,7 +36,6 @@ var Save;
         addAndReturnElement("description", nameSpace, metadataEl).textContent = Main.escapeTags(Metadata.metaObject.description);
         addAndReturnElement("difficulty", nameSpace, metadataEl).textContent = Metadata.metaObject.difficulty;
         addAndReturnElement("defaultChangeType", nameSpace, metadataEl).textContent = Metadata.metaObject.defaultChangeType;
-        addAndReturnElement("version", nameSpace, metadataEl).textContent = Metadata.metaObject.scriptVersion;
         addAndReturnElement("character", nameSpace, metadataEl).setAttribute('id', Main.escapeTags(Metadata.metaObject.character));
         
         var parametersEl = addAndReturnElement("parameters", nameSpace, metadataEl);

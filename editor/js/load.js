@@ -53,6 +53,7 @@ var Load;
      ** Public Functions
      */
 
+    // Creates a graph and metadata from xml file provided by user
     function importScript()
     {
         var input = document.getElementById("import").files;
@@ -78,9 +79,14 @@ var Load;
 
             prepareRebuild();
 
+            // Try to find the schemaVersion of the XML and to find the old version
+            // These are both passed to generateGraph and there is decided how to cope with the multiple versions
+            var schemaVersion = parseInt($($('schemaVersion', xml)[0]).text());
+            var oldVersion = parseInt($($('metadata', xml)[0]).find('version').text());
+
             loadMetadata($($('metadata', xml)[0]));
             loadFeedbackForm($($('feedbackform', xml)[0]));
-            suspendedly(generateGraph, jsPlumb)(xml);
+            suspendedly(generateGraph, jsPlumb)(xml, oldVersion, schemaVersion);
         };
 
         reader.readAsText(input[0]);
@@ -136,13 +142,12 @@ var Load;
     }
 
     // Generates the entire graph, including the objects.
-    function generateGraph(xml)
+    function generateGraph(xml, oldVersion, schemaVersion)
     {
-        if (!loadedMetaObject.scriptVersion) //version is undefined. script does not have sequence, interleave or tree tags
-        {
-            generateGraphLegacy(xml);
-        }
-        else
+        var plumbInstance;
+        var connections = {};
+
+        if (schemaVersion || oldVersion)
         {
             var level = 0;
             $('interleave', xml).each(function()
@@ -209,6 +214,10 @@ var Load;
                 level++;
             });
         }
+        else
+        {
+            generateGraphLegacy(xml);
+        }
     }
 
     function generateGraphLegacy(xml)
@@ -250,7 +259,6 @@ var Load;
     // Load the metadata of the script.
     function loadMetadata(metadata)
     {
-        var version = parseInt($(metadata).find('version').text());
         var name = Main.unEscapeTags($(metadata).find('name').text());
         $('#scriptNameTab .scriptName').text(name);
         var description = Main.unEscapeTags($(metadata).find('description').text());
@@ -314,7 +322,6 @@ var Load;
             character: character,
             description: description,
             parameterObject: parameterObject,
-            scriptVersion: version,
             defaultChangeType: defaultChangeType
         };
     }

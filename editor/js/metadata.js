@@ -78,7 +78,6 @@ var Metadata;
             character: "", //character is defined in properties by free form input text
             description: "",
             parameterObject: pObj,
-            scriptVersion: 3,
             defaultChangeType: LanguageManager.sLang("edt_parts_delta"),
         };
     }
