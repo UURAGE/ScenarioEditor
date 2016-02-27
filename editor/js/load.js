@@ -382,9 +382,11 @@ var Load;
             Main.jsPlumbCounter = Math.max(Main.jsPlumbCounter, parseInt(idMatch[1]));
         else
             id = "ext_" + id;
-        var endNode = $(statement).attr('possibleEnd') == "true";
+        
         var jumpPoint = $(statement).attr('jumpPoint') == "true";
         var initsNode = $(statement).attr('inits') == "true";
+        var endNode = $(statement).attr('possibleEnd') == "true";
+            
         var text = "";
         var conversationArray = [];
         if (type == Main.conversationType)

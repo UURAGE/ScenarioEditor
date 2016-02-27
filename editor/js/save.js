@@ -222,9 +222,13 @@ var Save;
             var statementEl = addAndReturnElement(
                 node.type + (node.type == Main.conversationType ? "" : "Statement"), nameSpace, treeElement);
             statementEl.setAttribute('id', node.id.replace(/^ext_/, '').replace(/_/g, '.'));
+            
+            if (node.type === Main.computerType)
+            {
+                statementEl.setAttribute('jumpPoint', node.jumpPoint);
+                statementEl.setAttribute('inits', node.initsNode);
+            }
             statementEl.setAttribute('possibleEnd', node.endNode);
-            statementEl.setAttribute('jumpPoint', node.jumpPoint);
-            statementEl.setAttribute('inits', node.initsNode);
 
             // Add a text element to the XML element.
             if (node.type == Main.conversationType)
