@@ -215,25 +215,6 @@ var Main;
                 return true;
             });
         });
-        $('#newConversationNode').on("mousedown", function(e)
-        {
-            selectElement(null);
-
-            e.preventDefault(); // Prevent selecting text
-            var text = "[+" + LanguageManager.sLang("edt_main_conversation") + "]";
-
-            if (!Zoom.isZoomed())
-            {
-                DragBox.showError(e, LanguageManager.sLang("edt_main_no_subject_open"));
-                return;
-            }
-
-            DragBox.startDragging(e, text, function(pos)
-            {
-                placeNewNode(Main.conversationType,pos);
-                return true;
-            });
-        });
         $("#newChildNode").on('mousedown', function(e)
         {
             createChildNode();

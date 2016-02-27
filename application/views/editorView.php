@@ -152,7 +152,6 @@
                     </div>
                     <div class="small-buttons">
                       <button id="newTree" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/subject.png");?>" alt=""><?php sLang("edt_subject"); ?></div></button>
-                      <button id="newConversationNode" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/conversation.png");?>" alt=""><?php sLang("edt_conversation"); ?></div></button>
                       <button id="toggleDraftScreen" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/draft.png");?>" alt=""><?php sLang("edt_note_pad"); ?></div></button>
                     </div>
                   </div>
