@@ -20,6 +20,7 @@ class LanguageLoader
         }
 
         $language = $this->CI->session->userdata('language');
+        $availableLanguages = config_item('browserCodes');
 
         // Strict equality to prevent nasty behaviour
         if($language === FALSE)
@@ -55,17 +56,13 @@ class LanguageLoader
                 $currentPriority = $languages[$i][1];
                 $tempAccepted = "";
 
-                switch ($currentLang)
+                for($j = 0; $j<sizeof($availableLanguages); $j++)
                 {
-                    case "nl":
-                        $tempAccepted = "dutch";
-                        break;
-                    default:
-                        $tempAccepted = "english";
-                        break;
+                    if($availableLanguages[$currentLang] !== NULL)
+                        $tempAccepted = $availableLanguages[$currentLang];
                 }
 
-                if($currentPriority > $maxPriority)
+                if($currentPriority > $maxPriority && $tempAccepted !== "")
                 {
                     $acceptedLang = $tempAccepted;
                     $maxPriority = $currentPriority;
