@@ -16,7 +16,8 @@ var Zoom;
         isZoomed : isZoomed
     };
 
-    function toggleZoom(tree) //tree (object not id) contains a div and original positions before zoom
+    // Tree (the object, not the id) contains a div and original positions before zoom
+    function toggleZoom(tree) 
     {
         if(!tree.dragDiv.hasClass("zoom"))
             zoomIn(tree);
@@ -28,33 +29,35 @@ var Zoom;
     {
         if (!$('#' + tree.id).hasClass('zoom'))
         {
-            //find treeContainer
+            // Unselect the selected tree(s), because we are zooming in
+            Main.selectElement(null);
+            
+            // Find the treeContainer
             var parent = tree.dragDiv.parent();
 
-            //unzoom other trees
+            // Zoom out all the other trees if they are zoomed in
             $.each(Main.trees, function(key, value) {
                 zoomOut(value); 
             });
 
-            //tell the Tree it is now zoomed
             tree.dragDiv.addClass("zoom");
-            //ensure it looks right
-            parent.css({"overflow": "hidden"}); // hide overflowing content
-            tree.dragDiv.css({"top": parent.scrollTop(), "left": parent.scrollLeft()});//put it in gridposition(0,0)
-            tree.dragDiv.draggable('disable'); //make it undraggable
-            tree.dragDiv.removeClass("ui-state-disabled");//remove default disable-draggable-style
+            parent.css({"overflow": "hidden"}); 
+            // Put it in grid position (0,0)
+            tree.dragDiv.css({"top": parent.scrollTop(), "left": parent.scrollLeft()});
+            tree.dragDiv.draggable('disable'); 
+            // Remove default disable-draggable-style
+            tree.dragDiv.removeClass("ui-state-disabled");
 
-            //return to the last scroll position
+            // Return to the last scroll position
             tree.div.scrollLeft(tree.leftScroll);
             tree.div.scrollTop(tree.topScroll);
 
             tree.div.xselectable('enable');
 
-            //set text in zoombutton to [-]
             var zoomTreeButton = $('.zoomTreeButton', tree.dragDiv);
             zoomTreeButton.text("[-]");
 
-            //save name if needed
+            // Save the subject name if necessary
             $('.subjectName', tree.dragDiv).text(Main.unEscapeTags(tree.subject));
 
             var heightOffset = tree.div.position().top - tree.dragDiv.position().top;
@@ -83,7 +86,7 @@ var Zoom;
             $('#draftScreen').hide();
             MiniMap.deactivate();
 
-            //scroll position needs to 0 when the dom manipulation happens to keep jsPlumb from messing up
+            // Scroll position needs to 0 when the dom manipulation happens to keep jsPlumb from messing up
             tree.leftScroll = tree.div.scrollLeft();
             tree.topScroll = tree.div.scrollTop();
 
@@ -104,8 +107,7 @@ var Zoom;
 
             parent.css({"overflow": "auto"});
             jsPlumb.setSuspendDrawing(true);
-        
-            //update show/hide of buttons
+            
             Main.updateButtons();
         }
     }

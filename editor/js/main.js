@@ -64,6 +64,8 @@ var Main;
 
         jsPlumb.setSuspendDrawing(true);
         
+        updateButtons();
+        
         $("#main").focus();
         
         var scriptNameInput = $('<input type="text" maxlength="35">');
@@ -391,9 +393,8 @@ var Main;
 
         var zoomTreeButton = $('<div>',{text:"[+]", class:"zoomTreeButton button"});
         zoomTreeButton.on("click", function() 
-        { 
-            // open/close tree
-            Zoom.toggleZoom(Main.trees[id]);            
+        {
+            Zoom.toggleZoom(Main.trees[id]);
             MiniMap.update(true);
         });
         var defaultName = LanguageManager.sLang("edt_main_default_subject");
@@ -538,9 +539,10 @@ var Main;
     function addNewTree(id, indicatorSnap, offsetX, offsetY) 
     {
         if(Zoom.isZoomed()) 
-        {   //user is currently zoomed in    
+        {
             var zoomed = $('#mainCell .zoom');
-            Zoom.toggleZoom(Main.trees[zoomed.attr("id")]);
+            Zoom.zoomOut(Main.trees[zoomed.attr("id")]);
+            
             MiniMap.update(true);
         }
         //creates empty tree and selects it
