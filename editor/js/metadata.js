@@ -213,15 +213,7 @@ var Metadata;
     function atLeastOneParameter(type)
     {
         var pObj = Metadata.metaObject.parameterObject;
-
-        if (type === "parameter")
-        {
-            return (!$.isEmptyObject(pObj));
-        }
-        else
-        {
-            return (!$.isEmptyObject(eObj) || !$.isEmptyObject(pObj));
-        }
+        return (!$.isEmptyObject(pObj));
     }
 
     function addTimeParameter(div)
