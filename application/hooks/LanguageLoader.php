@@ -5,9 +5,9 @@
 //©Copyright Utrecht University (Department of Information and Computing Sciences) 
 */
 
-/**
-*this class is used to emulate auto loading of language files, normal autoloading can not be based on session data 
-*/
+/*
+ * This class is used to emulate auto loading of language files, normal autoloading can not be based on session data 
+ */
 class LanguageLoader
 {   
     function load()
@@ -23,17 +23,17 @@ class LanguageLoader
         $availableLanguages = config_item('browserCodes');
 
         // Strict equality to prevent nasty behaviour
-        if($language === FALSE)
+        if ($language === FALSE)
         {            
             $browserLang = explode(",",$_SERVER['HTTP_ACCEPT_LANGUAGE']);
 
             $languages = array();
 
-            for($i = 0; $i< sizeof($browserLang); $i++)
+            for ($i = 0; $i < sizeof($browserLang); $i++)
             {
                 $lang = explode(";", $browserLang[$i]);
 
-                if(sizeof($lang) == 2)
+                if (sizeof($lang) == 2)
                 {
                     // This contains a priority value in the format "q=<priority>"
                     $lang[1] = substr($lang[1], 2);
@@ -48,21 +48,22 @@ class LanguageLoader
             }
 
             $maxPriority = -1;
+            // If no accepted language can be found, the default configured language will be used
             $acceptedLang = config_item('language');
 
-            for($i = 0; $i<sizeof($languages); $i++)
+            for ($i = 0; $i < sizeof($languages); $i++)
             {
                 $currentLang = $languages[$i][0];
                 $currentPriority = $languages[$i][1];
                 $tempAccepted = "";
+                $languageAvailable = array_key_exists($currentLang, $availableLanguages);
 
-                for($j = 0; $j<sizeof($availableLanguages); $j++)
+                if ($languageAvailable && $availableLanguages[$currentLang] !== NULL)
                 {
-                    if($availableLanguages[$currentLang] !== NULL)
-                        $tempAccepted = $availableLanguages[$currentLang];
+                    $tempAccepted = $availableLanguages[$currentLang];
                 }
 
-                if($currentPriority > $maxPriority && $tempAccepted !== "")
+                if ($currentPriority > $maxPriority && $tempAccepted !== "")
                 {
                     $acceptedLang = $tempAccepted;
                     $maxPriority = $currentPriority;
@@ -70,10 +71,6 @@ class LanguageLoader
             }
 
             $language = $acceptedLang;
-            $this->CI->session->set_userdata('language', $language);
-        }
-        else
-        {
             $this->CI->session->set_userdata('language', $language);
         }
 
