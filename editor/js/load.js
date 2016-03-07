@@ -240,7 +240,8 @@ var Load;
         // Allows the editor to load older XML versions without defaultChangeType
         if (defaultChangeType === "")
             defaultChangeType = LanguageManager.sLang("edt_parts_delta");
-        
+        $("#defaultChangeTypeSelect").val(defaultChangeType);
+
         for (var i = 0; i < parameters.length; i++)
         {
             var parameter = parameters[i];
