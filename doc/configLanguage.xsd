@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="urn:uurage-temporary:config"
+	xmlns:tns="urn:uurage-temporary:config"
+	elementFormDefault="qualified"
+	version="inbetween">
+	<element name="config">
+		<complexType>
+			<sequence>
+				<element name="properties" type="tns:propertiesType" />
+			</sequence>
+		</complexType>
+	   <key name="propertyID">
+		   <selector xpath=".//tns:property" />
+		   <field xpath="@id" />
+	   </key> 
+	</element>
+	<element name="property">
+		<complexType>
+			<group ref="tns:typeGroup" />
+			<attribute name="id" type="string" use="required" />
+			<attribute name="name" type="string" use="required" />
+			<attribute name="optional" type="boolean" use="optional" default="false" />
+			<attribute name="description" type="string" use="optional" />
+			<attributeGroup ref="tns:propertyScopes" />
+		</complexType>
+	</element>
+	<complexType name="propertiesType">
+		<choice minOccurs="0" maxOccurs="unbounded">
+			<element ref="tns:property" />
+			<element name="propertyGroup">
+				<complexType>
+					<complexContent>
+						<extension base="tns:propertiesType">
+							<attribute name="name" type="string" use="optional" />
+						</extension>
+					</complexContent>
+				</complexType>
+			</element>
+		</choice>
+		<attributeGroup ref="tns:propertyScopes" />
+	</complexType>
+	<group name="typeGroup">
+		<choice>
+			<element name="typeBoolean" />
+			<element name="typeString" />
+			<element name="typeInteger" />
+			<element name="typeEnumeration">
+				<complexType>
+					<sequence>
+						<element name="value" type="string" minOccurs="1" maxOccurs="unbounded" />
+					</sequence>
+				</complexType>
+			</element>
+		</choice>
+	</group>
+	<attributeGroup name="propertyScopes">
+		<attribute name="characterScope" type="string" use="optional" default="independent" />
+		<attribute name="statementScope" type="string" use="optional" default="independent" />
+	</attributeGroup>
+</schema>
