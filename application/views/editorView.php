@@ -89,6 +89,7 @@
   }
 
   ?>
+  <script id="config" type="application/xml"><?php echo file_get_contents(editor_path('config.xml')); ?></script>
 </head>
 
 <body>
