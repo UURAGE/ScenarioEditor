@@ -3,7 +3,7 @@
 
 <html>
 <head>
-  <title>Editor - Communicate!</title>
+  <title>Editor - UURAGE</title>
   <meta charset="utf-8">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="-1">
@@ -58,6 +58,7 @@
       //"js/lib/xselectable.js",
       "js/lib/colResizable-1.3.min.js",
       "js/utils.js",
+      "js/config.js",
       "js/parameterValues.js",
       "js/dragBox.js",
       "js/miniMap.js",
