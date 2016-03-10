@@ -82,7 +82,7 @@ var Clipboard;
     function copyTree(treeId)
     {
         //Save tree data
-        var toCopy = Main.clone(Main.trees[treeId]),
+        var toCopy = Utils.clone(Main.trees[treeId]),
         nodes = [];
         //Save all node data in tree
         $.each(Main.trees[treeId].nodes, function(index, nodeId)
@@ -96,7 +96,7 @@ var Clipboard;
 
     function copyNode(nodeId)
     {
-        toCopy = Main.clone(Main.nodes[nodeId]);
+        toCopy = Utils.clone(Main.nodes[nodeId]);
         //Get node connections
         var connections = jsPlumb.getConnections(
                     {
@@ -210,7 +210,7 @@ var Clipboard;
 
     function pasteNode(copiedNode)
     {
-        var node = Main.clone(copiedNode); //no dom action just yet. this just copies the object in the nodes object
+        var node = Utils.clone(copiedNode); //no dom action just yet. this just copies the object in the nodes object
         var newNode = Main.addNewNode(node.type); //to do dom manipulations and create the id. no data now present in nodes[newNode.id] is kept
 
         Main.selectElement(null);

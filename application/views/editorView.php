@@ -61,6 +61,7 @@
       "js/lib/multidraggable.js",
       "js/lib/xselectable.js",
       "js/lib/colResizable-1.3.min.js",
+      "js/utils.js",
       "js/parameterValues.js",
       "js/dragBox.js",
       "js/miniMap.js",

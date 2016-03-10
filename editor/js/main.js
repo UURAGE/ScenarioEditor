@@ -34,8 +34,7 @@ var Main;
         applyChanges: applyChanges,
         changeAllNodeTexts: changeAllNodeTexts,
         changeNodeText: changeNodeText,
-        clone: clone,
-        createEmptyTree: createEmptyTree,        
+        createEmptyTree: createEmptyTree,
         createAndReturnNode: createAndReturnNode,
         dehighlightParents: dehighlightParents,
         deleteAllSelected: deleteAllSelected,
@@ -1639,13 +1638,6 @@ var Main;
 
             $("#optionalCheckbox").prop("checked", Main.trees[Main.selectedElement].optional);
         }
-    }
-    
-    //taken from stackoverflow
-    //http: //stackoverflow.com/questions/728360/most-elegant-way-to-clone-a-javascript-object
-    function clone(obj)
-    {
-        return $.extend(true, {}, obj);
     }
 
     function makeConnection(sourceID, targetID) 
