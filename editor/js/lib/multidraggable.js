@@ -20,8 +20,6 @@
 	                	clickedNode = this;
 	            		var div = "<div id='clone'>";
 	            		$(opts.container).append(div);
-	            		var scrollLeft = $(opts.container).scrollLeft();
-	            		var scrollTop = $(opts.container).scrollTop();
 						var pos = $(this).position();
 						$.each($(opts.groupSel).add(this) || {}, function(key,value) {
 							var elemPos = $(value).position();
@@ -33,8 +31,8 @@
 							$("#clone").append(cloneNode);
 							clonePos = $(cloneNode).offset();
 							$(cloneNode).offset({
-								top: clonePos.top - pos.top - scrollTop, 
-								left: clonePos.left - pos.left - scrollLeft
+								top: clonePos.top - pos.top,
+								left: clonePos.left - pos.left,
 							});
 						});
 						return $("#clone");
