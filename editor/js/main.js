@@ -664,7 +664,7 @@ var Main;
             var m2T = clamp(posT,upperBound, underBound-50);
             nodeT = m2T-upperBound+treeDiv.scrollTop();
         }
-        $('#'+node.id).css({top:nodeT,left:nodeL});
+        $('#'+node.id).css({top:nodeT,left:nodeL, width:"128px"});
     }
 
     function createChildNode(event)
