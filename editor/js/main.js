@@ -11,14 +11,14 @@ var Main;
 
     Main = 
     {
-        nodes: {},
+        nodes: [],
         selectedElement: null,
         selectedElements: [],
         jsPlumbCounter: 0,
         computerType: "computer",
         playerType: "player",
         conversationType: "conversation",
-        trees: {},
+        trees: [],
         maxTreeNumber: 0,
         gridX: gridX,
         gridY: gridY,

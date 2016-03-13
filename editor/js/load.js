@@ -109,8 +109,6 @@ var Load;
     function prepareRebuild()
     {
         Main.selectElement(null);
-        Main.nodes = {};
-        Main.trees = {};
 
         if (loadedMetaObject === undefined)
         {
@@ -118,7 +116,11 @@ var Load;
             loadedMetaObject = Metadata.metaObject;
         }
 
-        jsPlumb.deleteEveryEndpoint();
+        if(Main.nodes.length !== 0)
+        {
+            jsPlumb.deleteEveryEndpoint();
+        }
+
         $(".w").remove();
 
         Main.jsPlumbCounter = 0;
