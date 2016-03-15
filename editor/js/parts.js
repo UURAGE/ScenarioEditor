@@ -212,6 +212,9 @@ var Parts;
                                 '<input type="text" id="character" />' +
                             '</div>' +
                         '</div>' +
+                        '<div id="meta-properties" class="sub-formTable" style="display:none">' +
+                            '<h3>'+LanguageManager.sLang("edt_parts_properties")+'</h3>' +
+                        '</div>' +
                         '<div id="advanced"class="sub-formTable">' +
                             '<h3>'+LanguageManager.sLang("edt_parts_advanced")+'</h3>' +
                             '<div>' +

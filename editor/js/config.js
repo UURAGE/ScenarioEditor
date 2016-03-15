@@ -81,17 +81,29 @@ var Config;
         'string':
         {
             name: 'string',
-            loadType: function(typeXML) { return this; }
+            loadType: function(typeXML) { return this; },
+            appendControlTo: function(containerEl, htmlId)
+            {
+                containerEl.append($('<input>', { id: htmlId, type: 'text' }));
+            }
         },
         'integer':
         {
             name: 'integer',
-            loadType: function(typeXML) { return this; }
+            loadType: function(typeXML) { return this; },
+            appendControlTo: function(containerEl, htmlId)
+            {
+                containerEl.append($('<input>', { id: htmlId, type: 'number' }));
+            }
         },
         'boolean':
         {
             name: 'boolean',
-            loadType: function(typeXML) { return this; }
+            loadType: function(typeXML) { return this; },
+            appendControlTo: function(containerEl, htmlId)
+            {
+                containerEl.append($('<input>', { id: htmlId, type: 'checkbox' }));
+            }
         },
         'enumeration':
         {
@@ -104,6 +116,15 @@ var Config;
                     values.push(valueXML.textContent);
                 });
                 return $.extend({ values: values }, this);
+            },
+            appendControlTo: function(containerEl, htmlId)
+            {
+                var selectEl = $('<select>', { id: htmlId });
+                this.values.forEach(function(value)
+                {
+                    selectEl.append($('<option>', { text: value, value: value }));
+                });
+                containerEl.append(selectEl);
             }
         }
     };

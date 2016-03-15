@@ -58,6 +58,22 @@ var Metadata;
             if ($("#params").children().not(".toBeRemoved").length === 0)
                 $("#paramsTableHead").addClass("hidden");
         });
+        
+        var anyPropertyShown = false;
+        var propertiesEl = $('#meta-properties');
+        for (var propertyId in Config.configObject.properties)
+        {
+            var property = Config.configObject.properties[propertyId];
+            if (property.scopes.statementScope !== 'independent') continue;
+            var htmlId = 'meta-properties-' + property.id;
+            
+            var propertyContainer = $('<div>');
+            propertiesEl.append(propertyContainer);
+            propertyContainer.append($('<label>', { text: property.name + ':', 'for': htmlId }));
+            property.type.appendControlTo(propertyContainer, htmlId);
+            anyPropertyShown = true;
+        }
+        if (anyPropertyShown) propertiesEl.show();
     });
 
     /*
