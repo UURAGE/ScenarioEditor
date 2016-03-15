@@ -72,14 +72,39 @@ var Config;
     
     function loadType(typeXML)
     {
-        return Config.types[typeXML[0].nodeName.substr('type'.length).toLowerCase()];
+        var typeName = typeXML[0].nodeName.substr('type'.length).toLowerCase();
+        return Config.types[typeName].loadType(typeXML);
     }
     
     Config.types =
     {
-        'string': { name: 'string' },
-        'integer': { name: 'integer' },
-        'boolean': { name: 'boolean' },
-        'enumeration': { name: 'enumeration' }
+        'string':
+        {
+            name: 'string',
+            loadType: function(typeXML) { return this; }
+        },
+        'integer':
+        {
+            name: 'integer',
+            loadType: function(typeXML) { return this; }
+        },
+        'boolean':
+        {
+            name: 'boolean',
+            loadType: function(typeXML) { return this; }
+        },
+        'enumeration':
+        {
+            name: 'enumeration',
+            loadType: function(typeXML)
+            {
+                var values = [];
+                typeXML.children('value').each(function(index, valueXML)
+                {
+                    values.push(valueXML.textContent);
+                });
+                return $.extend({ values: values }, this);
+            }
+        }
     };
 })();
