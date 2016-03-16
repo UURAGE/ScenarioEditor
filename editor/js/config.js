@@ -111,7 +111,7 @@ var Config;
             loadType: function(typeXML)
             {
                 var values = [];
-                typeXML.children('value').each(function(index, valueXML)
+                typeXML.children('option').each(function(index, valueXML)
                 {
                     values.push(valueXML.textContent);
                 });
