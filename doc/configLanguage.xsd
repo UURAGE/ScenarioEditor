@@ -48,7 +48,7 @@
 			<element name="typeEnumeration">
 				<complexType>
 					<sequence>
-						<element name="value" type="string" minOccurs="1" maxOccurs="unbounded" />
+						<element name="option" type="string" minOccurs="1" maxOccurs="unbounded" />
 					</sequence>
 				</complexType>
 			</element>
