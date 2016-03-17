@@ -38,7 +38,8 @@ var Save;
         addAndReturnElement("defaultChangeType", nameSpace, metadataEl).textContent = Metadata.metaObject.defaultChangeType;
         addAndReturnElement("character", nameSpace, metadataEl).setAttribute('id', Main.escapeTags(Metadata.metaObject.character));
         
-        var parametersEl = addAndReturnElement("parameters", nameSpace, metadataEl);
+        var definitionsEl = addAndReturnElement("definitions", nameSpace, metadataEl);
+        var parametersEl = addAndReturnElement("parameters", nameSpace, definitionsEl);
         var scoringFunctionEl = addAndReturnElement("scoringFunction", nameSpace, metadataEl);
         var scoringSumEl = document.createElementNS(nameSpace, "sum");
 

@@ -235,7 +235,8 @@ var Load;
         var character = Main.unEscapeTags($(metadata).find('character').attr('id'));
         var difficulty = $(metadata).find('difficulty').text();
         var parameterObject = {};
-        var parameters = $(metadata).find('parameters').children();
+        var definitions = $(metadata).find('definitions');
+        var parameters = $(definitions).find('parameters').children();
         var defaultChangeType = $(metadata).find('defaultChangeType').text();
         // Allows the editor to load older XML versions without defaultChangeType
         if (defaultChangeType === "")
