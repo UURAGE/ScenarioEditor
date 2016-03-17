@@ -76,12 +76,21 @@ var Config;
         return Config.types[typeName].loadType(typeXML);
     }
     
+    function appendChild(parentXML, name)
+    {
+        parentXML.appendChild(document.createElementNS(parentXML.namespaceURI, name));
+    }
+    
     Config.types =
     {
         'string':
         {
             name: 'string',
             loadType: function(typeXML) { return this; },
+            insertUnderlyingType: function(typeXML)
+            {
+                appendChild(typeXML, 'typeString');
+            },
             appendControlTo: function(containerEl, htmlId)
             {
                 containerEl.append($('<input>', { id: htmlId, type: 'text' }));
@@ -91,6 +100,10 @@ var Config;
         {
             name: 'integer',
             loadType: function(typeXML) { return this; },
+            insertUnderlyingType: function(typeXML)
+            {
+                appendChild(typeXML, 'typeInteger');
+            },
             appendControlTo: function(containerEl, htmlId)
             {
                 containerEl.append($('<input>', { id: htmlId, type: 'number' }));
@@ -100,6 +113,10 @@ var Config;
         {
             name: 'boolean',
             loadType: function(typeXML) { return this; },
+            insertUnderlyingType: function(typeXML)
+            {
+                appendChild(typeXML, 'typeBoolean');
+            },
             appendControlTo: function(containerEl, htmlId)
             {
                 containerEl.append($('<input>', { id: htmlId, type: 'checkbox' }));
@@ -116,6 +133,10 @@ var Config;
                     values.push(valueXML.textContent);
                 });
                 return $.extend({ values: values }, this);
+            },
+            insertUnderlyingType: function(typeXML)
+            {
+                appendChild(typeXML, 'typeString');
             },
             appendControlTo: function(containerEl, htmlId)
             {

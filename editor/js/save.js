@@ -39,11 +39,22 @@ var Save;
         addAndReturnElement("character", nameSpace, metadataEl).setAttribute('id', Main.escapeTags(Metadata.metaObject.character));
         
         var definitionsEl = addAndReturnElement("definitions", nameSpace, metadataEl);
+
+        // Save property definitions.
+        var propertyDefinitionsEl = addAndReturnElement("properties", nameSpace, definitionsEl);
+        for (var propertyId in Config.configObject.properties)
+        {
+            var property = Config.configObject.properties[propertyId];
+            var propertyEl = addAndReturnElement("property", nameSpace, propertyDefinitionsEl);
+            propertyEl.setAttribute("id", propertyId);
+            property.type.insertUnderlyingType(propertyEl);
+        }
+
+        // Save parameters and collect data for saving weights.
         var parametersEl = addAndReturnElement("parameters", nameSpace, definitionsEl);
         var scoringFunctionEl = addAndReturnElement("scoringFunction", nameSpace, metadataEl);
         var scoringSumEl = document.createElementNS(nameSpace, "sum");
 
-        // Save parameters and collect data for saving weights.
         for (var parameterID in Metadata.metaObject.parameterObject)
         {
             var parameterObj = Metadata.metaObject.parameterObject[parameterID];
