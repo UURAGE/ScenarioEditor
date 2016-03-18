@@ -267,6 +267,16 @@ var Load;
             };
         }
 
+        var properties = {};
+        $(metadata).children('properties').children().each(function()
+        {
+            var propertyId = this.attributes.idref.value;
+            if (propertyId in Config.configObject.properties)
+            {
+                properties[propertyId] = Config.configObject.properties[propertyId].type.fromXML(this);
+            }
+        });
+
         $(metadata).children('scoringFunction').children('sum').children('scale').children('paramRef').each(function()
         {
             var parameterId = this.attributes.idref.value;
@@ -292,6 +302,7 @@ var Load;
             difficulty: difficulty,
             character: character,
             description: description,
+            properties: properties,
             parameterObject: parameterObject,
             defaultChangeType: defaultChangeType
         };

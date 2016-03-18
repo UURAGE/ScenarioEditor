@@ -81,6 +81,11 @@ var Config;
         parentXML.appendChild(document.createElementNS(parentXML.namespaceURI, name));
     }
     
+    function toXMLSimple(valueXML, value)
+    {
+        valueXML.textContent = value;
+    }
+    
     Config.types =
     {
         'string':
@@ -94,7 +99,20 @@ var Config;
             appendControlTo: function(containerEl, htmlId)
             {
                 containerEl.append($('<input>', { id: htmlId, type: 'text' }));
-            }
+            },
+            getFromDOM: function(containerEl)
+            {
+                return containerEl.children('input').first().val();
+            },
+            setInDOM: function(containerEl, value)
+            {
+                containerEl.children('input').first().val(value);
+            },
+            fromXML: function(valueXML)
+            {
+                return valueXML.textContent;
+            },
+            toXML: toXMLSimple
         },
         'integer':
         {
@@ -106,8 +124,24 @@ var Config;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                containerEl.append($('<input>', { id: htmlId, type: 'number' }));
-            }
+                containerEl.append($('<input>', { id: htmlId, type: 'number', value: 0 }));
+            },
+            getFromDOM: function(containerEl)
+            {
+                // Note the defaulting of NaN to 0: we want to avoid
+                // NaNs where integers are expected at all costs.
+                var value = parseInt(containerEl.children('input').first().val(), 10);
+                return isNaN(value) ? 0 : parseInt(value, 10);
+            },
+            setInDOM: function(containerEl, value)
+            {
+                containerEl.children('input').first().val(value);
+            },
+            fromXML: function(valueXML)
+            {
+                return parseInt(valueXML.textContent, 10);
+            },
+            toXML: toXMLSimple
         },
         'boolean':
         {
@@ -120,7 +154,20 @@ var Config;
             appendControlTo: function(containerEl, htmlId)
             {
                 containerEl.append($('<input>', { id: htmlId, type: 'checkbox' }));
-            }
+            },
+            getFromDOM: function(containerEl)
+            {
+                return Boolean(containerEl.children('input').first().prop('checked'));
+            },
+            setInDOM: function(containerEl, value)
+            {
+                containerEl.children('input').first().prop('checked', value);
+            },
+            fromXML: function(valueXML)
+            {
+                return Boolean(valueXML.textContent);
+            },
+            toXML: toXMLSimple
         },
         'enumeration':
         {
@@ -146,7 +193,20 @@ var Config;
                     selectEl.append($('<option>', { text: value, value: value }));
                 });
                 containerEl.append(selectEl);
-            }
+            },
+            getFromDOM: function(containerEl)
+            {
+                return containerEl.children('select').first().val();
+            },
+            setInDOM: function(containerEl, value)
+            {
+                containerEl.children('select').first().val(value);
+            },
+            fromXML: function(valueXML)
+            {
+                return valueXML.textContent;
+            },
+            toXML: toXMLSimple
         }
     };
 })();

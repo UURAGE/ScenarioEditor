@@ -148,6 +148,7 @@ var Load3;
             difficulty: difficulty,
             character: character,
             description: description,
+            properties: {},
             parameterObject: parameterObject,
             defaultChangeType: defaultChangeType
         };

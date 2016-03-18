@@ -52,7 +52,7 @@ var Save;
 
         // Save parameters and collect data for saving weights.
         var parametersEl = addAndReturnElement("parameters", nameSpace, definitionsEl);
-        var scoringFunctionEl = addAndReturnElement("scoringFunction", nameSpace, metadataEl);
+        var scoringFunctionEl = document.createElementNS(nameSpace, "scoringFunction");
         var scoringSumEl = document.createElementNS(nameSpace, "sum");
 
         for (var parameterID in Metadata.metaObject.parameterObject)
@@ -76,6 +76,16 @@ var Save;
             paramRefEl.setAttribute("idref", parameterID);
         }
 
+        // Save statement-independent properties.
+        var propertiesEl = addAndReturnElement("properties", nameSpace, metadataEl);
+        for (var propertyId in Metadata.metaObject.properties)
+        {
+            var propertyValue = Metadata.metaObject.properties[propertyId];
+            var propertyEl = addAndReturnElement("property", nameSpace, propertiesEl);
+            propertyEl.setAttribute("idref", propertyId);
+            Config.configObject.properties[propertyId].type.toXML(propertyEl, propertyValue);
+        }
+
         // Save parameter weights.
         if (scoringSumEl.childNodes.length === 0)
         {
@@ -86,6 +96,7 @@ var Save;
         {
             scoringFunctionEl.appendChild(scoringSumEl);
         }
+        metadataEl.appendChild(scoringFunctionEl);
 
         // This part saves the feedback form.
         var feedbackFormEl = addAndReturnElement("feedbackForm", nameSpace, doc.documentElement);

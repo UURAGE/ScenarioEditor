@@ -65,12 +65,12 @@ var Metadata;
         {
             var property = Config.configObject.properties[propertyId];
             if (property.scopes.statementScope !== 'independent') continue;
-            var htmlId = 'meta-properties-' + property.id;
+            var controlHtmlId = 'meta-properties-' + property.id;
             
-            var propertyContainer = $('<div>');
+            var propertyContainer = $('<div>', { id: 'meta-properties-container-' + property.id });
             propertiesEl.append(propertyContainer);
-            propertyContainer.append($('<label>', { text: property.name + ':', 'for': htmlId }));
-            property.type.appendControlTo(propertyContainer, htmlId);
+            propertyContainer.append($('<label>', { text: property.name + ':', 'for': controlHtmlId }));
+            property.type.appendControlTo(propertyContainer, controlHtmlId);
             anyPropertyShown = true;
         }
         if (anyPropertyShown) propertiesEl.show();
@@ -93,6 +93,7 @@ var Metadata;
             difficulty: "medium",
             character: "", //character is defined in properties by free form input text
             description: "",
+            properties: {},
             parameterObject: pObj,
             defaultChangeType: LanguageManager.sLang("edt_parts_delta"),
         };
@@ -139,6 +140,17 @@ var Metadata;
         $("#scriptDescription").val(Metadata.metaObject.description);
         $("#character").val(Metadata.metaObject.character);
         $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
+        
+        for (var propertyId in Config.configObject.properties)
+        {
+            var property = Config.configObject.properties[propertyId];
+            if (property.scopes.statementScope !== "independent") continue;
+            if (propertyId in Metadata.metaObject.properties)
+            {
+                property.type.setInDOM($("#meta-properties-container-" + propertyId),
+                    Metadata.metaObject.properties[propertyId]);
+            }
+        }
     }
 
     function parameterDialog()
@@ -338,6 +350,14 @@ var Metadata;
 
         Metadata.metaObject.difficulty = $("#scriptDifficulty").val();
         Metadata.metaObject.description = $("#scriptDescription").val();
+
+        for (var propertyId in Config.configObject.properties)
+        {
+            var property = Config.configObject.properties[propertyId];
+            if (property.scopes.statementScope !== "independent") continue;
+            Metadata.metaObject.properties[propertyId] =
+                property.type.getFromDOM($("#meta-properties-container-" + propertyId));
+        }
 
         $("#metaScreen").dialog('close');
         Main.selectNode(previouslySelectedNode);
