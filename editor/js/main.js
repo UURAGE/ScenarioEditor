@@ -641,6 +641,7 @@ var Main;
                 preconditions: []
             },
             intent: [],
+            properties: {},
             video: null,
             image: null,
             audio: null,
@@ -1251,6 +1252,15 @@ var Main;
         });
         node.intent = intentsArray;
 
+        // Save properties.
+        for (var propertyId in Config.configObject.properties)
+        {
+            var property = Config.configObject.properties[propertyId];
+            if (property.scopes.statementScope !== "per") continue;
+            node.properties[propertyId] =
+                property.type.getFromDOM($("#node-properties-container-" + propertyId));
+        }
+
         // Save the media.
         node.video = ObjectGenerator.nullFromHTMLValue($("#videoOptions").val());
         node.image = ObjectGenerator.nullFromHTMLValue($("#imageOptions").val());
@@ -1664,7 +1674,7 @@ var Main;
 
         // Clear everything in the sidebar.
         $(
-            "#preconditionsDiv, #effectParameterDiv, #intentions"
+            "#preconditionsDiv, #effectParameterDiv, #intentions, #node-properties"
         ).children().remove();
 
         // Don't show properties if no node or tree is selected. Display the minimap
@@ -1707,6 +1717,24 @@ var Main;
                 var intent = node.intent[l];
                 addedDiv = HtmlGenerator.addEmptyIntention();
                 addedDiv.find(".name").val(intent.name);
+            }
+
+            // Properties:
+            var propertiesEl = $('#node-properties');
+            for (var propertyId in Config.configObject.properties)
+            {
+                var property = Config.configObject.properties[propertyId];
+                if (property.scopes.statementScope !== 'per') continue;
+                var controlHtmlId = 'node-properties-' + property.id;
+
+                var propertyContainer = $('<div>', { id: 'node-properties-container-' + property.id });
+                propertiesEl.append(propertyContainer);
+                propertyContainer.append($('<label>', { text: property.name + ':', 'for': controlHtmlId }));
+                property.type.appendControlTo(propertyContainer, controlHtmlId);
+                if (propertyId in node.properties)
+                {
+                    property.type.setInDOM(propertyContainer, node.properties[propertyId]);
+                }
             }
 
             $("#endNodeCheckbox").prop("checked", node.endNode);

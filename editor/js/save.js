@@ -372,6 +372,16 @@ var Save;
                 preconditionsEl.appendChild(preconditionsInXML);
             }
 
+            // Save per-statement properties.
+            var propertiesEl = addAndReturnElement("properties", nameSpace, statementEl);
+            for (var propertyId in node.properties)
+            {
+                var propertyValue = node.properties[propertyId];
+                var propertyEl = addAndReturnElement("property", nameSpace, propertiesEl);
+                propertyEl.setAttribute("idref", propertyId);
+                Config.configObject.properties[propertyId].type.toXML(propertyEl, propertyValue);
+            }
+
             var connectionElName = '';
             switch (node.type)
             {

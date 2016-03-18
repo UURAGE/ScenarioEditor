@@ -487,6 +487,16 @@ var Load;
             }
         }
 
+        var properties = {};
+        $(statement).children('properties').children().each(function()
+        {
+            var propertyId = this.attributes.idref.value;
+            if (propertyId in Config.configObject.properties)
+            {
+                properties[propertyId] = Config.configObject.properties[propertyId].type.fromXML(this);
+            }
+        });
+
         var node = Main.createAndReturnNode(type, id, Main.trees[treeID].div, Main.trees[treeID].dragDiv.attr('id'));
         Main.nodes[id] = {
             text: (type == Main.conversationType ? "" : text),
@@ -495,6 +505,7 @@ var Load;
             parameters: parameterEffects,
             preconditions: preconditionsJS,
             intent: intentsArray,
+            properties: properties,
             video: video,
             image: image,
             audio: audio,

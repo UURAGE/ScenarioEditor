@@ -285,6 +285,14 @@
                     <button id="addIntention" title="<?php sLang('edt_add');?>"><img src="<?php echo editor_url("png/others/plus.png");?>" alt="+"></button>
                   </div>
                 </div>
+                <div id="propertiesSection" class="sidebarSection">
+                  <div class="sub-header clickable">
+                    <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/intentions.png");?>" alt=""><?php sLang('edt_properties');?></h2>
+                  </div>
+                  <div class="collapsable">
+                    <div id="node-properties"></div>
+                  </div>
+                </div>
                 <div id="mediaSelector" class="sidebarSection">
                   <div class="sub-header clickable">
                     <h2 title="<?php sLang('edt_custom_media');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/media.png");?>" alt=""><?php sLang('edt_media');?></h2>
