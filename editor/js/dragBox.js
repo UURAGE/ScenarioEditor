@@ -12,15 +12,14 @@ var DragBox;
         startDragging : startDragging,
         showError : showError,
         isDroppable : isDroppable,
-        cancel: cancelDragBox
+        cancel: cancel
     };
 
     var dragging = false,
         startPos = {},
         dragPos = {},
         dragSafezone = 25,
-        stopHandler = null,
-        cancelDragBox = new Event("cancelDragBox");
+        stopHandler = null;
 
     // Starts a dragging action, registering the stop handler
     function startDragging(e, text, newStopHandler)
@@ -28,14 +27,19 @@ var DragBox;
         startPos = { x: e.pageX, y: e.pageY };
         stopHandler = newStopHandler;
         $(document).on('mousemove', handleDrag);
-        $(document).on('mouseup', {cancel:false}, handleStop);
-        $("#dragBox").on("cancelDragBox", {cancel:true}, handleStop);
+        $(document).on('mouseup', handleStop);
         dragging = true;
 
         updateDraggerPosition(e);
         showDraggerWithText(text);
         $('#dragBox').removeClass('error');
         $('body').css("cursor", "move");
+    }
+
+    // Stops a dragging action without executing the stop handler
+    function cancel()
+    {
+        if (dragging) stopDragging();
     }
 
     // Updates the position of the dragbox according to the mouse position
@@ -51,20 +55,24 @@ var DragBox;
         var pos = { left: e.pageX, top: e.pageY };
 
         // Allow the stop handler to cancel the drop
-        // Short-cicuit evaluation means that the drophandler is not executed on a cancel
-        if (e.data.cancel || (isDroppable() && stopHandler(pos)))
+        // (i.e. force the user to keep dragging)
+        if (isDroppable() && stopHandler(pos))
         {
-             // Reset all the dragging stuff
-            $('#dragBox').hide();
-            $(document).off('mousemove', handleDrag);
-            $(document).off('mouseup', handleStop);
-            $("#dragBox").off('cancelDragBox', handleStop);
-            dragging = false;
-            startPos = {};
-            dragPos = {};
-            stopHandler = null;
-            $('body').css("cursor", "");
+            stopDragging();
         }
+    }
+
+    // Resets dragging-related data and handlers
+    function stopDragging()
+    {
+        $('#dragBox').hide();
+        $(document).off('mousemove', handleDrag);
+        $(document).off('mouseup', handleStop);
+        dragging = false;
+        startPos = {};
+        dragPos = {};
+        stopHandler = null;
+        $('body').css("cursor", "");
     }
 
     // Only droppable if dragger is moved more than X pixels
@@ -96,7 +104,7 @@ var DragBox;
 
     function showDraggerWithText(text)
     {
-        drag = $('#dragBox');
+        var drag = $('#dragBox');
         drag.stop(true).css({ opacity: "" }).show();
         drag.html(text);
     }

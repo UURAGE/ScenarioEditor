@@ -117,7 +117,7 @@ var KeyControl;
         },
         27: function()
         {
-            $("#dragBox").trigger("cancelDragBox");
+            DragBox.cancel();
         }
     };
 
