@@ -216,7 +216,7 @@ var Main;
                 return true;
             });
         });
-        $("#newChildNode").on('mousedown', function(e)
+        $("#newChildNode").on('click', function(e)
         {
             createChildNode();
         });
@@ -711,12 +711,8 @@ var Main;
                 return;
             }
 
-            // Select the new node and open its inputArea
-            selectElement(node.id);
-            var nodeDiv = $('#'+node.id);
-            nodeDiv.trigger("dblclick");
-            
             // Reposition the new node
+            var nodeDiv = $('#'+node.id);
             var parentDiv = $('#'+parent.id);
             var left = parentDiv.position().left;
             var top = parentDiv.position().top + 55 + parentDiv.height();
