@@ -783,11 +783,8 @@ var Main;
                 if(cancel === false || cancel === undefined)
                 {
                     Main.nodes[id].text = Main.escapeTags(text);
-                    //Can only save changes for selected node
-                    selectElement(id);
-                    applyChanges();
-                    //Deselect node when finished editor
-                    //selectElement(null);
+                    changeNodeText(id);
+                    jsPlumb.repaint(id);
                 }
                 //Enable dragging for this component
                 jsPlumb.setDraggable(thisNode, true);
