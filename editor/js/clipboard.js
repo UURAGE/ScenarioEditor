@@ -234,7 +234,7 @@ var Clipboard;
         });
         //Save node text
         nodeElem.find(".statementText").text(copiedNode.text).show();
-        nodeElem.find("textarea.nodestatement").val(copiedNode.text);
+        nodeElem.find("textarea.nodestatement").val(Main.unEscapeTags(copiedNode.text));
 
         Main.changeNodeText(newNode.id);
 
