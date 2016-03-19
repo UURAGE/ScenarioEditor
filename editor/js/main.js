@@ -450,7 +450,7 @@ var Main;
 
         subjectDiv.on("click", function(e) 
         { 
-            cancelBubbleEvent(e);
+            e.stopPropagation();
 
             if (Main.selectedElement === id)
                 return;
@@ -757,7 +757,7 @@ var Main;
 
                     this.selectionStart = this.selectionEnd = -1;
                 }
-                cancelBubbleEvent(event);
+                event.stopPropagation();
             });
             input.append(txtArea);
             
@@ -910,7 +910,7 @@ var Main;
         // Make the node selected when we click on it.
         node.on("click", function(event)
         {
-            cancelBubbleEvent(event);
+            event.stopPropagation();
             if (Main.selectedElement === id)
                 return;
             if (event.ctrlKey)
@@ -926,7 +926,7 @@ var Main;
         // When we drag a node that is not part of the selected nodes, we remove the selection.
         node.on("mousedown", function(event)
         {
-            cancelBubbleEvent(event);
+            event.stopPropagation();
             if (!event.ctrlKey)
             {
                 if (!$(this).hasClass("multiSelected"))
@@ -1256,19 +1256,6 @@ var Main;
     /*
      ** Private Functions
      */
-
-    //used to prevent events from overlapping ui elements from being triggered
-    function cancelBubbleEvent(e)
-    {
-        if (e)
-        {
-            e.stopPropagation();
-        }
-        else
-        {
-            window.event.cancelBubble = true;
-        }
-    }
 
     //grid is based on the css specified size of tree containers.
     function initialiseGrid(domGridElement)
