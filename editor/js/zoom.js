@@ -13,6 +13,7 @@ var Zoom;
         toggleZoom : toggleZoom,
         zoomIn : zoomIn,
         zoomOut : zoomOut,
+        getZoomed: getZoomed,
         isZoomed : isZoomed
     };
 
@@ -78,6 +79,9 @@ var Zoom;
 
     function zoomOut(tree)
     {
+        if (!tree) tree = getZoomed();
+        if (!tree) return;
+
         if ($('#' + tree.id).hasClass('zoom'))
         {
             var parent = tree.dragDiv.parent();
@@ -111,13 +115,20 @@ var Zoom;
             Main.updateButtons();
         }
     }
+
+    function getZoomed()
+    {
+        var zoomedTrees = $("#mainCell .treeContainer.zoom");
+        if (zoomedTrees.length === 0) return null;
+
+        return Main.trees[zoomedTrees.eq(0).attr("id")];
+    }
     
     function isZoomed(treeID)
     {
         if (treeID === undefined)
         {
-            var zoomedTrees = $('#mainCell .treeContainer.zoom');
-            return zoomedTrees.length >= 1;  
+            return getZoomed() !== null;
         }  
         else 
         {

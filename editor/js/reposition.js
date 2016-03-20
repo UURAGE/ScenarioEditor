@@ -11,32 +11,29 @@
         // Event handlers.
         $("#repositionGraph").on('click', function()
         {
-            $.each(Main.trees, function(id, tree)
-            {
-                if (tree.dragDiv.hasClass('zoom'))
-                {
-                    // Return if there is no start node.
-                    var startNodeIDs = Save.getStartNodeIDs(tree);
-                    if(startNodeIDs[0] === -1) { return; }
+            var tree = Zoom.getZoomed();
+            if (!tree) return;
 
-                    Main.unsavedChanges = true;
+            // Return if there is no start node.
+            var startNodeIDs = Save.getStartNodeIDs(tree);
+            if(startNodeIDs[0] === -1) { return; }
 
-                    // First we distribute the nodes vertically based on the longest path to the Node.
-                    var verticalOrder =
-                        distributeNodesVertically(
-                            tree);
-                    // Next we try to find a way to place the nodes horizontally to minimize edge crossings.
-                    var optimizedOrder =
-                        optimizeHorizontalDistribution(
-                            verticalOrder);
-                    // Reposition the jsPlumb nodes based on the optimizedOrder, we suspend drawing while moving the nodes.
-                    Load.suspendedly(
-                        repositionNodes)(
-                        optimizedOrder);
-                    // Redraw everything to reflect all the changes.
-                    Main.repaintEverything();
-                }
-            });
+            Main.unsavedChanges = true;
+
+            // First we distribute the nodes vertically based on the longest path to the Node.
+            var verticalOrder =
+                distributeNodesVertically(
+                    tree);
+            // Next we try to find a way to place the nodes horizontally to minimize edge crossings.
+            var optimizedOrder =
+                optimizeHorizontalDistribution(
+                    verticalOrder);
+            // Reposition the jsPlumb nodes based on the optimizedOrder, we suspend drawing while moving the nodes.
+            Load.suspendedly(
+                repositionNodes)(
+                optimizedOrder);
+            // Redraw everything to reflect all the changes.
+            Main.repaintEverything();
         });
     });
 

@@ -164,12 +164,7 @@ var Main;
             e.preventDefault(); // Prevent selecting text
             var text = "[+" + LanguageManager.sLang("edt_common_subject") + "]";
 
-            if (Zoom.isZoomed())
-            {
-                var zoomedTree = $("#mainCell .treeContainer.zoom");
-                Zoom.zoomOut(Main.trees[zoomedTree.attr("id")]);
-                MiniMap.update(true);
-            }
+            Zoom.zoomOut();
 
             DragBox.startDragging(e, text, function(pos)
             {
@@ -537,13 +532,8 @@ var Main;
 
     function addNewTree(id, indicatorSnap, offsetX, offsetY) 
     {
-        if(Zoom.isZoomed()) 
-        {
-            var zoomed = $('#mainCell .zoom');
-            Zoom.zoomOut(Main.trees[zoomed.attr("id")]);
-            
-            MiniMap.update(true);
-        }
+        Zoom.zoomOut();
+        
         //creates empty tree and selects it
         var tree = createEmptyTree(id, indicatorSnap, offsetX, offsetY);
         selectTree(tree.id);  
@@ -580,8 +570,9 @@ var Main;
         var container = $(".selected.treeContainer"); //when multiple things are selected their class is .multiselected.
 
         if (container.length === 0)
-        { //jquery gives an object with length zero on a 'failed' selector
-            container = $("#mainCell .zoom"); //looking at a zoomed in tree container. make all nodes appear there
+        {
+            var zoomedTree = Zoom.getZoomed();
+            if (zoomedTree) container = zoomedTree.dragDiv;
         }
 
         if (container.length === 0)
@@ -648,7 +639,7 @@ var Main;
         if (node === undefined) return;
 
         // the canvas is open; get the canvas div
-        var treeDiv = $('#main > .treeContainer.zoom > .treeDiv');
+        var treeDiv = Zoom.getZoomed().div;
         // calculate canvas boundaries
         var leftBound = $('#main').position().left;
         var rightBound = leftBound + treeDiv.width();

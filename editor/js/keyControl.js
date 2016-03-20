@@ -333,10 +333,7 @@ var KeyControl;
         
         if (Zoom.isZoomed())
         {
-            var zoomedTree = $('#mainCell .zoom');
-            var treeID = zoomedTree.attr("id");
-            
-            Main.trees[treeID].nodes.forEach(function(nodeID)
+            Zoom.getZoomed().nodes.forEach(function(nodeID)
             {
                 selectExtraElement(nodeID);
             });
