@@ -334,8 +334,8 @@ var MiniMap;
     {
         if (!enabled) return;
 
+        if (!active) showAnimated($("#miniwrap"));
         active = true;
-        showAnimated($("#miniwrap"));
         update(true);
     }
 
@@ -343,7 +343,7 @@ var MiniMap;
     {
         if (!enabled) return;
 
+        if (active) hideAnimated($("#miniwrap"));
         active = false;
-        hideAnimated($("#miniwrap"));
     }
 })();
