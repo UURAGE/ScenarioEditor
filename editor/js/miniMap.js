@@ -215,6 +215,7 @@ var MiniMap;
         {
             $("#scaledDiv").empty();
             main.clone().appendTo($("#scaledDiv"));
+            $("#scaledDiv #gridIndicator").remove();
             //Rename cloned div ids!
             $("#scaledDiv > #main").attr("id","miniMain");
             //Remove inappropriate subjects from minimap
