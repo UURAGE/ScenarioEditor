@@ -855,15 +855,15 @@ var Main;
         jsPlumb.makeSource(node,
         {
             filter: ".ep", // only supported by jquery
-            anchor: "Continuous",
-            connector: ["StateMachine", {curviness: 20 }],
-            connectorStyle:
-            {
-                strokeStyle: "#5c96bc",
-                lineWidth: 2,
-                outlineColor: "transparent",
-                outlineWidth: 4
-            }
+            //anchor: "Continuous",
+            //connector: ["StateMachine", {curviness: 20 }],
+            //connectorStyle:
+            //{
+            //    strokeStyle: "#5c96bc",
+            //    lineWidth: 2,
+            //    outlineColor: "transparent",
+            //    outlineWidth: 4
+            //}
         });
 
         // initialise all '.w' elements as connection targets.
@@ -877,11 +877,11 @@ var Main;
         });
 
         // Used for dragging of multiple nodes.
-        node.multiDraggable(
-        {
-            container: parent,
-            groupSel: ".multiSelected"
-        });
+        //node.multiDraggable(
+        //{
+        //    container: parent,
+        //    groupSel: ".multiSelected"
+        //});
 
         // Make the node selected when we click on it.
         node.on("click", function(event)
