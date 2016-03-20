@@ -32,8 +32,8 @@
             Load.suspendedly(
                 repositionNodes)(
                 optimizedOrder);
-            // Redraw everything to reflect all the changes.
-            Main.repaintEverything();
+            // Redraw zoomed tree to reflect all the changes.
+            Main.repaintZoomedNodes();
         });
     });
 

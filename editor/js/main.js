@@ -32,7 +32,7 @@ var Main;
         addNewNode: addNewNode,
         addNewTree: addNewTree,
         applyChanges: applyChanges,
-        changeAllNodeTexts: changeAllNodeTexts,
+        changeZoomedNodeTexts: changeZoomedNodeTexts,
         changeNodeText: changeNodeText,
         createEmptyTree: createEmptyTree,
         createAndReturnNode: createAndReturnNode,
@@ -44,7 +44,7 @@ var Main;
         openConversation: openConversation,
         placeNewNode: placeNewNode,
         placeNewTree: placeNewTree,
-        repaintEverything: repaintEverything,
+        repaintZoomedNodes: repaintZoomedNodes,
         selectElement: selectElement,
         selectNode: selectNode,
         unEscapeTags: unEscapeTags,
@@ -242,7 +242,7 @@ var Main;
             else
                 $("#labelText").attr("class", "statements");
 
-            changeAllNodeTexts();
+            changeZoomedNodeTexts();
         });
 
         $("#main").on('mouseenter', function()
@@ -712,7 +712,7 @@ var Main;
             top += parentDiv.parent().scrollTop() ? parentDiv.parent().scrollTop() : 0 ;
             // Actually move node
             nodeDiv.css({"top": top, "left": left});
-            repaintEverything();
+            repaintZoomedNodes();
         }
     }
 
@@ -1001,12 +1001,14 @@ var Main;
          });
     }
     
-    // Changes the text for all nodes.
-    function changeAllNodeTexts()
+    function changeZoomedNodeTexts()
     {
-        for (var nodeID in Main.nodes)
+        if (!Zoom.isZoomed()) return;
+        Zoom.getZoomed().nodes.forEach(function (nodeID)
+        {
             changeNodeText(nodeID);
-        repaintEverything();
+        });
+        repaintZoomedNodes();
     }
 
     function deleteAllSelected()
@@ -1021,8 +1023,9 @@ var Main;
             if (Main.selectedElement !== null)
                 deleteElement(Main.selectedElement);
             Main.selectedElements = [];
-        });
+        }, true);
 
+        repaintZoomedNodes();
         MiniMap.update(true);
     }
 
@@ -1202,10 +1205,12 @@ var Main;
         $(".parentSelected").removeClass("parentSelected");
     }
 
-    function repaintEverything()
+    function repaintZoomedNodes()
     {
-        for (var nodeID in Main.nodes)
+        if (!Zoom.isZoomed()) return;
+        Zoom.getZoomed().nodes.forEach(function (nodeID) {
             jsPlumb.repaint(nodeID);
+        });
     }
 
     function escapeTags(str) 
