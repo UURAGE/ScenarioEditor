@@ -509,16 +509,13 @@ var Main;
             containment: [0, $("#toolbar").outerHeight(), $(
                     "#main").outerWidth(), $("#toolbar").outerHeight() +
                 $("#main").outerHeight()
-            ]
+            ],
+
+            stop:function(event)
+            {
+                dropHandler(event, id);
+            }
         }); //we cannot use the built in grid functionality because it doesnt allow to drag "outside" the graph area to expand it
-        dragDiv.on("dragstop", function(event)
-        {
-            dropHandler(event, id);
-        }); //dragging "outside" needs a manually set containment rectangle to work properly
-        treeDiv.on("dragstop", function(event)
-        {
-            event.stopPropagation();
-        }); //the build in grid also doesnt work well with a scrolling container
 
         // Attach minimap scroll event listener to treeDiv
         MiniMap.attachScrollListener(treeDiv);

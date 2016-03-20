@@ -3,6 +3,7 @@
 jsPlumb.bind("ready", function() 
 {
     // setup some defaults for jsPlumb.
+    
     jsPlumb.importDefaults(
     {
         Endpoint : ["Dot", {radius:2}],
@@ -16,6 +17,7 @@ jsPlumb.bind("ready", function()
             } ]
         ]
     });
+
 
     // bind a dblclick listener to each connection; the connection is deleted. you could of course
     // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
