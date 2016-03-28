@@ -34,23 +34,23 @@ var KeyControl;
                 {
                     if(e.keyCode in ctrlNumberControl)
                     {
-                        ensurePreventDefault(this, e, ctrlNumberControl[e.keyCode]);
+                        Utils.ensurePreventDefault(this, e, ctrlNumberControl[e.keyCode]);
                     }
                     else if(ch in ctrlLetterControl)
                     {
-                        ensurePreventDefault(this, e, ctrlLetterControl[ch]);
+                        Utils.ensurePreventDefault(this, e, ctrlLetterControl[ch]);
                     }
                     
                     $("#main").focus();
                 }
                 else if(e.keyCode in numberControl)
                 {
-                    ensurePreventDefault(this, e, numberControl[e.keyCode]);
+                    Utils.ensurePreventDefault(this, e, numberControl[e.keyCode]);
                     $("#main").focus();
                 }
                 else if (ch in letterControl)
                 {
-                    ensurePreventDefault(this, e, letterControl[ch]);
+                    Utils.ensurePreventDefault(this, e, letterControl[ch]);
                 }
             }
         });
@@ -173,20 +173,6 @@ var KeyControl;
             moveNodeLeft();
         }
     };
-    
-    // Ensures the default event trigger is really prevented, 
-    // because of a bug in firefox it is still triggered, 
-    // when just calling event.preventDefault() 
-    // http://stackoverflow.com/questions/14860759/cant-override-ctrls-in-firefox-using-jquery-hotkeys
-    // -> move this to utils?
-    function ensurePreventDefault(div, event, eventFunction)
-    {
-        event.preventDefault();
-                        
-        div.blur();
-                        
-        setTimeout(function() { eventFunction(); }, 50);        
-    }
 
     /*
      ** Public Functions
