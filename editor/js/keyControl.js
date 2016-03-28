@@ -75,6 +75,11 @@ var KeyControl;
         },
         R: function()
         {
+            if(Zoom.isZoomed()) 
+                Main.createChildNode();
+        },
+        T: function()
+        {
             if(!Zoom.isZoomed()) 
                 Main.addNewTree(null, true, 0, 0);
         },

@@ -34,6 +34,7 @@ var Main;
         applyChanges: applyChanges,
         changeZoomedNodeTexts: changeZoomedNodeTexts,
         changeNodeText: changeNodeText,
+        createChildNode: createChildNode,
         createEmptyTree: createEmptyTree,
         createAndReturnNode: createAndReturnNode,
         dehighlightParents: dehighlightParents,
