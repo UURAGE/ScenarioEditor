@@ -261,7 +261,7 @@ var Main;
         });
 
         // Used for selecting multiple nodes.
-        $("#main").xselectable(
+        $("#main").selectable(
         {
             distance: 5,
             filter: ".w", // Only select the nodes.
@@ -272,7 +272,7 @@ var Main;
         {
             ctrlDown = event.ctrlKey;
         });
-        $("#main").on('xselectablestart', function()
+        $("#main").on('selectablestart', function()
         {
             $(this).focus();
             // Make sure no node is selected when we start selecting.
@@ -283,38 +283,49 @@ var Main;
             }
             xselectableSelected = [];
         });
-        $("#main").on('xselectableselected', function(event, ui)
+        $("#main").on('selectableselected', function(event, element)
         {
             // Add all selected nodes to a array.
-            for (var i = 0; i < ui.selected.length; i++)
-            {
-                var id = ui.selected[i].id;
+            var id = element.selected.id;
 
-                //not zoomed into a tree, nodes may not be selected
-                if (!Zoom.isZoomed() && !(id in Main.trees))
+            //zoomed, select nodes
+            if (Zoom.isZoomed())
+            {
+                if(!(id in Main.trees))
                 {
                     $("#" + id).removeClass("multiSelected");
                     $("#" + id).removeClass(
-                        "xselectable-selected");
-                    continue;
-                }
-                // Prevent duplicate nodes.
-                if (!$("#" + id).hasClass("multiSelected"))
+                        "selectable-selected");
+
                     Main.selectedElements.push(id);
-                xselectableSelected.push(id); // This must also be done with duplicate nodes to remove the xselectable.
+                    xselectableSelected.push(id); // This must also be done with duplicate nodes to remove the xselectable.
+                }
             }
-            MiniMap.update(true);
+            else
+            {
+                if(id in Main.trees)
+                {
+                    $("#" + id).removeClass("multiSelected");
+                    $("#" + id).removeClass(
+                        "selectable-selected");
+
+                    Main.selectedElements.push(id);
+                    xselectableSelected.push(id); // This must also be done with duplicate nodes to remove the xselectable.
+                }
+            }
         });
-        $("#main").on('xselectablestop', function()
+        $("#main").on('selectablestop', function()
         {
             for (var i = 0; i < xselectableSelected.length; i++)
                 $("#" + xselectableSelected[i]).removeClass(
-                    "xselectable-selected").addClass(
+                    "selectable-selected").addClass(
                     "multiSelected");
 
             // If there's only one node selected, show the node.
             if (Main.selectedElements.length === 1)
                 selectElement(Main.selectedElements[0]);
+
+            MiniMap.update(true);
         });
         $('#allConversationsHTML').hide();
 
@@ -372,12 +383,12 @@ var Main;
                 selectElement(null);
             }
         });
-        treeDiv.xselectable(
+        treeDiv.selectable(
         {
             distance: 5,
             filter: ".w", // Only select the nodes.
         });
-        treeDiv.xselectable('disable'); //box selection only useful in zoomed state
+        treeDiv.selectable('disable'); //box selection only useful in zoomed state
 
         var zoomTreeButton = $('<div>',{text:"[+]", class:"zoomTreeButton button"});
         zoomTreeButton.on("click", function()
