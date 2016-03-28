@@ -299,6 +299,8 @@ var Main;
 
                     Main.selectedElements.push(id);
                     xselectableSelected.push(id); // This must also be done with duplicate nodes to remove the xselectable.
+
+                    jsPlumb.addToDragSelection(element.selected);
                 }
             }
             else
@@ -1031,6 +1033,8 @@ var Main;
 
     function selectElement(elementId)
     {
+        jsPlumb.clearDragSelection();
+
         if (elementId in Main.trees)
             selectTree(elementId);
         else

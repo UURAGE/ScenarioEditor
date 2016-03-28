@@ -206,6 +206,9 @@ var KeyControl;
             Main.selectedElements.push(elementID);
             $("#" + elementID).addClass("multiSelected");
         }
+
+        if(elementID !== null && elementID !== undefined && !(elementID in Main.trees))
+            jsPlumb.addToDragSelection($("#"+elementID)[0]);
     }
 
     /*
@@ -215,6 +218,9 @@ var KeyControl;
     //If the user clicked on a selected node while ctrl is pressed, deselect the node.
     function deselectElement(node)
     {
+        if(node !== null && node !== undefined && !(node in Main.trees))
+            jsPlumb.removeFromDragSelection($("#"+node)[0]);
+
         if (Main.selectedElement !== null)
             Main.selectElement(null);
         else
