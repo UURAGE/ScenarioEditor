@@ -382,7 +382,7 @@ var Save;
             }
 
             // Get the outgoing connections of the node.
-            var connections = jsPlumb.getConnections(
+            var connections = tree.plumbInstance.getConnections(
             {
                 source: node.id
             });
@@ -448,7 +448,7 @@ var Save;
             var orphanNodes = [];
             $.each(tree.nodes, function(index, nodeID)
             {
-                var connections = jsPlumb.getConnections(
+                var connections = tree.plumbInstance.getConnections(
                 {
                     target: nodeID
                 });

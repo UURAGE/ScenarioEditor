@@ -38,11 +38,11 @@
         // Find a topological ordering of the nodes.
         var topOrd = findTopologicalOrdering(tree);
         // Give each node a rank (equal to the length of the longest path to the node from the source).
-        giveNodesRanks(topOrd);
+        giveNodesRanks(topOrd, tree.plumbInstance);
         // Sort the topological ordering based on the ranks of the nodes.
         var topOrdSortedByRank = topOrd.sort(compareRanks);
         // Create the virtual node network, refer to the documentation for more details.
-        return addVirtualNodes(topOrdSortedByRank);
+        return addVirtualNodes(topOrdSortedByRank, tree.plumbInstance);
     }
 
     function optimizeHorizontalDistribution(order)
@@ -338,7 +338,7 @@
 
     // First, this function places the nodes in an array of arrays, sperating the nodes by rank.
     // Then whenever a node is connected to another node with more than 1 rank difference, this adds virtual nodes between those nodes on every rank between them.
-    function addVirtualNodes(topOrdSortedByRank)
+    function addVirtualNodes(topOrdSortedByRank, plumbInstance)
     {
         // We are going add an array in each node to save which children (including virtual nodes) it has and which parents.
         // First we initialise (and/or empty) those arrays.
@@ -374,7 +374,7 @@
             virtualNodeNetwork[currentNode.topologicalRank].push(
                 currentNode);
             // We set the array of it's children. We want the nodes themselves, not the IDs in this array, so we map over this array to get them.
-            currentNode.topologicalChildren = jsPlumb.getConnections(
+            currentNode.topologicalChildren = plumbInstance.getConnections(
             {
                 source: topOrdSortedByRank[j]
             }).map(connectionToNode);
@@ -528,7 +528,7 @@
     }
 
     // This function gives every node a rank (the longest path from the source node).
-    function giveNodesRanks(topologicalOrdening)
+    function giveNodesRanks(topologicalOrdening, plumbInstance)
     {
         // Initialise every rank to minus infinity.
         $.each(topologicalOrdening, function(index, nodeID)
@@ -541,7 +541,7 @@
         for (var i = 0; i < topologicalOrdening.length; i++)
         {
             //... take a look at every child of that node ...
-            var connections = jsPlumb.getConnections(
+            var connections = plumbInstance.getConnections(
             {
                 source: topologicalOrdening[i]
             });
@@ -575,7 +575,7 @@
         $.each(Save.getStartNodeIDs(tree), function(index, startNodeID)
         {
             // Recursively find a reversed topological ordering.
-            findTopologicalOrderingRec(startNodeID, topologicalOrderening);
+            findTopologicalOrderingRec(startNodeID, topologicalOrderening, tree.plumbInstance);
         });
         // Finding a reversed topological ordering (with children before parents) is easier to code,
         // so we find the reversed ordering and then reverse again to get the result we want.
@@ -583,7 +583,7 @@
     }
 
     // The recursive function to find the topological ordering.
-    function findTopologicalOrderingRec(currentNodeID, topologicalOrderening)
+    function findTopologicalOrderingRec(currentNodeID, topologicalOrderening, plumbInstance)
     {
         // If we haven't visited this node yet ...
         if (!Main.nodes[currentNodeID].topologicalOrderingVisited)
@@ -591,7 +591,7 @@
             //... we have visited this node now.
             // While visiting this node we first make sure all children are added to topologicalOrderening, then we add the node itself.
             Main.nodes[currentNodeID].topologicalOrderingVisited = true;
-            var connections = jsPlumb.getConnections(
+            var connections = plumbInstance.getConnections(
             {
                 source: currentNodeID
             });

@@ -90,12 +90,12 @@ var Load;
     }
 
     // Wraps a function so that it is executed while jsPlumb drawing is suspended.
-    function suspendedly(func)
+    function suspendedly(func, plumbInstance)
     {
         return function()
         {
             var args = Array.prototype.slice.call(arguments);
-            jsPlumb.doWhileSuspended(function()
+            plumbInstance.doWhileSuspended(function()
             {
                 func.apply(this, args);
             });
@@ -118,7 +118,10 @@ var Load;
 
         if(Main.nodes.length !== 0)
         {
-            jsPlumb.deleteEveryEndpoint();
+            Main.trees.forEach(function(tree)
+            {
+                tree.plumbInstance.deleteEveryEndpoint();
+            });
         }
 
         $(".w").remove();
@@ -130,7 +133,7 @@ var Load;
     function generateGraph(xml)
     {
         var connections = {};
-
+        var plumbInstance;
         if (!loadedMetaObject.scriptVersion) //version is undefined. script does not have sequence, interleave or tree tags
         {
             generateGraphLegacy(xml);
@@ -145,7 +148,7 @@ var Load;
                     var treeID = this.getAttribute('id');
                     Main.maxTreeNumber = Math.max(parseInt(treeID.substring(4)) + 1, Main.maxTreeNumber);
                     var tree = Main.createEmptyTree(treeID, false, 0, 0);
-
+                    plumbInstance = tree.plumbInstance;
                     // get the subject from the XML
                     tree.subject = Main.unEscapeTags($(this).children('subject')[0].textContent);
 
@@ -193,7 +196,7 @@ var Load;
         $.each(connections, function(sourceId, targets)
         {
             for (var i = 0; i < targets.length; i++)
-                jsPlumb.connect(
+                plumbInstance.connect(
                 {
                     source: sourceId,
                     target: targets[i]
@@ -229,7 +232,7 @@ var Load;
         $.each(connections, function(sourceId, targets)
         {
             for (var i = 0; i < targets.length; i++)
-                jsPlumb.connect(
+                tree.plumbInstance.connect(
                 {
                     source: sourceId,
                     target: targets[i]

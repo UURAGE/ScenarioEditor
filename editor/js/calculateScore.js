@@ -22,7 +22,7 @@
     {
         if (nodeID === null) return; //node is not defined.
 
-        var connections = jsPlumb.getConnections(
+        var connections = Main.trees[Main.nodes[nodeID].parent].plumbInstance.getConnections(
         {
             target: nodeID
         });

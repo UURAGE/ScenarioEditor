@@ -57,8 +57,6 @@ var Main;
         makeCollapsable();
 
         MiniMap.initialise();
-
-        jsPlumb.setSuspendDrawing(true);
         
         updateButtons();
         
@@ -300,7 +298,7 @@ var Main;
                     Main.selectedElements.push(id);
                     xselectableSelected.push(id); // This must also be done with duplicate nodes to remove the xselectable.
 
-                    jsPlumb.addToDragSelection(element.selected);
+                    Zoom.getZoomed.plumbInstance.addToDragSelection(element.selected);
                 }
             }
             else
@@ -397,6 +395,7 @@ var Main;
         {
             Zoom.toggleZoom(Main.trees[id]);
             MiniMap.update(true);
+            repaintZoomedNodes();
         });
 
         var defaultName = LanguageManager.sLang("edt_main_default_subject");
@@ -492,7 +491,8 @@ var Main;
             leftScroll: 0, //necessary to zoom in to the spot on the graph where last zoomed out
             topScroll: 0,
             level: 0,
-            nodes: []
+            nodes: [],
+            plumbInstance: genJsPlumbInstance(treeDiv)
         };
 
         //first time a treecontainer is made we set the grid all containers will snap to (if the grid indicator has not displayed already)
@@ -517,7 +517,7 @@ var Main;
         Main.trees[id].level = Main.trees[id].topPos;
 
         //(x,y) of upper left of containment and (x,y) of lower right
-        jsPlumb.draggable(dragDiv,
+        Main.trees[id].plumbInstance.draggable(dragDiv,
         {
             containment: [0, $("#toolbar").outerHeight(), $(
                     "#main").outerWidth(), $("#toolbar").outerHeight() +
@@ -700,7 +700,7 @@ var Main;
             // If there are errors (cycles, invalid pairs, existing connections)
             // regarding the connection to be created, delete the new node and cancel.
 
-            var connection = makeConnection(parent.id, node.id);
+            var connection = makeConnection(parent.id, node.id, Zoom.getZoomed.plumbInstance);
 
             if (!connection)
             {
@@ -730,6 +730,7 @@ var Main;
         }
 
         Main.trees[parentID].nodes.push(id);
+        var plumbInstance = Main.trees[parentID].plumbInstance;
 
         // Add the node to the html.
         var node = $('<div id="'+id+'" class="w '+ type+'">');
@@ -773,10 +774,10 @@ var Main;
                 {
                     Main.nodes[id].text = text;
                     changeNodeText(id);
-                    jsPlumb.repaint(id);
+                    plumbInstance.repaint(id);
                 }
                 //Enable dragging for this component
-                jsPlumb.setDraggable(thisNode, true);
+                plumbInstance.setDraggable(thisNode, true);
             });
             
             input.on('keydown', function(e)
@@ -823,7 +824,7 @@ var Main;
                 if(Main.nodes[id].type !== Main.conversationType)
                 {
                     // Disable dragging for this component
-                    jsPlumb.setDraggable(thisNode, false);
+                    plumbInstance.setDraggable(thisNode, false);
 
                     // Make room for typing text in the node     
                     thisNode.height(h+35);
@@ -854,7 +855,7 @@ var Main;
         node.css({"top": topOffset, "left": leftOffset});
 
         // initialise draggable elements.
-        jsPlumb.draggable(node,
+        plumbInstance.draggable(node,
         {
             containment: "parent"
         });
@@ -865,7 +866,7 @@ var Main;
         // which prevents us from just setting a jsPlumb.Defaults.PaintStyle.  but that is what i
         // would recommend you do. Note also here that we use the 'filter' option to tell jsPlumb
         // which parts of the element should actually respond to a drag start.
-        jsPlumb.makeSource(node,
+        plumbInstance.makeSource(node,
         {
             filter: ".ep", // only supported by jquery
             //anchor: "Continuous",
@@ -880,7 +881,7 @@ var Main;
         });
 
         // initialise all '.w' elements as connection targets.
-        jsPlumb.makeTarget(node,
+        plumbInstance.makeTarget(node,
         {
             dropOptions:
             {
@@ -1015,7 +1016,21 @@ var Main;
 
     function deleteAllSelected()
     {
+        var suspendedTrees = [];
+
+        //suspend the drawing in each tree where deleteions will occur
+        Main.selectedElements.forEach(function(element)
+        {
+            if(element in Main.trees)
+            {
+                suspendedTrees.push(element);
+                Main.trees[element].plumbInstance.setSuspendDrawing(true);
+            }
+        });
+
         $(".pathToDeadEnd").removeClass("pathToDeadEnd");
+
+        //suspend the jsplumb instance that handles the tree containers
         jsPlumb.doWhileSuspended(function()
         {
             for (var i = 0; i < Main.selectedElements.length; i++)
@@ -1027,14 +1042,17 @@ var Main;
             Main.selectedElements = [];
         }, true);
 
+        suspendedTrees.forEach(function(tree)
+        {
+            Main.trees[tree].plumbInstance.setSuspendDrawing(false, true);
+        });
+
         repaintZoomedNodes();
         MiniMap.update(true);
     }
 
     function selectElement(elementId)
     {
-        jsPlumb.clearDragSelection();
-
         if (elementId in Main.trees)
             selectTree(elementId);
         else
@@ -1044,6 +1062,8 @@ var Main;
     // Select a node.
     function selectNode(nodeID)
     {
+        Main.trees[Main.nodes[nodeID].parent].plumbInstance.clearDragSelection();
+
         // Before we change the node, we first apply the changes that may have been made.
         if (Main.selectedElement !== null)
             applyChanges();
@@ -1179,14 +1199,14 @@ var Main;
         changeNodeText(Main.selectedElement);
 
         // Repaint the selected node after all changes.
-        jsPlumb.repaint($('#' + Main.selectedElement));
+        Main.trees[node.parent].plumbInstance.repaint($('#' + Main.selectedElement));
     }
 
     function highlightParents(nodeID)
     {
         if (nodeID === null) return;
 
-        var connections = jsPlumb.getConnections(
+        var connections = Main.trees[Main.nodes[nodeID].parent].plumbInstance.getConnections(
         {
             target: nodeID
         });
@@ -1212,9 +1232,7 @@ var Main;
     function repaintZoomedNodes()
     {
         if (!Zoom.isZoomed()) return;
-        Zoom.getZoomed().nodes.forEach(function (nodeID) {
-            jsPlumb.repaint(nodeID);
-        });
+        Zoom.getZoomed().plumbInstance.repaintEverything();
     }
 
     function escapeTags(str) 
@@ -1509,7 +1527,7 @@ var Main;
 
         // Delete the node of our object and remove it from the graph.
         delete Main.nodes[toDelete];
-        jsPlumb.remove($('#' + toDelete));
+        parentTree.plumbInstance.remove($('#' + toDelete));
     }
 
     function applyTreeChanges()
@@ -1620,7 +1638,7 @@ var Main;
         }
     }
 
-    function makeConnection(sourceID, targetID) 
+    function makeConnection(sourceID, targetID, plumbInstance)
     {
         var sourceNode = Main.nodes[sourceID];
         var targetNode = Main.nodes[targetID];
@@ -1662,7 +1680,7 @@ var Main;
         }
         
         // This check needs revision, maybe we can allow a node to have more than 10 outgoing connections
-        if (jsPlumb.getConnections({source: sourceID}).length >= 10)
+        if (plumbInstance.getConnections({source: sourceID}).length >= 10)
         {
             alert(LanguageManager.sLang("edt_plumb_error_child_type"));
             return false;
@@ -1672,14 +1690,14 @@ var Main;
             return false;
         }
 
-        jsPlumb.connect({ source: sourceID, target: targetID });
+        plumbInstance.connect({ source: sourceID, target: targetID });
         
         return true;
     }
     
     function getFirstChildIdOrNull(sourceId)
     {
-        var connections = jsPlumb.getConnections({ source: sourceId });
+        var connections = Main.trees.[Main.nodes[sourceId].parent].plumbInstance.getConnections({ source: sourceId });
         return (connections.length === 0 ? null : connections[0].targetId);
     }
 

@@ -208,7 +208,7 @@ var KeyControl;
         }
 
         if(elementID !== null && elementID !== undefined && !(elementID in Main.trees))
-            jsPlumb.addToDragSelection($("#"+elementID)[0]);
+            Main.trees[Main.nodes[elementID].parent].plumbInstance.addToDragSelection($("#"+elementID)[0]);
     }
 
     /*
@@ -219,7 +219,7 @@ var KeyControl;
     function deselectElement(node)
     {
         if(node !== null && node !== undefined && !(node in Main.trees))
-            jsPlumb.removeFromDragSelection($("#"+node)[0]);
+            Main.trees[Main.nodes[node].parent].plumbInstance.removeFromDragSelection($("#"+node)[0]);
 
         if (Main.selectedElement !== null)
             Main.selectElement(null);
@@ -241,6 +241,7 @@ var KeyControl;
     {
         // Check if none of the selected nodes are out of the upper bound
         var outOfUpperBound = false;
+        var plumbInstance = Main.trees[Main.selectedElements[0].parent].plumbInstance
         for (var i = 0; i < Main.selectedElements.length; i++)
         {
             var upperBound = $('#main').position().top + 50;
@@ -259,14 +260,16 @@ var KeyControl;
                 {
                     top: $("#" + Main.selectedElements[j]).offset().top - 5
                 });
-                jsPlumb.repaint($("#" + Main.selectedElements[j]));
             }
+
+            plumbInstance.repaintEverything();
         }
     }
 
     //If a node is selected and arrow up is pressed, move the node down.
     function moveNodeDown()
     {
+        var plumbInstance = Main.trees[Main.selectedElements[0].parent].plumbInstance
         for (var i = 0; i < Main.selectedElements.length; i++)
         {
             $("#" + Main.selectedElements[i]).offset(
@@ -274,17 +277,21 @@ var KeyControl;
                 top: $("#" + Main.selectedElements[i]).offset()
                     .top + 5
             });
-            jsPlumb.repaint($("#" + Main.selectedElements[i]));
         }
+
+        plumbInstance.repaintEverything();
     }
 
     //If a node is selected and arrow up is pressed, move the node to the left.
     function moveNodeLeft()
     {
         // Check if none of the nodes will move out of the canvas
+        var plumbInstance = Main.trees[Main.selectedElements[0].parent].plumbInstance
         var outOfLeftBound = false;
         for (var i = 0; i < Main.selectedElements.length; i++)
         {
+            plumbInstance = Main.trees[Main.selectedElements[i].parent].plumbInstance
+
             var leftBound = $('#main').position().left;
 
             var newLeft = $("#" + Main.selectedElements[i]).offset().left - 5;
@@ -304,14 +311,15 @@ var KeyControl;
                 {
                     left: $("#" + Main.selectedElements[j]).offset().left - 5
                 });
-                jsPlumb.repaint($("#" + Main.selectedElements[j]));
             }
+            plumbInstance.repaintEverything();
         }
     }
 
     //If a node is selected and arrow up is pressed, move the node to the right.
     function moveNodeRight()
     {
+        var plumbInstance = Main.trees[Main.selectedElements[0].parent].plumbInstance
         for (var i = 0; i < Main.selectedElements.length; i++)
         {
             $("#" + Main.selectedElements[i]).offset(
@@ -319,8 +327,9 @@ var KeyControl;
                 left: $("#" + Main.selectedElements[i]).offset()
                     .left + 5
             });
-            jsPlumb.repaint($("#" + Main.selectedElements[i]));
         }
+
+        plumbInstance.repaintEverything();
     }
 
     function selectAll()
@@ -349,7 +358,9 @@ var KeyControl;
     {
         if (Main.selectedElement === null) return;
 
-        var connections = jsPlumb.getConnections(
+        var plumbInstance = Main.trees[Main.nodes[Main.selectedElement].parent].plumbInstance;
+
+        var connections = plumbInstance.getConnections(
         {
             target: Main.selectedElement
         });
@@ -372,7 +383,9 @@ var KeyControl;
     {
         if (Main.selectedElement === null) return;
 
-        var connections = jsPlumb.getConnections(
+        vvar plumbInstance = Main.trees[Main.nodes[Main.selectedElement].parent].plumbInstance;
+
+        var connections = plumbInstance.getConnections(
         {
             source: Main.selectedElement
         });
@@ -395,7 +408,9 @@ var KeyControl;
     {
         if (Main.selectedElement === null) return;
 
-        var connections = jsPlumb.getConnections(
+        var plumbInstance = Main.trees[Main.nodes[Main.selectedElement].parent].plumbInstance;
+
+        var connections = plumbInstance.getConnections(
         {
             target: Main.selectedElement
         });
@@ -404,7 +419,7 @@ var KeyControl;
         var leftCurrent = $("#" + Main.selectedElement).offset().left;
         for (var i = 0; i < connections.length; i++)
         {
-            var connections2 = jsPlumb.getConnections(
+            var connections2 = plumbInstance.getConnections(
             {
                 source: connections[i].sourceId
             });
@@ -431,7 +446,9 @@ var KeyControl;
     {
         if (Main.selectedElement === null) return;
 
-        var connections = jsPlumb.getConnections(
+        var plumbInstance = Main.trees[Main.nodes[Main.selectedElement].parent].plumbInstance;
+
+        var connections = plumbInstance.getConnections(
         {
             target: Main.selectedElement
         });
@@ -441,7 +458,7 @@ var KeyControl;
         var rightCurrent = $("#" + Main.selectedElement).offset().left;
         for (var i = 0; i < connections.length; i++)
         {
-            var sourceConnections = jsPlumb.getConnections(
+            var sourceConnections = plumbInstance.getConnections(
             {
                 source: connections[i].sourceId
             });

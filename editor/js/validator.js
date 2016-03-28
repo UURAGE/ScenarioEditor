@@ -132,7 +132,7 @@ var Validator;
             
             $.each(markedEnds, function(index, nodeID) 
             {
-                var connections = jsPlumb.getConnections({ source: nodeID });
+                var connections = tree.plumbInstance.getConnections({ source: nodeID });
                 if (connections.length > 0) 
                 {
                     validationReport.push(
@@ -245,7 +245,7 @@ var Validator;
                 return true;
             }
 
-            var connections = jsPlumb.getConnections({ source: nodeID });
+            var connections = tree.plumbInstance.getConnections({ source: nodeID });
             if(connections.length === 0) {
                 result.push(nodeID);            
             }
@@ -334,7 +334,8 @@ var Validator;
             return true;
 
         Main.nodes[currentNode].visited = true;
-        var connections = jsPlumb.getConnections({source: currentNode});
+        var plumbInstance = Main.trees[Main.nodes[currentNode].parent].plumbInstance;
+        var connections = plumbInstance.getConnections({source: currentNode});
         for (var i = 0; i < connections.length; i++)
             if(!Main.nodes[connections[i].targetId].visited && testCycleDFS(connections[i].targetId, nodeToFind))
                 return true;
@@ -345,7 +346,8 @@ var Validator;
     // Checks if a connection between the node already has been made.
     function testDuplicateConnection(sourceId, targetId)
     {
-        return jsPlumb.getConnections({ source: sourceId, target: targetId }).length > 0;
+        var plumbInstance = Main.trees[Main.nodes[sourceId].parent].plumbInstance;
+        return plumbInstance.getConnections({ source: sourceId, target: targetId }).length > 0;
     }
 
 

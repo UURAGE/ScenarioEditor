@@ -99,8 +99,10 @@ var Clipboard;
         delete Main.nodes[nodeId].topologicalParent;
         
         toCopy = Utils.clone(Main.nodes[nodeId]);
+        var plumbInstance = Main.trees[Main.nodes[nodeId].parent].plumbInstance;
+        
         //Get node connections
-        var connections = jsPlumb.getConnections(
+        var connections = plumbInstance.getConnections(
                     {
                         target: nodeId
                     });
@@ -122,6 +124,8 @@ var Clipboard;
 
     function pasteElement()
     {
+        var plumbInstance = Zoom.getZoomed().plumbInstance;
+
         if (copiedElement !== null && copiedElement !== undefined)
         {
             if (copiedTrees && !Zoom.isZoomed())
@@ -193,7 +197,7 @@ var Clipboard;
                             connection.sourceId]; //map original source to copied source
                         if (!source)
                             return true;
-                        jsPlumb.connect(
+                        plumbInstance.connect(
                         {
                             "source": source,
                             "target": target
@@ -291,7 +295,7 @@ var Clipboard;
             {
                 var target = idMappings[connection.targetId]; //map original target to copied target
                 var source = idMappings[connection.sourceId]; //map original source to copied source
-                jsPlumb.connect(
+                newTree.plumbInstance.connect(
                 {
                     "source": source,
                     "target": target
