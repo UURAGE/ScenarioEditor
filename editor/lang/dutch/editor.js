@@ -64,8 +64,6 @@
 
     LanguageManager.edt_media_title = "Media Toevoegen";
     LanguageManager.edt_media_export_error = "Waarschuwing: er zijn fouten aanwezig in het script. Weet u zeker dat u wilt exporteren?";
-    LanguageManager.edt_media_download_complete = "Download voltooid";
-    LanguageManager.edt_media_download_available = "Download beschikbaar";
     LanguageManager.edt_media_none = "Geen";
     LanguageManager.edt_media_upload = "Uploaden";
     LanguageManager.edt_media_uploading = "Bezig met verwerken. Geef het uploaden de tijd, a.u.b.";
@@ -127,6 +125,7 @@
     LanguageManager.edt_save_error = "Er ging iets mis bij het opslaan";
     LanguageManager.edt_save_error_server = "Er ging iets mis bij het opslaan: serverfout";
     LanguageManager.edt_save_script_saved = "Script opgeslagen";
+    LanguageManager.edt_save_download_available = "Download beschikbaar";
 
     LanguageManager.edt_clipboard_copy_of = "kopie van %s";
 

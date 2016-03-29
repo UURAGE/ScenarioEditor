@@ -64,8 +64,6 @@
 
     LanguageManager.edt_media_title = "Add Media";
     LanguageManager.edt_media_export_error = "Warning: the script contains errors. Are you sure you want to export?";
-    LanguageManager.edt_media_download_complete = "Download completed";
-    LanguageManager.edt_media_download_available = "Download available";
     LanguageManager.edt_media_none = "None";
     LanguageManager.edt_media_upload = "Upload";
     LanguageManager.edt_media_uploading = "Processing, please allow some time for the upload";
@@ -127,6 +125,7 @@
     LanguageManager.edt_save_error = "Something went wrong while saving";
     LanguageManager.edt_save_error_server = "Something went wrong while saving: server error";
     LanguageManager.edt_save_script_saved = "Script saved";
+    LanguageManager.edt_save_download_available = "Download available";
 
     LanguageManager.edt_clipboard_copy_of = "copy of %s";
 

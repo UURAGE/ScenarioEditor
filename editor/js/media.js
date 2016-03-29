@@ -18,7 +18,6 @@ var Media;
     Media = 
     {
         mediaLists: mediaLists,
-        downloadFile: downloadFile,
         mediaDialog: mediaDialog,
         fillMediaSelectors: fillMediaSelectors
     };
@@ -29,7 +28,6 @@ var Media;
     {
         // Event handlers.
         $("#mediaScreenButton").on('click', mediaDialog);
-        $("#exportScript").on('click', downloadFile);
         $("#mediaScreen").html(Parts.getMediaScreenHTML());
 
         //getMediaList();
@@ -38,86 +36,6 @@ var Media;
     /*
      ** Public Functions
      */
-
-    //offers the xml of the current script for download
-    //adapted from work by Eric Bidelman (ericbidelman@chromium.org)
-    function downloadFile()
-    {
-        //warn user before exporting an invalid script
-        var errors = Validator.validate();
-        var hasErrors = false;
-        $.each(errors, function(index, value)
-        {
-            hasErrors = hasErrors || (value.level === 'error');
-        });
-
-        if (hasErrors)
-        {
-            if (!window.confirm(LanguageManager.sLang("edt_media_export_error")))
-            {
-                return false;
-            }
-        }
-
-        Main.applyChanges();
-
-        window.URL = window.webkitURL || window.URL;
-
-        // var cleanUp = function(a)
-        // {
-        //     a.textContent = LanguageManager.sLang("edt_media_download_complete");
-        //     a.dataset.disabled = true;
-        // 
-        //     // Need a small delay for the revokeObjectURL to work properly.
-        //     setTimeout(function()
-        //     {
-        //         window.URL.revokeObjectURL(a.href);
-        //     }, 1500);
-        // };
-
-
-        var MIME_TYPE = 'text/xml';
-        var prevLink = $('#impExp a');
-
-        if (prevLink)
-        {
-            window.URL.revokeObjectURL(prevLink.href);
-            prevLink.remove();
-        }
-
-        var xml = Save.generateXML();
-        var bb = new Blob([xml],
-        {
-            type: MIME_TYPE
-        });
-
-        var a = document.createElement('a');
-        a.download = Metadata.metaObject.name + ".xml";
-        a.href = window.URL.createObjectURL(bb);
-        a.textContent = LanguageManager.sLang("edt_media_download_available");
-
-        a.dataset.downloadurl = [MIME_TYPE, a.download, a.href].join(':');
-        a.draggable = true; // Don't really need, but good practice.
-        a.classList.add('dragout');
-
-        $('#impExp').append(a);
-
-        document.body.appendChild(a);
-
-        a.click();
-
-        document.body.removeChild(a);
-
-        // a.onclick = function()
-        // {
-        //     if ('disabled' in this.dataset)
-        //     {
-        //         return false;
-        //     }
-
-        //     cleanUp(this);
-        // };
-    }
 
     // Show the media dialog.
     function mediaDialog()
