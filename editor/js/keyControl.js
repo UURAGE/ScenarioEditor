@@ -152,6 +152,10 @@ var KeyControl;
         {
             location.reload();
         },
+        P: function()
+        {
+            printScript();
+        }
     };
 
     //All events for keyboard controls with special characters and ctrl pressed.
