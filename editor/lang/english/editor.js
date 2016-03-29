@@ -119,7 +119,7 @@
     LanguageManager.edt_parts_advanced = "Advanced";
     LanguageManager.edt_parts_appearance = "Appearance";
 
-    LanguageManager.edt_print_warning = "Please open a subject before printing";
+    LanguageManager.edt_print_warning = "Preparation for printing can take a long time for large scenarios, are you sure you want to continue?";
 
     LanguageManager.edt_return_title = "Leave editor";
 

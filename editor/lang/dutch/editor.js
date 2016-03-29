@@ -119,7 +119,7 @@
     LanguageManager.edt_parts_advanced = "Geavanceerd";
     LanguageManager.edt_parts_appearance = "Uiterlijk";
 
-    LanguageManager.edt_print_warning = "Open a.u.b. eerst een onderwerp voor u probeert te printen.";
+    LanguageManager.edt_print_warning = "Het voorbereiden van het printen kan lang duren voor grote scenario's, weet u zeker dat u wilt doorgaan?";
 
     LanguageManager.edt_return_title = "Editor verlaten";
 

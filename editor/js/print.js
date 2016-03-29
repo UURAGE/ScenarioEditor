@@ -6,6 +6,8 @@
 
 $(document).ready(function()
 {
+    // This function is used to set the heights inside the window to be printed
+    // and is called inside that window HTML on load
     var setHeights = function setHeights()
     {
         [].forEach.call(document.getElementsByClassName('container'), function (container)
@@ -26,38 +28,38 @@ $(document).ready(function()
     
     $("#print").on('click', function()
     {
-        // We need to be zoomed, otherwise the arrows will not be drawn
-        if (!Zoom.isZoomed())
-        {
-            alert(LanguageManager.sLang("edt_print_warning"));
-            return;
-        }
-
-        var treeDivList = document.getElementsByClassName("treeDiv");
+        if (!confirm(LanguageManager.sLang("edt_print_warning"))) return;
+        
         var htmlList = [];
-        for (var i = 0; i < treeDivList.length; i++)
+        $('.treeContainer').each(function()
         {
-            var treeDivContentList = treeDivList[i].getElementsByTagName("*");
-            var name = document.getElementsByClassName('subjectName')[i].innerHTML;
+            // Zoom in and out to create correct HTML for nodes and connections,
+            // because jsPlumb does this dynamically when a tree is zoomed
+            Zoom.zoomIn(Main.trees[this.id]);            
+            var treeDiv = $(this).children('.treeDiv')[0];
+            var treeDivContentList = $(treeDiv).children();
+            var name = $(this).find('.subjectName')[0].innerHTML;
+            Zoom.zoomOut();
+            
             // Put the name, except the "[+]" or "[-]" before it, at the top of the page
             htmlList.push('<h1>' + name + '</h1>');
             // Begin a container div that contains the treeDiv and forces a page break upon printing
             htmlList.push(
                 '<div class="container" style="page-break-after:always;position:relative;height:1px;">'
-            );
-            for (var j = 0; j < treeDivContentList.length; j++)
+            );            
+            for (var i = 0; i < treeDivContentList.length; i++)
             {
-                if (treeDivContentList[j].className !== '' &&
-                    treeDivContentList[j].className !== 'ep' &&
-                    treeDivContentList[j].className !== 'statementText' &&
-                    treeDivContentList[j].className !== 'nodestatement' &&
-                    treeDivContentList[j].className !== 'statementInput' &&
-                    treeDivContentList[j].className !== 'imgDiv')
-                    htmlList.push(treeDivContentList[j].outerHTML);
-            }
+                if (treeDivContentList[i].className !== '' &&
+                    treeDivContentList[i].className !== 'ep' &&
+                    treeDivContentList[i].className !== 'statementText' &&
+                    treeDivContentList[i].className !== 'nodestatement' &&
+                    treeDivContentList[i].className !== 'statementInput' &&
+                    treeDivContentList[i].className !== 'imgDiv')
+                    htmlList.push(treeDivContentList[i].outerHTML);
+            }            
             // End the container
             htmlList.push('</div>');
-        }
+        });
         
         // Open a window for printing
         var printWindow = window.open('', '',
