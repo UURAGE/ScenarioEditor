@@ -11,7 +11,8 @@ var Utils;
     Utils =
     {
         clone: clone,
-        ensurePreventDefault: ensurePreventDefault
+        ensurePreventDefault: ensurePreventDefault,
+        parseDecimalIntWithDefault: parseDecimalIntWithDefault
     };
     
     // Taken from stackoverflow
@@ -34,4 +35,10 @@ var Utils;
         setTimeout(function() { eventFunction(); }, 50);
     }
     
+    function parseDecimalIntWithDefault(string, defaultValue)
+    {
+        // Make sure radix 10 is used (the default is browser-dependent).
+        var value = parseInt(string, 10);
+        return (isNaN(value) ? defaultValue : value);
+    }
 })();

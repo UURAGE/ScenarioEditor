@@ -38,9 +38,9 @@ var ObjectGenerator;
         // If the name is empty, we cannot create a valid parameter object.
         if (name === "") return null;
 
-        var minimumScore = Load.parseDecimalIntWithDefault(div.find(
+        var minimumScore = Utils.parseDecimalIntWithDefault(div.find(
                 ".minimumScore").val(), 0);
-        var maximumScore =  Load.parseDecimalIntWithDefault(div.find(
+        var maximumScore =  Utils.parseDecimalIntWithDefault(div.find(
                 ".maximumScore").val(), 0);
 
         // Make sure maximumScore is always bigger than minimumScore!
@@ -49,9 +49,9 @@ var ObjectGenerator;
 
         return {
             name: div.find(".name").val(),
-            initialValue: Load.parseDecimalIntWithDefault(div.find(
+            initialValue: Utils.parseDecimalIntWithDefault(div.find(
                 ".initialValue").val(), 0),
-            weightForFinalScore: Load.parseDecimalIntWithDefault(div.find(
+            weightForFinalScore: Utils.parseDecimalIntWithDefault(div.find(
                 ".weightForFinalScore").val(), 0),
             minimumScore: minimumScore,
             maximumScore: maximumScore,
@@ -93,7 +93,7 @@ var ObjectGenerator;
                 "option:selected").val(),
             changeType: div.find(".changeType").find("option:selected")
                 .val(),
-            value: Load.parseDecimalIntWithDefault(div.find(".value").val(),
+            value: Utils.parseDecimalIntWithDefault(div.find(".value").val(),
                 0)
         };
     }
@@ -121,7 +121,7 @@ var ObjectGenerator;
         return {
             parameterid: div.find(".parameterid").val(),
             test: div.find(".test").val(),
-            value: Load.parseDecimalIntWithDefault(div.find(".value").val(),
+            value: Utils.parseDecimalIntWithDefault(div.find(".value").val(),
                 0)
         };
     }

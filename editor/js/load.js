@@ -13,8 +13,7 @@ var Load;
     Load =
     {
         importScript: importScript,
-        suspendedly: suspendedly,
-        parseDecimalIntWithDefault: parseDecimalIntWithDefault
+        suspendedly: suspendedly
     };
 
     var loadedMetaObject;
@@ -82,13 +81,6 @@ var Load;
         };
     }
 
-    function parseDecimalIntWithDefault(string, defaultValue)
-    {
-        // Make sure radix 10 is used (the default is browser-dependent).
-        var value = parseInt(string, 10);
-        return (isNaN(value) ? defaultValue : value);
-    }
-
     /*
      ** Private Functions
      */
@@ -138,8 +130,8 @@ var Load;
 
                     // get the position from the XML, note that this is in grid coordinates, not screen coordinates
                     var position = $(this).children('position')[0]; 
-                    tree.leftPos = Math.round(parseDecimalIntWithDefault($(position).children('x')[0].textContent, 0)); // set x
-                    tree.topPos  = Math.round(parseDecimalIntWithDefault($(position).children('y')[0].textContent, 0)); // set y
+                    tree.leftPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('x')[0].textContent, 0)); // set x
+                    tree.topPos  = Math.round(Utils.parseDecimalIntWithDefault($(position).children('y')[0].textContent, 0)); // set y
                     tree.level = Math.round(level); // set level
 
                     tree.dragDiv.css(
@@ -259,7 +251,7 @@ var Load;
             {
                 name: Main.unEscapeTags(parameter.attributes.name.value),
                 initialValue: (parameter.hasAttribute('initialValue') ?
-                    parseDecimalIntWithDefault(parameter.attributes.initialValue.value, 0) : 0),
+                    Utils.parseDecimalIntWithDefault(parameter.attributes.initialValue.value, 0) : 0),
                 weightForFinalScore: 0,
                 minimumScore: parameter.attributes.minimumScore.value,
                 maximumScore: parameter.attributes.maximumScore.value,
@@ -275,7 +267,7 @@ var Load;
             {
                 //...add the weight of the parameter.
                 parameterObject[parameterId].weightForFinalScore =
-                    parseDecimalIntWithDefault($(this).parent().attr('scalar'), 0);
+                    Utils.parseDecimalIntWithDefault($(this).parent().attr('scalar'), 0);
                     
             }
         });
