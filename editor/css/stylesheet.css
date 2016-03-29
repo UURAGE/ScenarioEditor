@@ -565,7 +565,8 @@ button.enabled
 #properties.tree > #endNode,
 #properties.tree > #initsNode,
 #properties.tree > #jumpNode,
-#properties.tree > #calculateScore
+#properties.tree > #calculateScore,
+#properties.tree > #propertiesSection
 {
   display: none;
 }
