@@ -387,11 +387,12 @@ var Main;
         treeDiv.xselectable('disable'); //box selection only useful in zoomed state
 
         var zoomTreeButton = $('<div>',{text:"[+]", class:"zoomTreeButton button"});
-        zoomTreeButton.on("click", function() 
+        zoomTreeButton.on("click", function()
         {
             Zoom.toggleZoom(Main.trees[id]);
             MiniMap.update(true);
         });
+
         var defaultName = LanguageManager.sLang("edt_main_default_subject");
         var changeNameInput = $('<input type="text" class="subjectNameInput" maxlength="20">');
         changeNameInput.val(defaultName);

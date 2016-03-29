@@ -112,7 +112,7 @@
                         <button id="importScript" class="globalButton" title="<?php sLang('edt_import_script_title'); ?>"><div><?php sLang("edt_import_script"); ?>...</div></button>
                         <button id="exportScript" class="globalButton" title="<?php sLang('edt_export_script_title'); ?>"><div><?php sLang("edt_export_script"); ?>...</div></button>
                         <div class="separator"></div>
-                        <button id="print" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/print.png");?>" alt=""><?php sLang("edt_print"); ?>...</div></button>
+                        <button id="print" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/print.png");?>" alt=""><?php sLang("edt_print"); ?>...</div></button>
                       </div>
                     </div>
                   </div>
