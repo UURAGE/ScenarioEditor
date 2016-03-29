@@ -1,9 +1,5 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/*
-//This program has been developed by students from the bachelor Computer Science at Utrecht University 
-//within the Software and Game project courses 2013-2015
-//©Copyright Utrecht University (Department of Information and Computing Sciences) 
-*/
+/* ©Copyright Utrecht University (Department of Information and Computing Sciences) */
 
 /*
  * This class is used to emulate auto loading of language files, normal autoloading can not be based on session data 
