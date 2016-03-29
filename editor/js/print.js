@@ -19,10 +19,11 @@ function printScript()
         [].forEach.call(document.getElementsByClassName('container'), function (container)
         {
             // Set the height to include all bounding rectangles
+            var containerHeight = container.getBoundingClientRect().top;
             var maxHeight = 0;
             [].forEach.call(container.getElementsByTagName('div'), function (div)
             {
-                var newHeight = div.getBoundingClientRect().bottom - container.getBoundingClientRect().top;
+                var newHeight = div.getBoundingClientRect().bottom - containerHeight;
                 if (newHeight > maxHeight)
                 {
                     maxHeight = newHeight;
@@ -64,16 +65,24 @@ function printScript()
     });
     
     // Open a window for printing
-    var printWindow = window.open('', '',
-        'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0'
+    var printWindow = window.open
+    (
+     '', 
+     '',
+     'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0'
     );
     
     // Add style sheet references
-    printWindow.document.write(
-        '<link rel="stylesheet" type="text/css" href="/backend/editor/css/stylesheet.css">' +
-        '<link rel="stylesheet" type="text/css" href="/backend/editor/css/jsPlumbStyle.css?">' +
-        '<link rel="stylesheet" type="text/css" href="/backend/editor/css/selectableStyle.css">' +
-        '<style type="text/css">.w{position:absolute;}circle{display:none}</style>'
+    for (var i = 0; i < document.styleSheets.length; i++)
+    {
+        printWindow.document.write
+        (
+            '<link rel="stylesheet" type="text/css" href="' + document.styleSheets[i].href + '">'
+        );
+    }
+    printWindow.document.write
+    (
+        '<style type="text/css"> .w{ position:absolute; } circle{ display:none } </style>'
     );
     
     // Add the setHeights function javascript
