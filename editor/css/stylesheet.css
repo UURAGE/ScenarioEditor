@@ -204,7 +204,7 @@ button.enabled
   background-color: Highlight !important;
 }
 
-#buttons button,
+#toolbar button,
 #properties button,
 #general button,
 #sidebar button,
@@ -268,7 +268,7 @@ button.enabled
     vertical-align: top;
   }
 
-#buttons button
+#toolbar button
 {
   margin: 1px;
   padding: 0;
@@ -280,19 +280,19 @@ button.enabled
     padding-right: 1px;*/
 }
 
-#buttons .small-buttons
+#toolbar .small-buttons
 {
   float: left;
   padding: 1px;
 }
 
-  #buttons .small-buttons *
+  #toolbar .small-buttons *
   {
     margin: 0;
     padding: 2px;
   }
 
-  #buttons .small-buttons button
+  #toolbar .small-buttons button
   {
     display: block;
     width: 120px;
@@ -300,35 +300,35 @@ button.enabled
     text-align: left;
   }
 
-  #buttons .small-buttons img
+  #toolbar .small-buttons img
   {
     margin: 0 3px;
     width: 10px;
     height: 10px;
   }
 
-#buttons .big-buttons
+#toolbar .big-buttons
 {
   float: left;
   padding: 1px;
 }
 
-  #buttons .big-buttons *
+  #toolbar .big-buttons *
   {
     margin: 0;
   }
 
-  #buttons .big-buttons button
+  #toolbar .big-buttons button
   {
     min-width: 50px;
   }
 
-  #buttons .big-buttons div
+  #toolbar .big-buttons div
   {
     margin: 0px 1px;
   }
 
-  #buttons .big-buttons img
+  #toolbar .big-buttons img
   {
     margin: auto;
     margin-bottom: 5px;
@@ -337,21 +337,21 @@ button.enabled
     display: block;
   }
 
-#buttons button div
+#toolbar button div
 {
   margin: 3px;
   font-weight: normal;
   font-size: 12px;
 }
 
-#buttons button:hover, #buttons button.hovered
+#toolbar button:hover, #toolbar button.hovered
 {
   background-color: #2ecc71;
   color: #fff;
   cursor: pointer;
 }
 
-#buttons :disabled, #buttons :disabled:hover
+#toolbar :disabled, #toolbar :disabled:hover
 {
   outline: none;
   border: none;
@@ -361,7 +361,7 @@ button.enabled
   cursor: default !important;
 }
 
-#buttons #manual
+#toolbar #manual
 {
   float: right;
   overflow: hidden;
@@ -373,7 +373,7 @@ button.enabled
   border-radius: 100%;
 }
 
-  #buttons #manual img, #buttons #manual div
+  #toolbar #manual img, #toolbar #manual div
   {
     margin: 0;
     padding: 0;
@@ -381,7 +381,7 @@ button.enabled
     height: 25px;
   }
 
-#buttons .separator
+#toolbar .separator
 {
   margin: 5px 0;
   padding: 0;
@@ -804,14 +804,14 @@ span.noSelect
     content: "";
   }
 
-#buttons
+#toolbar
 {
   margin: 0;
   padding: 0;
   background-color: #bdc3c7;
 }
 
-  #buttons .dropdown
+  #toolbar .dropdown
   {
     position: absolute;
     top: 0;
@@ -830,13 +830,13 @@ span.noSelect
   height: 4px;
 }
 
-#buttons .dropdown button, #buttons .dropdown div
+#toolbar .dropdown button, #toolbar .dropdown div
 {
   width: 130px;
   /*padding: 2px 5px;*/
 }
 
-#buttons .dropdown .dropdownItems
+#toolbar .dropdown .dropdownItems
 {
   display: none;
   margin: 0;

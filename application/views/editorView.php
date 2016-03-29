@@ -95,87 +95,85 @@
         <div id="content">
           <div>
             <div id="toolbar">
-              <div id="buttons">
-                <!-- commented this button, because the manuals are no longer up to date. TODO: add new manuals
-                <button id="manual" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/manual.png");?>" alt=""><?php sLang("edt_manual"); ?></div></button>
-                -->
-                <div id="menusAndName">
-                  <div class="buttonGroup dropdown" id="file">
-                    <!-- File -->
-                    <div class="small-buttons">
-                      <button id="fileButton" class="globalButton dropdownButton"><div><?php sLang("edt_file"); ?>...</div></button>
-                      <div id="fileDropdown" class="dropdownItems">
-                        <button id="importScript" class="globalButton" title="<?php sLang('edt_import_script_title'); ?>"><div><?php sLang("edt_import_script"); ?>...</div></button>
-                        <button id="exportScript" class="globalButton" title="<?php sLang('edt_export_script_title'); ?>"><div><?php sLang("edt_export_script"); ?>...</div></button>
-                        <div class="separator"></div>
-                        <button id="print" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/print.png");?>" alt=""><?php sLang("edt_print"); ?>...</div></button>
-                      </div>
+              <div id="scriptNameTab">
+                <?php sLang("edt_scenario"); ?>: 
+                <span class="scriptName"></span>
+              </div>
+              <!-- commented this button, because the manuals are no longer up to date. TODO: add new manuals
+              <button id="manual" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/manual.png");?>" alt=""><?php sLang("edt_manual"); ?></div></button>
+              -->
+              <div id="menus">
+                <div class="buttonGroup dropdown" id="file">
+                  <!-- File -->
+                  <div class="small-buttons">
+                    <button id="fileButton" class="globalButton dropdownButton"><div><?php sLang("edt_file"); ?>...</div></button>
+                    <div id="fileDropdown" class="dropdownItems">
+                      <button id="importScript" class="globalButton" title="<?php sLang('edt_import_script_title'); ?>"><div><?php sLang("edt_import_script"); ?>...</div></button>
+                      <button id="exportScript" class="globalButton" title="<?php sLang('edt_export_script_title'); ?>"><div><?php sLang("edt_export_script"); ?>...</div></button>
+                      <div class="separator"></div>
+                      <button id="print" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/print.png");?>" alt=""><?php sLang("edt_print"); ?>...</div></button>
                     </div>
-                  </div>
-                  <div class="buttonGroup dropdown" style="left:132px;" id="script">
-                    <div class="small-buttons">
-                      <button id="scriptButton" class="globalButton dropdownButton"><div><?php sLang("edt_script"); ?>...</div></button>
-                      <div id="scriptDropdown" class="dropdownItems">
-                        <button id="mediaScreenButton" class="globalButton" title="<?php sLang('edt_media_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/media.png");?>" alt=""><?php sLang("edt_media"); ?>...</div></button>
-                        <button id="editMetadata" class="globalButton" title="<?php sLang('edt_properties_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_properties"); ?>...</div></button>
-                        <button id="editParameters" class="globalButton" title="<?php sLang('edt_parameters_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_parameters"); ?>...</div></button>
-                        <button id="feedbackform" class="globalButton" title="<?php sLang('edt_post_game_feedback_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_post_game_feedback"); ?>...</div></button>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="scriptNameTab">
-                    <?php sLang("edt_scenario"); ?>: 
-                    <span class="scriptName"></span>
                   </div>
                 </div>
-                <div id="ribbon">
-                  <div class="buttonGroup" id="clipboard">
-                    <!-- Clipboard -->
-                    <div class="big-buttons">
-                      <button id="pasteNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/draft.png");?>" alt=""><?php sLang("edt_paste"); ?></div></button>
-                    </div>
-                    <div class="small-buttons">
-                      <button id="copyNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/save.png");?>" alt=""><?php sLang("edt_copy"); ?></div></button>
-                      <button id="cutNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/cut.png");?>" alt=""><?php sLang("edt_cut"); ?></div></button>
-                      <button id="deleteNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/trashbin.png");?>" alt=""><?php sLang("btn_delete"); ?></div></button>
+                <div class="buttonGroup dropdown" style="left:132px;" id="script">
+                  <div class="small-buttons">
+                    <button id="scriptButton" class="globalButton dropdownButton"><div><?php sLang("edt_script"); ?>...</div></button>
+                    <div id="scriptDropdown" class="dropdownItems">
+                      <button id="mediaScreenButton" class="globalButton" title="<?php sLang('edt_media_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/media.png");?>" alt=""><?php sLang("edt_media"); ?>...</div></button>
+                      <button id="editMetadata" class="globalButton" title="<?php sLang('edt_properties_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_properties"); ?>...</div></button>
+                      <button id="editParameters" class="globalButton" title="<?php sLang('edt_parameters_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_parameters"); ?>...</div></button>
+                      <button id="feedbackform" class="globalButton" title="<?php sLang('edt_post_game_feedback_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_post_game_feedback"); ?>...</div></button>
                     </div>
                   </div>
-                  <div class="buttonGroup" id="edit">
-                    <!-- Edit -->
-                    <div class="big-buttons">
-                      <button id="newPlayerNode" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/player.png");?>" alt=""><?php sLang("edt_player"); ?></div></button>
-                      <button id="newComputerNode" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/computer.png");?>" alt=""><?php sLang("edt_computer"); ?></div></button>
-                      <button id="newChildNode" class="nodeButton"><div><img src="<?php echo editor_url("png/main_buttons/child.png");?>" alt=""><?php sLang("edt_child"); ?></div></button>
-                    </div>
-                    <div class="small-buttons">
-                      <button id="newTree" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/subject.png");?>" alt=""><?php sLang("edt_subject"); ?></div></button>
-                      <button id="toggleDraftScreen" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/draft.png");?>" alt=""><?php sLang("edt_note_pad"); ?></div></button>
-                    </div>
+                </div>
+              </div>
+              <div id="ribbon">
+                <div class="buttonGroup" id="clipboard">
+                  <!-- Clipboard -->
+                  <div class="big-buttons">
+                    <button id="pasteNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/draft.png");?>" alt=""><?php sLang("edt_paste"); ?></div></button>
                   </div>
-                  <div class="buttonGroup" id="view">
-                    <!-- View -->
-                    <div class="big-buttons">
-                      <button id="repositionGraph" class="subjectButton" title="<?php sLang('edt_arrange_title'); ?>">
-                        <div><img src="<?php echo editor_url("png/main_buttons/arrange.png");?>" alt=""><?php sLang("edt_arrange"); ?></div>
-                      </button>
-                    </div>
-                    <div class="small-buttons">
-                      <button id="labelText" class="subjectButton statements">
-                        <div><img src="<?php echo editor_url("png/main_buttons/intentions.png");?>" alt=""><?php sLang("edt_intentions"); ?></div>
-                        <div><img src="<?php echo editor_url("png/main_buttons/sentences.png");?>" alt=""><?php sLang("edt_statements"); ?></div>
-                      </button>
-                      <button id="allParents" class="nodeButton">
-                        <div><img src="<?php echo editor_url("png/main_buttons/parents.png");?>" alt=""><?php sLang("edt_parents"); ?></div>
-                      </button>
-                    </div>
+                  <div class="small-buttons">
+                    <button id="copyNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/save.png");?>" alt=""><?php sLang("edt_copy"); ?></div></button>
+                    <button id="cutNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/cut.png");?>" alt=""><?php sLang("edt_cut"); ?></div></button>
+                    <button id="deleteNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/trashbin.png");?>" alt=""><?php sLang("btn_delete"); ?></div></button>
                   </div>
-                  <div class="buttonGroup" id="validate">
-                    <!-- Validate -->
-                    <div class="big-buttons">
-                      <button id="validation" class="globalButton">
-                        <div><img src="<?php echo editor_url("png/main_buttons/validate.png");?>" alt=""><?php sLang("edt_validate"); ?></div>
-                      </button>
-                    </div>
+                </div>
+                <div class="buttonGroup" id="edit">
+                  <!-- Edit -->
+                  <div class="big-buttons">
+                    <button id="newPlayerNode" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/player.png");?>" alt=""><?php sLang("edt_player"); ?></div></button>
+                    <button id="newComputerNode" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/computer.png");?>" alt=""><?php sLang("edt_computer"); ?></div></button>
+                    <button id="newChildNode" class="nodeButton"><div><img src="<?php echo editor_url("png/main_buttons/child.png");?>" alt=""><?php sLang("edt_child"); ?></div></button>
+                  </div>
+                  <div class="small-buttons">
+                    <button id="newTree" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/subject.png");?>" alt=""><?php sLang("edt_subject"); ?></div></button>
+                    <button id="toggleDraftScreen" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/draft.png");?>" alt=""><?php sLang("edt_note_pad"); ?></div></button>
+                  </div>
+                </div>
+                <div class="buttonGroup" id="view">
+                  <!-- View -->
+                  <div class="big-buttons">
+                    <button id="repositionGraph" class="subjectButton" title="<?php sLang('edt_arrange_title'); ?>">
+                      <div><img src="<?php echo editor_url("png/main_buttons/arrange.png");?>" alt=""><?php sLang("edt_arrange"); ?></div>
+                    </button>
+                  </div>
+                  <div class="small-buttons">
+                    <button id="labelText" class="subjectButton statements">
+                      <div><img src="<?php echo editor_url("png/main_buttons/intentions.png");?>" alt=""><?php sLang("edt_intentions"); ?></div>
+                      <div><img src="<?php echo editor_url("png/main_buttons/sentences.png");?>" alt=""><?php sLang("edt_statements"); ?></div>
+                    </button>
+                    <button id="allParents" class="nodeButton">
+                      <div><img src="<?php echo editor_url("png/main_buttons/parents.png");?>" alt=""><?php sLang("edt_parents"); ?></div>
+                    </button>
+                  </div>
+                </div>
+                <div class="buttonGroup" id="validate">
+                  <!-- Validate -->
+                  <div class="big-buttons">
+                    <button id="validation" class="globalButton">
+                      <div><img src="<?php echo editor_url("png/main_buttons/validate.png");?>" alt=""><?php sLang("edt_validate"); ?></div>
+                    </button>
                   </div>
                 </div>
               </div>
