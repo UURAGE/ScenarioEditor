@@ -207,7 +207,7 @@ var Save;
         if (hasErrors)
         {
             if (!window.confirm(
-                    LanguageManager.sLang("edt_media_export_error")
+                    LanguageManager.sLang("edt_save_export_error")
                 ))
             {
                 return false;
