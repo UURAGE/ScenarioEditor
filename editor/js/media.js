@@ -30,9 +30,7 @@ var Media;
         // Event handlers.
         $("#mediaScreenButton").on('click', mediaDialog);
         $("#exportScript").on('click', downloadFile);
-        $("#importScript").on('click', importDialog);
         $("#mediaScreen").html(Parts.getMediaScreenHTML());
-        $("#importScreen").html(Parts.getImportScreenHTML());
 
         //getMediaList();
     });
@@ -120,35 +118,6 @@ var Media;
         //     cleanUp(this);
         // };
     }
-
-    function importDialog()
-    {
-        $("#importScreen").dialog(
-        {
-            title : LanguageManager.sLang("edt_media_import_title"),
-            height: ParameterValues.heightMedia,
-            width: ParameterValues.widthMedia,
-            modal: true,
-            buttons: [
-            {
-                text: LanguageManager.sLang("edt_media_import"),
-                click: function()
-                {
-                    Load.importScript();
-                    $("#importScreen").dialog('close');
-                }
-            },
-            {
-                text: LanguageManager.sLang("edt_common_close"),
-                click: function()
-                {
-                    $("#importScreen").dialog(
-                        'close');
-                }
-            }]
-        });
-    }
-
 
     // Show the media dialog.
     function mediaDialog()

@@ -48,6 +48,8 @@
     LanguageManager.edt_plumb_error_conversation_siblings = "Error: gesprekken moeten enig kind zijn.";
     LanguageManager.edt_plumb_error_child_type = "Error: alle kinderen van één knoop moeten van hetzelfde type zijn.";
     
+    LanguageManager.edt_load_import_title = "Importeer script";
+    LanguageManager.edt_load_import = "Importeer";
     LanguageManager.edt_load_error = "Er ging iets mis bij het laden van het bestand";
     LanguageManager.edt_load_invalid_xml = "Ongeldige XML";
 
@@ -64,8 +66,6 @@
     LanguageManager.edt_media_export_error = "Waarschuwing: er zijn fouten aanwezig in het script. Weet u zeker dat u wilt exporteren?";
     LanguageManager.edt_media_download_complete = "Download voltooid";
     LanguageManager.edt_media_download_available = "Download beschikbaar";
-    LanguageManager.edt_media_import_title = "Importeer script";
-    LanguageManager.edt_media_import = "Importeer";
     LanguageManager.edt_media_none = "Geen";
     LanguageManager.edt_media_upload = "Uploaden";
     LanguageManager.edt_media_uploading = "Bezig met verwerken. Geef het uploaden de tijd, a.u.b.";

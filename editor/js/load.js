@@ -20,6 +20,34 @@ var Load;
     
     $(document).ready(function()
     {
+        $("#importScreen").html(Parts.getImportScreenHTML());
+        $("#importScript").on('click', function()
+        {
+            $("#importScreen").dialog(
+            {
+                title : LanguageManager.sLang("edt_load_import_title"),
+                height: ParameterValues.heightMedia,
+                width: ParameterValues.widthMedia,
+                modal: true,
+                buttons: 
+                [{
+                    text: LanguageManager.sLang("edt_load_import"),
+                    click: function()
+                    {
+                        importScript();
+                        $("#importScreen").dialog('close');
+                    }
+                },
+                {
+                    text: LanguageManager.sLang("edt_common_close"),
+                    click: function()
+                    {
+                        $("#importScreen").dialog('close');
+                    }
+                }]
+            });
+        });
+        
         // At the beginning no XML is loaded, so we need to define a metaObject
         Metadata.getNewDefaultMetaObject();
         loadedMetaObject = Metadata.metaObject;
@@ -29,9 +57,6 @@ var Load;
      ** Public Functions
      */
 
-    //creates a graph and metadata from xml file provided by user
-    //always performed AFTER the normal load function*, so all metadata provided by server has been set
-    //*load is performed when the editor page is loaded, this function is called when the user clicks the import button
     function importScript()
     {
         var input = document.getElementById("import").files;

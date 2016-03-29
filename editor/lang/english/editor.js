@@ -48,6 +48,8 @@
     LanguageManager.edt_plumb_error_conversation_siblings = "Error: conversations may not have siblings.";
     LanguageManager.edt_plumb_error_child_type = "Error: a node may have only children of the same type.";
 
+    LanguageManager.edt_load_import_title = "Import script";
+    LanguageManager.edt_load_import = "Import";
     LanguageManager.edt_load_error = "Encountered an error while loading the file";
     LanguageManager.edt_load_invalid_xml = "Invalid XML";
 
@@ -64,8 +66,6 @@
     LanguageManager.edt_media_export_error = "Warning: the script contains errors. Are you sure you want to export?";
     LanguageManager.edt_media_download_complete = "Download completed";
     LanguageManager.edt_media_download_available = "Download available";
-    LanguageManager.edt_media_import_title = "Import script";
-    LanguageManager.edt_media_import = "Import";
     LanguageManager.edt_media_none = "None";
     LanguageManager.edt_media_upload = "Upload";
     LanguageManager.edt_media_uploading = "Processing, please allow some time for the upload";
