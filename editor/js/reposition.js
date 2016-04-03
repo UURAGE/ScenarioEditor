@@ -598,7 +598,7 @@
             for (var i = 0; i < connections.length; i++)
             {
                 findTopologicalOrderingRec(connections[i].targetId,
-                    topologicalOrderening);
+                    topologicalOrderening, plumbInstance);
             }
             // Since topologicalOrderening is passed by reference, we don't need to return anything.
             topologicalOrderening.push(currentNodeID);
