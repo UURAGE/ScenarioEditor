@@ -860,24 +860,10 @@ var Main;
             containment: "parent"
         });
 
-        // make each ".ep" div a source and give it some parameters to work with.  here we tell it
-        // to use a Continuous anchor and the StateMachine connectors, and also we give it the
-        // connector's paint style.  note that in this demo the strokeStyle is dynamically generated,
-        // which prevents us from just setting a jsPlumb.Defaults.PaintStyle.  but that is what i
-        // would recommend you do. Note also here that we use the 'filter' option to tell jsPlumb
-        // which parts of the element should actually respond to a drag start.
+        // make each ".ep" div a source
         plumbInstance.makeSource(node,
         {
-            filter: ".ep", // only supported by jquery
-            //anchor: "Continuous",
-            //connector: ["StateMachine", {curviness: 20 }],
-            //connectorStyle:
-            //{
-            //    strokeStyle: "#5c96bc",
-            //    lineWidth: 2,
-            //    outlineColor: "transparent",
-            //    outlineWidth: 4
-            //}
+            filter: ".ep",
         });
 
         // initialise all '.w' elements as connection targets.

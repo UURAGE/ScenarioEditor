@@ -24,7 +24,8 @@ var PlumbGenerator;
         {
             Endpoint : ["Dot", {radius:2}],
             HoverPaintStyle : {strokeStyle:"#1e8151", lineWidth:2 },
-            Connector: ["Bezier", {curviness: 10}],
+            Connector: ["StateMachine", {curviness: 20}],
+            PaintStyle : {strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4},
             ConnectionOverlays : [
                 [ "Arrow", {
                     location:1,
