@@ -492,10 +492,8 @@ var Main;
             topScroll: 0,
             level: 0,
             nodes: [],
-            plumbInstance: jsPlumb.getInstance()//PlumbGenerator.genJsPlumbInstance(treeDiv)
+            plumbInstance: PlumbGenerator.genJsPlumbInstance(treeDiv)
         };
-
-        Main.trees[id].plumbInstance.setContainer(treeDiv);
 
         //first time a treecontainer is made we set the grid all containers will snap to (if the grid indicator has not displayed already)
         //height and width are known only after the append to main

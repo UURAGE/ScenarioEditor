@@ -4,6 +4,8 @@ var PlumbGenerator;
 
 (function()
 {
+    "use strict";
+
     PlumbGenerator = 
     {
         genJsPlumbInstance : genJsPlumbInstance
@@ -22,6 +24,7 @@ var PlumbGenerator;
         {
             Endpoint : ["Dot", {radius:2}],
             HoverPaintStyle : {strokeStyle:"#1e8151", lineWidth:2 },
+            Connector: ["Bezier", {curviness: 10}],
             ConnectionOverlays : [
                 [ "Arrow", {
                     location:1,
@@ -47,6 +50,9 @@ var PlumbGenerator;
         // on click, select connector
         instance.bind("click",function(c)
         {
+            if(c==null)
+                return;
+
             // change color style
             setTimeout(function()
             {
@@ -94,4 +100,4 @@ var PlumbGenerator;
     
         return instance;    
     }
-});
+})();
