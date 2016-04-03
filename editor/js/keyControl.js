@@ -383,7 +383,7 @@ var KeyControl;
     {
         if (Main.selectedElement === null) return;
 
-        vvar plumbInstance = Main.trees[Main.nodes[Main.selectedElement].parent].plumbInstance;
+        var plumbInstance = Main.trees[Main.nodes[Main.selectedElement].parent].plumbInstance;
 
         var connections = plumbInstance.getConnections(
         {

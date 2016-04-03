@@ -63,7 +63,7 @@
       "js/miniMap.js",
       "js/main.js",
       "js/parts.js",
-      "js/jsPlumbSettings.js",
+      "js/plumbGenerator.js",
       "js/load.js",
       "js/save.js",
       "js/media.js",

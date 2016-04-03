@@ -298,7 +298,7 @@ var Main;
                     Main.selectedElements.push(id);
                     xselectableSelected.push(id); // This must also be done with duplicate nodes to remove the xselectable.
 
-                    Zoom.getZoomed.plumbInstance.addToDragSelection(element.selected);
+                    Zoom.getZoomed().plumbInstance.addToDragSelection(element.selected);
                 }
             }
             else
@@ -492,8 +492,10 @@ var Main;
             topScroll: 0,
             level: 0,
             nodes: [],
-            plumbInstance: genJsPlumbInstance(treeDiv)
+            plumbInstance: jsPlumb.getInstance()//PlumbGenerator.genJsPlumbInstance(treeDiv)
         };
+
+        Main.trees[id].plumbInstance.setContainer(treeDiv);
 
         //first time a treecontainer is made we set the grid all containers will snap to (if the grid indicator has not displayed already)
         //height and width are known only after the append to main
@@ -517,7 +519,7 @@ var Main;
         Main.trees[id].level = Main.trees[id].topPos;
 
         //(x,y) of upper left of containment and (x,y) of lower right
-        Main.trees[id].plumbInstance.draggable(dragDiv,
+        jsPlumb.draggable(dragDiv,
         {
             containment: [0, $("#toolbar").outerHeight(), $(
                     "#main").outerWidth(), $("#toolbar").outerHeight() +
@@ -700,7 +702,7 @@ var Main;
             // If there are errors (cycles, invalid pairs, existing connections)
             // regarding the connection to be created, delete the new node and cancel.
 
-            var connection = makeConnection(parent.id, node.id, Zoom.getZoomed.plumbInstance);
+            var connection = makeConnection(parent.id, node.id, Zoom.getZoomed().plumbInstance);
 
             if (!connection)
             {
@@ -1062,11 +1064,17 @@ var Main;
     // Select a node.
     function selectNode(nodeID)
     {
-        Main.trees[Main.nodes[nodeID].parent].plumbInstance.clearDragSelection();
+        if(nodeID !== null)
+            Main.trees[Main.nodes[nodeID].parent].plumbInstance.clearDragSelection();
 
         // Before we change the node, we first apply the changes that may have been made.
         if (Main.selectedElement !== null)
+        {
             applyChanges();
+
+            if(Main.selectedElement in Main.nodes)
+                Main.trees[Main.nodes[Main.selectedElement].parent].plumbInstance.clearDragSelection();
+        }
 
         // Currently selected node(s) should now not be selected.
         $(".selected").removeClass("selected");
@@ -1697,7 +1705,7 @@ var Main;
     
     function getFirstChildIdOrNull(sourceId)
     {
-        var connections = Main.trees.[Main.nodes[sourceId].parent].plumbInstance.getConnections({ source: sourceId });
+        var connections = Main.trees[Main.nodes[sourceId].parent].plumbInstance.getConnections({ source: sourceId });
         return (connections.length === 0 ? null : connections[0].targetId);
     }
 

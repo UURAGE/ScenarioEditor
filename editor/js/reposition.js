@@ -26,7 +26,7 @@
                     verticalOrder);
             // Reposition the jsPlumb nodes based on the optimizedOrder, we suspend drawing while moving the nodes.
             Load.suspendedly(
-                repositionNodes)(
+                repositionNodes, tree.plumbInstance)(
                 optimizedOrder);
             // Redraw zoomed tree to reflect all the changes.
             Main.repaintZoomedNodes();

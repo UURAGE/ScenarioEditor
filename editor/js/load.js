@@ -80,7 +80,7 @@ var Load;
 
             loadMetadata($($('metadata', xml)[0]));
             loadFeedbackForm($($('feedbackform', xml)[0]));
-            suspendedly(generateGraph)(xml);
+            suspendedly(generateGraph, jsPlumb)(xml);
         };
 
         reader.readAsText(input[0]);
@@ -118,7 +118,7 @@ var Load;
 
         if(Main.nodes.length !== 0)
         {
-            Main.trees.forEach(function(tree)
+            Main.treesforEach(function(tree)
             {
                 tree.plumbInstance.deleteEveryEndpoint();
             });
@@ -132,7 +132,6 @@ var Load;
     // Generates the entire graph, including the objects.
     function generateGraph(xml)
     {
-        var connections = {};
         var plumbInstance;
         if (!loadedMetaObject.scriptVersion) //version is undefined. script does not have sequence, interleave or tree tags
         {
@@ -145,10 +144,12 @@ var Load;
             {
                 $(this).children('tree').each(function()
                 {
+                    var connections = {};
+
                     var treeID = this.getAttribute('id');
                     Main.maxTreeNumber = Math.max(parseInt(treeID.substring(4)) + 1, Main.maxTreeNumber);
                     var tree = Main.createEmptyTree(treeID, false, 0, 0);
-                    plumbInstance = tree.plumbInstance;
+                    var plumbInstance = tree.plumbInstance;
                     // get the subject from the XML
                     tree.subject = Main.unEscapeTags($(this).children('subject')[0].textContent);
 
@@ -186,22 +187,23 @@ var Load;
                                 break;
                         }
                     });
+
+                    // Makes the connections between the nodes.
+                    $.each(connections, function(sourceId, targets)
+                    {
+                        for (var i = 0; i < targets.length; i++)
+                            plumbInstance.connect(
+                            {
+                                source: sourceId,
+                                target: targets[i]
+                            });
+                    });
+                    
                 });
 
                 level++;
             });
         }
-
-        // Makes the connections between the nodes.
-        $.each(connections, function(sourceId, targets)
-        {
-            for (var i = 0; i < targets.length; i++)
-                plumbInstance.connect(
-                {
-                    source: sourceId,
-                    target: targets[i]
-                });
-        });
     }
 
     function generateGraphLegacy(xml)
