@@ -705,9 +705,7 @@ var Main;
             var parentDiv = $('#'+parent.id);
             var left = parentDiv.position().left;
             var top = parentDiv.position().top + 55 + parentDiv.height();
-            // Compensate for scrolling
-            left += parentDiv.parent().scrollLeft() ? parentDiv.parent().scrollLeft() : 0;
-            top += parentDiv.parent().scrollTop() ? parentDiv.parent().scrollTop() : 0 ;
+            
             // Actually move node
             nodeDiv.css({"top": top, "left": left});
             repaintZoomedNodes();
