@@ -92,6 +92,12 @@ var Clipboard;
 
     function copyNode(nodeId)
     {
+        // Delete the properties from node that are used for arranging all nodes within a tree
+        // This is done here, because doing it after a arrange will make it even slower
+        delete Main.nodes[nodeId].topologicalChildren;
+        delete Main.nodes[nodeId].topologicalOrderingVisited;
+        delete Main.nodes[nodeId].topologicalParent;
+        
         toCopy = Utils.clone(Main.nodes[nodeId]);
         //Get node connections
         var connections = jsPlumb.getConnections(
