@@ -309,8 +309,8 @@ var Save;
 
             var position = $("#" + node.id).position();
             var positionEl = addAndReturnElement("position", nameSpace, statementEl);
-            addAndReturnElement("x", nameSpace, positionEl).textContent = position.left + tree.div.scrollLeft();
-            addAndReturnElement("y", nameSpace, positionEl).textContent = position.top + tree.div.scrollTop();
+            addAndReturnElement("x", nameSpace, positionEl).textContent = position.left;
+            addAndReturnElement("y", nameSpace, positionEl).textContent = position.top;
 
             if (!visible)
                 $("#" + node.id).hide();
