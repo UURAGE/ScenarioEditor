@@ -359,7 +359,7 @@ var Main;
 
     function createEmptyTree(id, indicatorSnap, offsetX, offsetY)
     {
-        if (!id) //id is false (NaN)
+        if (!id)
         {
             id = "tree" + Main.maxTreeNumber;
             Main.maxTreeNumber++;
@@ -398,22 +398,23 @@ var Main;
             KeyControl.hotKeysActive = true;
             
             var subDiv = $("#"+id);
-            var onderName = subDiv.find('.subjectName').show();
+            var subjectName = subDiv.find('.subjectName').show();
             var input = subDiv.find('.subjectNameInput').hide();
 
             if(cancel === true)
             {
-                onderName.text(Main.trees[id].subject);
+                subjectName.text(Main.trees[id].subject);
                 input.text(Main.trees[id].subject);
                 input.val(Main.trees[id].subject);
             }
-
-            // save subject on defocus of textbox
-            if(cancel === false || cancel == undefined)//focusout may be thrown by any number of points not in our code
+            // Save subject on defocus of textbox
+            else
             {
                 Main.trees[id].subject = Main.escapeTags(input.val());
-                onderName.text(Main.unEscapeTags(Main.trees[id].subject));
+                subjectName.text(Main.unEscapeTags(Main.trees[id].subject));
             }
+            
+            updateSideBar();
         });
         changeNameInput.on('keydown', function(e)
         {
