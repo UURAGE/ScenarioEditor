@@ -90,23 +90,6 @@
 
 <body>
   <div id="wrap">
-    <div id="languages">
-                <?php
-                $languages = scandir(getcwd()."/application/language");
-                $lastElement = end($languages);
-                foreach($languages as $index=>$name)
-                {
-                    if(ctype_alnum($name))
-                    {
-                        $flagUrl = flag_url($name);
-                        echo("<a href='".site_url()."/language/changeLanguage/".$name."'><img src='".$flagUrl."'></a>");
-                        
-                        if ($name != $lastElement)
-                            echo(" | ");
-                    }
-                }
-                ?>
-    </div>
     <div id="wrapRow">
       <div id="wrapLeft">
         <div id="content">
@@ -221,6 +204,23 @@
         <div>
           <div>
             <div>
+              <div id="languages">
+                <?php
+                $languages = scandir(getcwd()."/application/language");
+                $lastElement = end($languages);
+                foreach($languages as $index=>$name)
+                {
+                    if(ctype_alnum($name))
+                    {
+                        $flagUrl = flag_url($name);
+                        echo("<a href='".site_url()."/language/changeLanguage/".$name."'><img src='".$flagUrl."'></a>");
+                        
+                        if ($name != $lastElement)
+                            echo(" | ");
+                    }
+                }
+                ?>
+              </div>
               <div id="miniwrap" style="display: none">
                 <label for="enableMinimap" style="margin-left: 30px" title="<?php sLang('edt_toggle_minimap'); ?>"><?php sLang("edt_minimap"); ?>:</label>
                 <input type="checkbox" id="enableMinimap" style="display:inline" checked title="<?php sLang('edt_toggle_minimap'); ?>"/>
