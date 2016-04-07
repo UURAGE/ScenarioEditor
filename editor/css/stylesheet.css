@@ -67,7 +67,9 @@ textarea.text
 
 #languages
 {
-  float: right;
+  position: absolute;
+  right: 0;
+  padding-right: 20px;
 }
 
 #sidebar textarea
