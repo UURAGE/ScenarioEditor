@@ -234,8 +234,8 @@
                 </div>
               </div>
               <div id="properties" class="hidden">
-                <div id="treeSubject" class="sidebarSection">
-                  <h2><?php sLang("edt_subject_name"); ?></h2>
+                <div id="treeSubject">
+                  <h1><?php sLang("edt_subject_name"); ?></h1>
                 </div>
                 <div id="headerPlayer" class="header clickable collapseAll">
                   <h1><span class="masterclicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/player.png");?>" alt=""><?php sLang('edt_player');?></h1>
