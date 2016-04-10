@@ -11,14 +11,14 @@ var Main;
 
     Main = 
     {
-        nodes: [],
+        nodes: {},
         selectedElement: null,
         selectedElements: [],
         jsPlumbCounter: 0,
         computerType: "computer",
         playerType: "player",
         conversationType: "conversation",
-        trees: [],
+        trees: {},
         maxTreeNumber: 0,
         gridX: gridX,
         gridY: gridY,
@@ -381,6 +381,7 @@ var Main;
             if (e.target == this)
             {
                 selectElement(null);
+                Main.trees[id].plumbInstance.clearDragSelection();
             }
         });
         treeDiv.selectable(
@@ -857,7 +858,21 @@ var Main;
         // initialise draggable elements.
         plumbInstance.draggable(node,
         {
-            containment: "parent"
+            containment: "parent",
+
+            start: function(event)
+            {
+                if(Main.selectedElement === null)
+                {
+                    if(Main.selectedElements.indexOf(id) === -1)
+                        selectElement(id);
+                }
+                else
+                {
+                    if(Main.selectedElement !== id)
+                        selectElement(id);
+                }
+            }
         });
 
         // make each ".ep" div a source
@@ -873,7 +888,7 @@ var Main;
             {
                 hoverClass: "dragHover"
             },
-            anchor: "Continuous"
+            anchor: "Top"
         });
 
         // Used for dragging of multiple nodes.
@@ -897,18 +912,6 @@ var Main;
             {
                 selectElement(id);
             }   
-        });
-
-        // When we drag a node that is not part of the selected nodes, we remove the selection.
-        node.on("mousedown", function(event)
-        {
-            event.stopPropagation();
-            if (!event.ctrlKey)
-            {
-                if (!$(this).hasClass("multiSelected"))
-                    $(".multiSelected").removeClass(
-                        "multiSelected");
-            }
         });
 
         return node;

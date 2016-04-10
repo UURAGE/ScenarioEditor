@@ -118,7 +118,7 @@ var Load;
 
         if(Main.nodes.length !== 0)
         {
-            Main.treesforEach(function(tree)
+            $.each(Main.trees, function(id, tree)
             {
                 tree.plumbInstance.deleteEveryEndpoint();
             });
