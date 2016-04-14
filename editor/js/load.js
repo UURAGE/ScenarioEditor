@@ -145,7 +145,7 @@ var Load;
                     var tree = Main.createEmptyTree(treeID, false, 0, 0);
 
                     // get the subject from the XML
-                    tree.subject = $(this).children('subject')[0].textContent; 
+                    tree.subject = Main.unEscapeTags($(this).children('subject')[0].textContent); 
 
                     tree.optional = $(this).attr('optional') == "true";
 
@@ -161,8 +161,8 @@ var Load;
                         left: tree.leftPos * (Main.gridX) + "px"
                     });
 
-                    $('.subjectName', tree.dragDiv).text(Main.unEscapeTags(tree.subject)); // set subject in HTML
-                    $('.subjectNameInput', tree.dragDiv).val(Main.unEscapeTags(tree.subject)); // set subject in HTML
+                    $('.subjectName', tree.dragDiv).text(tree.subject); // set subject in HTML
+                    $('.subjectNameInput', tree.dragDiv).val(tree.subject); // set subject in HTML
 
                     tree.dragDiv.css('border-color', '');
 
@@ -238,14 +238,10 @@ var Load;
     // Load the metadata of the script.
     function loadMetadata(metadata)
     {
-        var character;
-        character = $(metadata).find('character').attr('id');
-
         var version = parseInt($(metadata).find('version').text());
-        var name = $(metadata).find('name').text(); 
-        // set the name in the main screen of the editor
-        $('#scriptNameTab .scriptName').text(Main.unEscapeTags(name)); 
-        var description = $(metadata).find('description').text();
+        var name = Main.unEscapeTags($(metadata).find('name').text()); 
+        var description = Main.unEscapeTags($(metadata).find('description').text());
+        var character = Main.unEscapeTags($(metadata).find('character').attr('id'));
         var difficulty = $(metadata).find('difficulty').text();
         var parameterObject = {};
         var parameters = $(metadata).find('parameters').children();
@@ -328,7 +324,7 @@ var Load;
 
                     var conditionTest = $(this).attr('test');
                     var conditionValue = $(this).attr('value');
-                    var conditionFeedbackString = $(this).text();
+                    var conditionFeedbackString = Main.unEscapeTags($(this).text());
 
                     if (conditionValue === undefined)
                     {
@@ -414,18 +410,18 @@ var Load;
                     conversationTextType == "playerText" ||
                     conversationTextType == "situationText")
                 {
-                    text += allChildren[i].textContent + "<br />";
+                    text += Main.unEscapeTags(allChildren[i].textContent) + "<br />";
                     conversationArray.push(
                     {
                         type: conversationTextType,
-                        text: allChildren[i].textContent
+                        text: Main.unEscapeTags(allChildren[i].textContent)
                     });
                 }
             }
         }
         // Load the stored values for the node.
         else
-            text = $(statement).find('text').text();
+            text = Main.unEscapeTags($(statement).find('text').text());
         var xPos = $(statement).find('x').text();
         var yPos = $(statement).find('y').text();
 
@@ -465,7 +461,7 @@ var Load;
             for (var l = 0; l < intents.length; l++)
                 intentsArray.push(
                 {
-                    name: $(intents[l]).text()
+                    name: Main.unEscapeTags($(intents[l]).text())
                 });
 
             targets = $(statement).find('nextComputerStatements').children();
@@ -475,7 +471,7 @@ var Load;
         else
             targets = $(statement).find('responses').children();
 
-        var comment = $(statement).find('comment').text();
+        var comment = Main.unEscapeTags($(statement).find('comment').text());
 
         if (targets.length > 0)
         {
@@ -520,8 +516,8 @@ var Load;
         // fill the insides with text
         var txtArea = node.find('textarea.nodestatement');
         var txtView = node.find('.statementText');
-        txtArea.empty().append(text);
-        txtView.empty().append(text);
+        txtArea.val(text);
+        txtView.html(Main.escapeTags(text));
     }
 
     // Load all preconditions from a given precondition element tree.

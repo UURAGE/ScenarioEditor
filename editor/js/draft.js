@@ -523,7 +523,7 @@
         // make sure the starting input-text equals current saved node.text
         var nodeDiv = $("#"+node.id);
         var inputText = nodeDiv.find(".nodestatement");
-        inputText.val(Main.unEscapeTags(node.text));
+        inputText.val(node.text);
         Main.changeNodeText(node.id);
         Main.selectElement(node.id);
         

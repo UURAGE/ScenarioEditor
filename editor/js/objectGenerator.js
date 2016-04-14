@@ -24,7 +24,7 @@ var ObjectGenerator;
     {
         return {
             type: $(div).attr("class").split(' ')[1],
-            text: Main.escapeTags(div.find("textarea.text").val()),
+            text: div.find("textarea.text").val(),
         };
     }
 
@@ -99,7 +99,7 @@ var ObjectGenerator;
         var name = div.find(".name").val();
         return (name === "" ? null :
         {
-            name: Main.escapeTags(div.find(".name").val())
+            name: div.find(".name").val()
         });
     }
 

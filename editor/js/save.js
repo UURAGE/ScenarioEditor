@@ -29,13 +29,13 @@ var Save;
 
         // Handles the metadata.
         var metadataEl = addAndReturnElement("metadata", nameSpace, doc.documentElement);
-        addAndReturnElement("name", nameSpace, metadataEl).textContent =Metadata.metaObject.name;
+        addAndReturnElement("name", nameSpace, metadataEl).textContent = Main.escapeTags(Metadata.metaObject.name);
         addAndReturnElement("date", nameSpace, metadataEl).textContent =new Date().toISOString();
-        addAndReturnElement("description", nameSpace, metadataEl).textContent = Metadata.metaObject.description;
+        addAndReturnElement("description", nameSpace, metadataEl).textContent = Main.escapeTags(Metadata.metaObject.description);
         addAndReturnElement("difficulty", nameSpace, metadataEl).textContent = Metadata.metaObject.difficulty;
         addAndReturnElement("defaultChangeType", nameSpace, metadataEl).textContent = Metadata.metaObject.defaultChangeType;
         addAndReturnElement("version", nameSpace, metadataEl).textContent = Metadata.metaObject.scriptVersion;
-        addAndReturnElement("character", nameSpace, metadataEl).setAttribute("id", Metadata.metaObject.character);
+        addAndReturnElement("character", nameSpace, metadataEl).setAttribute('id', Main.escapeTags(Metadata.metaObject.character));
         
         var parametersEl = addAndReturnElement("parameters", nameSpace, metadataEl);
         var scoringFunctionEl = addAndReturnElement("scoringFunction", nameSpace, metadataEl);
@@ -130,7 +130,7 @@ var Save;
                         }
                         currentConditionEl.setAttribute("value", testValue);
                     }
-                    currentConditionEl.textContent = condition.feedbackString;
+                    currentConditionEl.textContent = Main.escapeTags(condition.feedbackString);
                 }
             }
         }
@@ -254,7 +254,7 @@ var Save;
         treeElement.setAttribute("id", tree.id);
         treeElement.setAttribute("optional", tree.optional);
 
-        addAndReturnElement('subject', nameSpace, treeElement).textContent = tree.subject;
+        addAndReturnElement('subject', nameSpace, treeElement).textContent = Main.escapeTags(tree.subject);
 
         var positionElement = addAndReturnElement('position', nameSpace, treeElement);
 
@@ -297,10 +297,10 @@ var Save;
                 {
                     var conversationObj = node.conversation[i];
                     addAndReturnElement(conversationObj.type, nameSpace, statementEl).textContent =
-                        conversationObj.text;
+                        Main.escapeTags(conversationObj.text);
                 }
             else
-                addAndReturnElement("text", nameSpace, statementEl).textContent = node.text;
+                addAndReturnElement("text", nameSpace, statementEl).textContent = Main.escapeTags(node.text);
 
             // Save the position.
             var visible = $("#" + node.id).is(":visible");
@@ -317,8 +317,7 @@ var Save;
 
             // Save the comment.
             if (node.comment !== "")
-                addAndReturnElement("comment", nameSpace,
-                    statementEl).textContent = node.comment;
+                addAndReturnElement("comment", nameSpace, statementEl).textContent = Main.escapeTags(node.comment);
 
             // Save the media.
             if (node.image !== null || node.video !== null ||
@@ -363,7 +362,7 @@ var Save;
                     for (var j = 0; j < node.intent.length; j++)
                     {
                         var intentObj = node.intent[j];
-                        addAndReturnElement("intent", nameSpace, intentsEl).textContent = intentObj.name;
+                        addAndReturnElement("intent", nameSpace, intentsEl).textContent = Main.escapeTags(intentObj.name);
                     }
                     if (intentsEl.childNodes.length !== 0)
                         statementEl.appendChild(intentsEl);

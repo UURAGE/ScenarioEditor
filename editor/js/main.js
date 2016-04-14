@@ -77,9 +77,9 @@ var Main;
                 var inputName = nameInput.val().trim().replace(/[^a-z0-9_,\.\s\|\!\&\\\/\'\"\[\]\{\+\=\(\)\}]/gi, '');
                 if(inputName !== "" && inputName.length <= 35)
                 {
-                    Metadata.metaObject.name = escapeTags(inputName);
+                    Metadata.metaObject.name = inputName;
                 }
-                $('#scriptNameTab .scriptName').text(unEscapeTags(Metadata.metaObject.name));
+                $('#scriptNameTab .scriptName').text(Metadata.metaObject.name);
             }
 
             $(this).hide();
@@ -410,8 +410,8 @@ var Main;
             // Save subject on defocus of textbox
             else
             {
-                Main.trees[id].subject = Main.escapeTags(input.val());
-                subjectName.text(Main.unEscapeTags(Main.trees[id].subject));
+                Main.trees[id].subject = input.val();
+                subjectName.text(Main.trees[id].subject);
             }
             
             updateSideBar();
@@ -760,13 +760,12 @@ var Main;
 
                 if(cancel === true)
                 {
-                    thisNode.find('textarea').text(Main.unEscapeTags(Main.nodes[id].text));
-                    thisNode.find('textarea').val(Main.unEscapeTags(Main.nodes[id].text));
+                    thisNode.find('textarea').val(Main.nodes[id].text);
                 }
 
                 if(cancel === false || cancel === undefined)
                 {
-                    Main.nodes[id].text = Main.escapeTags(text);
+                    Main.nodes[id].text = text;
                     changeNodeText(id);
                     jsPlumb.repaint(id);
                 }
@@ -947,7 +946,7 @@ var Main;
         for (var i = 0; i < node.conversation.length; i++) {
             var conversation = node.conversation[i];
             var addedDiv = HtmlGenerator.addConversationOfType(conversation.type);
-            addedDiv.find("textarea.text").val(Main.unEscapeTags(conversation.text));
+            addedDiv.find("textarea.text").val(conversation.text);
         }
 
         $(".addConversation").each( function() { $(this).show(); } );
@@ -1166,7 +1165,7 @@ var Main;
         node.jumpPoint = $("#jumpNodeCheckbox").prop("checked");
 
         // Save comment.
-        node.comment = escapeTags($("textarea#comment").val());
+        node.comment = $("textarea#comment").val();
 
         // Change the text of the node.
         changeNodeText(Main.selectedElement);
@@ -1353,20 +1352,20 @@ var Main;
         {
             case Main.computerType:
                 // for computerType node: just input text
-                text = node.text;
+                text = escapeTags(node.text);
                 break;
             case Main.playerType:
                 // for playerType node: show text input, if the "Intentions"-option is off
                 // (the relevant toolbar button then shows "Statements")
                 if ($("#labelText").hasClass("statements"))
-                    text = node.text;
+                    text = escapeTags(node.text);
                 else
                 {
                     // if the "Intentions"-option is on, show a list of intentions
                     text += "<ul>";
                     for (var i = 0; i < node.intent.length; i++)
                     {
-                        var intent = node.intent[i].name;
+                        var intent = escapeTags(node.intent[i].name);
                         text += "<li>" + intent + "</li>";
                         var longestIntentWord = intent.split(" ").reduce(
                             function(a, b)
@@ -1396,7 +1395,7 @@ var Main;
                             type = LanguageManager.sLang("edt_common_situation");
                             break;
                     }
-                    text += type + ": " + node.conversation[j].text + "\n";
+                    text += type + ": " + escapeTags(node.conversation[j].text) + "\n";
                 }
                 break;
         }
@@ -1407,7 +1406,7 @@ var Main;
                 return a.length > b.length ? a : b;
             });
 
-        var textLength = $(".lengthTest").html(longestWord)[0].clientWidth / 11;
+        var textLength = $(".lengthTest").text(longestWord)[0].clientWidth / 11;
 
         var width = Math.max(3, textLength * 1.08, Math.sqrt(text.length));
 
@@ -1436,7 +1435,7 @@ var Main;
         nodeHTML.width(width + "em");
         var nodeTextDiv = $('.statementText', nodeHTML);
         nodeTextDiv.show();
-        nodeTextDiv.empty().append(text);
+        nodeTextDiv.html(text);
         
         // make sure the text fits inside the node
         var h = nodeTextDiv[0].clientHeight;
@@ -1512,10 +1511,10 @@ var Main;
         var tree = Main.trees[Main.selectedElement];
 
         var subInput = tree.dragDiv.find('input.subjectNameInput');
-        tree.subject = Main.escapeTags(subInput.val());
+        tree.subject = subInput.val();
 
         var subname = tree.dragDiv.find('.subjectName');
-        subname.text(Main.unEscapeTags(tree.subject));
+        subname.text(tree.subject);
 
         var zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
         if (Zoom.isZoomed(tree.id)) 
@@ -1560,7 +1559,7 @@ var Main;
 
             // Show the values of the node in the side bar.
             // Statement:
-            $("textarea#statement").val(unEscapeTags(node.text));
+            $("textarea#statement").val(node.text);
 
             // Insert the preconditions in the sidebar
             HtmlGenerator.insertPreconditions(node.preconditions, $("#preconditionsDiv"));
@@ -1580,7 +1579,7 @@ var Main;
             {
                 var intent = node.intent[l];
                 addedDiv = HtmlGenerator.addEmptyIntention();
-                addedDiv.find(".name").val(unEscapeTags(intent.name));
+                addedDiv.find(".name").val(intent.name);
             }
 
             $("#endNodeCheckbox").prop("checked", node.endNode);
@@ -1593,9 +1592,9 @@ var Main;
             $("#imageOptions").val(HtmlGenerator.nullToHTMLValue(node.image));
             $("#audioOptions").val(HtmlGenerator.nullToHTMLValue(node.audio));
 
-            $("textarea#comment").val(unEscapeTags(node.comment));
-            $("#scores").empty();
+            $("textarea#comment").val(node.comment);
 
+            $("#scores").empty();
         }
         else if (Main.selectedElement in Main.trees)
         {
@@ -1607,7 +1606,7 @@ var Main;
             var currentName = Main.trees[Main.selectedElement].subject;
             var sideBarSub = $('#treeSubject');
             sideBarSub.empty();
-            sideBarSub.append('<h1>'+currentName+'</h1>');
+            sideBarSub.append($('<h1>', { text: currentName }));
 
             $("#optionalCheckbox").prop("checked", Main.trees[Main.selectedElement].optional);
         }

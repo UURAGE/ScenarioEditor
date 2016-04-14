@@ -118,12 +118,10 @@ var Metadata;
         });
 
         // Show the stored values for the metadata.
-        $("#scriptName").val(Main.unEscapeTags(Metadata.metaObject.name));
+        $("#scriptName").val(Metadata.metaObject.name);
         $("#scriptDifficulty").val(Metadata.metaObject.difficulty);
-        $("#scriptDescription").val(Main.unEscapeTags(Metadata.metaObject.description));
-        
-        $("#character").val(Main.unEscapeTags(Metadata.metaObject.character));
-        
+        $("#scriptDescription").val(Metadata.metaObject.description);
+        $("#character").val(Metadata.metaObject.character);
         $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
     }
 
@@ -202,7 +200,7 @@ var Metadata;
         if ($("#params").children().length > 0)
             $("#paramsTableHead").removeClass("hidden");
         
-        $("#scriptDescription").val(Main.unEscapeTags(Metadata.metaObject.description));
+        $("#scriptDescription").val(Metadata.metaObject.description);
         $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
     }
 
@@ -302,7 +300,7 @@ var Metadata;
             $(this).removeClass("newParameter").addClass("existingParameter");
         });
 
-        console.log(Metadata.metaObject.parameterObject);
+        //console.log(Metadata.metaObject.parameterObject);
     }
     
     // Save all changes to the metaObject.
@@ -314,14 +312,14 @@ var Metadata;
         var previouslySelectedNode = Main.selectedElement;
         Main.selectNode(null);
 
-        Metadata.metaObject.character = Main.escapeTags($("#character").val());
+        Metadata.metaObject.character = $("#character").val();
         
         Metadata.metaObject.defaultChangeType = $("#defaultChangeTypeSelect").val();
 
         // Save all values in the dialog to the metaObject.
-        Metadata.metaObject.name = Main.escapeTags($("#scriptName").val());
+        Metadata.metaObject.name = $("#scriptName").val();
         Metadata.metaObject.difficulty = $("#scriptDifficulty").val();
-        Metadata.metaObject.description = Main.escapeTags($("#scriptDescription").val());
+        Metadata.metaObject.description = $("#scriptDescription").val();
 
         var truncatedName;
         if (Metadata.metaObject.name.length > 20)

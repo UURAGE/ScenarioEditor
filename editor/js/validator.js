@@ -69,7 +69,7 @@ var Validator;
                 {
                     validationReport.push(
                     {
-                        message: LanguageManager.fLang("edt_validator_empty_subject", [Main.unEscapeTags(tree.subject)]),
+                        message: LanguageManager.fLang("edt_validator_empty_subject", [tree.subject]),
                         level: 'error',
                         jumpToFunction: function() { Zoom.zoomIn(tree); }
                     });
@@ -78,7 +78,7 @@ var Validator;
                 {
                     validationReport.push(
                     {
-                        message: LanguageManager.fLang("edt_validator_empty_conversation", [Main.unEscapeTags(tree.subject)]),
+                        message: LanguageManager.fLang("edt_validator_empty_conversation", [tree.subject]),
                         level: 'error',
                         jumpToFunction: function() { Zoom.zoomIn(tree); }
                     }); 
@@ -89,7 +89,7 @@ var Validator;
                 {
                     validationReport.push(
                     {
-                        message: LanguageManager.fLang("edt_validator_conversation_start_error", [Main.unEscapeTags(tree.subject)]),
+                        message: LanguageManager.fLang("edt_validator_conversation_start_error", [tree.subject]),
                         level: 'error',
                         jumpToFunction: function() { Zoom.zoomIn(tree); }
                     }); 
@@ -101,7 +101,7 @@ var Validator;
                     { 
                         validationReport.push(
                         {
-                            message: LanguageManager.fLang("edt_validator_subject_start_type_error", [Main.unEscapeTags(tree.subject)]),
+                            message: LanguageManager.fLang("edt_validator_subject_start_type_error", [tree.subject]),
                             level: 'error',
                             jumpToFunction: function() { Zoom.zoomIn(tree); }
                         });
@@ -110,7 +110,7 @@ var Validator;
                     {
                         validationReport.push(
                         {
-                            message: LanguageManager.fLang("edt_validator_subject_start_type_error", [Main.unEscapeTags(tree.subject)]),
+                            message: LanguageManager.fLang("edt_validator_subject_start_type_error", [tree.subject]),
                             level: 'error',
                             jumpToFunction: function() { Zoom.zoomIn(tree); }
                         });
@@ -119,7 +119,7 @@ var Validator;
                     {
                         validationReport.push(
                         {
-                            message: LanguageManager.fLang("edt_validator_subject_start_type_error2", [Main.unEscapeTags(tree.subject)]),
+                            message: LanguageManager.fLang("edt_validator_subject_start_type_error2", [tree.subject]),
                             level: 'error',
                             jumpToFunction: function() { Zoom.zoomIn(tree); }
                         });
@@ -137,7 +137,7 @@ var Validator;
                 {
                     validationReport.push(
                     {
-                        message: LanguageManager.fLang("edt_validator_end_outgoing_connections", [Main.unEscapeTags(tree.subject)]),
+                        message: LanguageManager.fLang("edt_validator_end_outgoing_connections", [tree.subject]),
                         level: 'error',
                         jumpToFunction: function() {
                             Zoom.zoomIn(tree);
@@ -164,7 +164,7 @@ var Validator;
                         { // node is a dead end, but not marked as end node
                             validationReport.push(
                             {
-                                message: LanguageManager.fLang("edt_validator_unmarked_end", [Main.unEscapeTags(tree.subject)]),
+                                message: LanguageManager.fLang("edt_validator_unmarked_end", [tree.subject]),
                                 level: 'error',
                                 jumpToFunction: function() {
                                     Zoom.zoomIn(tree);

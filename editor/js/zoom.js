@@ -54,8 +54,7 @@ var Zoom;
             var zoomTreeButton = $('.zoomTreeButton', tree.dragDiv);
             zoomTreeButton.text("[-]");
 
-            // Save the subject name if necessary
-            $('.subjectName', tree.dragDiv).text(Main.unEscapeTags(tree.subject));
+            $('.subjectName', tree.dragDiv).text(tree.subject);
 
             var heightOffset = tree.div.position().top - tree.dragDiv.position().top;
             var dragDivHeight = tree.dragDiv.outerHeight();
@@ -98,7 +97,7 @@ var Zoom;
             tree.dragDiv.draggable('enable');
             tree.div.xselectable('disable');
 
-            $('.subjectName', tree.dragDiv).text(Main.unEscapeTags(tree.subject));
+            $('.subjectName', tree.dragDiv).text(tree.subject);
             //$(tree.div).css('width', 0);
             //$(tree.div).css('height', 0);
 

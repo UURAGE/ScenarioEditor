@@ -37,7 +37,6 @@ var FeedbackForm;
                 var thisID = $(this).attr('id');                    
                 
                 var textBoxValue = $(this).find('textArea').val();
-                textBoxValue = Main.escapeTags(textBoxValue);
 
                 if (thisID != "defaultDescription" + parentID)
                 {
@@ -307,7 +306,7 @@ var FeedbackForm;
                         else
                         {
                             var condition = FeedbackForm.conditions[paramID][loopCounter];
-                            var feedbackString = Main.unEscapeTags(condition.feedbackString);
+                            var feedbackString = condition.feedbackString;
 
                             var box1, box2;
 
