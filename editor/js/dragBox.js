@@ -119,6 +119,6 @@ var DragBox;
     {
         var drag = $('#dragBox');
         drag.stop(true).css({ opacity: "" }).show();
-        drag.html(text);
+        drag.text(text);
     }
 })();
