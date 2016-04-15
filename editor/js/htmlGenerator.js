@@ -288,7 +288,7 @@ var HtmlGenerator;
         {
             if (effectType === undefined || (effectType === "parameter"))
                 div.find(type).append('<option value="' + pID + '">' +
-                    pObj[pID].name + '</option>');
+                    Main.escapeTags(pObj[pID].name) + '</option>');
         }
     }
 

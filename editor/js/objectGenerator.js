@@ -44,7 +44,7 @@ var ObjectGenerator;
             maximumScore = minimumScore + 1;
 
         return {
-            name: div.find(".name").val(),
+            name: name,
             initialValue: Utils.parseDecimalIntWithDefault(div.find(
                 ".initialValue").val(), 0),
             weightForFinalScore: Utils.parseDecimalIntWithDefault(div.find(

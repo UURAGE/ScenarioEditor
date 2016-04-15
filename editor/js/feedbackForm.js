@@ -34,7 +34,7 @@ var FeedbackForm;
             var parentID = $(this).attr('id');
 
             $(this).children("div").each(function(){
-                var thisID = $(this).attr('id');                    
+                var thisID = $(this).attr('id');
                 
                 var textBoxValue = $(this).find('textArea').val();
 
@@ -215,7 +215,7 @@ var FeedbackForm;
 
         var string = "";
         string += "<div id='" + parameterID + "_" + counter + "'>";
-        string += LanguageManager.sLang("edt_feedback_if") + " " + parameterName + " ";
+        string += LanguageManager.sLang("edt_feedback_if") + " " + Main.escapeTags(parameterName) + " ";
         string += "<select id='" + parameterID + "_" + counter + "Select'>";
         string += "<option " + s1 + "value='min'>"+LanguageManager.sLang("edt_feedback_min")+"</option>";
         string += "<option " + s2 + "value='max'>"+LanguageManager.sLang("edt_feedback_max")+"</option>";
@@ -261,7 +261,7 @@ var FeedbackForm;
                 var pID = p;
                 var pName = Metadata.metaObject.parameterObject[p].name;
                 // Replace all whitespaces so id's contain no spaces.
-                htmlString += '<option value="' + pID + '">' + pName + '</option>';
+                htmlString += '<option value="' + pID + '">' + Main.escapeTags(pName) + '</option>';
             }
         }
         // Close the select.

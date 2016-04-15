@@ -308,7 +308,7 @@
     // SHIFT + TAB function while editing draft
     function prevCol(obj)
     {
-        obj.col -= 1;        
+        obj.col -= 1;
         if (obj.col < 1)
         {
             var prev = obj.tr.prev();
@@ -472,7 +472,7 @@
             value = input.val(),
             valueView = input.parent().siblings('.value');
         item.properties[property] = value;
-        valueView.html(value);
+        valueView.text(value);
         input.parent().hide();
         valueView.show();
 
