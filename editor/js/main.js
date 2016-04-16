@@ -520,10 +520,10 @@ var Main;
         //(x,y) of upper left of containment and (x,y) of lower right
         jsPlumb.draggable(dragDiv,
         {
-            containment: [0, $("#toolbar").outerHeight(), $(
-                    "#main").outerWidth(), $("#toolbar").outerHeight() +
-                $("#main").outerHeight()
-            ],
+            //the constrain function retuts the array with coordinates that will be assigned to the dragged element
+            constrain: function(currentCoordinates,element){
+                return [currentCoordinates[0],Math.max(0,currentCoordinates[1])];
+            },
 
             stop:function(event)
             {
@@ -858,7 +858,9 @@ var Main;
         // initialise draggable elements.
         plumbInstance.draggable(node,
         {
-            containment: "parent",
+            constrain: function(currentCoordinates,element){
+                return [currentCoordinates[0],Math.max(0,currentCoordinates[1])];
+            },
 
             start: function(event)
             {
