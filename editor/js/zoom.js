@@ -63,8 +63,8 @@ var Zoom;
             tree.nodes.forEach(function(n)
             {
                 Main.changeNodeText(n);
-                jsPlumb.repaint(n);
-
+                tree.plumbInstance.updateOffset({elId:n, recalc:true});
+                tree.plumbInstance.repaint(n, null, 0);
             });
         }
 

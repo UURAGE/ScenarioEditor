@@ -805,7 +805,7 @@ var Main;
         parent.append(node);
     
         node.on("dblclick", function() 
-        { 
+        {
             // Make nodes configurable, only for the player nodes if they are not showing an intention
             if (Main.nodes[id].type != Main.playerType || $("#labelText").hasClass("statements"))
             {
@@ -874,6 +874,12 @@ var Main;
                     if(Main.selectedElement !== id)
                         selectElement(id);
                 }
+            },
+
+            stop: function(event)
+            {
+                //plumbInstance.updateOffset({elId:event.el.id, recalc:true});
+                //plumbInstance.repaint(event.el.id, null, 0);
             }
         });
 
@@ -1467,6 +1473,9 @@ var Main;
         nodeTextInput.hide();
         nodeTextInput.height("100%");
         nodeTextInput.hide();
+
+        Main.trees[node.parent].plumbInstance.updateOffset({elId:nodeID, recalc:true});
+        Main.trees[node.parent].plumbInstance.repaint(nodeID, null, 0);
 
         // Add the jumpnode class to the node for a graphical indication
         if (node.jumpPoint)
