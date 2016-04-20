@@ -72,7 +72,7 @@ var Main;
             
             var nameInput = $('#scriptNameTab .scriptNameInput input');
 
-            if(cancel === false || cancel === undefined)
+            if(!cancel)
             {
                 var inputName = nameInput.val().trim().replace(/[^a-z0-9_,\.\s\|\!\&\\\/\'\"\[\]\{\+\=\(\)\}]/gi, '');
                 if(inputName !== "" && inputName.length <= 35)
@@ -401,7 +401,7 @@ var Main;
             var subjectName = subDiv.find('.subjectName').show();
             var input = subDiv.find('.subjectNameInput').hide();
 
-            if(cancel === true)
+            if(cancel)
             {
                 subjectName.text(Main.trees[id].subject);
                 input.text(Main.trees[id].subject);
@@ -758,12 +758,11 @@ var Main;
                 thisNode.find('.statementInput').hide();
                 thisNode.find('.statementText').text(text).show();
 
-                if(cancel === true)
+                if(cancel)
                 {
                     thisNode.find('textarea').val(Main.nodes[id].text);
                 }
-
-                if(cancel === false || cancel === undefined)
+                else
                 {
                     Main.nodes[id].text = text;
                     changeNodeText(id);
