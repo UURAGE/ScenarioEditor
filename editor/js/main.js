@@ -1253,13 +1253,12 @@ var Main;
         node.intent = intentsArray;
 
         // Save properties.
-        for (var propertyId in Config.configObject.properties)
+        Config.configObject.properties.sequence.forEach(function (property)
         {
-            var property = Config.configObject.properties[propertyId];
-            if (property.scopes.statementScope !== "per") continue;
-            node.properties[propertyId] =
-                property.type.getFromDOM($("#node-properties-container-" + propertyId));
-        }
+            if (property.scopes.statementScope !== "per") return;
+            node.properties[property.id] =
+                property.type.getFromDOM($("#node-properties-container-" + property.id));
+        });
 
         // Save the media.
         node.video = ObjectGenerator.nullFromHTMLValue($("#videoOptions").val());
@@ -1721,21 +1720,20 @@ var Main;
 
             // Properties:
             var propertiesEl = $('#node-properties');
-            for (var propertyId in Config.configObject.properties)
+            Config.configObject.properties.sequence.forEach(function (property)
             {
-                var property = Config.configObject.properties[propertyId];
-                if (property.scopes.statementScope !== 'per') continue;
+                if (property.scopes.statementScope !== 'per') return;
                 var controlHtmlId = 'node-properties-' + property.id;
 
                 var propertyContainer = $('<div>', { id: 'node-properties-container-' + property.id });
                 propertiesEl.append(propertyContainer);
                 propertyContainer.append($('<label>', { text: property.name + ':', 'for': controlHtmlId }));
                 property.type.appendControlTo(propertyContainer, controlHtmlId);
-                if (propertyId in node.properties)
+                if (property.id in node.properties)
                 {
-                    property.type.setInDOM(propertyContainer, node.properties[propertyId]);
+                    property.type.setInDOM(propertyContainer, node.properties[property.id]);
                 }
-            }
+            });
 
             $("#endNodeCheckbox").prop("checked", node.endNode);
             $("#initsNodeCheckbox").prop("checked", node.initsNode);

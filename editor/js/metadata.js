@@ -61,10 +61,9 @@ var Metadata;
         
         var anyPropertyShown = false;
         var propertiesEl = $('#meta-properties');
-        for (var propertyId in Config.configObject.properties)
+        Config.configObject.properties.sequence.forEach(function (property)
         {
-            var property = Config.configObject.properties[propertyId];
-            if (property.scopes.statementScope !== 'independent') continue;
+            if (property.scopes.statementScope !== 'independent') return;
             var controlHtmlId = 'meta-properties-' + property.id;
             
             var propertyContainer = $('<div>', { id: 'meta-properties-container-' + property.id });
@@ -72,7 +71,7 @@ var Metadata;
             propertyContainer.append($('<label>', { text: property.name + ':', 'for': controlHtmlId }));
             property.type.appendControlTo(propertyContainer, controlHtmlId);
             anyPropertyShown = true;
-        }
+        });
         if (anyPropertyShown) propertiesEl.show();
     });
 
@@ -141,16 +140,15 @@ var Metadata;
         $("#character").val(Metadata.metaObject.character);
         $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
         
-        for (var propertyId in Config.configObject.properties)
+        Config.configObject.properties.sequence.forEach(function (property)
         {
-            var property = Config.configObject.properties[propertyId];
-            if (property.scopes.statementScope !== "independent") continue;
-            if (propertyId in Metadata.metaObject.properties)
+            if (property.scopes.statementScope !== "independent") return;
+            if (property.id in Metadata.metaObject.properties)
             {
-                property.type.setInDOM($("#meta-properties-container-" + propertyId),
-                    Metadata.metaObject.properties[propertyId]);
+                property.type.setInDOM($("#meta-properties-container-" + property.id),
+                    Metadata.metaObject.properties[property.id]);
             }
-        }
+        });
     }
 
     function parameterDialog()
@@ -351,13 +349,12 @@ var Metadata;
         Metadata.metaObject.difficulty = $("#scriptDifficulty").val();
         Metadata.metaObject.description = $("#scriptDescription").val();
 
-        for (var propertyId in Config.configObject.properties)
+        Config.configObject.properties.sequence.forEach(function (property)
         {
-            var property = Config.configObject.properties[propertyId];
-            if (property.scopes.statementScope !== "independent") continue;
-            Metadata.metaObject.properties[propertyId] =
-                property.type.getFromDOM($("#meta-properties-container-" + propertyId));
-        }
+            if (property.scopes.statementScope !== "independent") return;
+            Metadata.metaObject.properties[property.id] =
+                property.type.getFromDOM($("#meta-properties-container-" + property.id));
+        });
 
         $("#metaScreen").dialog('close');
         Main.selectNode(previouslySelectedNode);

@@ -42,13 +42,12 @@ var Save;
 
         // Save property definitions.
         var propertyDefinitionsEl = addAndReturnElement("properties", nameSpace, definitionsEl);
-        for (var propertyId in Config.configObject.properties)
+        Config.configObject.properties.sequence.forEach(function (property)
         {
-            var property = Config.configObject.properties[propertyId];
             var propertyEl = addAndReturnElement("property", nameSpace, propertyDefinitionsEl);
-            propertyEl.setAttribute("id", propertyId);
+            propertyEl.setAttribute("id", property.id);
             property.type.insertUnderlyingType(propertyEl);
-        }
+        });
 
         // Save parameters and collect data for saving weights.
         var parametersEl = addAndReturnElement("parameters", nameSpace, definitionsEl);
@@ -83,7 +82,7 @@ var Save;
             var propertyValue = Metadata.metaObject.properties[propertyId];
             var propertyEl = addAndReturnElement("property", nameSpace, propertiesEl);
             propertyEl.setAttribute("idref", propertyId);
-            Config.configObject.properties[propertyId].type.toXML(propertyEl, propertyValue);
+            Config.configObject.properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
         }
 
         // Save parameter weights.
@@ -379,7 +378,7 @@ var Save;
                 var propertyValue = node.properties[propertyId];
                 var propertyEl = addAndReturnElement("property", nameSpace, propertiesEl);
                 propertyEl.setAttribute("idref", propertyId);
-                Config.configObject.properties[propertyId].type.toXML(propertyEl, propertyValue);
+                Config.configObject.properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
             }
 
             var connectionElName = '';

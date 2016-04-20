@@ -271,9 +271,9 @@ var Load;
         $(metadata).children('properties').children().each(function()
         {
             var propertyId = this.attributes.idref.value;
-            if (propertyId in Config.configObject.properties)
+            if (propertyId in Config.configObject.properties.byId)
             {
-                properties[propertyId] = Config.configObject.properties[propertyId].type.fromXML(this);
+                properties[propertyId] = Config.configObject.properties.byId[propertyId].type.fromXML(this);
             }
         });
 
@@ -491,9 +491,9 @@ var Load;
         $(statement).children('properties').children().each(function()
         {
             var propertyId = this.attributes.idref.value;
-            if (propertyId in Config.configObject.properties)
+            if (propertyId in Config.configObject.properties.byId)
             {
-                properties[propertyId] = Config.configObject.properties[propertyId].type.fromXML(this);
+                properties[propertyId] = Config.configObject.properties.byId[propertyId].type.fromXML(this);
             }
         });
 

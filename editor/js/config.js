@@ -23,35 +23,50 @@ var Config;
         Config.configObject = config;
     }
     
+    function loadPropertyNode(nodeXML, parentScopes)
+    {
+        if (nodeXML.nodeName === "property")
+        {
+            var propertyScopes = loadScopes(nodeXML);
+            mergeScopes(propertyScopes, parentScopes);
+            return {
+                kind: 'property',
+                id: nodeXML.getAttribute('id'),
+                name: nodeXML.getAttribute('name'),
+                description: nodeXML.getAttribute('description'),
+                optional: Boolean(nodeXML.getAttribute('optional')),
+                scopes: propertyScopes,
+                type: loadType($(nodeXML).children().eq(0))
+            };
+        }
+        else
+        {
+            return loadPropertyGroup($(nodeXML), parentScopes);
+        }
+    }
+    
     function loadPropertyGroup(groupXML, parentScopes)
     {
         var groupScopes = loadScopes(groupXML[0]);
         mergeScopes(groupScopes, parentScopes);
         
-        var properties = {};
+        var sequence = [];
+        var byId = {};
         groupXML.children().each(function (index, childXML)
         {
-            if (childXML.nodeName === "property")
+            var subResult = loadPropertyNode(childXML, groupScopes);
+            if (subResult.kind === 'property')
             {
-                var id = childXML.getAttribute('id');
-                var propertyScopes = loadScopes(childXML);
-                mergeScopes(propertyScopes, groupScopes);
-                properties[id] =
-                {
-                    id: id,
-                    name: childXML.getAttribute('name'),
-                    description: childXML.getAttribute('description'),
-                    optional: Boolean(childXML.getAttribute('optional')),
-                    scopes: propertyScopes,
-                    type: loadType($(childXML).children().eq(0))
-                }
+                sequence.push(subResult);
+                byId[subResult.id] = subResult;
             }
-            else
+            else if (subResult.kind === 'group')
             {
-                $.extend(properties, loadPropertyGroup($(childXML), groupScopes));
+                sequence = sequence.concat(subResult.sequence);
+                $.extend(byId, subResult.byId);
             }
         });
-        return properties;
+        return { kind: 'group', sequence: sequence, byId: byId };
     }
     
     function loadScopes(scopedXML)
