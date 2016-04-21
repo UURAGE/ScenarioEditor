@@ -18,7 +18,7 @@ var Config;
         var config = {};
         
         var defaultScopes = { statementScope: 'independent' };
-        config.properties = loadPropertyGroup(configXML.children('properties'), defaultScopes);
+        config.properties = loadPropertyCollection(configXML.children('properties'), 'toplevel', defaultScopes);
         
         Config.configObject = config;
     }
@@ -39,22 +39,28 @@ var Config;
                 type: loadType($(nodeXML).children().eq(0))
             };
         }
+        else if (nodeXML.nodeName === "propertySection")
+        {
+            var subResult = loadPropertyCollection($(nodeXML), 'section', parentScopes);
+            subResult.name = nodeXML.getAttribute('name');
+            return subResult;
+        }
         else
         {
-            return loadPropertyGroup($(nodeXML), parentScopes);
+            return loadPropertyCollection($(nodeXML), 'group', parentScopes);
         }
     }
     
-    function loadPropertyGroup(groupXML, parentScopes)
+    function loadPropertyCollection(collectionXML, kind, parentScopes)
     {
-        var groupScopes = loadScopes(groupXML[0]);
-        mergeScopes(groupScopes, parentScopes);
+        var collectionScopes = loadScopes(collectionXML[0]);
+        mergeScopes(collectionScopes, parentScopes);
         
         var sequence = [];
         var byId = {};
-        groupXML.children().each(function (index, childXML)
+        collectionXML.children().each(function (index, childXML)
         {
-            var subResult = loadPropertyNode(childXML, groupScopes);
+            var subResult = loadPropertyNode(childXML, collectionScopes);
             if (subResult.kind === 'property')
             {
                 sequence.push(subResult);
@@ -65,8 +71,13 @@ var Config;
                 sequence = sequence.concat(subResult.sequence);
                 $.extend(byId, subResult.byId);
             }
+            else if (subResult.kind === 'section')
+            {
+                sequence.push(subResult);
+                $.extend(byId, subResult.byId);
+            }
         });
-        return { kind: 'group', sequence: sequence, byId: byId };
+        return { kind: kind, scopes: collectionScopes, sequence: sequence, byId: byId };
     }
     
     function loadScopes(scopedXML)

@@ -42,12 +42,13 @@ var Save;
 
         // Save property definitions.
         var propertyDefinitionsEl = addAndReturnElement("properties", nameSpace, definitionsEl);
-        Config.configObject.properties.sequence.forEach(function (property)
+        for (var propertyId in Config.configObject.properties.byId)
         {
+            var property = Config.configObject.properties.byId[propertyId];
             var propertyEl = addAndReturnElement("property", nameSpace, propertyDefinitionsEl);
             propertyEl.setAttribute("id", property.id);
             property.type.insertUnderlyingType(propertyEl);
-        });
+        }
 
         // Save parameters and collect data for saving weights.
         var parametersEl = addAndReturnElement("parameters", nameSpace, definitionsEl);

@@ -58,19 +58,36 @@ var Metadata;
             if ($("#params").children().not(".toBeRemoved").length === 0)
                 $("#paramsTableHead").addClass("hidden");
         });
-        
+
         var anyPropertyShown = false;
         var propertiesEl = $('#meta-properties');
-        Config.configObject.properties.sequence.forEach(function (property)
+        var showPropertyItem = function (propertyItem, hLevel, container)
         {
-            if (property.scopes.statementScope !== 'independent') return;
-            var controlHtmlId = 'meta-properties-' + property.id;
-            
-            var propertyContainer = $('<div>', { id: 'meta-properties-container-' + property.id });
-            propertiesEl.append(propertyContainer);
-            propertyContainer.append($('<label>', { text: property.name + ':', 'for': controlHtmlId }));
-            property.type.appendControlTo(propertyContainer, controlHtmlId);
-            anyPropertyShown = true;
+            if (propertyItem.scopes.statementScope !== 'independent') return;
+            if (propertyItem.kind === 'section')
+            {
+                propertyItem.sequence.forEach(function (subItem)
+                {
+                    var headerContainer = $('<div>');
+                    headerContainer.append($('<h' + hLevel + '>', { text: propertyItem.name }));
+                    container.append(headerContainer);
+                    showPropertyItem(subItem, hLevel + 1, container);
+                });
+            }
+            else
+            {
+                var controlHtmlId = 'meta-properties-' + propertyItem.id;
+
+                var propertyContainer = $('<div>', { id: 'meta-properties-container-' + propertyItem.id });
+                container.append(propertyContainer);
+                propertyContainer.append($('<label>', { text: propertyItem.name + ':', 'for': controlHtmlId }));
+                propertyItem.type.appendControlTo(propertyContainer, controlHtmlId);
+                anyPropertyShown = true;
+            }
+        };
+        Config.configObject.properties.sequence.forEach(function (propertyItem)
+        {
+            showPropertyItem(propertyItem, 4, propertiesEl);
         });
         if (anyPropertyShown) propertiesEl.show();
     });
@@ -140,15 +157,16 @@ var Metadata;
         $("#character").val(Metadata.metaObject.character);
         $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
         
-        Config.configObject.properties.sequence.forEach(function (property)
+        for (var propertyId in Config.configObject.properties.byId)
         {
-            if (property.scopes.statementScope !== "independent") return;
+            var property = Config.configObject.properties.byId[propertyId];
+            if (property.scopes.statementScope !== "independent") continue;
             if (property.id in Metadata.metaObject.properties)
             {
                 property.type.setInDOM($("#meta-properties-container-" + property.id),
                     Metadata.metaObject.properties[property.id]);
             }
-        });
+        }
     }
 
     function parameterDialog()
@@ -349,12 +367,13 @@ var Metadata;
         Metadata.metaObject.difficulty = $("#scriptDifficulty").val();
         Metadata.metaObject.description = $("#scriptDescription").val();
 
-        Config.configObject.properties.sequence.forEach(function (property)
+        for (var propertyId in Config.configObject.properties.byId)
         {
-            if (property.scopes.statementScope !== "independent") return;
+            var property = Config.configObject.properties.byId[propertyId];
+            if (property.scopes.statementScope !== "independent") continue;
             Metadata.metaObject.properties[property.id] =
                 property.type.getFromDOM($("#meta-properties-container-" + property.id));
-        });
+        }
 
         $("#metaScreen").dialog('close');
         Main.selectNode(previouslySelectedNode);

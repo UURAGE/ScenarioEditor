@@ -1253,12 +1253,13 @@ var Main;
         node.intent = intentsArray;
 
         // Save properties.
-        Config.configObject.properties.sequence.forEach(function (property)
+        for (var propertyId in Config.configObject.properties.byId)
         {
-            if (property.scopes.statementScope !== "per") return;
+            var property = Config.configObject.properties.byId[propertyId];
+            if (property.scopes.statementScope !== "per") continue;
             node.properties[property.id] =
                 property.type.getFromDOM($("#node-properties-container-" + property.id));
-        });
+        }
 
         // Save the media.
         node.video = ObjectGenerator.nullFromHTMLValue($("#videoOptions").val());
@@ -1719,20 +1720,36 @@ var Main;
             }
 
             // Properties:
-            var propertiesEl = $('#node-properties');
-            Config.configObject.properties.sequence.forEach(function (property)
+            var showPropertyItem = function (propertyItem, hLevel, container)
             {
-                if (property.scopes.statementScope !== 'per') return;
-                var controlHtmlId = 'node-properties-' + property.id;
-
-                var propertyContainer = $('<div>', { id: 'node-properties-container-' + property.id });
-                propertiesEl.append(propertyContainer);
-                propertyContainer.append($('<label>', { text: property.name + ':', 'for': controlHtmlId }));
-                property.type.appendControlTo(propertyContainer, controlHtmlId);
-                if (property.id in node.properties)
+                if (propertyItem.scopes.statementScope !== 'per') return;
+                if (propertyItem.kind === 'section')
                 {
-                    property.type.setInDOM(propertyContainer, node.properties[property.id]);
+                    var sectionContainer = $('<div>');
+                    sectionContainer.append($('<h' + hLevel + '>', { text: propertyItem.name }));
+                    container.append(sectionContainer);
+                    propertyItem.sequence.forEach(function (subItem)
+                    {
+                        showPropertyItem(subItem, hLevel + 1, sectionContainer);
+                    });
                 }
+                else
+                {
+                    var controlHtmlId = 'node-properties-' + propertyItem.id;
+
+                    var propertyContainer = $('<div>', { id: 'node-properties-container-' + propertyItem.id });
+                    container.append(propertyContainer);
+                    propertyContainer.append($('<label>', { text: propertyItem.name + ':', 'for': controlHtmlId }));
+                    propertyItem.type.appendControlTo(propertyContainer, controlHtmlId);
+                    if (propertyItem.id in node.properties)
+                    {
+                        propertyItem.type.setInDOM(propertyContainer, node.properties[propertyItem.id]);
+                    }
+                }
+            }
+            Config.configObject.properties.sequence.forEach(function (subItem)
+            {
+                showPropertyItem(subItem, 3, $('#node-properties'));
             });
 
             $("#endNodeCheckbox").prop("checked", node.endNode);
