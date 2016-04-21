@@ -6,27 +6,27 @@ var KeyControl;
 {
     var hotKeysActive;
 
-    KeyControl = 
+    KeyControl =
     {
         ctrlClickOnElement: ctrlClickOnElement,
         selectExtraElement: selectExtraElement,
         hotKeysActive  : hotKeysActive
     };
-    
-    $(document).ready(function() 
+
+    $(document).ready(function()
     {
         //activate the hotkeys
         KeyControl.hotKeysActive = true;
 
         // Event handlers.
-        $("#main").on('keydown', function(e) 
+        $("#main").on('keydown', function(e)
         {
             // check if hotkeys are active
             if(KeyControl.hotKeysActive)
             {
                 var ch = String.fromCharCode(e.keyCode);
                 //Check if the ctrl key is pressed
-                if(e.ctrlKey)
+                if(e.ctrlKey && !e.shiftKey)
                 {
                     if(e.keyCode in ctrlNumberControl)
                     {
@@ -36,15 +36,15 @@ var KeyControl;
                     {
                         Utils.ensurePreventDefault(this, e, ctrlLetterControl[ch]);
                     }
-                    
+
                     $("#main").focus();
                 }
-                else if(e.keyCode in numberControl)
+                else if(!e.ctrlKey && !e.shiftKey && e.keyCode in numberControl)
                 {
                     Utils.ensurePreventDefault(this, e, numberControl[e.keyCode]);
                     $("#main").focus();
                 }
-                else if (ch in letterControl)
+                else if (!e.ctrlKey && !e.shiftKey && ch in letterControl)
                 {
                     Utils.ensurePreventDefault(this, e, letterControl[ch]);
                 }
@@ -56,27 +56,27 @@ var KeyControl;
     var letterControl = {
         Q: function()
         {
-            if(Zoom.isZoomed()) 
+            if(Zoom.isZoomed())
                 Main.addNewNode(Main.playerType);
         },
         W: function()
         {
-            if(Zoom.isZoomed()) 
+            if(Zoom.isZoomed())
                 Main.addNewNode(Main.computerType);
         },
         E: function()
         {
-            if(Zoom.isZoomed()) 
+            if(Zoom.isZoomed())
                 Main.addNewNode(Main.conversationType);
         },
         R: function()
         {
-            if(Zoom.isZoomed()) 
+            if(Zoom.isZoomed())
                 Main.createChildNode();
         },
         T: function()
         {
-            if(!Zoom.isZoomed()) 
+            if(!Zoom.isZoomed())
                 Main.addNewTree(null, true, 0, 0);
         },
         M: function()
@@ -202,12 +202,12 @@ var KeyControl;
                 Main.selectedElements.push(selectedElementID);
                 $("#" + selectedElementID).addClass("multiSelected");
             }
-            
+
             Main.selectedElements.push(elementID);
             $("#" + elementID).addClass("multiSelected");
         }
     }
-    
+
     /*
      ** Private Functions
      */
@@ -238,12 +238,12 @@ var KeyControl;
         for (var i = 0; i < Main.selectedElements.length; i++)
         {
             var upperBound = $('#main').position().top + 50;
-            
+
             var newTop = $("#" + Main.selectedElements[i]).offset().top - 5;
-            
+
             outOfUpperBound = newTop < upperBound - 1;
         }
-        
+
         // If none of the nodes is moving outside of the canvas, move and repaint them
         if (!outOfUpperBound)
         {
@@ -280,15 +280,15 @@ var KeyControl;
         for (var i = 0; i < Main.selectedElements.length; i++)
         {
             var leftBound = $('#main').position().left;
-            
+
             var newLeft = $("#" + Main.selectedElements[i]).offset().left - 5;
-            
+
             outOfLeftBound = newLeft < leftBound - 1;
-            
+
             if (outOfLeftBound)
                 break;
         }
-        
+
         // If none of the nodes will move out of the canvas, move and repaint them
         if (!outOfLeftBound)
         {
@@ -321,7 +321,7 @@ var KeyControl;
     {
         Main.selectElement(null);
         Main.selectedElements = [];
-        
+
         if (Zoom.isZoomed())
         {
             Zoom.getZoomed().nodes.forEach(function(nodeID)
@@ -429,7 +429,7 @@ var KeyControl;
         {
             target: Main.selectedElement
         });
-        
+
         var closestNode;
         var right = -Infinity;
         var rightCurrent = $("#" + Main.selectedElement).offset().left;
@@ -439,7 +439,7 @@ var KeyControl;
             {
                 source: connections[i].sourceId
             });
-            
+
             for (var j = 0; j < sourceConnections.length; j++)
             {
                 var nodeLookedAt = sourceConnections[j].targetId;
@@ -454,7 +454,7 @@ var KeyControl;
                 }
             }
         }
-        
+
         if (right !== -Infinity)
             Main.selectElement(closestNode);
     }
