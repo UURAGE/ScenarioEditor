@@ -6,7 +6,7 @@ var Metadata;
 {
     var parameterCounter = 0;
 
-    Metadata = 
+    Metadata =
     {
         metaObject: {},
         getNewDefaultMetaObject: getNewDefaultMetaObject,
@@ -15,7 +15,8 @@ var Metadata;
         atLeastOneParameter: atLeastOneParameter,
         metadataDialog: metadataDialog,
         timePId : null,
-        addTimeParameter: addTimeParameter
+        addTimeParameter: addTimeParameter,
+        formatScriptName: formatScriptName
     };
 
     $(document).ready(function()
@@ -70,14 +71,14 @@ var Metadata;
         parameterCounter = 0;
 
         var pObj = {};
-        
+
         Metadata.metaObject = {
             name: "",
             difficulty: "medium",
-            character: "", //character is defined in properties by free form input text 
+            character: "", //character is defined in properties by free form input text
             description: "",
             parameterObject: pObj,
-            scriptVersion: 3, 
+            scriptVersion: 3,
             defaultChangeType: LanguageManager.sLang("edt_parts_delta"),
         };
     }
@@ -176,7 +177,7 @@ var Metadata;
                     $("#paramsTableHead").removeClass("hidden");
                 }
             }
-        });        
+        });
 
         $("#params").empty();
         $("#paramsTableHead").addClass("hidden");
@@ -195,11 +196,11 @@ var Metadata;
             addedDiv.find(".weightForFinalScore").val(parameter.weightForFinalScore);
             addedDiv.find(".minimumScore").val(parameter.minimumScore);
             addedDiv.find(".maximumScore").val(parameter.maximumScore);
-            addedDiv.find(".parameterDescription").val(parameter.parameterDescription);        
+            addedDiv.find(".parameterDescription").val(parameter.parameterDescription);
         }
         if ($("#params").children().length > 0)
             $("#paramsTableHead").removeClass("hidden");
-        
+
         $("#scriptDescription").val(Metadata.metaObject.description);
         $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
     }
@@ -213,9 +214,9 @@ var Metadata;
     function addTimeParameter(div)
     {
         var newParamObject = ObjectGenerator.parameterObject(div);
-        
+
         if (newParamObject === null) return;
-        
+
         var id = 't';
         $(div).prop('id', id);
         Metadata.metaObject.parameterObject[id] = newParamObject;
@@ -224,7 +225,7 @@ var Metadata;
 
         $(div).removeClass("newParameter").addClass("existingParameter").addClass('isT');
 
-        var timeObject = 
+        var timeObject =
         {
             parameterid : id,
             changeType: "delta",
@@ -265,7 +266,7 @@ var Metadata;
                         node.parameters.splice(i, 1);
                 removeAllPreconditionsWithParam(id, node.preconditions);
             }
-            
+
             delete FeedbackForm.conditions[id];
 
             if (id === Metadata.timePId && Metadata.timePId !== null)
@@ -289,20 +290,20 @@ var Metadata;
         $(".newParameter").each(function()
         {
             var newParamObject = ObjectGenerator.parameterObject($(this));
-            
+
             if (newParamObject === null) return;
-            
+
             var id = 'p' + (Metadata.parameterCounter += 1).toString();
-            
+
             $(this).prop('id', id);
             Metadata.metaObject.parameterObject[id] = newParamObject;
-            
+
             $(this).removeClass("newParameter").addClass("existingParameter");
         });
 
         //console.log(Metadata.metaObject.parameterObject);
     }
-    
+
     // Save all changes to the metaObject.
     function saveMetaObject()
     {
@@ -313,7 +314,7 @@ var Metadata;
         Main.selectNode(null);
 
         Metadata.metaObject.character = $("#character").val();
-        
+
         Metadata.metaObject.defaultChangeType = $("#defaultChangeTypeSelect").val();
 
         // Save all values in the dialog to the metaObject
@@ -355,12 +356,12 @@ var Metadata;
 
     function formatScriptName(scriptName)
     {
-        scriptName = scriptName.trim().replace(/[^a-z0-9_,\.\s\|\!\&\\\/\'\"\[\]\{\+\=\(\)\}]/gi, '');
-        if (scriptName !== "" && scriptName.length <= 35)
+        scriptName = scriptName.trim().substr(0, 35);
+        if (scriptName !== "")
         {
             return scriptName;
         }
-        else    
+        else
         {
             return Metadata.metaObject.name;
         }

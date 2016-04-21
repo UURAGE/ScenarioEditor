@@ -74,11 +74,8 @@ var Main;
 
             if(!cancel)
             {
-                var inputName = nameInput.val().trim().replace(/[^a-z0-9_,\.\s\|\!\&\\\/\'\"\[\]\{\+\=\(\)\}]/gi, '');
-                if(inputName !== "" && inputName.length <= 35)
-                {
-                    Metadata.metaObject.name = inputName;
-                }
+                var inputName = Metadata.formatScriptName(nameInput.val());
+                Metadata.metaObject.name = inputName;
                 $('#scriptNameTab .scriptName').text(Metadata.metaObject.name);
             }
 
