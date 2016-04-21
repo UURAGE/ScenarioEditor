@@ -55,7 +55,21 @@
 		</choice>
 	</group>
 	<attributeGroup name="propertyScopes">
-		<attribute name="characterScope" type="string" use="optional" default="independent" />
-		<attribute name="statementScope" type="string" use="optional" default="independent" />
+		<attribute name="characterScope" use="optional" default="independent">
+			<simpleType>
+				<restriction base="string">
+					<enumeration value="independent" />
+					<enumeration value="per" />
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="statementScope" use="optional" default="independent">
+			<simpleType>
+				<restriction base="string">
+					<enumeration value="independent" />
+					<enumeration value="per" />
+				</restriction>
+			</simpleType>
+		</attribute>
 	</attributeGroup>
 </schema>
