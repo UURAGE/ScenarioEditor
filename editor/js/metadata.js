@@ -316,21 +316,12 @@ var Metadata;
         
         Metadata.metaObject.defaultChangeType = $("#defaultChangeTypeSelect").val();
 
-        // Save all values in the dialog to the metaObject.
-        Metadata.metaObject.name = $("#scriptName").val();
+        // Save all values in the dialog to the metaObject
+        Metadata.metaObject.name = formatScriptName($("#scriptName").val());
+        $('#scriptNameTab .scriptName').text(Metadata.metaObject.name);
+
         Metadata.metaObject.difficulty = $("#scriptDifficulty").val();
         Metadata.metaObject.description = $("#scriptDescription").val();
-
-        var truncatedName;
-        if (Metadata.metaObject.name.length > 20)
-        {
-            truncatedName = Metadata.metaObject.name.substring(0, 17) + "...";
-        }
-        else
-        {
-            truncatedName = Metadata.metaObject.name;
-        }
-        $('#scriptNameTab .scriptName').text(truncatedName);
 
         $("#metaScreen").dialog('close');
         Main.selectNode(previouslySelectedNode);
@@ -362,4 +353,16 @@ var Metadata;
         }
     }
 
+    function formatScriptName(scriptName)
+    {
+        scriptName = scriptName.trim().replace(/[^a-z0-9_,\.\s\|\!\&\\\/\'\"\[\]\{\+\=\(\)\}]/gi, '');
+        if (scriptName !== "" && scriptName.length <= 35)
+        {
+            return scriptName;
+        }
+        else    
+        {
+            return Metadata.metaObject.name;
+        }
+    }
 })();
