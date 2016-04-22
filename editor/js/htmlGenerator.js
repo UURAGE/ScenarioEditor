@@ -167,8 +167,7 @@ var HtmlGenerator;
         $("#effectParameterDiv").append(parameterEffectHTML);
         var addedDiv = $("#effectParameterDiv").children().last();
         
-        var defaultChangeType = $("#defaultChangeTypeSelect option:selected").val();
-        addedDiv.find(".changeType").val(defaultChangeType);
+        addedDiv.find(".changeType").val(Metadata.metaObject.defaultChangeType);
         
         insertParameters(addedDiv, ".parameterid", "parameter");
         return addedDiv;
