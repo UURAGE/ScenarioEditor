@@ -13,7 +13,7 @@ var Load;
     };
 
     var loadedMetaObject;
-    
+
     $(document).ready(function()
     {
         $("#importScreen").html(Parts.getImportScreenHTML());
@@ -25,7 +25,7 @@ var Load;
                 height: ParameterValues.heightMedia,
                 width: ParameterValues.widthMedia,
                 modal: true,
-                buttons: 
+                buttons:
                 [{
                     text: LanguageManager.sLang("edt_load_import"),
                     click: function()
@@ -43,7 +43,7 @@ var Load;
                 }]
             });
         });
-        
+
         // At the beginning no XML is loaded, so we need to define a metaObject
         Metadata.getNewDefaultMetaObject();
         loadedMetaObject = Metadata.metaObject;
@@ -105,7 +105,7 @@ var Load;
     /*
      ** Private Functions
      */
-     
+
     function prepareRebuild()
     {
         Main.selectElement(null);
@@ -145,12 +145,12 @@ var Load;
                     var tree = Main.createEmptyTree(treeID, false, 0, 0);
 
                     // get the subject from the XML
-                    tree.subject = Main.unEscapeTags($(this).children('subject')[0].textContent); 
+                    tree.subject = Main.unEscapeTags($(this).children('subject')[0].textContent);
 
                     tree.optional = $(this).attr('optional') == "true";
 
                     // get the position from the XML, note that this is in grid coordinates, not screen coordinates
-                    var position = $(this).children('position')[0]; 
+                    var position = $(this).children('position')[0];
                     tree.leftPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('x')[0].textContent, 0)); // set x
                     tree.topPos  = Math.round(Utils.parseDecimalIntWithDefault($(position).children('y')[0].textContent, 0)); // set y
                     tree.level = Math.round(level); // set level
@@ -166,7 +166,7 @@ var Load;
 
                     tree.dragDiv.css('border-color', '');
 
-                    $(this).children().each(function() 
+                    $(this).children().each(function()
                     { // parse the tree in the container
                         switch (this.nodeName)
                         {
@@ -182,7 +182,7 @@ var Load;
                         }
                     });
                 });
-                
+
                 level++;
             });
         }
@@ -239,7 +239,8 @@ var Load;
     function loadMetadata(metadata)
     {
         var version = parseInt($(metadata).find('version').text());
-        var name = Main.unEscapeTags($(metadata).find('name').text()); 
+        var name = Main.unEscapeTags($(metadata).find('name').text());
+        $('#scriptNameTab .scriptName').text(name);
         var description = Main.unEscapeTags($(metadata).find('description').text());
         var character = Main.unEscapeTags($(metadata).find('character').attr('id'));
         var difficulty = $(metadata).find('difficulty').text();
@@ -263,8 +264,8 @@ var Load;
                 if (paramNumber > Metadata.parameterCounter)
                     Metadata.parameterCounter = paramNumber;
             }
-            
-            parameterObject[paramId] = 
+
+            parameterObject[paramId] =
             {
                 name: Main.unEscapeTags(parameter.attributes.name.value),
                 initialValue: (parameter.hasAttribute('initialValue') ?
@@ -285,7 +286,7 @@ var Load;
                 //...add the weight of the parameter.
                 parameterObject[parameterId].weightForFinalScore =
                     Utils.parseDecimalIntWithDefault($(this).parent().attr('scalar'), 0);
-                    
+
             }
         });
 
@@ -348,7 +349,7 @@ var Load;
 
                         }
                     }
-                    else 
+                    else
                     {
                         if (conditionTest !== "min" || conditionTest !== "max")
                         {
@@ -392,11 +393,11 @@ var Load;
             Main.jsPlumbCounter = Math.max(Main.jsPlumbCounter, parseInt(idMatch[1]));
         else
             id = "ext_" + id;
-        
+
         var jumpPoint = $(statement).attr('jumpPoint') == "true";
         var initsNode = $(statement).attr('inits') == "true";
         var endNode = $(statement).attr('possibleEnd') == "true";
-            
+
         var text = "";
         var conversationArray = [];
         if (type == Main.conversationType)
