@@ -676,6 +676,9 @@ var Main;
             nodeT = m2T-upperBound+treeDiv.scrollTop();
         }
         $('#'+node.id).css({top:nodeT,left:nodeL, width:"128px"});
+
+        Main.trees[node.parent].plumbInstance.updateOffset({elId:node.id, recalc:true});
+        Main.trees[node.parent].plumbInstance.repaint(node.id, null, 0);
     }
 
     function createChildNode(event)

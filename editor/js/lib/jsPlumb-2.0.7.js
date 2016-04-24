@@ -3554,7 +3554,7 @@
 
                                     // this is one element
                                     var _one = function (_e) {
-                                        _draw(_e[0], uip);
+                                        //_draw(_e[0], uip);
                                         _currentInstance.removeClass(_e[0], "jsplumb-dragged");
                                         _currentInstance.select({source: _e[0]}).removeClass(_currentInstance.elementDraggingClass + " " + _currentInstance.sourceElementDraggingClass, true);
                                         _currentInstance.select({target: _e[0]}).removeClass(_currentInstance.elementDraggingClass + " " + _currentInstance.targetElementDraggingClass, true);
