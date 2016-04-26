@@ -28,11 +28,12 @@
 	<complexType name="propertiesType">
 		<choice minOccurs="0" maxOccurs="unbounded">
 			<element ref="tns:property" />
-			<element name="propertyGroup">
+			<element name="propertyGroup" type="tns:propertiesType" />
+			<element name="propertySection">
 				<complexType>
 					<complexContent>
 						<extension base="tns:propertiesType">
-							<attribute name="name" type="string" use="optional" />
+							<attribute name="name" type="string" use="required" />
 						</extension>
 					</complexContent>
 				</complexType>
