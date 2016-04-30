@@ -8,12 +8,23 @@
 		<complexType>
 			<sequence>
 				<element name="properties" type="tns:propertiesType" />
+				<choice>
+					<element ref="tns:character" />
+					<element name="characters">
+						<complexType>
+							<sequence>
+								<element name="properties" type="tns:propertiesType" minOccurs="0" maxOccurs="1" />
+								<element ref="tns:character" minOccurs="1" maxOccurs="unbounded" />
+							</sequence>
+						</complexType>
+					</element>
+				</choice>
 			</sequence>
 		</complexType>
 	   <key name="propertyID">
 		   <selector xpath=".//tns:property" />
 		   <field xpath="@id" />
-	   </key> 
+	   </key>
 	</element>
 	<element name="property">
 		<complexType>
@@ -23,6 +34,13 @@
 			<attribute name="optional" type="boolean" use="optional" default="false" />
 			<attribute name="description" type="string" use="optional" />
 			<attributeGroup ref="tns:propertyScopes" />
+		</complexType>
+	</element>
+	<element name="character">
+		<complexType>
+			<sequence>
+				<element name="properties" type="tns:propertiesType" minOccurs="0" maxOccurs="1" />
+			</sequence>
 		</complexType>
 	</element>
 	<complexType name="propertiesType">
@@ -56,14 +74,6 @@
 		</choice>
 	</group>
 	<attributeGroup name="propertyScopes">
-		<attribute name="characterScope" use="optional" default="independent">
-			<simpleType>
-				<restriction base="string">
-					<enumeration value="independent" />
-					<enumeration value="per" />
-				</restriction>
-			</simpleType>
-		</attribute>
 		<attribute name="statementScope" use="optional" default="independent">
 			<simpleType>
 				<restriction base="string">
