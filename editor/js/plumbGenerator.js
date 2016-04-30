@@ -6,7 +6,7 @@ var PlumbGenerator;
 {
     "use strict";
 
-    PlumbGenerator = 
+    PlumbGenerator =
     {
         genJsPlumbInstance : genJsPlumbInstance
     }
@@ -19,10 +19,11 @@ var PlumbGenerator;
         instance.setContainer(container);
 
             // setup some defaults for jsPlumb.
-            
+
         instance.importDefaults(
         {
             Endpoint : ["Dot", {radius:2}],
+            Anchor : "Continuous",
             HoverPaintStyle : {strokeStyle:"#1e8151", lineWidth:2 },
             Connector: ["StateMachine", {curviness: 20}],
             PaintStyle : {strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4},
@@ -35,19 +36,19 @@ var PlumbGenerator;
                 } ]
             ]
         });
-    
-    
+
+
         // bind a dblclick listener to each connection; the connection is deleted. you could of course
         // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
         // happening.
-        instance.bind("dblclick", function(c) 
+        instance.bind("dblclick", function(c)
         {
             $(".pathToDeadEnd").removeClass("pathToDeadEnd");
             instance.detach(c);
             Main.dehighlightParents();
             Main.highlightParents(Main.selectedElement);
         });
-    
+
         // on click, select connector
         instance.bind("click",function(c)
         {
@@ -61,7 +62,7 @@ var PlumbGenerator;
             },5);
             // time out so that the click can be finished
             setTimeout(function()
-            { 
+            {
                 // add new click event that deselects the arrow on first canvas click
                 $("#main").one("click", function()
                 {
@@ -72,16 +73,16 @@ var PlumbGenerator;
                         target: c.targetId
                     });
                     if(con.length > 0) // connection can just have been removed
-                    {    
+                    {
                     // connections are unique, so if it exists there is never more then one
                     con[0].setPaintStyle({strokeStyle:"#5c96bc"});
                     }
-                });                 
+                });
             }, 30);
         });
-    
-        instance.bind("beforeDrop", function(info) 
-        { 
+
+        instance.bind("beforeDrop", function(info)
+        {
             Main.makeConnection(info.sourceId,info.targetId, instance);
             instance.updateOffset({elId:info.sourceId, recalc:true});
             instance.repaint(info.sourceId, null, 0);
@@ -89,11 +90,11 @@ var PlumbGenerator;
             instance.updateOffset({elId:info.targetId, recalc:true});
             instance.repaint(info.targetId, null, 0);
         });
-    
-        instance.bind("connection", function(info) 
+
+        instance.bind("connection", function(info)
         {
             $(".pathToDeadEnd").removeClass("pathToDeadEnd");
-            if($("#" + info.targetId).hasClass("parentSelected") || 
+            if($("#" + info.targetId).hasClass("parentSelected") ||
                $("#" + info.targetId).hasClass("selected"))
             {
                 if($("#allParents").hasClass("enabled"))
@@ -103,7 +104,7 @@ var PlumbGenerator;
                 }
             }
         });
-    
-        return instance;    
+
+        return instance;
     }
 })();
