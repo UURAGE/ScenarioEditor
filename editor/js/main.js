@@ -50,7 +50,9 @@ var Main;
 
     //Private Variables.
     var xselectableSelected = [],
-        ctrlDown = false;
+        ctrlDown = false,
+        editPermission = false,
+        invalidateNodeClick = false;//a drag event also triggers a click event, use this flag to catch and stop these events
 
     $(document).ready(function()
     {
@@ -867,6 +869,7 @@ var Main;
 
             start: function(event)
             {
+                invalidateNodeClick = true;
                 if(Main.selectedElement === null)
                 {
                     if(Main.selectedElements.indexOf(id) === -1)
@@ -877,13 +880,8 @@ var Main;
                     if(Main.selectedElement !== id)
                         selectElement(id);
                 }
-            },
-
-            stop: function(event)
-            {
-                //plumbInstance.updateOffset({elId:event.el.id, recalc:true});
-                //plumbInstance.repaint(event.el.id, null, 0);
             }
+            //we do not set invalidateNodeClick in a stop handler since it fires before the click handler
         });
 
         // make each ".ep" div a source
@@ -913,6 +911,11 @@ var Main;
         node.on("click", function(event)
         {
             event.stopPropagation();
+            if(invalidateNodeClick)
+            {
+                invalidateNodeClick = false;
+                return;
+            }
             if (Main.selectedElement === id)
                 return;
             if (event.ctrlKey)
