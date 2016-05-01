@@ -4,25 +4,37 @@ var Config;
 
 (function ()
 {
-    Config = 
+    Config =
     {
         configObject: {},
         types: {}
     };
-    
+
+    var defaultScopes = { statementScope: 'independent' };
+    var defaultPropertyCollection = { kind: 'toplevel', scopes: defaultScopes, sequence: [], byId: {} };
+
     $(document).ready(loadConfig);
-    
+
     function loadConfig()
     {
         var configXML = $($.parseXML($('#config').text())).children('config');
         var config = {};
-        
-        var defaultScopes = { statementScope: 'independent' };
+
         config.properties = loadPropertyCollection(configXML.children('properties'), 'toplevel', defaultScopes);
-        
+
+        if (configXML.children('character').length > 0)
+        {
+            config.characters = { properties: $.extend({}, defaultPropertyCollection) };
+            config.characters['character'] = loadCharacterNode(configXML.children('character'), 'character');
+        }
+        else
+        {
+            config.characters = loadCharacterCollection(configXML.children('characters'));
+        }
+
         Config.configObject = config;
     }
-    
+
     function loadPropertyNode(nodeXML, parentScopes)
     {
         if (nodeXML.nodeName === "property")
@@ -50,12 +62,12 @@ var Config;
             return loadPropertyCollection($(nodeXML), 'group', parentScopes);
         }
     }
-    
+
     function loadPropertyCollection(collectionXML, kind, parentScopes)
     {
         var collectionScopes = loadScopes(collectionXML[0]);
         mergeScopes(collectionScopes, parentScopes);
-        
+
         var sequence = [];
         var byId = {};
         collectionXML.children().each(function (index, childXML)
@@ -79,12 +91,12 @@ var Config;
         });
         return { kind: kind, scopes: collectionScopes, sequence: sequence, byId: byId };
     }
-    
+
     function loadScopes(scopedXML)
     {
         return { statementScope: scopedXML.getAttribute('statementScope') };
     }
-    
+
     function mergeScopes(localScopes, parentScopes)
     {
         for (var scopeName in parentScopes)
@@ -95,23 +107,55 @@ var Config;
             }
         }
     }
-    
+
     function loadType(typeXML)
     {
         var typeName = typeXML[0].nodeName.substr('type'.length).toLowerCase();
         return Config.types[typeName].loadType(typeXML);
     }
-    
+
     function appendChild(parentXML, name)
     {
         parentXML.appendChild(document.createElementNS(parentXML.namespaceURI, name));
     }
-    
+
     function toXMLSimple(valueXML, value)
     {
         valueXML.textContent = value;
     }
-    
+
+    function loadCharacterCollection(collectionXML)
+    {
+        var characters = {};
+        collectionXML.children('character').each(function(index, childXML)
+        {
+            var characterID = 'character' + index;
+            characters[characterID] = loadCharacterNode(childXML, characterID);
+        });
+        characters.properties = loadPropertyCollectionOrDefault($(collectionXML).children('properties'));
+        return characters;
+    }
+
+    function loadCharacterNode(nodeXML, characterID)
+    {
+        var properties = loadPropertyCollectionOrDefault($(nodeXML).children('properties'));
+        return { id: characterID, properties: properties};
+    }
+
+    function loadPropertyCollectionOrDefault(propertiesXML)
+    {
+        var properties = {};
+        if (propertiesXML.length > 0)
+        {
+            properties = loadPropertyCollection(propertiesXML, 'toplevel', defaultScopes);
+        }
+        else
+        {
+            $.extend(properties, defaultPropertyCollection);
+        }
+        return properties;
+    }
+
     Config.types =
     {
         'string':
