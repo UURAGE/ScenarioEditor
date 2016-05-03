@@ -17,7 +17,7 @@
 								<element ref="tns:character" minOccurs="1" maxOccurs="unbounded" />
 							</sequence>
 						</complexType>
-						<key name="characterid">
+						<key name="characterID">
 							<selector xpath="./tns:character" />
 							<field xpath="@id" />
 						</key>
