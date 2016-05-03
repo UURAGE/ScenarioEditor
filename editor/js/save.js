@@ -4,7 +4,7 @@ var Save;
 
 (function()
 {
-    Save = 
+    Save =
     {
         generateXML: generateXML,
         getStartNodeIDs: getStartNodeIDs
@@ -37,18 +37,35 @@ var Save;
         addAndReturnElement("difficulty", nameSpace, metadataEl).textContent = Metadata.metaObject.difficulty;
         addAndReturnElement("defaultChangeType", nameSpace, metadataEl).textContent = Metadata.metaObject.defaultChangeType;
         addAndReturnElement("character", nameSpace, metadataEl).setAttribute('id', Main.escapeTags(Metadata.metaObject.character));
-        
+
         var definitionsEl = addAndReturnElement("definitions", nameSpace, metadataEl);
 
         // Save property definitions.
         var propertyDefinitionsEl = addAndReturnElement("properties", nameSpace, definitionsEl);
-        for (var propertyId in Config.configObject.properties.byId)
+        var addPropertyDefinitionElement = function (property, nameSpace, propertyDefinitionsEl)
         {
-            var property = Config.configObject.properties.byId[propertyId];
             var propertyEl = addAndReturnElement("property", nameSpace, propertyDefinitionsEl);
             propertyEl.setAttribute("id", property.id);
             property.type.insertUnderlyingType(propertyEl);
+        };
+        for (var propertyId in Config.configObject.properties.byId)
+        {
+            var property = Config.configObject.properties.byId[propertyId];
+            addPropertyDefinitionElement(property, nameSpace, propertyDefinitionsEl);
         }
+        for (var propertyId in Config.configObject.characters.properties.byId)
+        {
+            var property = Config.configObject.characters.properties.byId[propertyId];
+            addPropertyDefinitionElement(property, nameSpace, propertyDefinitionsEl);
+        }
+        $.each(Config.configObject.characters.ids, function(_, characterId)
+        {
+            for (var propertyId in Config.configObject.characters[characterId].properties.byId)
+            {
+                var property = Config.configObject.characters[characterId].properties.byId[propertyId];
+                addPropertyDefinitionElement(property, nameSpace, propertyDefinitionsEl);
+            }
+        });
 
         // Save parameters and collect data for saving weights.
         var parametersEl = addAndReturnElement("parameters", nameSpace, definitionsEl);
@@ -204,7 +221,7 @@ var Save;
             error.push(-1);
             return error;
         }
-        
+
         return orphanNodes;
     }
 
@@ -286,13 +303,13 @@ var Save;
         addAndReturnElement('y', nameSpace,positionElement).textContent = tree.topPos;
 
         var startNodeIDs = getStartNodeIDs(tree);
-    
-        $.each(startNodeIDs, function(index, startNodeID) 
+
+        $.each(startNodeIDs, function(index, startNodeID)
         {
             if (startNodeID !== -1)
                 addAndReturnElement("start", nameSpace, treeElement).setAttribute("idref", startNodeID.replace(/^ext_/, '').replace(/_/g, '.'));
         });
-        
+
         generateNodesXML(treeElement, tree, nameSpace);
     }
 
@@ -307,7 +324,7 @@ var Save;
             var statementEl = addAndReturnElement(
                 node.type + (node.type == Main.conversationType ? "" : "Statement"), nameSpace, treeElement);
             statementEl.setAttribute('id', node.id.replace(/^ext_/, '').replace(/_/g, '.'));
-            
+
             if (node.type === Main.computerType)
             {
                 statementEl.setAttribute('jumpPoint', node.jumpPoint);
@@ -402,7 +419,7 @@ var Save;
                         statementEl.appendChild(intentsEl);
                     // Save the parameter effects.
                     var parameterEffectsEl = addAndReturnElement("parameterEffects", nameSpace, statementEl);
-                    
+
                     for (var k = 0; k < node.parameters.length; k++)
                     {
                         var pEff = node.parameters[k];
@@ -464,7 +481,7 @@ var Save;
             {
                 var conditionObj = precondition.preconditions[i];
                 conditionEl = createAndReturnPreconditionXML(conditionObj, nameSpace);
-                if (conditionEl !== null) 
+                if (conditionEl !== null)
                     typeEl.appendChild(conditionEl);
             }
 

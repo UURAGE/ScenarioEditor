@@ -27,6 +27,7 @@ var Config;
             config.characters = { properties: $.extend({}, defaultPropertyCollection) };
             var character = loadCharacterNode(configXML.children('character')[0]);
             config.characters[character.id] = character;
+            config.characters.ids = [character.id];
         }
         else
         {
@@ -128,10 +129,12 @@ var Config;
     function loadCharacterCollection(collectionXML)
     {
         var characters = {};
+        characters.ids = [];
         collectionXML.children('character').each(function(index, childXML)
         {
             var character = loadCharacterNode(childXML);
             characters[character.id] = character;
+            characters.ids.push(character.id);
         });
         characters.properties = loadPropertyCollectionOrDefault($(collectionXML).children('properties'));
         return characters;
