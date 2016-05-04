@@ -58,7 +58,7 @@ var Save;
             var property = Config.configObject.characters.properties.byId[propertyId];
             addPropertyDefinitionElement(property, nameSpace, propertyDefinitionsEl);
         }
-        $.each(Config.configObject.characters.ids, function(_, characterId)
+        Config.configObject.characters.ids.forEach(function(characterId)
         {
             for (var propertyId in Config.configObject.characters[characterId].properties.byId)
             {

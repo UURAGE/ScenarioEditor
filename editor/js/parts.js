@@ -2,7 +2,7 @@
 
 var Parts;
 
-(function () 
+(function ()
 {
     //Raw HTML that needs to be exported.
     Parts =
@@ -22,14 +22,14 @@ var Parts;
         getImportScreenHTML: getImportScreenHTML
     };
 
-    function getFeedbackScreenHTML() 
+    function getFeedbackScreenHTML()
     {
         return '' +
             '<div id="paramTabs">' +
             '</div>';
     }
 
-    function getConversationTextHTML() 
+    function getConversationTextHTML()
     {
         return '' +
             '<div class="conversation">' +
@@ -41,7 +41,7 @@ var Parts;
             '</div>';
     }
 
-    function getDraftScreenHTML() 
+    function getDraftScreenHTML()
     {
         return '' +
             '<div id="itemControls">' +
@@ -86,17 +86,17 @@ var Parts;
             '</table>' +
             '<button id="addDraftItem" class="add">' + LanguageManager.sLang("edt_draft_add_item") + '</button>';
     }
-    
-    function getChangeTypeHTML() 
+
+    function getChangeTypeHTML()
     {
-        return '' + 
+        return '' +
             '<select class="changeType">' +
                         '<option value="delta" selected="selected">'+LanguageManager.sLang("edt_parts_delta")+'</option>' +
                         '<option value="set" >'+LanguageManager.sLang("edt_parts_set")+'</option>' +
-            '</select>'; 
+            '</select>';
     }
 
-    function getParameterEffectHTML() 
+    function getParameterEffectHTML()
     {
         return '' +
             '<div class="ParametrEffect">' +
@@ -107,7 +107,7 @@ var Parts;
             '</div>';
     }
 
-    function getGroupPreconditionHTML() 
+    function getGroupPreconditionHTML()
     {
         return '' +
             '<div class="precondition groupprecondition empty">' +
@@ -125,7 +125,7 @@ var Parts;
             '</div>';
     }
 
-    function getIntentionHTML() 
+    function getIntentionHTML()
     {
         return '' +
             '<div class="intention">' +
@@ -134,7 +134,7 @@ var Parts;
             '</div>';
     }
 
-    function getMediaScreenHTML() 
+    function getMediaScreenHTML()
     {
         return '' +
             '<div>' +
@@ -149,7 +149,7 @@ var Parts;
         '<div id="uploadStatus"></div>';
     }
 
-    function getParameterScreenHTML() 
+    function getParameterScreenHTML()
     {
         return '' +
             '<div id="allParamsDiv">' +
@@ -174,7 +174,7 @@ var Parts;
 
     }
 
-    function getMetaScreenHTML() 
+    function getMetaScreenHTML()
     {
         return '' +
             '<div>' +
@@ -205,12 +205,9 @@ var Parts;
                                 '</textarea>' +
                             '</div>' +
                         '</div>' +
-                        '<div id="appearance"class="sub-formTable">' +
-                            '<h3>'+LanguageManager.sLang("edt_parts_appearance")+'</h3>' +
-                            '<div>' +
-                                '<label for="character">Character:</label>' +
-                                '<input type="text" id="character" />' +
-                            '</div>' +
+                        '<div id="character-properties" class="sub-formTable" style="display:none">' +
+                            '<h3>' +LanguageManager.sLang("edt_parts_character_properties")+ '</h3>' +
+                            '<div>'+'<div id="character-tabs"/>'+'</div>' +
                         '</div>' +
                         '<div id="meta-properties" class="sub-formTable" style="display:none">' +
                             '<h3>'+LanguageManager.sLang("edt_parts_properties")+'</h3>' +
@@ -231,7 +228,7 @@ var Parts;
             '</div>';
     }
 
-    function getImportScreenHTML() 
+    function getImportScreenHTML()
     {
         return '' +
                 '<div id="impExp">' +
@@ -243,7 +240,7 @@ var Parts;
             '</div>';
     }
 
-    function getParameterDefinitionHTML() 
+    function getParameterDefinitionHTML()
     {
         return '' +
             '<tr class="newParameter">' +
@@ -272,7 +269,7 @@ var Parts;
             '</tr>';
     }
 
-    function getPreconditionHTML() 
+    function getPreconditionHTML()
     {
         return '' +
             '<div class="precondition">' +
@@ -291,7 +288,7 @@ var Parts;
             '</div>';
     }
 
-    function getScoreHTML() 
+    function getScoreHTML()
     {
         return '' +
             '<div class="scores">' +
