@@ -36,7 +36,6 @@ var Save;
         addAndReturnElement("description", nameSpace, metadataEl).textContent = Main.escapeTags(Metadata.metaObject.description);
         addAndReturnElement("difficulty", nameSpace, metadataEl).textContent = Metadata.metaObject.difficulty;
         addAndReturnElement("defaultChangeType", nameSpace, metadataEl).textContent = Metadata.metaObject.defaultChangeType;
-        addAndReturnElement("character", nameSpace, metadataEl).setAttribute('id', Main.escapeTags(Metadata.metaObject.character));
 
         var definitionsEl = addAndReturnElement("definitions", nameSpace, metadataEl);
 

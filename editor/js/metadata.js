@@ -196,7 +196,6 @@ var Metadata;
         $("#scriptName").val(Metadata.metaObject.name);
         $("#scriptDifficulty").val(Metadata.metaObject.difficulty);
         $("#scriptDescription").val(Metadata.metaObject.description);
-        $("#character").val(Metadata.metaObject.character);
         $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
 
         var setPropertyInDOM = function(propertiesObject, propertyContainerId, property)

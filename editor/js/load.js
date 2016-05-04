@@ -232,7 +232,6 @@ var Load;
         var name = Main.unEscapeTags($(metadata).find('name').text());
         $('#scriptNameTab .scriptName').text(name);
         var description = Main.unEscapeTags($(metadata).find('description').text());
-        var character = Main.unEscapeTags($(metadata).find('character').attr('id'));
         var difficulty = $(metadata).find('difficulty').text();
         var parameterObject = {};
         var definitions = $(metadata).find('definitions');
@@ -300,7 +299,7 @@ var Load;
         Metadata.metaObject = {
             name: name,
             difficulty: difficulty,
-            character: character,
+            characters: Metadata.metaObject.characters,
             description: description,
             properties: properties,
             parameterObject: parameterObject,
