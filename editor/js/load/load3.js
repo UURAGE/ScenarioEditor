@@ -273,9 +273,9 @@ var Load3;
         var yPos = $(statement).find('y').text();
 
         // Load media.
-        var video = nullIfMissing($(statement).find('video').attr('extid'));
-        var image = nullIfMissing($(statement).find('image').attr('extid'));
-        var audio = nullIfMissing($(statement).find('audio').attr('extid'));
+        var video = Load.nullIfMissing($(statement).find('video').attr('extid'));
+        var image = Load.nullIfMissing($(statement).find('image').attr('extid'));
+        var audio = Load.nullIfMissing($(statement).find('audio').attr('extid'));
 
         // Load the preconditions of this node.
         var preconditionsXML = $(statement).find("preconditions");
