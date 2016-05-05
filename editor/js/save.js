@@ -93,40 +93,10 @@ var Save;
         }
 
         // Save statement-independent properties
-        var propertiesEl = addAndReturnElement("properties", nameSpace, metadataEl);
-        for (var propertyId in Metadata.metaObject.properties)
-        {
-            var propertyValue = Metadata.metaObject.properties[propertyId];
-            var propertyEl = addAndReturnElement("property", nameSpace, propertiesEl);
-            propertyEl.setAttribute("idref", propertyId);
-            Config.configObject.properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
-        }
+        generatePropertiesXML(metadataEl, Metadata.metaObject.properties, nameSpace);
 
         // Save statement-independent character properties
-        var charactersEl = addAndReturnElement("characters", nameSpace, metadataEl);
-        for (var characterId in Metadata.metaObject.characters)
-        {
-            var characterEl = addAndReturnElement("character", nameSpace, charactersEl);
-            characterEl.setAttribute("id", characterId);
-
-            var characterPropertiesEl = addAndReturnElement("properties", nameSpace, characterEl);
-
-            for (var propertyId in Metadata.metaObject.characters[characterId].properties)
-            {
-                var propertyValue = Metadata.metaObject.characters[characterId].properties[propertyId];
-                var propertyEl = addAndReturnElement("property", nameSpace, characterPropertiesEl);
-                propertyEl.setAttribute("idref", propertyId);
-
-                if (propertyId in Config.configObject.characters.properties.byId)
-                {
-                    Config.configObject.characters.properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
-                }
-                else
-                {
-                    Config.configObject.characters[characterId].properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
-                }
-            }
-        }
+        generateCharactersXML(metadataEl, Metadata.metaObject.characters, nameSpace);
 
         // Save parameter weights
         if (scoringSumEl.childNodes.length === 0)
@@ -416,40 +386,10 @@ var Save;
             }
 
             // Save per-statement properties
-            var propertiesEl = addAndReturnElement("properties", nameSpace, statementEl);
-            for (var propertyId in node.properties)
-            {
-                var propertyValue = node.properties[propertyId];
-                var propertyEl = addAndReturnElement("property", nameSpace, propertiesEl);
-                propertyEl.setAttribute("idref", propertyId);
-                Config.configObject.properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
-            }
+            generatePropertiesXML(statementEl, node.properties, nameSpace);
 
             // Save per-statement character properties
-            var charactersEl = addAndReturnElement("characters", nameSpace, statementEl);
-            for (var characterId in node.characters)
-            {
-                var characterEl = addAndReturnElement("character", nameSpace, charactersEl);
-                characterEl.setAttribute("id", characterId);
-
-                var characterPropertiesEl = addAndReturnElement("properties", nameSpace, characterEl);
-
-                for (var propertyId in node.characters[characterId].properties)
-                {
-                    var propertyValue = node.characters[characterId].properties[propertyId];
-                    var propertyEl = addAndReturnElement("property", nameSpace, characterPropertiesEl);
-                    propertyEl.setAttribute("idref", propertyId);
-
-                    if (propertyId in Config.configObject.characters.properties.byId)
-                    {
-                        Config.configObject.characters.properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
-                    }
-                    else
-                    {
-                        Config.configObject.characters[characterId].properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
-                    }
-                }
-            }
+            generateCharactersXML(statementEl, node.characters, nameSpace);
 
             var connectionElName = '';
             switch (node.type)
@@ -498,6 +438,46 @@ var Save;
                 connectionEl.setAttribute('idref', connections[l].targetId.replace(/^ext_/, '').replace(/_/g, '.'));
             }
         });
+    }
+
+    function generatePropertiesXML(element, properties, nameSpace)
+    {
+        var propertiesEl = addAndReturnElement("properties", nameSpace, element);
+        for (var propertyId in properties)
+        {
+            var propertyValue = properties[propertyId];
+            var propertyEl = addAndReturnElement("property", nameSpace, propertiesEl);
+            propertyEl.setAttribute("idref", propertyId);
+            Config.configObject.properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
+        }
+    }
+
+    function generateCharactersXML(element, characters, nameSpace)
+    {
+        var charactersEl = addAndReturnElement("characters", nameSpace, element);
+        for (var characterId in characters)
+        {
+            var characterEl = addAndReturnElement("character", nameSpace, charactersEl);
+            characterEl.setAttribute("id", characterId);
+
+            var characterPropertiesEl = addAndReturnElement("properties", nameSpace, characterEl);
+
+            for (var propertyId in characters[characterId].properties)
+            {
+                var propertyValue = characters[characterId].properties[propertyId];
+                var propertyEl = addAndReturnElement("property", nameSpace, characterPropertiesEl);
+                propertyEl.setAttribute("idref", propertyId);
+
+                if (propertyId in Config.configObject.characters.properties.byId)
+                {
+                    Config.configObject.characters.properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
+                }
+                else
+                {
+                    Config.configObject.characters[characterId].properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
+                }
+            }
+        }
     }
 
     // Creates an XML element, adds it to another element, and returns the created element
