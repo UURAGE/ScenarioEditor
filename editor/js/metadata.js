@@ -431,23 +431,21 @@ var Metadata;
         Metadata.metaObject.difficulty = $("#scriptDifficulty").val();
         Metadata.metaObject.description = $("#scriptDescription").val();
 
-        var getPropertyFromDOM = function(propertiesContainerId, property)
-        {
-            if (property.scopes.statementScope !== "independent") return;
-            return property.type.getFromDOM($(propertiesContainerId + '-' + property.id));
-        };
         for (var propertyId in Config.configObject.properties.byId)
         {
             var property = Config.configObject.properties.byId[propertyId];
-            Metadata.metaObject.properties[property.id] = getPropertyFromDOM("#meta-properties-container", property);
+            if (property.scopes.statementScope !== "independent") continue;
+            Metadata.metaObject.properties[property.id] =
+                property.type.getFromDOM($("#meta-properties-container-" + property.id));
         }
         for (var propertyId in Config.configObject.characters.properties.byId)
         {
             Config.configObject.characters.ids.forEach(function(characterId)
             {
                 var property = Config.configObject.characters.properties.byId[propertyId];
+                if (property.scopes.statementScope !== "independent") return;
                 Metadata.metaObject.characters[characterId].properties[property.id] =
-                    getPropertyFromDOM("#meta-character-properties-" + characterId + "-container", property);
+                    property.type.getFromDOM($("#meta-character-properties-" + characterId + "-container-" + property.id));
             });
         }
         Config.configObject.characters.ids.forEach(function(characterId)
@@ -455,8 +453,9 @@ var Metadata;
             for (var propertyId in Config.configObject.characters[characterId].properties.byId)
             {
                 var property = Config.configObject.characters[characterId].properties.byId[propertyId];
+                if (property.scopes.statementScope !== "independent") continue;
                 Metadata.metaObject.characters[characterId].properties[property.id] =
-                    getPropertyFromDOM("#meta-character-properties-" + characterId + "-container", property);
+                    property.type.getFromDOM($("#meta-character-properties-" + characterId + "-container-" + property.id));
             }
         });
 

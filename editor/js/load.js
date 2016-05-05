@@ -266,38 +266,8 @@ var Load;
             };
         }
 
-        var properties = {};
-        $(metadata).children('properties').children().each(function()
-        {
-            var propertyId = this.attributes.idref.value;
-            if (propertyId in Config.configObject.properties.byId)
-            {
-                properties[propertyId] = Config.configObject.properties.byId[propertyId].type.fromXML(this);
-            }
-        });
-
-        var characters = {};
-        $(metadata).children('characters').children().each(function()
-        {
-            var characterId = this.attributes.id.value;
-            if ($.inArray(characterId, Config.configObject.characters.ids) > -1)
-            {
-                characters[characterId] = {};
-                characters[characterId].properties = {};
-                $(this).children('properties').children().each(function()
-                {
-                    var propertyId = this.attributes.idref.value;
-                    if (propertyId in Config.configObject.characters.properties.byId)
-                    {
-                        characters[characterId].properties[propertyId] = Config.configObject.characters.properties.byId[propertyId].type.fromXML(this);
-                    }
-                    else if (propertyId in Config.configObject.characters[characterId].properties.byId)
-                    {
-                        characters[characterId].properties[propertyId] = Config.configObject.characters[characterId].properties.byId[propertyId].type.fromXML(this);
-                    }
-                });
-            }
-        });
+        var properties = loadProperties($(metadata).children('properties'));
+        var characters = loadCharacters($(metadata).children('characters'));
 
         $(metadata).children('scoringFunction').children('sum').children('scale').children('paramRef').each(function()
         {
@@ -510,15 +480,9 @@ var Load;
             }
         }
 
-        var properties = {};
-        $(statement).children('properties').children().each(function()
-        {
-            var propertyId = this.attributes.idref.value;
-            if (propertyId in Config.configObject.properties.byId)
-            {
-                properties[propertyId] = Config.configObject.properties.byId[propertyId].type.fromXML(this);
-            }
-        });
+        var properties = loadProperties($(statement).children('properties'));
+
+        var characters = loadCharacters($(statement).children('characters'));
 
         var node = Main.createAndReturnNode(type, id, Main.trees[treeID].div, Main.trees[treeID].dragDiv.attr('id'));
         Main.nodes[id] = {
@@ -530,7 +494,7 @@ var Load;
             preconditions: preconditionsJS,
             intent: intentsArray,
             properties: properties,
-            characters: Metadata.getNewDefaultCharactersObject(),
+            characters: characters,
             video: video,
             image: image,
             audio: audio,
@@ -587,6 +551,47 @@ var Load;
             type: preconditionType,
             preconditions: preconditionsArray
         };
+    }
+
+    function loadProperties(propertiesXMLElement)
+    {
+        var properties = {};
+        propertiesXMLElement.children().each(function()
+        {
+            var propertyId = this.attributes.idref.value;
+            if (propertyId in Config.configObject.properties.byId)
+            {
+                properties[propertyId] = Config.configObject.properties.byId[propertyId].type.fromXML(this);
+            }
+        });
+        return properties;
+    }
+
+    function loadCharacters(charactersXMLElement)
+    {
+        var characters = {};
+        charactersXMLElement.children().each(function()
+        {
+            var characterId = this.attributes.id.value;
+            if ($.inArray(characterId, Config.configObject.characters.ids) > -1)
+            {
+                characters[characterId] = {};
+                characters[characterId].properties = {};
+                $(this).children('properties').children().each(function()
+                {
+                    var propertyId = this.attributes.idref.value;
+                    if (propertyId in Config.configObject.characters.properties.byId)
+                    {
+                        characters[characterId].properties[propertyId] = Config.configObject.characters.properties.byId[propertyId].type.fromXML(this);
+                    }
+                    else if (propertyId in Config.configObject.characters[characterId].properties.byId)
+                    {
+                        characters[characterId].properties[propertyId] = Config.configObject.characters[characterId].properties.byId[propertyId].type.fromXML(this);
+                    }
+                });
+            }
+        });
+        return characters;
     }
 
     function nullIfMissing(elements)

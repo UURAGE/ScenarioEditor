@@ -1278,14 +1278,16 @@ var Main;
         for (var propertyId in Config.configObject.properties.byId)
         {
             var property = Config.configObject.properties.byId[propertyId];
-            node.properties[propertyId] = getPropertyFromDOM("#node-properties-container", property);
+            if (property.scopes.statementScope !== "per") continue;
+            node.properties[propertyId] = property.type.getFromDOM($("#node-properties-container-" + property.id));
         }
         for (var propertyId in Config.configObject.characters.properties.byId)
         {
             Config.configObject.characters.ids.forEach(function(characterId)
             {
                 var property = Config.configObject.characters.properties.byId[propertyId];
-                node.characters[characterId].properties[propertyId] = getPropertyFromDOM("#node-character-properties-" + characterId + "-container" , property);
+                if (property.scopes.statementScope !== "per") return;
+                node.characters[characterId].properties[propertyId] = property.type.getFromDOM($("#node-character-properties-" + characterId + "-container-" + property.id));
             });
         }
         Config.configObject.characters.ids.forEach(function(characterId)
@@ -1293,7 +1295,8 @@ var Main;
             for (var propertyId in Config.configObject.characters[characterId].properties.byId)
             {
                 var property = Config.configObject.characters[characterId].properties.byId[propertyId];
-                node.characters[characterId].properties[propertyId] = getPropertyFromDOM("#node-character-properties-" + characterId + "-container", property);
+                if (property.scopes.statementScope !== "per") continue;
+                node.characters[characterId].properties[propertyId] = property.type.getFromDOM($("#node-character-properties-" + characterId + "-container-" + property.id));
             }
         });
 

@@ -425,6 +425,32 @@ var Save;
                 Config.configObject.properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
             }
 
+            // Save per-statement character properties
+            var charactersEl = addAndReturnElement("characters", nameSpace, statementEl);
+            for (var characterId in node.characters)
+            {
+                var characterEl = addAndReturnElement("character", nameSpace, charactersEl);
+                characterEl.setAttribute("id", characterId);
+
+                var characterPropertiesEl = addAndReturnElement("properties", nameSpace, characterEl);
+
+                for (var propertyId in node.characters[characterId].properties)
+                {
+                    var propertyValue = node.characters[characterId].properties[propertyId];
+                    var propertyEl = addAndReturnElement("property", nameSpace, characterPropertiesEl);
+                    propertyEl.setAttribute("idref", propertyId);
+
+                    if (propertyId in Config.configObject.characters.properties.byId)
+                    {
+                        Config.configObject.characters.properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
+                    }
+                    else
+                    {
+                        Config.configObject.characters[characterId].properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
+                    }
+                }
+            }
+
             var connectionElName = '';
             switch (node.type)
             {
