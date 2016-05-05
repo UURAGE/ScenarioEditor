@@ -48,7 +48,7 @@ var Config;
                 id: nodeXML.getAttribute('id'),
                 name: nodeXML.getAttribute('name'),
                 description: nodeXML.getAttribute('description'),
-                optional: Boolean(nodeXML.getAttribute('optional')),
+                optional: Utils.parseBool(nodeXML.getAttribute('optional')),
                 scopes: propertyScopes,
                 type: loadType($(nodeXML).children().eq(0))
             };
@@ -231,7 +231,7 @@ var Config;
             },
             getFromDOM: function(containerEl)
             {
-                return Boolean(containerEl.children('input').first().prop('checked'));
+                return containerEl.children('input').first().prop('checked');
             },
             setInDOM: function(containerEl, value)
             {
@@ -239,7 +239,7 @@ var Config;
             },
             fromXML: function(valueXML)
             {
-                return Boolean(valueXML.textContent);
+                return Utils.parseBool(valueXML.textContent);
             },
             toXML: toXMLSimple
         },
