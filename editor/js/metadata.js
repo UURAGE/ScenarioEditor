@@ -10,6 +10,7 @@ var Metadata;
     {
         metaObject: {},
         getNewDefaultMetaObject: getNewDefaultMetaObject,
+        getNewDefaultCharactersObject: getNewDefaultCharactersObject,
         parameterCounter: parameterCounter,
         parameterDialog: parameterDialog,
         atLeastOneParameter: atLeastOneParameter,
@@ -95,7 +96,7 @@ var Metadata;
 
         anyPropertyShown = false;
 
-        characterPropertiesEl = $('#character-properties');
+        characterPropertiesEl = $('#meta-character-properties');
         var characterTabs = $("#character-tabs");
         var characterTabList = $('<ul>');
         characterTabs.append(characterTabList);
@@ -122,7 +123,11 @@ var Metadata;
             });
         });
 
-        characterTabs.tabs();
+        characterTabs.tabs(
+        {
+            active: false,
+            collapsible: true
+        });
         if (anyPropertyShown) characterPropertiesEl.show();
     });
 
@@ -141,7 +146,7 @@ var Metadata;
         Metadata.metaObject = {
             name: "",
             difficulty: "medium",
-            characters: getNewDefaultMetaObjectCharacters(),
+            characters: getNewDefaultCharactersObject(),
             description: "",
             properties: {},
             parameterObject: pObj,
@@ -149,7 +154,7 @@ var Metadata;
         };
     }
 
-    function getNewDefaultMetaObjectCharacters()
+    function getNewDefaultCharactersObject()
     {
         var characters = {};
         Config.configObject.characters.ids.forEach(function(characterId)
@@ -217,7 +222,7 @@ var Metadata;
             Config.configObject.characters.ids.forEach(function(characterId)
             {
                 var property = Config.configObject.characters.properties.byId[propertyId];
-                setPropertyInDOM(Metadata.metaObject.characters[characterId].properties, "#character-properties-" + characterId + "-container", property);
+                setPropertyInDOM(Metadata.metaObject.characters[characterId].properties, "#meta-character-properties-" + characterId + "-container", property);
             });
         }
         Config.configObject.characters.ids.forEach(function(characterId)
@@ -225,7 +230,7 @@ var Metadata;
             for (var propertyId in Config.configObject.characters[characterId].properties.byId)
             {
                 var property = Config.configObject.characters[characterId].properties.byId[propertyId];
-                setPropertyInDOM(Metadata.metaObject.characters[characterId].properties, "#character-properties-" + characterId + "-container", property);
+                setPropertyInDOM(Metadata.metaObject.characters[characterId].properties, "#meta-character-properties-" + characterId + "-container", property);
             }
         });
     }
@@ -416,7 +421,7 @@ var Metadata;
         // All parameters that should be removed.
         var previouslySelectedNode = Main.selectedElement;
         Main.selectNode(null);
-        
+
         Metadata.metaObject.defaultChangeType = $("#defaultChangeTypeSelect").val();
 
         // Save all values in the dialog to the metaObject
@@ -442,7 +447,7 @@ var Metadata;
             {
                 var property = Config.configObject.characters.properties.byId[propertyId];
                 Metadata.metaObject.characters[characterId].properties[property.id] =
-                    getPropertyFromDOM("#character-properties-" + characterId + "-container", property);
+                    getPropertyFromDOM("#meta-character-properties-" + characterId + "-container", property);
             });
         }
         Config.configObject.characters.ids.forEach(function(characterId)
@@ -451,7 +456,7 @@ var Metadata;
             {
                 var property = Config.configObject.characters[characterId].properties.byId[propertyId];
                 Metadata.metaObject.characters[characterId].properties[property.id] =
-                    getPropertyFromDOM("#character-properties-" + characterId + "-container", property);
+                    getPropertyFromDOM("#meta-character-properties-" + characterId + "-container", property);
             }
         });
 

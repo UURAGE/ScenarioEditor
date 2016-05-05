@@ -205,7 +205,7 @@ var Parts;
                                 '</textarea>' +
                             '</div>' +
                         '</div>' +
-                        '<div id="character-properties" class="sub-formTable" style="display:none">' +
+                        '<div id="meta-character-properties" class="sub-formTable" style="display:none">' +
                             '<h3>' +LanguageManager.sLang("edt_parts_character_properties")+ '</h3>' +
                             '<div>'+'<div id="character-tabs"/>'+'</div>' +
                         '</div>' +

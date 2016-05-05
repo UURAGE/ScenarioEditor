@@ -13,6 +13,7 @@ $lang["edt_media"] = "Media";
 $lang["edt_media_title"] = "Uploaden van muziek, plaatjes en video";
 $lang["edt_properties"] = "Eigenschappen";
 $lang["edt_properties_title"] = "Allerlei opties van scenario en intenties aanpassen";
+$lang["edt_character_properties"] = "Karakter eigenschappen";
 $lang["edt_parameters"] = "Parameters";
 $lang["edt_parameters_title"] = "Aanpassen en definiëren van parameters";
 $lang["edt_post_game_feedback"] = "Eindfeedback";

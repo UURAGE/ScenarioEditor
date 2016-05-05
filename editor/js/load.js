@@ -416,6 +416,7 @@ var Load;
         else
             id = "ext_" + id;
 
+        var characterIdRef = $(statement).attr('characterIdRef');
         var jumpPoint = $(statement).attr('jumpPoint') == "true";
         var initsNode = $(statement).attr('inits') == "true";
         var endNode = $(statement).attr('possibleEnd') == "true";
@@ -524,10 +525,12 @@ var Load;
             text: (type == Main.conversationType ? "" : text),
             conversation: conversationArray,
             type: type,
+            characterIdRef: characterIdRef,
             parameters: parameterEffects,
             preconditions: preconditionsJS,
             intent: intentsArray,
             properties: properties,
+            characters: Metadata.getNewDefaultCharactersObject(),
             video: video,
             image: image,
             audio: audio,

@@ -293,6 +293,14 @@
                     <div id="node-properties"></div>
                   </div>
                 </div>
+                <div id="characterPropertiesSection" class="sidebarSection">
+                  <div class="sub-header clickable">
+                    <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/intentions.png");?>" alt=""><?php sLang('edt_character_properties');?></h2>
+                  </div>
+                  <div class="collapsable">
+                    <div id="node-character-properties"></div>
+                  </div>
+                </div>
                 <div id="mediaSelector" class="sidebarSection">
                   <div class="sub-header clickable">
                     <h2 title="<?php sLang('edt_custom_media');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/media.png");?>" alt=""><?php sLang('edt_media');?></h2>

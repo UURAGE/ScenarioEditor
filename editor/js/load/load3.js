@@ -148,6 +148,7 @@ var Load3;
             characters: Metadata.metaObject.characters,
             description: description,
             properties: {},
+            characters: Metadata.getNewDefaultCharactersObject(),
             parameterObject: parameterObject,
             defaultChangeType: defaultChangeType
         };
@@ -337,9 +338,12 @@ var Load3;
             text: (type == Main.conversationType ? "" : text),
             conversation: conversationArray,
             type: type,
+            characterIdRef: Config.configObject.characters.ids[0],
             parameters: parameterEffects,
             preconditions: preconditionsJS,
             intent: intentsArray,
+            properties: {},
+            characters: Metadata.getNewDefaultCharactersObject(),
             video: video,
             image: image,
             audio: audio,

@@ -352,6 +352,7 @@ var Save;
 
             if (node.type === Main.computerType)
             {
+                statementEl.setAttribute('characterIdRef', node.characterIdRef);
                 statementEl.setAttribute('jumpPoint', node.jumpPoint);
                 statementEl.setAttribute('inits', node.initsNode);
             }

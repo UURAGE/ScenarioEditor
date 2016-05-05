@@ -567,6 +567,7 @@ button.enabled
 #properties.tree > #jumpNode,
 #properties.tree > #calculateScore,
 #properties.tree > #propertiesSection
+#properties.tree > #characterPropertiesSection
 {
   display: none;
 }

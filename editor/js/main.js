@@ -630,10 +630,26 @@ var Main;
         if (Metadata.timePId !== null && type === Main.playerType)
             parameters.push(timeObject);
 
+        var characterIdRef = "";
+        if (type === Main.computerType)
+        {
+            if (Config.configObject.characters.ids.length === 1)
+            {
+                characterIdRef = Config.configObject.characters.ids[0];
+            }
+            else
+            {
+                // There are multiple characters so a character has to be picked for the statement
+                // For now the default is the first character
+                characterIdRef = Config.configObject.characters.ids[0];
+            }
+        }
+
         Main.nodes[id] = {
             text: "",
             conversation: [],
             type: type,
+            characterIdRef: characterIdRef,
             parameters: parameters,
             preconditions:
             {
@@ -642,6 +658,7 @@ var Main;
             },
             intent: [],
             properties: {},
+            characters: Metadata.getNewDefaultCharactersObject(),
             video: null,
             image: null,
             audio: null,
@@ -1253,13 +1270,32 @@ var Main;
         node.intent = intentsArray;
 
         // Save properties.
+        var getPropertyFromDOM = function(propertyContainerId, property)
+        {
+            if (property.scopes.statementScope !== "per") return;
+            return property.type.getFromDOM($(propertyContainerId + '-' + property.id));
+        };
         for (var propertyId in Config.configObject.properties.byId)
         {
             var property = Config.configObject.properties.byId[propertyId];
-            if (property.scopes.statementScope !== "per") continue;
-            node.properties[property.id] =
-                property.type.getFromDOM($("#node-properties-container-" + property.id));
+            node.properties[propertyId] = getPropertyFromDOM("#node-properties-container", property);
         }
+        for (var propertyId in Config.configObject.characters.properties.byId)
+        {
+            Config.configObject.characters.ids.forEach(function(characterId)
+            {
+                var property = Config.configObject.characters.properties.byId[propertyId];
+                node.characters[characterId].properties[propertyId] = getPropertyFromDOM("#node-character-properties-" + characterId + "-container" , property);
+            });
+        }
+        Config.configObject.characters.ids.forEach(function(characterId)
+        {
+            for (var propertyId in Config.configObject.characters[characterId].properties.byId)
+            {
+                var property = Config.configObject.characters[characterId].properties.byId[propertyId];
+                node.characters[characterId].properties[propertyId] = getPropertyFromDOM("#node-character-properties-" + characterId + "-container", property);
+            }
+        });
 
         // Save the media.
         node.video = ObjectGenerator.nullFromHTMLValue($("#videoOptions").val());
@@ -1488,7 +1524,7 @@ var Main;
         {
             case Main.computerType:
                 // for computerType node: just input text
-                text = escapeTags(node.text);
+                text = "<b>" + node.characterIdRef + ": </b>" + escapeTags(node.text);
                 break;
             case Main.playerType:
                 // for playerType node: show text input, if the "Intentions"-option is off
@@ -1674,7 +1710,7 @@ var Main;
 
         // Clear everything in the sidebar.
         $(
-            "#preconditionsDiv, #effectParameterDiv, #intentions, #node-properties"
+            "#preconditionsDiv, #effectParameterDiv, #intentions, #node-properties, #node-character-properties"
         ).children().remove();
 
         // Don't show properties if no node or tree is selected. Display the minimap
@@ -1720,7 +1756,7 @@ var Main;
             }
 
             // Properties:
-            var showPropertyItem = function (propertyItem, hLevel, container)
+            var showPropertyItem = function (propertiesObject, propertyItem, hLevel, container, idPrefix)
             {
                 if (propertyItem.scopes.statementScope !== 'per') return;
                 if (propertyItem.kind === 'section')
@@ -1730,26 +1766,55 @@ var Main;
                     container.append(sectionContainer);
                     propertyItem.sequence.forEach(function (subItem)
                     {
-                        showPropertyItem(subItem, hLevel + 1, sectionContainer);
+                        showPropertyItem(propertiesObject, subItem, hLevel + 1, sectionContainer, idPrefix);
                     });
                 }
                 else
                 {
-                    var controlHtmlId = 'node-properties-' + propertyItem.id;
+                    var controlHtmlId = idPrefix + '-' + propertyItem.id;
 
-                    var propertyContainer = $('<div>', { id: 'node-properties-container-' + propertyItem.id });
+                    var propertyContainer = $('<div>', { id: idPrefix + '-container-' + propertyItem.id });
                     container.append(propertyContainer);
                     propertyContainer.append($('<label>', { text: propertyItem.name + ':', 'for': controlHtmlId }));
                     propertyItem.type.appendControlTo(propertyContainer, controlHtmlId);
-                    if (propertyItem.id in node.properties)
+                    if (propertyItem.id in propertiesObject)
                     {
-                        propertyItem.type.setInDOM(propertyContainer, node.properties[propertyItem.id]);
+                        propertyItem.type.setInDOM(propertyContainer, propertiesObject[propertyItem.id]);
                     }
                 }
             }
+            var nodePropertiesEl = $('#node-properties');
             Config.configObject.properties.sequence.forEach(function (subItem)
             {
-                showPropertyItem(subItem, 3, $('#node-properties'));
+                showPropertyItem(node.properties, subItem, 3, nodePropertiesEl, nodePropertiesEl.attr('id'));
+            });
+
+            nodeCharacterPropertiesEl = $('#node-character-properties');
+            accordionDiv = $('<div>');
+            nodeCharacterPropertiesEl.append(accordionDiv);
+            var characterHeaderStartLevel = 3;
+            Config.configObject.characters.ids.forEach(function(characterId)
+            {
+                var characterHeader = $('<h' + characterHeaderStartLevel +'>', { text: characterId });
+                var characterDiv = $('<div>');
+                accordionDiv.append(characterHeader).append(characterDiv);
+
+                var containerIdPrefix = nodeCharacterPropertiesEl.attr('id') + '-' + characterId;
+
+                Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
+                {
+                    showPropertyItem(node.characters[characterId].properties, propertyItem, characterHeaderStartLevel + 1, characterDiv, containerIdPrefix);
+                });
+
+                Config.configObject.characters[characterId].properties.sequence.forEach(function(propertyItem)
+                {
+                    showPropertyItem(node.characters[characterId].properties, propertyItem, characterHeaderStartLevel + 1, characterDiv, containerIdPrefix);
+                });
+            });
+            accordionDiv.accordion(
+            {
+                active: false,
+                collapsible: true
             });
 
             $("#endNodeCheckbox").prop("checked", node.endNode);

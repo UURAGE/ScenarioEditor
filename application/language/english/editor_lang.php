@@ -13,6 +13,7 @@ $lang["edt_media"] = "Media";
 $lang["edt_media_title"] = "Upload music, images and video";
 $lang["edt_properties"] = "Properties";
 $lang["edt_properties_title"] = "Change various script and intention properties";
+$lang["edt_character_properties"] = "Character properties";
 $lang["edt_parameters"] = "Parameters";
 $lang["edt_parameters_title"] = "Edit and define parameters";
 $lang["edt_post_game_feedback"] = "Ending feedback";
