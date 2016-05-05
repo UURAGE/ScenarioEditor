@@ -19,7 +19,7 @@ var Save;
      ** Public Functions
      */
 
-    // Generates the XML.
+    // Generates the XML
     function generateXML()
     {
         var sortedTrees = sortTrees(Main.trees);
@@ -29,7 +29,7 @@ var Save;
 
         doc.documentElement.setAttribute("schemaVersion", 4);
 
-        // Handles the metadata.
+        // Handles the metadata
         var metadataEl = addAndReturnElement("metadata", nameSpace, doc.documentElement);
         addAndReturnElement("name", nameSpace, metadataEl).textContent = Main.escapeTags(Metadata.metaObject.name);
         addAndReturnElement("date", nameSpace, metadataEl).textContent =new Date().toISOString();
@@ -39,7 +39,7 @@ var Save;
 
         var definitionsEl = addAndReturnElement("definitions", nameSpace, metadataEl);
 
-        // Save property definitions.
+        // Save property definitions
         var propertyDefinitionsEl = addAndReturnElement("properties", nameSpace, definitionsEl);
         var addPropertyDefinitionElement = function (property, nameSpace, propertyDefinitionsEl)
         {
@@ -66,7 +66,7 @@ var Save;
             }
         });
 
-        // Save parameters and collect data for saving weights.
+        // Save parameters and collect data for saving weights
         var parametersEl = addAndReturnElement("parameters", nameSpace, definitionsEl);
         var scoringFunctionEl = document.createElementNS(nameSpace, "scoringFunction");
         var scoringSumEl = document.createElementNS(nameSpace, "sum");
@@ -92,7 +92,7 @@ var Save;
             paramRefEl.setAttribute("idref", parameterID);
         }
 
-        // Save statement-independent properties.
+        // Save statement-independent properties
         var propertiesEl = addAndReturnElement("properties", nameSpace, metadataEl);
         for (var propertyId in Metadata.metaObject.properties)
         {
@@ -102,7 +102,33 @@ var Save;
             Config.configObject.properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
         }
 
-        // Save parameter weights.
+        // Save statement-independent character properties
+        var charactersEl = addAndReturnElement("characters", nameSpace, metadataEl);
+        for (var characterId in Metadata.metaObject.characters)
+        {
+            var characterEl = addAndReturnElement("character", nameSpace, charactersEl);
+            characterEl.setAttribute("id", characterId);
+
+            var characterPropertiesEl = addAndReturnElement("properties", nameSpace, characterEl);
+
+            for (var propertyId in Metadata.metaObject.characters[characterId].properties)
+            {
+                var propertyValue = Metadata.metaObject.characters[characterId].properties[propertyId];
+                var propertyEl = addAndReturnElement("property", nameSpace, characterPropertiesEl);
+                propertyEl.setAttribute("idref", propertyId);
+
+                if (propertyId in Config.configObject.characters.properties.byId)
+                {
+                    Config.configObject.characters.properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
+                }
+                else
+                {
+                    Config.configObject.characters[characterId].properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
+                }
+            }
+        }
+
+        // Save parameter weights
         if (scoringSumEl.childNodes.length === 0)
         {
             var constantEl = addAndReturnElement("constant", nameSpace, scoringFunctionEl);
@@ -114,7 +140,7 @@ var Save;
         }
         metadataEl.appendChild(scoringFunctionEl);
 
-        // This part saves the feedback form.
+        // This part saves the feedback form
         var feedbackFormEl = addAndReturnElement("feedbackForm", nameSpace, doc.documentElement);
         for (var parameter in FeedbackForm.conditions)
         {
@@ -123,7 +149,7 @@ var Save;
 
             for (var loopCounter = 0; loopCounter < FeedbackForm.conditions[parameter].length; loopCounter++)
             {
-                // Special case, the default condition.
+                // Special case, the default condition
                 if (loopCounter == FeedbackForm.conditions[parameter].length -1)
                 {
                     var defaultCondition = FeedbackForm.conditions[parameter][loopCounter];
@@ -135,7 +161,7 @@ var Save;
                     var condition = FeedbackForm.conditions[parameter][loopCounter];
                     var currentConditionEl = addAndReturnElement("condition", nameSpace, currentParamEl);
                     currentConditionEl.setAttribute("test", condition.test);
-                    // Some checks to make sure the values of the condition are only added if they exist.
+                    // Some checks to make sure the values of the condition are only added if they exist
                     if (condition.values.length !== 0)
                     {
                         if (condition.values[1] !== undefined)
@@ -276,7 +302,7 @@ var Save;
 
         a.dataset.downloadurl = [MIME_TYPE, a.download, a.href].join(
             ':');
-        a.draggable = true; // Don't really need, but good practice.
+        a.draggable = true; // Don't really need, but good practice
         a.classList.add('dragout');
 
         $('#impExp').append(a);
@@ -316,10 +342,10 @@ var Save;
     {
         tree.nodes.forEach(function(nodeID)
         {
-            // Get the node.
+            // Get the node
             var node = Main.nodes[nodeID];
 
-            // Generate the XML element for the node with the id.
+            // Generate the XML element for the node with the id
             var statementEl = addAndReturnElement(
                 node.type + (node.type == Main.conversationType ? "" : "Statement"), nameSpace, treeElement);
             statementEl.setAttribute('id', node.id.replace(/^ext_/, '').replace(/_/g, '.'));
@@ -331,7 +357,7 @@ var Save;
             }
             statementEl.setAttribute('possibleEnd', node.endNode);
 
-            // Add a text element to the XML element.
+            // Add a text element to the XML element
             if (node.type == Main.conversationType)
                 for (var i = 0; i < node.conversation.length; i++)
                 {
@@ -342,7 +368,7 @@ var Save;
             else
                 addAndReturnElement("text", nameSpace, statementEl).textContent = Main.escapeTags(node.text);
 
-            // Save the position.
+            // Save the position
             var visible = $("#" + node.id).is(":visible");
             if (!visible) // cannot get pos for hidden elements
                 $("#" + node.id).show();
@@ -355,11 +381,11 @@ var Save;
             if (!visible)
                 $("#" + node.id).hide();
 
-            // Save the comment.
+            // Save the comment
             if (node.comment !== "")
                 addAndReturnElement("comment", nameSpace, statementEl).textContent = Main.escapeTags(node.comment);
 
-            // Save the media.
+            // Save the media
             if (node.image !== null || node.video !== null ||
                 node.audio !== null)
             {
@@ -367,20 +393,20 @@ var Save;
 
                 // Save the visuals
                 var visualsEl = addAndReturnElement("visuals", nameSpace, mediaEl);
-                // Save the video.
+                // Save the video
                 if (node.video !== null)
                     addAndReturnElement("video", nameSpace, visualsEl).setAttribute("extid", node.video);
                 // Save the imagery
                 if (node.image !== null)
                     addAndReturnElement("image", nameSpace, visualsEl).setAttribute("extid", node.image);
 
-                // Save the audio.
+                // Save the audio
                 var audiosEl = addAndReturnElement("audios", nameSpace, mediaEl);
                 if (node.audio !== null)
                     addAndReturnElement("audio", nameSpace, audiosEl).setAttribute("extid", node.audio);
             }
 
-            // Save the preconditions.
+            // Save the preconditions
             var preconditionsInXML = createAndReturnPreconditionXML(node.preconditions, nameSpace);
             if (preconditionsInXML !== null)
             {
@@ -388,7 +414,7 @@ var Save;
                 preconditionsEl.appendChild(preconditionsInXML);
             }
 
-            // Save per-statement properties.
+            // Save per-statement properties
             var propertiesEl = addAndReturnElement("properties", nameSpace, statementEl);
             for (var propertyId in node.properties)
             {
@@ -431,13 +457,13 @@ var Save;
                     break;
             }
 
-            // Get the outgoing connections of the node.
+            // Get the outgoing connections of the node
             var connections = tree.plumbInstance.getConnections(
             {
                 source: node.id
             });
 
-            // Save the connections.
+            // Save the connections
             var connectionsEl = addAndReturnElement(connectionElName + "s", nameSpace,statementEl);
             for (var l = 0; l < connections.length; l++)
             {
@@ -447,7 +473,7 @@ var Save;
         });
     }
 
-    // Creates an XML element, adds it to another element, and returns the created element.
+    // Creates an XML element, adds it to another element, and returns the created element
     function addAndReturnElement(elNameToAdd, nameSpace, xmlElement)
     {
         var elToAdd = document.createElementNS(nameSpace, elNameToAdd);
@@ -455,7 +481,7 @@ var Save;
         return elToAdd;
     }
 
-    // Creates an XML element for the precondition.
+    // Creates an XML element for the precondition
     function createAndReturnPreconditionXML(precondition, nameSpace)
     {
         var conditionEl;
@@ -470,7 +496,7 @@ var Save;
 
         if (precondition.type == "alwaysTrue")
         {
-            // Return null to signal that no preconditions should be added.
+            // Return null to signal that no preconditions should be added
             return null;
         }
         else
@@ -484,7 +510,7 @@ var Save;
                     typeEl.appendChild(conditionEl);
             }
 
-            // If there aren't any child preconditions, this element is illegal.
+            // If there aren't any child preconditions, this element is illegal
             if (typeEl.childNodes.length === 0)
                 return null;
             else
@@ -492,7 +518,7 @@ var Save;
         }
     }
 
-    // Get all nodes without parents.
+    // Get all nodes without parents
     function getNodesWithoutParents(tree) //nodes is an array
         {
             var orphanNodes = [];

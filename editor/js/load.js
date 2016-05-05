@@ -276,6 +276,29 @@ var Load;
             }
         });
 
+        var characters = {};
+        $(metadata).children('characters').children().each(function()
+        {
+            var characterId = this.attributes.id.value;
+            if ($.inArray(characterId, Config.configObject.characters.ids) > -1)
+            {
+                characters[characterId] = {};
+                characters[characterId].properties = {};
+                $(this).children('properties').children().each(function()
+                {
+                    var propertyId = this.attributes.idref.value;
+                    if (propertyId in Config.configObject.characters.properties.byId)
+                    {
+                        characters[characterId].properties[propertyId] = Config.configObject.characters.properties.byId[propertyId].type.fromXML(this);
+                    }
+                    else if (propertyId in Config.configObject.characters[characterId].properties.byId)
+                    {
+                        characters[characterId].properties[propertyId] = Config.configObject.characters[characterId].properties.byId[propertyId].type.fromXML(this);
+                    }
+                });
+            }
+        });
+
         $(metadata).children('scoringFunction').children('sum').children('scale').children('paramRef').each(function()
         {
             var parameterId = this.attributes.idref.value;
@@ -299,7 +322,7 @@ var Load;
         Metadata.metaObject = {
             name: name,
             difficulty: difficulty,
-            characters: Metadata.metaObject.characters,
+            characters: characters,
             description: description,
             properties: properties,
             parameterObject: parameterObject,

@@ -416,9 +416,7 @@ var Metadata;
         // All parameters that should be removed.
         var previouslySelectedNode = Main.selectedElement;
         Main.selectNode(null);
-
-        Metadata.metaObject.character = $("#character").val();
-
+        
         Metadata.metaObject.defaultChangeType = $("#defaultChangeTypeSelect").val();
 
         // Save all values in the dialog to the metaObject
