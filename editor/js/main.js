@@ -63,6 +63,21 @@ var Main;
 
         $("#main").focus();
 
+        if (Config.configObject.characters.ids.length > 1)
+        {
+            Config.configObject.characters.ids.forEach(function(characterId)
+            {
+                var option = $("<option>");
+                option.val(characterId);
+                option.text(characterId);
+                $("#characterSelection").append(option);
+            });
+        }
+        else
+        {
+            $("#characterSelection").remove();
+        }
+
         var scriptNameInput = $('<input type="text" maxlength="35">');
         var scriptNameInputSpan = $('<span>', { class: "scriptNameInput" }).append(scriptNameInput);
         scriptNameInputSpan.on('focusout', function(e, cancel)
@@ -633,14 +648,12 @@ var Main;
         var characterIdRef = "";
         if (type === Main.computerType)
         {
-            if (Config.configObject.characters.ids.length === 1)
+            if (Config.configObject.characters.ids.length > 1)
             {
-                characterIdRef = Config.configObject.characters.ids[0];
+                characterIdRef = $("#characterSelection option:selected").val();
             }
             else
             {
-                // There are multiple characters so a character has to be picked for the statement
-                // For now the default is the first character
                 characterIdRef = Config.configObject.characters.ids[0];
             }
         }
@@ -1527,7 +1540,8 @@ var Main;
         {
             case Main.computerType:
                 // for computerType node: just input text
-                text = "<b>" + node.characterIdRef + ": </b>" + escapeTags(node.text);
+                characterIdTextPrefix = "<b>" + node.characterIdRef + ": </b>";
+                text = Config.configObject.characters.ids.length > 1 ? characterIdTextPrefix : "" + escapeTags(node.text);
                 break;
             case Main.playerType:
                 // for playerType node: show text input, if the "Intentions"-option is off
