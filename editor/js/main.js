@@ -122,7 +122,7 @@ var Main;
         );
 
         //handle movement of the div indicating which grid cell youre hovering over
-        $('#wrapRow').on('mousemove', function(e)
+        $('#main').on('mousemove', function(e)
         {
             var mainPos = $("#main").offset();
             var leftPos = gridPos(e.pageX - mainPos.left + $("#main").scrollLeft(), Main.gridX);
@@ -897,7 +897,6 @@ var Main;
             {
                 hoverClass: "dragHover"
             },
-            anchor: "Top"
         });
 
         // Used for dragging of multiple nodes.
