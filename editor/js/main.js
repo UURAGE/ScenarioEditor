@@ -1540,8 +1540,12 @@ var Main;
         {
             case Main.computerType:
                 // for computerType node: just input text
-                characterIdTextPrefix = "<b>" + node.characterIdRef + ": </b>";
-                text = Config.configObject.characters.ids.length > 1 ? characterIdTextPrefix : "" + escapeTags(node.text);
+                characterIdPrefix = "<b>" + node.characterIdRef + ": </b>";
+                if (Config.configObject.characters.ids.length > 1)
+                {
+                    text += characterIdPrefix;
+                }
+                text += escapeTags(node.text);
                 break;
             case Main.playerType:
                 // for playerType node: show text input, if the "Intentions"-option is off
