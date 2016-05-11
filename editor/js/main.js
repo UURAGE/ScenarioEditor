@@ -1283,11 +1283,6 @@ var Main;
         node.intent = intentsArray;
 
         // Save properties.
-        var getPropertyFromDOM = function(propertyContainerId, property)
-        {
-            if (property.scopes.statementScope !== "per") return;
-            return property.type.getFromDOM($(propertyContainerId + '-' + property.id));
-        };
         for (var propertyId in Config.configObject.properties.byId)
         {
             var property = Config.configObject.properties.byId[propertyId];
@@ -1803,7 +1798,7 @@ var Main;
                         propertyItem.type.setInDOM(propertyContainer, propertiesObject[propertyItem.id]);
                     }
                 }
-            }
+            };
             var nodePropertiesEl = $('#node-properties');
             Config.configObject.properties.sequence.forEach(function (subItem)
             {
