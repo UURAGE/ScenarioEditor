@@ -162,8 +162,24 @@ var Main;
 
             DragBox.startDragging(e, text, function(pos)
             {
-                addNewTree(null, true, 0, 0);
-                return true;
+                var position = $("#gridIndicator").position();
+                var leftOffsetPos = position.left; // + $("#main").scrollLeft();
+                var topOffsetPos = position.top; //+ $("#main").scrollTop();
+
+                var gridLeftPos = Math.round(leftOffsetPos / Main.gridX);
+                var gridTopPos = Math.round(topOffsetPos / Main.gridY);
+
+                //make sure no trees can be dragged on top of each other
+                if(checkGridAvailable(gridLeftPos, gridTopPos))
+                {
+
+                    addNewTree(null, true, 0, 0);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             });
 
         });
@@ -515,8 +531,8 @@ var Main;
             });
         }
 
-        Main.trees[id].leftPos = dragDiv.position().left / Main.gridX;
-        Main.trees[id].topPos = dragDiv.position().top / Main.gridY;
+        Main.trees[id].leftPos = Math.round(dragDiv.position().left / Main.gridX);
+        Main.trees[id].topPos = Math.round(dragDiv.position().top / Main.gridY);
         Main.trees[id].level = Main.trees[id].topPos;
 
         //(x,y) of upper left of containment and (x,y) of lower right
