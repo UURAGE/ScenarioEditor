@@ -1,3 +1,4 @@
+/* ©Copyright Utrecht University (Department of Information and Computing Sciences) */
 (function()
 {
     "use strict";

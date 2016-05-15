@@ -1,4 +1,5 @@
 <?php
+/* ©Copyright Utrecht University (Department of Information and Computing Sciences) */
 $lang["btn_cancel"] = "Annuleren";
 $lang["btn_delete"] = "Verwijderen";
 $lang["btn_create"] = "Aanmaken";

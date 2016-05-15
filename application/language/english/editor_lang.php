@@ -1,4 +1,5 @@
 <?php
+/* ©Copyright Utrecht University (Department of Information and Computing Sciences) */
 $lang["edt_manual"] = "Manual";
 $lang["edt_file"] = "File";
 $lang["edt_languages"] = "Languages";
