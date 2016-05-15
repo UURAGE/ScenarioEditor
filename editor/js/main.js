@@ -529,7 +529,7 @@ var Main;
 
             stop:function(event)
             {
-                dropHandler(event, id);
+                treeDropHandler(event, id);
             }
         }); //we cannot use the built in grid functionality because it doesnt allow to drag "outside" the graph area to expand it
 
@@ -1299,7 +1299,7 @@ var Main;
     }
 
     //keeps the tree's position up to date for zooming out. handles snapping to grid
-    function dropHandler(event, id)
+    function treeDropHandler(event, id)
     {
         Main.unsavedChanges = true;
 
@@ -1311,17 +1311,45 @@ var Main;
         var position = $("#gridIndicator").position();
         var leftOffsetPos = position.left; // + $("#main").scrollLeft();
         var topOffsetPos = position.top; //+ $("#main").scrollTop();
-        tree.dragDiv.css(
+
+        var gridLeftPos = Math.round(leftOffsetPos / Main.gridX);
+        var gridTopPos = Math.round(topOffsetPos / Main.gridY);
+
+        //make sure no trees can be dragged on top of each other
+        if(checkGridAvailable(gridLeftPos, gridTopPos))
         {
-            "top": topOffsetPos,
-            "left": leftOffsetPos
+            tree.dragDiv.css(
+            {
+                "top": topOffsetPos,
+                "left": leftOffsetPos
+            });
+
+            tree.leftPos = gridLeftPos //store position to return to this point when zoomed in and out again
+            tree.topPos = gridTopPos
+            tree.level = Math.round(tree.topPos); //trees have a conversation level. trees on the same level are interleaved. trees on different levels are sequenced from top to bottom (low y to high y)
+
+            MiniMap.update(true);
+        }
+        else
+        {
+            tree.dragDiv.css(
+            {
+                "top": tree.topPos*Main.gridY,
+                "left": tree.leftPos*Main.gridX,
+            });
+        }
+    }
+
+    function checkGridAvailable(gridX, gridY)
+    {
+        var available = true;
+
+        $.each(Main.trees, function(id, tree)
+        {
+                available = available && !(tree.leftPos === gridX && tree.topPos === gridY)
         });
 
-        tree.leftPos = Math.round(leftOffsetPos / Main.gridX); //store position to return to this point when zoomed in and out again
-        tree.topPos = Math.round(topOffsetPos / Main.gridY);
-        tree.level = Math.round(tree.topPos); //trees have a conversation level. trees on the same level are interleaved. trees on different levels are sequenced from top to bottom (low y to high y)
-
-        MiniMap.update(true);
+        return available;
     }
 
     //transforms a free position, for example x=43 and grid size=15, to a grid position x=45 (round to nearest multiple of gridsize)
