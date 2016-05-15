@@ -101,12 +101,12 @@ var Metadata;
         var characterTabList = $('<ul>');
         characterTabs.append(characterTabList);
 
-        Config.configObject.characters.ids.forEach(function(characterId)
+        Config.configObject.characters.sequence.forEach(function (character)
         {
-            var characterTabId = characterPropertiesEl.attr('id') + '-' + characterId;
+            var characterTabId = characterPropertiesEl.attr('id') + '-' + character.id;
 
             // Make a character tab with a link to the div it contains
-            var li = $('<li>').append($('<a>', { href:'#' + characterTabId, text: characterId }));
+            var li = $('<li>').append($('<a>', { href:'#' + characterTabId, text: character.id }));
             characterTabList.append(li);
 
             var characterTabDiv = $('<div>', { id: characterTabId });
@@ -117,7 +117,7 @@ var Metadata;
                 showPropertyItem(propertyItem, hStartLevel, characterTabDiv, characterTabId);
             });
 
-            Config.configObject.characters[characterId].properties.sequence.forEach(function(propertyItem)
+            Config.configObject.characters.byId[character.id].properties.sequence.forEach(function(propertyItem)
             {
                 showPropertyItem(propertyItem, hStartLevel, characterTabDiv, characterTabId);
             });
@@ -157,11 +157,11 @@ var Metadata;
     function getNewDefaultCharactersObject()
     {
         var characters = {};
-        Config.configObject.characters.ids.forEach(function(characterId)
+        for (var characterId in Config.configObject.characters.byId)
         {
             characters[characterId] = {};
             characters[characterId].properties = {};
-        });
+        }
         return characters;
     }
 
@@ -219,20 +219,20 @@ var Metadata;
         }
         for (var propertyId in Config.configObject.characters.properties.byId)
         {
-            Config.configObject.characters.ids.forEach(function(characterId)
+            for (var characterId in Config.configObject.characters.byId)
             {
                 var property = Config.configObject.characters.properties.byId[propertyId];
                 setPropertyInDOM(Metadata.metaObject.characters[characterId].properties, "#meta-character-properties-" + characterId + "-container", property);
-            });
+            }
         }
-        Config.configObject.characters.ids.forEach(function(characterId)
+        for (var characterId in Config.configObject.characters.byId)
         {
-            for (var propertyId in Config.configObject.characters[characterId].properties.byId)
+            for (var propertyId in Config.configObject.characters.byId[characterId].properties.byId)
             {
-                var property = Config.configObject.characters[characterId].properties.byId[propertyId];
+                var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
                 setPropertyInDOM(Metadata.metaObject.characters[characterId].properties, "#meta-character-properties-" + characterId + "-container", property);
             }
-        });
+        }
     }
 
     function parameterDialog()
@@ -440,24 +440,24 @@ var Metadata;
         }
         for (var propertyId in Config.configObject.characters.properties.byId)
         {
-            Config.configObject.characters.ids.forEach(function(characterId)
+            for (var characterId in Config.configObject.characters.byId)
             {
                 var property = Config.configObject.characters.properties.byId[propertyId];
-                if (property.scopes.statementScope !== "independent") return;
-                Metadata.metaObject.characters[characterId].properties[property.id] =
-                    property.type.getFromDOM($("#meta-character-properties-" + characterId + "-container-" + property.id));
-            });
-        }
-        Config.configObject.characters.ids.forEach(function(characterId)
-        {
-            for (var propertyId in Config.configObject.characters[characterId].properties.byId)
-            {
-                var property = Config.configObject.characters[characterId].properties.byId[propertyId];
                 if (property.scopes.statementScope !== "independent") continue;
                 Metadata.metaObject.characters[characterId].properties[property.id] =
                     property.type.getFromDOM($("#meta-character-properties-" + characterId + "-container-" + property.id));
             }
-        });
+        }
+        for (var characterId in Config.configObject.characters.byId)
+        {
+            for (var propertyId in Config.configObject.characters.byId[characterId].properties.byId)
+            {
+                var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
+                if (property.scopes.statementScope !== "independent") continue;
+                Metadata.metaObject.characters[characterId].properties[property.id] =
+                    property.type.getFromDOM($("#meta-character-properties-" + characterId + "-container-" + property.id));
+            }
+        }
 
         $("#metaScreen").dialog('close');
         Main.selectNode(previouslySelectedNode);

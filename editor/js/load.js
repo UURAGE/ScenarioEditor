@@ -573,7 +573,7 @@ var Load;
         charactersXMLElement.children().each(function()
         {
             var characterId = this.attributes.id.value;
-            if ($.inArray(characterId, Config.configObject.characters.ids) > -1)
+            if (characterId in Config.configObject.characters.byId)
             {
                 characters[characterId] = {};
                 characters[characterId].properties = {};
@@ -584,9 +584,9 @@ var Load;
                     {
                         characters[characterId].properties[propertyId] = Config.configObject.characters.properties.byId[propertyId].type.fromXML(this);
                     }
-                    else if (propertyId in Config.configObject.characters[characterId].properties.byId)
+                    else if (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
                     {
-                        characters[characterId].properties[propertyId] = Config.configObject.characters[characterId].properties.byId[propertyId].type.fromXML(this);
+                        characters[characterId].properties[propertyId] = Config.configObject.characters.byId[characterId].properties.byId[propertyId].type.fromXML(this);
                     }
                 });
             }

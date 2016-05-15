@@ -338,7 +338,7 @@ var Load3;
             text: (type == Main.conversationType ? "" : text),
             conversation: conversationArray,
             type: type,
-            characterIdRef: Config.configObject.characters.ids[0],
+            characterIdRef: Config.configObject.characters.sequence[0].id,
             parameters: parameterEffects,
             preconditions: preconditionsJS,
             intent: intentsArray,

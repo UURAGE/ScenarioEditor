@@ -63,15 +63,15 @@ var Main;
 
         $("#main").focus();
 
-        if (Config.configObject.characters.ids.length > 1)
+        if (Config.configObject.characters.sequence.length > 1)
         {
-            Config.configObject.characters.ids.forEach(function(characterId)
+            for (var characterId in Config.configObject.characters.byId)
             {
                 var option = $("<option>");
                 option.val(characterId);
                 option.text(characterId);
                 $("#characterSelection").append(option);
-            });
+            }
         }
         else
         {
@@ -648,13 +648,13 @@ var Main;
         var characterIdRef = "";
         if (type === Main.computerType)
         {
-            if (Config.configObject.characters.ids.length > 1)
+            if (Config.configObject.characters.sequence.length > 1)
             {
                 characterIdRef = $("#characterSelection option:selected").val();
             }
             else
             {
-                characterIdRef = Config.configObject.characters.ids[0];
+                characterIdRef = Config.configObject.characters.sequence[0];
             }
         }
 
@@ -1291,22 +1291,22 @@ var Main;
         }
         for (var propertyId in Config.configObject.characters.properties.byId)
         {
-            Config.configObject.characters.ids.forEach(function(characterId)
+            for (var characterId in Config.configObject.characters.byId)
             {
                 var property = Config.configObject.characters.properties.byId[propertyId];
-                if (property.scopes.statementScope !== "per") return;
-                node.characters[characterId].properties[propertyId] = property.type.getFromDOM($("#node-character-properties-" + characterId + "-container-" + property.id));
-            });
-        }
-        Config.configObject.characters.ids.forEach(function(characterId)
-        {
-            for (var propertyId in Config.configObject.characters[characterId].properties.byId)
-            {
-                var property = Config.configObject.characters[characterId].properties.byId[propertyId];
                 if (property.scopes.statementScope !== "per") continue;
                 node.characters[characterId].properties[propertyId] = property.type.getFromDOM($("#node-character-properties-" + characterId + "-container-" + property.id));
             }
-        });
+        }
+        for (var characterId in Config.configObject.characters.byId)
+        {
+            for (var propertyId in Config.configObject.characters.byId[characterId].properties.byId)
+            {
+                var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
+                if (property.scopes.statementScope !== "per") continue;
+                node.characters[characterId].properties[propertyId] = property.type.getFromDOM($("#node-character-properties-" + characterId + "-container-" + property.id));
+            }
+        }
 
         // Save the media.
         node.video = ObjectGenerator.nullFromHTMLValue($("#videoOptions").val());
@@ -1536,7 +1536,7 @@ var Main;
             case Main.computerType:
                 // for computerType node: just input text
                 characterIdPrefix = "<b>" + node.characterIdRef + ": </b>";
-                if (Config.configObject.characters.ids.length > 1)
+                if (Config.configObject.characters.sequence.length > 1)
                 {
                     text += characterIdPrefix;
                 }
@@ -1809,22 +1809,22 @@ var Main;
             accordionDiv = $('<div>');
             nodeCharacterPropertiesEl.append(accordionDiv);
             var characterHeaderStartLevel = 3;
-            Config.configObject.characters.ids.forEach(function(characterId)
+            Config.configObject.characters.sequence.forEach(function(character)
             {
-                var characterHeader = $('<h' + characterHeaderStartLevel +'>', { text: characterId });
+                var characterHeader = $('<h' + characterHeaderStartLevel +'>', { text: character.id });
                 var characterDiv = $('<div>');
                 accordionDiv.append(characterHeader).append(characterDiv);
 
-                var containerIdPrefix = nodeCharacterPropertiesEl.attr('id') + '-' + characterId;
+                var containerIdPrefix = nodeCharacterPropertiesEl.attr('id') + '-' + character.id;
 
                 Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
                 {
-                    showPropertyItem(node.characters[characterId].properties, propertyItem, characterHeaderStartLevel + 1, characterDiv, containerIdPrefix);
+                    showPropertyItem(node.characters[character.id].properties, propertyItem, characterHeaderStartLevel + 1, characterDiv, containerIdPrefix);
                 });
 
-                Config.configObject.characters[characterId].properties.sequence.forEach(function(propertyItem)
+                Config.configObject.characters.byId[character.id].properties.sequence.forEach(function(propertyItem)
                 {
-                    showPropertyItem(node.characters[characterId].properties, propertyItem, characterHeaderStartLevel + 1, characterDiv, containerIdPrefix);
+                    showPropertyItem(node.characters[character.id].properties, propertyItem, characterHeaderStartLevel + 1, characterDiv, containerIdPrefix);
                 });
             });
             accordionDiv.accordion(

@@ -24,10 +24,10 @@ var Config;
 
         if (configXML.children('character').length === 1)
         {
-            config.characters = { properties: $.extend({}, defaultPropertyCollection) };
+            config.characters = { properties: $.extend({}, defaultPropertyCollection), byId: {} };
             var character = loadCharacterNode(configXML.children('character')[0]);
-            config.characters[character.id] = character;
-            config.characters.ids = [character.id];
+            config.characters.byId[character.id] = character;
+            config.characters.sequence = [character];
         }
         else
         {
@@ -129,12 +129,13 @@ var Config;
     function loadCharacterCollection(collectionXML)
     {
         var characters = {};
-        characters.ids = [];
+        characters.sequence = [];
+        characters.byId = {};
         collectionXML.children('character').each(function(index, childXML)
         {
             var character = loadCharacterNode(childXML);
-            characters[character.id] = character;
-            characters.ids.push(character.id);
+            characters.sequence.push(character);
+            characters.byId[character.id] = character;
         });
         characters.properties = loadPropertyCollectionOrDefault($(collectionXML).children('properties'));
         return characters;

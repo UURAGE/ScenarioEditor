@@ -57,14 +57,14 @@ var Save;
             var property = Config.configObject.characters.properties.byId[propertyId];
             addPropertyDefinitionElement(property, nameSpace, propertyDefinitionsEl);
         }
-        Config.configObject.characters.ids.forEach(function(characterId)
+        for (var characterId in Config.configObject.characters.byId)
         {
-            for (var propertyId in Config.configObject.characters[characterId].properties.byId)
+            for (var propertyId in Config.configObject.characters.byId[characterId].properties.byId)
             {
-                var property = Config.configObject.characters[characterId].properties.byId[propertyId];
+                var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
                 addPropertyDefinitionElement(property, nameSpace, propertyDefinitionsEl);
             }
-        });
+        }
 
         // Save parameters and collect data for saving weights
         var parametersEl = addAndReturnElement("parameters", nameSpace, definitionsEl);
@@ -474,7 +474,7 @@ var Save;
                 }
                 else
                 {
-                    Config.configObject.characters[characterId].properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
+                    Config.configObject.characters.byId[characterId].properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
                 }
             }
         }
