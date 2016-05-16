@@ -5,10 +5,10 @@ var HtmlGenerator;
 (function()
 {
     "use strict";
-    
+
     var parameterHTML = Parts.getParameterDefinitionHTML();
 
-    HtmlGenerator = 
+    HtmlGenerator =
     {
         parameterHTML: parameterHTML,
         addConversationOfType: addConversationOfType,
@@ -166,9 +166,9 @@ var HtmlGenerator;
     {
         $("#effectParameterDiv").append(parameterEffectHTML);
         var addedDiv = $("#effectParameterDiv").children().last();
-        
+
         addedDiv.find(".changeType").val(Metadata.metaObject.defaultChangeType);
-        
+
         insertParameters(addedDiv, ".parameterid", "parameter");
         return addedDiv;
     }
@@ -213,7 +213,7 @@ var HtmlGenerator;
         {
             $("#scores").append(scoreHTML);
             addedDiv = $("#scores").children().last();
-            addedDiv.find(".name").append(name);
+            addedDiv.find(".name").text(name);
             if (scores[name].min == scores[name].max)
                 addedDiv.find(".score").append(scores[name].min);
             else
