@@ -249,6 +249,9 @@ var KeyControl;
             var newTop = $("#" + Main.selectedElements[i]).offset().top - 5;
 
             outOfUpperBound = newTop < upperBound - 1;
+
+            if (outOfUpperBound)
+                break;
         }
 
         // If none of the nodes is moving outside of the canvas, move and repaint them
