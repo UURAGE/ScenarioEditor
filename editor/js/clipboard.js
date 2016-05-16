@@ -4,13 +4,13 @@ var Clipboard;
 
 (function()
 {
-    Clipboard = 
-    {        
-        copyElement: copyElement,        
-        cutElement: cutElement,  
+    Clipboard =
+    {
+        copyElement: copyElement,
+        cutElement: cutElement,
         pasteElement: pasteElement
-    };    
-    
+    };
+
     //Public Variables
 
     //Private Variables
@@ -19,7 +19,7 @@ var Clipboard;
         copiedTrees = false;
 
     $(document).ready(function()
-    {        
+    {
         $("#copyNode").on('click', function()
         {
             copyElement();
@@ -90,24 +90,24 @@ var Clipboard;
         return toCopy;
     }
 
-    function copyNode(nodeId)
+    function copyNode(nodeID)
     {
         // Delete the properties from node that are used for arranging all nodes within a tree
         // This is done here, because doing it after an arrange operation will make it even slower
-        delete Main.nodes[nodeId].topologicalChildren;
-        delete Main.nodes[nodeId].topologicalOrderingVisited;
-        delete Main.nodes[nodeId].topologicalParent;
-        
-        toCopy = Utils.clone(Main.nodes[nodeId]);
-        var plumbInstance = Main.trees[Main.nodes[nodeId].parent].plumbInstance;
-        
+        delete Main.nodes[nodeID].topologicalChildren;
+        delete Main.nodes[nodeID].topologicalOrderingVisited;
+        delete Main.nodes[nodeID].topologicalParent;
+
+        toCopy = Utils.clone(Main.nodes[nodeID]);
+        var plumbInstance = Main.getPlumbInstanceByNodeID(nodeID);
+
         //Get node connections
         var connections = plumbInstance.getConnections(
                     {
-                        target: nodeId
+                        target: nodeID
                     });
         //Get node position
-        var position = $('#' + nodeId).position();
+        var position = $('#' + nodeID).position();
 
         //Save extra node info
         toCopy.connections = connections;
@@ -175,7 +175,7 @@ var Clipboard;
                     newNode = pasteNode(node);
                     idMappings[node.id] = newNode.id;
                 });
-                
+
                 var plumbInstance = Zoom.getZoomed().plumbInstance;
                 //Copy jsPlumb connections
                 $.each(copiedElements, function(index, node)
@@ -268,7 +268,7 @@ var Clipboard;
             if (!node) //due to deleting from arrays in js leaving values undefined
                 return true; //$.each version of continue
 
-            var newNode = pasteNode(node);            
+            var newNode = pasteNode(node);
 
             Main.selectElement(newTree.id); //after creation a new node is immediately selected. so we need to reselect the tree
 
@@ -303,5 +303,5 @@ var Clipboard;
             });
         });
     }
-    
+
 }());

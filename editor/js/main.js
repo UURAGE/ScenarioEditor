@@ -1118,7 +1118,7 @@ var Main;
     function selectNode(nodeID)
     {
         if(nodeID !== null)
-            Main.trees[Main.nodes[nodeID].parent].plumbInstance.clearDragSelection();
+            Main.getPlumbInstanceByNodeID(nodeID).clearDragSelection();
 
         // Before we change the node, we first apply the changes that may have been made.
         if (Main.selectedElement !== null)
@@ -1126,7 +1126,7 @@ var Main;
             applyChanges();
 
             if(Main.selectedElement in Main.nodes)
-                Main.trees[Main.nodes[Main.selectedElement].parent].plumbInstance.clearDragSelection();
+                Main.getPlumbInstanceByNodeID(Main.selectedElement).clearDragSelection();
         }
 
         // Currently selected node(s) should now not be selected.
@@ -1286,7 +1286,7 @@ var Main;
     {
         if (nodeID === null) return;
 
-        var connections = Main.trees[Main.nodes[nodeID].parent].plumbInstance.getConnections(
+        var connections = Main.getPlumbInstanceByNodeID(nodeID).getConnections(
         {
             target: nodeID
         });
@@ -1806,7 +1806,7 @@ var Main;
 
     function getFirstChildIdOrNull(sourceId)
     {
-        var connections = Main.trees[Main.nodes[sourceId].parent].plumbInstance.getConnections({ source: sourceId });
+        var connections = Main.getPlumbInstanceByNodeID(sourceId).getConnections({ source: sourceId });
         return (connections.length === 0 ? null : connections[0].targetId);
     }
 

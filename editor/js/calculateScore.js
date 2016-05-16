@@ -17,12 +17,12 @@
     //memoization of calculated scores for speed improvement
     var memo = [];
 
-    // Calculate the score of this node, by getting the scores of parents. 
+    // Calculate the score of this node, by getting the scores of parents.
     function getScoreParents(nodeID)
     {
         if (nodeID === null) return; //node is not defined.
 
-        var connections = Main.trees[Main.nodes[nodeID].parent].plumbInstance.getConnections(
+        var connections = Main.getPlumbInstanceByNodeID(nodeID).getConnections(
         {
             target: nodeID
         });

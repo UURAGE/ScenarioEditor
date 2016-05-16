@@ -208,7 +208,7 @@ var KeyControl;
         }
 
         if(elementID !== null && elementID !== undefined && !(elementID in Main.trees))
-            Main.trees[Main.nodes[elementID].parent].plumbInstance.addToDragSelection($("#"+elementID)[0]);
+            Main.getPlumbInstanceByNodeID(elementID).addToDragSelection($("#"+elementID)[0]);
     }
 
     /*
@@ -219,7 +219,7 @@ var KeyControl;
     function deselectElement(node)
     {
         if(node !== null && node !== undefined && !(node in Main.trees))
-            Main.trees[Main.nodes[node].parent].plumbInstance.removeFromDragSelection($("#"+node)[0]);
+            Main.getPlumbInstanceByNodeID(node).removeFromDragSelection($("#"+node)[0]);
 
         if (Main.selectedElement !== null)
             Main.selectElement(null);
@@ -363,7 +363,7 @@ var KeyControl;
     {
         if (Main.selectedElement === null) return;
 
-        var plumbInstance = Main.trees[Main.nodes[Main.selectedElement].parent].plumbInstance;
+        var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElement);
 
         var connections = plumbInstance.getConnections(
         {
@@ -388,7 +388,7 @@ var KeyControl;
     {
         if (Main.selectedElement === null) return;
 
-        var plumbInstance = Main.trees[Main.nodes[Main.selectedElement].parent].plumbInstance;
+        var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElement);
 
         var connections = plumbInstance.getConnections(
         {
@@ -413,7 +413,7 @@ var KeyControl;
     {
         if (Main.selectedElement === null) return;
 
-        var plumbInstance = Main.trees[Main.nodes[Main.selectedElement].parent].plumbInstance;
+        var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElement);
 
         var connections = plumbInstance.getConnections(
         {
@@ -451,7 +451,7 @@ var KeyControl;
     {
         if (Main.selectedElement === null) return;
 
-        var plumbInstance = Main.trees[Main.nodes[Main.selectedElement].parent].plumbInstance;
+        var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElement);
 
         var connections = plumbInstance.getConnections(
         {

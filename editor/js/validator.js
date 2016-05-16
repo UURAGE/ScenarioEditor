@@ -4,7 +4,7 @@ var Validator;
 
 (function()
 {
-    Validator = 
+    Validator =
     {
         validate: validate,
         show: show,
@@ -22,7 +22,7 @@ var Validator;
         });
     });
 
-    function validate() 
+    function validate()
     {
         var validationReport = []; // an array of objects containing the errors found
         //var unmarkedEndNodes = []; // nodes without children not marked as end node
@@ -30,7 +30,7 @@ var Validator;
         // First save the latest changes.
         Main.applyChanges(Main.selectedElement);
         // Checks whether the script has a name
-        if(Metadata.metaObject.name === null || Metadata.metaObject.name === "") 
+        if(Metadata.metaObject.name === null || Metadata.metaObject.name === "")
         {
             validationReport.push(
             {
@@ -43,7 +43,7 @@ var Validator;
             });
         }
 
-        if (Object.keys(Main.trees).length === 0) 
+        if (Object.keys(Main.trees).length === 0)
         {
             validationReport.push(
             {
@@ -54,18 +54,18 @@ var Validator;
         }
 
         var numberOfTreesOnLevels = getNumberOfTreesOnLevels(Main.trees);
-        var highestLevel = numberOfTreesOnLevels.length - 1; // note that trees with a high level are low on the editor screen 
+        var highestLevel = numberOfTreesOnLevels.length - 1; // note that trees with a high level are low on the editor screen
         var hasValidEnd = false; // if the highest level has an end node this becomes true
         var highestLevelHasEnd = false;
-        
-        $.each(Main.trees, function(id, tree) 
+
+        $.each(Main.trees, function(id, tree)
         {
             // Check whether there is exactly one node without parents.
             var startNodeIDs = Save.getStartNodeIDs(tree); //defined in save.js
-            
+
             $.each(startNodeIDs, function(index, startNodeID)
             {
-                if(startNodeID === -1) 
+                if(startNodeID === -1)
                 {
                     validationReport.push(
                     {
@@ -81,9 +81,9 @@ var Validator;
                         message: LanguageManager.fLang("edt_validator_empty_conversation", [tree.subject]),
                         level: 'error',
                         jumpToFunction: function() { Zoom.zoomIn(tree); }
-                    }); 
-                     
-                    
+                    });
+
+
                 }
                 else if (Main.nodes[startNodeID].type === Main.conversationType && startNodeIDs.length !== 1)
                 {
@@ -92,13 +92,13 @@ var Validator;
                         message: LanguageManager.fLang("edt_validator_conversation_start_error", [tree.subject]),
                         level: 'error',
                         jumpToFunction: function() { Zoom.zoomIn(tree); }
-                    }); 
+                    });
                 }
                 // the tree on the first level can start with anything, but the trees following can only start with player nodes or conversations that start with a player node
-                else if(tree.level !== 0) 
+                else if(tree.level !== 0)
                 {
                     if(Main.nodes[startNodeID].type === Main.computerType)
-                    { 
+                    {
                         validationReport.push(
                         {
                             message: LanguageManager.fLang("edt_validator_subject_start_type_error", [tree.subject]),
@@ -129,11 +129,11 @@ var Validator;
 
             // gets all nodes marked as end node
             var markedEnds = findAllMarkedEnds(tree);
-            
-            $.each(markedEnds, function(index, nodeID) 
+
+            $.each(markedEnds, function(index, nodeID)
             {
                 var connections = tree.plumbInstance.getConnections({ source: nodeID });
-                if (connections.length > 0) 
+                if (connections.length > 0)
                 {
                     validationReport.push(
                     {
@@ -150,17 +150,17 @@ var Validator;
                     hasValidEnd = true;
                 }
             });
-            
+
             if (tree.level === highestLevel)
             {
                 // gets all nodes without children from the tree
-                var deadEnds = findAllDeadEnds(tree);   
+                var deadEnds = findAllDeadEnds(tree);
 
                 if (numberOfTreesOnLevels[tree.level] === 1)
                 {
-                    $.each(deadEnds, function(index, nodeID) 
+                    $.each(deadEnds, function(index, nodeID)
                     {
-                        if (markedEnds.indexOf(nodeID) === -1) 
+                        if (markedEnds.indexOf(nodeID) === -1)
                         { // node is a dead end, but not marked as end node
                             validationReport.push(
                             {
@@ -180,17 +180,17 @@ var Validator;
                 }
                 else
                 {
-                    $.each(deadEnds, function(index, nodeID) 
+                    $.each(deadEnds, function(index, nodeID)
                     {
-                        if (markedEnds.indexOf(nodeID) !== -1) 
-                        { 
+                        if (markedEnds.indexOf(nodeID) !== -1)
+                        {
                             highestLevelHasEnd = true;
                         }
                     });
                 }
             }
 
-            if (tree.subject === "") 
+            if (tree.subject === "")
             {
                 validationReport.push(
                 {
@@ -201,7 +201,7 @@ var Validator;
             }
         });
 
-        if(numberOfTreesOnLevels[0] !== 1) 
+        if(numberOfTreesOnLevels[0] !== 1)
         {
             validationReport.push(
             {
@@ -210,8 +210,8 @@ var Validator;
                 jumpToFunction: function() { }
             });
         }
-        
-        if(!highestLevelHasEnd) 
+
+        if(!highestLevelHasEnd)
         { // no single iteration errors, but there is no valid end
             validationReport.push(
             {
@@ -220,8 +220,8 @@ var Validator;
                 jumpToFunction: function() { }
             });
         }
-        
-        if(!hasValidEnd) 
+
+        if(!hasValidEnd)
         { // no single iteration errors, but there is no valid end
             validationReport.push(
             {
@@ -233,13 +233,13 @@ var Validator;
 
         return validationReport; // add highest level unmarked end nodes and return
     }
-    
-    
 
-    function findAllDeadEnds(tree) 
+
+
+    function findAllDeadEnds(tree)
     { // finds all nodes without children
-        var result = [];    
-        
+        var result = [];
+
         $.each(tree.nodes, function(index, nodeID) {
             if(!nodeID) {
                 return true;
@@ -247,14 +247,14 @@ var Validator;
 
             var connections = tree.plumbInstance.getConnections({ source: nodeID });
             if(connections.length === 0) {
-                result.push(nodeID);            
+                result.push(nodeID);
             }
         });
 
         return result;
     }
 
-    function findAllMarkedEnds(tree) 
+    function findAllMarkedEnds(tree)
     { // find all nodes that are marked as end
         var result = [];
         $.each(tree.nodes, function(index, nodeID) {
@@ -273,17 +273,17 @@ var Validator;
     function getNumberOfTreesOnLevels(trees)
     {
         var treesOnLevels = [];
-        $.each(trees, function(index, tree) 
+        $.each(trees, function(index, tree)
         {
             if (typeof treesOnLevels[tree.level] == 'undefined')
                 treesOnLevels[tree.level] = 0;
-            
+
             treesOnLevels[tree.level]++;
         });
-        
+
         return treesOnLevels;
     }
-    
+
     function show(errors)
     {
         var hasErrors = false;
@@ -318,7 +318,7 @@ var Validator;
         $('#tabDock').show();
         $("#main").focus();
     }
-    
+
     // Checks if there is a cycle in the graph.
     function testCycle(currentNode, nodeToFind)
     {
@@ -334,7 +334,7 @@ var Validator;
             return true;
 
         Main.nodes[currentNode].visited = true;
-        var plumbInstance = Main.trees[Main.nodes[currentNode].parent].plumbInstance;
+        var plumbInstance = Main.getPlumbInstanceByNodeID(currentNode);
         var connections = plumbInstance.getConnections({source: currentNode});
         for (var i = 0; i < connections.length; i++)
             if(!Main.nodes[connections[i].targetId].visited && testCycleDFS(connections[i].targetId, nodeToFind))
@@ -346,7 +346,7 @@ var Validator;
     // Checks if a connection between the node already has been made.
     function testDuplicateConnection(sourceId, targetId)
     {
-        var plumbInstance = Main.trees[Main.nodes[sourceId].parent].plumbInstance;
+        var plumbInstance = Main.getPlumbInstanceByNodeID(sourceId);
         return plumbInstance.getConnections({ source: sourceId, target: targetId }).length > 0;
     }
 
