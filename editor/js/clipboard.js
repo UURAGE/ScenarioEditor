@@ -124,8 +124,6 @@ var Clipboard;
 
     function pasteElement()
     {
-        var plumbInstance = Zoom.getZoomed().plumbInstance;
-
         if (copiedElement !== null && copiedElement !== undefined)
         {
             if (copiedTrees && !Zoom.isZoomed())
@@ -178,6 +176,7 @@ var Clipboard;
                     idMappings[node.id] = newNode.id;
                 });
                 
+                var plumbInstance = Zoom.getZoomed().plumbInstance;
                 //Copy jsPlumb connections
                 $.each(copiedElements, function(index, node)
                 {
