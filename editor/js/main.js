@@ -593,7 +593,6 @@ var Main;
     {
         Main.unsavedChanges = true;
 
-        $(".pathToDeadEnd").removeClass("pathToDeadEnd");
         var container = $(".selected.treeContainer"); //when multiple things are selected their class is .multiselected.
 
         if (container.length === 0)
@@ -1051,8 +1050,6 @@ var Main;
                 }
             });
 
-            $(".pathToDeadEnd").removeClass("pathToDeadEnd");
-
             // Suspend the jsplumb instance that handles the tree containers
             jsPlumb.doWhileSuspended(function()
             {
@@ -1083,7 +1080,6 @@ var Main;
                 });
                 delete zoomedTree.selectedConnections[connectionId];
 
-                $(".pathToDeadEnd").removeClass("pathToDeadEnd");
                 // Pick the first element in the array, because connections are unique
                 // and detach it
                 zoomedTree.plumbInstance.detach(c[0]);
@@ -1622,8 +1618,6 @@ var Main;
     function deleteNode(nodeID)
     {
         if (nodeID === null) return; // No node selected, so do nothing
-
-        $(".pathToDeadEnd").removeClass("pathToDeadEnd");
 
         var toDelete = nodeID;
 

@@ -120,10 +120,6 @@
 	background-color:lightgreen;
 }
 
-.pathToDeadEnd {
-	background-color:pink;
-}
-
 .bestPath {
 	background-color:yellow !important;
 }

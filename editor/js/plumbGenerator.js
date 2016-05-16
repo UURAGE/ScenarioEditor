@@ -36,11 +36,7 @@ var PlumbGenerator;
         });
 
         // On dblclick, the connection will be deleted
-        instance.bind("dblclick", function(c)
-        {
-            $(".pathToDeadEnd").removeClass("pathToDeadEnd");
-            instance.detach(c);
-        });
+        instance.bind("dblclick", instance.detach);
 
         // On click, select the connection
         instance.bind("click",function(c, e)
@@ -94,7 +90,6 @@ var PlumbGenerator;
 
         instance.bind("connection", function(info)
         {
-            $(".pathToDeadEnd").removeClass("pathToDeadEnd");
             if($("#" + info.targetId).hasClass("parentSelected") ||
                $("#" + info.targetId).hasClass("selected"))
             {
