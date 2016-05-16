@@ -37,6 +37,7 @@ var Main;
         deleteAllSelected: deleteAllSelected,
         deselectConnection: deselectConnection,
         escapeTags: escapeTags,
+        getPlumbInstanceByNodeID: getPlumbInstanceByNodeID,
         highlightParents: highlightParents,
         makeConnection: makeConnection,
         openConversation: openConversation,
@@ -945,6 +946,11 @@ var Main;
         });
 
         return node;
+    }
+
+    function getPlumbInstanceByNodeID(nodeID)
+    {
+        return Main.trees[Main.nodes[nodeID].parent].plumbInstance;
     }
 
     function triggerSubjectNameInput(id, selectAllInput)

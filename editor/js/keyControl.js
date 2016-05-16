@@ -239,9 +239,10 @@ var KeyControl;
     //If a node is selected and arrow up is pressed, move the node up.
     function moveNodeUp()
     {
+        var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElements[0]);
+
         // Check if none of the selected nodes are out of the upper bound
         var outOfUpperBound = false;
-        var plumbInstance = Main.trees[Main.selectedElements[0].parent].plumbInstance
         for (var i = 0; i < Main.selectedElements.length; i++)
         {
             var upperBound = $('#main').position().top + 50;
@@ -272,7 +273,8 @@ var KeyControl;
     //If a node is selected and arrow up is pressed, move the node down.
     function moveNodeDown()
     {
-        var plumbInstance = Main.trees[Main.selectedElements[0].parent].plumbInstance
+        var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElements[0]);
+
         for (var i = 0; i < Main.selectedElements.length; i++)
         {
             $("#" + Main.selectedElements[i]).offset(
@@ -288,13 +290,12 @@ var KeyControl;
     //If a node is selected and arrow up is pressed, move the node to the left.
     function moveNodeLeft()
     {
+        var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElements[0]);
+
         // Check if none of the nodes will move out of the canvas
-        var plumbInstance = Main.trees[Main.selectedElements[0].parent].plumbInstance
         var outOfLeftBound = false;
         for (var i = 0; i < Main.selectedElements.length; i++)
         {
-            plumbInstance = Main.trees[Main.selectedElements[i].parent].plumbInstance
-
             var leftBound = $('#main').position().left;
 
             var newLeft = $("#" + Main.selectedElements[i]).offset().left - 5;
@@ -322,7 +323,8 @@ var KeyControl;
     //If a node is selected and arrow up is pressed, move the node to the right.
     function moveNodeRight()
     {
-        var plumbInstance = Main.trees[Main.selectedElements[0].parent].plumbInstance
+        var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElements[0]);
+
         for (var i = 0; i < Main.selectedElements.length; i++)
         {
             $("#" + Main.selectedElements[i]).offset(
