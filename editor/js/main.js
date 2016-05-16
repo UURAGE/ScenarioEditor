@@ -1044,18 +1044,6 @@ var Main;
         // If there are node or tree elements selected
         if (Main.selectedElements.length > 0)
         {
-            var suspendedTrees = [];
-
-            // Suspend the drawing in each tree where deleteions will occur
-            Main.selectedElements.forEach(function(element)
-            {
-                if(element in Main.trees)
-                {
-                    suspendedTrees.push(element);
-                    Main.trees[element].plumbInstance.setSuspendDrawing(true);
-                }
-            });
-
             // Suspend the jsplumb instance that handles the tree containers
             jsPlumb.doWhileSuspended(function()
             {
@@ -1064,14 +1052,11 @@ var Main;
                     deleteElement(Main.selectedElements[i]);
                 }
                 if (Main.selectedElement !== null)
+                {
                     deleteElement(Main.selectedElement);
+                }
                 Main.selectedElements = [];
             }, true);
-
-            suspendedTrees.forEach(function(tree)
-            {
-                Main.trees[tree].plumbInstance.setSuspendDrawing(false, true);
-            });
         }
         // If there is a tree zoomed and if there are selected connections, delete them
         else if (Zoom.isZoomed())
