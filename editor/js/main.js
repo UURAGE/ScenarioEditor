@@ -35,6 +35,7 @@ var Main;
         createAndReturnNode: createAndReturnNode,
         dehighlightParents: dehighlightParents,
         deleteAllSelected: deleteAllSelected,
+        deselectConnection: deselectConnection,
         escapeTags: escapeTags,
         highlightParents: highlightParents,
         makeConnection: makeConnection,
@@ -511,6 +512,7 @@ var Main;
             topScroll: 0,
             level: 0,
             nodes: [],
+            selectedConnections: {}, // The keys for this object are the connection ids
             plumbInstance: PlumbGenerator.genJsPlumbInstance(treeDiv)
         };
 
@@ -1034,36 +1036,59 @@ var Main;
 
     function deleteAllSelected()
     {
-        var suspendedTrees = [];
-
-        //suspend the drawing in each tree where deleteions will occur
-        Main.selectedElements.forEach(function(element)
+        // If there are node or tree elements selected
+        if (Main.selectedElements.length > 0)
         {
-            if(element in Main.trees)
+            var suspendedTrees = [];
+
+            // Suspend the drawing in each tree where deleteions will occur
+            Main.selectedElements.forEach(function(element)
             {
-                suspendedTrees.push(element);
-                Main.trees[element].plumbInstance.setSuspendDrawing(true);
-            }
-        });
+                if(element in Main.trees)
+                {
+                    suspendedTrees.push(element);
+                    Main.trees[element].plumbInstance.setSuspendDrawing(true);
+                }
+            });
 
-        $(".pathToDeadEnd").removeClass("pathToDeadEnd");
+            $(".pathToDeadEnd").removeClass("pathToDeadEnd");
 
-        //suspend the jsplumb instance that handles the tree containers
-        jsPlumb.doWhileSuspended(function()
-        {
-            for (var i = 0; i < Main.selectedElements.length; i++)
+            // Suspend the jsplumb instance that handles the tree containers
+            jsPlumb.doWhileSuspended(function()
             {
-                deleteElement(Main.selectedElements[i]);
-            }
-            if (Main.selectedElement !== null)
-                deleteElement(Main.selectedElement);
-            Main.selectedElements = [];
-        }, true);
+                for (var i = 0; i < Main.selectedElements.length; i++)
+                {
+                    deleteElement(Main.selectedElements[i]);
+                }
+                if (Main.selectedElement !== null)
+                    deleteElement(Main.selectedElement);
+                Main.selectedElements = [];
+            }, true);
 
-        suspendedTrees.forEach(function(tree)
+            suspendedTrees.forEach(function(tree)
+            {
+                Main.trees[tree].plumbInstance.setSuspendDrawing(false, true);
+            });
+        }
+        // If there is a tree zoomed and if there are selected connections, delete them
+        else if (Zoom.isZoomed())
         {
-            Main.trees[tree].plumbInstance.setSuspendDrawing(false, true);
-        });
+            var zoomedTree = Zoom.getZoomed();
+            for (var connectionId in zoomedTree.selectedConnections)
+            {
+                var c = zoomedTree.plumbInstance.getConnections(
+                {
+                    source: zoomedTree.selectedConnections[connectionId].source,
+                    target: zoomedTree.selectedConnections[connectionId].target
+                });
+                delete zoomedTree.selectedConnections[connectionId];
+
+                $(".pathToDeadEnd").removeClass("pathToDeadEnd");
+                // Pick the first element in the array, because connections are unique
+                // and detach it
+                zoomedTree.plumbInstance.detach(c[0]);
+            }
+        }
 
         repaintZoomedNodes();
         MiniMap.update(true);
@@ -1075,6 +1100,16 @@ var Main;
             selectTree(elementId);
         else
             selectNode(elementId);
+
+        // If anything is selected here then we need to deselect all the connections
+        if (Zoom.isZoomed())
+        {
+            var zoomedTree = Zoom.getZoomed();
+            for (var connectionId in zoomedTree.selectedConnections)
+            {
+                deselectConnection(zoomedTree.plumbInstance, zoomedTree.selectedConnections, connectionId);
+            }
+        }
     }
 
     // Select a node.
@@ -1119,6 +1154,25 @@ var Main;
         // Update the side bar, so it displays the selected node.
         updateSideBar();
         updateButtons();
+    }
+
+    function deselectConnection(plumbInstance, selectedConnections, connectionId)
+    {
+        var cs = plumbInstance.getConnections(
+        {
+            source: selectedConnections[connectionId].source,
+            target: selectedConnections[connectionId].target
+        });
+
+        // Connection could just have been removed so we need to check if it still exists
+        if(cs.length > 0)
+        {
+            // Pick the first element in the array, because connections are unique
+            // and give the original color back to the connection
+            cs[0].setPaintStyle({strokeStyle:"#5c96bc"});
+        }
+
+        delete selectedConnections[connectionId];
     }
 
     function updateButtons()
@@ -1340,8 +1394,8 @@ var Main;
                 "left": leftOffsetPos
             });
 
-            tree.leftPos = gridLeftPos //store position to return to this point when zoomed in and out again
-            tree.topPos = gridTopPos
+            tree.leftPos = gridLeftPos; //store position to return to this point when zoomed in and out again
+            tree.topPos = gridTopPos;
             tree.level = Math.round(tree.topPos); //trees have a conversation level. trees on the same level are interleaved. trees on different levels are sequenced from top to bottom (low y to high y)
 
             MiniMap.update(true);
@@ -1362,7 +1416,7 @@ var Main;
 
         $.each(Main.trees, function(id, tree)
         {
-                available = available && !(tree.leftPos === gridX && tree.topPos === gridY)
+            available = available && !(tree.leftPos === gridX && tree.topPos === gridY);
         });
 
         return available;

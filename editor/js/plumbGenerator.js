@@ -9,16 +9,14 @@ var PlumbGenerator;
     PlumbGenerator =
     {
         genJsPlumbInstance : genJsPlumbInstance
-    }
+    };
 
-    //expects an element returned from a jquery selector
+    // Expects an element returned from a jquery selector
     function genJsPlumbInstance(container)
     {
         var instance = jsPlumb.getInstance();
 
         instance.setContainer(container);
-
-            // setup some defaults for jsPlumb.
 
         instance.importDefaults(
         {
@@ -37,48 +35,51 @@ var PlumbGenerator;
             ]
         });
 
-
-        // bind a dblclick listener to each connection; the connection is deleted. you could of course
-        // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
-        // happening.
+        // On dblclick, the connection will be deleted
         instance.bind("dblclick", function(c)
         {
             $(".pathToDeadEnd").removeClass("pathToDeadEnd");
             instance.detach(c);
-            Main.dehighlightParents();
-            Main.highlightParents(Main.selectedElement);
         });
 
-        // on click, select connector
-        instance.bind("click",function(c)
+        // On click, select the connection
+        instance.bind("click",function(c, e)
         {
-            if(c==null)
-                return;
+            if(!c) return;
 
-            // change color style
-            setTimeout(function()
+            // There are other elements (nodes or trees) selected, so deselect those elements
+            if (Main.selectedElements.length > 0) Main.selectElement(null);
+
+            var selectedConnections = Zoom.getZoomed().selectedConnections;
+            if (c.id in selectedConnections)
             {
-                c.setPaintStyle({strokeStyle:"darkgoldenrod"});
-            },5);
-            // time out so that the click can be finished
-            setTimeout(function()
-            {
-                // add new click event that deselects the arrow on first canvas click
-                $("#main").one("click", function()
+                if (e.ctrlKey)
                 {
-                    // find selected connection
-                    var con = instance.getConnections(
+                    Main.deselectConnection(instance, selectedConnections, c.id);
+                }
+                else
+                {
+                    for (var connectionId in selectedConnections)
                     {
-                        source: c.sourceId,
-                        target: c.targetId
-                    });
-                    if(con.length > 0) // connection can just have been removed
-                    {
-                    // connections are unique, so if it exists there is never more then one
-                    con[0].setPaintStyle({strokeStyle:"#5c96bc"});
+                        Main.deselectConnection(instance, selectedConnections, connectionId);
                     }
-                });
-            }, 30);
+                }
+            }
+            else
+            {
+                if (!e.ctrlKey)
+                {
+                    for (var connectionId in selectedConnections)
+                    {
+                        Main.deselectConnection(instance, selectedConnections, connectionId);
+                    }
+                }
+
+                selectedConnections[c.id] = { source: c.sourceId, target: c.targetId };
+
+                // Change the color of the connection
+                c.setPaintStyle({strokeStyle:"darkgoldenrod"});
+            }
         });
 
         instance.bind("beforeDrop", function(info)
