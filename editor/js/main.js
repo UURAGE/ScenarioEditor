@@ -880,7 +880,7 @@ var Main;
         plumbInstance.draggable(node,
         {
             constrain: function(currentCoordinates,element){
-                return [currentCoordinates[0],Math.max(0,currentCoordinates[1])];
+                return [Math.max(0, currentCoordinates[0]),Math.max(0,currentCoordinates[1])];
             },
 
             start: function(event)
