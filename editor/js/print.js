@@ -49,22 +49,41 @@ function printScript()
         // Put the name, except the "[+]" or "[-]" before it, at the top of the page
         htmlList.push('<h1>' + name + '</h1>');
         // Begin a container div that contains the treeDiv and forces a page break upon printing
-        htmlList.push(
-            '<div class="container" style="page-break-after:always;position:relative;height:1px;">'
-        );
+        htmlList.push('<div class="container" style="page-break-after:always;position:relative;height:1px;">');
+        // Loop over the contents of the tree div and put the relevant HTML in the htmlList
         for (var i = 0; i < treeDivContentList.length; i++)
         {
-            var html = treeDivContentList[i].outerHTML;
-            if (html && treeDivContentList[i].className !== '' &&
-                treeDivContentList[i].className !== 'ep' &&
-                treeDivContentList[i].className !== 'statementText' &&
-                treeDivContentList[i].className !== 'nodestatement' &&
-                treeDivContentList[i].className !== 'statementInput' &&
-                treeDivContentList[i].className !== 'imgDiv')
-                htmlList.push(html);
-            // The outerHTML for SVG is not supported in IE and ME, because there the HTML element is an SVGSVGElement
+            var outerHTML = treeDivContentList[i].outerHTML;
+            if (outerHTML && treeDivContentList[i].className)
+            {
+                // If it's a statement we need to loop over its contents and add only the relevant HTML
+                if (treeDivContentList[i].classList.contains('player')     ||
+                    treeDivContentList[i].classList.contains('computer')   ||
+                    treeDivContentList[i].classList.contains('conversation'))
+                {
+                    // Manually add the inner HTML
+                    outerHTML = outerHTML.slice(0, outerHTML.indexOf(treeDivContentList[i].innerHTML));
+                    htmlList.push(outerHTML);
+                    var statementDivContentList = $(treeDivContentList[i]).children();
+                    for (var j = 0; j < statementDivContentList.length; j++)
+                    {
+                        if (statementDivContentList[j].className !== 'ep'            &&
+                            statementDivContentList[j].className !== 'nodestatement' &&
+                            statementDivContentList[j].className !== 'statementInput')
+                        {
+                            htmlList.push(statementDivContentList[j].outerHTML);
+                        }
+                    }
+                    htmlList.push('</div>');
+                }
+                else
+                {
+                    htmlList.push(outerHTML);
+                }
+            }
+            // The outerHTML for SVG is not supported in IE and ME, because the HTMLElement is an SVGSVGElement
             // http://stackoverflow.com/questions/12865025/convert-svgsvgelement-to-string
-            else if (!html && treeDivContentList[i].className.baseVal === 'jsplumb-connector')
+            else if (!outerHTML && treeDivContentList[i].className.baseVal === 'jsplumb-connector')
             {
                 var svgHTML = (new XMLSerializer()).serializeToString(treeDivContentList[i]);
                 htmlList.push(svgHTML);
