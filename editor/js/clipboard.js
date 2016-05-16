@@ -221,6 +221,7 @@ var Clipboard;
         Main.selectElement(null);
 
         node.id = newNode.id;
+        node.parent = newNode.parent;
         delete node.position;
         delete node.connections;
 
