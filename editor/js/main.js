@@ -65,13 +65,13 @@ var Main;
 
         if (Config.configObject.characters.sequence.length > 1)
         {
-            for (var characterId in Config.configObject.characters.byId)
+            Config.configObject.characters.sequence.forEach(function (character)
             {
                 var option = $("<option>");
-                option.val(characterId);
-                option.text(characterId);
+                option.val(character.id);
+                option.text(character.id);
                 $("#characterSelection").append(option);
-            }
+            });
         }
         else
         {
