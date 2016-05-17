@@ -1283,10 +1283,11 @@ var Main;
         node.intent = intentsArray;
 
         // Save properties.
+        var acceptableScopes = ['per', 'per-' + node.type];
         for (var propertyId in Config.configObject.properties.byId)
         {
             var property = Config.configObject.properties.byId[propertyId];
-            if (property.scopes.statementScope !== "per") continue;
+            if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
             node.properties[propertyId] = property.type.getFromDOM($("#node-properties-container-" + property.id));
         }
         for (var propertyId in Config.configObject.characters.properties.byId)
@@ -1294,7 +1295,7 @@ var Main;
             for (var characterId in Config.configObject.characters.byId)
             {
                 var property = Config.configObject.characters.properties.byId[propertyId];
-                if (property.scopes.statementScope !== "per") continue;
+                if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
                 node.characters[characterId].properties[propertyId] = property.type.getFromDOM($("#node-character-properties-" + characterId + "-container-" + property.id));
             }
         }
@@ -1303,7 +1304,7 @@ var Main;
             for (var propertyId in Config.configObject.characters.byId[characterId].properties.byId)
             {
                 var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
-                if (property.scopes.statementScope !== "per") continue;
+                if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
                 node.characters[characterId].properties[propertyId] = property.type.getFromDOM($("#node-character-properties-" + characterId + "-container-" + property.id));
             }
         }
@@ -1772,9 +1773,10 @@ var Main;
             }
 
             // Properties:
+            var acceptableScopes = ['per', 'per-' + node.type];
             var showPropertyItem = function (propertiesObject, propertyItem, hLevel, container, idPrefix)
             {
-                if (propertyItem.scopes.statementScope !== 'per') return;
+                if (acceptableScopes.indexOf(propertyItem.scopes.statementScope) === -1) return;
                 if (propertyItem.kind === 'section')
                 {
                     var sectionContainer = $('<div>');
