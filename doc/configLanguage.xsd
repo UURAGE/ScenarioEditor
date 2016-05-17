@@ -84,6 +84,8 @@
 				<restriction base="string">
 					<enumeration value="independent" />
 					<enumeration value="per" />
+					<enumeration value="per-computer" />
+					<enumeration value="per-player" />
 				</restriction>
 			</simpleType>
 		</attribute>
