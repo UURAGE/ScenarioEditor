@@ -458,7 +458,7 @@ var Save;
         for (var characterId in characters)
         {
             var characterEl = addAndReturnElement("character", nameSpace, charactersEl);
-            characterEl.setAttribute("id", characterId);
+            characterEl.setAttribute("idref", characterId);
 
             var characterPropertiesEl = addAndReturnElement("properties", nameSpace, characterEl);
 

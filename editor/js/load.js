@@ -572,7 +572,7 @@ var Load;
         var characters = {};
         charactersXMLElement.children().each(function()
         {
-            var characterId = this.attributes.id.value;
+            var characterId = this.attributes.idref.value;
             if (characterId in Config.configObject.characters.byId)
             {
                 characters[characterId] = {};
