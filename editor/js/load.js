@@ -386,7 +386,7 @@ var Load;
         else
             id = "ext_" + id;
 
-        var characterIdRef = $(statement).attr('characterIdRef');
+        var characterIdRef = $(statement).attr('characteridref');
         var jumpPoint = $(statement).attr('jumpPoint') == "true";
         var initsNode = $(statement).attr('inits') == "true";
         var endNode = $(statement).attr('possibleEnd') == "true";
