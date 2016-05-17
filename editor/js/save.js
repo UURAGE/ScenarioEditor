@@ -92,6 +92,14 @@ var Save;
             paramRefEl.setAttribute("idref", parameterID);
         }
 
+        // Save characters
+        var charactersEl = addAndReturnElement("characters", nameSpace, definitionsEl);
+        Config.configObject.characters.sequence.forEach(function (character)
+        {
+            var characterEl = addAndReturnElement("character", nameSpace, charactersEl);
+            characterEl.setAttribute("id", character.id);
+        });
+
         // Save statement-independent properties
         generatePropertiesXML(metadataEl, Metadata.metaObject.properties, nameSpace);
 
