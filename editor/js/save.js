@@ -408,15 +408,7 @@ var Save;
                     break;
                 case Main.playerType:
                     connectionElName = "response";
-                    // Save the intents.
-                    var intentsEl = document.createElementNS(nameSpace, "intents");
-                    for (var j = 0; j < node.intent.length; j++)
-                    {
-                        var intentObj = node.intent[j];
-                        addAndReturnElement("intent", nameSpace, intentsEl).textContent = Main.escapeTags(intentObj.name);
-                    }
-                    if (intentsEl.childNodes.length !== 0)
-                        statementEl.appendChild(intentsEl);
+
                     // Save the parameter effects.
                     var parameterEffectsEl = addAndReturnElement("parameterEffects", nameSpace, statementEl);
 

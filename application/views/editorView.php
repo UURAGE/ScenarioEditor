@@ -163,10 +163,6 @@
                     </button>
                   </div>
                   <div class="small-buttons">
-                    <button id="labelText" class="subjectButton statements">
-                      <div><img src="<?php echo editor_url("png/main_buttons/intentions.png");?>" alt=""><?php sLang("edt_intentions"); ?></div>
-                      <div><img src="<?php echo editor_url("png/main_buttons/sentences.png");?>" alt=""><?php sLang("edt_statements"); ?></div>
-                    </button>
                     <button id="allParents" class="nodeButton">
                       <div><img src="<?php echo editor_url("png/main_buttons/parents.png");?>" alt=""><?php sLang("edt_parents"); ?></div>
                     </button>
@@ -283,15 +279,6 @@
                       <div id="effectParameterDiv"></div>
                       <button id="addParameterEffect" title="<?php sLang('edt_add');?>"><img src="<?php echo editor_url("png/others/plus.png");?>" alt=""></button>
                     </div>
-                  </div>
-                </div>
-                <div id="allIntentionsHTML" class="sidebarSection">
-                  <div class="sub-header clickable">
-                    <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/intentions.png");?>" alt=""><?php sLang('edt_intentions');?></h2>
-                  </div>
-                  <div class="collapsable">
-                    <div id="intentions"></div>
-                    <button id="addIntention" title="<?php sLang('edt_add');?>"><img src="<?php echo editor_url("png/others/plus.png");?>" alt="+"></button>
                   </div>
                 </div>
                 <div id="propertiesSection" class="sidebarSection">

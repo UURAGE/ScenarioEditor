@@ -433,7 +433,6 @@ var Load;
             preconditionsJS = loadPreconditions(preconditionsXML.children()[0]);
 
         var parameterEffects = [];
-        var intentsArray = [];
         var targets;
         if (type === Main.playerType)
         {
@@ -449,14 +448,6 @@ var Load;
                     value: parseInt(parameter.attributes.value.value)
                 });
             }
-
-            var intents = $(statement).find('intents').children();
-
-            for (var l = 0; l < intents.length; l++)
-                intentsArray.push(
-                {
-                    name: Main.unEscapeTags($(intents[l]).text())
-                });
 
             targets = $(statement).find('responses').children();
             if (targets.length === 0)
@@ -492,7 +483,6 @@ var Load;
             characterIdRef: characterIdRef,
             parameters: parameterEffects,
             preconditions: preconditionsJS,
-            intent: intentsArray,
             properties: properties,
             characters: characters,
             video: video,

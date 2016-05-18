@@ -26,7 +26,6 @@ var Main;
         addNewNode: addNewNode,
         addNewTree: addNewTree,
         applyChanges: applyChanges,
-        changeZoomedNodeTexts: changeZoomedNodeTexts,
         changeNodeText: changeNodeText,
         createChildNode: createChildNode,
         createEmptyTree: createEmptyTree,
@@ -255,18 +254,6 @@ var Main;
                 $(this).addClass("enabled");
                 highlightParents(Main.selectedElement);
             }
-        });
-        $("#labelText").on('click', function()
-        {
-            // Toggle between the labels.
-            if ($("#labelText").hasClass("statements"))
-            {
-                $("#labelText").attr("class", "intents enabled");
-            }
-            else
-                $("#labelText").attr("class", "statements");
-
-            changeZoomedNodeTexts();
         });
 
         $("#main").on('mouseenter', function()
@@ -669,7 +656,6 @@ var Main;
                 type: "alwaysTrue",
                 preconditions: []
             },
-            intent: [],
             properties: {},
             characters: Metadata.getNewDefaultCharactersObject(),
             video: null,
@@ -868,48 +854,44 @@ var Main;
 
         node.on("dblclick", function()
         {
-            // Make nodes configurable, only for the player nodes if they are not showing an intention
-            if (Main.nodes[id].type != Main.playerType || $("#labelText").hasClass("statements"))
+            var thisNode = $('#'+id);
+            var text = Main.nodes[id].text ? Main.nodes[id].text : "";
+
+            KeyControl.hotKeysActive = false;
+
+            // Make sure the text fits inside the node
+            var nodeTextDiv = thisNode.find('.statementText');
+            var nodeTextInput = thisNode.find('.statementInput');
+            // Retrieve the height before the div becomes invisible
+            var h = nodeTextDiv[0].clientHeight;
+            nodeTextDiv.hide();
+            nodeTextInput.show();
+
+            if(Main.nodes[id].type !== Main.conversationType)
             {
-                var thisNode = $('#'+id);
-                var text = Main.nodes[id].text ? Main.nodes[id].text : "";
+                // Disable dragging for this component
+                plumbInstance.setDraggable(thisNode, false);
 
-                KeyControl.hotKeysActive = false;
+                // Make room for typing text in the node
+                thisNode.height(h+35);
+                if (thisNode.width() < 128)
+                    thisNode.width(128);
 
-                // Make sure the text fits inside the node
-                var nodeTextDiv = thisNode.find('.statementText');
-                var nodeTextInput = thisNode.find('.statementInput');
-                // Retrieve the height before the div becomes invisible
-                var h = nodeTextDiv[0].clientHeight;
-                nodeTextDiv.hide();
-                nodeTextInput.show();
+                nodeTextInput.height("100%");
 
-                if(Main.nodes[id].type !== Main.conversationType)
-                {
-                    // Disable dragging for this component
-                    plumbInstance.setDraggable(thisNode, false);
-
-                    // Make room for typing text in the node
-                    thisNode.height(h+35);
-                    if (thisNode.width() < 128)
-                        thisNode.width(128);
-
-                    nodeTextInput.height("100%");
-
-                    // Fill node with current node text
-                    var txtArea = thisNode.find('textarea.nodestatement');
-                    txtArea.value = text;
-                    txtArea.focus();
-                }
-                else
-                {
-                    // For a conversation node, do nothing but give a warning
-                    // that this text is supposed to be changed in the sidebar
-                    thisNode.width = 50;
-                    // Open converstation popup
-                    selectElement(id);
-                    openConversation();
-                }
+                // Fill node with current node text
+                var txtArea = thisNode.find('textarea.nodestatement');
+                txtArea.value = text;
+                txtArea.focus();
+            }
+            else
+            {
+                // For a conversation node, do nothing but give a warning
+                // that this text is supposed to be changed in the sidebar
+                thisNode.width = 50;
+                // Open converstation popup
+                selectElement(id);
+                openConversation();
             }
         });
 
@@ -1066,16 +1048,6 @@ var Main;
                 $("#main").focus();
             }
          });
-    }
-
-    function changeZoomedNodeTexts()
-    {
-        if (!Zoom.isZoomed()) return;
-        Zoom.getZoomed().nodes.forEach(function (nodeID)
-        {
-            changeNodeText(nodeID);
-        });
-        repaintZoomedNodes();
     }
 
     function deleteAllSelected()
@@ -1277,16 +1249,6 @@ var Main;
 
         // Save preconditions.
         node.preconditions = ObjectGenerator.preconditionObject($("#preconditionsDiv").children().first());
-
-        // Save intents.
-        var intentsArray = [];
-        $("#intentions").children().each(function()
-        {
-            var intentObj = ObjectGenerator.intentionObject($(this));
-            if (intentObj !== null)
-                intentsArray.push(intentObj);
-        });
-        node.intent = intentsArray;
 
         // Save properties.
         var acceptableScopes = ['per', 'per-' + node.type];
@@ -1550,28 +1512,8 @@ var Main;
                 text += escapeTags(node.text);
                 break;
             case Main.playerType:
-                // for playerType node: show text input, if the "Intentions"-option is off
-                // (the relevant toolbar button then shows "Statements")
-                if ($("#labelText").hasClass("statements"))
-                    text = escapeTags(node.text);
-                else
-                {
-                    // if the "Intentions"-option is on, show a list of intentions
-                    text += "<ul>";
-                    for (var i = 0; i < node.intent.length; i++)
-                    {
-                        var intent = escapeTags(node.intent[i].name);
-                        text += "<li>" + intent + "</li>";
-                        var longestIntentWord = intent.split(" ").reduce(
-                            function(a, b)
-                            {
-                                return a.length > b.length ? a : b;
-                            });
-                        if (longestIntentWord.length > longestWord.length)
-                            longestWord = longestIntentWord;
-                    }
-                    text += "</ul>";
-                }
+                // for playerType node: show text input
+                text = escapeTags(node.text);
                 break;
             case Main.conversationType:
                 // for conversation type node: prefix textlines by the one that says them
@@ -1594,15 +1536,15 @@ var Main;
                 }
                 break;
         }
-        //decide node-width
+        // Calculate the node width
         if (longestWord === "")
+        {
             longestWord = text.split(" ").reduce(function(a, b)
             {
                 return a.length > b.length ? a : b;
             });
-
+        }
         var textLength = $(".lengthTest").text(longestWord)[0].clientWidth / 11;
-
         var width = Math.max(3, textLength * 1.08, Math.sqrt(text.length));
 
         // get the node
@@ -1733,7 +1675,7 @@ var Main;
 
         // Clear everything in the sidebar.
         $(
-            "#preconditionsDiv, #effectParameterDiv, #intentions, #node-properties"
+            "#preconditionsDiv, #effectParameterDiv, #node-properties"
         ).children().remove();
 
         // Don't show properties if no node or tree is selected. Display the minimap
@@ -1770,15 +1712,7 @@ var Main;
                 addedDiv.find(".value").val(parameter.value);
             }
 
-            // Intents:
-            for (var l = 0; l < node.intent.length; l++)
-            {
-                var intent = node.intent[l];
-                addedDiv = HtmlGenerator.addEmptyIntention();
-                addedDiv.find(".name").val(intent.name);
-            }
-
-            // Properties:
+            // Show the node properties
             var acceptableScopes = ['per', 'per-' + node.type];
             var showPropertyItem = function (propertiesObject, propertyItem, hLevel, container, idPrefix)
             {

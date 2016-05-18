@@ -5,15 +5,14 @@
     "use strict";
 
     var itemProperties = [],
-        propEditors = 
+        propEditors =
         {
             fallback: '<input tabindex="1" type="text">',
             type: '<select tabindex="1" class="type">' +
                 '<option value="player">' + LanguageManager.sLang("edt_draft_letter_player") + '</option>' +
                 '<option value="computer">' + LanguageManager.sLang("edt_draft_letter_computer") + '</option>' +
                 '</select>',
-            statement: '<textarea tabindex="1"></textarea>',
-            intention: '<input tabindex="1" type="text" class="intention-auto">'            
+            statement: '<textarea tabindex="1"></textarea>'
         },
         editing = null,
         editingCol = -1,
@@ -85,7 +84,6 @@
                 value = $(this).val(),
                 playerOnlyCols =
                 [
-                    itemProperties.indexOf("intention"),
                     itemProperties.indexOf("effect")
                 ];
 
@@ -324,7 +322,7 @@
         // recursion to skip cols that are disabled or contain a select element
         if (field.hasClass("disabled") || field.find("select").length > 0)
             obj = prevCol(obj);
-           
+
         return obj;
     }
 
@@ -350,7 +348,7 @@
         if (field.hasClass("disabled") || field.find("select").length > 0)
             obj = nextCol(obj);
 
-        return obj;        
+        return obj;
     }
 
     // String max length trimmer
@@ -509,24 +507,13 @@
         Main.selectElement(null);
         node.text = props.statement;
 
-        if (props.type === Main.playerType)
-        {
-            if (props.intention !== "")
-            {
-                node.intent.push(
-                {
-                    name: props.intention
-                });
-            }
-        }
-
         // make sure the starting input-text equals current saved node.text
         var nodeDiv = $("#"+node.id);
         var inputText = nodeDiv.find(".nodestatement");
         inputText.val(node.text);
         Main.changeNodeText(node.id);
         Main.selectElement(node.id);
-        
+
         removeItem(tr);
         return node;
     }

@@ -48,7 +48,7 @@
     LanguageManager.edt_plumb_error_conversation_child = "Error: een conversatie mag geen computerknoop als kind hebben.";
     LanguageManager.edt_plumb_error_conversation_siblings = "Error: gesprekken moeten enig kind zijn.";
     LanguageManager.edt_plumb_error_child_type = "Error: alle kinderen van één knoop moeten van hetzelfde type zijn.";
-    
+
     LanguageManager.edt_load_import_title = "Importeer script";
     LanguageManager.edt_load_import = "Importeer";
     LanguageManager.edt_load_error = "Er ging iets mis bij het laden van het bestand";
@@ -73,10 +73,8 @@
     LanguageManager.edt_metadata_title = "Eigenschappen Aanpassen";
     LanguageManager.edt_metadata_parameters_title = "Parameters Aanpassen";
     LanguageManager.edt_metadata_parameters_to_feedback = "Open Eindfeedback...";
-    LanguageManager.edt_metadata_add_intention_placeholder = "type intentie en enter";
 
     LanguageManager.edt_parts_statement = "Zin";
-    LanguageManager.edt_parts_intention = "Intentie";
     LanguageManager.edt_parts_feedback = "Feedback";
     LanguageManager.edt_parts_type = "Type";
     LanguageManager.edt_parts_delta = "delta";

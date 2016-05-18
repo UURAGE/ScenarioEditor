@@ -6,13 +6,12 @@ var ObjectGenerator;
 
 (function()
 {
-    ObjectGenerator = 
+    ObjectGenerator =
     {
         conversationObject: ConversationObject,
         parameterObject: ParameterObject,
         preconditionObject: PreconditionObject,
         effectObject: EffectObject,
-        intentionObject: IntentionObject,
         nullFromHTMLValue: NullFromHTMLValue
     };
 
@@ -92,15 +91,6 @@ var ObjectGenerator;
             value: Utils.parseDecimalIntWithDefault(div.find(".value").val(),
                 0)
         };
-    }
-
-    function IntentionObject(div)
-    {
-        var name = div.find(".name").val();
-        return (name === "" ? null :
-        {
-            name: div.find(".name").val()
-        });
     }
 
     function NullFromHTMLValue(value)

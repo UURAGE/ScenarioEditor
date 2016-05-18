@@ -73,10 +73,8 @@
     LanguageManager.edt_metadata_title = "Edit properties";
     LanguageManager.edt_metadata_parameters_title = "Edit parameters";
     LanguageManager.edt_metadata_parameters_to_feedback = "Open Feedback...";
-    LanguageManager.edt_metadata_add_intention_placeholder = "type intention and enter";
 
     LanguageManager.edt_parts_statement = "Statement";
-    LanguageManager.edt_parts_intention = "Intention";
     LanguageManager.edt_parts_feedback = "Feedback";
     LanguageManager.edt_parts_type = "Type";
     LanguageManager.edt_parts_delta = "delta";

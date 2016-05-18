@@ -392,16 +392,6 @@ button.enabled
   background-color: #ecf0f1;
 }
 
-#labelText.intents > div:nth-child(1)
-{
-  display: none;
-}
-
-#labelText.statements > div:nth-child(2)
-{
-  display: none;
-}
-
 #sidebar
 {
   width: 375px;
@@ -530,7 +520,6 @@ button.enabled
 
 #properties.computer > #allConversationsHTML,
 #properties.computer > #allEffectHTML,
-#properties.computer > #allIntentionsHTML,
 #properties.computer > #headerPlayer,
 #properties.computer > #headerConversation,
 #properties.computer > #treeSubject,
@@ -541,7 +530,6 @@ button.enabled
 
 #properties.conversation > #statementHTML,
 #properties.conversation > #allEffectHTML,
-#properties.conversation > #allIntentionsHTML,
 #properties.conversation > #headerPlayer,
 #properties.conversation > #headerComputer,
 #properties.conversation > #treeSubject,
@@ -556,10 +544,8 @@ button.enabled
 
 #properties.tree > #statementHTML,
 #properties.tree > #allEffectHTML,
-#properties.tree > #allIntentionsHTML,
 #properties.tree > #allConversationsHTML,
 #properties.tree > #allPreconditionsHTML,
-#properties.tree > #feedbackHTML,
 #properties.tree > #commentHTML,
 #properties.tree > #headerPlayer,
 #properties.tree > #headerComputer,
@@ -576,7 +562,7 @@ button.enabled
 }
 
 
-#statement, #comment, #feedback, #treeNameBox
+#statement, #comment, #treeNameBox
 {
   display: block;
   -moz-box-sizing: border-box;

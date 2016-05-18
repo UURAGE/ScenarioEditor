@@ -12,7 +12,6 @@ var HtmlGenerator;
     {
         parameterHTML: parameterHTML,
         addConversationOfType: addConversationOfType,
-        addEmptyIntention: addEmptyIntention,
         addEmptyParameterEffect: addEmptyParameterEffect,
         insertPreconditions: insertPreconditions,
         nullToHTMLValue: nullToHTMLValue,
@@ -25,7 +24,6 @@ var HtmlGenerator;
     var groupPreconditionHTML = Parts.getGroupPreconditionHTML();
     var parameterEffectHTML = Parts.getParameterEffectHTML();
     var scoreHTML = Parts.getScoreHTML();
-    var playerIntentionHTML = Parts.getIntentionHTML();
     var radioButtonCounter = 0;
 
     $(document).ready(function()
@@ -121,12 +119,6 @@ var HtmlGenerator;
             }
         });
 
-        $("#addIntention").on('click', function()
-        {
-            addEmptyIntention();
-            focusFirstTabindexedDescendant($(".intention").last());
-        });
-
         // Event handlers for removing HTML.
         $("#preconditionsDiv").on('click', '.deleteParent',
             function()
@@ -138,7 +130,7 @@ var HtmlGenerator;
                 updateGroupPreconditionCounter(
                     containingGroupPrecondition);
             });
-        $("#intentions, #effectParameterDiv, #conversationDiv"
+        $("#effectParameterDiv, #conversationDiv"
         ).on('click', '.deleteParent', function()
         {
             $(this).parent().remove();
@@ -153,13 +145,6 @@ var HtmlGenerator;
     {
         return $("#conversationDiv").append(conversationHTML).children()
             .last().addClass(type);
-    }
-
-    function addEmptyIntention()
-    {
-        $("#intentions").append(playerIntentionHTML);
-        var addedDiv = $("#intentions").children().last();
-        return addedDiv;
     }
 
     function addEmptyParameterEffect()

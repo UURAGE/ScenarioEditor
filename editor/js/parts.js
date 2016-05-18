@@ -12,7 +12,6 @@ var Parts;
         getDraftScreenHTML: getDraftScreenHTML,
         getParameterEffectHTML: getParameterEffectHTML,
         getGroupPreconditionHTML: getGroupPreconditionHTML,
-        getIntentionHTML: getIntentionHTML,
         getMediaScreenHTML: getMediaScreenHTML,
         getMetaScreenHTML: getMetaScreenHTML,
         getParameterScreenHTML: getParameterScreenHTML,
@@ -64,14 +63,12 @@ var Parts;
                                 LanguageManager.sLang("edt_draft_letter_player") + '/' + LanguageManager.sLang("edt_draft_letter_computer") +
                             '</th>' +
                             '<th class="col1">' + LanguageManager.sLang("edt_parts_statement") + '</th>' +
-                            '<th class="col2">' + LanguageManager.sLang("edt_parts_intention") + '</th>' +
-                            '<th class="col4">' + LanguageManager.sLang("edt_parts_feedback") + '</th>' +
                         '</tr>' +
                     '</table>' +
                 '</tr>' +
                 '<tr>' +
                     '<div id="tableSizeFixer">' +
-                        '<table id="draftTable" data-properties="type,statement,intention,effect,feedback" style="width:100%">' +
+                        '<table id="draftTable" data-properties="type,statement" style="width:100%">' +
                             '<colgroup>' +
                                '<col span="1" style="width: 15%;">' +
                                '<col span="1" style="width: 5%;">' +
@@ -122,15 +119,6 @@ var Parts;
                 '<button class="addGroupPrecondition"><img src="' + editor_url + 'png/others/plus.png" alt="+"> '+LanguageManager.sLang("edt_parts_add_group")+'</button>' +
                 '' +
                 '<button type="button" class="deleteParent" title="'+LanguageManager.sLang("edt_common_delete")+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"> '+LanguageManager.sLang("edt_parts_delete_group")+'</button>' +
-            '</div>';
-    }
-
-    function getIntentionHTML()
-    {
-        return '' +
-            '<div class="intention">' +
-                '<input type="text" class="name"></input>' +
-                '<button type="button" class="deleteParent" title="'+LanguageManager.sLang("edt_common_delete")+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
             '</div>';
     }
 
