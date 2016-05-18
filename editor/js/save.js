@@ -407,7 +407,7 @@ var Save;
                     connectionElName = "response";
                     break;
                 case Main.playerType:
-                    connectionElName = "nextComputerStatement";
+                    connectionElName = "response";
                     // Save the intents.
                     var intentsEl = document.createElementNS(nameSpace, "intents");
                     for (var j = 0; j < node.intent.length; j++)

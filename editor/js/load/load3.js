@@ -145,7 +145,6 @@ var Load3;
         Metadata.metaObject = {
             name: name,
             difficulty: difficulty,
-            characters: Metadata.metaObject.characters,
             description: description,
             properties: {},
             characters: Metadata.getNewDefaultCharactersObject(),

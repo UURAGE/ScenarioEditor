@@ -458,9 +458,9 @@ var Load;
                     name: Main.unEscapeTags($(intents[l]).text())
                 });
 
-            targets = $(statement).find('nextComputerStatements').children();
+            targets = $(statement).find('responses').children();
             if (targets.length === 0)
-                targets = $(statement).find('nextComputerStatement');
+                targets = $(statement).find('response');
         }
         else
             targets = $(statement).find('responses').children();
