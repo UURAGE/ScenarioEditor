@@ -480,7 +480,7 @@ var Load;
             }
         }
 
-        var properties = loadProperties($(statement).children('properties'));
+        var properties = loadProperties($(statement).children('propertyValues'));
 
         var characters = loadCharacters($(statement).children('characters'));
 
@@ -577,7 +577,7 @@ var Load;
             {
                 characters[characterId] = {};
                 characters[characterId].properties = {};
-                $(this).children('properties').children().each(function()
+                $(this).children('propertyValues').children().each(function()
                 {
                     var propertyId = this.attributes.idref.value;
                     if (propertyId in Config.configObject.characters.properties.byId)

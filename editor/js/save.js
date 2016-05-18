@@ -450,11 +450,11 @@ var Save;
 
     function generatePropertiesXML(element, properties, nameSpace)
     {
-        var propertiesEl = addAndReturnElement("properties", nameSpace, element);
+        var propertiesEl = addAndReturnElement("propertyValues", nameSpace, element);
         for (var propertyId in properties)
         {
             var propertyValue = properties[propertyId];
-            var propertyEl = addAndReturnElement("property", nameSpace, propertiesEl);
+            var propertyEl = addAndReturnElement("propertyValue", nameSpace, propertiesEl);
             propertyEl.setAttribute("idref", propertyId);
             Config.configObject.properties.byId[propertyId].type.toXML(propertyEl, propertyValue);
         }
@@ -468,12 +468,12 @@ var Save;
             var characterEl = addAndReturnElement("character", nameSpace, charactersEl);
             characterEl.setAttribute("idref", characterId);
 
-            var characterPropertiesEl = addAndReturnElement("properties", nameSpace, characterEl);
+            var characterPropertiesEl = addAndReturnElement("propertyValues", nameSpace, characterEl);
 
             for (var propertyId in characters[characterId].properties)
             {
                 var propertyValue = characters[characterId].properties[propertyId];
-                var propertyEl = addAndReturnElement("property", nameSpace, characterPropertiesEl);
+                var propertyEl = addAndReturnElement("propertyValue", nameSpace, characterPropertiesEl);
                 propertyEl.setAttribute("idref", propertyId);
 
                 if (propertyId in Config.configObject.characters.properties.byId)
