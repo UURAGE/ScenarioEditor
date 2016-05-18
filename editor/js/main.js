@@ -1258,6 +1258,12 @@ var Main;
         // Get the selected node.
         var node = Main.nodes[Main.selectedElement];
 
+        // Save the selected characterId when there are multiple characters.
+        if (node.type === Main.computerType && Config.configObject.characters.sequence.length > 1)
+        {
+            node.characterIdRef = $("#characterSelection option:selected").val();
+        }
+
         // Save parameter effects.
         var parameterEffects = [];
 
@@ -1296,7 +1302,7 @@ var Main;
             {
                 var property = Config.configObject.characters.properties.byId[propertyId];
                 if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
-                node.characters[characterId].properties[propertyId] = property.type.getFromDOM($("#node-character-properties-" + characterId + "-container-" + property.id));
+                node.characters[characterId].properties[propertyId] = property.type.getFromDOM($("#node-properties-" + characterId + "-container-" + property.id));
             }
         }
         for (var characterId in Config.configObject.characters.byId)
@@ -1305,7 +1311,7 @@ var Main;
             {
                 var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
                 if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
-                node.characters[characterId].properties[propertyId] = property.type.getFromDOM($("#node-character-properties-" + characterId + "-container-" + property.id));
+                node.characters[characterId].properties[propertyId] = property.type.getFromDOM($("#node-properties-" + characterId + "-container-" + property.id));
             }
         }
 
@@ -1536,10 +1542,10 @@ var Main;
         {
             case Main.computerType:
                 // for computerType node: just input text
-                characterIdPrefix = "<b>" + node.characterIdRef + ": </b>";
+                // with characterId prefix when there are multiple characters
                 if (Config.configObject.characters.sequence.length > 1)
                 {
-                    text += characterIdPrefix;
+                    text += "<b>" + node.characterIdRef + ": </b>";
                 }
                 text += escapeTags(node.text);
                 break;
@@ -1727,7 +1733,7 @@ var Main;
 
         // Clear everything in the sidebar.
         $(
-            "#preconditionsDiv, #effectParameterDiv, #intentions, #node-properties, #node-character-properties"
+            "#preconditionsDiv, #effectParameterDiv, #intentions, #node-properties"
         ).children().remove();
 
         // Don't show properties if no node or tree is selected. Display the minimap
@@ -1807,7 +1813,7 @@ var Main;
                 showPropertyItem(node.properties, subItem, 3, nodePropertiesEl, nodePropertiesEl.attr('id'));
             });
 
-            nodeCharacterPropertiesEl = $('#node-character-properties');
+            nodeCharacterPropertiesEl = $('#node-properties');
             accordionDiv = $('<div>');
             nodeCharacterPropertiesEl.append(accordionDiv);
             var characterHeaderStartLevel = 3;

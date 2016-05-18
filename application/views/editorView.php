@@ -148,7 +148,6 @@
                   <div class="big-buttons">
                     <button id="newPlayerNode" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/player.png");?>" alt=""><?php sLang("edt_player"); ?></div></button>
                     <button id="newComputerNode" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/computer.png");?>" alt=""><?php sLang("edt_computer"); ?></div></button>
-                    <select name="characterSelection" id="characterSelection" class="subjectButton"></select>
                     <button id="newChildNode" class="nodeButton"><div><img src="<?php echo editor_url("png/main_buttons/child.png");?>" alt=""><?php sLang("edt_child"); ?></div></button>
                   </div>
                   <div class="small-buttons">
@@ -251,6 +250,15 @@
                 <div id="headerConversation" class="header clickable collapseAll">
                   <h1><span class="masterclicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/conversation.png");?>" alt=""><?php sLang('edt_conversation');?></h1>
                 </div>
+                <div id="characterSection" class="sidebarSection">
+                  <div class="sub-header clickable">
+                    <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/intentions.png");?>" alt=""><?php sLang('edt_character');?></h2>
+                  </div>
+                  <div class="collapsable">
+                    <select name="characterSelection" id="characterSelection" class="subjectButton"></select>
+                    <div id="node-character-own-properties"></div>
+                  </div>
+                </div>
                 <div id="allConversationsHTML">
                   <span id="conversationButtonSpan">
                     <button class="addConversation" data-type="playerText" title="<?php sLang('edt_player');?>"><img src="<?php echo editor_url("png/conversation/conversation_add_player.png");?>" alt=""></button>
@@ -292,14 +300,6 @@
                   </div>
                   <div class="collapsable">
                     <div id="node-properties"></div>
-                  </div>
-                </div>
-                <div id="characterPropertiesSection" class="sidebarSection">
-                  <div class="sub-header clickable">
-                    <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/intentions.png");?>" alt=""><?php sLang('edt_character_properties');?></h2>
-                  </div>
-                  <div class="collapsable">
-                    <div id="node-character-properties"></div>
                   </div>
                 </div>
                 <div id="mediaSelector" class="sidebarSection">

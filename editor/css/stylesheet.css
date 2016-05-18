@@ -522,7 +522,8 @@ button.enabled
 #properties.player > #treeSubject,
 #properties.player > #jumpNode,
 #properties.player > #initsNode,
-#properties.player > #optionalSubject
+#properties.player > #optionalSubject,
+#properties.player > #characterSection
 {
   display: none;
 }
@@ -546,7 +547,9 @@ button.enabled
 #properties.conversation > #treeSubject,
 #properties.conversation > #jumpNode,
 #properties.conversation > #initsNode,
-#properties.conversation > #optionalSubject
+#properties.conversation > #optionalSubject,
+#properties.conversation > #propertiesSection,
+#properties.conversation > #characterSection
 {
   display: none;
 }
@@ -566,8 +569,8 @@ button.enabled
 #properties.tree > #initsNode,
 #properties.tree > #jumpNode,
 #properties.tree > #calculateScore,
-#properties.tree > #propertiesSection
-#properties.tree > #characterPropertiesSection
+#properties.tree > #propertiesSection,
+#properties.tree > #characterSection
 {
   display: none;
 }
