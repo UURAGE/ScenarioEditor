@@ -642,7 +642,7 @@ var Main;
             }
             else
             {
-                characterIdRef = Config.configObject.characters.sequence[0];
+                characterIdRef = Config.configObject.characters.sequence[0].id;
             }
         }
 
@@ -1714,6 +1714,7 @@ var Main;
             }
 
             // Show the node properties
+            var anyPropertyShown = false;
             var acceptableScopes = ['per', 'per-' + node.type];
             var showPropertyItem = function (propertiesObject, propertyItem, hLevel, container, idPrefix)
             {
@@ -1740,6 +1741,7 @@ var Main;
                     {
                         propertyItem.type.setInDOM(propertyContainer, propertiesObject[propertyItem.id]);
                     }
+                    anyPropertyShown = true;
                 }
             };
             var nodePropertiesEl = $('#node-properties');
@@ -1747,6 +1749,9 @@ var Main;
             {
                 showPropertyItem(node.properties, subItem, 3, nodePropertiesEl, nodePropertiesEl.attr('id'));
             });
+
+            var nodePropertyShown = anyPropertyShown;
+            anyPropertyShown = false;
 
             nodeCharacterPropertiesEl = $('#node-properties');
             accordionDiv = $('<div>');
@@ -1770,11 +1775,22 @@ var Main;
                     showPropertyItem(node.characters[character.id].properties, propertyItem, characterHeaderStartLevel + 1, characterDiv, containerIdPrefix);
                 });
             });
-            accordionDiv.accordion(
+
+            if (!nodePropertyShown && ! anyPropertyShown)
             {
-                active: false,
-                collapsible: true
-            });
+                $("#propertiesSection").hide();
+            }
+            else if (!anyPropertyShown)
+            {
+                $("#propertiesSection").show();
+                accordionDiv.hide();
+            }
+            else
+            {
+                $("#propertiesSection").show();
+                accordionDiv.accordion({ active: false, collapsible: true });
+                accordionDiv.show();
+            }
 
             $("#endNodeCheckbox").prop("checked", node.endNode);
             $("#initsNodeCheckbox").prop("checked", node.initsNode);
