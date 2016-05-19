@@ -393,13 +393,6 @@ var Save;
                 preconditionsEl.appendChild(preconditionsInXML);
             }
 
-            // Save per-statement properties
-            generatePropertiesXML(statementEl, node.properties, nameSpace);
-
-            // Save per-statement character properties
-            generateCharactersXML(statementEl, node.characters, nameSpace);
-
-            var connectionElName = 'response';
             if (node.type !== Main.conversationType)
             {
                 // Save the parameter effects.
@@ -414,6 +407,14 @@ var Save;
                     pEffElement.setAttribute("value", pEff.value);
                 }
             }
+
+            // Save per-statement properties
+            generatePropertiesXML(statementEl, node.properties, nameSpace);
+
+            // Save per-statement character properties
+            generateCharactersXML(statementEl, node.characters, nameSpace);
+
+            var connectionElName = 'response';
 
             // Get the outgoing connections of the node
             var connections = tree.plumbInstance.getConnections(
