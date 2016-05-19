@@ -112,8 +112,16 @@
                   <div class="small-buttons">
                     <button id="fileButton" class="globalButton dropdownButton"><div><?php sLang("edt_file"); ?>...</div></button>
                     <div id="fileDropdown" class="dropdownItems">
-                      <button id="importScript" class="globalButton" title="<?php sLang('edt_import_script_title'); ?>"><div><?php sLang("edt_import_script"); ?>...</div></button>
-                      <button id="exportScript" class="globalButton" title="<?php sLang('edt_export_script_title'); ?>"><div><?php sLang("edt_export_script"); ?>...</div></button>
+                      <button id="importScript" class="globalButton" title="<?php sLang('edt_import_script_title'); ?>">
+                        <div>
+                          <img src="<?php echo editor_url("png/main_buttons/import.png");?>" alt=""><?php sLang("edt_import_script"); ?>...
+                        </div>
+                      </button>
+                      <button id="exportScript" class="globalButton" title="<?php sLang('edt_export_script_title'); ?>">
+                        <div>
+                          <img src="<?php echo editor_url("png/main_buttons/export.png");?>" alt=""><?php sLang("edt_export_script"); ?>...
+                        </div>
+                      </button>
                       <div class="separator"></div>
                       <button id="print" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/print.png");?>" alt=""><?php sLang("edt_print"); ?>...</div></button>
                     </div>
@@ -132,27 +140,23 @@
                 </div>
               </div>
               <div id="ribbon">
-                <div class="buttonGroup" id="clipboard">
-                  <!-- Clipboard -->
-                  <div class="big-buttons">
-                    <button id="pasteNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/draft.png");?>" alt=""><?php sLang("edt_paste"); ?></div></button>
-                  </div>
-                  <div class="small-buttons">
-                    <button id="copyNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/save.png");?>" alt=""><?php sLang("edt_copy"); ?></div></button>
-                    <button id="cutNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/cut.png");?>" alt=""><?php sLang("edt_cut"); ?></div></button>
-                    <button id="deleteNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/trashbin.png");?>" alt=""><?php sLang("btn_delete"); ?></div></button>
-                  </div>
-                </div>
                 <div class="buttonGroup" id="edit">
                   <!-- Edit -->
                   <div class="big-buttons">
+                    <button id="newTree" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/subject.png");?>" alt=""><?php sLang("edt_subject"); ?></div></button>
                     <button id="newPlayerNode" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/player.png");?>" alt=""><?php sLang("edt_player"); ?></div></button>
                     <button id="newComputerNode" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/computer.png");?>" alt=""><?php sLang("edt_computer"); ?></div></button>
                     <button id="newChildNode" class="nodeButton"><div><img src="<?php echo editor_url("png/main_buttons/child.png");?>" alt=""><?php sLang("edt_child"); ?></div></button>
-                  </div>
-                  <div class="small-buttons">
-                    <button id="newTree" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/subject.png");?>" alt=""><?php sLang("edt_subject"); ?></div></button>
                     <button id="toggleDraftScreen" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/draft.png");?>" alt=""><?php sLang("edt_note_pad"); ?></div></button>
+                  </div>
+                </div>
+                <div class="buttonGroup" id="clipboard">
+                  <!-- Clipboard -->
+                  <div class="big-buttons">
+                    <button id="copyNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/copy.png");?>" alt=""><?php sLang("edt_copy"); ?></div></button>
+                    <button id="cutNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/cut.png");?>" alt=""><?php sLang("edt_cut"); ?></div></button>
+                    <button id="pasteNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/paste_placeholder.png");?>" alt=""><?php sLang("edt_paste"); ?></div></button>
+                    <button id="deleteNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/trashbin.png");?>" alt=""><?php sLang("btn_delete"); ?></div></button>
                   </div>
                 </div>
                 <div class="buttonGroup" id="view">
@@ -161,8 +165,6 @@
                     <button id="repositionGraph" class="subjectButton" title="<?php sLang('edt_arrange_title'); ?>">
                       <div><img src="<?php echo editor_url("png/main_buttons/arrange.png");?>" alt=""><?php sLang("edt_arrange"); ?></div>
                     </button>
-                  </div>
-                  <div class="small-buttons">
                     <button id="allParents" class="nodeButton">
                       <div><img src="<?php echo editor_url("png/main_buttons/parents.png");?>" alt=""><?php sLang("edt_parents"); ?></div>
                     </button>
