@@ -10,8 +10,11 @@ var Config;
         types: {}
     };
 
-    var defaultScopes = { statementScope: 'independent' };
-    var defaultPropertyCollection = { kind: 'toplevel', scopes: defaultScopes, sequence: [], byId: {} };
+    var defaultPropertyScopes = { statementScope: 'independent' };
+    var defaultPropertyCollection = { kind: 'toplevel', scopes: defaultPropertyScopes, sequence: [], byId: {} };
+
+    var defaultParameterScopes = { statementScope: 'per' };
+    var defaultParameterCollection = { kind: 'toplevel', scopes: defaultParameterScopes, sequence: [], byId: {} }
 
     $(document).ready(loadConfig);
 
@@ -20,7 +23,8 @@ var Config;
         var configXML = $($.parseXML($('#config').text())).children('config');
         var config = {};
 
-        config.properties = loadPropertyCollection(configXML.children('properties'), 'toplevel', defaultScopes);
+        config.properties = loadCollection(configXML.children('properties'), 'property', 'toplevel', defaultPropertyScopes);
+        config.parameters = loadCollection(configXML.children('parameters'), 'parameter', 'toplevel', defaultParameterScopes);
 
         if (configXML.children('character').length === 1)
         {
@@ -37,35 +41,35 @@ var Config;
         Config.configObject = config;
     }
 
-    function loadPropertyNode(nodeXML, parentScopes)
+    function loadNode(nodeXML, nodeName, parentScopes)
     {
-        if (nodeXML.nodeName === "property")
+        if (nodeXML.nodeName === nodeName)
         {
-            var propertyScopes = loadScopes(nodeXML);
-            mergeScopes(propertyScopes, parentScopes);
+            var nodeScopes = loadScopes(nodeXML);
+            mergeScopes(nodeScopes, parentScopes);
             return {
-                kind: 'property',
+                kind: nodeName,
                 id: nodeXML.getAttribute('id'),
                 name: nodeXML.getAttribute('name'),
                 description: nodeXML.getAttribute('description'),
                 optional: Utils.parseBool(nodeXML.getAttribute('optional')),
-                scopes: propertyScopes,
+                scopes: nodeScopes,
                 type: loadType($(nodeXML).children().eq(0))
             };
         }
-        else if (nodeXML.nodeName === "propertySection")
+        else if (nodeXML.nodeName === nodeName + "Section")
         {
-            var subResult = loadPropertyCollection($(nodeXML), 'section', parentScopes);
+            var subResult = loadCollection($(nodeXML), nodeName, 'section', parentScopes);
             subResult.name = nodeXML.getAttribute('name');
             return subResult;
         }
         else
         {
-            return loadPropertyCollection($(nodeXML), 'group', parentScopes);
+            return loadCollection($(nodeXML), 'group', parentScopes);
         }
     }
 
-    function loadPropertyCollection(collectionXML, kind, parentScopes)
+    function loadCollection(collectionXML, nodeName, kind, parentScopes)
     {
         var collectionScopes = loadScopes(collectionXML[0]);
         mergeScopes(collectionScopes, parentScopes);
@@ -74,8 +78,8 @@ var Config;
         var byId = {};
         collectionXML.children().each(function (index, childXML)
         {
-            var subResult = loadPropertyNode(childXML, collectionScopes);
-            if (subResult.kind === 'property')
+            var subResult = loadNode(childXML, nodeName, collectionScopes);
+            if (subResult.kind === nodeName)
             {
                 sequence.push(subResult);
                 byId[subResult.id] = subResult;
@@ -137,28 +141,30 @@ var Config;
             characters.sequence.push(character);
             characters.byId[character.id] = character;
         });
-        characters.properties = loadPropertyCollectionOrDefault($(collectionXML).children('properties'));
+        characters.properties = loadCollectionOrDefault($(collectionXML).children('properties'), 'property', defaultPropertyCollection, defaultPropertyScopes);
+        characters.parameters = loadCollectionOrDefault($(collectionXML).children('parameters'), 'parameter', defaultParameterCollection, defaultParameterScopes);
         return characters;
     }
 
     function loadCharacterNode(nodeXML)
     {
-        var properties = loadPropertyCollectionOrDefault($(nodeXML).children('properties'));
-        return { id: nodeXML.getAttribute('id'), properties: properties};
+        var properties = loadCollectionOrDefault($(nodeXML).children('properties'), 'property', defaultPropertyCollection, defaultPropertyScopes);
+        var parameters = loadCollectionOrDefault($(nodeXML).children('parameters'), 'parameter', defaultParameterCollection, defaultParameterScopes);
+        return { id: nodeXML.getAttribute('id'), properties: properties, parameters: parameters};
     }
 
-    function loadPropertyCollectionOrDefault(propertiesXML)
+    function loadCollectionOrDefault(collectionXML, nodeName, defaultCollection, defaultScopes)
     {
-        var properties = {};
-        if (propertiesXML.length > 0)
+        var collection = {};
+        if (collectionXML.length > 0)
         {
-            properties = loadPropertyCollection(propertiesXML, 'toplevel', defaultScopes);
+            collection = loadCollection(collectionXML, nodeName, 'toplevel', defaultScopes);
         }
         else
         {
-            $.extend(properties, defaultPropertyCollection);
+            $.extend(collection, defaultCollection);
         }
-        return properties;
+        return collection;
     }
 
     Config.types =
