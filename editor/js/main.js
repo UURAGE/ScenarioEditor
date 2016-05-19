@@ -74,7 +74,8 @@ var Main;
         }
         else
         {
-            $("#characterSelection").remove();
+            $("#characterSection").remove();
+            $("#propertiesSection .collapsable").append($('<div>', { id:"node-character-own-properties" }));
         }
 
         var scriptNameInput = $('<input type="text" maxlength="35">');
