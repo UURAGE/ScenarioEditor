@@ -42,6 +42,7 @@ $lang["edt_preconditions"] = "Precondities";
 $lang["edt_preconditions_title"] = "Knoop beschikbaar maken afhankelijk van parameters";
 $lang["edt_effects"] = "Effecten";
 $lang["edt_effects_title"] = "Effect van knoop op parameters";
+$lang["edt_add_effect"] = "Effect toevoegen";
 $lang["edt_emotion"] = "Emotie";
 $lang["edt_emotions"] = "Emoties";
 $lang["edt_add"] = "Toevoegen";

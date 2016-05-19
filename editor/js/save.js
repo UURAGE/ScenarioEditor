@@ -399,29 +399,20 @@ var Save;
             // Save per-statement character properties
             generateCharactersXML(statementEl, node.characters, nameSpace);
 
-            var connectionElName = '';
-            switch (node.type)
+            var connectionElName = 'response';
+            if (node.type !== Main.conversationType)
             {
-                case Main.conversationType:
-                case Main.computerType:
-                    connectionElName = "response";
-                    break;
-                case Main.playerType:
-                    connectionElName = "response";
+                // Save the parameter effects.
+                var parameterEffectsEl = addAndReturnElement("parameterEffects", nameSpace, statementEl);
 
-                    // Save the parameter effects.
-                    var parameterEffectsEl = addAndReturnElement("parameterEffects", nameSpace, statementEl);
-
-                    for (var k = 0; k < node.parameters.length; k++)
-                    {
-                        var pEff = node.parameters[k];
-                        var pEffElement = addAndReturnElement("parameterEffect", nameSpace, parameterEffectsEl);
-                        pEffElement.setAttribute("idref", pEff.parameterid);
-                        pEffElement.setAttribute("changeType", pEff.changeType);
-                        pEffElement.setAttribute("value", pEff.value);
-                    }
-
-                    break;
+                for (var k = 0; k < node.parameters.length; k++)
+                {
+                    var pEff = node.parameters[k];
+                    var pEffElement = addAndReturnElement("parameterEffect", nameSpace, parameterEffectsEl);
+                    pEffElement.setAttribute("idref", pEff.parameterid);
+                    pEffElement.setAttribute("changeType", pEff.changeType);
+                    pEffElement.setAttribute("value", pEff.value);
+                }
             }
 
             // Get the outgoing connections of the node

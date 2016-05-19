@@ -433,22 +433,22 @@ var Load;
             preconditionsJS = loadPreconditions(preconditionsXML.children()[0]);
 
         var parameterEffects = [];
+        var pEffEl = $(statement).find('parameterEffects');
+        var pEffs = pEffEl.children(); //all parameter effects of the node.
+        for (var j = 0; j < pEffs.length; j++)
+        {
+            var parameter = pEffs[j];
+            parameterEffects.push(
+            {
+                parameterid: parameter.attributes.idref.value,
+                changeType: parameter.attributes.changeType.value,
+                value: parseInt(parameter.attributes.value.value)
+            });
+        }
+
         var targets;
         if (type === Main.playerType)
         {
-            var pEffEl = $(statement).find('parameterEffects');
-            var pEffs = pEffEl.children(); //all parameter effects of the node.
-            for (var j = 0; j < pEffs.length; j++)
-            {
-                var parameter = pEffs[j];
-                parameterEffects.push(
-                {
-                    parameterid: parameter.attributes.idref.value,
-                    changeType: parameter.attributes.changeType.value,
-                    value: parseInt(parameter.attributes.value.value)
-                });
-            }
-
             targets = $(statement).find('responses').children();
             if (targets.length === 0)
                 targets = $(statement).find('response');

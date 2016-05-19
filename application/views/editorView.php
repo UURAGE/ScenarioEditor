@@ -250,7 +250,7 @@
                 </div>
                 <div id="characterSection" class="sidebarSection">
                   <div class="sub-header clickable">
-                    <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/intentions.png");?>" alt=""><?php sLang('edt_character');?></h2>
+                    <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/character.png");?>" alt=""><?php sLang('edt_character');?></h2>
                   </div>
                   <div class="collapsable">
                     <select name="characterSelection" id="characterSelection" class="subjectButton"></select>
@@ -277,15 +277,14 @@
                   </div>
                   <div class="collapsable">
                     <div id="parameterWrapper">
-                      <?php sLang('edt_parameters');?>
                       <div id="effectParameterDiv"></div>
-                      <button id="addParameterEffect" title="<?php sLang('edt_add');?>"><img src="<?php echo editor_url("png/others/plus.png");?>" alt=""></button>
+                      <button id="addParameterEffect" title="<?php sLang('edt_add');?>"><img src="<?php echo editor_url("png/others/plus.png");?>" alt=""> <?php sLang('edt_add_effect');?></button>
                     </div>
                   </div>
                 </div>
                 <div id="propertiesSection" class="sidebarSection">
                   <div class="sub-header clickable">
-                    <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/intentions.png");?>" alt=""><?php sLang('edt_properties');?></h2>
+                    <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/properties.png");?>" alt=""><?php sLang('edt_properties');?></h2>
                   </div>
                   <div class="collapsable">
                     <div id="node-properties"></div>

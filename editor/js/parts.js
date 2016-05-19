@@ -96,7 +96,7 @@ var Parts;
     function getParameterEffectHTML()
     {
         return '' +
-            '<div class="ParametrEffect">' +
+            '<div>' +
                 '<select class="parameterid"></select>' +
                 getChangeTypeHTML() +
                 '<input type="number" class="value" pattern="[+\\-]?\\d*" style="width:40px;" />' +
