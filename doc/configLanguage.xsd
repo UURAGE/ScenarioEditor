@@ -8,12 +8,14 @@
 		<complexType>
 			<sequence>
 				<element name="properties" type="tns:propertiesType" />
+				<element name="parameters" type="tns:parameterType" />
 				<choice>
 					<element ref="tns:character" />
 					<element name="characters">
 						<complexType>
 							<sequence>
 								<element name="properties" type="tns:propertiesType" minOccurs="0" maxOccurs="1" />
+								<element name="parameters" type="tns:parameterType" minOccurs="0" maxOccurs="1"/>
 								<element ref="tns:character" minOccurs="1" maxOccurs="unbounded" />
 							</sequence>
 						</complexType>
@@ -25,10 +27,14 @@
 				</choice>
 			</sequence>
 		</complexType>
-	   <key name="propertyID">
-		   <selector xpath=".//tns:property" />
-		   <field xpath="@id" />
-	   </key>
+		<key name="propertyID">
+			<selector xpath=".//tns:property" />
+			<field xpath="@id" />
+		</key>
+		<key name="parameterID">
+			<selector xpath=".//tns:parameter" />
+			<field xpath="@id" />
+		</key>
 	</element>
 	<element name="property">
 		<complexType>
@@ -40,10 +46,21 @@
 			<attributeGroup ref="tns:propertyScopes" />
 		</complexType>
 	</element>
+	<element name="parameter">
+		<complexType>
+			<group ref="tns:typeGroup" />
+			<attribute name="id" type="string" use="required" />
+			<attribute name="name" type="string" use="required" />
+			<attribute name="optional" type="boolean" use="optional" default="false" />
+			<attribute name="description" type="string" use="optional" />
+			<attributeGroup ref="tns:parameterScopes" />
+		</complexType>
+	</element>
 	<element name="character">
 		<complexType>
 			<sequence>
 				<element name="properties" type="tns:propertiesType" minOccurs="0" maxOccurs="1" />
+				<element name="parameters" type="tns:parameterType" minOccurs="0" maxOccurs="1"/>
 			</sequence>
 			<attribute name="id" type="string" use="required" />
 		</complexType>
@@ -64,6 +81,22 @@
 		</choice>
 		<attributeGroup ref="tns:propertyScopes" />
 	</complexType>
+	<complexType name="parameterType">
+		<choice minOccurs="0" maxOccurs="unbounded">
+			<element ref="tns:parameter" />
+			<element name="parameterGroup" type="tns:parameterType" />
+			<element name="parameterSection">
+				<complexType>
+					<complexContent>
+						<extension base="tns:parameterType">
+							<attribute name="name" type="string" use="required" />
+						</extension>
+					</complexContent>
+				</complexType>
+			</element>
+		</choice>
+		<attributeGroup ref="tns:parameterScopes" />
+	</complexType>
 	<group name="typeGroup">
 		<choice>
 			<element name="typeBoolean" />
@@ -83,6 +116,17 @@
 			<simpleType>
 				<restriction base="string">
 					<enumeration value="independent" />
+					<enumeration value="per" />
+					<enumeration value="per-computer" />
+					<enumeration value="per-player" />
+				</restriction>
+			</simpleType>
+		</attribute>
+	</attributeGroup>
+	<attributeGroup name="parameterScopes">
+		<attribute name="statementScope" use="optional" default="per">
+			<simpleType>
+				<restriction base="string">
 					<enumeration value="per" />
 					<enumeration value="per-computer" />
 					<enumeration value="per-player" />
