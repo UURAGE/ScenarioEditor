@@ -31,12 +31,11 @@
 
         if (connections.length === 0) //if this node has no parents, then the scores are the default value.
         {
-            var pObj = Metadata.metaObject.parameterObject;
             var defaultScore = {};
 
-            for (var p in pObj)
+            for (var pId in Metadata.metaObject.parameters)
             {
-                var param = pObj[p];
+                var param = Metadata.metaObject.parameters[pId];
 
                 defaultScore[param.name] = {
                     min: param.initialValue,
@@ -51,11 +50,10 @@
         var nodeEffects = Main.nodes[nodeID].parameters; //The effects this node has on the parameters
         var effectParams = [];
 
-
         for (var id in nodeEffects) //Get the effects this node has on the parameters.
         {
             var pId = nodeEffects[id].parameterid;
-            var par = Metadata.metaObject.parameterObject[pId];
+            var par = Metadata.metaObject.parameters[pId];
             effectParams[par.name] = {
                 changeType: nodeEffects[id].changeType,
                 value: nodeEffects[id].value

@@ -4,7 +4,7 @@ var FeedbackForm;
 
 (function()
 {
-    FeedbackForm = 
+    FeedbackForm =
     {
         // Object keyed on parameter ID.
         // Each value has a list of conditions and a default text.
@@ -35,7 +35,7 @@ var FeedbackForm;
 
             $(this).children("div").each(function(){
                 var thisID = $(this).attr('id');
-                
+
                 var textBoxValue = $(this).find('textArea').val();
 
                 if (thisID != "defaultDescription" + parentID)
@@ -124,7 +124,7 @@ var FeedbackForm;
 
     function createDivForParameter(parameterID, counter, box1, box2, textArea, test)
     {
-        var parameterName = Metadata.metaObject.parameterObject[parameterID].name;
+        var parameterName = Metadata.metaObject.parameters[parameterID].name;
         var box1Value, box2Value, box1Visibility, box2Visibility, textAreaData;
         var s1, s2, s3, s4, s5, s6;
         var noBox1 = false;
@@ -178,7 +178,7 @@ var FeedbackForm;
             box1Value = 0;
             box1Visibility = 'display:none';
         }
-        else 
+        else
         {
             if (box1 !== undefined)
             {
@@ -254,25 +254,24 @@ var FeedbackForm;
         htmlString += "<select id='paramSelect'>";
 
         // Add an option per parameter to this select.
-        for (var p in Metadata.metaObject.parameterObject)
+        for (var pId in Metadata.metaObject.parameters)
         {
-            if (Metadata.metaObject.parameterObject[p].weightForFinalScore !== 0)
+            if (Metadata.metaObject.parameters[pId].weightForFinalScore !== 0)
             {
-                var pID = p;
-                var pName = Metadata.metaObject.parameterObject[p].name;
+                var pName = Metadata.metaObject.parameters[pId].name;
                 // Replace all whitespaces so id's contain no spaces.
-                htmlString += '<option value="' + pID + '">' + Main.escapeTags(pName) + '</option>';
+                htmlString += '<option value="' + pId + '">' + Main.escapeTags(pName) + '</option>';
             }
         }
         // Close the select.
         htmlString += "</select>";
 
         // Add hidden divs per parameter.
-        for (var paramID in Metadata.metaObject.parameterObject)
+        for (var paramID in Metadata.metaObject.parameters)
         {
             // Here we check which parameters are and are not in metadata and the global object.
 
-            if (Metadata.metaObject.parameterObject[paramID].weightForFinalScore !== 0)
+            if (Metadata.metaObject.parameters[paramID].weightForFinalScore !== 0)
             {
                 if (FeedbackForm.conditions[paramID] === undefined)
                 {
@@ -327,7 +326,7 @@ var FeedbackForm;
                             htmlString += createDivForParameter(paramID, loopCounter + 1, box1, box2, feedbackString, condition.test);
                         }
                     }
-                    
+
                     // Then, add a default description textarea at the end of the div.
                     htmlString += "<button type='button' class='addParameter' title='"+LanguageManager.sLang("edt_common_add")+"'><img src='" + editor_url + "png/others/plus.png' alt='+'></button>";
                     htmlString += "<div id='defaultDescription" + paramID + "'>";
@@ -357,7 +356,7 @@ var FeedbackForm;
 
         // Function that removes the parent of the clicked button.
         $("#paramTabs").on('click', '.deleteParent', function()
-        {             
+        {
             $(this).parent().remove();
         });
 

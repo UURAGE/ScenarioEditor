@@ -71,25 +71,25 @@ var Save;
         var scoringFunctionEl = document.createElementNS(nameSpace, "scoringFunction");
         var scoringSumEl = document.createElementNS(nameSpace, "sum");
 
-        for (var parameterID in Metadata.metaObject.parameterObject)
+        for (var pId in Metadata.metaObject.parameters)
         {
-            var parameterObj = Metadata.metaObject.parameterObject[parameterID];
+            var parameter = Metadata.metaObject.parameters[pId];
             var parameterEl = addAndReturnElement("parameter", nameSpace, parametersEl);
 
-            parameterEl.setAttribute("id", parameterID);
-            parameterEl.setAttribute("name", Main.escapeTags(parameterObj.name));
-            parameterEl.setAttribute("initialValue", parameterObj.initialValue);
-            parameterEl.setAttribute("minimumScore", parameterObj.minimumScore);
-            parameterEl.setAttribute("maximumScore", parameterObj.maximumScore);
-            parameterEl.setAttribute("description", Main.escapeTags(parameterObj.description));
+            parameterEl.setAttribute("id", pId);
+            parameterEl.setAttribute("name", Main.escapeTags(parameter.name));
+            parameterEl.setAttribute("initialValue", parameter.initialValue);
+            parameterEl.setAttribute("minimumScore", parameter.minimumScore);
+            parameterEl.setAttribute("maximumScore", parameter.maximumScore);
+            parameterEl.setAttribute("description", Main.escapeTags(parameter.description));
 
-            if (parameterObj.weightForFinalScore !== 0)
+            if (parameter.weightForFinalScore !== 0)
                 parameterEl.setAttribute("scored", "true");
 
             var scaleEl = addAndReturnElement("scale", nameSpace, scoringSumEl);
-            scaleEl.setAttribute("scalar", parameterObj.weightForFinalScore);
+            scaleEl.setAttribute("scalar", parameter.weightForFinalScore);
             var paramRefEl = addAndReturnElement("paramRef", nameSpace, scaleEl);
-            paramRefEl.setAttribute("idref", parameterID);
+            paramRefEl.setAttribute("idref", pId);
         }
 
         // Save characters
@@ -166,11 +166,11 @@ var Save;
                         var testValue = 0;
                         if (condition.test === "min")
                         {
-                            testValue = Metadata.metaObject.parameterObject[parameter].minimumScore;
+                            testValue = Metadata.metaObject.parameters[parameter].minimumScore;
                         }
                         else if (condition.test === "max")
                         {
-                            testValue = Metadata.metaObject.parameterObject[parameter].maximumScore;
+                            testValue = Metadata.metaObject.parameters[parameter].maximumScore;
                         }
                         currentConditionEl.setAttribute("value", testValue);
                     }

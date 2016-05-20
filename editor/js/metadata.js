@@ -139,17 +139,14 @@ var Metadata;
     // If needed, change the defaults here.
     function getNewDefaultMetaObject()
     {
-        parameterCounter = 0;
-
-        var pObj = {};
-
+        Metadata.parameterCounter = 0;
         Metadata.metaObject = {
             name: "",
             difficulty: "medium",
             characters: getNewDefaultCharactersObject(),
             description: "",
             properties: {},
-            parameterObject: pObj,
+            parameters: {},
             defaultChangeType: LanguageManager.sLang("edt_parts_delta"),
         };
     }
@@ -291,14 +288,14 @@ var Metadata;
         $("#params").empty();
         $("#paramsTableHead").addClass("hidden");
 
-        for (var parameterName in Metadata.metaObject.parameterObject)
+        for (var pId in Metadata.metaObject.parameters)
         {
-            var parameter = Metadata.metaObject.parameterObject[parameterName];
+            var parameter = Metadata.metaObject.parameters[pId];
             var addedDiv = $("#params").append(HtmlGenerator.parameterHTML).children().last();
             addedDiv.removeClass("newParameter").addClass("existingParameter");
 
-            addedDiv.prop('id', parameterName);
-            if(parameterName === "t")
+            addedDiv.prop('id', pId);
+            if(pId === "t")
                 addedDiv.addClass("isT");
             addedDiv.find(".name").val(parameter.name);
             addedDiv.find(".initialValue").val(parameter.initialValue);
@@ -314,21 +311,20 @@ var Metadata;
         $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
     }
 
-    function atLeastOneParameter(type)
+    function atLeastOneParameter()
     {
-        var pObj = Metadata.metaObject.parameterObject;
-        return (!$.isEmptyObject(pObj));
+        return (!$.isEmptyObject(Metadata.metaObject.parameters));
     }
 
     function addTimeParameter(div)
     {
-        var newParamObject = ObjectGenerator.parameterObject(div);
+        var newParameters = ObjectGenerator.parameterObject(div);
 
-        if (newParamObject === null) return;
+        if (newParameters === null) return;
 
         var id = 't';
         $(div).prop('id', id);
-        Metadata.metaObject.parameterObject[id] = newParamObject;
+        Metadata.metaObject.parameters[id] = newParameters;
 
         Metadata.timePId = id;
 
@@ -384,33 +380,33 @@ var Metadata;
             // Remove the parameter from the html and the object.
             $(this).remove();
 
-            delete Metadata.metaObject.parameterObject[id];
+            delete Metadata.metaObject.parameters[id];
         });
 
         $(".existingParameter").each(function()
         {
             var id = $(this).prop('id');
-            var newParamObject = ObjectGenerator.parameterObject($(this));
+            var newParameters = ObjectGenerator.parameterObject($(this));
 
-            Metadata.metaObject.parameterObject[id] = newParamObject;
+            Metadata.metaObject.parameters[id] = newParameters;
         });
 
         // All new parameters.
         $(".newParameter").each(function()
         {
-            var newParamObject = ObjectGenerator.parameterObject($(this));
+            var newParameters = ObjectGenerator.parameterObject($(this));
 
-            if (newParamObject === null) return;
+            if (newParameters === null) return;
 
             var id = 'p' + (Metadata.parameterCounter += 1).toString();
 
             $(this).prop('id', id);
-            Metadata.metaObject.parameterObject[id] = newParamObject;
+            Metadata.metaObject.parameters[id] = newParameters;
 
             $(this).removeClass("newParameter").addClass("existingParameter");
         });
 
-        //console.log(Metadata.metaObject.parameterObject);
+        //console.log(Metadata.metaObject.parameters);
     }
 
     // Save all changes to the metaObject.

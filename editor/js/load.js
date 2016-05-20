@@ -233,18 +233,17 @@ var Load;
         $('#scriptNameTab .scriptName').text(name);
         var description = Main.unEscapeTags($(metadata).find('description').text());
         var difficulty = $(metadata).find('difficulty').text();
-        var parameterObject = {};
         var definitions = $(metadata).find('definitions');
-        var parameters = $(definitions).find('parameters').children();
+
         var defaultChangeType = $(metadata).find('defaultChangeType').text();
         // Allows the editor to load older XML versions without defaultChangeType
         if (defaultChangeType === "")
             defaultChangeType = LanguageManager.sLang("edt_parts_delta");
 
-        for (var i = 0; i < parameters.length; i++)
+        var parameters = {};
+        $(definitions).children('parameters').children().each(function()
         {
-            var parameter = parameters[i];
-            var paramId = parameter.attributes.id.value;
+            var paramId = this.attributes.id.value;
 
             var paramMatch = paramId.match(/^p(\d+)$/);
             if (paramMatch !== null)
@@ -254,17 +253,17 @@ var Load;
                     Metadata.parameterCounter = paramNumber;
             }
 
-            parameterObject[paramId] =
+            parameters[paramId] =
             {
-                name: Main.unEscapeTags(parameter.attributes.name.value),
-                initialValue: (parameter.hasAttribute('initialValue') ?
-                    Utils.parseDecimalIntWithDefault(parameter.attributes.initialValue.value, 0) : 0),
+                name: Main.unEscapeTags(this.attributes.name.value),
+                initialValue: (this.hasAttribute('initialValue') ?
+                    Utils.parseDecimalIntWithDefault(this.attributes.initialValue.value, 0) : 0),
                 weightForFinalScore: 0,
-                minimumScore: parameter.attributes.minimumScore.value,
-                maximumScore: parameter.attributes.maximumScore.value,
-                description: parameter.hasAttribute("description") ? Main.unEscapeTags(parameter.attributes.description.value) : ""
+                minimumScore: this.attributes.minimumScore.value,
+                maximumScore: this.attributes.maximumScore.value,
+                description: this.hasAttribute("description") ? Main.unEscapeTags(this.attributes.description.value) : ""
             };
-        }
+        });
 
         var properties = loadProperties($(metadata).children('properties'));
         var characters = loadCharacters($(metadata).children('characters'));
@@ -273,21 +272,18 @@ var Load;
         {
             var parameterId = this.attributes.idref.value;
             //if the parameter exists...
-            if (parameterId in parameterObject)
+            if (parameterId in parameters)
             {
                 //...add the weight of the parameter.
-                parameterObject[parameterId].weightForFinalScore =
+                parameters[parameterId].weightForFinalScore =
                     Utils.parseDecimalIntWithDefault($(this).parent().attr('scalar'), 0);
 
             }
         });
 
         var timePId = null;
-
-        if (parameterObject.hasOwnProperty('t'))
+        if (parameters.hasOwnProperty('t'))
             timePId = 't';
-
-        Metadata.timePId = timePId;
 
         Metadata.metaObject = {
             name: name,
@@ -295,7 +291,8 @@ var Load;
             characters: characters,
             description: description,
             properties: properties,
-            parameterObject: parameterObject,
+            parameters: parameters,
+            timePId: timePId,
             defaultChangeType: defaultChangeType
         };
     }
@@ -522,7 +519,7 @@ var Load;
         {
             if (preconditionChildren[i].nodeName == "condition")
             {
-                if (preconditionChildren[i].attributes.idref.value in Metadata.metaObject.parameterObject)
+                if (preconditionChildren[i].attributes.idref.value in Metadata.metaObject.parameters)
                 {
                     preconditionsArray.push(
                     {

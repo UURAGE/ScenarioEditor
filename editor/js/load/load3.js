@@ -148,7 +148,7 @@ var Load3;
             description: description,
             properties: {},
             characters: Metadata.getNewDefaultCharactersObject(),
-            parameterObject: parameterObject,
+            parameters: parameterObject,
             defaultChangeType: defaultChangeType
         };
     }
@@ -380,7 +380,7 @@ var Load3;
         {
             if (preconditionChildren[i].nodeName == "condition")
             {
-                if (preconditionChildren[i].attributes.idref.value in Metadata.metaObject.parameterObject)
+                if (preconditionChildren[i].attributes.idref.value in Metadata.metaObject.parameters)
                 {
                     preconditionsArray.push(
                     {

@@ -72,7 +72,7 @@ var HtmlGenerator;
             });
         $("#addParameterEffect").on('click', function()
         {
-            if (Metadata.atLeastOneParameter("parameter"))
+            if (Metadata.atLeastOneParameter())
             {
                 addEmptyParameterEffect();
                 focusFirstTabindexedDescendant($(".effect")
@@ -267,12 +267,11 @@ var HtmlGenerator;
     // Inserts all the parameters for the effects and preconditions.
     function insertParameters(div, type, effectType)
     {
-        var pObj = Metadata.metaObject.parameterObject;
-        for (var pID in pObj)
+        for (var pId in Metadata.metaObject.parameters)
         {
             if (effectType === undefined || (effectType === "parameter"))
-                div.find(type).append('<option value="' + pID + '">' +
-                    Main.escapeTags(pObj[pID].name) + '</option>');
+                div.find(type).append('<option value="' + pId + '">' +
+                    Main.escapeTags(Metadata.metaObject.parameters[pId].name) + '</option>');
         }
     }
 
