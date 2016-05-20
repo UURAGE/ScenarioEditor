@@ -487,7 +487,7 @@ var Save;
         if (!("type" in precondition))
         {
             conditionEl = document.createElementNS(nameSpace, "condition");
-            conditionEl.setAttribute("idref", precondition.parameterid);
+            conditionEl.setAttribute("idref", precondition.idRef);
             conditionEl.setAttribute("test", precondition.test);
             conditionEl.setAttribute("value", precondition.value);
             return conditionEl;

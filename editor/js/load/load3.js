@@ -296,7 +296,7 @@ var Load3;
                 var parameter = pEffs[j];
                 parameterEffects.push(
                 {
-                    parameterid: parameter.attributes.idref.value,
+                    idRef: parameter.attributes.idref.value,
                     changeType: parameter.attributes.changeType.value,
                     value: parseInt(parameter.attributes.value.value)
                 });
@@ -384,7 +384,7 @@ var Load3;
                 {
                     preconditionsArray.push(
                     {
-                        parameterid: preconditionChildren[i].attributes.idref.value,
+                        idRef: preconditionChildren[i].attributes.idref.value,
                         test: preconditionChildren[i].attributes.test .value,
                         value: parseInt(preconditionChildren[i].attributes.value.value)
                     });

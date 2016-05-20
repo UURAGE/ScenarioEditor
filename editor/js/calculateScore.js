@@ -46,22 +46,23 @@
             parentScores.push(defaultScore);
         }
 
+        var i;
         var returnScores = []; //The values to be returned.
         var nodeEffects = Main.nodes[nodeID].parameters; //The effects this node has on the parameters
         var effectParams = [];
 
-        for (var id in nodeEffects) //Get the effects this node has on the parameters.
+        for (i in nodeEffects) //Get the effects this node has on the parameters.
         {
-            var pId = nodeEffects[id].parameterid;
-            var par = Metadata.metaObject.parameters[pId];
-            effectParams[par.name] = {
-                changeType: nodeEffects[id].changeType,
-                value: nodeEffects[id].value
+            var paremeter = Metadata.metaObject.parameters[nodeEffects[i].idRef];
+            effectParams[paremeter.name] =
+            {
+                changeType: nodeEffects[i].changeType,
+                value: nodeEffects[i].value
             };
         }
 
         // Reused for-in-loop index variables
-        var i, parName;
+        var parName;
 
         for (i = 0; i < connections.length; i++)
         {

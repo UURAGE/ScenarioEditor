@@ -84,12 +84,9 @@ var ObjectGenerator;
     function EffectObject(div)
     {
         return {
-            parameterid: div.find(".parameterid").find(
-                "option:selected").val(),
-            changeType: div.find(".changeType").find("option:selected")
-                .val(),
-            value: Utils.parseDecimalIntWithDefault(div.find(".value").val(),
-                0)
+            idRef: div.find(".parameter-idref-select").find("option:selected").val(),
+            changeType: div.find(".changeType").find("option:selected").val(),
+            value: Utils.parseDecimalIntWithDefault(div.find(".value").val(),0)
         };
     }
 
@@ -105,7 +102,7 @@ var ObjectGenerator;
     function SinglePreconditionObject(div)
     {
         return {
-            parameterid: div.find(".parameterid").val(),
+            idRef: div.find(".parameter-idref-select").val(),
             test: div.find(".test").val(),
             value: Utils.parseDecimalIntWithDefault(div.find(".value").val(),
                 0)

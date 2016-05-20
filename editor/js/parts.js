@@ -97,7 +97,7 @@ var Parts;
     {
         return '' +
             '<div>' +
-                '<select class="parameterid"></select>' +
+                '<select class="parameter-idref-select"></select>' +
                 getChangeTypeHTML() +
                 '<input type="number" class="value" pattern="[+\\-]?\\d*" style="width:40px;" />' +
                 '<button type="button" class="deleteParent" title="'+LanguageManager.sLang("edt_common_delete")+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
@@ -261,7 +261,7 @@ var Parts;
     {
         return '' +
             '<div class="precondition">' +
-                '<select class="parameterid">' +
+                '<select class="parameter-idref-select">' +
                 '</select>' +
                 '<select class="test">' +
                     '<option value="greaterThan">&gt;</option>' +

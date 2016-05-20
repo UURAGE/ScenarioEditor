@@ -270,12 +270,12 @@ var Load;
 
         $(metadata).children('scoringFunction').children('sum').children('scale').children('paramRef').each(function()
         {
-            var parameterId = this.attributes.idref.value;
+            var parameterIdRef = this.attributes.idref.value;
             //if the parameter exists...
-            if (parameterId in parameters)
+            if (parameterIdRef in parameters)
             {
                 //...add the weight of the parameter.
-                parameters[parameterId].weightForFinalScore =
+                parameters[parameterIdRef].weightForFinalScore =
                     Utils.parseDecimalIntWithDefault($(this).parent().attr('scalar'), 0);
 
             }
@@ -437,7 +437,7 @@ var Load;
             var parameter = pEffs[j];
             parameterEffects.push(
             {
-                parameterid: parameter.attributes.idref.value,
+                idRef: parameter.attributes.idref.value,
                 changeType: parameter.attributes.changeType.value,
                 value: parseInt(parameter.attributes.value.value)
             });
@@ -523,7 +523,7 @@ var Load;
                 {
                     preconditionsArray.push(
                     {
-                        parameterid: preconditionChildren[i].attributes.idref.value,
+                        idRef: preconditionChildren[i].attributes.idref.value,
                         test: preconditionChildren[i].attributes.test .value,
                         value: parseInt(preconditionChildren[i].attributes.value.value)
                     });

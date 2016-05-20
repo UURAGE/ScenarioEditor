@@ -152,9 +152,7 @@ var HtmlGenerator;
         $("#effectParameterDiv").append(parameterEffectHTML);
         var addedDiv = $("#effectParameterDiv").children().last();
 
-        addedDiv.find(".changeType").val(Metadata.metaObject.defaultChangeType);
-
-        insertParameters(addedDiv, ".parameterid", "parameter");
+        insertParameters(addedDiv);
         return addedDiv;
     }
 
@@ -178,7 +176,7 @@ var HtmlGenerator;
             else
             {
                 addedDiv = addEmptyPrecondition(divToAddChildren);
-                addedDiv.find(".parameterid").val(currentPrecondition.parameterid);
+                addedDiv.find(".parameter-idref-select").val(currentPrecondition.idRef);
                 addedDiv.find(".test").val(currentPrecondition.test);
                 addedDiv.find(".value").val(currentPrecondition.value);
             }
@@ -225,9 +223,8 @@ var HtmlGenerator;
     {
         divToAdd.append(preconditionHTML);
         var addedDiv = $(divToAdd).children().last();
-        insertParameters(addedDiv, ".parameterid");
-        updateGroupPreconditionCounter(divToAdd.closest(
-            ".groupprecondition"));
+        insertParameters(addedDiv);
+        updateGroupPreconditionCounter(divToAdd.closest(".groupprecondition"));
         return addedDiv;
     }
 
@@ -265,13 +262,12 @@ var HtmlGenerator;
     }
 
     // Inserts all the parameters for the effects and preconditions.
-    function insertParameters(div, type, effectType)
+    function insertParameters(div)
     {
         for (var pId in Metadata.metaObject.parameters)
         {
-            if (effectType === undefined || (effectType === "parameter"))
-                div.find(type).append('<option value="' + pId + '">' +
-                    Main.escapeTags(Metadata.metaObject.parameters[pId].name) + '</option>');
+            div.find(".parameter-idref-select").append('<option value="' + pId + '">' +
+                Main.escapeTags(Metadata.metaObject.parameters[pId].name) + '</option>');
         }
     }
 
