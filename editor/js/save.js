@@ -71,9 +71,9 @@ var Save;
         var scoringFunctionEl = document.createElementNS(nameSpace, "scoringFunction");
         var scoringSumEl = document.createElementNS(nameSpace, "sum");
 
-        for (var pId in Metadata.metaObject.parameters)
+        for (var pId in Metadata.metaObject.parameters.byId)
         {
-            var parameter = Metadata.metaObject.parameters[pId];
+            var parameter = Metadata.metaObject.parameters.byId[pId];
             var parameterEl = addAndReturnElement("parameter", nameSpace, parametersEl);
 
             parameterEl.setAttribute("id", pId);
@@ -166,11 +166,11 @@ var Save;
                         var testValue = 0;
                         if (condition.test === "min")
                         {
-                            testValue = Metadata.metaObject.parameters[parameter].minimumScore;
+                            testValue = Metadata.metaObject.parameters.byId[parameter].minimumScore;
                         }
                         else if (condition.test === "max")
                         {
-                            testValue = Metadata.metaObject.parameters[parameter].maximumScore;
+                            testValue = Metadata.metaObject.parameters.byId[parameter].maximumScore;
                         }
                         currentConditionEl.setAttribute("value", testValue);
                     }

@@ -90,7 +90,7 @@ var Load3;
         $('#scriptNameTab .scriptName').text(name);
         var description = Main.unEscapeTags($(metadata).find('description').text());
         var difficulty = $(metadata).find('difficulty').text();
-        var parameterObject = {};
+        var parametersObject = Metadata.getNewDefaultParametersObject();
         var parameters = $(metadata).find('parameters').children();
         var defaultChangeType = $(metadata).find('defaultChangeType').text();
         // Allows the editor to load older XML versions without defaultChangeType
@@ -110,8 +110,9 @@ var Load3;
                     Metadata.parameterCounter = paramNumber;
             }
 
-            parameterObject[paramId] =
+            parametersObject.byId[paramId] =
             {
+                id: paramId,
                 name: Main.unEscapeTags(parameter.attributes.name.value),
                 initialValue: (parameter.hasAttribute('initialValue') ?
                     Utils.parseDecimalIntWithDefault(parameter.attributes.initialValue.value, 0) : 0),
@@ -120,16 +121,17 @@ var Load3;
                 maximumScore: parameter.attributes.maximumScore.value,
                 description: parameter.hasAttribute("parameterDescription") ? Main.unEscapeTags(parameter.attributes.parameterDescription.value) : ""
             };
+            parametersObject.sequence.push(parametersObject.byId[paramId]);
         }
 
         $(metadata).children('scoringFunction').children('sum').children('scale').children('paramRef').each(function()
         {
             var parameterId = this.attributes.idref.value;
             //if the parameter exists...
-            if (parameterId in parameterObject)
+            if (parameterId in parametersObject.byId)
             {
                 //...add the weight of the parameter.
-                parameterObject[parameterId].weightForFinalScore =
+                parametersObject.byId[parameterId].weightForFinalScore =
                     Utils.parseDecimalIntWithDefault($(this).parent().attr('scalar'), 0);
 
             }
@@ -137,7 +139,7 @@ var Load3;
 
         var timePId = null;
 
-        if (parameterObject.hasOwnProperty('t'))
+        if (parametersObject.hasOwnProperty('t'))
             timePId = 't';
 
         Metadata.timePId = timePId;
@@ -148,7 +150,7 @@ var Load3;
             description: description,
             properties: {},
             characters: Metadata.getNewDefaultCharactersObject(),
-            parameters: parameterObject,
+            parameters: parametersObject,
             defaultChangeType: defaultChangeType
         };
     }
@@ -380,7 +382,7 @@ var Load3;
         {
             if (preconditionChildren[i].nodeName == "condition")
             {
-                if (preconditionChildren[i].attributes.idref.value in Metadata.metaObject.parameters)
+                if (preconditionChildren[i].attributes.idref.value in Metadata.metaObject.parameters.byId)
                 {
                     preconditionsArray.push(
                     {

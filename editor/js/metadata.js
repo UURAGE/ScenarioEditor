@@ -10,10 +10,11 @@ var Metadata;
     {
         metaObject: {},
         getNewDefaultMetaObject: getNewDefaultMetaObject,
+        getNewDefaultParametersObject: getNewDefaultParametersObject,
         getNewDefaultCharactersObject: getNewDefaultCharactersObject,
         parameterCounter: parameterCounter,
         parameterDialog: parameterDialog,
-        atLeastOneParameter: atLeastOneParameter,
+        atLeastOneUserDefinedParameter: atLeastOneUserDefinedParameter,
         metadataDialog: metadataDialog,
         timePId : null,
         addTimeParameter: addTimeParameter,
@@ -143,12 +144,21 @@ var Metadata;
         Metadata.metaObject = {
             name: "",
             difficulty: "medium",
-            characters: getNewDefaultCharactersObject(),
             description: "",
+            characters: getNewDefaultCharactersObject(),
+            parameters: getNewDefaultParametersObject(),
             properties: {},
-            parameters: {},
             defaultChangeType: LanguageManager.sLang("edt_parts_delta"),
         };
+    }
+
+    // This function returns an object suitable for user-defined parameter definitions
+    function getNewDefaultParametersObject()
+    {
+        var parameters = {};
+        parameters.byId = {};
+        parameters.sequence = [];
+        return parameters;
     }
 
     function getNewDefaultCharactersObject()
@@ -278,7 +288,7 @@ var Metadata;
                 $(".toBeRemoved").removeClass("toBeRemoved");
                 $(".newParameter").remove();
                 //Ugly test to determine if there are parameters. If there are, the table headers need to be visible in the metascreen the next time.
-                if (atLeastOneParameter())
+                if (atLeastOneUserDefinedParameter())
                 {
                     $("#paramsTableHead").removeClass("hidden");
                 }
@@ -288,14 +298,13 @@ var Metadata;
         $("#params").empty();
         $("#paramsTableHead").addClass("hidden");
 
-        for (var pId in Metadata.metaObject.parameters)
+        Metadata.metaObject.parameters.sequence.forEach(function(parameter)
         {
-            var parameter = Metadata.metaObject.parameters[pId];
             var addedDiv = $("#params").append(HtmlGenerator.parameterHTML).children().last();
             addedDiv.removeClass("newParameter").addClass("existingParameter");
 
-            addedDiv.prop('id', pId);
-            if(pId === "t")
+            addedDiv.prop('id', parameter.id);
+            if(parameter.id === "t")
                 addedDiv.addClass("isT");
             addedDiv.find(".name").val(parameter.name);
             addedDiv.find(".initialValue").val(parameter.initialValue);
@@ -303,7 +312,7 @@ var Metadata;
             addedDiv.find(".minimumScore").val(parameter.minimumScore);
             addedDiv.find(".maximumScore").val(parameter.maximumScore);
             addedDiv.find(".description").val(parameter.description);
-        }
+        });
         if ($("#params").children().length > 0)
             $("#paramsTableHead").removeClass("hidden");
 
@@ -311,28 +320,28 @@ var Metadata;
         $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
     }
 
-    function atLeastOneParameter()
+    function atLeastOneUserDefinedParameter()
     {
-        return (!$.isEmptyObject(Metadata.metaObject.parameters));
+        return Metadata.metaObject.parameters.sequence.length > 0;
     }
 
     function addTimeParameter(div)
     {
+        $(div).prop('id', 't');
         var newParameter = ObjectGenerator.parameterObject(div);
 
         if (!newParameter) return;
 
-        var id = 't';
-        $(div).prop('id', id);
-        Metadata.metaObject.parameters[id] = newParameter;
+        Metadata.metaObject.parameters.sequence.push(newParameter);
+        Metadata.metaObject.parameters.byId[newParameter.id] = newParameter;
 
-        Metadata.timePId = id;
+        Metadata.timePId = newParameter.id;
 
         $(div).removeClass("newParameter").addClass("existingParameter").addClass('isT');
 
         var timeEffect =
         {
-            idRef: id,
+            idRef: newParameter.id,
             changeType: "delta",
             value: 1
         };
@@ -380,28 +389,30 @@ var Metadata;
             // Remove the parameter from the html and the object.
             $(this).remove();
 
-            delete Metadata.metaObject.parameters[id];
+            parameterToBeRemoved = Metadata.metaObject.parameters.byId[id];
+            indexOfParameterToBeRemoved = Metadata.metaObject.parameters.sequence.indexOf(parameterToBeRemoved);
+            delete Metadata.metaObject.parameters.byId[id];
+            delete Metadata.metaObject.parameters.sequence.splice(indexOfParameterToBeRemoved, 1);
         });
 
         $(".existingParameter").each(function()
         {
-            var id = $(this).prop('id');
-            var newParameters = ObjectGenerator.parameterObject($(this));
-
-            Metadata.metaObject.parameters[id] = newParameters;
+            var parameter = ObjectGenerator.parameterObject($(this));
+            Metadata.metaObject.parameters.byId[parameter.id] = parameter;
+            Metadata.metaObject.parameters.sequence.push(parameter);
         });
 
         // All new parameters.
         $(".newParameter").each(function()
         {
-            var newParameters = ObjectGenerator.parameterObject($(this));
-
-            if (newParameters === null) return;
-
             var id = 'p' + (Metadata.parameterCounter += 1).toString();
-
             $(this).prop('id', id);
-            Metadata.metaObject.parameters[id] = newParameters;
+            var newParameter = ObjectGenerator.parameterObject($(this));
+
+            if (!newParameter) return;
+
+            Metadata.metaObject.parameters.sequence.push(newParameter);
+            Metadata.metaObject.parameters.byId[newParameter.id] = newParameter;
 
             $(this).removeClass("newParameter").addClass("existingParameter");
         });

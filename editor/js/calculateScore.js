@@ -33,9 +33,9 @@
         {
             var defaultScore = {};
 
-            for (var pId in Metadata.metaObject.parameters)
+            for (var pId in Metadata.metaObject.parameters.byId)
             {
-                var param = Metadata.metaObject.parameters[pId];
+                var param = Metadata.metaObject.parameters.byId[pId];
 
                 defaultScore[param.name] = {
                     min: param.initialValue,
@@ -53,7 +53,7 @@
 
         for (i in nodeEffects) //Get the effects this node has on the parameters.
         {
-            var paremeter = Metadata.metaObject.parameters[nodeEffects[i].idRef];
+            var paremeter = Metadata.metaObject.parameters.byId[nodeEffects[i].idRef];
             effectParams[paremeter.name] =
             {
                 changeType: nodeEffects[i].changeType,

@@ -240,7 +240,7 @@ var Load;
         if (defaultChangeType === "")
             defaultChangeType = LanguageManager.sLang("edt_parts_delta");
 
-        var parameters = {};
+        var parameters = Metadata.getNewDefaultParametersObject();
         $(definitions).children('parameters').children().each(function()
         {
             var paramId = this.attributes.id.value;
@@ -253,8 +253,9 @@ var Load;
                     Metadata.parameterCounter = paramNumber;
             }
 
-            parameters[paramId] =
+            var parameter =
             {
+                id: paramId,
                 name: Main.unEscapeTags(this.attributes.name.value),
                 initialValue: (this.hasAttribute('initialValue') ?
                     Utils.parseDecimalIntWithDefault(this.attributes.initialValue.value, 0) : 0),
@@ -263,6 +264,8 @@ var Load;
                 maximumScore: this.attributes.maximumScore.value,
                 description: this.hasAttribute("description") ? Main.unEscapeTags(this.attributes.description.value) : ""
             };
+            parameters.sequence.push(parameter);
+            parameters.byId[parameter.id] = parameter;
         });
 
         var properties = loadProperties($(metadata).children('properties'));
@@ -272,10 +275,10 @@ var Load;
         {
             var parameterIdRef = this.attributes.idref.value;
             //if the parameter exists...
-            if (parameterIdRef in parameters)
+            if (parameterIdRef in parameters.byId)
             {
                 //...add the weight of the parameter.
-                parameters[parameterIdRef].weightForFinalScore =
+                parameters.byId[parameterIdRef].weightForFinalScore =
                     Utils.parseDecimalIntWithDefault($(this).parent().attr('scalar'), 0);
 
             }
@@ -519,7 +522,7 @@ var Load;
         {
             if (preconditionChildren[i].nodeName == "condition")
             {
-                if (preconditionChildren[i].attributes.idref.value in Metadata.metaObject.parameters)
+                if (preconditionChildren[i].attributes.idref.value in Metadata.metaObject.parameters.byId)
                 {
                     preconditionsArray.push(
                     {

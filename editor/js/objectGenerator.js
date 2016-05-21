@@ -29,9 +29,10 @@ var ObjectGenerator;
 
     function ParameterObject(div)
     {
+        var id = div.prop('id');
         var name = div.find(".name").val();
         // If the name is empty, we cannot create a valid parameter object.
-        if (name === "") return null;
+        if (!name) return null;
 
         var minimumScore = Utils.parseDecimalIntWithDefault(div.find(
                 ".minimumScore").val(), 0);
@@ -43,6 +44,7 @@ var ObjectGenerator;
             maximumScore = minimumScore + 1;
 
         return {
+            id: id,
             name: name,
             initialValue: Utils.parseDecimalIntWithDefault(div.find(
                 ".initialValue").val(), 0),
@@ -50,7 +52,8 @@ var ObjectGenerator;
                 ".weightForFinalScore").val(), 0),
             minimumScore: minimumScore,
             maximumScore: maximumScore,
-            description: div.find(".description").val()        };
+            description: div.find(".description").val()
+        };
     }
 
     function PreconditionObject(preconditionDiv)

@@ -37,7 +37,7 @@ var HtmlGenerator;
         $("#preconditionsDiv").on('click', ".addPrecondition",
             function()
             {
-                if (Metadata.atLeastOneParameter())
+                if (Metadata.atLeastOneUserDefinedParameter())
                 {
                     var container = $(this).parent().children(".groupPreconditionDiv");
                     addEmptyPrecondition(container);
@@ -54,7 +54,7 @@ var HtmlGenerator;
         $("#preconditionsDiv").on('click', ".addGroupPrecondition",
             function()
             {
-                if (Metadata.atLeastOneParameter())
+                if (Metadata.atLeastOneUserDefinedParameter())
                 {
                     var container = $(this).parent().children(".groupPreconditionDiv");
                     addEmptyGroupPrecondition(container);
@@ -70,7 +70,7 @@ var HtmlGenerator;
             });
         $("#addParameterEffect").on('click', function()
         {
-            if (Metadata.atLeastOneParameter())
+            if (Metadata.atLeastOneUserDefinedParameter())
             {
                 addEmptyParameterEffect();
                 focusFirstTabindexedDescendant($(".effect").last());
@@ -254,10 +254,10 @@ var HtmlGenerator;
     // Inserts all the parameters for the effects and preconditions.
     function insertParameters(div, parameters)
     {
-        for (var pId in parameters)
+        for (var pId in parameters.byId)
         {
             div.find(".parameter-idref-select").append('<option value="' + pId + '">' +
-                Main.escapeTags(parameters[pId].name) + '</option>');
+                Main.escapeTags(parameters.byId[pId].name) + '</option>');
         }
     }
 

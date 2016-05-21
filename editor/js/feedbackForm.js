@@ -124,7 +124,7 @@ var FeedbackForm;
 
     function createDivForParameter(parameterID, counter, box1, box2, textArea, test)
     {
-        var parameterName = Metadata.metaObject.parameters[parameterID].name;
+        var parameterName = Metadata.metaObject.parameters.byId[parameterID].name;
         var box1Value, box2Value, box1Visibility, box2Visibility, textAreaData;
         var s1, s2, s3, s4, s5, s6;
         var noBox1 = false;
@@ -254,36 +254,35 @@ var FeedbackForm;
         htmlString += "<select id='paramSelect'>";
 
         // Add an option per parameter to this select.
-        for (var pId in Metadata.metaObject.parameters)
+        Metadata.metaObject.parameters.sequence.forEach(function(parameter)
         {
-            if (Metadata.metaObject.parameters[pId].weightForFinalScore !== 0)
+            if (parameter.weightForFinalScore !== 0)
             {
-                var pName = Metadata.metaObject.parameters[pId].name;
+                var pName = parameter.name;
                 // Replace all whitespaces so id's contain no spaces.
-                htmlString += '<option value="' + pId + '">' + Main.escapeTags(pName) + '</option>';
+                htmlString += '<option value="' + parameter.id + '">' + Main.escapeTags(pName) + '</option>';
             }
-        }
+        });
         // Close the select.
         htmlString += "</select>";
 
         // Add hidden divs per parameter.
-        for (var paramID in Metadata.metaObject.parameters)
+        Metadata.metaObject.parameters.sequence.forEach(function(parameter)
         {
             // Here we check which parameters are and are not in metadata and the global object.
-
-            if (Metadata.metaObject.parameters[paramID].weightForFinalScore !== 0)
+            if (parameter.weightForFinalScore !== 0)
             {
-                if (FeedbackForm.conditions[paramID] === undefined)
+                if (FeedbackForm.conditions[parameter.id] === undefined)
                 {
                     // Parameter is in metadata, not in the global object.
                     // Create new divs.
-                    htmlString += "<div id='" + paramID + "' style='display:none'>";
+                    htmlString += "<div id='" + parameter.id + "' style='display:none'>";
                     htmlString += "<button type='button' class='addParameter' title='"+LanguageManager.sLang("edt_common_add")+"'><img src='" + editor_url + "png/others/plus.png' alt='+'></button>";
                     // Then, add a default description textarea at the end of the div.
-                    htmlString += "<div id='defaultDescription" + paramID + "'>";
+                    htmlString += "<div id='defaultDescription" + parameter.id + "'>";
                     htmlString += "</br></br>";
                     htmlString += LanguageManager.sLang("edt_feedback_default_description");
-                    htmlString += "<textarea id='defaultText" + paramID + "' style='height:120px;width:100%;-moz-box-sizing:border-box;box-sizing:border-box'></textarea>";
+                    htmlString += "<textarea id='defaultText" + parameter.id + "' style='height:120px;width:100%;-moz-box-sizing:border-box;box-sizing:border-box'></textarea>";
                     htmlString += "</div>";
                     htmlString += "</div>";
                 }
@@ -291,20 +290,20 @@ var FeedbackForm;
                 {
                     // Parameter is both in metadata and in the global object.
                     // Create new divs and fill with values from the global object.
-                    htmlString += "<div id='" + paramID + "' style='display:none'>";
+                    htmlString += "<div id='" + parameter.id + "' style='display:none'>";
 
                     var defaultFeedbackString = "";
-                    for (var loopCounter = 0; loopCounter < FeedbackForm.conditions[paramID].length; loopCounter++)
+                    for (var loopCounter = 0; loopCounter < FeedbackForm.conditions[parameter.id].length; loopCounter++)
                     {
                         // Special case, the last condition in the loop is always the default condition.
-                        if (loopCounter === FeedbackForm.conditions[paramID].length - 1)
+                        if (loopCounter === FeedbackForm.conditions[parameter.id].length - 1)
                         {
-                            var defaultCondition = FeedbackForm.conditions[paramID][loopCounter];
+                            var defaultCondition = FeedbackForm.conditions[parameter.id][loopCounter];
                             defaultFeedbackString = defaultCondition.feedbackString;
                         }
                         else
                         {
-                            var condition = FeedbackForm.conditions[paramID][loopCounter];
+                            var condition = FeedbackForm.conditions[parameter.id][loopCounter];
                             var feedbackString = condition.feedbackString;
 
                             var box1, box2;
@@ -323,21 +322,21 @@ var FeedbackForm;
                                 }
                                 else box2 = condition.values[1];
                             }
-                            htmlString += createDivForParameter(paramID, loopCounter + 1, box1, box2, feedbackString, condition.test);
+                            htmlString += createDivForParameter(parameter.id, loopCounter + 1, box1, box2, feedbackString, condition.test);
                         }
                     }
 
                     // Then, add a default description textarea at the end of the div.
                     htmlString += "<button type='button' class='addParameter' title='"+LanguageManager.sLang("edt_common_add")+"'><img src='" + editor_url + "png/others/plus.png' alt='+'></button>";
-                    htmlString += "<div id='defaultDescription" + paramID + "'>";
+                    htmlString += "<div id='defaultDescription" + parameter.id + "'>";
                     htmlString += "</br></br>";
                     htmlString += LanguageManager.sLang("edt_feedback_default_description")+":";
-                    htmlString += "<textarea id='defaultText" + paramID + "' style='height:120px;width:100%;-moz-box-sizing:border-box;box-sizing:border-box'>" + defaultFeedbackString + "</textarea>";
+                    htmlString += "<textarea id='defaultText" + parameter.id + "' style='height:120px;width:100%;-moz-box-sizing:border-box;box-sizing:border-box'>" + defaultFeedbackString + "</textarea>";
                     htmlString += "</div>";
                     htmlString += "</div>";
                 }
             }
-        }
+        });
 
         // And finally append this html to the div paramTabs.
         tabs.append(htmlString);
