@@ -1747,36 +1747,42 @@ var Main;
                         addEffectButton.on('click', function()
                         {
                             var effectsContainer = container.children('.fixed-parameter-effects-container');
+
+                            var effectDiv = $('<div>', { class: "fixed-parameter-effect-control", style:"display:inline" });
+
                             // Clone the select made for each separate section and put it in the parameter effect
                             var select = container.children('.parameter-idref-select').clone();
-                            select.show();
+                            var changeEffectType = function(pId)
+                            {
+                                // TODO Remove access to config here, to generalize character-independent and per-character scoping
+                                Config.configObject.parameters.byId[pId].type.appendControlTo(effectDiv, "");
+                                if (pId in parametersObject)
+                                {
+                                    Config.configObject.parameters.byId[pId].type.setInDOM(effectDiv, parametersObject[pId]);
+                                }
+                            };
+                            changeEffectType($(select).val());
+
+                            select.on('change', function()
+                            {
+                                effectDiv.empty();
+                                changeEffectType($(this).val());
+                            });
+                            select.removeClass('hidden');
+
                             var deleteButton = $(Parts.getDeleteParentButtonHTML());
                             deleteButton.on('click', function() { $(this).parent().remove(); });
 
-                            var parameterEffectDiv = $('<div>');
-                            parameterEffectDiv.append(select);
-                            parameterEffectDiv.append(deleteButton);
-                            effectsContainer.append(parameterEffectDiv);
+                            var effectContainer = $('<div>', { class: "fixed-parameter-effect-container" });
+                            effectContainer.append(select).append(effectDiv).append(deleteButton);
+                            effectsContainer.append(effectContainer);
                         });
                     }
                     else
                     {
-                        // TODO: Generalize the extraction of the parameter name
                         parameterIdRefSelect = container.find(".parameter-idref-select");
                     }
-                    parameterIdRefSelect.append('<option value="' + parameterItem.id + '">' + Main.escapeTags(Config.configObject.parameters.byId[parameterItem.id].name) + '</option>');
-
-                    // TODO: Move this to the add fixed parameter effect code
-                    /* var controlHtmlId = idPrefix + '-' + parameterItem.id;
-
-                    var parameterContainer = $('<div>', { id: idPrefix + '-container-' + parameterItem.id });
-                    container.append(parameterContainer);
-                    parameterContainer.append($('<label>', { text: parameterItem.name + ':', 'for': controlHtmlId }));
-                    parameterItem.type.appendControlTo(parameterContainer, controlHtmlId);
-                    if (parameterItem.id in parametersObject)
-                    {
-                        parameterItem.type.setInDOM(parameterContainer, parametersObject[parameterItem.id]);
-                    } */
+                    parameterIdRefSelect.append('<option value="' + parameterItem.id + '">' + Main.escapeTags(parameterItem.name) + '</option>');
                 }
             };
 
