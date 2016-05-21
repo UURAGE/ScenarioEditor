@@ -277,10 +277,11 @@
                   </div>
                   <div class="collapsable">
                     <div>
-                      <h4 style="display:inline">User-defined</h4>
+                      <h3>User-defined</h3>
                       <div id="userDefinedParameterEffects"></div>
                       <button id="addUserDefinedParameterEffect" title="<?php sLang('edt_add');?>"><img src="<?php echo editor_url("png/others/plus.png");?>" alt=""> <?php sLang('edt_add_effect');?></button>
                     </div>
+                    <div id="node-fixed-parameter-effects"></div>
                   </div>
                 </div>
                 <div id="propertiesSection" class="sidebarSection">

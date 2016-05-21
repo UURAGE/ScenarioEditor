@@ -113,9 +113,9 @@
     LanguageManager.edt_parts_change_type = "Standaard verander type";
     LanguageManager.edt_parts_file_to_import = "Bestand om te importeren";
     LanguageManager.edt_parts_advanced = "Geavanceerd";
-    LanguageManager.edt_parts_appearance = "Uiterlijk";
     LanguageManager.edt_parts_properties = "Eigenschappen";
     LanguageManager.edt_parts_character_properties = "Karakter eigenschappen";
+    LanguageManager.edt_parts_add_effect = "Effect toevoegen";
 
     LanguageManager.edt_print_warning = "Het voorbereiden van het printen kan lang duren voor grote scenario's, weet u zeker dat u wilt doorgaan?";
 

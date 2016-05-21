@@ -113,9 +113,9 @@
     LanguageManager.edt_parts_change_type = "Default change type";
     LanguageManager.edt_parts_file_to_import = "File to import";
     LanguageManager.edt_parts_advanced = "Advanced";
-    LanguageManager.edt_parts_appearance = "Appearance";
     LanguageManager.edt_parts_properties = "Properties";
     LanguageManager.edt_parts_character_properties = "Character properties";
+    LanguageManager.edt_parts_add_effect = "Add effect";
 
     LanguageManager.edt_print_warning = "Preparation for printing can take a long time for large scenarios, are you sure you want to continue?";
 

@@ -1676,7 +1676,7 @@ var Main;
 
         // Clear everything in the sidebar.
         $(
-            "#preconditionsDiv, #userDefinedParameterEffects, #node-properties"
+            "#preconditionsDiv, #userDefinedParameterEffects, #node-properties, #node-fixed-parameter-effects"
         ).children().remove();
 
         // Don't show properties if no node or tree is selected. Display the minimap
@@ -1703,6 +1703,7 @@ var Main;
             // Insert the preconditions in the sidebar
             HtmlGenerator.insertPreconditions(node.preconditions, $("#preconditionsDiv"));
 
+            // User-defined parameters
             for (var k = 0; k < node.parameters.length; k++)
             {
                 var parameter = node.parameters[k];
@@ -1713,9 +1714,59 @@ var Main;
                 addedDiv.find(".value").val(parameter.value);
             }
 
+            var acceptableScopes = ['per', 'per-' + node.type];
+
+            // Fixed parameters
+            var showParameterItem = function(parametersObject, parameterItem, hLevel, container, idPrefix)
+            {
+                if (acceptableScopes.indexOf(parameterItem.scopes.statementScope) === -1) return;
+                if (parameterItem.kind === 'section')
+                {
+                    var sectionContainer = $('<div>');
+                    sectionContainer.append($('<h' + hLevel + '>', { text: parameterItem.name }));
+                    container.append(sectionContainer);
+                    parameterItem.sequence.forEach(function (subItem)
+                    {
+                        showParameterItem(parametersObject, subItem, hLevel + 1, sectionContainer, idPrefix);
+                    });
+                }
+                else
+                {
+                    if (!container.hasClass('containsParameter'))
+                    {
+                        container.addClass('containsParameter');
+                        container.append(Parts.getAddParameterEffectButtonHTML());
+                        var addedButton = container.children().last();
+                        addedButton.on('click', function()
+                        {
+
+                        });
+                    }
+
+                    // TODO: Move this to the add fixed parameter effect code
+                    /* var controlHtmlId = idPrefix + '-' + parameterItem.id;
+
+                    var parameterContainer = $('<div>', { id: idPrefix + '-container-' + parameterItem.id });
+                    container.append(parameterContainer);
+                    parameterContainer.append($('<label>', { text: parameterItem.name + ':', 'for': controlHtmlId }));
+                    parameterItem.type.appendControlTo(parameterContainer, controlHtmlId);
+                    if (parameterItem.id in parametersObject)
+                    {
+                        parameterItem.type.setInDOM(parameterContainer, parametersObject[parameterItem.id]);
+                    } */
+                }
+            };
+
+            fixedParameterEffectsEl = $("#node-fixed-parameter-effects");
+            fixedParameterEffectsEl.removeClass('containsParameter');
+            var hStartLevel = 3;
+            Config.configObject.parameters.sequence.forEach(function(subItem)
+            {
+                showParameterItem(node.parameters, subItem, hStartLevel, fixedParameterEffectsEl, fixedParameterEffectsEl.attr('id'));
+            });
+
             // Show the node properties
             var anyPropertyShown = false;
-            var acceptableScopes = ['per', 'per-' + node.type];
             var showPropertyItem = function (propertiesObject, propertyItem, hLevel, container, idPrefix)
             {
                 if (acceptableScopes.indexOf(propertyItem.scopes.statementScope) === -1) return;

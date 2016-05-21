@@ -11,6 +11,7 @@ var Parts;
         getConversationTextHTML: getConversationTextHTML,
         getDraftScreenHTML: getDraftScreenHTML,
         getParameterEffectHTML: getParameterEffectHTML,
+        getAddParameterEffectButtonHTML: getAddParameterEffectButtonHTML,
         getGroupPreconditionHTML: getGroupPreconditionHTML,
         getMediaScreenHTML: getMediaScreenHTML,
         getMetaScreenHTML: getMetaScreenHTML,
@@ -102,6 +103,14 @@ var Parts;
                 '<input type="number" class="value" pattern="[+\\-]?\\d*" style="width:40px;" />' +
                 '<button type="button" class="deleteParent" title="'+LanguageManager.sLang("edt_common_delete")+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
             '</div>';
+    }
+
+    function getAddParameterEffectButtonHTML()
+    {
+        return '' +
+            '<button title="' + LanguageManager.sLang('edt_common_add') + '">' +
+                '<img src="' + editor_url + 'png/others/plus.png" alt="+">' + LanguageManager.sLang('edt_parts_add_effect') +
+            '</button>';
     }
 
     function getGroupPreconditionHTML()
