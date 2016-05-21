@@ -12,6 +12,7 @@ var Parts;
         getDraftScreenHTML: getDraftScreenHTML,
         getParameterEffectHTML: getParameterEffectHTML,
         getAddParameterEffectButtonHTML: getAddParameterEffectButtonHTML,
+        getDeleteParentButtonHTML: getDeleteParentButtonHTML,
         getGroupPreconditionHTML: getGroupPreconditionHTML,
         getMediaScreenHTML: getMediaScreenHTML,
         getMetaScreenHTML: getMetaScreenHTML,
@@ -105,11 +106,16 @@ var Parts;
             '</div>';
     }
 
+    function getDeleteParentButtonHTML()
+    {
+        return '' + '<button type="button" class="deleteParent" title="'+LanguageManager.sLang("edt_common_delete")+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>';
+    }
+
     function getAddParameterEffectButtonHTML()
     {
         return '' +
             '<button title="' + LanguageManager.sLang('edt_common_add') + '">' +
-                '<img src="' + editor_url + 'png/others/plus.png" alt="+">' + LanguageManager.sLang('edt_parts_add_effect') +
+                '<img src="' + editor_url + 'png/others/plus.png" alt="+">' + ' ' + LanguageManager.sLang('edt_parts_add_effect') +
             '</button>';
     }
 

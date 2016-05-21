@@ -1732,16 +1732,39 @@ var Main;
                 }
                 else
                 {
+                    var parameterIdRefSelect;
                     if (!container.hasClass('containsParameter'))
                     {
                         container.addClass('containsParameter');
-                        container.append(Parts.getAddParameterEffectButtonHTML());
-                        var addedButton = container.children().last();
-                        addedButton.on('click', function()
-                        {
 
+                        parameterIdRefSelect = $('<select>', { class: "parameter-idref-select hidden" });
+                        container.append(parameterIdRefSelect);
+
+                        container.append($('<div>', { class: "fixed-parameter-effects-container"}));
+
+                        container.append(Parts.getAddParameterEffectButtonHTML());
+                        var addEffectButton = container.children().last();
+                        addEffectButton.on('click', function()
+                        {
+                            var effectsContainer = container.children('.fixed-parameter-effects-container');
+                            // Clone the select made for each separate section and put it in the parameter effect
+                            var select = container.children('.parameter-idref-select').clone();
+                            select.show();
+                            var deleteButton = $(Parts.getDeleteParentButtonHTML());
+                            deleteButton.on('click', function() { $(this).parent().remove(); });
+
+                            var parameterEffectDiv = $('<div>');
+                            parameterEffectDiv.append(select);
+                            parameterEffectDiv.append(deleteButton);
+                            effectsContainer.append(parameterEffectDiv);
                         });
                     }
+                    else
+                    {
+                        // TODO: Generalize the extraction of the parameter name
+                        parameterIdRefSelect = container.find(".parameter-idref-select");
+                    }
+                    parameterIdRefSelect.append('<option value="' + parameterItem.id + '">' + Main.escapeTags(Config.configObject.parameters.byId[parameterItem.id].name) + '</option>');
 
                     // TODO: Move this to the add fixed parameter effect code
                     /* var controlHtmlId = idPrefix + '-' + parameterItem.id;
