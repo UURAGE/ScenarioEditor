@@ -318,21 +318,21 @@ var Metadata;
 
     function addTimeParameter(div)
     {
-        var newParameters = ObjectGenerator.parameterObject(div);
+        var newParameter = ObjectGenerator.parameterObject(div);
 
-        if (newParameters === null) return;
+        if (!newParameter) return;
 
         var id = 't';
         $(div).prop('id', id);
-        Metadata.metaObject.parameters[id] = newParameters;
+        Metadata.metaObject.parameters[id] = newParameter;
 
         Metadata.timePId = id;
 
         $(div).removeClass("newParameter").addClass("existingParameter").addClass('isT');
 
-        var timeObject =
+        var timeEffect =
         {
-            parameterid : id,
+            idRef: id,
             changeType: "delta",
             value: 1
         };
@@ -343,9 +343,9 @@ var Metadata;
             if (node.type === Main.playerType)
             {
                 if (node.parameters !== undefined && node.parameters !== null)
-                    node.parameters.push(timeObject);
+                    node.parameters.push(timeEffect);
                 else
-                    node.parameters = [timeObject];
+                    node.parameters = [timeEffect];
             }
         }
     }
@@ -367,7 +367,7 @@ var Metadata;
             {
                 var node = Main.nodes[nodeID];
                 for (var i = 0; i < node.parameters.length; i++)
-                    if (node.parameters[i].parameterid == id)
+                    if (node.parameters[i].idRef === id)
                         node.parameters.splice(i, 1);
                 removeAllPreconditionsWithParam(id, node.preconditions);
             }
@@ -476,7 +476,7 @@ var Metadata;
             }
             else
             {
-                if (currentPrecondition.parameterid == paramIdToRemove)
+                if (currentPrecondition.idRef === paramIdToRemove)
                 {
                     precondition.preconditions.splice(i, 1);
                     i--;

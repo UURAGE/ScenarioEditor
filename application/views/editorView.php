@@ -271,13 +271,13 @@
                   </div>
                   <div id="preconditionsDiv" class="collapsable"></div>
                 </div>
-                <div id="allEffectHTML" class="sidebarSection">
+                <div id="effectsSection" class="sidebarSection">
                   <div class="sub-header clickable">
                     <h2 title="<?php sLang('edt_effects_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/effects.png");?>" alt=""><?php sLang('edt_effects');?></h2>
                   </div>
                   <div class="collapsable">
-                    <div id="parameterWrapper">
-                      <div id="effectParameterDiv"></div>
+                    <div>
+                      <div id="parameterEffects"></div>
                       <button id="addParameterEffect" title="<?php sLang('edt_add');?>"><img src="<?php echo editor_url("png/others/plus.png");?>" alt=""> <?php sLang('edt_add_effect');?></button>
                     </div>
                   </div>

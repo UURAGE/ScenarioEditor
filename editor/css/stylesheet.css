@@ -528,13 +528,13 @@ button.enabled
 }
 
 #properties.conversation > #statementHTML,
-#properties.conversation > #allEffectHTML,
 #properties.conversation > #headerPlayer,
 #properties.conversation > #headerComputer,
 #properties.conversation > #treeSubject,
 #properties.conversation > #jumpNode,
 #properties.conversation > #initsNode,
 #properties.conversation > #optionalSubject,
+#properties.conversation > #effectsSection,
 #properties.conversation > #propertiesSection,
 #properties.conversation > #characterSection
 {
@@ -542,7 +542,6 @@ button.enabled
 }
 
 #properties.tree > #statementHTML,
-#properties.tree > #allEffectHTML,
 #properties.tree > #allConversationsHTML,
 #properties.tree > #allPreconditionsHTML,
 #properties.tree > #commentHTML,
@@ -554,6 +553,7 @@ button.enabled
 #properties.tree > #initsNode,
 #properties.tree > #jumpNode,
 #properties.tree > #calculateScore,
+#properties.tree > #effectsSection,
 #properties.tree > #propertiesSection,
 #properties.tree > #characterSection
 {

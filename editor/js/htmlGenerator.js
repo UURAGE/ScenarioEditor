@@ -39,11 +39,10 @@ var HtmlGenerator;
             {
                 if (Metadata.atLeastOneParameter())
                 {
-                    var container = $(this).parent().children(
-                        ".groupPreconditionDiv");
+                    var container = $(this).parent().children(".groupPreconditionDiv");
                     addEmptyPrecondition(container);
-                    focusFirstTabindexedDescendant(container.children(
-                        ".precondition").last());
+                    var addedDiv = container.children(".precondition").last();
+                    focusFirstTabindexedDescendant(addedDiv);
                 }
                 else
                 {
@@ -57,8 +56,7 @@ var HtmlGenerator;
             {
                 if (Metadata.atLeastOneParameter())
                 {
-                    var container = $(this).parent().children(
-                        ".groupPreconditionDiv");
+                    var container = $(this).parent().children(".groupPreconditionDiv");
                     addEmptyGroupPrecondition(container);
                     container.children(".precondition").last().find(
                         'button').first().focus();
@@ -75,12 +73,10 @@ var HtmlGenerator;
             if (Metadata.atLeastOneParameter())
             {
                 addEmptyParameterEffect();
-                focusFirstTabindexedDescendant($(".effect")
-                    .last());
+                focusFirstTabindexedDescendant($(".effect").last());
             }
             else
             {
-
                 alert(
                     LanguageManager.sLang("edt_html_error_no_effect")
                 );
@@ -124,13 +120,11 @@ var HtmlGenerator;
             function()
             {
                 var containingGroupPrecondition =
-                    $(this).parent().parent().closest(
-                        ".groupprecondition");
+                    $(this).parent().parent().closest(".groupprecondition");
                 $(this).parent().remove();
-                updateGroupPreconditionCounter(
-                    containingGroupPrecondition);
+                updateGroupPreconditionCounter(containingGroupPrecondition);
             });
-        $("#effectParameterDiv, #conversationDiv"
+        $("#parameterEffects, #conversationDiv"
         ).on('click', '.deleteParent', function()
         {
             $(this).parent().remove();
@@ -143,16 +137,17 @@ var HtmlGenerator;
 
     function addConversationOfType(type)
     {
-        return $("#conversationDiv").append(conversationHTML).children()
-            .last().addClass(type);
+        $("#conversationDiv").append(conversationHTML);
+        var addedDiv = $("#conversationDiv").children().last();
+        return addedDiv.addClass(type);
     }
 
     function addEmptyParameterEffect()
     {
-        $("#effectParameterDiv").append(parameterEffectHTML);
-        var addedDiv = $("#effectParameterDiv").children().last();
-
-        insertParameters(addedDiv);
+        $("#parameterEffects").append(parameterEffectHTML);
+        var addedDiv = $("#parameterEffects").children().last();
+        insertParameters(addedDiv, Metadata.metaObject.parameters);
+        insertParameters(addedDiv, Config.configObject.parameters);
         return addedDiv;
     }
 
@@ -163,15 +158,13 @@ var HtmlGenerator;
             "input[value=" + precondition.type + "]").prop(
             'checked', true);
 
-        var divToAddChildren = addedDiv.children(
-            ".groupPreconditionDiv");
+        var divToAddChildren = addedDiv.children(".groupPreconditionDiv");
         for (var i = 0; i < precondition.preconditions.length; i++)
         {
             var currentPrecondition = precondition.preconditions[i];
             if ("type" in currentPrecondition)
             {
-                insertPreconditions(currentPrecondition,
-                    divToAddChildren);
+                insertPreconditions(currentPrecondition, divToAddChildren);
             }
             else
             {
@@ -213,8 +206,7 @@ var HtmlGenerator;
     // Appends and returns html to show the objects.
     function addConversation(object)
     {
-        var addedConversation = addConversationOfType($(object).data(
-            "type"));
+        var addedConversation = addConversationOfType($(object).data("type"));
         focusFirstTabindexedDescendant($(".conversation").last());
         return addedConversation;
     }
@@ -223,7 +215,7 @@ var HtmlGenerator;
     {
         divToAdd.append(preconditionHTML);
         var addedDiv = $(divToAdd).children().last();
-        insertParameters(addedDiv);
+        insertParameters(addedDiv, Metadata.metaObject.parameters);
         updateGroupPreconditionCounter(divToAdd.closest(".groupprecondition"));
         return addedDiv;
     }
@@ -236,8 +228,7 @@ var HtmlGenerator;
         addedDiv.children(".groupPreconditionRadioDiv").find("input").each(
             function()
             {
-                $(this).prop("name", "preconRadio" +
-                    radioButtonCounter);
+                $(this).prop("name", "preconRadio" + radioButtonCounter);
             });
         updateGroupPreconditionCounter(divToAdd.closest(
             ".groupprecondition"));
@@ -246,8 +237,7 @@ var HtmlGenerator;
 
     function updateGroupPreconditionCounter(div)
     {
-        var childCount = div.children(".groupPreconditionDiv").children()
-            .length;
+        var childCount = div.children(".groupPreconditionDiv").children().length;
         var states = {
             empty: childCount === 0,
             single: childCount === 1,
@@ -262,12 +252,12 @@ var HtmlGenerator;
     }
 
     // Inserts all the parameters for the effects and preconditions.
-    function insertParameters(div)
+    function insertParameters(div, parameters)
     {
-        for (var pId in Metadata.metaObject.parameters)
+        for (var pId in parameters)
         {
             div.find(".parameter-idref-select").append('<option value="' + pId + '">' +
-                Main.escapeTags(Metadata.metaObject.parameters[pId].name) + '</option>');
+                Main.escapeTags(parameters[pId].name) + '</option>');
         }
     }
 
@@ -277,7 +267,6 @@ var HtmlGenerator;
         div.find(".name").val(name);
         div.find(".initialValue").val(initialValue);
         div.find(".weightForFinalScore").val(weight);
-
         return div;
     }
 

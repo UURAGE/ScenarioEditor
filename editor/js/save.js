@@ -402,7 +402,7 @@ var Save;
                 {
                     var pEff = node.parameters[k];
                     var pEffElement = addAndReturnElement("parameterEffect", nameSpace, parameterEffectsEl);
-                    pEffElement.setAttribute("idref", pEff.parameterid);
+                    pEffElement.setAttribute("idref", pEff.idRef);
                     pEffElement.setAttribute("changeType", pEff.changeType);
                     pEffElement.setAttribute("value", pEff.value);
                 }
