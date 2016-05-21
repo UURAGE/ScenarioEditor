@@ -277,8 +277,9 @@
                   </div>
                   <div class="collapsable">
                     <div>
-                      <div id="parameterEffects"></div>
-                      <button id="addParameterEffect" title="<?php sLang('edt_add');?>"><img src="<?php echo editor_url("png/others/plus.png");?>" alt=""> <?php sLang('edt_add_effect');?></button>
+                      <h4 style="display:inline">User-defined</h4>
+                      <div id="userDefinedParameterEffects"></div>
+                      <button id="addUserDefinedParameterEffect" title="<?php sLang('edt_add');?>"><img src="<?php echo editor_url("png/others/plus.png");?>" alt=""> <?php sLang('edt_add_effect');?></button>
                     </div>
                   </div>
                 </div>

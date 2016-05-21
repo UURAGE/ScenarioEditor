@@ -68,11 +68,11 @@ var HtmlGenerator;
                     );
                 }
             });
-        $("#addParameterEffect").on('click', function()
+        $("#addUserDefinedParameterEffect").on('click', function()
         {
             if (Metadata.atLeastOneUserDefinedParameter())
             {
-                addEmptyParameterEffect();
+                addEmptyParameterEffect(Metadata.metaObject.parameters);
                 focusFirstTabindexedDescendant($(".effect").last());
             }
             else
@@ -106,7 +106,10 @@ var HtmlGenerator;
                 var div = $("#params").children().last();
                 // console.log(div.children());
                 // div.children().children().prop('disabled', true);
-                addParameter(div, LanguageManager.sLang("edt_html_time"), 0, 0);
+                $(div).prop('id', 't');
+                div.find(".name").val(LanguageManager.sLang("edt_html_time"));
+                div.find(".initialValue").val(0);
+                div.find(".weightForFinalScore").val(0);
                 Metadata.addTimeParameter(div);
 
                 focusFirstTabindexedDescendant($("#params").children().last());
@@ -124,7 +127,7 @@ var HtmlGenerator;
                 $(this).parent().remove();
                 updateGroupPreconditionCounter(containingGroupPrecondition);
             });
-        $("#parameterEffects, #conversationDiv"
+        $("#userDefinedParameterEffects, #conversationDiv"
         ).on('click', '.deleteParent', function()
         {
             $(this).parent().remove();
@@ -142,12 +145,11 @@ var HtmlGenerator;
         return addedDiv.addClass(type);
     }
 
-    function addEmptyParameterEffect()
+    function addEmptyParameterEffect(parameters)
     {
-        $("#parameterEffects").append(parameterEffectHTML);
-        var addedDiv = $("#parameterEffects").children().last();
-        insertParameters(addedDiv, Metadata.metaObject.parameters);
-        insertParameters(addedDiv, Config.configObject.parameters);
+        $("#userDefinedParameterEffects").append(parameterEffectHTML);
+        var addedDiv = $("#userDefinedParameterEffects").children().last();
+        insertParameters(addedDiv, parameters);
         return addedDiv;
     }
 
@@ -216,6 +218,7 @@ var HtmlGenerator;
         divToAdd.append(preconditionHTML);
         var addedDiv = $(divToAdd).children().last();
         insertParameters(addedDiv, Metadata.metaObject.parameters);
+        insertParameters(addedDiv, Config.configObject.parameters);
         updateGroupPreconditionCounter(divToAdd.closest(".groupprecondition"));
         return addedDiv;
     }
@@ -259,15 +262,6 @@ var HtmlGenerator;
             div.find(".parameter-idref-select").append('<option value="' + pId + '">' +
                 Main.escapeTags(parameters.byId[pId].name) + '</option>');
         }
-    }
-
-    // Add parameter to metaData div
-    function addParameter(div, name, initialValue, weight)
-    {
-        div.find(".name").val(name);
-        div.find(".initialValue").val(initialValue);
-        div.find(".weightForFinalScore").val(weight);
-        return div;
     }
 
     // Focuses on the first descendant that has a non-negative tabindex.

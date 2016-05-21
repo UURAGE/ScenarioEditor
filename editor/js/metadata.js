@@ -327,7 +327,6 @@ var Metadata;
 
     function addTimeParameter(div)
     {
-        $(div).prop('id', 't');
         var newParameter = ObjectGenerator.parameterObject(div);
 
         if (!newParameter) return;
@@ -399,7 +398,6 @@ var Metadata;
         {
             var parameter = ObjectGenerator.parameterObject($(this));
             Metadata.metaObject.parameters.byId[parameter.id] = parameter;
-            Metadata.metaObject.parameters.sequence.push(parameter);
         });
 
         // All new parameters.

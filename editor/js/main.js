@@ -1240,7 +1240,7 @@ var Main;
         // Save parameter effects.
         var parameterEffects = [];
 
-        $("#parameterEffects").children().each(function()
+        $("#userDefinedParameterEffects").children().each(function()
         {
             parameterEffects.push(ObjectGenerator.effectObject(
                 $(this)));
@@ -1676,7 +1676,7 @@ var Main;
 
         // Clear everything in the sidebar.
         $(
-            "#preconditionsDiv, #parameterEffects, #node-properties"
+            "#preconditionsDiv, #userDefinedParameterEffects, #node-properties"
         ).children().remove();
 
         // Don't show properties if no node or tree is selected. Display the minimap
@@ -1707,7 +1707,7 @@ var Main;
             {
                 var parameter = node.parameters[k];
 
-                addedDiv = HtmlGenerator.addEmptyParameterEffect();
+                addedDiv = HtmlGenerator.addEmptyParameterEffect(Metadata.metaObject.parameters);
                 addedDiv.find(".parameter-idref-select").val(parameter.idRef);
                 addedDiv.find(".changeType").val(parameter.changeType);
                 addedDiv.find(".value").val(parameter.value);
