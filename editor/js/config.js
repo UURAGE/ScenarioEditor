@@ -65,7 +65,7 @@ var Config;
         }
         else
         {
-            return loadCollection($(nodeXML), 'group', parentScopes);
+            return loadCollection($(nodeXML), nodeName, 'group', parentScopes);
         }
     }
 
