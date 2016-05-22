@@ -1780,7 +1780,7 @@ var Main;
             };
 
             // Shows the sections and add buttons when there are effects that can be added
-            var showParameterItem = function(parameterDefinitions, parameterEffects, parameterItem, hLevel, container)
+            var showParameterItem = function(parameterDefinitions, parameterItem, hLevel, container)
             {
                 if (acceptableScopes.indexOf(parameterItem.scopes.statementScope) === -1) return false;
                 if (parameterItem.kind === 'section')
@@ -1793,7 +1793,7 @@ var Main;
                     var anyParameterShown = false;
                     parameterItem.sequence.forEach(function (subItem)
                     {
-                        if (showParameterItem(parameterDefinitions, parameterEffects, subItem, hLevel + 1, sectionContainer))
+                        if (showParameterItem(parameterDefinitions, subItem, hLevel + 1, sectionContainer))
                             anyParameterShown = true;
                     });
 
@@ -1826,7 +1826,7 @@ var Main;
                     }
                     else
                     {
-                        parameterIdRefSelect = container.find(".fixed-parameter-effect-idref-select");
+                        parameterIdRefSelect = container.children('select.fixed-parameter-effect-idref-select.hidden');
                     }
                     parameterIdRefOption = $('<option>', { value: parameterItem.id, text:  Main.escapeTags(parameterItem.name)});
                     parameterIdRefSelect.append(parameterIdRefOption);
@@ -1842,7 +1842,7 @@ var Main;
             var hStartLevel = 3;
             Config.configObject.parameters.sequence.forEach(function(subItem)
             {
-                showParameterItem(Config.configObject.parameters, node.fixedParameterEffects, subItem, hStartLevel, fixedParameterEffectsEl);
+                showParameterItem(Config.configObject.parameters, subItem, hStartLevel, fixedParameterEffectsEl);
             });
 
             // Add the effects that were previously defined
