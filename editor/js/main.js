@@ -1262,9 +1262,6 @@ var Main;
 
         // Change the text of the node.
         changeNodeText(Main.selectedElement);
-
-        // Repaint the selected node after all changes.
-        Main.trees[node.parent].plumbInstance.repaint($('#' + Main.selectedElement));
     }
 
     function highlightParents(nodeID)
