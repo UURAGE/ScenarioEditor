@@ -264,9 +264,10 @@ var KeyControl;
                 {
                     top: $("#" + Main.selectedElements[j]).offset().top - 5
                 });
-            }
 
-            plumbInstance.repaintEverything();
+                plumbInstance.updateOffset({elId:Main.selectedElements[j], recalc:true});
+                plumbInstance.repaint(Main.selectedElements[j], null, 0);
+            }
         }
     }
 
@@ -282,9 +283,10 @@ var KeyControl;
                 top: $("#" + Main.selectedElements[i]).offset()
                     .top + 5
             });
-        }
 
-        plumbInstance.repaintEverything();
+            plumbInstance.updateOffset({elId:Main.selectedElements[i], recalc:true});
+            plumbInstance.repaint(Main.selectedElements[i], null, 0);
+        }
     }
 
     //If a node is selected and arrow up is pressed, move the node to the left.
@@ -315,8 +317,10 @@ var KeyControl;
                 {
                     left: $("#" + Main.selectedElements[j]).offset().left - 5
                 });
+
+                plumbInstance.updateOffset({elId:Main.selectedElements[j], recalc:true});
+                plumbInstance.repaint(Main.selectedElements[j], null, 0);
             }
-            plumbInstance.repaintEverything();
         }
     }
 
@@ -332,9 +336,10 @@ var KeyControl;
                 left: $("#" + Main.selectedElements[i]).offset()
                     .left + 5
             });
-        }
 
-        plumbInstance.repaintEverything();
+            plumbInstance.updateOffset({elId:Main.selectedElements[i], recalc:true});
+            plumbInstance.repaint(Main.selectedElements[i], null, 0);
+        }
     }
 
     function selectAll()
