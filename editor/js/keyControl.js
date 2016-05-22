@@ -277,8 +277,7 @@ var KeyControl;
                     top: $("#" + Main.selectedElements[j]).offset().top - 5
                 });
 
-                plumbInstance.updateOffset({elId:Main.selectedElements[j], recalc:true});
-                plumbInstance.repaint(Main.selectedElements[j], null, 0);
+                plumbInstance.revalidate(Main.selectedElements[j], 0);
             }
         }
     }
@@ -296,8 +295,7 @@ var KeyControl;
                     .top + 5
             });
 
-            plumbInstance.updateOffset({elId:Main.selectedElements[i], recalc:true});
-            plumbInstance.repaint(Main.selectedElements[i], null, 0);
+            plumbInstance.revalidate(Main.selectedElements[i], 0);
         }
     }
 
@@ -330,8 +328,7 @@ var KeyControl;
                     left: $("#" + Main.selectedElements[j]).offset().left - 5
                 });
 
-                plumbInstance.updateOffset({elId:Main.selectedElements[j], recalc:true});
-                plumbInstance.repaint(Main.selectedElements[j], null, 0);
+                plumbInstance.revalidate(Main.selectedElements[j], 0);
             }
         }
     }
@@ -349,8 +346,7 @@ var KeyControl;
                     .left + 5
             });
 
-            plumbInstance.updateOffset({elId:Main.selectedElements[i], recalc:true});
-            plumbInstance.repaint(Main.selectedElements[i], null, 0);
+            plumbInstance.revalidate(Main.selectedElements[i], 0);
         }
     }
 
