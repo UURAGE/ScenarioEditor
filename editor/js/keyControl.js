@@ -158,19 +158,31 @@ var KeyControl;
     var ctrlNumberControl = {
         38: function()
         {
-            moveNodeUp();
+            if(Main.selectedElements[0] in Main.nodes)
+                moveNodeUp();
+            else if(Main.selectedElements[0] in Main.trees)
+                moveTree(function(x){return x;}, function(y){return y-1;});//arrow(lambda) functions would be nice here when support is sorted out
         },
         40: function()
         {
-            moveNodeDown();
+            if(Main.selectedElements[0] in Main.nodes)
+                moveNodeDown();
+            else if(Main.selectedElements[0] in Main.trees)
+                moveTree(function(x){return x;}, function(y){return y+1;});
         },
         39: function()
         {
-            moveNodeRight();
+            if(Main.selectedElements[0] in Main.nodes)
+                moveNodeRight();
+            else if(Main.selectedElements[0] in Main.trees)
+                moveTree(function(x){return x+1;}, function(y){return y;});
         },
         37: function()
         {
-            moveNodeLeft();
+            if(Main.selectedElements[0] in Main.nodes)
+                moveNodeLeft();
+            else if(Main.selectedElements[0] in Main.trees)
+                moveTree(function(x){return x-1;}, function(y){return y;});
         }
     };
 
@@ -207,7 +219,7 @@ var KeyControl;
             $("#" + elementID).addClass("multiSelected");
         }
 
-        if(elementID !== null && elementID !== undefined && !(elementID in Main.trees))
+        if(elementID !== null && elementID !== undefined && elementID in Main.nodes)
             Main.getPlumbInstanceByNodeID(elementID).addToDragSelection($("#"+elementID)[0]);
     }
 
@@ -340,6 +352,69 @@ var KeyControl;
             plumbInstance.updateOffset({elId:Main.selectedElements[i], recalc:true});
             plumbInstance.repaint(Main.selectedElements[i], null, 0);
         }
+    }
+
+    function moveTree(modifyX, modifyY)
+    {
+        var allClear = true;
+
+        for (var i = 0; i < Main.selectedElements.length; i++)
+        {
+            var tree = Main.trees[Main.selectedElements[i]];
+            var newGridX = modifyX(tree.leftPos);
+            var newGridY = modifyY(tree.topPos);
+
+            //new position is within bounds
+            if(newGridX >= 0 && newGridY >= 0)
+            {
+                //check if the new position is blocked by an unselected tree
+                //selected trees may occupy the space since they will move anyway
+                //all selected trees will move in the same distance in the same direction so no two selected trees can end up in the same space if they are not already
+                allClear = allClear && checkUnselectedGridAvailable(newGridX, newGridY);
+
+                if(!allClear)
+                    break;
+            }
+            else
+            {
+                allClear = false;
+                break;
+            }
+        }
+
+        if(allClear)
+        {
+            for (var i = 0; i < Main.selectedElements.length; i++)
+            {
+                var tree = Main.trees[Main.selectedElements[i]];
+                var newGridX = modifyX(tree.leftPos);
+                var newGridY = modifyY(tree.topPos);
+
+                tree.leftPos = newGridX;
+                tree.topPos = newGridY;
+
+                tree.dragDiv.css(
+                {
+                    "top": tree.topPos*Main.gridY,
+                    "left": tree.leftPos*Main.gridX,
+                });
+            }
+        }
+    }
+
+    function checkUnselectedGridAvailable(gridX, gridY)
+    {
+        var available = true;
+
+        $.each(Main.trees, function(id, tree)
+        {
+            if(id in Main.selectedElements)
+                return;
+
+            available = available && !(tree.leftPos === gridX && tree.topPos === gridY);
+        });
+
+        return available;
     }
 
     function selectAll()
