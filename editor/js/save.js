@@ -91,6 +91,13 @@ var Save;
             var paramRefEl = addAndReturnElement("paramRef", nameSpace, scaleEl);
             paramRefEl.setAttribute("idref", pId);
         }
+        for (var parameterId in Config.configObject.parameters.byId)
+        {
+            var parameter = Config.configObject.parameters.byId[parameterId];
+            var parameterEl = addAndReturnElement("parameter", nameSpace, parametersEl);
+            parameterEl.setAttribute("id", parameter.id);
+            parameter.type.insertUnderlyingType(parameterEl);
+        }
 
         // Save characters
         var charactersEl = addAndReturnElement("characters", nameSpace, definitionsEl);
@@ -405,6 +412,17 @@ var Save;
                     pEffElement.setAttribute("idref", pEff.idRef);
                     pEffElement.setAttribute("changeType", pEff.changeType);
                     pEffElement.setAttribute("value", pEff.value);
+                }
+
+                for (var parameterIdRef in node.fixedParameterEffects)
+                {
+                    node.fixedParameterEffects[parameterIdRef].forEach(function(parameterEffect)
+                    {
+                        var pEffElement = addAndReturnElement("parameterEffect", nameSpace, parameterEffectsEl);
+                        pEffElement.setAttribute("idref", parameterEffect.idRef);
+                        pEffElement.setAttribute("changeType", parameterEffect.changeType);
+                        pEffElement.setAttribute("value", parameterEffect.value);
+                    });
                 }
             }
 
