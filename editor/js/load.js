@@ -482,6 +482,7 @@ var Load;
             type: type,
             characterIdRef: characterIdRef,
             parameters: parameterEffects,
+            fixedParameterEffects: {},
             preconditions: preconditionsJS,
             properties: properties,
             characters: characters,

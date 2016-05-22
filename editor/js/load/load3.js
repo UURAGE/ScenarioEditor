@@ -341,6 +341,7 @@ var Load3;
             type: type,
             characterIdRef: Config.configObject.characters.sequence[0].id,
             parameters: parameterEffects,
+            fixedParameterEffects: {},
             preconditions: preconditionsJS,
             intent: intentsArray,
             properties: {},

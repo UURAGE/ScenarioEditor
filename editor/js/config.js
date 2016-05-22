@@ -14,7 +14,7 @@ var Config;
     var defaultPropertyCollection = { kind: 'toplevel', scopes: defaultPropertyScopes, sequence: [], byId: {} };
 
     var defaultParameterScopes = { statementScope: 'per' };
-    var defaultParameterCollection = { kind: 'toplevel', scopes: defaultParameterScopes, sequence: [], byId: {} }
+    var defaultParameterCollection = { kind: 'toplevel', scopes: defaultParameterScopes, sequence: [], byId: {} };
 
     $(document).ready(loadConfig);
 
@@ -172,6 +172,8 @@ var Config;
         'string':
         {
             name: 'string',
+            assignmentOperators: ['set'],
+            relationalOperators: ['equalTo', 'notEqualTo'],
             loadType: function(typeXML) { return this; },
             insertUnderlyingType: function(typeXML)
             {
@@ -198,6 +200,8 @@ var Config;
         'integer':
         {
             name: 'integer',
+            assignmentOperators: ['set', 'delta'],
+            relationalOperators: ['equalTo', 'notEqualTo', 'greaterThanEqualTo', 'lessThanEqualTo', 'greaterThan', 'lessThan'],
             loadType: function(typeXML) { return this; },
             insertUnderlyingType: function(typeXML)
             {
@@ -227,6 +231,8 @@ var Config;
         'boolean':
         {
             name: 'boolean',
+            assignmentOperators: ['set'],
+            relationalOperators: ['equalTo', 'notEqualTo'],
             loadType: function(typeXML) { return this; },
             insertUnderlyingType: function(typeXML)
             {
@@ -253,6 +259,8 @@ var Config;
         'enumeration':
         {
             name: 'enumeration',
+            assignmentOperators: ['set'],
+            relationalOperators: ['equalTo', 'notEqualTo'],
             loadType: function(typeXML)
             {
                 var values = [];

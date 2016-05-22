@@ -652,6 +652,7 @@ var Main;
             type: type,
             characterIdRef: characterIdRef,
             parameters: parameters,
+            fixedParameterEffects: {},
             preconditions:
             {
                 type: "alwaysTrue",
@@ -1237,16 +1238,34 @@ var Main;
             node.characterIdRef = $("#characterSelection option:selected").val();
         }
 
-        // Save parameter effects.
+        // Save user-defined parameter effects.
         var parameterEffects = [];
-
         $("#userDefinedParameterEffects").children().each(function()
         {
-            parameterEffects.push(ObjectGenerator.effectObject(
-                $(this)));
+            parameterEffects.push(ObjectGenerator.effectObject($(this)));
         });
-
         node.parameters = parameterEffects;
+
+        // Save fixed parameter effects.
+        node.fixedParameterEffects = {};
+        $("#fixed-parameter-effects").find('.fixed-parameter-effect-container').each(function()
+        {
+            var parameterIdRef = $(this).find('.fixed-parameter-effect-idref-select').val();
+            var controlContainer = $(this).find('.fixed-parameter-effect-control-container');
+            var parameterValue = Config.configObject.parameters.byId[parameterIdRef].type.getFromDOM(controlContainer);
+            var parameterChangeType = $(this).find('.fixed-parameter-effect-changetype-select').val();
+            var parameterEffect = {
+                idRef: parameterIdRef,
+                changeType: parameterChangeType,
+                value: parameterValue
+            };
+
+            if (!(parameterEffect.idRef in node.fixedParameterEffects))
+            {
+                node.fixedParameterEffects[parameterEffect.idRef] = [];
+            }
+            node.fixedParameterEffects[parameterEffect.idRef].push(parameterEffect);
+        });
 
         // Save preconditions.
         node.preconditions = ObjectGenerator.preconditionObject($("#preconditionsDiv").children().first());
@@ -1676,7 +1695,7 @@ var Main;
 
         // Clear everything in the sidebar.
         $(
-            "#preconditionsDiv, #userDefinedParameterEffects, #node-properties, #node-fixed-parameter-effects"
+            "#preconditionsDiv, #userDefinedParameterEffects, #node-properties, #fixed-parameter-effects"
         ).children().remove();
 
         // Don't show properties if no node or tree is selected. Display the minimap
@@ -1703,7 +1722,7 @@ var Main;
             // Insert the preconditions in the sidebar
             HtmlGenerator.insertPreconditions(node.preconditions, $("#preconditionsDiv"));
 
-            // User-defined parameters
+            // Show user-defined parameters
             for (var k = 0; k < node.parameters.length; k++)
             {
                 var parameter = node.parameters[k];
@@ -1716,83 +1735,133 @@ var Main;
 
             var acceptableScopes = ['per', 'per-' + node.type];
 
-            // Fixed parameters
-            var showParameterItem = function(parametersObject, parameterItem, hLevel, container, idPrefix)
+            // Show fixed parameters
+            // Accumulator for mapping a parameter id to it's effects container
+            var idRefToEffectsContainer = {};
+            // Appends a default effect to the container, which changes dynamically based on the parameter selected
+            var appendEffectContainerTo = function(effectsContainer, parameterDefinitions)
             {
-                if (acceptableScopes.indexOf(parameterItem.scopes.statementScope) === -1) return;
+                // This element contains the dynamically changing changeType and control for possible values
+                // It is separate from the rest so that it can be emptied
+                var effectDiv = $('<div>', { style:"display:inline" });
+
+                // Dynamically changes the type of the effect according to the given parameter
+                var changeEffectType = function(pId)
+                {
+                    var changeTypeSelect = $('<select>', { class: "fixed-parameter-effect-changetype-select" });
+                    parameterDefinitions.byId[pId].type.assignmentOperators.forEach(function(op)
+                    {
+                        changeTypeSelect.append($('<option>', { value: op, text: op }));
+                    });
+                    effectDiv.append(changeTypeSelect);
+
+                    var controlContainer = $('<div>', { class: "fixed-parameter-effect-control-container", style:"display:inline" });
+                    parameterDefinitions.byId[pId].type.appendControlTo(controlContainer);
+                    effectDiv.append(controlContainer);
+                };
+
+                // Clone the hidden select accumulated for each separate section and put it in the parameter effect
+                var idRefSelect = effectsContainer.parent().children('select.fixed-parameter-effect-idref-select.hidden').clone();
+                changeEffectType($(idRefSelect).val());
+                idRefSelect.on('change', function()
+                {
+                    effectDiv.empty();
+                    changeEffectType($(this).val());
+                });
+                idRefSelect.removeClass('hidden');
+
+                // This button deletes the effect (container)
+                var deleteButton = $(Parts.getDeleteParentButtonHTML());
+                deleteButton.on('click', function() { $(this).parent().remove(); });
+
+                var effectContainer = $('<div>', { class: "fixed-parameter-effect-container" });
+                effectContainer.append(idRefSelect).append(effectDiv).append(deleteButton);
+                effectsContainer.append(effectContainer);
+            };
+
+            // Shows the sections and add buttons when there are effects that can be added
+            var showParameterItem = function(parameterDefinitions, parameterEffects, parameterItem, hLevel, container)
+            {
+                if (acceptableScopes.indexOf(parameterItem.scopes.statementScope) === -1) return false;
                 if (parameterItem.kind === 'section')
                 {
                     var sectionContainer = $('<div>');
                     sectionContainer.append($('<h' + hLevel + '>', { text: parameterItem.name }));
                     container.append(sectionContainer);
+
+                    // Show all subsections or possibilities to add effects
+                    var anyParameterShown = false;
                     parameterItem.sequence.forEach(function (subItem)
                     {
-                        showParameterItem(parametersObject, subItem, hLevel + 1, sectionContainer, idPrefix);
+                        if (showParameterItem(parameterDefinitions, parameterEffects, subItem, hLevel + 1, sectionContainer))
+                            anyParameterShown = true;
                     });
+
+                    // Remove the section if there are no effects inside it and no effects inside subsections to add
+                    if (!anyParameterShown)
+                        sectionContainer.remove();
+
+                    return anyParameterShown;
                 }
                 else
                 {
                     var parameterIdRefSelect;
-                    if (!container.hasClass('containsParameter'))
+                    if (!container.hasClass("fixed-parameter-effects-possible"))
                     {
-                        container.addClass('containsParameter');
+                        container.addClass("fixed-parameter-effects-possible");
 
-                        parameterIdRefSelect = $('<select>', { class: "parameter-idref-select hidden" });
+                        // Make a new select that accumulates all the possible parameter id's that can be affected
+                        parameterIdRefSelect = $('<select>', { class: "fixed-parameter-effect-idref-select hidden" });
                         container.append(parameterIdRefSelect);
 
-                        container.append($('<div>', { class: "fixed-parameter-effects-container"}));
+                        var effectsContainer = $('<div>', { class: "fixed-parameter-effects-container"});
+                        container.append(effectsContainer);
 
                         container.append(Parts.getAddParameterEffectButtonHTML());
                         var addEffectButton = container.children().last();
                         addEffectButton.on('click', function()
                         {
-                            var effectsContainer = container.children('.fixed-parameter-effects-container');
-
-                            var effectDiv = $('<div>', { class: "fixed-parameter-effect-control", style:"display:inline" });
-
-                            // Clone the select made for each separate section and put it in the parameter effect
-                            var select = container.children('.parameter-idref-select').clone();
-                            var changeEffectType = function(pId)
-                            {
-                                // TODO Remove access to config here, to generalize character-independent and per-character scoping
-                                Config.configObject.parameters.byId[pId].type.appendControlTo(effectDiv, "");
-                                if (pId in parametersObject)
-                                {
-                                    Config.configObject.parameters.byId[pId].type.setInDOM(effectDiv, parametersObject[pId]);
-                                }
-                            };
-                            changeEffectType($(select).val());
-
-                            select.on('change', function()
-                            {
-                                effectDiv.empty();
-                                changeEffectType($(this).val());
-                            });
-                            select.removeClass('hidden');
-
-                            var deleteButton = $(Parts.getDeleteParentButtonHTML());
-                            deleteButton.on('click', function() { $(this).parent().remove(); });
-
-                            var effectContainer = $('<div>', { class: "fixed-parameter-effect-container" });
-                            effectContainer.append(select).append(effectDiv).append(deleteButton);
-                            effectsContainer.append(effectContainer);
+                            appendEffectContainerTo(effectsContainer, parameterDefinitions);
                         });
                     }
                     else
                     {
-                        parameterIdRefSelect = container.find(".parameter-idref-select");
+                        parameterIdRefSelect = container.find(".fixed-parameter-effect-idref-select");
                     }
-                    parameterIdRefSelect.append('<option value="' + parameterItem.id + '">' + Main.escapeTags(parameterItem.name) + '</option>');
+                    parameterIdRefOption = $('<option>', { value: parameterItem.id, text:  Main.escapeTags(parameterItem.name)});
+                    parameterIdRefSelect.append(parameterIdRefOption);
+
+                    idRefToEffectsContainer[parameterItem.id] = container.children('.fixed-parameter-effects-container');
+
+                    return true;
                 }
             };
 
-            fixedParameterEffectsEl = $("#node-fixed-parameter-effects");
-            fixedParameterEffectsEl.removeClass('containsParameter');
+            fixedParameterEffectsEl = $("#fixed-parameter-effects");
+            fixedParameterEffectsEl.removeClass('fixed-parameter-effects-possible');
             var hStartLevel = 3;
             Config.configObject.parameters.sequence.forEach(function(subItem)
             {
-                showParameterItem(node.parameters, subItem, hStartLevel, fixedParameterEffectsEl, fixedParameterEffectsEl.attr('id'));
+                showParameterItem(Config.configObject.parameters, node.fixedParameterEffects, subItem, hStartLevel, fixedParameterEffectsEl);
             });
+
+            // Add the effects that were previously defined
+            for (var parameterIdRef in node.fixedParameterEffects)
+            {
+                if (parameterIdRef in idRefToEffectsContainer)
+                {
+                    node.fixedParameterEffects[parameterIdRef].forEach(function(effect)
+                    {
+                        var effectsContainer = idRefToEffectsContainer[parameterIdRef];
+                        appendEffectContainerTo(effectsContainer, Config.configObject.parameters);
+                        var addedEffectContainer = effectsContainer.children().last();
+
+                        addedEffectContainer.find('.fixed-parameter-effect-idref-select').val(effect.idRef).change();
+                        addedEffectContainer.find('.fixed-parameter-effect-changetype-select').val(effect.changeType);
+                        Config.configObject.parameters.byId[effect.idRef].type.setInDOM(addedEffectContainer.find('.fixed-parameter-effect-control-container'), effect.value);
+                    });
+                }
+            }
 
             // Show the node properties
             var anyPropertyShown = false;
