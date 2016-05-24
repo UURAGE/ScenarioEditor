@@ -241,7 +241,7 @@ var Load;
             defaultChangeType = LanguageManager.sLang("edt_parts_delta");
 
         var parameters = Metadata.getNewDefaultParametersObject();
-        $(definitions).children('parameters').children().each(function()
+        $(definitions).children('parameters').children('userDefined').children().each(function()
         {
             var paramId = this.attributes.id.value;
 

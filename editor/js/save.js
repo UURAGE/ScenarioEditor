@@ -71,10 +71,11 @@ var Save;
         var scoringFunctionEl = document.createElementNS(nameSpace, "scoringFunction");
         var scoringSumEl = document.createElementNS(nameSpace, "sum");
 
+        userDefinedParametersEl = addAndReturnElement("userDefined", nameSpace, parametersEl);
         for (var pId in Metadata.metaObject.parameters.byId)
         {
             var parameter = Metadata.metaObject.parameters.byId[pId];
-            var parameterEl = addAndReturnElement("parameter", nameSpace, parametersEl);
+            var parameterEl = addAndReturnElement("parameter", nameSpace, userDefinedParametersEl);
 
             parameterEl.setAttribute("id", pId);
             parameterEl.setAttribute("name", Main.escapeTags(parameter.name));
@@ -91,10 +92,12 @@ var Save;
             var paramRefEl = addAndReturnElement("paramRef", nameSpace, scaleEl);
             paramRefEl.setAttribute("idref", pId);
         }
+
+        var fixedParametersEl = addAndReturnElement("fixed", nameSpace, parametersEl);
         for (var parameterId in Config.configObject.parameters.byId)
         {
             var parameter = Config.configObject.parameters.byId[parameterId];
-            var parameterEl = addAndReturnElement("parameter", nameSpace, parametersEl);
+            var parameterEl = addAndReturnElement("parameter", nameSpace, fixedParametersEl);
             parameterEl.setAttribute("id", parameter.id);
             parameter.type.insertUnderlyingType(parameterEl);
         }
