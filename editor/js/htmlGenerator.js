@@ -11,7 +11,6 @@ var HtmlGenerator;
     HtmlGenerator =
     {
         parameterHTML: parameterHTML,
-        addConversationOfType: addConversationOfType,
         addEmptyParameterEffect: addEmptyParameterEffect,
         insertPreconditions: insertPreconditions,
         nullToHTMLValue: nullToHTMLValue,
@@ -19,7 +18,6 @@ var HtmlGenerator;
     };
 
     //Get all the raw HTLM from Parts.js
-    var conversationHTML = Parts.getConversationTextHTML();
     var preconditionHTML = Parts.getPreconditionHTML();
     var groupPreconditionHTML = Parts.getGroupPreconditionHTML();
     var parameterEffectHTML = Parts.getParameterEffectHTML();
@@ -30,10 +28,6 @@ var HtmlGenerator;
     {
         // Set event handlers:
         // Event handlers for adding HTML.
-        $(".addConversation").on('click', function()
-        {
-            addConversation(this);
-        });
         $("#preconditionsDiv").on('click', ".addPrecondition",
             function()
             {
@@ -127,7 +121,7 @@ var HtmlGenerator;
                 $(this).parent().remove();
                 updateGroupPreconditionCounter(containingGroupPrecondition);
             });
-        $("#userDefinedParameterEffects, #conversationDiv"
+        $("#userDefinedParameterEffects"
         ).on('click', '.deleteParent', function()
         {
             $(this).parent().remove();
@@ -137,13 +131,6 @@ var HtmlGenerator;
     /*
      ** Public Functions
      */
-
-    function addConversationOfType(type)
-    {
-        $("#conversationDiv").append(conversationHTML);
-        var addedDiv = $("#conversationDiv").children().last();
-        return addedDiv.addClass(type);
-    }
 
     function addEmptyParameterEffect(parameters)
     {
@@ -204,14 +191,6 @@ var HtmlGenerator;
     /*
      ** Private Functions
      */
-
-    // Appends and returns html to show the objects.
-    function addConversation(object)
-    {
-        var addedConversation = addConversationOfType($(object).data("type"));
-        focusFirstTabindexedDescendant($(".conversation").last());
-        return addedConversation;
-    }
 
     function addEmptyPrecondition(divToAdd)
     {

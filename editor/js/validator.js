@@ -74,56 +74,15 @@ var Validator;
                         jumpToFunction: function() { Zoom.zoomIn(tree); }
                     });
                 }
-                else if (Main.nodes[startNodeID].type === Main.conversationType && typeof Main.nodes[startNodeID].conversation[0] == 'undefined')
-                {
-                    validationReport.push(
-                    {
-                        message: LanguageManager.fLang("edt_validator_empty_conversation", [tree.subject]),
-                        level: 'error',
-                        jumpToFunction: function() { Zoom.zoomIn(tree); }
-                    });
-
-
-                }
-                else if (Main.nodes[startNodeID].type === Main.conversationType && startNodeIDs.length !== 1)
-                {
-                    validationReport.push(
-                    {
-                        message: LanguageManager.fLang("edt_validator_conversation_start_error", [tree.subject]),
-                        level: 'error',
-                        jumpToFunction: function() { Zoom.zoomIn(tree); }
-                    });
-                }
                 // the tree on the first level can start with anything, but the trees following can only start with player nodes or conversations that start with a player node
-                else if(tree.level !== 0)
+                else if(tree.level !== 0 && Main.nodes[startNodeID].type === Main.computerType)
                 {
-                    if(Main.nodes[startNodeID].type === Main.computerType)
+                    validationReport.push(
                     {
-                        validationReport.push(
-                        {
-                            message: LanguageManager.fLang("edt_validator_subject_start_type_error", [tree.subject]),
-                            level: 'error',
-                            jumpToFunction: function() { Zoom.zoomIn(tree); }
-                        });
-                    }
-                    else if (Main.nodes[startNodeID].type === Main.conversationType && Main.nodes[startNodeID].conversation[0].type === "computerText")
-                    {
-                        validationReport.push(
-                        {
-                            message: LanguageManager.fLang("edt_validator_subject_start_type_error", [tree.subject]),
-                            level: 'error',
-                            jumpToFunction: function() { Zoom.zoomIn(tree); }
-                        });
-                    }
-                    else if (Main.nodes[startNodeID].type === Main.conversationType && Main.nodes[startNodeID].conversation[0].type === "situationText")
-                    {
-                        validationReport.push(
-                        {
-                            message: LanguageManager.fLang("edt_validator_subject_start_type_error2", [tree.subject]),
-                            level: 'error',
-                            jumpToFunction: function() { Zoom.zoomIn(tree); }
-                        });
-                    }
+                        message: LanguageManager.fLang("edt_validator_subject_start_type_error", [tree.subject]),
+                        level: 'error',
+                        jumpToFunction: function() { Zoom.zoomIn(tree); }
+                    });
                 }
             });
 

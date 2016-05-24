@@ -10,7 +10,7 @@ var Load1;
     {
         generateGraph: generateGraph
     };
-    
+
     function generateGraph(xml)
     {
         var tree = Main.createEmptyTree(null, false, 0, 0);
@@ -29,8 +29,7 @@ var Load1;
                         connections, tree.id);
                     break;
                 case "conversation":
-                    Load3.loadStatement(this, Main.conversationType,
-                        connections, tree.id);
+                    // TODO: Resolve conversations to nodes
                     break;
             }
         });

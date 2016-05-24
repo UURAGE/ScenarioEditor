@@ -64,11 +64,6 @@ var KeyControl;
             if(Zoom.isZoomed())
                 Main.addNewNode(Main.computerType);
         },
-        E: function()
-        {
-            if(Zoom.isZoomed())
-                Main.addNewNode(Main.conversationType);
-        },
         R: function()
         {
             if(Zoom.isZoomed())

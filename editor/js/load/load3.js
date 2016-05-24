@@ -62,7 +62,7 @@ var Load3;
                             loadStatement(this, Main.playerType, connections, treeID);
                             break;
                         case "conversation":
-                            loadStatement(this, Main.conversationType, connections, treeID);
+                            // TODO: Resolve conversations to nodes
                             break;
                     }
                 });
@@ -245,31 +245,8 @@ var Load3;
         var initsNode = $(statement).attr('inits') == "true";
         var endNode = $(statement).attr('possibleEnd') == "true";
 
-        var text = "";
-        var conversationArray = [];
-        if (type == Main.conversationType)
-        {
-            var allChildren = $(statement).children();
-            // Get all the text elements of the conversation.
-            for (var i = 0; i < allChildren.length; i++)
-            {
-                var conversationTextType = allChildren[i].nodeName;
-                if (conversationTextType == "computerText" ||
-                    conversationTextType == "playerText" ||
-                    conversationTextType == "situationText")
-                {
-                    text += Main.unEscapeTags(allChildren[i].textContent) + "<br />";
-                    conversationArray.push(
-                    {
-                        type: conversationTextType,
-                        text: Main.unEscapeTags(allChildren[i].textContent)
-                    });
-                }
-            }
-        }
-        // Load the stored values for the node.
-        else
-            text = Main.unEscapeTags($(statement).find('text').text());
+        var text = Main.unEscapeTags($(statement).find('text').text());
+
         var xPos = $(statement).find('x').text();
         var yPos = $(statement).find('y').text();
 
@@ -336,8 +313,7 @@ var Load3;
 
         var node = Main.createAndReturnNode(type, id, Main.trees[treeID].div, Main.trees[treeID].dragDiv.attr('id'));
         Main.nodes[id] = {
-            text: (type == Main.conversationType ? "" : text),
-            conversation: conversationArray,
+            text: text,
             type: type,
             characterIdRef: Config.configObject.characters.sequence[0].id,
             parameters: parameterEffects,

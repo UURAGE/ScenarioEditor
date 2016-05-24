@@ -334,8 +334,7 @@ var Save;
             var node = Main.nodes[nodeID];
 
             // Generate the XML element for the node with the id
-            var statementEl = addAndReturnElement(
-                node.type + (node.type == Main.conversationType ? "" : "Statement"), nameSpace, treeElement);
+            var statementEl = addAndReturnElement(node.type + "Statement", nameSpace, treeElement);
             statementEl.setAttribute('id', node.id.replace(/^ext_/, '').replace(/_/g, '.'));
 
             if (node.type === Main.computerType)
@@ -347,15 +346,7 @@ var Save;
             statementEl.setAttribute('possibleEnd', node.endNode);
 
             // Add a text element to the XML element
-            if (node.type == Main.conversationType)
-                for (var i = 0; i < node.conversation.length; i++)
-                {
-                    var conversationObj = node.conversation[i];
-                    addAndReturnElement(conversationObj.type, nameSpace, statementEl).textContent =
-                        Main.escapeTags(conversationObj.text);
-                }
-            else
-                addAndReturnElement("text", nameSpace, statementEl).textContent = Main.escapeTags(node.text);
+            addAndReturnElement("text", nameSpace, statementEl).textContent = Main.escapeTags(node.text);
 
             // Save the position
             var visible = $("#" + node.id).is(":visible");
@@ -403,30 +394,27 @@ var Save;
                 preconditionsEl.appendChild(preconditionsInXML);
             }
 
-            if (node.type !== Main.conversationType)
+            // Save the parameter effects.
+            var parameterEffectsEl = addAndReturnElement("parameterEffects", nameSpace, statementEl);
+
+            for (var k = 0; k < node.parameters.length; k++)
             {
-                // Save the parameter effects.
-                var parameterEffectsEl = addAndReturnElement("parameterEffects", nameSpace, statementEl);
+                var pEff = node.parameters[k];
+                var pEffElement = addAndReturnElement("parameterEffect", nameSpace, parameterEffectsEl);
+                pEffElement.setAttribute("idref", pEff.idRef);
+                pEffElement.setAttribute("changeType", pEff.changeType);
+                pEffElement.setAttribute("value", pEff.value);
+            }
 
-                for (var k = 0; k < node.parameters.length; k++)
+            for (var parameterIdRef in node.fixedParameterEffects)
+            {
+                node.fixedParameterEffects[parameterIdRef].forEach(function(parameterEffect)
                 {
-                    var pEff = node.parameters[k];
                     var pEffElement = addAndReturnElement("parameterEffect", nameSpace, parameterEffectsEl);
-                    pEffElement.setAttribute("idref", pEff.idRef);
-                    pEffElement.setAttribute("changeType", pEff.changeType);
-                    pEffElement.setAttribute("value", pEff.value);
-                }
-
-                for (var parameterIdRef in node.fixedParameterEffects)
-                {
-                    node.fixedParameterEffects[parameterIdRef].forEach(function(parameterEffect)
-                    {
-                        var pEffElement = addAndReturnElement("parameterEffect", nameSpace, parameterEffectsEl);
-                        pEffElement.setAttribute("idref", parameterEffect.idRef);
-                        pEffElement.setAttribute("changeType", parameterEffect.changeType);
-                        pEffElement.setAttribute("value", parameterEffect.value);
-                    });
-                }
+                    pEffElement.setAttribute("idref", parameterEffect.idRef);
+                    pEffElement.setAttribute("changeType", parameterEffect.changeType);
+                    pEffElement.setAttribute("value", parameterEffect.value);
+                });
             }
 
             // Save per-statement properties

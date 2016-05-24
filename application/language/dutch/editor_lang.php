@@ -22,7 +22,6 @@ $lang["edt_copy"] = "Kopiëren";
 $lang["edt_cut"] = "Knippen";
 $lang["edt_paste"] = "Plakken";
 $lang["edt_subject"] = "Onderwerp";
-$lang["edt_conversation"] = "Gesprek";
 $lang["edt_note_pad"] = "Kladblad";
 $lang["edt_player"] = "Speler";
 $lang["edt_computer"] = "Computer";

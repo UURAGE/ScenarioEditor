@@ -8,7 +8,6 @@ var ObjectGenerator;
 {
     ObjectGenerator =
     {
-        conversationObject: ConversationObject,
         parameterObject: ParameterObject,
         preconditionObject: PreconditionObject,
         effectObject: EffectObject,
@@ -18,14 +17,6 @@ var ObjectGenerator;
     /*
      ** Public funtions
      */
-
-    function ConversationObject(div)
-    {
-        return {
-            type: $(div).attr("class").split(' ')[1],
-            text: div.find("textarea.text").val(),
-        };
-    }
 
     function ParameterObject(div)
     {

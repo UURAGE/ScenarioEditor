@@ -45,8 +45,6 @@
     LanguageManager.edt_plumb_error_tree_connection = "Error: kan geen connecties tussen bomen maken.";
     LanguageManager.edt_plumb_error_cycle = "Error: deze connectie kan niet worden gemaakt, want dat zou een cykel creëren.";
     LanguageManager.edt_plumb_error_node_type = "Error: er kunnen geen connecties worden gemaakt tussen twee knopen van hetzelfde type.";
-    LanguageManager.edt_plumb_error_conversation_child = "Error: een conversatie mag geen computerknoop als kind hebben.";
-    LanguageManager.edt_plumb_error_conversation_siblings = "Error: gesprekken moeten enig kind zijn.";
     LanguageManager.edt_plumb_error_child_type = "Error: alle kinderen van één knoop moeten van hetzelfde type zijn.";
 
     LanguageManager.edt_load_import_title = "Importeer script";
@@ -59,9 +57,7 @@
     LanguageManager.edt_main_link_name = "Naam link";
     LanguageManager.edt_main_pending_changes = "Dit script heeft mogelijk veranderingen die niet zijn opgeslagen. Weet u zeker dat u de pagina wilt verlaten?";
     LanguageManager.edt_main_default_subject = "Naam onderwerp";
-    LanguageManager.edt_main_conversation = "Gesprek";
     LanguageManager.edt_main_copy_of = "kopie van";
-    LanguageManager.edt_main_see_conversation = "Zie gespreksscherm";
 
     LanguageManager.edt_media_title = "Media Toevoegen";
     LanguageManager.edt_media_none = "Geen";
@@ -133,8 +129,6 @@
     LanguageManager.edt_validator_no_problems = "Geen problemen gevonden!";
     LanguageManager.edt_validator_no_name = "Het script heeft geen naam.";
     LanguageManager.edt_validator_empty_subject = "Onderwerp \"%s\" is leeg.";
-    LanguageManager.edt_validator_empty_conversation = "Onderwerp \"%s\" bevat een gesprek zonder knopen";
-    LanguageManager.edt_validator_conversation_start_error = "Onderwerp \"%s\" kan alleen met een gesprek beginnen als het niet begint met andere knopen";
     LanguageManager.edt_validator_subject_start_type_error = "Onderwerp \"%s\" begint met een computerknoop. De speler moet een onderwerp beginnen.";
     LanguageManager.edt_validator_subject_start_type_error2 = "Onderwerp \"%s\" begint met een situatie. De speler moet een onderwerp beginnen.";
     LanguageManager.edt_validator_end_outgoing_connections = "Onderwerp \"%s\" bevat een gemarkeerd einde dat nog uitgaande pijlen heeft.";

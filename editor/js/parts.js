@@ -8,7 +8,6 @@ var Parts;
     Parts =
     {
         getFeedbackScreenHTML: getFeedbackScreenHTML,
-        getConversationTextHTML: getConversationTextHTML,
         getDraftScreenHTML: getDraftScreenHTML,
         getParameterEffectHTML: getParameterEffectHTML,
         getAddParameterEffectButtonHTML: getAddParameterEffectButtonHTML,
@@ -27,18 +26,6 @@ var Parts;
     {
         return '' +
             '<div id="paramTabs">' +
-            '</div>';
-    }
-
-    function getConversationTextHTML()
-    {
-        return '' +
-            '<div class="conversation">' +
-                '<img class="computerText hidden" src="' + editor_url + 'png/conversation/conversation_computer.png" alt="'+LanguageManager.sLang("edt_common_computer")+'">' +
-                '<img class="playerText hidden" src="' + editor_url + 'png/conversation/conversation_player.png" alt="'+LanguageManager.sLang("edt_common_player")+'">' +
-                '<img class="situationText hidden" src="' + editor_url + 'png/conversation/conversation_situation.png" alt="'+LanguageManager.sLang("edt_common_situation")+'">' +
-                '<textarea class="text"></textarea>' +
-                '<button type="button" class="deleteParent" title="'+LanguageManager.sLang("edt_common_delete")+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
             '</div>';
     }
 

@@ -45,8 +45,6 @@
     LanguageManager.edt_plumb_error_tree_connection = "Error: connections must be contained in a single tree.";
     LanguageManager.edt_plumb_error_cycle = "Error: cannot create connections that complete a cycle.";
     LanguageManager.edt_plumb_error_node_type = "Error: cannot create connection between two nodes of the same type.";
-    LanguageManager.edt_plumb_error_conversation_child = "Error: a conversation may not have computer-type child nodes.";
-    LanguageManager.edt_plumb_error_conversation_siblings = "Error: conversations may not have siblings.";
     LanguageManager.edt_plumb_error_child_type = "Error: a node may have only children of the same type.";
 
     LanguageManager.edt_load_import_title = "Import script";
@@ -59,9 +57,7 @@
     LanguageManager.edt_main_link_name = "Link name";
     LanguageManager.edt_main_pending_changes = "This script may contain unsaved changes. Are you sure you want to leave the page?";
     LanguageManager.edt_main_default_subject = "Subject name";
-    LanguageManager.edt_main_conversation = "Conversation";
     LanguageManager.edt_main_copy_of = "copy of";
-    LanguageManager.edt_main_see_conversation = "See conversation screen";
 
     LanguageManager.edt_media_title = "Add Media";
     LanguageManager.edt_media_none = "None";
@@ -133,8 +129,6 @@
     LanguageManager.edt_validator_no_problems = "No problems found!";
     LanguageManager.edt_validator_no_name = "The script does not have a name.";
     LanguageManager.edt_validator_empty_subject = "Subject \"%s\" is empty.";
-    LanguageManager.edt_validator_empty_conversation = "Subject \"%s\" contains a conversation without nodes.";
-    LanguageManager.edt_validator_conversation_start_error = "Subject \"%s\" can only start with a conversation of it is the only possible start";
     LanguageManager.edt_validator_subject_start_type_error = "Subject \"%s\" starts with a computer node. A subject must be started by the player.";
     LanguageManager.edt_validator_subject_start_type_error2 = "Subject \"%s\" starts with a situation node. A subject must be started by the player.";
     LanguageManager.edt_validator_end_outgoing_connections = "Subject \"%s\" contains a node that is marked as an end with outgoing connections.";

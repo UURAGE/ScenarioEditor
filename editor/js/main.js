@@ -16,7 +16,6 @@ var Main;
         jsPlumbCounter: 0,
         computerType: "computer",
         playerType: "player",
-        conversationType: "conversation",
         trees: {},
         maxTreeNumber: 0,
         gridX: gridX,
@@ -37,7 +36,6 @@ var Main;
         getPlumbInstanceByNodeID: getPlumbInstanceByNodeID,
         highlightParents: highlightParents,
         makeConnection: makeConnection,
-        openConversation: openConversation,
         placeNewNode: placeNewNode,
         placeNewTree: placeNewTree,
         repaintZoomedNodes: repaintZoomedNodes,
@@ -345,15 +343,6 @@ var Main;
 
             MiniMap.update(true);
         });
-        $('#allConversationsHTML').hide();
-
-        $("#conversationDiv").sortable(
-        {
-            axis: "y",
-            containment: "parent",
-            cursor: "move",
-            tolerance: "pointer"
-        });
 
         $("#closeTabDock").on('click', function()
         {
@@ -648,7 +637,6 @@ var Main;
 
         Main.nodes[id] = {
             text: "",
-            conversation: [],
             type: type,
             characterIdRef: characterIdRef,
             parameters: parameters,
@@ -742,9 +730,6 @@ var Main;
                 case Main.computerType:
                     node = addNewNode(Main.playerType);
                     break;
-                case Main.conversationType:
-                    node = addNewNode(Main.playerType);
-                    break;
             }
 
             // If there are errors (cycles, invalid pairs, existing connections)
@@ -788,65 +773,57 @@ var Main;
         node.append( $('<div>',{class:"ep"}) );
 
         var input =  $('<div>',{class:"statementInput"});
-        if(type !== Main.conversationType)
+        var txtArea = $('<textarea>',{class:"nodestatement"});
+        // Because textareas apparently don't act normally:
+        // Manual deselect for txtArea
+        txtArea.on("mousedown", function(event)
         {
-            var txtArea = $('<textarea>',{class:"nodestatement"});
-            // Because textareas apparently don't act normally:
-            // Manual deselect for txtArea
-            txtArea.on("mousedown", function(event)
+            if (this.selectionStart !== this.selectionEnd)
             {
-                if (this.selectionStart !== this.selectionEnd)
-                {
 
-                    this.selectionStart = this.selectionEnd = -1;
-                }
-                event.stopPropagation();
-            });
-            input.append(txtArea);
+                this.selectionStart = this.selectionEnd = -1;
+            }
+            event.stopPropagation();
+        });
+        input.append(txtArea);
 
-            input.on('focusout',function(e, cancel)
-            {
-                // Turn hotkeys on again (they are turned off while typing in the node)
-                KeyControl.hotKeysActive = true;
-                var thisNode = $('#'+id);
-
-                var val = thisNode.find('textarea').val();
-                var text = val ? val : "";
-
-
-                thisNode.find('.statementInput').hide();
-                thisNode.find('.statementText').text(text).show();
-
-                if(cancel)
-                {
-                    thisNode.find('textarea').val(Main.nodes[id].text);
-                }
-                else
-                {
-                    Main.nodes[id].text = text;
-                    changeNodeText(id);
-                    plumbInstance.repaint(id);
-                }
-                //Enable dragging for this component
-                plumbInstance.setDraggable(thisNode, true);
-            });
-
-            input.on('keydown', function(e)
-            {
-                if(e.ctrlKey && e.keyCode === 13) // enter
-                {
-                    input.trigger('focusout', [false]);
-                }
-                if(e.keyCode === 27) // escape
-                {
-                    input.trigger('focusout', [true]);
-                }
-            });
-        }
-        else
+        input.on('focusout',function(e, cancel)
         {
-            input.text(LanguageManager.sLang("edt_main_see_conversation"));
-        }
+            // Turn hotkeys on again (they are turned off while typing in the node)
+            KeyControl.hotKeysActive = true;
+            var thisNode = $('#'+id);
+
+            var val = thisNode.find('textarea').val();
+            var text = val ? val : "";
+
+            thisNode.find('.statementInput').hide();
+            thisNode.find('.statementText').text(text).show();
+
+            if(cancel)
+            {
+                thisNode.find('textarea').val(Main.nodes[id].text);
+            }
+            else
+            {
+                Main.nodes[id].text = text;
+                changeNodeText(id);
+                jsPlumb.repaint(id);
+            }
+            //Enable dragging for this component
+            jsPlumb.setDraggable(thisNode, true);
+        });
+
+        input.on('keydown', function(e)
+        {
+            if(e.ctrlKey && e.keyCode === 13) // enter
+            {
+                input.trigger('focusout', [false]);
+            }
+            if(e.keyCode === 27) // escape
+            {
+                input.trigger('focusout', [true]);
+            }
+        });
 
         node.append( input );
         node.append( $('<div>',{class:"statementText"}).hide() );
@@ -869,32 +846,20 @@ var Main;
             nodeTextDiv.hide();
             nodeTextInput.show();
 
-            if(Main.nodes[id].type !== Main.conversationType)
-            {
-                // Disable dragging for this component
-                plumbInstance.setDraggable(thisNode, false);
+            // Disable dragging for this component
+            jsPlumb.setDraggable(thisNode, false);
 
-                // Make room for typing text in the node
-                thisNode.height(h+35);
-                if (thisNode.width() < 128)
-                    thisNode.width(128);
+            // Make room for typing text in the node
+            thisNode.height(h+35);
+            if (thisNode.width() < 128)
+                thisNode.width(128);
 
-                nodeTextInput.height("100%");
+            nodeTextInput.height("100%");
 
-                // Fill node with current node text
-                var txtArea = thisNode.find('textarea.nodestatement');
-                txtArea.value = text;
-                txtArea.focus();
-            }
-            else
-            {
-                // For a conversation node, do nothing but give a warning
-                // that this text is supposed to be changed in the sidebar
-                thisNode.width = 50;
-                // Open converstation popup
-                selectElement(id);
-                openConversation();
-            }
+            // Fill node with current node text
+            var txtArea = thisNode.find('textarea.nodestatement');
+            txtArea.value = text;
+            txtArea.focus();
         });
 
         var topOffset = parent.scrollTop();
@@ -988,68 +953,6 @@ var Main;
         input.show();
         input.focus();
         if (selectAllInput) input.select();
-    }
-
-    function openConversation()
-    {
-        var node = Main.nodes[Main.selectedElement];
-        if (!node || node.type != Main.conversationType) return;
-
-        $("#conversationDiv").empty();
-
-        // set content of popup (current converstation statements)
-        for (var i = 0; i < node.conversation.length; i++) {
-            var conversation = node.conversation[i];
-            var addedDiv = HtmlGenerator.addConversationOfType(conversation.type);
-            addedDiv.find("textarea.text").val(conversation.text);
-        }
-
-        $(".addConversation").each( function() { $(this).show(); } );
-
-        //open popup
-        $('#allConversationsHTML').dialog(
-        {
-            title: LanguageManager.sLang("edt_main_conversation"),
-            height: 600,
-            width: 600,
-            modal: true,
-            appendTo: "#wrap",
-            closeOnEscape: true,
-            resizable: false,
-            draggable: false,
-            buttons: [
-            {
-                text: LanguageManager.sLang("edt_common_confirm"),
-                click: function()
-                {
-                    // Save changes made to the conversation fields.
-                    if (node.type === Main.conversationType)
-                    {
-                        var conversationArray = [];
-                        $("#conversationDiv").children().each(function()
-                        {
-                            conversationArray.push(ObjectGenerator.conversationObject($(this)));
-                        });
-                        node.conversation = conversationArray;
-                    }
-                    changeNodeText(node.id);
-                    $("#allConversationsHTML").dialog('close');
-
-                }
-            },
-            {
-                text: LanguageManager.sLang("edt_common_cancel"), click: function()
-                {
-                    $("#allConversationsHTML").dialog('close');
-                }
-            }],
-            close: function()
-            {
-                // do nothing but close the dialog
-                KeyControl.hotKeysActive = true;
-                $("#main").focus();
-            }
-         });
     }
 
     function deleteAllSelected()
@@ -1535,26 +1438,6 @@ var Main;
                 // for playerType node: show text input
                 text = escapeTags(node.text);
                 break;
-            case Main.conversationType:
-                // for conversation type node: prefix textlines by the one that says them
-                for (var j = 0; j < node.conversation.length; j++)
-                {
-                    var type;
-                    switch (node.conversation[j].type)
-                    {
-                        case "computerText":
-                            type = LanguageManager.sLang("edt_common_computer");
-                            break;
-                        case "playerText":
-                            type = LanguageManager.sLang("edt_common_player");
-                            break;
-                        case "situationText":
-                            type = LanguageManager.sLang("edt_common_situation");
-                            break;
-                    }
-                    text += type + ": " + escapeTags(node.conversation[j].text) + "\n";
-                }
-                break;
         }
         // Calculate the node width
         if (longestWord === "")
@@ -1736,7 +1619,7 @@ var Main;
             var acceptableScopes = ['per', 'per-' + node.type];
 
             // Show fixed parameters
-            // Accumulator for mapping a parameter id to it's effects container
+            // Accumulator for mapping a parameter id to its effects container
             var idRefToEffectsContainer = {};
             // Appends a default effect to the container, which changes dynamically based on the parameter selected
             var appendEffectContainerTo = function(effectsContainer, parameterDefinitions)
@@ -1988,23 +1871,11 @@ var Main;
             alert(LanguageManager.sLang("edt_plumb_error_cycle"));
             return false;
         }
-        // The following tests assume and ensure the following invariants:
-        // * Conversations can not be followed by a computer statement
-        // * Conversations are single children.
-        // * Siblings are of the same type.
-        if(sourceNode.type === Main.conversationType && targetNode.type === Main.computerType)
-        {
-            alert(LanguageManager.sLang("edt_plumb_error_conversation_child"));
-            return false;
-        }
+
+        // Ensure that siblings are of the same type only
         var firstChildId = getFirstChildIdOrNull(sourceID);
         if (firstChildId !== null)
         {
-            if (Main.nodes[firstChildId].type === Main.conversationType || targetNode.type === Main.conversationType)
-            {
-                alert(LanguageManager.sLang("edt_plumb_error_conversation_siblings"));
-                return false;
-            }
             if (targetNode.type != Main.nodes[firstChildId].type)
             {
                 alert(LanguageManager.sLang("edt_plumb_error_child_type"));

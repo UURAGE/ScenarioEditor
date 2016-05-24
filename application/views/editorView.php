@@ -245,9 +245,6 @@
                 <div id="headerComputer" class="header clickable collapseAll">
                   <h1><span class="masterclicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/computer.png");?>" alt=""><?php sLang('edt_computer');?></h1>
                 </div>
-                <div id="headerConversation" class="header clickable collapseAll">
-                  <h1><span class="masterclicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/conversation.png");?>" alt=""><?php sLang('edt_conversation');?></h1>
-                </div>
                 <div id="characterSection" class="sidebarSection">
                   <div class="sub-header clickable">
                     <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/character.png");?>" alt=""><?php sLang('edt_character');?></h2>
@@ -256,14 +253,6 @@
                     <select name="characterSelection" id="characterSelection" class="subjectButton"></select>
                     <div id="node-character-own-properties"></div>
                   </div>
-                </div>
-                <div id="allConversationsHTML">
-                  <span id="conversationButtonSpan">
-                    <button class="addConversation" data-type="playerText" title="<?php sLang('edt_player');?>"><img src="<?php echo editor_url("png/conversation/conversation_add_player.png");?>" alt=""></button>
-                    <button class="addConversation" data-type="computerText" title="<?php sLang('edt_computer');?>"><img src="<?php echo editor_url("png/conversation/conversation_add_computer.png");?>" alt=""></button>
-                    <button class="addConversation" data-type="situationText" title="<?php sLang('edt_situation');?>"><img src="<?php echo editor_url("png/conversation/conversation_add_situation.png");?>" alt=""></button>
-                  </span>
-                  <div id="conversationDiv"></div>
                 </div>
                 <div id="allPreconditionsHTML" class="sidebarSection withMarginTop">
                   <div class="sub-header clickable">

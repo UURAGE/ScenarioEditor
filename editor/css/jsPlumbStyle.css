@@ -34,11 +34,7 @@
 .w.player {
 	border:3px solid #1f71b8;
 }
-.w.conversation {
-	border:3px solid #1f71b8;
-	border-bottom-color:#b72121;
-	border-right-color:#b72121;
-}
+
 .jumpnode
 {
 	border-bottom-color:#8B4A94   !important;
@@ -91,21 +87,7 @@
 
 /* On hover of treecontainer: change the text color of nodes inside it to black (they inherit white from .w:hover{})*/
 .w.treeContainer:hover > .player ,
-.w.treeContainer:hover > .player.computer,
-.w.treeContainer:hover > .player.conversation{
-	color:black;
-}
-
-.w.conversation:hover {
-	background: #3366ff; /* Old browsers */
-	background: -moz-linear-gradient(-45deg, #ff3333 50%, #3366ff 50%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, right bottom, color-stop(50%,#ff3333), color-stop(50%,#3366ff)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(-45deg,#ff3333 50%, #3366ff 50%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(-45deg,#ff3333 50%, #3366ff 50%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(-45deg,#ff3333 50%, #3366ff 50%); /* IE10+ */
-	background: linear-gradient(135deg, #3366ff 50%,#ff3333 50%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3333', endColorstr='#3366ff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-}
+.w.treeContainer:hover > .player.computer
 
 .selected, .multiSelected {
 	color:white;

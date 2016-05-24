@@ -248,28 +248,6 @@ button.enabled
   float: left;
 }
 
-#conversationButtonSpan
-{
-  display: block;
-  clear: both;
-  margin-bottom: 0;
-  width: 100%;
-  height: 60px;
-}
-
-#conversationDiv
-{
-  display: block;
-  overflow: auto;
-  height: 370px;
-}
-
-  #conversationDiv button,
-  .conversation > img
-  {
-    vertical-align: top;
-  }
-
 #toolbar button
 {
   margin: 1px;
@@ -506,9 +484,7 @@ button.enabled
   background-color: white;
 }
 
-#properties.player > #allConversationsHTML,
 #properties.player > #headerComputer,
-#properties.player > #headerConversation,
 #properties.player > #treeSubject,
 #properties.player > #jumpNode,
 #properties.player > #initsNode,
@@ -518,36 +494,18 @@ button.enabled
   display: none;
 }
 
-#properties.computer > #allConversationsHTML,
 #properties.computer > #headerPlayer,
-#properties.computer > #headerConversation,
 #properties.computer > #treeSubject,
 #properties.computer > #optionalSubject
 {
   display: none;
 }
 
-#properties.conversation > #statementHTML,
-#properties.conversation > #headerPlayer,
-#properties.conversation > #headerComputer,
-#properties.conversation > #treeSubject,
-#properties.conversation > #jumpNode,
-#properties.conversation > #initsNode,
-#properties.conversation > #optionalSubject,
-#properties.conversation > #effectsSection,
-#properties.conversation > #propertiesSection,
-#properties.conversation > #characterSection
-{
-  display: none;
-}
-
 #properties.tree > #statementHTML,
-#properties.tree > #allConversationsHTML,
 #properties.tree > #allPreconditionsHTML,
 #properties.tree > #commentHTML,
 #properties.tree > #headerPlayer,
 #properties.tree > #headerComputer,
-#properties.tree > #headerConversation,
 #properties.tree > #mediaSelector,
 #properties.tree > #endNode,
 #properties.tree > #initsNode,
@@ -568,13 +526,6 @@ button.enabled
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   width: 100%;
-}
-
-.conversation.computerText > .computerText,
-.conversation.playerText > .playerText,
-.conversation.situationText > .situationText
-{
-  display: inline-block;
 }
 
 .hidden, .toBeRemoved
