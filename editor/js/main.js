@@ -1461,6 +1461,8 @@ var Main;
         Main.selectedElements.push(Main.selectedElement);
 
         updateSideBar();
+
+        $("#main").focus();
     }
 
     // Change the text of the node.
