@@ -446,18 +446,10 @@ var Load;
             });
         }
 
-        var targets;
-        if (type === Main.playerType)
-        {
-            targets = $(statement).find('responses').children();
-            if (targets.length === 0)
-                targets = $(statement).find('response');
-        }
-        else
-            targets = $(statement).find('responses').children();
-
         var comment = Main.unEscapeTags($(statement).find('comment').text());
 
+
+        var targets = $(statement).find('responses').children();
         if (targets.length > 0)
         {
             // Save all the connections. We will create the connections when all nodes have been added.
