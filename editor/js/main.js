@@ -411,14 +411,6 @@ var Main;
         });
         treeDiv.selectable('disable'); //box selection only useful in zoomed state
 
-        var zoomTreeButton = $('<div>',{text:"[+]", class:"zoomTreeButton button"});
-        zoomTreeButton.on("click", function()
-        {
-            Zoom.toggleZoom(Main.trees[id]);
-            MiniMap.update(true);
-            repaintZoomedNodes();
-        });
-
         var defaultName = LanguageManager.sLang("edt_main_default_subject");
         var changeNameInput = $('<input type="text" class="subjectNameInput" maxlength="20">');
         changeNameInput.val(defaultName);
@@ -458,6 +450,16 @@ var Main;
                 changeNameInput.trigger('focusout', [true]);
                 $("#main").focus();
             }
+        });
+
+        var zoomTreeButton = $('<div>',{text:"[+]", class:"zoomTreeButton button"});
+        zoomTreeButton.on("click", function()
+        {
+            // open/close tree
+            changeNameInput.trigger("focusout");
+            Zoom.toggleZoom(Main.trees[id]);
+            MiniMap.update(true);
+            repaintZoomedNodes();
         });
 
         var inputSpan = $('<span>');
