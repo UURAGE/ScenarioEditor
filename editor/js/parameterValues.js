@@ -21,10 +21,6 @@ var ParameterValues;
     var heightParameterScreen = 600;
     var widthParameterScreen = 800;
 
-    // Values for feedback form dialog
-    var heightFeedbackFormScreen = 600;
-    var widthFeedbackFormScreen = 800;
-
     // Values for the message box
     var messageColors =
     {
@@ -43,8 +39,6 @@ var ParameterValues;
         widthReturn : widthReturn,
         heightParameterScreen : heightParameterScreen,
         widthParameterScreen : widthParameterScreen,
-        heightFeedbackFormScreen : heightFeedbackFormScreen,
-        widthFeedbackFormScreen : widthFeedbackFormScreen,
         messageColors : messageColors
     };
 })();

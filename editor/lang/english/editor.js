@@ -28,15 +28,6 @@
     LanguageManager.edt_draft_delete_all = "Delete all";
     LanguageManager.edt_draft_delete_all_confirm = "Delete all items from the note pad?";
 
-    LanguageManager.edt_feedback_title = "Feedback Form";
-    LanguageManager.edt_feedback_if = "If";
-    LanguageManager.edt_feedback_min = "min";
-    LanguageManager.edt_feedback_max = "max";
-    LanguageManager.edt_feedback_between = "between";
-    LanguageManager.edt_feedback_description = "Description";
-    LanguageManager.edt_feedback_default_description = "Default description";
-    LanguageManager.edt_feedback_to_parameters = 'Open Parameters...';
-
     LanguageManager.edt_html_error_no_test = "Error: there are no parameters to test on.";
     LanguageManager.edt_html_error_no_effect = "Error: there are no parameters to affect";
     LanguageManager.edt_html_up_to = "up to";
@@ -61,10 +52,8 @@
 
     LanguageManager.edt_metadata_title = "Edit properties";
     LanguageManager.edt_metadata_parameters_title = "Edit parameters";
-    LanguageManager.edt_metadata_parameters_to_feedback = "Open Feedback...";
 
     LanguageManager.edt_parts_statement = "Statement";
-    LanguageManager.edt_parts_feedback = "Feedback";
     LanguageManager.edt_parts_type = "Type";
     LanguageManager.edt_parts_delta = "delta";
     LanguageManager.edt_parts_set = "set";
@@ -75,7 +64,6 @@
     LanguageManager.edt_parts_add_condition = "Add precondition";
     LanguageManager.edt_parts_add_group = "Add group";
     LanguageManager.edt_parts_delete_group = "Delete group";
-    LanguageManager.edt_parts_add_file = "Add File";
     LanguageManager.edt_parts_name = "Name";
     LanguageManager.edt_parts_value = "Value";
     LanguageManager.edt_parts_weight = "Weight";

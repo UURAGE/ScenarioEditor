@@ -7,7 +7,6 @@ var Parts;
     //Raw HTML that needs to be exported.
     Parts =
     {
-        getFeedbackScreenHTML: getFeedbackScreenHTML,
         getDraftScreenHTML: getDraftScreenHTML,
         getParameterEffectHTML: getParameterEffectHTML,
         getAddParameterEffectButtonHTML: getAddParameterEffectButtonHTML,
@@ -20,13 +19,6 @@ var Parts;
         getScoreHTML: getScoreHTML,
         getImportScreenHTML: getImportScreenHTML
     };
-
-    function getFeedbackScreenHTML()
-    {
-        return '' +
-            '<div id="paramTabs">' +
-            '</div>';
-    }
 
     function getDraftScreenHTML()
     {

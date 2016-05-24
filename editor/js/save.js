@@ -129,67 +129,6 @@ var Save;
         }
         metadataEl.appendChild(scoringFunctionEl);
 
-        // This part saves the feedback form
-        var feedbackFormEl = addAndReturnElement("feedbackForm", nameSpace, doc.documentElement);
-        for (var parameter in FeedbackForm.conditions)
-        {
-            var currentParamEl = addAndReturnElement("parameter", nameSpace, feedbackFormEl);
-            currentParamEl.setAttribute("idref", parameter);
-
-            for (var loopCounter = 0; loopCounter < FeedbackForm.conditions[parameter].length; loopCounter++)
-            {
-                // Special case, the default condition
-                if (loopCounter == FeedbackForm.conditions[parameter].length -1)
-                {
-                    var defaultCondition = FeedbackForm.conditions[parameter][loopCounter];
-                    var currentDefaultConditionEl = addAndReturnElement("default", nameSpace, currentParamEl);
-                    currentDefaultConditionEl.textContent = defaultCondition.feedbackString;
-                }
-                else
-                {
-                    var condition = FeedbackForm.conditions[parameter][loopCounter];
-                    var currentConditionEl = addAndReturnElement("condition", nameSpace, currentParamEl);
-                    currentConditionEl.setAttribute("test", condition.test);
-                    // Some checks to make sure the values of the condition are only added if they exist
-                    if (condition.values.length !== 0)
-                    {
-                        if (condition.values[1] !== undefined)
-                        {
-                            var value1, value2;
-                            value1 = condition.values[0];
-                            value2 = condition.values[1];
-
-                            if (parseInt(value1) >= parseInt(value2))
-                            {
-                                value2 = parseInt(value1) + 1;
-                            }
-                            currentConditionEl.setAttribute("lowerBound", value1);
-                            currentConditionEl.setAttribute("upperBound", value2);
-                        }
-                        else if (condition.values[0] !== undefined)
-                        {
-                            currentConditionEl.setAttribute("value", condition.values[0]);
-                        }
-                    }
-                    else
-                    {
-                        // Min/Max situation. Check which one it is and pass the correct value.
-                        var testValue = 0;
-                        if (condition.test === "min")
-                        {
-                            testValue = Metadata.metaObject.parameters.byId[parameter].minimumScore;
-                        }
-                        else if (condition.test === "max")
-                        {
-                            testValue = Metadata.metaObject.parameters.byId[parameter].maximumScore;
-                        }
-                        currentConditionEl.setAttribute("value", testValue);
-                    }
-                    currentConditionEl.textContent = Main.escapeTags(condition.feedbackString);
-                }
-            }
-        }
-
         var seqElement = addAndReturnElement("sequence", nameSpace, doc.documentElement);
 
         var i = 0;

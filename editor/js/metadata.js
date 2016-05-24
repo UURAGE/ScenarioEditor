@@ -260,15 +260,6 @@ var Metadata;
             modal: true,
             buttons: [
             {
-                text: LanguageManager.sLang("edt_metadata_parameters_to_feedback"),
-                click: function()
-                {
-                    saveParameters();
-                    $(this).dialog('close');
-                    FeedbackForm.feedbackFormDialog();
-                }
-            },
-            {
                 text: LanguageManager.sLang("edt_common_confirm"),
                 click: function()
                 {
@@ -379,8 +370,6 @@ var Metadata;
                         node.parameters.splice(i, 1);
                 removeAllPreconditionsWithParam(id, node.preconditions);
             }
-
-            delete FeedbackForm.conditions[id];
 
             if (id === Metadata.timePId && Metadata.timePId !== null)
                 Metadata.timePId = null;

@@ -70,7 +70,6 @@
       "js/load/load3.js",
       "js/save.js",
       "js/metadata.js",
-      "js/feedbackForm.js",
       "js/htmlGenerator.js",
       "js/objectGenerator.js",
       "js/validator.js",
@@ -132,7 +131,6 @@
                     <div id="scriptDropdown" class="dropdownItems">
                       <button id="editMetadata" class="globalButton" title="<?php sLang('edt_properties_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_properties"); ?>...</div></button>
                       <button id="editParameters" class="globalButton" title="<?php sLang('edt_parameters_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_parameters"); ?>...</div></button>
-                      <button id="feedbackform" class="globalButton" title="<?php sLang('edt_post_game_feedback_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_post_game_feedback"); ?>...</div></button>
                     </div>
                   </div>
                 </div>
@@ -341,10 +339,7 @@
   <div id="metaScreen" style="display: none"></div>
   <div id="importScreen" style="display: none"></div>
   <div id="parameterScreen" style="display: none"></div>
-  <div id="feedbackScreen" style="display: none"></div>
   <div id="returnScreen" style="display: none"><p><?php sLang('edt_return_dialog');?></p></div>
-  <div id="toGameScreen" style="display: none"><p><?php sLang('edt_game_dialog');?></p></div>
-  <div id="toGameError" style="display: none"><p><?php sLang('edt_validate_dialog');?></p></div>
   <div id="dragBox" style="display: none"></div>
   <div class="lengthTest"></div>
 </body>

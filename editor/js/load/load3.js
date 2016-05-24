@@ -10,7 +10,6 @@ var Load3;
     {
         generateGraph: generateGraph,
         loadMetadata: loadMetadata,
-        loadFeedbackForm: loadFeedbackForm,
         loadStatement: loadStatement
     };
 
@@ -153,81 +152,6 @@ var Load3;
             parameters: parametersObject,
             defaultChangeType: defaultChangeType
         };
-    }
-
-    function loadFeedbackForm(feedbackForm)
-    {
-        var allConditions = {};
-        $(feedbackForm).find("parameter").each(function() {
-            var paramID = $(this).attr("id");
-            var conditions = [];
-            $(this).find("condition").each(function() {
-
-                    var condition = {
-                        ID: null,
-                        test: null,
-                        values: [],
-                        feedbackString: null
-                    };
-
-                    var conditionTest = $(this).attr('test');
-                    var conditionValue = $(this).attr('value');
-                    var conditionFeedbackString = Main.unEscapeTags($(this).text());
-
-                    if (conditionValue === undefined)
-                    {
-                        var lowerBound = $(this).attr('lowerBound');
-                        var upperBound = $(this).attr('upperBound');
-
-                        if (parseInt(lowerBound) >= parseInt(upperBound))
-                        {
-                            upperBound = parseInt(lowerBound) + 1;
-                        }
-
-                        if (lowerBound !== undefined)
-                        {
-                            if (parseInt(lowerBound) >= parseInt(upperBound))
-                            {
-                                upperBound = parseInt(lowerBound) + 1;
-                            }
-
-                            condition.values.push(lowerBound);
-                            condition.values.push(upperBound);
-
-                        }
-                    }
-                    else
-                    {
-                        if (conditionTest !== "min" || conditionTest !== "max")
-                        {
-                            condition.values.push(conditionValue);
-                        }
-                    }
-
-
-                    condition.ID = paramID;
-                    condition.test = conditionTest;
-                    condition.feedbackString = conditionFeedbackString;
-
-                    conditions.push(condition);
-            });
-
-            var defaultConditionEl = $(this).find("default");
-
-            var defaultCondition = {
-                ID: null,
-                feedbackString: null
-            };
-
-            defaultCondition.ID = paramID;
-            defaultCondition.feedbackString = defaultConditionEl.text();
-
-            conditions.push(defaultCondition);
-
-            allConditions[paramID] = conditions;
-        });
-
-        FeedbackForm.conditions = allConditions;
     }
 
     // Load a statement.

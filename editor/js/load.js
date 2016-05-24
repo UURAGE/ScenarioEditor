@@ -88,14 +88,12 @@ var Load;
             if (schemaVersion)
             {
                 loadMetadata($($('metadata', xml)[0]));
-                loadFeedbackForm($($('feedbackForm', xml)[0]));
                 suspendedly(generateGraph, jsPlumb)(xml);
             }
             // Load versions 2 and 3
             else if (oldVersion)
             {
                 Load3.loadMetadata($($('metadata', xml)[0]));
-                Load3.loadFeedbackForm($($('feedbackform', xml)[0]));
                 suspendedly(Load3.generateGraph, jsPlumb)(xml);
             }
             // Load version 1
@@ -295,81 +293,6 @@ var Load;
             timePId: timePId,
             defaultChangeType: defaultChangeType
         };
-    }
-
-    function loadFeedbackForm(feedbackForm)
-    {
-        var allConditions = {};
-        $(feedbackForm).find("parameter").each(function() {
-            var paramID = $(this).attr("idref");
-            var conditions = [];
-            $(this).find("condition").each(function() {
-
-                    var condition = {
-                        ID: null,
-                        test: null,
-                        values: [],
-                        feedbackString: null
-                    };
-
-                    var conditionTest = $(this).attr('test');
-                    var conditionValue = $(this).attr('value');
-                    var conditionFeedbackString = Main.unEscapeTags($(this).text());
-
-                    if (conditionValue === undefined)
-                    {
-                        var lowerBound = $(this).attr('lowerBound');
-                        var upperBound = $(this).attr('upperBound');
-
-                        if (parseInt(lowerBound) >= parseInt(upperBound))
-                        {
-                            upperBound = parseInt(lowerBound) + 1;
-                        }
-
-                        if (lowerBound !== undefined)
-                        {
-                            if (parseInt(lowerBound) >= parseInt(upperBound))
-                            {
-                                upperBound = parseInt(lowerBound) + 1;
-                            }
-
-                            condition.values.push(lowerBound);
-                            condition.values.push(upperBound);
-
-                        }
-                    }
-                    else
-                    {
-                        if (conditionTest !== "min" || conditionTest !== "max")
-                        {
-                            condition.values.push(conditionValue);
-                        }
-                    }
-
-
-                    condition.ID = paramID;
-                    condition.test = conditionTest;
-                    condition.feedbackString = conditionFeedbackString;
-
-                    conditions.push(condition);
-            });
-
-            var defaultConditionEl = $(this).find("default");
-
-            var defaultCondition = {
-                ID: null,
-                feedbackString: null
-            };
-
-            defaultCondition.ID = paramID;
-            defaultCondition.feedbackString = defaultConditionEl.text();
-
-            conditions.push(defaultCondition);
-
-            allConditions[paramID] = conditions;
-        });
-
-        FeedbackForm.conditions = allConditions;
     }
 
     // Load a statement.

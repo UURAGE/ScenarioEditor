@@ -28,15 +28,6 @@
     LanguageManager.edt_draft_delete_all = "Alles verwijderen";
     LanguageManager.edt_draft_delete_all_confirm = "Alle items verwijderen uit het kladblok?";
 
-    LanguageManager.edt_feedback_title = "Feedback Form";
-    LanguageManager.edt_feedback_if = "Als";
-    LanguageManager.edt_feedback_min = "min";
-    LanguageManager.edt_feedback_max = "max";
-    LanguageManager.edt_feedback_between = "tussen";
-    LanguageManager.edt_feedback_description = "Beschrijving";
-    LanguageManager.edt_feedback_default_description = "Standaardbeschrijving";
-    LanguageManager.edt_feedback_to_parameters = 'Open Parameters...';
-
     LanguageManager.edt_html_error_no_test = "Error: er zijn geen parameters. Dus er is niks waar deze knoop op kan testen.";
     LanguageManager.edt_html_error_no_effect = "Error: er zijn geen parameters. Dus er is niks waar deze knoop effect op kan hebben.";
     LanguageManager.edt_html_up_to = "tot";
@@ -61,10 +52,8 @@
 
     LanguageManager.edt_metadata_title = "Eigenschappen Aanpassen";
     LanguageManager.edt_metadata_parameters_title = "Parameters Aanpassen";
-    LanguageManager.edt_metadata_parameters_to_feedback = "Open Eindfeedback...";
 
     LanguageManager.edt_parts_statement = "Zin";
-    LanguageManager.edt_parts_feedback = "Feedback";
     LanguageManager.edt_parts_type = "Type";
     LanguageManager.edt_parts_delta = "delta";
     LanguageManager.edt_parts_set = "set";
