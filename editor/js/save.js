@@ -6,6 +6,7 @@ var Save;
 {
     Save =
     {
+        exportScript: exportScript,
         generateXML: generateXML,
         getStartNodeIDs: getStartNodeIDs
     };

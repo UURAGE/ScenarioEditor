@@ -176,7 +176,7 @@ var KeyControl;
         },
         S: function()
         {
-            Media.downloadFile();
+            Save.exportScript();
         },
         L: function()
         {
