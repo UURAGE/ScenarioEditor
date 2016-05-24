@@ -546,6 +546,12 @@ var Main;
                 return [currentCoordinates[0],Math.max(0,currentCoordinates[1])];
             },
 
+            start: function(event)
+            {
+                if(Main.selectedElements[0]!==id)
+                    selectTree(id);
+            },
+
             stop:function(event)
             {
                 treeDropHandler(event, id);
