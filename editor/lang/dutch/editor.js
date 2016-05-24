@@ -59,13 +59,6 @@
     LanguageManager.edt_main_default_subject = "Naam onderwerp";
     LanguageManager.edt_main_copy_of = "kopie van";
 
-    LanguageManager.edt_media_title = "Media Toevoegen";
-    LanguageManager.edt_media_none = "Geen";
-    LanguageManager.edt_media_upload = "Uploaden";
-    LanguageManager.edt_media_uploading = "Bezig met verwerken. Geef het uploaden de tijd, a.u.b.";
-    LanguageManager.edt_media_transport_error = "transporterror";
-    LanguageManager.edt_media_failed = "Mislukt";
-
     LanguageManager.edt_metadata_title = "Eigenschappen Aanpassen";
     LanguageManager.edt_metadata_parameters_title = "Parameters Aanpassen";
     LanguageManager.edt_metadata_parameters_to_feedback = "Open Eindfeedback...";
@@ -82,8 +75,6 @@
     LanguageManager.edt_parts_add_condition = "Preconditie toevoegen";
     LanguageManager.edt_parts_add_group = "Groep toevoegen";
     LanguageManager.edt_parts_delete_group = "Groep verwijderen";
-    LanguageManager.edt_parts_add_file = "Bestand Toevoegen";
-    LanguageManager.edt_parts_file_warning = "Let op: Alleen mp4-, mp3-, ogg- en png-bestanden worden geaccepteerd.";
     LanguageManager.edt_parts_name = "Naam";
     LanguageManager.edt_parts_value = "Waarde";
     LanguageManager.edt_parts_weight = "Weging";
@@ -99,13 +90,7 @@
     LanguageManager.edt_parts_medium = "Gemiddeld";
     LanguageManager.edt_parts_hard = "Moeilijk";
     LanguageManager.edt_parts_very_hard = "Zeer moeilijk";
-    LanguageManager.edt_parts_sitting = "Zittend";
     LanguageManager.edt_parts_none = "Geen";
-    LanguageManager.edt_parts_list_background = "Lijstachtergrond";
-    LanguageManager.edt_parts_character_picture = "Personageplaatje";
-    LanguageManager.edt_parts_show_score = "Score weergeven";
-    LanguageManager.edt_parts_show_feedback = "Feedback weergeven";
-    LanguageManager.edt_parts_immediate_feedback = "Directe feedback";
     LanguageManager.edt_parts_change_type = "Standaard verander type";
     LanguageManager.edt_parts_file_to_import = "Bestand om te importeren";
     LanguageManager.edt_parts_advanced = "Geavanceerd";

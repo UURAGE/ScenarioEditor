@@ -250,11 +250,6 @@ var Load3;
         var xPos = $(statement).find('x').text();
         var yPos = $(statement).find('y').text();
 
-        // Load media.
-        var video = Load.nullIfMissing($(statement).find('video').attr('extid'));
-        var image = Load.nullIfMissing($(statement).find('image').attr('extid'));
-        var audio = Load.nullIfMissing($(statement).find('audio').attr('extid'));
-
         // Load the preconditions of this node.
         var preconditionsXML = $(statement).find("preconditions");
         var preconditionsJS;
@@ -322,9 +317,6 @@ var Load3;
             intent: intentsArray,
             properties: {},
             characters: Metadata.getNewDefaultCharactersObject(),
-            video: video,
-            image: image,
-            audio: audio,
             comment: comment,
             endNode: endNode,
             initsNode: initsNode,

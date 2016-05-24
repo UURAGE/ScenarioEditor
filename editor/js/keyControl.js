@@ -74,10 +74,6 @@ var KeyControl;
             if(!Zoom.isZoomed())
                 Main.addNewTree(null, true, 0, 0);
         },
-        M: function()
-        {
-            Media.mediaDialog();
-        },
         B: function()
         {
             Metadata.metadataDialog();

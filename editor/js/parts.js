@@ -13,7 +13,6 @@ var Parts;
         getAddParameterEffectButtonHTML: getAddParameterEffectButtonHTML,
         getDeleteParentButtonHTML: getDeleteParentButtonHTML,
         getGroupPreconditionHTML: getGroupPreconditionHTML,
-        getMediaScreenHTML: getMediaScreenHTML,
         getMetaScreenHTML: getMetaScreenHTML,
         getParameterScreenHTML: getParameterScreenHTML,
         getParameterDefinitionHTML: getParameterDefinitionHTML,
@@ -122,21 +121,6 @@ var Parts;
                 '' +
                 '<button type="button" class="deleteParent" title="'+LanguageManager.sLang("edt_common_delete")+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"> '+LanguageManager.sLang("edt_parts_delete_group")+'</button>' +
             '</div>';
-    }
-
-    function getMediaScreenHTML()
-    {
-        return '' +
-            '<div>' +
-                /*'<form id="uploadForm" action="" method="post" enctype="multipart/form-data">' +
-                    '<label for="file">'+LanguageManager.sLang("edt_parts_add_file")+':</label>' +
-                    '<input type="file" accept="image/png,video/mp4,audio/mp3,application/ogg,audio/ogg" name="file[]" id="file" multiple="multiple"/>' +
-                '</form>' +*/
-            '</div>' +
-            '<p>' +
-                "Feature currently not available" +//LanguageManager.sLang("edt_parts_file_warning") +
-            '</p>' +
-        '<div id="uploadStatus"></div>';
     }
 
     function getParameterScreenHTML()

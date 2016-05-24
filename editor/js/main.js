@@ -648,9 +648,6 @@ var Main;
             },
             properties: {},
             characters: Metadata.getNewDefaultCharactersObject(),
-            video: null,
-            image: null,
-            audio: null,
             comment: "",
             endNode: false,
             initsNode: false,
@@ -1200,11 +1197,6 @@ var Main;
             }
         }
 
-        // Save the media.
-        node.video = ObjectGenerator.nullFromHTMLValue($("#videoOptions").val());
-        node.image = ObjectGenerator.nullFromHTMLValue($("#imageOptions").val());
-        node.audio = ObjectGenerator.nullFromHTMLValue($("#audioOptions").val());
-
         // Save endNode.
         node.endNode = $("#endNodeCheckbox").prop("checked");
 
@@ -1415,8 +1407,6 @@ var Main;
     }
 
     // Change the text of the node.
-    // also inputs images that show if the node has audio/visuals.
-    // We might want to refactor the function name
     function changeNodeText(nodeID)
     {
         var node = Main.nodes[nodeID];
@@ -1452,17 +1442,11 @@ var Main;
 
         // get the node
         var nodeHTML = $('#' + nodeID);
-        // fill div that can hold the images that visualize if the node has video/audio
+        // fill div that can hold the images that visualize if the node has certain settings
         var imageDiv = $('.imgDiv', nodeHTML);
         imageDiv.empty();
         if (node.comment !== "")
             imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_comments.png'>");
-        if (node.audio !== null)
-            imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_audio.png'>");
-        if (node.video !== null)
-            imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_video.png'>");
-        if (node.image !== null)
-            imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_image.png'>");
         if (node.jumpPoint)
             imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_jump.png'>");
         if (node.endNode)
@@ -1827,12 +1811,6 @@ var Main;
             $("#endNodeCheckbox").prop("checked", node.endNode);
             $("#initsNodeCheckbox").prop("checked", node.initsNode);
             $("#jumpNodeCheckbox").prop("checked", node.jumpPoint);
-
-            // Media:
-            //Media.fillMediaSelectors();
-            $("#videoOptions").val(HtmlGenerator.nullToHTMLValue(node.video));
-            $("#imageOptions").val(HtmlGenerator.nullToHTMLValue(node.image));
-            $("#audioOptions").val(HtmlGenerator.nullToHTMLValue(node.audio));
 
             $("textarea#comment").val(node.comment);
 

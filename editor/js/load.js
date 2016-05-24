@@ -23,8 +23,8 @@ var Load;
             $("#importScreen").dialog(
             {
                 title : LanguageManager.sLang("edt_load_import_title"),
-                height: ParameterValues.heightMedia,
-                width: ParameterValues.widthMedia,
+                height: ParameterValues.heightImportScreen,
+                width: ParameterValues.widthImportScreen,
                 modal: true,
                 buttons:
                 [{
@@ -393,11 +393,6 @@ var Load;
         var xPos = $(statement).find('x').text();
         var yPos = $(statement).find('y').text();
 
-        // Load media.
-        var video = nullIfMissing($(statement).find('video').attr('extid'));
-        var image = nullIfMissing($(statement).find('image').attr('extid'));
-        var audio = nullIfMissing($(statement).find('audio').attr('extid'));
-
         // Load the preconditions of this node.
         var preconditionsXML = $(statement).find("preconditions");
         var preconditionsJS;
@@ -451,9 +446,6 @@ var Load;
             preconditions: preconditionsJS,
             properties: properties,
             characters: characters,
-            video: video,
-            image: image,
-            audio: audio,
             comment: comment,
             endNode: endNode,
             initsNode: initsNode,

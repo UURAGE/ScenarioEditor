@@ -231,23 +231,6 @@ button.enabled
   font-size: 40px;
 }
 
-.mediaLabel
-{
-  clear: left;
-  padding-right: 10px;
-  width: 50px;
-}
-
-.mediaSelect
-{
-  min-width: 150px;
-}
-
-.mediaLabel, .mediaSelect
-{
-  float: left;
-}
-
 #toolbar button
 {
   margin: 1px;
@@ -506,7 +489,6 @@ button.enabled
 #properties.tree > #commentHTML,
 #properties.tree > #headerPlayer,
 #properties.tree > #headerComputer,
-#properties.tree > #mediaSelector,
 #properties.tree > #endNode,
 #properties.tree > #initsNode,
 #properties.tree > #jumpNode,
@@ -517,7 +499,6 @@ button.enabled
 {
   display: none;
 }
-
 
 #statement, #comment, #treeNameBox
 {

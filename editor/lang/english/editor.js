@@ -59,13 +59,6 @@
     LanguageManager.edt_main_default_subject = "Subject name";
     LanguageManager.edt_main_copy_of = "copy of";
 
-    LanguageManager.edt_media_title = "Add Media";
-    LanguageManager.edt_media_none = "None";
-    LanguageManager.edt_media_upload = "Upload";
-    LanguageManager.edt_media_uploading = "Processing, please allow some time for the upload";
-    LanguageManager.edt_media_transport_error = "transport error";
-    LanguageManager.edt_media_failed = "Failed";
-
     LanguageManager.edt_metadata_title = "Edit properties";
     LanguageManager.edt_metadata_parameters_title = "Edit parameters";
     LanguageManager.edt_metadata_parameters_to_feedback = "Open Feedback...";
@@ -83,7 +76,6 @@
     LanguageManager.edt_parts_add_group = "Add group";
     LanguageManager.edt_parts_delete_group = "Delete group";
     LanguageManager.edt_parts_add_file = "Add File";
-    LanguageManager.edt_parts_file_warning = "Please note: Only mp4, mp3, ogg and png files will be accepted.";
     LanguageManager.edt_parts_name = "Name";
     LanguageManager.edt_parts_value = "Value";
     LanguageManager.edt_parts_weight = "Weight";
@@ -99,13 +91,7 @@
     LanguageManager.edt_parts_medium = "Medium";
     LanguageManager.edt_parts_hard = "Hard";
     LanguageManager.edt_parts_very_hard = "Very hard";
-    LanguageManager.edt_parts_sitting = "Sitting";
     LanguageManager.edt_parts_none = "None";
-    LanguageManager.edt_parts_list_background = "List background";
-    LanguageManager.edt_parts_character_picture = "Character picture";
-    LanguageManager.edt_parts_show_score = "Show score";
-    LanguageManager.edt_parts_show_feedback = "Show feedback";
-    LanguageManager.edt_parts_immediate_feedback = "Immediate feedback";
     LanguageManager.edt_parts_change_type = "Default change type";
     LanguageManager.edt_parts_file_to_import = "File to import";
     LanguageManager.edt_parts_advanced = "Advanced";

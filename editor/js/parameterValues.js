@@ -9,9 +9,9 @@ var ParameterValues;
     var heightMetaScreen = 600;
     var widthMetaScreen = 600;
 
-    // Values for the media dialog
-    var heightMedia = 500;
-    var widthMedia =  500;
+    // Values for the import dialog
+    var heightImportScreen = 500;
+    var widthImportScreen =  500;
 
     // Values for the return dialog
     var heightReturn = 300;
@@ -32,13 +32,13 @@ var ParameterValues;
         warning: '#F80',
         info: '#05F'
     };
-    
+
     ParameterValues =
     {
         heightMetaScreen : heightMetaScreen,
         widthMetaScreen : widthMetaScreen,
-        heightMedia : heightMedia,
-        widthMedia : widthMedia,
+        heightImportScreen : heightImportScreen,
+        widthImportScreen : widthImportScreen,
         heightReturn : heightReturn,
         widthReturn : widthReturn,
         heightParameterScreen : heightParameterScreen,
@@ -46,5 +46,5 @@ var ParameterValues;
         heightFeedbackFormScreen : heightFeedbackFormScreen,
         widthFeedbackFormScreen : widthFeedbackFormScreen,
         messageColors : messageColors
-    };    
+    };
 })();

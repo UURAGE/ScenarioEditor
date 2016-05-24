@@ -69,7 +69,6 @@
       "js/load/load1.js",
       "js/load/load3.js",
       "js/save.js",
-      "js/media.js",
       "js/metadata.js",
       "js/feedbackForm.js",
       "js/htmlGenerator.js",
@@ -131,7 +130,6 @@
                   <div class="small-buttons">
                     <button id="scriptButton" class="globalButton dropdownButton"><div><?php sLang("edt_script"); ?>...</div></button>
                     <div id="scriptDropdown" class="dropdownItems">
-                      <button id="mediaScreenButton" class="globalButton" title="<?php sLang('edt_media_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/media.png");?>" alt=""><?php sLang("edt_media"); ?>...</div></button>
                       <button id="editMetadata" class="globalButton" title="<?php sLang('edt_properties_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_properties"); ?>...</div></button>
                       <button id="editParameters" class="globalButton" title="<?php sLang('edt_parameters_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_parameters"); ?>...</div></button>
                       <button id="feedbackform" class="globalButton" title="<?php sLang('edt_post_game_feedback_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_post_game_feedback"); ?>...</div></button>
@@ -281,19 +279,6 @@
                     <div id="node-properties"></div>
                   </div>
                 </div>
-                <div id="mediaSelector" class="sidebarSection">
-                  <div class="sub-header clickable">
-                    <h2 title="<?php sLang('edt_custom_media');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/media.png");?>" alt=""><?php sLang('edt_media');?></h2>
-                  </div>
-                  <div class="collapsable">
-                    <label for="imageOptions" class="mediaLabel"><?php sLang('edt_image');?>:</label>
-                    <select name="Image" id="imageOptions" class="mediaSelect"></select><br/>
-                    <label for="videoOptions" class="mediaLabel"><?php sLang('edt_video');?>:</label>
-                    <select name="Video" id="videoOptions" class="mediaSelect"></select><br/>
-                    <label for="audioOptions" class="mediaLabel"><?php sLang('edt_audio');?>:</label>
-                    <select name="Audio" id="audioOptions" class="mediaSelect"></select>
-                  </div>
-                </div>
                 <div id="commentHTML" class="sidebarSection">
                   <div class="sub-header clickable">
                     <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/comments.png");?>" alt=""><?php sLang('edt_authors_note');?></h2>
@@ -302,7 +287,6 @@
                     <textarea id="comment"></textarea>
                   </div>
                 </div>
-
                 <div class="sidebarSection" id="optionalSubject">
                   <div class="sub-header clickable">
                     <h2 title="<?php sLang('edt_optional_title');?>"><span class="clicktag">[+]</span> <?php sLang('edt_optional_header');?></h2>
@@ -311,7 +295,6 @@
                     <input type="checkbox" id="optionalCheckbox"/><label for="optionalCheckbox"><?php sLang('edt_optional_description');?></label>
                   </div>
                 </div>
-
                 <div class="sidebarSection" id="jumpNode">
                   <div class="sub-header clickable">
                     <h2 title="<?php sLang('edt_jump_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/jump.png");?>" alt=""><?php sLang('edt_jump_header');?></h2>
@@ -320,7 +303,6 @@
                     <input type="checkbox" id="jumpNodeCheckbox"/><label for="jumpNodeCheckbox"><?php sLang('edt_jump_description');?></label>
                   </div>
                 </div>
-
                 <div class="sidebarSection" id="initsNode">
                   <div class="sub-header clickable">
                     <h2 title="<?php sLang('edt_inits_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/premature_end.png");?>" alt=""><?php sLang('edt_inits_header');?></h2>
@@ -329,7 +311,6 @@
                     <input type="checkbox" id="initsNodeCheckbox"/><label for="initsNodeCheckbox"><?php sLang('edt_inits_description');?></label>
                   </div>
                 </div>
-
                 <div class="sidebarSection" id="endNode">
                   <div class="sub-header clickable">
                     <h2 title="<?php sLang('edt_end_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/end.png");?>" alt=""><?php sLang('edt_end_header');?></h2>
@@ -338,7 +319,6 @@
                     <input type="checkbox" id="endNodeCheckbox"/><label for="endNodeCheckbox"><?php sLang('edt_end_description');?></label>
                   </div>
                 </div>
-
                 <div class="sidebarSection" id="calculateScore">
                   <div class="sub-header clickable">
                     <h2 title="<?php sLang('edt_score_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/calculator.png");?>" alt=""><?php sLang('edt_score_header');?></h2>
@@ -361,7 +341,6 @@
   <div id="metaScreen" style="display: none"></div>
   <div id="importScreen" style="display: none"></div>
   <div id="parameterScreen" style="display: none"></div>
-  <div id="mediaScreen" style="display: none"></div>
   <div id="feedbackScreen" style="display: none"></div>
   <div id="returnScreen" style="display: none"><p><?php sLang('edt_return_dialog');?></p></div>
   <div id="toGameScreen" style="display: none"><p><?php sLang('edt_game_dialog');?></p></div>

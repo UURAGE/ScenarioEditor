@@ -366,27 +366,6 @@ var Save;
             if (node.comment !== "")
                 addAndReturnElement("comment", nameSpace, statementEl).textContent = Main.escapeTags(node.comment);
 
-            // Save the media
-            if (node.image !== null || node.video !== null ||
-                node.audio !== null)
-            {
-                var mediaEl = addAndReturnElement("media", nameSpace, statementEl);
-
-                // Save the visuals
-                var visualsEl = addAndReturnElement("visuals", nameSpace, mediaEl);
-                // Save the video
-                if (node.video !== null)
-                    addAndReturnElement("video", nameSpace, visualsEl).setAttribute("extid", node.video);
-                // Save the imagery
-                if (node.image !== null)
-                    addAndReturnElement("image", nameSpace, visualsEl).setAttribute("extid", node.image);
-
-                // Save the audio
-                var audiosEl = addAndReturnElement("audios", nameSpace, mediaEl);
-                if (node.audio !== null)
-                    addAndReturnElement("audio", nameSpace, audiosEl).setAttribute("extid", node.audio);
-            }
-
             // Save the preconditions
             var preconditionsInXML = createAndReturnPreconditionXML(node.preconditions, nameSpace);
             if (preconditionsInXML !== null)
