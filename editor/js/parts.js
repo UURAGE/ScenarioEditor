@@ -149,12 +149,12 @@ var Parts;
                         '<div id="general" class="sub-formTable">' +
                             '<h3>'+LanguageManager.sLang("edt_parts_general")+'</h3>' +
                             '<div>' +
-                                '<label for="scriptName">'+LanguageManager.sLang("edt_parts_script_name")+':</label>' +
-                                '<input type="text" id="scriptName" />' +
+                                '<label for="scenarioName">'+LanguageManager.sLang("edt_parts_scenario_name")+':</label>' +
+                                '<input type="text" id="scenarioName" />' +
                             '</div>' +
                             '<div>' +
-                                '<label for="scriptDifficulty">'+LanguageManager.sLang("edt_parts_difficulty")+':</label>' +
-                                '<select id="scriptDifficulty">' +
+                                '<label for="scenarioDifficulty">'+LanguageManager.sLang("edt_parts_difficulty")+':</label>' +
+                                '<select id="scenarioDifficulty">' +
                                     '<option value="very_easy">'+LanguageManager.sLang("edt_parts_very_easy")+'</option>' +
                                     '<option value="easy">'+LanguageManager.sLang("edt_parts_easy")+'</option>' +
                                     '<option value="medium" selected="selected">'+LanguageManager.sLang("edt_parts_medium")+'</option>' +
@@ -162,11 +162,11 @@ var Parts;
                                     '<option value="very_difficult">'+LanguageManager.sLang("edt_parts_very_hard")+'</option>' +
                                 '</select>' +
                             '</div>' +
-                            '<div id="scriptDescription-container">' +
+                            '<div id="scenarioDescription-container">' +
                                 '<div>' +
-                                    '<label for="scriptDescription">'+LanguageManager.sLang("edt_parts_description")+':</label></ br>' +
+                                    '<label for="scenarioDescription">'+LanguageManager.sLang("edt_parts_description")+':</label></ br>' +
                                 '</div>' +
-                                '<textarea id="scriptDescription"' +
+                                '<textarea id="scenarioDescription"' +
                                     'style="height: 200px; width: 100%; -moz-box-sizing: border-box; box-sizing: border-box">' +
                                 '</textarea>' +
                             '</div>' +

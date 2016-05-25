@@ -82,11 +82,11 @@ var Load3;
         });
     }
 
-    // Load the metadata of the script.
+    // Load the metadata of the scenario.
     function loadMetadata(metadata)
     {
         var name = Main.unEscapeTags($(metadata).find('name').text());
-        $('#scriptNameTab .scriptName').text(name);
+        $('#scenarioNameTab .scenarioName').text(name);
         var description = Main.unEscapeTags($(metadata).find('description').text());
         var difficulty = $(metadata).find('difficulty').text();
         var parametersObject = Metadata.getNewDefaultParametersObject();

@@ -9,10 +9,10 @@ var MiniMap;
 (function()
 {
     var zoom = 1,
-        // Show details? Set to false to speed up editor processing in large scripts
+        // Show details? Set to false to speed up editor processing in large scenarios
         detailed = true;
-    
-    MiniMap = 
+
+    MiniMap =
     {
         zoom: zoom,
         detailed: detailed,
@@ -22,7 +22,7 @@ var MiniMap;
         activate: activate,
         deactivate: deactivate
     };
-    
+
     // Turned on for this session? (based on e.g. browser)
     var enabled = true,
     // Allowed by the context? If not, hidden completely, including controls
@@ -38,24 +38,24 @@ var MiniMap;
         // but this bugs out a lot of other css properties in the cloned main DOM
         // meanwhile the minimap is disabled for mozilla
         // minimap disabled in ie, until minimap displacement bug is fixed
-        
+
         if (navigator.userAgent.match(/Chrome/i) || navigator.userAgent.match(/Opera/i) ||  navigator.userAgent.match(/Edge/i))
-        {            
+        {
             enabled = true;
-            $("#miniwrap").css("display","block"); 
+            $("#miniwrap").css("display","block");
             $("#minimap").css("width", "300px");
             $("#minimap").css("height", "300px");
-            $("#minimap").css("overflow", "hidden");            
+            $("#minimap").css("overflow", "hidden");
 
             $("#minimap").on("click", function(e)
-            {   
+            {
                 update(true);
-                updateScrollPosition(e); 
+                updateScrollPosition(e);
                 //e.stopPropagation();
             });
             // Listener for change in scroll position in main div
             $("#mainCell #main").scroll(function()
-            {            
+            {
                 update(false);
             });
 
@@ -90,13 +90,13 @@ var MiniMap;
                     update(true);
                 }
             });
-        } 
+        }
         else
         {
             enabled = false;
             $("#miniwrap").css("display","none");
-            console.log("It appears you're using Firefox or IE, minimap display:" + $("#miniwrap").css("display") + ". We recommend running this game in Chrome or Opera.");            
-        }       
+            console.log("It appears you're using Firefox or IE, minimap display:" + $("#miniwrap").css("display") + ". We recommend running this game in Chrome or Opera.");
+        }
     }
 
     function attachScrollListener(treeDiv)
@@ -125,17 +125,17 @@ var MiniMap;
         $("#minimapSelector").css("top", minimapSelectorY+"px");
         $("#minimapSelector").css("left", minimapSelectorX+"px");
 
-        //Debugging:        
+        //Debugging:
         //console.log("minimapZoom:" + minimapZoom);
         //console.log("minimapSelectorX:" + minimapSelectorX);
-        //console.log("minimapSelectorY:" + minimapSelectorY);        
+        //console.log("minimapSelectorY:" + minimapSelectorY);
 
         minimapSelectorX /= zoom;
         minimapSelectorY /= zoom;
 
-        //Debugging:        
+        //Debugging:
         //console.log("scrollPositionX:" + minimapSelectorX);
-        //console.log("scrollPositionY:" + minimapSelectorY);        
+        //console.log("scrollPositionY:" + minimapSelectorY);
 
         if(!Zoom.isZoomed())   //Nothing is zoomed
         {
@@ -157,7 +157,7 @@ var MiniMap;
         maxY = null;
     }
 
-    //Scale the minimap according to the main div dimensions 
+    //Scale the minimap according to the main div dimensions
     //and optionally refresh the background by cloning the main div
     ///refresh boolean to effect a new clone of the main div and its children
     function update(refresh)
@@ -166,8 +166,8 @@ var MiniMap;
 
         var realWidth, realHeight;
         var viewportWidth, viewportHeight, viewportX, viewportY, zoomFactor;
-        var main, treeDiv; 
-        
+        var main, treeDiv;
+
         //Debugging:
         //console.log("Trees open:" + $('#mainCell .zoom').length);
         //console.log("Minimap updated, refreshed: " + refresh);
@@ -176,15 +176,15 @@ var MiniMap;
         treeDiv = $("#mainCell .treeContainer.zoom > .treeDiv");
 
         if(!Zoom.isZoomed())   //Nothing is zoomed
-        { 
+        {
             realWidth = main[0].scrollWidth;
             realHeight = main[0].scrollHeight;
             viewportX = main.scrollLeft();
             viewportY = main.scrollTop();
         }
         else
-        {                
-            if (treeDiv == "undefined") 
+        {
+            if (treeDiv == "undefined")
             {
                 realWidth = main[0].scrollWidth;
                 realHeight = main[0].scrollHeight;
@@ -201,11 +201,11 @@ var MiniMap;
         }
         viewportWidth = main.width();
         viewportHeight = main.height();
-        
+
         $("#scaledDiv").css("width", realWidth+"px");
         $("#scaledDiv").css("height", realHeight+"px");
-        $("#minimap").css("height", $("#sidebar").height()-25+"px"); 
-        
+        $("#minimap").css("height", $("#sidebar").height()-25+"px");
+
         //Show a cloned and scaled down version of the main div in the minimap if detailedMinimap is set to true
         if(detailed && refresh)
         {
@@ -215,8 +215,8 @@ var MiniMap;
             //Rename cloned div ids!
             $("#scaledDiv > #main").attr("id","miniMain");
             //Remove inappropriate subjects from minimap
-            if(Zoom.isZoomed())            
-                $("#scaledDiv .treeContainer").not(".zoom").remove(); 
+            if(Zoom.isZoomed())
+                $("#scaledDiv .treeContainer").not(".zoom").remove();
         }
 
         //Debugging:
@@ -227,22 +227,22 @@ var MiniMap;
         var height = 300;
 
         var widthFactor = width/realWidth;
-        var heightFactor = height/realHeight;                
-        
-        zoomFactor = widthFactor;            
+        var heightFactor = height/realHeight;
+
+        zoomFactor = widthFactor;
         //minimap gets taller than the allowed screenheight
-        if (zoomFactor * realHeight > $("#sidebar").height()) 
+        if (zoomFactor * realHeight > $("#sidebar").height())
         {
             zoomFactor = $("#sidebar").height()/(realHeight+realHeight*0.1);
         }
 
-        //Debugging:        
+        //Debugging:
         //console.log("widthFactor:" + widthFactor);
         //console.log("heightFactor:" + heightFactor);
-        //console.log("zoomFactor:" + zoomFactor);                       
-        
+        //console.log("zoomFactor:" + zoomFactor);
+
         $("#minimap").css("width", (realWidth * zoomFactor) + "px");
-        $("#minimap").css("height", (realHeight * zoomFactor) + "px");        
+        $("#minimap").css("height", (realHeight * zoomFactor) + "px");
 
         if(detailed && refresh)
         {
@@ -252,7 +252,7 @@ var MiniMap;
             $("#scaledDiv .treeContainer.zoom").css("top", 0 + "px");
             $("#scaledDiv .treeContainer.zoom > .treeDiv").css("height", realHeight + "px");
             $("#scaledDiv .treeContainer.zoom > .treeDiv").css("width", realWidth + "px");
-            
+
             $("#scaledDiv *").off();
         }
 
@@ -260,7 +260,7 @@ var MiniMap;
         // css zoom code needs to be rewritten for css translate: scale(v)
         // but this bugs out a lot of other css properties in the cloned main DOM:
         //$("#scaledDiv #main").css("-moz-transform:", "scale("zoomFactor+")");
-       
+
         //Scale and reposition the minimap selector
         viewportWidth = viewportWidth*zoomFactor;
         viewportHeight = viewportHeight*zoomFactor;
@@ -272,7 +272,7 @@ var MiniMap;
         $("#minimapSelector").css("left", viewportX+"px");
 
         zoom = zoomFactor;
-        
+
         //Decouple objects for garbage collection:
         width = null;
         height = null;
@@ -293,7 +293,7 @@ var MiniMap;
         html2canvas($("#main"),
         {
             onrendered: function(canvas)
-            { 
+            {
                 var aspectRatio = canvas.height/canvas.width;
                 var divWidth = parseInt($("#minimap").css("width"));
                 var extra_canvas = document.createElement("canvas");
@@ -310,7 +310,7 @@ var MiniMap;
             }
         });
         */
-        
+
     }
 
     function showAnimated(element)

@@ -29,7 +29,7 @@ var Validator;
 
         // First save the latest changes.
         Main.applyChanges(Main.selectedElement);
-        // Checks whether the script has a name
+        // Checks whether the scenario has a name
         if(Metadata.metaObject.name === null || Metadata.metaObject.name === "")
         {
             validationReport.push(
@@ -38,7 +38,7 @@ var Validator;
                 level: 'warning',
                 jumpToFunction: function() {
                     Metadata.metadataDialog();
-                    $('#scriptName').focus();
+                    $('#scenarioName').focus();
                 }
             });
         }

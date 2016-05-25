@@ -38,7 +38,7 @@
     LanguageManager.edt_plumb_error_node_type = "Error: cannot create connection between two nodes of the same type.";
     LanguageManager.edt_plumb_error_child_type = "Error: a node may have only children of the same type.";
 
-    LanguageManager.edt_load_import_title = "Import script";
+    LanguageManager.edt_load_import_title = "Import scenario";
     LanguageManager.edt_load_import = "Import";
     LanguageManager.edt_load_error = "Encountered an error while loading the file";
     LanguageManager.edt_load_invalid_xml = "Invalid XML";
@@ -46,7 +46,7 @@
     LanguageManager.edt_main_no_subject_open = "No subject open!";
     LanguageManager.edt_main_input_link = "Please enter the url.";
     LanguageManager.edt_main_link_name = "Link name";
-    LanguageManager.edt_main_pending_changes = "This script may contain unsaved changes. Are you sure you want to leave the page?";
+    LanguageManager.edt_main_pending_changes = "This scenario may contain unsaved changes. Are you sure you want to leave the page?";
     LanguageManager.edt_main_default_subject = "Subject name";
     LanguageManager.edt_main_copy_of = "copy of";
 
@@ -72,7 +72,7 @@
     LanguageManager.edt_parts_description = "Description";
     LanguageManager.edt_parts_add_time_title = "Add parameter time +1 to every node";
     LanguageManager.edt_parts_general = "General";
-    LanguageManager.edt_parts_script_name = "Script name";
+    LanguageManager.edt_parts_scenario_name = "Scenario name";
     LanguageManager.edt_parts_difficulty = "Difficulty";
     LanguageManager.edt_parts_very_easy = "Very easy";
     LanguageManager.edt_parts_easy = "Easy";
@@ -91,17 +91,17 @@
 
     LanguageManager.edt_return_title = "Leave editor";
 
-    LanguageManager.edt_save_contains_errors = "Warning: the script contains errors. Are you sure you want to save?";
+    LanguageManager.edt_save_contains_errors = "Warning: the scenario contains errors. Are you sure you want to save?";
     LanguageManager.edt_save_error = "Something went wrong while saving";
     LanguageManager.edt_save_error_server = "Something went wrong while saving: server error";
-    LanguageManager.edt_save_script_saved = "Script saved";
-    LanguageManager.edt_save_export_error = "Warning: the script contains errors. Are you sure you want to export?";
+    LanguageManager.edt_save_scenario_saved = "Scenario saved";
+    LanguageManager.edt_save_export_error = "Warning: the scenario contains errors. Are you sure you want to export?";
     LanguageManager.edt_save_download_available = "Download available";
 
     LanguageManager.edt_clipboard_copy_of = "copy of %s";
 
     LanguageManager.edt_validator_no_problems = "No problems found!";
-    LanguageManager.edt_validator_no_name = "The script does not have a name.";
+    LanguageManager.edt_validator_no_name = "The scenario does not have a name.";
     LanguageManager.edt_validator_empty_subject = "Subject \"%s\" is empty.";
     LanguageManager.edt_validator_subject_start_type_error = "Subject \"%s\" starts with a computer node. A subject must be started by the player.";
     LanguageManager.edt_validator_subject_start_type_error2 = "Subject \"%s\" starts with a situation node. A subject must be started by the player.";

@@ -8,7 +8,7 @@ var Load;
 
     Load =
     {
-        importScript: importScript,
+        importScenario: importScenario,
         suspendedly: suspendedly,
         nullIfMissing: nullIfMissing
     };
@@ -18,7 +18,7 @@ var Load;
     $(document).ready(function()
     {
         $("#importScreen").html(Parts.getImportScreenHTML());
-        $("#importScript").on('click', function()
+        $("#importScenario").on('click', function()
         {
             $("#importScreen").dialog(
             {
@@ -31,7 +31,7 @@ var Load;
                     text: LanguageManager.sLang("edt_load_import"),
                     click: function()
                     {
-                        importScript();
+                        importScenario();
                         $("#importScreen").dialog('close');
                     }
                 },
@@ -55,7 +55,7 @@ var Load;
      */
 
     // Creates a graph and metadata from xml file provided by user
-    function importScript()
+    function importScenario()
     {
         var input = document.getElementById("import").files;
 
@@ -81,7 +81,7 @@ var Load;
             prepareRebuild();
 
             // Try to find the schemaVersion of the XML and to find the old version
-            var schemaVersion = parseInt($('script', xml).attr('schemaVersion'));
+            var schemaVersion = parseInt($('scenario', xml).attr('schemaVersion'));
             var oldVersion = parseInt($($('metadata', xml)[0]).find('version').text());
 
             // Load with the newest version of the schema
@@ -105,7 +105,7 @@ var Load;
 
         reader.readAsText(input[0]);
 
-        //Loading of script complete, hide loading div:
+        //Loading of scenario complete, hide loading div:
         $("#loading").hide();
     }
 
@@ -221,11 +221,11 @@ var Load;
         });
     }
 
-    // Load the metadata of the script.
+    // Load the metadata of the scenario.
     function loadMetadata(metadata)
     {
         var name = Main.unEscapeTags($(metadata).find('name').text());
-        $('#scriptNameTab .scriptName').text(name);
+        $('#scenarioNameTab .scenarioName').text(name);
         var description = Main.unEscapeTags($(metadata).find('description').text());
         var difficulty = $(metadata).find('difficulty').text();
         var definitions = $(metadata).find('definitions');

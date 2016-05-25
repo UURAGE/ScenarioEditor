@@ -3,12 +3,11 @@
 $lang["edt_manual"] = "Manual";
 $lang["edt_file"] = "File";
 $lang["edt_languages"] = "Languages";
-$lang["edt_export_script"] = "Export Script";
-$lang["edt_export_script_title"] = "Export this script as XML";
-$lang["edt_import_script"] = "Import Script";
-$lang["edt_import_script_title"] = "Import an exported script";
+$lang["edt_export_scenario"] = "Export";
+$lang["edt_export_scenario_title"] = "Export this scenario as XML";
+$lang["edt_import_scenario"] = "Import";
+$lang["edt_import_scenario_title"] = "Import a scenario XML";
 $lang["edt_print"] = "Print";
-$lang["edt_script"] = "Script";
 $lang["edt_properties"] = "Properties";
 $lang["edt_properties_title"] = "Change various scenario properties";
 $lang["edt_parameters"] = "Parameters";
@@ -55,7 +54,4 @@ $lang["edt_inits_header"] = "Early end of subject";
 $lang["edt_inits_description"] = "Allow early end of subject";
 $lang["edt_score_title"] = "Calculate the score extremes";
 $lang["edt_score_header"] = "Calculate score";
-$lang["edt_return_dialog"] = "Click 'Save' to save the script and return to script management. Click 'To script management' to quit without saving.";
-$lang["edt_game_dialog"] = "Click 'Publish' to make this script available on the front page. Click 'Test' to save the script and play it yourself, click 'dont't save' to reject all changes.";
-$lang["edt_validate_dialog"] = "Your script has unresolved errors. These need to be fixed before you can return to the game. Click 'Validate' for more information";
 ?>

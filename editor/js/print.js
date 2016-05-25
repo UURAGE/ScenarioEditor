@@ -4,11 +4,11 @@ $(document).ready(function()
 {
     $("#print").on('click', function()
     {
-        printScript();
+        printScenario();
     });
 });
 
-function printScript()
+function printScenario()
 {
     if (!confirm(LanguageManager.sLang("edt_print_warning"))) return;
 

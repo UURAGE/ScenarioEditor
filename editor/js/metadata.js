@@ -18,7 +18,7 @@ var Metadata;
         metadataDialog: metadataDialog,
         timePId : null,
         addTimeParameter: addTimeParameter,
-        formatScriptName: formatScriptName
+        formatScenarioName: formatScenarioName
     };
 
     $(document).ready(function()
@@ -172,7 +172,7 @@ var Metadata;
         return characters;
     }
 
-    //Create the dialog to change the script description.
+    //Create the dialog to change the scenario description.
     function metadataDialog()
     {
         Main.selectNode(null);
@@ -205,9 +205,9 @@ var Metadata;
         });
 
         // Show the stored values for the metadata.
-        $("#scriptName").val(Metadata.metaObject.name);
-        $("#scriptDifficulty").val(Metadata.metaObject.difficulty);
-        $("#scriptDescription").val(Metadata.metaObject.description);
+        $("#scenarioName").val(Metadata.metaObject.name);
+        $("#scenarioDifficulty").val(Metadata.metaObject.difficulty);
+        $("#scenarioDescription").val(Metadata.metaObject.description);
         $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
 
         var setPropertyInDOM = function(propertiesObject, propertyContainerId, property)
@@ -307,7 +307,7 @@ var Metadata;
         if ($("#params").children().length > 0)
             $("#paramsTableHead").removeClass("hidden");
 
-        $("#scriptDescription").val(Metadata.metaObject.description);
+        $("#scenarioDescription").val(Metadata.metaObject.description);
         $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
     }
 
@@ -419,11 +419,11 @@ var Metadata;
         Metadata.metaObject.defaultChangeType = $("#defaultChangeTypeSelect").val();
 
         // Save all values in the dialog to the metaObject
-        Metadata.metaObject.name = formatScriptName($("#scriptName").val());
-        $('#scriptNameTab .scriptName').text(Metadata.metaObject.name);
+        Metadata.metaObject.name = formatScenarioName($("#scenarioName").val());
+        $('#scenarioNameTab .scenarioName').text(Metadata.metaObject.name);
 
-        Metadata.metaObject.difficulty = $("#scriptDifficulty").val();
-        Metadata.metaObject.description = $("#scriptDescription").val();
+        Metadata.metaObject.difficulty = $("#scenarioDifficulty").val();
+        Metadata.metaObject.description = $("#scenarioDescription").val();
 
         for (var propertyId in Config.configObject.properties.byId)
         {
@@ -483,12 +483,12 @@ var Metadata;
         }
     }
 
-    function formatScriptName(scriptName)
+    function formatScenarioName(scenarioName)
     {
-        scriptName = scriptName.trim().substr(0, 35);
-        if (scriptName !== "")
+        scenarioName = scenarioName.trim().substr(0, 35);
+        if (scenarioName !== "")
         {
-            return scriptName;
+            return scenarioName;
         }
         else
         {

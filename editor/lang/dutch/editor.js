@@ -38,7 +38,7 @@
     LanguageManager.edt_plumb_error_node_type = "Error: er kunnen geen connecties worden gemaakt tussen twee knopen van hetzelfde type.";
     LanguageManager.edt_plumb_error_child_type = "Error: alle kinderen van één knoop moeten van hetzelfde type zijn.";
 
-    LanguageManager.edt_load_import_title = "Importeer script";
+    LanguageManager.edt_load_import_title = "Importeer scenario";
     LanguageManager.edt_load_import = "Importeer";
     LanguageManager.edt_load_error = "Er ging iets mis bij het laden van het bestand";
     LanguageManager.edt_load_invalid_xml = "Ongeldige XML";
@@ -46,7 +46,7 @@
     LanguageManager.edt_main_no_subject_open = "Geen onderwerp geopend!";
     LanguageManager.edt_main_input_link = "Vul de url van de link in";
     LanguageManager.edt_main_link_name = "Naam link";
-    LanguageManager.edt_main_pending_changes = "Dit script heeft mogelijk veranderingen die niet zijn opgeslagen. Weet u zeker dat u de pagina wilt verlaten?";
+    LanguageManager.edt_main_pending_changes = "Dit scenario heeft mogelijk veranderingen die niet zijn opgeslagen. Weet u zeker dat u de pagina wilt verlaten?";
     LanguageManager.edt_main_default_subject = "Naam onderwerp";
     LanguageManager.edt_main_copy_of = "kopie van";
 
@@ -72,7 +72,7 @@
     LanguageManager.edt_parts_description = "Beschrijving";
     LanguageManager.edt_parts_add_time_title = "Parameter tijd +1 toevoegen aan elke knoop";
     LanguageManager.edt_parts_general = "Algemeen";
-    LanguageManager.edt_parts_script_name = "Naam script";
+    LanguageManager.edt_parts_scenario_name = "Naam scenario";
     LanguageManager.edt_parts_difficulty = "Moeilijkheidsgraad";
     LanguageManager.edt_parts_very_easy = "Zeer makkelijk";
     LanguageManager.edt_parts_easy = "Makkelijk";
@@ -91,17 +91,17 @@
 
     LanguageManager.edt_return_title = "Editor verlaten";
 
-    LanguageManager.edt_save_contains_errors = "Waarschuwing: er zijn fouten aanwezig in het script. Weet u zeker dat u op wilt slaan?";
+    LanguageManager.edt_save_contains_errors = "Waarschuwing: er zijn fouten aanwezig in het scenario. Weet u zeker dat u op wilt slaan?";
     LanguageManager.edt_save_error = "Er ging iets mis bij het opslaan";
     LanguageManager.edt_save_error_server = "Er ging iets mis bij het opslaan: serverfout";
-    LanguageManager.edt_save_script_saved = "Script opgeslagen";
-    LanguageManager.edt_save_export_error = "Waarschuwing: er zijn fouten aanwezig in het script. Weet u zeker dat u wilt exporteren?";
+    LanguageManager.edt_save_scenario_saved = "Scenario opgeslagen";
+    LanguageManager.edt_save_export_error = "Waarschuwing: er zijn fouten aanwezig in het scenario. Weet u zeker dat u wilt exporteren?";
     LanguageManager.edt_save_download_available = "Download beschikbaar";
 
     LanguageManager.edt_clipboard_copy_of = "kopie van %s";
 
     LanguageManager.edt_validator_no_problems = "Geen problemen gevonden!";
-    LanguageManager.edt_validator_no_name = "Het script heeft geen naam.";
+    LanguageManager.edt_validator_no_name = "Het scenario heeft geen naam.";
     LanguageManager.edt_validator_empty_subject = "Onderwerp \"%s\" is leeg.";
     LanguageManager.edt_validator_subject_start_type_error = "Onderwerp \"%s\" begint met een computerknoop. De speler moet een onderwerp beginnen.";
     LanguageManager.edt_validator_subject_start_type_error2 = "Onderwerp \"%s\" begint met een situatie. De speler moet een onderwerp beginnen.";

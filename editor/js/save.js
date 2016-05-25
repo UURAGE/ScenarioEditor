@@ -6,14 +6,14 @@ var Save;
 {
     Save =
     {
-        exportScript: exportScript,
+        exportScenario: exportScenario,
         generateXML: generateXML,
         getStartNodeIDs: getStartNodeIDs
     };
 
     $(document).ready(function()
     {
-        $("#exportScript").on('click', exportScript);
+        $("#exportScenario").on('click', exportScenario);
     });
 
     /*
@@ -26,7 +26,7 @@ var Save;
         var sortedTrees = sortTrees(Main.trees);
 
         var nameSpace = "urn:uurage-temporary";
-        var doc = document.implementation.createDocument(nameSpace,'script', null);
+        var doc = document.implementation.createDocument(nameSpace, 'scenario', null);
 
         doc.documentElement.setAttribute("schemaVersion", 4);
 
@@ -182,11 +182,11 @@ var Save;
      ** Private Functions
      */
 
-    // Offers the XML of the current script for download
+    // Offers the XML of the current scenario for download
     // Adapted from work by Eric Bidelman (ericbidelman@chromium.org)
-    function exportScript()
+    function exportScenario()
     {
-        // Warn user before exporting an invalid script
+        // Warn user before exporting an invalid scenario
         var errors = Validator.validate();
         var hasErrors = false;
         $.each(errors, function(index, value)

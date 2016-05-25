@@ -172,7 +172,7 @@ var KeyControl;
         },
         S: function()
         {
-            Save.exportScript();
+            Save.exportScenario();
         },
         L: function()
         {
@@ -180,7 +180,7 @@ var KeyControl;
         },
         P: function()
         {
-            printScript();
+            printScenario();
         }
     };
 

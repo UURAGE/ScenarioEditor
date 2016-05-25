@@ -116,10 +116,10 @@ a[data-disabled]
     {
       display: table-cell;
     }
-    .formTable #scriptDescription {
+    .formTable #scenarioDescription {
       display: block;
     }
-    .formTable #scriptDescription-container {
+    .formTable #scenarioDescription-container {
     }
 
 #gridIndicator
@@ -590,7 +590,7 @@ button.enabled
   cursor: default;
 }
 
-#scriptNameTab
+#scenarioNameTab
 {
   display: inline-block;
   margin: 0;
@@ -617,7 +617,7 @@ button.enabled
   width: calc(100% - 300px);
 }
 
-  #scriptNameTab span
+  #scenarioNameTab span
   {
     margin: 3px 0;
     padding: 0px 10px;
@@ -626,13 +626,13 @@ button.enabled
     color: #000;
   }
 
-    #scriptNameTab span:hover
+    #scenarioNameTab span:hover
     {
       background-color: #f8f8f8;
       color: #101010;
     }
 
-    #scriptNameTab span input[type=text]
+    #scenarioNameTab span input[type=text]
     {
       height: 1em;
       font: inherit;

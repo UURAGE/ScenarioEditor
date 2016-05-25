@@ -76,25 +76,25 @@ var Main;
             $("#propertiesSection .collapsable").append($('<div>', { id:"node-character-own-properties" }));
         }
 
-        var scriptNameInput = $('<input type="text" maxlength="35">');
-        var scriptNameInputSpan = $('<span>', { class: "scriptNameInput" }).append(scriptNameInput);
-        scriptNameInputSpan.on('focusout', function(e, cancel)
+        var scenarioNameInput = $('<input type="text" maxlength="35">');
+        var scenarioNameInputSpan = $('<span>', { class: "scenarioNameInput" }).append(scenarioNameInput);
+        scenarioNameInputSpan.on('focusout', function(e, cancel)
         {
             KeyControl.hotKeysActive = true;
 
-            var nameInput = $('#scriptNameTab .scriptNameInput input');
+            var nameInput = $('#scenarioNameTab .scenarioNameInput input');
 
             if(!cancel)
             {
-                var inputName = Metadata.formatScriptName(nameInput.val());
+                var inputName = Metadata.formatScenarioName(nameInput.val());
                 Metadata.metaObject.name = inputName;
-                $('#scriptNameTab .scriptName').text(Metadata.metaObject.name);
+                $('#scenarioNameTab .scenarioName').text(Metadata.metaObject.name);
             }
 
             $(this).hide();
-            $('#scriptNameTab .scriptName').show();
+            $('#scenarioNameTab .scenarioName').show();
         });
-        scriptNameInputSpan.on('keydown', function(e)
+        scenarioNameInputSpan.on('keydown', function(e)
         {
             if(e.keyCode === 13)// enter
             {
@@ -105,17 +105,17 @@ var Main;
                 $(this).trigger('focusout',[true]);
             }
         });
-        scriptNameInputSpan.hide();
+        scenarioNameInputSpan.hide();
 
-        $('#scriptNameTab').append(scriptNameInputSpan);
+        $('#scenarioNameTab').append(scenarioNameInputSpan);
 
-        $('#scriptNameTab .scriptName').on('dblclick', function(e)
+        $('#scenarioNameTab .scenarioName').on('dblclick', function(e)
         {
             KeyControl.hotKeysActive = false;
 
             $(this).hide();
 
-            var nameInputSpan = $('#scriptNameTab .scriptNameInput');
+            var nameInputSpan = $('#scenarioNameTab .scenarioNameInput');
             var nameInput = nameInputSpan.children('input');
             nameInput.val(Metadata.metaObject.name);
             nameInputSpan.show();

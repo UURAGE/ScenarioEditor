@@ -97,9 +97,9 @@
         <div id="content">
           <div>
             <div id="toolbar">
-              <div id="scriptNameTab">
+              <div id="scenarioNameTab">
                 <?php sLang("edt_scenario"); ?>:
-                <span class="scriptName"></span>
+                <span class="scenarioName"></span>
               </div>
               <!-- commented this button, because the manuals are no longer up to date. TODO: add new manuals
               <button id="manual" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/manual.png");?>" alt=""><?php sLang("edt_manual"); ?></div></button>
@@ -110,14 +110,14 @@
                   <div class="small-buttons">
                     <button id="fileButton" class="globalButton dropdownButton"><div><?php sLang("edt_file"); ?>...</div></button>
                     <div id="fileDropdown" class="dropdownItems">
-                      <button id="importScript" class="globalButton" title="<?php sLang('edt_import_script_title'); ?>">
+                      <button id="importScenario" class="globalButton" title="<?php sLang('edt_import_scenario_title'); ?>">
                         <div>
-                          <img src="<?php echo editor_url("png/main_buttons/import.png");?>" alt=""><?php sLang("edt_import_script"); ?>...
+                          <img src="<?php echo editor_url("png/main_buttons/import.png");?>" alt=""><?php sLang("edt_import_scenario"); ?>...
                         </div>
                       </button>
-                      <button id="exportScript" class="globalButton" title="<?php sLang('edt_export_script_title'); ?>">
+                      <button id="exportScenario" class="globalButton" title="<?php sLang('edt_export_scenario_title'); ?>">
                         <div>
-                          <img src="<?php echo editor_url("png/main_buttons/export.png");?>" alt=""><?php sLang("edt_export_script"); ?>...
+                          <img src="<?php echo editor_url("png/main_buttons/export.png");?>" alt=""><?php sLang("edt_export_scenario"); ?>...
                         </div>
                       </button>
                       <div class="separator"></div>
@@ -125,10 +125,11 @@
                     </div>
                   </div>
                 </div>
-                <div class="buttonGroup dropdown" style="left:132px;" id="script">
+                <div class="buttonGroup dropdown" style="left:132px;" id="scenario">
+                <!-- Scenario -->
                   <div class="small-buttons">
-                    <button id="scriptButton" class="globalButton dropdownButton"><div><?php sLang("edt_script"); ?>...</div></button>
-                    <div id="scriptDropdown" class="dropdownItems">
+                    <button id="scenarioButton" class="globalButton dropdownButton"><div><?php sLang("edt_scenario"); ?>...</div></button>
+                    <div id="scenarioDropdown" class="dropdownItems">
                       <button id="editMetadata" class="globalButton" title="<?php sLang('edt_properties_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_properties"); ?>...</div></button>
                       <button id="editParameters" class="globalButton" title="<?php sLang('edt_parameters_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_parameters"); ?>...</div></button>
                     </div>
