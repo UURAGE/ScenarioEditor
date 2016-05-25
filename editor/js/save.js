@@ -255,18 +255,19 @@ var Save;
         addAndReturnElement('x', nameSpace,positionElement).textContent = tree.leftPos;
         addAndReturnElement('y', nameSpace,positionElement).textContent = tree.topPos;
 
+        var startsElement = addAndReturnElement('starts', nameSpace, treeElement);
         var startNodeIDs = getStartNodeIDs(tree);
-
         $.each(startNodeIDs, function(index, startNodeID)
         {
             if (startNodeID !== -1)
-                addAndReturnElement("start", nameSpace, treeElement).setAttribute("idref", startNodeID.replace(/^ext_/, '').replace(/_/g, '.'));
+                addAndReturnElement("start", nameSpace, startsElement).setAttribute("idref", startNodeID.replace(/^ext_/, '').replace(/_/g, '.'));
         });
 
-        generateNodesXML(treeElement, tree, nameSpace);
+        var statementsElement = addAndReturnElement('statements', nameSpace, treeElement);
+        generateNodesXML(statementsElement, tree, nameSpace);
     }
 
-    function generateNodesXML(treeElement, tree, nameSpace)
+    function generateNodesXML(statementsElement, tree, nameSpace)
     {
         tree.nodes.forEach(function(nodeID)
         {
@@ -274,7 +275,7 @@ var Save;
             var node = Main.nodes[nodeID];
 
             // Generate the XML element for the node with the id
-            var statementEl = addAndReturnElement(node.type + "Statement", nameSpace, treeElement);
+            var statementEl = addAndReturnElement(node.type + "Statement", nameSpace, statementsElement);
             statementEl.setAttribute('id', node.id.replace(/^ext_/, '').replace(/_/g, '.'));
 
             if (node.type === Main.computerType)

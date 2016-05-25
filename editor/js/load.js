@@ -192,7 +192,7 @@ var Load;
 
                 tree.dragDiv.css('border-color', '');
 
-                $(this).children().each(function()
+                $(this).children('statements').children().each(function()
                 { // parse the tree in the container
                     switch (this.nodeName)
                     {
