@@ -9,7 +9,7 @@ var Main;
         gridY,
         domainID;
 
-    Main = 
+    Main =
     {
         nodes: {},
         selectedElement: null,
@@ -57,17 +57,17 @@ var Main;
         makeCollapsable();
 
         MiniMap.initialise();
-        
+
         updateButtons();
-        
+
         $("#main").focus();
-        
+
         var scriptNameInput = $('<input type="text" maxlength="35">');
         var scriptNameInputSpan = $('<span>', { class: "scriptNameInput" }).append(scriptNameInput);
         scriptNameInputSpan.on('focusout', function(e, cancel)
         {
             KeyControl.hotKeysActive = true;
-            
+
             var nameInput = $('#scriptNameTab .scriptNameInput input');
 
             if(!cancel)
@@ -79,7 +79,7 @@ var Main;
 
             $(this).hide();
             $('#scriptNameTab .scriptName').show();
-        });            
+        });
         scriptNameInputSpan.on('keydown', function(e)
         {
             if(e.keyCode === 13)// enter
@@ -88,19 +88,19 @@ var Main;
             }
             if(e.keyCode === 27)// escape
             {
-                $(this).trigger('focusout',[true]);   
+                $(this).trigger('focusout',[true]);
             }
-        });        
+        });
         scriptNameInputSpan.hide();
-        
+
         $('#scriptNameTab').append(scriptNameInputSpan);
-        
+
         $('#scriptNameTab .scriptName').on('dblclick', function(e)
         {
             KeyControl.hotKeysActive = false;
-            
+
             $(this).hide();
-            
+
             var nameInputSpan = $('#scriptNameTab .scriptNameInput');
             var nameInput = nameInputSpan.children('input');
             nameInput.val(Metadata.metaObject.name);
@@ -118,9 +118,9 @@ var Main;
                 $(this).find('.dropdownButton:first').removeClass("hovered");
             }
         );
-        
+
         //handle movement of the div indicating which grid cell youre hovering over
-        $('#main').on('mousemove', function(e)
+        $('#wrapRow').on('mousemove', function(e)
         {
             var mainPos = $("#main").offset();
             var leftPos = gridPos(e.pageX - mainPos.left + $("#main").scrollLeft(), Main.gridX);
@@ -142,7 +142,7 @@ var Main;
 
         $('#main').on('dblclick', function()
         {
-            if(!Zoom.isZoomed()) 
+            if(!Zoom.isZoomed())
                 addNewTree(null, true, 0, 0);//first argument of false generates a new id
         });
         $('#manual').on('click', function()
@@ -163,7 +163,7 @@ var Main;
                 addNewTree(null, true, 0, 0);
                 return true;
             });
-            
+
         });
         $('#newComputerNode').on("mousedown", function(e)
         {
@@ -246,7 +246,7 @@ var Main;
 
         $("#main").on('mouseleave', function()
         {
-            $("#gridIndicator").hide();
+            //$("#gridIndicator").hide();
         });
 
         $("#main").on('click', function(e)
@@ -372,8 +372,8 @@ var Main;
             id = "tree" + Main.maxTreeNumber;
             Main.maxTreeNumber++;
             Main.unsavedChanges = true;
-        }        
-        
+        }
+
         var treeDiv = $('<div>', { class: "treeDiv" });
         treeDiv.on("click", function(e)
         {
@@ -406,7 +406,7 @@ var Main;
         changeNameInput.on('focusout', function(e, cancel)
         {
             KeyControl.hotKeysActive = true;
-            
+
             var subDiv = $("#"+id);
             var subjectName = subDiv.find('.subjectName').show();
             var input = subDiv.find('.subjectNameInput').hide();
@@ -423,18 +423,18 @@ var Main;
                 Main.trees[id].subject = input.val();
                 subjectName.text(Main.trees[id].subject);
             }
-            
+
             updateSideBar();
         });
         changeNameInput.on('keydown', function(e)
         {
             if(e.keyCode === 13) // enter
-            {                    
+            {
                 changeNameInput.trigger('focusout', [false]);
                 $("#main").focus();
             }
             if(e.keyCode === 27) // escape
-            {                    
+            {
                 changeNameInput.trigger('focusout', [true]);
                 $("#main").focus();
             }
@@ -450,10 +450,10 @@ var Main;
         subjSpan.append(inputSpan);
 
         var subjectDiv = $('<div>', {class:"subjectDiv"});
-        subjectDiv.append(subjSpan);        
+        subjectDiv.append(subjSpan);
 
-        subjectDiv.on("click", function(e) 
-        { 
+        subjectDiv.on("click", function(e)
+        {
             e.stopPropagation();
 
             if (Main.selectedElement === id)
@@ -464,16 +464,16 @@ var Main;
             }
             else
             {
-                selectTree(id); 
+                selectTree(id);
             }
         });
 
-        subjectDiv.on("dblclick", function(e) 
+        subjectDiv.on("dblclick", function(e)
         {
             var selectAllInput = false;
             triggerSubjectNameInput(id, selectAllInput);
-            e.stopPropagation();        
-        }); 
+            e.stopPropagation();
+        });
 
         var dragDiv = $('<div>', {class: "w treeContainer selectable", id: id});
         dragDiv.append(subjectDiv);
@@ -537,13 +537,13 @@ var Main;
         return Main.trees[id];
     }
 
-    function addNewTree(id, indicatorSnap, offsetX, offsetY) 
+    function addNewTree(id, indicatorSnap, offsetX, offsetY)
     {
         Zoom.zoomOut();
-        
+
         //creates empty tree and selects it
         var tree = createEmptyTree(id, indicatorSnap, offsetX, offsetY);
-        selectTree(tree.id);  
+        selectTree(tree.id);
 
         // Triggers the input for a subject name
         var selectAllInput = true;
@@ -554,7 +554,7 @@ var Main;
 
     // Creates a new subject and ensures it does not spawn on top of an existing one
     function placeNewTree()
-    {   
+    {
         var maxY = -1;
         $.each(Main.trees,function(k,t)
         {
@@ -690,14 +690,14 @@ var Main;
             var node;
             switch(parent.type)
             {
-                case Main.playerType: 
+                case Main.playerType:
                     node = addNewNode(Main.computerType);
                     break;
-                case Main.computerType: 
-                    node = addNewNode(Main.playerType);    
+                case Main.computerType:
+                    node = addNewNode(Main.playerType);
                     break;
-                case Main.conversationType: 
-                    node = addNewNode(Main.playerType);    
+                case Main.conversationType:
+                    node = addNewNode(Main.playerType);
                     break;
             }
 
@@ -717,7 +717,7 @@ var Main;
             var parentDiv = $('#'+parent.id);
             var left = parentDiv.position().left;
             var top = parentDiv.position().top + 55 + parentDiv.height();
-            
+
             // Actually move node
             nodeDiv.css({"top": top, "left": left});
             repaintZoomedNodes();
@@ -756,7 +756,7 @@ var Main;
                 event.stopPropagation();
             });
             input.append(txtArea);
-            
+
             input.on('focusout',function(e, cancel)
             {
                 // Turn hotkeys on again (they are turned off while typing in the node)
@@ -764,8 +764,8 @@ var Main;
                 var thisNode = $('#'+id);
 
                 var val = thisNode.find('textarea').val();
-                var text = val ? val : "";  
-                
+                var text = val ? val : "";
+
 
                 thisNode.find('.statementInput').hide();
                 thisNode.find('.statementText').text(text).show();
@@ -783,7 +783,7 @@ var Main;
                 //Enable dragging for this component
                 plumbInstance.setDraggable(thisNode, true);
             });
-            
+
             input.on('keydown', function(e)
             {
                 if(e.ctrlKey && e.keyCode === 13) // enter
@@ -800,14 +800,14 @@ var Main;
         {
             input.text(LanguageManager.sLang("edt_main_see_conversation"));
         }
-        
+
         node.append( input );
         node.append( $('<div>',{class:"statementText"}).hide() );
         node.append( $('<div>',{class:'imgDiv'} ) );
 
         parent.append(node);
-    
-        node.on("dblclick", function() 
+
+        node.on("dblclick", function()
         {
             // Make nodes configurable, only for the player nodes if they are not showing an intention
             if (Main.nodes[id].type != Main.playerType || $("#labelText").hasClass("statements"))
@@ -830,7 +830,7 @@ var Main;
                     // Disable dragging for this component
                     plumbInstance.setDraggable(thisNode, false);
 
-                    // Make room for typing text in the node     
+                    // Make room for typing text in the node
                     thisNode.height(h+35);
                     if (thisNode.width() < 128)
                         thisNode.width(128);
@@ -922,23 +922,23 @@ var Main;
             else
             {
                 selectElement(id);
-            }   
+            }
         });
 
         return node;
     }
-    
+
     function triggerSubjectNameInput(id, selectAllInput)
     {
         KeyControl.hotKeysActive = false;
-        
+
         // hide subject name span and show textbox
         var subDiv = $("#"+id);
         subDiv.find('.subjectName').hide();
-        
+
         var input = subDiv.find('.subjectNameInput');
         input.show();
-        input.focus();        
+        input.focus();
         if (selectAllInput) input.select();
     }
 
@@ -946,7 +946,7 @@ var Main;
     {
         var node = Main.nodes[Main.selectedElement];
         if (!node || node.type != Main.conversationType) return;
-        
+
         $("#conversationDiv").empty();
 
         // set content of popup (current converstation statements)
@@ -960,50 +960,50 @@ var Main;
 
         //open popup
         $('#allConversationsHTML').dialog(
-        { 
-            title: LanguageManager.sLang("edt_main_conversation"), 
-            height: 600, 
-            width: 600, 
+        {
+            title: LanguageManager.sLang("edt_main_conversation"),
+            height: 600,
+            width: 600,
             modal: true,
             appendTo: "#wrap",
             closeOnEscape: true,
             resizable: false,
-            draggable: false,    
+            draggable: false,
             buttons: [
             {
                 text: LanguageManager.sLang("edt_common_confirm"),
-                click: function() 
+                click: function()
                 {
                     // Save changes made to the conversation fields.
-                    if (node.type === Main.conversationType) 
+                    if (node.type === Main.conversationType)
                     {
                         var conversationArray = [];
-                        $("#conversationDiv").children().each(function() 
+                        $("#conversationDiv").children().each(function()
                         {
                             conversationArray.push(ObjectGenerator.conversationObject($(this)));
                         });
                         node.conversation = conversationArray;
-                    } 
+                    }
                     changeNodeText(node.id);
-                    $("#allConversationsHTML").dialog('close'); 
-                    
+                    $("#allConversationsHTML").dialog('close');
+
                 }
-            }, 
+            },
             {
                 text: LanguageManager.sLang("edt_common_cancel"), click: function()
-                { 
-                    $("#allConversationsHTML").dialog('close'); 
+                {
+                    $("#allConversationsHTML").dialog('close');
                 }
             }],
-            close: function() 
-            {  
-                // do nothing but close the dialog 
+            close: function()
+            {
+                // do nothing but close the dialog
                 KeyControl.hotKeysActive = true;
                 $("#main").focus();
             }
          });
     }
-    
+
     function changeZoomedNodeTexts()
     {
         if (!Zoom.isZoomed()) return;
@@ -1103,18 +1103,18 @@ var Main;
         updateButtons();
     }
 
-    function updateButtons() 
+    function updateButtons()
     {
         var subjectButtons = document.getElementsByClassName("subjectButton");
         var nodeButtons = document.getElementsByClassName("nodeButton");
-        
+
         hideButtons(subjectButtons);
         hideButtons(nodeButtons);
-        
+
         if (Zoom.isZoomed())
         {
             showButtons(subjectButtons);
-            
+
             if (Main.selectedElement !== null)
             {
                  // A node is selected, because a tree is zoomed
@@ -1129,13 +1129,13 @@ var Main;
             }
         }
     }
-    function hideButtons(buttons) 
+    function hideButtons(buttons)
     {
         for (var i = 0, len = buttons.length; i < len; i++) {
             buttons[i].disabled = true;
         }
     }
-    function showButtons(buttons) 
+    function showButtons(buttons)
     {
         for (var i = 0, len = buttons.length; i < len; i++){
             buttons[i].disabled = false;
@@ -1241,7 +1241,7 @@ var Main;
         Zoom.getZoomed().plumbInstance.repaintEverything();
     }
 
-    function escapeTags(str) 
+    function escapeTags(str)
     {
         if (str === undefined)
             return str;
@@ -1318,7 +1318,7 @@ var Main;
         tree.leftPos = Math.round(leftOffsetPos / Main.gridX); //store position to return to this point when zoomed in and out again
         tree.topPos = Math.round(topOffsetPos / Main.gridY);
         tree.level = Math.round(tree.topPos); //trees have a conversation level. trees on the same level are interleaved. trees on different levels are sequenced from top to bottom (low y to high y)
-    
+
         MiniMap.update(true);
     }
 
@@ -1345,7 +1345,7 @@ var Main;
         {
             applyChanges();
         }
-        
+
         var dragDiv = Main.trees[id].dragDiv;
         if (Zoom.isZoomed(id))
         { //cancel select if the tree is zoomed to prevent acidental deletion and duplication of trees.
@@ -1364,15 +1364,15 @@ var Main;
 
         dragDiv.addClass("selected");
         Main.selectedElement = id;
-        
+
         dragDiv.addClass("multiSelected");
         Main.selectedElements.push(Main.selectedElement);
-            
+
         updateSideBar();
     }
 
-    // Change the text of the node. 
-    // also inputs images that show if the node has audio/visuals. 
+    // Change the text of the node.
+    // also inputs images that show if the node has audio/visuals.
     // We might want to refactor the function name
     function changeNodeText(nodeID)
     {
@@ -1444,31 +1444,31 @@ var Main;
 
         // get the node
         var nodeHTML = $('#' + nodeID);
-        // fill div that can hold the images that visualize if the node has video/audio 
+        // fill div that can hold the images that visualize if the node has video/audio
         var imageDiv = $('.imgDiv', nodeHTML);
         imageDiv.empty();
-        if (node.comment !== "")                         
+        if (node.comment !== "")
             imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_comments.png'>");
-        if (node.audio !== null)                         
+        if (node.audio !== null)
             imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_audio.png'>");
-        if (node.video !== null)                         
+        if (node.video !== null)
             imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_video.png'>");
-        if (node.image !== null)                         
+        if (node.image !== null)
             imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_image.png'>");
-        if (node.jumpPoint)                              
+        if (node.jumpPoint)
             imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_jump.png'>");
-        if (node.endNode)                                
+        if (node.endNode)
             imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_end.png'>");
-        if (node.initsNode)                              
+        if (node.initsNode)
             imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_premature_end.png'>");
-        
+
         // add the text and imageDiv to the node itself
         // apply text changes
         nodeHTML.width(width + "em");
         var nodeTextDiv = $('.statementText', nodeHTML);
         nodeTextDiv.show();
         nodeTextDiv.html(text);
-        
+
         // make sure the text fits inside the node
         var h = nodeTextDiv[0].clientHeight;
         nodeHTML.height(h);
@@ -1485,7 +1485,7 @@ var Main;
             nodeHTML.addClass('jumpnode');
         else
             nodeHTML.removeClass('jumpnode');
-        
+
         // Add the endnode class to the node for a graphical indication
         if(node.endNode)
             nodeHTML.addClass("endnode");
@@ -1552,9 +1552,9 @@ var Main;
         subname.text(tree.subject);
 
         var zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
-        if (Zoom.isZoomed(tree.id)) 
+        if (Zoom.isZoomed(tree.id))
             zoomTreeButton.text('[-]');
-        else 
+        else
             zoomTreeButton.text('[+]');
 
         tree.dragDiv.css('border-color', '');
@@ -1579,7 +1579,7 @@ var Main;
         if (Main.selectedElement === null)
         {
             $("#properties").attr("class", "hidden");
-            
+
             MiniMap.activate();
         }
         else if (Main.selectedElement in Main.nodes)
@@ -1687,7 +1687,7 @@ var Main;
                 return false;
             }
         }
-        
+
         // This check needs revision, maybe we can allow a node to have more than 10 outgoing connections
         if (plumbInstance.getConnections({source: sourceID}).length >= 10)
         {
@@ -1700,10 +1700,10 @@ var Main;
         }
 
         plumbInstance.connect({ source: sourceID, target: targetID });
-        
+
         return true;
     }
-    
+
     function getFirstChildIdOrNull(sourceId)
     {
         var connections = Main.trees[Main.nodes[sourceId].parent].plumbInstance.getConnections({ source: sourceId });
@@ -1714,7 +1714,7 @@ var Main;
     function makeCollapsable()
     {
         //Set the initial state of collapsable and clickable elements:
-        $(".collapsable").css("display", "inline-block");   
+        $(".collapsable").css("display", "inline-block");
         $(".collapsable").show();
         $(".clicktag").text("[-]");
         $(".masterclicktag").text("[-]");
@@ -1724,16 +1724,16 @@ var Main;
 
         // click element header to toggle slide property elements
         $(".clickable").on("click", function(e)
-        {                
+        {
                   //The main header was clicked, it can collapse all the property elements
                   if ($(this).hasClass("collapseAll"))
-                  { 
+                  {
                     //If there is at least one collapsable element open, close all
                     var result = 0;
                     $(".collapsable").each(function()
                         {
                             if($(this).css("display") != "none")
-                            {                    
+                            {
                                $("#properties").find(".collapsable").slideUp(400);
                                $(".clicktag").text("[+]");
                                $(".masterclicktag").text("[+]");
@@ -1744,7 +1744,7 @@ var Main;
                     //If there are no collapsable elements open, open all
                     if(result === 0)
                     {
-                        $("#properties").find(".collapsable").slideDown(400); 
+                        $("#properties").find(".collapsable").slideDown(400);
                         $(".clicktag").text("[-]");
                         $(".masterclicktag").text("[-]");
                     }
@@ -1760,10 +1760,10 @@ var Main;
                         $(".masterclicktag").text("[-]");
                     }
                     //An element was closed
-                    else 
-                    { 
+                    else
+                    {
                         mySpan.text("[+]");
-                        
+
                         $(".clickable").each(function()
                         {
                             //Check if there is at least one element open
@@ -1776,7 +1776,7 @@ var Main;
                         });
                     }
                     //Close or open a single element
-                    $(this).parent().closest("div").find(".collapsable").slideToggle(400);            
+                    $(this).parent().closest("div").find(".collapsable").slideToggle(400);
                   }
             e.stopPropagation();
         });
@@ -1785,7 +1785,7 @@ var Main;
         $(".collapsable").on("click", function(e)
         {
             e.stopPropagation();
-        });    
+        });
     }
 
 })();
