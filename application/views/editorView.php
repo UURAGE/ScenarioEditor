@@ -51,7 +51,7 @@
 
   //non language related scripts
   $scripts = array(
-      "js/lib/jquery-1.12.0.min.js",
+      "js/lib/jquery-2.2.4.min.js",
       "js/lib/jquery-ui-1.11.4.min.js",
       "js/lib/jsPlumb-2.0.7.js",
       //"js/lib/multidraggable.js",
