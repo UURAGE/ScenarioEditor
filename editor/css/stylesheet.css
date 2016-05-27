@@ -568,6 +568,11 @@ button.enabled
   display: block;
 }
 
+.ui-accordion .ui-accordion-header
+{
+  margin-bottom: 0;
+}
+
 #allPreconditionsHTML
 {
   white-space: nowrap;
