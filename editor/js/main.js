@@ -53,7 +53,6 @@ var Main;
     //Private Variables.
     var xselectableSelected = [],
         ctrlDown = false,
-        editPermission = false,
         invalidateNodeClick = false;//a drag event also triggers a click event, use this flag to catch and stop these events
 
     $(document).ready(function()
