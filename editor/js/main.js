@@ -1147,25 +1147,42 @@ var Main;
         node.parameters = parameterEffects;
 
         // Save fixed parameter effects.
-        node.fixedParameterEffects = {};
-        $("#fixed-parameter-effects").find('.fixed-parameter-effect-container').each(function()
+        getFixedParameterEffectFromDOMAndSetInNode = function(effectContainer, parameterDefinitions, fixedParameterEffects, classPrefix)
         {
-            var parameterIdRef = $(this).find('.fixed-parameter-effect-idref-select').val();
-            var controlContainer = $(this).find('.fixed-parameter-effect-control-container');
-            var parameterValue = Config.configObject.parameters.byId[parameterIdRef].type.getFromDOM(controlContainer);
-            var parameterChangeType = $(this).find('.fixed-parameter-effect-changetype-select').val();
+            var parameterIdRef = $(effectContainer).find('.' + classPrefix + '-effect-idref-select').val();
+            var controlContainer = $(effectContainer).find('.' + classPrefix + '-effect-control-container');
+            var parameterValue = parameterDefinitions[parameterIdRef].type.getFromDOM(controlContainer);
+            var parameterChangeType = $(effectContainer).find('.' + classPrefix + '-effect-changetype-select').val();
             var parameterEffect = {
                 idRef: parameterIdRef,
                 changeType: parameterChangeType,
                 value: parameterValue
             };
 
-            if (!(parameterEffect.idRef in node.fixedParameterEffects))
+            if (!(parameterEffect.idRef in fixedParameterEffects))
             {
-                node.fixedParameterEffects[parameterEffect.idRef] = [];
+                fixedParameterEffects[parameterEffect.idRef] = [];
             }
-            node.fixedParameterEffects[parameterEffect.idRef].push(parameterEffect);
+            fixedParameterEffects[parameterEffect.idRef].push(parameterEffect);
+        };
+
+        node.fixedParameterEffects = {};
+        var classPrefix = "fixed-parameter-effects";
+        $("#fixed-parameter-effects").find('.' + classPrefix + '-effect-container').each(function()
+        {
+            getFixedParameterEffectFromDOMAndSetInNode(this, Config.configObject.parameters.byId, node.fixedParameterEffects, classPrefix);
         });
+
+        for (var characterId in Config.configObject.characters.byId)
+        {
+            node.characters[characterId].fixedParameterEffects = {};
+            var classCharacterPrefix = classPrefix + '-' + characterId;
+            $("#fixed-parameter-effects").find('.' + classCharacterPrefix + '-effect-container').each(function()
+            {
+                var parameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[characterId].parameters.byId);
+                getFixedParameterEffectFromDOMAndSetInNode(this, parameterDefinitions, node.characters[characterId].fixedParameterEffects, classCharacterPrefix);
+            });
+        }
 
         // Save preconditions.
         node.preconditions = ObjectGenerator.preconditionObject($("#preconditionsDiv").children().first());
@@ -1603,10 +1620,8 @@ var Main;
             var acceptableScopes = ['per', 'per-' + node.type];
 
             // Show fixed parameters
-            // Accumulator for mapping a parameter id to its effects container
-            var idRefToEffectsContainer = {};
             // Appends a default effect to the container, which changes dynamically based on the parameter selected
-            var appendEffectContainerTo = function(effectsContainer, parameterDefinitions)
+            var appendEffectContainerTo = function(effectsContainer, containerClassPrefix, parameterDefinitions)
             {
                 // This element contains the dynamically changing changeType and control for possible values
                 // It is separate from the rest so that it can be emptied
@@ -1615,20 +1630,22 @@ var Main;
                 // Dynamically changes the type of the effect according to the given parameter
                 var changeEffectType = function(pId)
                 {
-                    var changeTypeSelect = $('<select>', { class: "fixed-parameter-effect-changetype-select" });
-                    parameterDefinitions.byId[pId].type.assignmentOperators.forEach(function(op)
+                    var changeTypeSelect = $('<select>', { class: containerClassPrefix + "-effect-changetype-select" });
+                    parameterDefinitions[pId].type.assignmentOperators.forEach(function(op)
                     {
                         changeTypeSelect.append($('<option>', { value: op, text: op }));
                     });
                     effectDiv.append(changeTypeSelect);
 
-                    var controlContainer = $('<div>', { class: "fixed-parameter-effect-control-container", style:"display:inline" });
-                    parameterDefinitions.byId[pId].type.appendControlTo(controlContainer);
+                    var controlContainer = $('<div>', { class: containerClassPrefix + "-effect-control-container", style:"display:inline" });
+                    parameterDefinitions[pId].type.appendControlTo(controlContainer);
                     effectDiv.append(controlContainer);
                 };
 
                 // Clone the hidden select accumulated for each separate section and put it in the parameter effect
-                var idRefSelect = effectsContainer.parent().children('select.fixed-parameter-effect-idref-select.hidden').clone();
+                var idRefSelect = effectsContainer.parent().children('select.' + containerClassPrefix + '-idref-select.hidden').clone();
+                idRefSelect.removeClass(containerClassPrefix + '-idref-select');
+                idRefSelect.addClass(containerClassPrefix + '-effect-idref-select');
                 changeEffectType($(idRefSelect).val());
                 idRefSelect.on('change', function()
                 {
@@ -1641,13 +1658,13 @@ var Main;
                 var deleteButton = $(Parts.getDeleteParentButtonHTML());
                 deleteButton.on('click', function() { $(this).parent().remove(); });
 
-                var effectContainer = $('<div>', { class: "fixed-parameter-effect-container" });
+                var effectContainer = $('<div>', { class: containerClassPrefix + "-effect-container" });
                 effectContainer.append(idRefSelect).append(effectDiv).append(deleteButton);
                 effectsContainer.append(effectContainer);
             };
 
             // Shows the sections and add buttons when there are effects that can be added
-            var showParameterItem = function(parameterDefinitions, parameterItem, hLevel, container)
+            var showParameterItem = function(parameterDefinitions, parameterItem, hLevel, container, classPrefix, idRefToEffectsContainer)
             {
                 if (acceptableScopes.indexOf(parameterItem.scopes.statementScope) === -1) return false;
                 if (parameterItem.kind === 'section')
@@ -1660,7 +1677,7 @@ var Main;
                     var anyParameterShown = false;
                     parameterItem.sequence.forEach(function (subItem)
                     {
-                        if (showParameterItem(parameterDefinitions, subItem, hLevel + 1, sectionContainer))
+                        if (showParameterItem(parameterDefinitions, subItem, hLevel + 1, sectionContainer, classPrefix, idRefToEffectsContainer))
                             anyParameterShown = true;
                     });
 
@@ -1673,46 +1690,104 @@ var Main;
                 else
                 {
                     var parameterIdRefSelect;
-                    if (!container.hasClass("fixed-parameter-effects-possible"))
+                    var effectsContainer;
+                    if (!container.hasClass(classPrefix + "-possible"))
                     {
-                        container.addClass("fixed-parameter-effects-possible");
+                        container.addClass(classPrefix + "-possible");
 
                         // Make a new select that accumulates all the possible parameter id's that can be affected
-                        parameterIdRefSelect = $('<select>', { class: "fixed-parameter-effect-idref-select hidden" });
+                        parameterIdRefSelect = $('<select>', { class: classPrefix + "-idref-select hidden" });
                         container.append(parameterIdRefSelect);
 
-                        var effectsContainer = $('<div>', { class: "fixed-parameter-effects-container"});
+                        effectsContainer = $('<div>', { class: classPrefix + "-container"});
                         container.append(effectsContainer);
 
                         container.append(Parts.getAddParameterEffectButtonHTML());
                         var addEffectButton = container.children().last();
                         addEffectButton.on('click', function()
                         {
-                            appendEffectContainerTo(effectsContainer, parameterDefinitions);
+                            appendEffectContainerTo(effectsContainer, classPrefix, parameterDefinitions);
                         });
                     }
                     else
                     {
-                        parameterIdRefSelect = container.children('select.fixed-parameter-effect-idref-select.hidden');
+                        parameterIdRefSelect = container.children('select.' + classPrefix + '-idref-select.hidden');
+                        effectsContainer = container.children('.' + classPrefix + '-container');
                     }
                     parameterIdRefOption = $('<option>', { value: parameterItem.id, text:  Main.escapeTags(parameterItem.name)});
                     parameterIdRefSelect.append(parameterIdRefOption);
 
-                    idRefToEffectsContainer[parameterItem.id] = container.children('.fixed-parameter-effects-container');
+                    idRefToEffectsContainer[parameterItem.id] = effectsContainer;
 
                     return true;
                 }
             };
 
+            // Show the sections for all character-independent fixed parameter effects
             fixedParameterEffectsEl = $("#fixed-parameter-effects");
-            fixedParameterEffectsEl.removeClass('fixed-parameter-effects-possible');
+            var classPrefix = fixedParameterEffectsEl.attr('id');
+            fixedParameterEffectsEl.removeClass(classPrefix + '-possible');
             var hStartLevel = 3;
+            // Accumulator for mapping a parameter id to its effects container
+            var idRefToEffectsContainer = {};
             Config.configObject.parameters.sequence.forEach(function(subItem)
             {
-                showParameterItem(Config.configObject.parameters, subItem, hStartLevel, fixedParameterEffectsEl);
+                showParameterItem(Config.configObject.parameters.byId, subItem, hStartLevel, fixedParameterEffectsEl, classPrefix, idRefToEffectsContainer);
             });
 
-            // Add the effects that were previously defined
+            // Show the sections for all per-character fixed parameter effects
+            fixedCharacterParameterEffectsEl = $("#fixed-parameter-effects");
+            var accordionDiv = $('<div>');
+            fixedCharacterParameterEffectsEl.append(accordionDiv);
+            var characterHeaderStartLevel = 3;
+            var anyCharacterParameterShown = false;
+            // Accumulator for mapping a character parameter id to its effects container
+            var idRefToCharacterEffectsContainer = {};
+            Config.configObject.characters.sequence.forEach(function(character)
+            {
+                var characterHeader = $('<h' + characterHeaderStartLevel +'>', { text: character.id });
+                var characterDiv = $('<div>');
+                accordionDiv.append(characterHeader).append(characterDiv);
+
+                var classCharacterPrefix = classPrefix + '-' + character.id;
+
+                idRefToCharacterEffectsContainer[character.id] = {};
+
+                // The definitions for each parameter need to be available for changing the select,
+                // it can either be a parameter for an individual character or for all the characters,
+                // so we need to merge the definitions into one object and pass it.
+                var characterParameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[character.id].parameters.byId);
+
+                Config.configObject.characters.parameters.sequence.forEach(function(parameterItem)
+                {
+                    if (showParameterItem(characterParameterDefinitions, parameterItem, characterHeaderStartLevel + 1,
+                                          characterDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[character.id]))
+                    {
+                        anyCharacterParameterShown = true;
+                    }
+                });
+
+                Config.configObject.characters.byId[character.id].parameters.sequence.forEach(function(parameterItem)
+                {
+                    if (showParameterItem(characterParameterDefinitions, parameterItem, characterHeaderStartLevel + 1,
+                                          characterDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[character.id]))
+                    {
+                        anyCharacterParameterShown = true;
+                    }
+                });
+            });
+
+            if (anyCharacterParameterShown)
+            {
+                // Set the heightStyle to "content", because the content changes dynamically
+                accordionDiv.accordion({ active: false, collapsible: true, heightStyle: "content" });
+            }
+            else
+            {
+                accordionDiv.remove();
+            }
+
+            // Add the character-independent effects that were previously defined
             for (var parameterIdRef in node.fixedParameterEffects)
             {
                 if (parameterIdRef in idRefToEffectsContainer)
@@ -1720,13 +1795,38 @@ var Main;
                     node.fixedParameterEffects[parameterIdRef].forEach(function(effect)
                     {
                         var effectsContainer = idRefToEffectsContainer[parameterIdRef];
-                        appendEffectContainerTo(effectsContainer, Config.configObject.parameters);
+                        appendEffectContainerTo(effectsContainer, classPrefix, Config.configObject.parameters.byId);
                         var addedEffectContainer = effectsContainer.children().last();
 
-                        addedEffectContainer.find('.fixed-parameter-effect-idref-select').val(effect.idRef).change();
-                        addedEffectContainer.find('.fixed-parameter-effect-changetype-select').val(effect.changeType);
-                        Config.configObject.parameters.byId[effect.idRef].type.setInDOM(addedEffectContainer.find('.fixed-parameter-effect-control-container'), effect.value);
+                        addedEffectContainer.find('.' + classPrefix + '-effect-idref-select').val(effect.idRef).change();
+                        addedEffectContainer.find('.' + classPrefix + '-effect-changetype-select').val(effect.changeType);
+                        Config.configObject.parameters.byId[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + classPrefix + '-effect-control-container'), effect.value);
                     });
+                }
+            }
+
+            // Add the per-character effects that were previously defined
+            for (var characterId in Config.configObject.characters.byId)
+            {
+                var classCharacterPrefix = classPrefix + '-' + characterId;
+
+                for (var parameterIdRef in node.characters[characterId].fixedParameterEffects)
+                {
+                    if (parameterIdRef in idRefToCharacterEffectsContainer[characterId])
+                    {
+                        node.characters[characterId].fixedParameterEffects[parameterIdRef].forEach(function(effect)
+                        {
+                            var characterParameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[characterId].parameters.byId);
+
+                            var effectsContainer = idRefToCharacterEffectsContainer[characterId][parameterIdRef];
+                            appendEffectContainerTo(effectsContainer, classCharacterPrefix, characterParameterDefinitions);
+                            var addedEffectContainer = effectsContainer.children().last();
+
+                            addedEffectContainer.find('.' + classCharacterPrefix + '-effect-idref-select').val(effect.idRef).change();
+                            addedEffectContainer.find('.' + classCharacterPrefix + '-effect-changetype-select').val(effect.changeType);
+                            characterParameterDefinitions[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + classCharacterPrefix + '-effect-control-container'), effect.value);
+                        });
+                    }
                 }
             }
 
@@ -1772,7 +1872,6 @@ var Main;
             nodeCharacterPropertiesEl = $('#node-properties');
             accordionDiv = $('<div>');
             nodeCharacterPropertiesEl.append(accordionDiv);
-            var characterHeaderStartLevel = 3;
             Config.configObject.characters.sequence.forEach(function(character)
             {
                 var characterHeader = $('<h' + characterHeaderStartLevel +'>', { text: character.id });
@@ -1799,13 +1898,12 @@ var Main;
             else if (!anyPropertyShown)
             {
                 $("#propertiesSection").show();
-                accordionDiv.hide();
+                accordionDiv.remove();
             }
             else
             {
                 $("#propertiesSection").show();
                 accordionDiv.accordion({ active: false, collapsible: true });
-                accordionDiv.show();
             }
 
             $("#endNodeCheckbox").prop("checked", node.endNode);
