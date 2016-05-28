@@ -263,8 +263,7 @@ var Load;
             parameters.byId[parameter.id] = parameter;
         });
 
-        var properties = loadProperties($(metadata).children('properties'));
-        var characters = loadCharacters($(metadata).children('characters'));
+        var properties = loadProperties($(metadata).children('propertyValues'));
 
         $(metadata).children('scoringFunction').children('sum').children('scale').children('paramRef').each(function()
         {
@@ -286,9 +285,9 @@ var Load;
         Metadata.metaObject = {
             name: name,
             difficulty: difficulty,
-            characters: characters,
             description: description,
-            properties: properties,
+            properties: properties.characterIndependent,
+            characters: properties.perCharacter,
             parameters: parameters,
             timePId: timePId,
             defaultChangeType: defaultChangeType
@@ -338,8 +337,9 @@ var Load;
             });
         }
 
-        var comment = Main.unEscapeTags($(statement).find('comment').text());
+        var properties = loadProperties($(statement).children('propertyValues'));
 
+        var comment = Main.unEscapeTags($(statement).find('comment').text());
 
         var targets = $(statement).find('responses').children();
         if (targets.length > 0)
@@ -355,10 +355,6 @@ var Load;
             }
         }
 
-        var properties = loadProperties($(statement).children('propertyValues'));
-
-        var characters = loadCharacters($(statement).children('characters'));
-
         var node = Main.createAndReturnNode(type, id, Main.trees[treeID].div, Main.trees[treeID].dragDiv.attr('id'));
         Main.nodes[id] = {
             text: text,
@@ -367,8 +363,8 @@ var Load;
             parameters: parameterEffects,
             fixedParameterEffects: {},
             preconditions: preconditionsJS,
-            properties: properties,
-            characters: characters,
+            properties: properties.characterIndependent,
+            characters: properties.perCharacter,
             comment: comment,
             endNode: endNode,
             initsNode: initsNode,
@@ -427,30 +423,15 @@ var Load;
     function loadProperties(propertiesXMLElement)
     {
         var properties = {};
+        var characters = Metadata.getNewDefaultCharactersObject();
         propertiesXMLElement.children().each(function()
         {
             var propertyId = this.attributes.idref.value;
-            if (propertyId in Config.configObject.properties.byId)
+            if (this.attributes.characteridref)
             {
-                properties[propertyId] = Config.configObject.properties.byId[propertyId].type.fromXML(this);
-            }
-        });
-        return properties;
-    }
-
-    function loadCharacters(charactersXMLElement)
-    {
-        var characters = {};
-        charactersXMLElement.children().each(function()
-        {
-            var characterId = this.attributes.idref.value;
-            if (characterId in Config.configObject.characters.byId)
-            {
-                characters[characterId] = {};
-                characters[characterId].properties = {};
-                $(this).children('propertyValues').children().each(function()
+                var characterId = this.attributes.characteridref.value;
+                if (characterId in Config.configObject.characters.byId)
                 {
-                    var propertyId = this.attributes.idref.value;
                     if (propertyId in Config.configObject.characters.properties.byId)
                     {
                         characters[characterId].properties[propertyId] = Config.configObject.characters.properties.byId[propertyId].type.fromXML(this);
@@ -459,10 +440,14 @@ var Load;
                     {
                         characters[characterId].properties[propertyId] = Config.configObject.characters.byId[characterId].properties.byId[propertyId].type.fromXML(this);
                     }
-                });
+                }
+            }
+            else if (propertyId in Config.configObject.properties.byId)
+            {
+                properties[propertyId] = Config.configObject.properties.byId[propertyId].type.fromXML(this);
             }
         });
-        return characters;
+        return { characterIndependent: properties, perCharacter: characters };
     }
 
     function nullIfMissing(elements)
@@ -475,3 +460,4 @@ var Load;
             return elements.text();
     }
 })();
+
