@@ -102,19 +102,51 @@ var KeyControl;
         },
         38: function()
         {
-            selectParent();
+            if(Main.selectedElements[0] in Main.nodes)
+                selectParent();
+            else if(Main.selectedElements[0] in Main.trees)
+            {
+                var selectedTree = Main.trees[Main.selectedElements[0]];
+                var upPredicate = function(tree){return tree.topPos < selectedTree.topPos && tree.leftPos === selectedTree.leftPos};
+
+                selectClosestOffsetTree(upPredicate, Main.selectedElements[0]);
+            }
         },
         40: function()
         {
-            selectChild();
+            if(Main.selectedElements[0] in Main.nodes)
+                selectChild();
+            else if(Main.selectedElements[0] in Main.trees)
+            {
+                var selectedTree = Main.trees[Main.selectedElements[0]];
+                var downPredicate = function(tree){return tree.topPos > selectedTree.topPos && tree.leftPos === selectedTree.leftPos};
+
+                selectClosestOffsetTree(downPredicate, Main.selectedElements[0]);
+            }
         },
         39: function()
         {
-            selectRightBrother();
+            if(Main.selectedElements[0] in Main.nodes)
+                selectRightBrother();
+            else if(Main.selectedElements[0] in Main.trees)
+            {
+                var selectedTree = Main.trees[Main.selectedElements[0]];
+                var rightPredicate = function(tree){return tree.topPos == selectedTree.topPos && tree.leftPos > selectedTree.leftPos};
+
+                selectClosestOffsetTree(rightPredicate, Main.selectedElements[0]);
+            }
         },
         37: function()
         {
-            selectLeftBrother();
+            if(Main.selectedElements[0] in Main.nodes)
+                selectLeftBrother();
+            else if(Main.selectedElements[0] in Main.trees)
+            {
+                var selectedTree = Main.trees[Main.selectedElements[0]];
+                var leftPredicate = function(tree){return tree.topPos === selectedTree.topPos && tree.leftPos < selectedTree.leftPos};
+
+                selectClosestOffsetTree(leftPredicate, Main.selectedElements[0]);
+            }
         },
         27: function()
         {
@@ -396,6 +428,34 @@ var KeyControl;
                 });
             }
         }
+    }
+
+    function selectClosestOffsetTree(offsetPredicate, originID)
+    {
+        var minDistance = Number.MAX_VALUE;
+        var originTree = Main.trees[originID];
+        var selectID = "";
+
+        $.each(Main.trees, function(id, tree)
+        {
+            if(id === originID)
+                return;
+            else
+            {
+                if(offsetPredicate(tree))
+                {
+                    var distance = Math.sqrt(Math.pow(tree.topPos-originTree.topPos, 2) + Math.pow(tree.leftPos-originTree.leftPos, 2));
+                    if(distance < minDistance)
+                    {
+                        minDistance = distance;
+                        selectID = id;
+                    }
+                }
+            }
+        });
+
+        if(selectID !== "")
+            Main.selectElement(selectID);
     }
 
     function checkUnselectedGridAvailable(gridX, gridY)
