@@ -308,7 +308,7 @@ var Load;
         var characterIdRef = $(statement).attr('characteridref');
         var jumpPoint = $(statement).attr('jumpPoint') == "true";
         var initsNode = $(statement).attr('inits') == "true";
-        var endNode = $(statement).attr('possibleEnd') == "true";
+        var endNode = $(statement).attr('end') == "true";
 
         var text = Main.unEscapeTags($(statement).find('text').text());
 

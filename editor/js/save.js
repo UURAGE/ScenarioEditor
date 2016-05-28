@@ -281,7 +281,7 @@ var Save;
                 statementEl.setAttribute('jumpPoint', node.jumpPoint);
                 statementEl.setAttribute('inits', node.initsNode);
             }
-            statementEl.setAttribute('possibleEnd', node.endNode);
+            statementEl.setAttribute('end', node.endNode);
 
             // Add a text element to the XML element
             addAndReturnElement("text", nameSpace, statementEl).textContent = Main.escapeTags(node.text);
