@@ -11,7 +11,7 @@ var Metadata;
         metaObject: {},
         getNewDefaultMetaObject: getNewDefaultMetaObject,
         getNewDefaultParametersObject: getNewDefaultParametersObject,
-        getNewDefaultCharactersObject: getNewDefaultCharactersObject,
+        getNewDefaultPropertyValuesObject: getNewDefaultPropertyValuesObject,
         parameterCounter: parameterCounter,
         parameterDialog: parameterDialog,
         atLeastOneUserDefinedParameter: atLeastOneUserDefinedParameter,
@@ -64,7 +64,7 @@ var Metadata;
         var anyPropertyShown = false;
         var hStartLevel = 4;
 
-        var propertiesEl = $('#meta-properties');
+        var propertyValuesEl = $('#meta-property-values');
         var showPropertyItem = function (propertyItem, hLevel, container, idPrefix)
         {
             if (propertyItem.scopes.statementScope !== 'independent') return;
@@ -91,20 +91,20 @@ var Metadata;
         };
         Config.configObject.properties.sequence.forEach(function (propertyItem)
         {
-            showPropertyItem(propertyItem, hStartLevel, propertiesEl, propertiesEl.attr('id'));
+            showPropertyItem(propertyItem, hStartLevel, propertyValuesEl, propertyValuesEl.attr('id'));
         });
-        if (anyPropertyShown) propertiesEl.show();
+        if (anyPropertyShown) propertyValuesEl.show();
 
         anyPropertyShown = false;
 
-        characterPropertiesEl = $('#meta-character-properties');
+        characterPropertyValuesEl = $('#meta-character-property-values');
         var characterTabs = $("#character-tabs");
         var characterTabList = $('<ul>');
         characterTabs.append(characterTabList);
 
         Config.configObject.characters.sequence.forEach(function (character)
         {
-            var characterTabId = characterPropertiesEl.attr('id') + '-' + character.id;
+            var characterTabId = characterPropertyValuesEl.attr('id') + '-' + character.id;
 
             // Make a character tab with a link to the div it contains
             var li = $('<li>').append($('<a>', { href:'#' + characterTabId, text: character.id }));
@@ -129,7 +129,7 @@ var Metadata;
             active: false,
             collapsible: true
         });
-        if (anyPropertyShown) characterPropertiesEl.show();
+        if (anyPropertyShown) characterPropertyValuesEl.show();
     });
 
     /*
@@ -145,11 +145,22 @@ var Metadata;
             name: "",
             difficulty: "medium",
             description: "",
-            characters: getNewDefaultCharactersObject(),
             parameters: getNewDefaultParametersObject(),
-            properties: {},
+            propertyValues: getNewDefaultPropertyValuesObject(),
             defaultChangeType: LanguageManager.sLang("edt_parts_delta"),
         };
+    }
+
+    function getNewDefaultPropertyValuesObject()
+    {
+        var propertyValues = {};
+        propertyValues.characterIndependent = {};
+        propertyValues.perCharacter = {};
+        for (var characterId in Config.configObject.characters.byId)
+        {
+            propertyValues.perCharacter[characterId] = {};
+        }
+        return propertyValues;
     }
 
     // This function returns an object suitable for user-defined parameter definitions
@@ -159,17 +170,6 @@ var Metadata;
         parameters.byId = {};
         parameters.sequence = [];
         return parameters;
-    }
-
-    function getNewDefaultCharactersObject()
-    {
-        var characters = {};
-        for (var characterId in Config.configObject.characters.byId)
-        {
-            characters[characterId] = {};
-            characters[characterId].properties = {};
-        }
-        return characters;
     }
 
     //Create the dialog to change the scenario description.
@@ -210,26 +210,25 @@ var Metadata;
         $("#scenarioDescription").val(Metadata.metaObject.description);
         $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
 
-        var setPropertyInDOM = function(propertiesObject, propertyContainerId, property)
+        var setPropertyInDOM = function(propertyValuesObject, propertyContainerId, property)
         {
             if (property.scopes.statementScope !== "independent") return;
-            if (property.id in propertiesObject)
+            if (property.id in propertyValuesObject)
             {
-                property.type.setInDOM($(propertyContainerId + '-' + property.id),
-                    propertiesObject[property.id]);
+                property.type.setInDOM($(propertyContainerId + '-' + property.id), propertyValuesObject[property.id]);
             }
         };
         for (var propertyId in Config.configObject.properties.byId)
         {
             var property = Config.configObject.properties.byId[propertyId];
-            setPropertyInDOM(Metadata.metaObject.properties, "#meta-properties-container", property);
+            setPropertyInDOM(Metadata.metaObject.propertyValues.characterIndependent, "#meta-property-values-container", property);
         }
         for (var propertyId in Config.configObject.characters.properties.byId)
         {
             for (var characterId in Config.configObject.characters.byId)
             {
                 var property = Config.configObject.characters.properties.byId[propertyId];
-                setPropertyInDOM(Metadata.metaObject.characters[characterId].properties, "#meta-character-properties-" + characterId + "-container", property);
+                setPropertyInDOM(Metadata.metaObject.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + characterId + "-container", property);
             }
         }
         for (var characterId in Config.configObject.characters.byId)
@@ -237,7 +236,7 @@ var Metadata;
             for (var propertyId in Config.configObject.characters.byId[characterId].properties.byId)
             {
                 var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
-                setPropertyInDOM(Metadata.metaObject.characters[characterId].properties, "#meta-character-properties-" + characterId + "-container", property);
+                setPropertyInDOM(Metadata.metaObject.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + characterId + "-container", property);
             }
         }
     }
@@ -429,8 +428,8 @@ var Metadata;
         {
             var property = Config.configObject.properties.byId[propertyId];
             if (property.scopes.statementScope !== "independent") continue;
-            Metadata.metaObject.properties[property.id] =
-                property.type.getFromDOM($("#meta-properties-container-" + property.id));
+            Metadata.metaObject.propertyValues.characterIndependent[property.id] =
+                property.type.getFromDOM($("#meta-property-values-container-" + property.id));
         }
         for (var propertyId in Config.configObject.characters.properties.byId)
         {
@@ -438,8 +437,8 @@ var Metadata;
             {
                 var property = Config.configObject.characters.properties.byId[propertyId];
                 if (property.scopes.statementScope !== "independent") continue;
-                Metadata.metaObject.characters[characterId].properties[property.id] =
-                    property.type.getFromDOM($("#meta-character-properties-" + characterId + "-container-" + property.id));
+                Metadata.metaObject.propertyValues.perCharacter[characterId][property.id] =
+                    property.type.getFromDOM($("#meta-character-property-values-" + characterId + "-container-" + property.id));
             }
         }
         for (var characterId in Config.configObject.characters.byId)
@@ -448,8 +447,8 @@ var Metadata;
             {
                 var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
                 if (property.scopes.statementScope !== "independent") continue;
-                Metadata.metaObject.characters[characterId].properties[property.id] =
-                    property.type.getFromDOM($("#meta-character-properties-" + characterId + "-container-" + property.id));
+                Metadata.metaObject.propertyValues.perCharacter[characterId][property.id] =
+                    property.type.getFromDOM($("#meta-character-property-values-" + characterId + "-container-" + property.id));
             }
         }
 

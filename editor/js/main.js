@@ -33,6 +33,7 @@ var Main;
         deleteAllSelected: deleteAllSelected,
         deselectConnection: deselectConnection,
         escapeTags: escapeTags,
+        getNewDefaultParameterEffectsObject: getNewDefaultParameterEffectsObject,
         getPlumbInstanceByNodeID: getPlumbInstanceByNodeID,
         highlightParents: highlightParents,
         makeConnection: makeConnection,
@@ -73,7 +74,7 @@ var Main;
         else
         {
             $("#characterSection").remove();
-            $("#propertiesSection .collapsable").append($('<div>', { id:"node-character-own-properties" }));
+            $("#propertyValuesSection .collapsable").append($('<div>', { id:"node-character-own-properties" }));
         }
 
         var scenarioNameInput = $('<input type="text" maxlength="35">');
@@ -640,14 +641,13 @@ var Main;
             type: type,
             characterIdRef: characterIdRef,
             parameters: parameters,
-            fixedParameterEffects: {},
+            parameterEffects: getNewDefaultParameterEffectsObject(),
             preconditions:
             {
                 type: "alwaysTrue",
                 preconditions: []
             },
-            properties: {},
-            characters: Metadata.getNewDefaultCharactersObject(),
+            propertyValues: Metadata.getNewDefaultPropertyValuesObject(),
             comment: "",
             endNode: false,
             initsNode: false,
@@ -1166,21 +1166,21 @@ var Main;
             fixedParameterEffects[parameterEffect.idRef].push(parameterEffect);
         };
 
-        node.fixedParameterEffects = {};
+        node.parameterEffects.fixed.characterIndependent = {};
         var classPrefix = "fixed-parameter-effects";
         $("#fixed-parameter-effects").find('.' + classPrefix + '-effect-container').each(function()
         {
-            getFixedParameterEffectFromDOMAndSetInNode(this, Config.configObject.parameters.byId, node.fixedParameterEffects, classPrefix);
+            getFixedParameterEffectFromDOMAndSetInNode(this, Config.configObject.parameters.byId, node.parameterEffects.fixed.characterIndependent, classPrefix);
         });
 
         for (var characterId in Config.configObject.characters.byId)
         {
-            node.characters[characterId].fixedParameterEffects = {};
+            node.parameterEffects.fixed.perCharacter[characterId] = {};
             var classCharacterPrefix = classPrefix + '-' + characterId;
             $("#fixed-parameter-effects").find('.' + classCharacterPrefix + '-effect-container').each(function()
             {
                 var parameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[characterId].parameters.byId);
-                getFixedParameterEffectFromDOMAndSetInNode(this, parameterDefinitions, node.characters[characterId].fixedParameterEffects, classCharacterPrefix);
+                getFixedParameterEffectFromDOMAndSetInNode(this, parameterDefinitions, node.parameterEffects.fixed.perCharacter[characterId], classCharacterPrefix);
             });
         }
 
@@ -1193,7 +1193,7 @@ var Main;
         {
             var property = Config.configObject.properties.byId[propertyId];
             if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
-            node.properties[propertyId] = property.type.getFromDOM($("#node-properties-container-" + property.id));
+            node.propertyValues.characterIndependent[propertyId] = property.type.getFromDOM($("#node-property-values-container-" + property.id));
         }
         for (var propertyId in Config.configObject.characters.properties.byId)
         {
@@ -1201,7 +1201,7 @@ var Main;
             {
                 var property = Config.configObject.characters.properties.byId[propertyId];
                 if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
-                node.characters[characterId].properties[propertyId] = property.type.getFromDOM($("#node-properties-" + characterId + "-container-" + property.id));
+                node.propertyValues.perCharacter[characterId][propertyId] = property.type.getFromDOM($("#node-property-values-" + characterId + "-container-" + property.id));
             }
         }
         for (var characterId in Config.configObject.characters.byId)
@@ -1210,7 +1210,7 @@ var Main;
             {
                 var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
                 if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
-                node.characters[characterId].properties[propertyId] = property.type.getFromDOM($("#node-properties-" + characterId + "-container-" + property.id));
+                node.propertyValues.perCharacter[characterId][propertyId] = property.type.getFromDOM($("#node-property-values-" + characterId + "-container-" + property.id));
             }
         }
 
@@ -1579,7 +1579,7 @@ var Main;
 
         // Clear everything in the sidebar.
         $(
-            "#preconditionsDiv, #userDefinedParameterEffects, #node-properties, #fixed-parameter-effects"
+            "#preconditionsDiv, #userDefinedParameterEffects, #node-property-values, #fixed-parameter-effects"
         ).children().remove();
 
         // Don't show properties if no node or tree is selected. Display the minimap
@@ -1788,11 +1788,11 @@ var Main;
             }
 
             // Add the character-independent effects that were previously defined
-            for (var parameterIdRef in node.fixedParameterEffects)
+            for (var parameterIdRef in node.parameterEffects.fixed.characterIndependent)
             {
                 if (parameterIdRef in idRefToEffectsContainer)
                 {
-                    node.fixedParameterEffects[parameterIdRef].forEach(function(effect)
+                    node.parameterEffects.fixed.characterIndependent[parameterIdRef].forEach(function(effect)
                     {
                         var effectsContainer = idRefToEffectsContainer[parameterIdRef];
                         appendEffectContainerTo(effectsContainer, classPrefix, Config.configObject.parameters.byId);
@@ -1810,11 +1810,11 @@ var Main;
             {
                 var classCharacterPrefix = classPrefix + '-' + characterId;
 
-                for (var parameterIdRef in node.characters[characterId].fixedParameterEffects)
+                for (var parameterIdRef in node.parameterEffects.fixed.perCharacter[characterId])
                 {
                     if (parameterIdRef in idRefToCharacterEffectsContainer[characterId])
                     {
-                        node.characters[characterId].fixedParameterEffects[parameterIdRef].forEach(function(effect)
+                        node.parameterEffects.fixed.perCharacter[characterId][parameterIdRef].forEach(function(effect)
                         {
                             var characterParameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[characterId].parameters.byId);
 
@@ -1832,7 +1832,7 @@ var Main;
 
             // Show the node properties
             var anyPropertyShown = false;
-            var showPropertyItem = function (propertiesObject, propertyItem, hLevel, container, idPrefix)
+            var showPropertyItem = function (propertyValuesObject, propertyItem, hLevel, container, idPrefix)
             {
                 if (acceptableScopes.indexOf(propertyItem.scopes.statementScope) === -1) return;
                 if (propertyItem.kind === 'section')
@@ -1842,7 +1842,7 @@ var Main;
                     container.append(sectionContainer);
                     propertyItem.sequence.forEach(function (subItem)
                     {
-                        showPropertyItem(propertiesObject, subItem, hLevel + 1, sectionContainer, idPrefix);
+                        showPropertyItem(propertyValuesObject, subItem, hLevel + 1, sectionContainer, idPrefix);
                     });
                 }
                 else
@@ -1853,23 +1853,23 @@ var Main;
                     container.append(propertyContainer);
                     propertyContainer.append($('<label>', { text: propertyItem.name + ':', 'for': controlHtmlId }));
                     propertyItem.type.appendControlTo(propertyContainer, controlHtmlId);
-                    if (propertyItem.id in propertiesObject)
+                    if (propertyItem.id in propertyValuesObject)
                     {
-                        propertyItem.type.setInDOM(propertyContainer, propertiesObject[propertyItem.id]);
+                        propertyItem.type.setInDOM(propertyContainer, propertyValuesObject[propertyItem.id]);
                     }
                     anyPropertyShown = true;
                 }
             };
-            var nodePropertiesEl = $('#node-properties');
+            var nodePropertiesEl = $('#node-property-values');
             Config.configObject.properties.sequence.forEach(function (subItem)
             {
-                showPropertyItem(node.properties, subItem, 3, nodePropertiesEl, nodePropertiesEl.attr('id'));
+                showPropertyItem(node.propertyValues.characterIndependent, subItem, 3, nodePropertiesEl, nodePropertiesEl.attr('id'));
             });
 
             var nodePropertyShown = anyPropertyShown;
             anyPropertyShown = false;
 
-            nodeCharacterPropertiesEl = $('#node-properties');
+            nodeCharacterPropertiesEl = $('#node-property-values');
             accordionDiv = $('<div>');
             nodeCharacterPropertiesEl.append(accordionDiv);
             Config.configObject.characters.sequence.forEach(function(character)
@@ -1882,27 +1882,27 @@ var Main;
 
                 Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
                 {
-                    showPropertyItem(node.characters[character.id].properties, propertyItem, characterHeaderStartLevel + 1, characterDiv, containerIdPrefix);
+                    showPropertyItem(node.propertyValues.perCharacter[character.id], propertyItem, characterHeaderStartLevel + 1, characterDiv, containerIdPrefix);
                 });
 
                 Config.configObject.characters.byId[character.id].properties.sequence.forEach(function(propertyItem)
                 {
-                    showPropertyItem(node.characters[character.id].properties, propertyItem, characterHeaderStartLevel + 1, characterDiv, containerIdPrefix);
+                    showPropertyItem(node.propertyValues.perCharacter[character.id], propertyItem, characterHeaderStartLevel + 1, characterDiv, containerIdPrefix);
                 });
             });
 
             if (!nodePropertyShown && ! anyPropertyShown)
             {
-                $("#propertiesSection").hide();
+                $("#propertyValuesSection").hide();
             }
             else if (!anyPropertyShown)
             {
-                $("#propertiesSection").show();
+                $("#propertyValuesSection").show();
                 accordionDiv.remove();
             }
             else
             {
-                $("#propertiesSection").show();
+                $("#propertyValuesSection").show();
                 accordionDiv.accordion({ active: false, collapsible: true });
             }
 
@@ -1979,6 +1979,19 @@ var Main;
     {
         var connections = Main.getPlumbInstanceByNodeID(sourceId).getConnections({ source: sourceId });
         return (connections.length === 0 ? null : connections[0].targetId);
+    }
+
+    function getNewDefaultParameterEffectsObject()
+    {
+        var parameterEffects = {};
+        parameterEffects.fixed = {};
+        parameterEffects.fixed.characterIndependent = {};
+        parameterEffects.fixed.perCharacter = {};
+        for (var characterId in Config.configObject.characters.byId)
+        {
+            parameterEffects.fixed.perCharacter[characterId] = {};
+        }
+        return parameterEffects;
     }
 
     //Make .collapsable div sections collapse and expand when .clickable sibling element is clicked

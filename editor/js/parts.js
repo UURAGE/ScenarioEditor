@@ -171,11 +171,11 @@ var Parts;
                                 '</textarea>' +
                             '</div>' +
                         '</div>' +
-                        '<div id="meta-character-properties" class="sub-formTable" style="display:none">' +
+                        '<div id="meta-character-property-values" class="sub-formTable" style="display:none">' +
                             '<h3>' +LanguageManager.sLang("edt_parts_character_properties")+ '</h3>' +
                             '<div>'+'<div id="character-tabs"/>'+'</div>' +
                         '</div>' +
-                        '<div id="meta-properties" class="sub-formTable" style="display:none">' +
+                        '<div id="meta-property-values" class="sub-formTable" style="display:none">' +
                             '<h3>'+LanguageManager.sLang("edt_parts_properties")+'</h3>' +
                         '</div>' +
                         '<div id="advanced"class="sub-formTable">' +

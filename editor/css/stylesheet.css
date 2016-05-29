@@ -493,7 +493,7 @@ button.enabled
 #properties.tree > #jumpNode,
 #properties.tree > #calculateScore,
 #properties.tree > #effectsSection,
-#properties.tree > #propertiesSection,
+#properties.tree > #propertyValuesSection,
 #properties.tree > #characterSection
 {
   display: none;

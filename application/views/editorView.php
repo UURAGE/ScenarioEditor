@@ -270,12 +270,12 @@
                     <div id="fixed-parameter-effects"></div>
                   </div>
                 </div>
-                <div id="propertiesSection" class="sidebarSection">
+                <div id="propertyValuesSection" class="sidebarSection">
                   <div class="sub-header clickable">
                     <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/properties.png");?>" alt=""><?php sLang('edt_properties');?></h2>
                   </div>
                   <div class="collapsable">
-                    <div id="node-properties"></div>
+                    <div id="node-property-values"></div>
                   </div>
                 </div>
                 <div id="commentHTML" class="sidebarSection">

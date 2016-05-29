@@ -147,8 +147,7 @@ var Load3;
             name: name,
             difficulty: difficulty,
             description: description,
-            properties: {},
-            characters: Metadata.getNewDefaultCharactersObject(),
+            propertyValues: Metadata.getNewDefaultPropertyValuesObject(),
             parameters: parametersObject,
             defaultChangeType: defaultChangeType
         };
@@ -236,11 +235,10 @@ var Load3;
             type: type,
             characterIdRef: Config.configObject.characters.sequence[0].id,
             parameters: parameterEffects,
-            fixedParameterEffects: {},
+            parameterEffects: Main.getNewDefaultParameterEffectsObject(),
             preconditions: preconditionsJS,
             intent: intentsArray,
-            properties: {},
-            characters: Metadata.getNewDefaultCharactersObject(),
+            propertyValues: Metadata.getNewDefaultPropertyValuesObject(),
             comment: comment,
             endNode: endNode,
             initsNode: initsNode,

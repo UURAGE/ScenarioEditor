@@ -263,7 +263,7 @@ var Load;
             parameters.byId[parameter.id] = parameter;
         });
 
-        var properties = loadProperties($(metadata).children('propertyValues'));
+        var propertyValues = loadPropertyValues($(metadata).children('propertyValues'));
 
         $(metadata).children('scoringFunction').children('sum').children('scale').children('paramRef').each(function()
         {
@@ -286,8 +286,7 @@ var Load;
             name: name,
             difficulty: difficulty,
             description: description,
-            properties: properties.characterIndependent,
-            characters: properties.perCharacter,
+            propertyValues: propertyValues,
             parameters: parameters,
             timePId: timePId,
             defaultChangeType: defaultChangeType
@@ -337,7 +336,7 @@ var Load;
             });
         }
 
-        var properties = loadProperties($(statement).children('propertyValues'));
+        var propertyValues = loadPropertyValues($(statement).children('propertyValues'));
 
         var comment = Main.unEscapeTags($(statement).find('comment').text());
 
@@ -361,10 +360,9 @@ var Load;
             type: type,
             characterIdRef: characterIdRef,
             parameters: parameterEffects,
-            fixedParameterEffects: {},
+            parameterEffects: Main.getNewDefaultParameterEffectsObject(),
             preconditions: preconditionsJS,
-            properties: properties.characterIndependent,
-            characters: properties.perCharacter,
+            propertyValues: propertyValues,
             comment: comment,
             endNode: endNode,
             initsNode: initsNode,
@@ -420,11 +418,10 @@ var Load;
         };
     }
 
-    function loadProperties(propertiesXMLElement)
+    function loadPropertyValues(propertyValuesXMLElement)
     {
-        var properties = {};
-        var characters = Metadata.getNewDefaultCharactersObject();
-        propertiesXMLElement.children().each(function()
+        var propertyValues = Metadata.getNewDefaultPropertyValuesObject();
+        propertyValuesXMLElement.children().each(function()
         {
             var propertyId = this.attributes.idref.value;
             if (this.attributes.characteridref)
@@ -434,20 +431,20 @@ var Load;
                 {
                     if (propertyId in Config.configObject.characters.properties.byId)
                     {
-                        characters[characterId].properties[propertyId] = Config.configObject.characters.properties.byId[propertyId].type.fromXML(this);
+                        propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.properties.byId[propertyId].type.fromXML(this);
                     }
                     else if (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
                     {
-                        characters[characterId].properties[propertyId] = Config.configObject.characters.byId[characterId].properties.byId[propertyId].type.fromXML(this);
+                        propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.byId[characterId].properties.byId[propertyId].type.fromXML(this);
                     }
                 }
             }
             else if (propertyId in Config.configObject.properties.byId)
             {
-                properties[propertyId] = Config.configObject.properties.byId[propertyId].type.fromXML(this);
+                propertyValues.characterIndependent[propertyId] = Config.configObject.properties.byId[propertyId].type.fromXML(this);
             }
         });
-        return { characterIndependent: properties, perCharacter: characters };
+        return propertyValues;
     }
 
     function nullIfMissing(elements)
