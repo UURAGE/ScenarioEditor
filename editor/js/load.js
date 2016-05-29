@@ -202,6 +202,9 @@ var Load;
                         case "playerStatement":
                             loadStatement(this, Main.playerType, connections, treeID);
                             break;
+                        case "situationStatement":
+                            loadStatement(this, Main.situationType, connections, treeID);
+                            break;
                     }
                 });
 

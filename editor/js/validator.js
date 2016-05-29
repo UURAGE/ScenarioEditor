@@ -74,15 +74,27 @@ var Validator;
                         jumpToFunction: function() { Zoom.zoomIn(tree); }
                     });
                 }
-                // the tree on the first level can start with anything, but the trees following can only start with player nodes or conversations that start with a player node
-                else if(tree.level !== 0 && Main.nodes[startNodeID].type === Main.computerType)
+                // the tree on the first level can start with anything, but the trees following can only start with player nodes
+                else if(tree.level !== 0 && Main.nodes[startNodeID].type !== Main.playerType)
                 {
-                    validationReport.push(
+                    if (Main.nodes[startNodeID].type === Main.computerType)
                     {
-                        message: LanguageManager.fLang("edt_validator_subject_start_type_error", [tree.subject]),
-                        level: 'error',
-                        jumpToFunction: function() { Zoom.zoomIn(tree); }
-                    });
+                        validationReport.push(
+                        {
+                            message: LanguageManager.fLang("edt_validator_subject_start_type_error_computer", [tree.subject]),
+                            level: 'error',
+                            jumpToFunction: function() { Zoom.zoomIn(tree); }
+                        });
+                    }
+                    else
+                    {
+                        validationReport.push(
+                        {
+                            message: LanguageManager.fLang("edt_validator_subject_start_type_error_situation", [tree.subject]),
+                            level: 'error',
+                            jumpToFunction: function() { Zoom.zoomIn(tree); }
+                        });
+                    }
                 }
             });
 

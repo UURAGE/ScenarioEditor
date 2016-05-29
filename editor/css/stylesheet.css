@@ -467,6 +467,7 @@ button.enabled
 }
 
 #properties.player > #headerComputer,
+#properties.player > #headerSituation,
 #properties.player > #treeSubject,
 #properties.player > #jumpNode,
 #properties.player > #initsNode,
@@ -476,7 +477,19 @@ button.enabled
   display: none;
 }
 
+#properties.situation > #headerPlayer,
+#properties.situation > #headerComputer,
+#properties.situation > #treeSubject,
+#properties.situation > #jumpNode,
+#properties.situation > #initsNode,
+#properties.situation > #optionalSubject,
+#properties.situation > #characterSection
+{
+  display: none;
+}
+
 #properties.computer > #headerPlayer,
+#properties.computer > #headerSituation,
 #properties.computer > #treeSubject,
 #properties.computer > #optionalSubject
 {
@@ -488,6 +501,7 @@ button.enabled
 #properties.tree > #commentHTML,
 #properties.tree > #headerPlayer,
 #properties.tree > #headerComputer,
+#properties.tree > #headerSituation,
 #properties.tree > #endNode,
 #properties.tree > #initsNode,
 #properties.tree > #jumpNode,

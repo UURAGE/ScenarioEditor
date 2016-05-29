@@ -103,8 +103,8 @@
     LanguageManager.edt_validator_no_problems = "No problems found!";
     LanguageManager.edt_validator_no_name = "The scenario does not have a name.";
     LanguageManager.edt_validator_empty_subject = "Subject \"%s\" is empty.";
-    LanguageManager.edt_validator_subject_start_type_error = "Subject \"%s\" starts with a computer node. A subject must be started by the player.";
-    LanguageManager.edt_validator_subject_start_type_error2 = "Subject \"%s\" starts with a situation node. A subject must be started by the player.";
+    LanguageManager.edt_validator_subject_start_type_error_computer = "Subject \"%s\" starts with a computer node. A subject must be started by the player.";
+    LanguageManager.edt_validator_subject_start_type_error_situation = "Subject \"%s\" starts with a situation node. A subject must be started by the player.";
     LanguageManager.edt_validator_end_outgoing_connections = "Subject \"%s\" contains a node that is marked as an end with outgoing connections.";
     LanguageManager.edt_validator_unmarked_end = "Subject \"%s\" contains an end node that has not been marked as such.";
     LanguageManager.edt_validator_unnamed_subject = "There is an unnamed subject.";

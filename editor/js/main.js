@@ -16,6 +16,7 @@ var Main;
         jsPlumbCounter: 0,
         computerType: "computer",
         playerType: "player",
+        situationType: "situation",
         trees: {},
         maxTreeNumber: 0,
         gridX: gridX,
@@ -211,7 +212,7 @@ var Main;
 
             DragBox.startDragging(e, text, function(pos)
             {
-                placeNewNode(Main.computerType,pos);
+                placeNewNode(Main.computerType, pos);
                 return true;
             });
         });
@@ -230,7 +231,26 @@ var Main;
 
             DragBox.startDragging(e, text, function(pos)
             {
-                placeNewNode(Main.playerType,pos);
+                placeNewNode(Main.playerType, pos);
+                return true;
+            });
+        });
+        $('#newSituationNode').on("mousedown", function(e)
+        {
+            selectElement(null);
+
+            e.preventDefault(); // Prevent selecting text
+            var text = "[+" + LanguageManager.sLang("edt_common_situation") + "]";
+
+            if (!Zoom.isZoomed())
+            {
+                DragBox.showError(e, LanguageManager.sLang("edt_main_no_subject_open"));
+                return;
+            }
+
+            DragBox.startDragging(e, text, function(pos)
+            {
+                placeNewNode(Main.situationType, pos);
                 return true;
             });
         });
@@ -726,6 +746,9 @@ var Main;
                 case Main.computerType:
                     node = addNewNode(Main.playerType);
                     break;
+                case Main.situationType:
+                    node = addNewNode(Main.playerType);
+                    break;
             }
 
             // If there are errors (cycles, invalid pairs, existing connections)
@@ -765,7 +788,7 @@ var Main;
         var plumbInstance = Main.trees[parentID].plumbInstance;
 
         // Add the node to the html.
-        var node = $('<div id="'+id+'" class="w '+ type+'">');
+        var node = $('<div id="'+id+'" class="w '+ type +'">');
         node.append( $('<div>',{class:"ep"}) );
 
         var input =  $('<div>',{class:"statementInput"});
@@ -1440,6 +1463,7 @@ var Main;
                 text += escapeTags(node.text);
                 break;
             case Main.playerType:
+            case Main.situationType:
                 // for playerType node: show text input
                 text = escapeTags(node.text);
                 break;

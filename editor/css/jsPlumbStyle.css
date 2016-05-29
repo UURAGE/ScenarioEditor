@@ -35,6 +35,10 @@
 	border:3px solid #1f71b8;
 }
 
+.w.situation {
+    border:3px solid #F37812;
+}
+
 .jumpnode
 {
 	border-bottom-color:#8B4A94   !important;
@@ -79,6 +83,10 @@
 
 .w.player:hover {
 	background-color:#3366ff;
+}
+
+.w.situation:hover {
+	background-color:#F79923;
 }
 
 .w.treeContainer:hover{

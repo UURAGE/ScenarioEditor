@@ -143,6 +143,7 @@
                     <button id="newTree" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/subject.png");?>" alt=""><?php sLang("edt_subject"); ?></div></button>
                     <button id="newPlayerNode" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/player.png");?>" alt=""><?php sLang("edt_player"); ?></div></button>
                     <button id="newComputerNode" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/computer.png");?>" alt=""><?php sLang("edt_computer"); ?></div></button>
+                    <button id="newSituationNode" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/situation.png");?>" alt=""><?php sLang("edt_situation"); ?></div></button>
                     <button id="newChildNode" class="nodeButton"><div><img src="<?php echo editor_url("png/main_buttons/child.png");?>" alt=""><?php sLang("edt_child"); ?></div></button>
                     <button id="toggleDraftScreen" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/draft.png");?>" alt=""><?php sLang("edt_note_pad"); ?></div></button>
                   </div>
@@ -241,6 +242,9 @@
                 </div>
                 <div id="headerComputer" class="header clickable collapseAll">
                   <h1><span class="masterclicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/computer.png");?>" alt=""><?php sLang('edt_computer');?></h1>
+                </div>
+                <div id="headerSituation" class="header clickable collapseAll">
+                  <h1><span class="masterclicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/situation.png");?>" alt=""><?php sLang('edt_situation');?></h1>
                 </div>
                 <div id="characterSection" class="sidebarSection">
                   <div class="sub-header clickable">

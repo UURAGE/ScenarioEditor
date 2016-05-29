@@ -103,8 +103,8 @@
     LanguageManager.edt_validator_no_problems = "Geen problemen gevonden!";
     LanguageManager.edt_validator_no_name = "Het scenario heeft geen naam.";
     LanguageManager.edt_validator_empty_subject = "Onderwerp \"%s\" is leeg.";
-    LanguageManager.edt_validator_subject_start_type_error = "Onderwerp \"%s\" begint met een computerknoop. De speler moet een onderwerp beginnen.";
-    LanguageManager.edt_validator_subject_start_type_error2 = "Onderwerp \"%s\" begint met een situatie. De speler moet een onderwerp beginnen.";
+    LanguageManager.edt_validator_subject_start_type_error_computer = "Onderwerp \"%s\" begint met een computerknoop. De speler moet een onderwerp beginnen.";
+    LanguageManager.edt_validator_subject_start_type_error_situation = "Onderwerp \"%s\" begint met een situatie. De speler moet een onderwerp beginnen.";
     LanguageManager.edt_validator_end_outgoing_connections = "Onderwerp \"%s\" bevat een gemarkeerd einde dat nog uitgaande pijlen heeft.";
     LanguageManager.edt_validator_unmarked_end = "Onderwerp \"%s\" bevat een einde dat niet is gemarkeerd als het einde van het gesprek.";
     LanguageManager.edt_validator_unnamed_subject = "Er is een onderwerp zonder naam.";
