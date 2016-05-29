@@ -96,6 +96,13 @@ var KeyControl;
 
     //All events for keyboard controls with special characters.
     var numberControl = {
+        13: function()
+        {
+            if(Main.selectedElements[0] in Main.trees)
+                Zoom.toggleZoom(Main.trees[Main.selectedElements[0]]);
+
+            Main.selectElement(null);
+        },
         46: function()
         {
             Main.deleteAllSelected();
@@ -215,6 +222,13 @@ var KeyControl;
                 moveNodeLeft();
             else if(Main.selectedElements[0] in Main.trees)
                 moveTree(function(x){return x-1;}, function(y){return y;});
+        },
+        13: function()
+        {
+            var selectedTree = Zoom.getZoomed();
+            if(Main.selectedElements[0] === undefined && selectedTree !== null)
+                Zoom.toggleZoom(selectedTree);
+            Main.selectElement(selectedTree.id);
         }
     };
 
