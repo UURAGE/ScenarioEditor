@@ -89,17 +89,15 @@ var Load3;
         $('#scenarioNameTab .scenarioName').text(name);
         var description = Main.unEscapeTags($(metadata).find('description').text());
         var difficulty = $(metadata).find('difficulty').text();
-        var parametersObject = Metadata.getNewDefaultParametersObject();
-        var parameters = $(metadata).find('parameters').children();
         var defaultChangeType = $(metadata).find('defaultChangeType').text();
         // Allows the editor to load older XML versions without defaultChangeType
         if (defaultChangeType === "")
             defaultChangeType = LanguageManager.sLang("edt_parts_delta");
 
-        for (var i = 0; i < parameters.length; i++)
+        var parameters = Metadata.getNewDefaultParametersObject();
+        $(metadata).find('parameters').children().each(function()
         {
-            var parameter = parameters[i];
-            var paramId = parameter.attributes.id.value;
+            var paramId = this.attributes.id.value;
 
             var paramMatch = paramId.match(/^p(\d+)$/);
             if (paramMatch !== null)
@@ -109,28 +107,28 @@ var Load3;
                     Metadata.parameterCounter = paramNumber;
             }
 
-            parametersObject.byId[paramId] =
+            parameters.byId[paramId] =
             {
                 id: paramId,
-                name: Main.unEscapeTags(parameter.attributes.name.value),
-                initialValue: (parameter.hasAttribute('initialValue') ?
-                    Utils.parseDecimalIntWithDefault(parameter.attributes.initialValue.value, 0) : 0),
+                name: Main.unEscapeTags(this.attributes.name.value),
+                initialValue: (this.hasAttribute('initialValue') ?
+                    Utils.parseDecimalIntWithDefault(this.attributes.initialValue.value, 0) : 0),
                 weightForFinalScore: 0,
-                minimumScore: parameter.attributes.minimumScore.value,
-                maximumScore: parameter.attributes.maximumScore.value,
-                description: parameter.hasAttribute("parameterDescription") ? Main.unEscapeTags(parameter.attributes.parameterDescription.value) : ""
+                minimumScore: this.attributes.minimumScore.value,
+                maximumScore: this.attributes.maximumScore.value,
+                description: this.hasAttribute("parameterDescription") ? Main.unEscapeTags(this.attributes.parameterDescription.value) : ""
             };
-            parametersObject.sequence.push(parametersObject.byId[paramId]);
-        }
+            parameters.sequence.push(parameters.byId[paramId]);
+        });
 
         $(metadata).children('scoringFunction').children('sum').children('scale').children('paramRef').each(function()
         {
             var parameterId = this.attributes.idref.value;
             //if the parameter exists...
-            if (parameterId in parametersObject.byId)
+            if (parameterId in parameters.byId)
             {
                 //...add the weight of the parameter.
-                parametersObject.byId[parameterId].weightForFinalScore =
+                parameters.byId[parameterId].weightForFinalScore =
                     Utils.parseDecimalIntWithDefault($(this).parent().attr('scalar'), 0);
 
             }
@@ -138,7 +136,7 @@ var Load3;
 
         var timePId = null;
 
-        if (parametersObject.hasOwnProperty('t'))
+        if (parameters.hasOwnProperty('t'))
             timePId = 't';
 
         Metadata.timePId = timePId;
@@ -148,7 +146,7 @@ var Load3;
             difficulty: difficulty,
             description: description,
             propertyValues: Metadata.getNewDefaultPropertyValuesObject(),
-            parameters: parametersObject,
+            parameters: parameters,
             defaultChangeType: defaultChangeType
         };
     }
@@ -181,7 +179,7 @@ var Load3;
         else
             preconditionsJS = loadPreconditions(preconditionsXML.children()[0]);
 
-        var parameterEffects = [];
+        var parameterEffects = Main.getNewDefaultParameterEffectsObject();
         var intentsArray = [];
         var targets;
         if (type === Main.playerType)
@@ -191,7 +189,7 @@ var Load3;
             for (var j = 0; j < pEffs.length; j++)
             {
                 var parameter = pEffs[j];
-                parameterEffects.push(
+                parameterEffects.userDefined.push(
                 {
                     idRef: parameter.attributes.idref.value,
                     changeType: parameter.attributes.changeType.value,
@@ -234,8 +232,7 @@ var Load3;
             text: text,
             type: type,
             characterIdRef: Config.configObject.characters.sequence[0].id,
-            parameters: parameterEffects,
-            parameterEffects: Main.getNewDefaultParameterEffectsObject(),
+            parameterEffects: parameterEffects,
             preconditions: preconditionsJS,
             intent: intentsArray,
             propertyValues: Metadata.getNewDefaultPropertyValuesObject(),

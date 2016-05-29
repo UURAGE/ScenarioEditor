@@ -315,9 +315,9 @@ var Save;
             // Save the parameter effects.
             var parameterEffectsEl = addAndReturnElement("parameterEffects", nameSpace, statementEl);
 
-            for (var k = 0; k < node.parameters.length; k++)
+            for (var k = 0; k < node.parameterEffects.userDefined.length; k++)
             {
-                var pEff = node.parameters[k];
+                var pEff = node.parameterEffects.userDefined[k];
                 var pEffElement = addAndReturnElement("parameterEffect", nameSpace, parameterEffectsEl);
                 pEffElement.setAttribute("idref", pEff.idRef);
                 pEffElement.setAttribute("changeType", pEff.changeType);

@@ -340,10 +340,10 @@ var Metadata;
             var node = Main.nodes[nodeId];
             if (node.type === Main.playerType)
             {
-                if (node.parameters !== undefined && node.parameters !== null)
-                    node.parameters.push(timeEffect);
+                if (node.parameterEffects.userDefined !== undefined && node.parameterEffects.userDefined !== null)
+                    node.parameterEffects.userDefined.push(timeEffect);
                 else
-                    node.parameters = [timeEffect];
+                    node.parameterEffects.userDefined = [timeEffect];
             }
         }
     }
@@ -364,9 +364,9 @@ var Metadata;
             for (var nodeID in Main.nodes)
             {
                 var node = Main.nodes[nodeID];
-                for (var i = 0; i < node.parameters.length; i++)
-                    if (node.parameters[i].idRef === id)
-                        node.parameters.splice(i, 1);
+                for (var i = 0; i < node.parameterEffects.userDefined.length; i++)
+                    if (node.parameterEffects.userDefined[i].idRef === id)
+                        node.parameterEffects.userDefined.splice(i, 1);
                 removeAllPreconditionsWithParam(id, node.preconditions);
             }
 

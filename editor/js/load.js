@@ -316,19 +316,20 @@ var Load;
 
         // Load the preconditions of this node.
         var preconditionsXML = $(statement).find("preconditions");
-        var preconditionsJS;
+        var preconditions;
         if (preconditionsXML.length === 0)
-            preconditionsJS = {type: "alwaysTrue", preconditions: []};
+            preconditions = {type: "alwaysTrue", preconditions: []};
         else
-            preconditionsJS = loadPreconditions(preconditionsXML.children()[0]);
+            preconditions = loadPreconditions(preconditionsXML.children()[0]);
 
-        var parameterEffects = [];
+        var parameterEffects = Main.getNewDefaultParameterEffectsObject();
+
         var pEffEl = $(statement).find('parameterEffects');
         var pEffs = pEffEl.children(); //all parameter effects of the node.
         for (var j = 0; j < pEffs.length; j++)
         {
             var parameter = pEffs[j];
-            parameterEffects.push(
+            parameterEffects.userDefined.push(
             {
                 idRef: parameter.attributes.idref.value,
                 changeType: parameter.attributes.changeType.value,
@@ -359,9 +360,8 @@ var Load;
             text: text,
             type: type,
             characterIdRef: characterIdRef,
-            parameters: parameterEffects,
-            parameterEffects: Main.getNewDefaultParameterEffectsObject(),
-            preconditions: preconditionsJS,
+            preconditions: preconditions,
+            parameterEffects: parameterEffects,
             propertyValues: propertyValues,
             comment: comment,
             endNode: endNode,

@@ -48,13 +48,13 @@
 
         var i;
         var returnScores = []; //The values to be returned.
-        var nodeEffects = Main.nodes[nodeID].parameters; //The effects this node has on the parameters
+        var nodeEffects = Main.nodes[nodeID].parameterEffects.userDefined; //The effects this node has on the parameters
         var effectParams = [];
 
         for (i in nodeEffects) //Get the effects this node has on the parameters.
         {
-            var paremeter = Metadata.metaObject.parameters.byId[nodeEffects[i].idRef];
-            effectParams[paremeter.name] =
+            var parameter = Metadata.metaObject.parameters.byId[nodeEffects[i].idRef];
+            effectParams[parameter.name] =
             {
                 changeType: nodeEffects[i].changeType,
                 value: nodeEffects[i].value

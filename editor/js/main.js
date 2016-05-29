@@ -613,7 +613,7 @@ var Main;
 
         var id = node.attr('id');
 
-        var parameters = [];
+        var parameterEffects = getNewDefaultParameterEffectsObject();
         var timeEffect = {
             idRef: 't',
             changeType: "delta",
@@ -621,7 +621,7 @@ var Main;
         };
 
         if (Metadata.timePId && type === Main.playerType)
-            parameters.push(timeEffect);
+            parameterEffects.userDefined.push(timeEffect);
 
         var characterIdRef = "";
         if (type === Main.computerType)
@@ -640,8 +640,7 @@ var Main;
             text: "",
             type: type,
             characterIdRef: characterIdRef,
-            parameters: parameters,
-            parameterEffects: getNewDefaultParameterEffectsObject(),
+            parameterEffects: parameterEffects,
             preconditions:
             {
                 type: "alwaysTrue",
@@ -1139,12 +1138,11 @@ var Main;
         }
 
         // Save user-defined parameter effects.
-        var parameterEffects = [];
+        node.parameterEffects.userDefined = [];
         $("#userDefinedParameterEffects").children().each(function()
         {
-            parameterEffects.push(ObjectGenerator.effectObject($(this)));
+            node.parameterEffects.userDefined.push(ObjectGenerator.effectObject($(this)));
         });
-        node.parameters = parameterEffects;
 
         // Save fixed parameter effects.
         getFixedParameterEffectFromDOMAndSetInNode = function(effectContainer, parameterDefinitions, fixedParameterEffects, classPrefix)
@@ -1607,9 +1605,9 @@ var Main;
             HtmlGenerator.insertPreconditions(node.preconditions, $("#preconditionsDiv"));
 
             // Show user-defined parameters
-            for (var k = 0; k < node.parameters.length; k++)
+            for (var k = 0; k < node.parameterEffects.userDefined.length; k++)
             {
-                var parameter = node.parameters[k];
+                var parameter = node.parameterEffects.userDefined[k];
 
                 addedDiv = HtmlGenerator.addEmptyParameterEffect(Metadata.metaObject.parameters);
                 addedDiv.find(".parameter-idref-select").val(parameter.idRef);
@@ -1984,6 +1982,7 @@ var Main;
     function getNewDefaultParameterEffectsObject()
     {
         var parameterEffects = {};
+        parameterEffects.userDefined = [];
         parameterEffects.fixed = {};
         parameterEffects.fixed.characterIndependent = {};
         parameterEffects.fixed.perCharacter = {};
