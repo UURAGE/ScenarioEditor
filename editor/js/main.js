@@ -744,7 +744,8 @@ var Main;
 
             // Actually move node
             nodeDiv.css({"top": top, "left": left});
-            repaintZoomedNodes();
+
+            Zoom.getZoomed().plumbInstance.revalidate(node.id, 0);
         }
     }
 
