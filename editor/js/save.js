@@ -40,32 +40,13 @@ var Save;
 
         var definitionsEl = addAndReturnElement("definitions", nameSpace, metadataEl);
 
-        // Save property definitions
-        var propertyDefinitionsEl = addAndReturnElement("properties", nameSpace, definitionsEl);
-        var addPropertyDefinitionElement = function (property, nameSpace, propertyDefinitionsEl)
+        // Save characters
+        var charactersEl = addAndReturnElement("characters", nameSpace, definitionsEl);
+        Config.configObject.characters.sequence.forEach(function (character)
         {
-            var propertyEl = addAndReturnElement("property", nameSpace, propertyDefinitionsEl);
-            propertyEl.setAttribute("id", property.id);
-            property.type.insertUnderlyingType(propertyEl);
-        };
-        for (var propertyId in Config.configObject.properties.byId)
-        {
-            var property = Config.configObject.properties.byId[propertyId];
-            addPropertyDefinitionElement(property, nameSpace, propertyDefinitionsEl);
-        }
-        for (var propertyId in Config.configObject.characters.properties.byId)
-        {
-            var property = Config.configObject.characters.properties.byId[propertyId];
-            addPropertyDefinitionElement(property, nameSpace, propertyDefinitionsEl);
-        }
-        for (var characterId in Config.configObject.characters.byId)
-        {
-            for (var propertyId in Config.configObject.characters.byId[characterId].properties.byId)
-            {
-                var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
-                addPropertyDefinitionElement(property, nameSpace, propertyDefinitionsEl);
-            }
-        }
+            var characterEl = addAndReturnElement("character", nameSpace, charactersEl);
+            characterEl.setAttribute("id", character.id);
+        });
 
         // Save user-defined parameters and collect data for saving weights
         var parametersEl = addAndReturnElement("parameters", nameSpace, definitionsEl);
@@ -94,25 +75,56 @@ var Save;
             paramRefEl.setAttribute("idref", pId);
         }
 
+        var addDefinitionElement = function (definition, elementName, nameSpace, definitionsEl)
+        {
+            var definitionEl = addAndReturnElement(elementName, nameSpace, definitionsEl);
+            definitionEl.setAttribute("id", definition.id);
+            definition.type.insertUnderlyingType(definitionEl);
+        };
+
         // Save fixed parameters
         var fixedParametersEl = addAndReturnElement("fixed", nameSpace, parametersEl);
         for (var parameterId in Config.configObject.parameters.byId)
         {
             var parameter = Config.configObject.parameters.byId[parameterId];
-            var parameterEl = addAndReturnElement("parameter", nameSpace, fixedParametersEl);
-            parameterEl.setAttribute("id", parameter.id);
-            parameter.type.insertUnderlyingType(parameterEl);
+            addDefinitionElement(parameter, "parameter", nameSpace, fixedParametersEl);
+        }
+        for (var parameterId in Config.configObject.characters.parameters.byId)
+        {
+            var parameter = Config.configObject.characters.parameters.byId[parameterId];
+            addDefinitionElement(parameter, "parameter", nameSpace, fixedParametersEl);
+        }
+        for (var characterId in Config.configObject.characters.byId)
+        {
+            for (var parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
+            {
+                var parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterId];
+                addDefinitionElement(parameter, "parameter", nameSpace, fixedParametersEl);
+            }
         }
 
-        // Save characters
-        var charactersEl = addAndReturnElement("characters", nameSpace, definitionsEl);
-        Config.configObject.characters.sequence.forEach(function (character)
+        // Save property definitions
+        var propertyDefinitionsEl = addAndReturnElement("properties", nameSpace, definitionsEl);
+        for (var propertyId in Config.configObject.properties.byId)
         {
-            var characterEl = addAndReturnElement("character", nameSpace, charactersEl);
-            characterEl.setAttribute("id", character.id);
-        });
+            var property = Config.configObject.properties.byId[propertyId];
+            addDefinitionElement(property, "property", nameSpace, propertyDefinitionsEl);
+        }
+        for (var propertyId in Config.configObject.characters.properties.byId)
+        {
+            var property = Config.configObject.characters.properties.byId[propertyId];
+            addDefinitionElement(property, "property", nameSpace, propertyDefinitionsEl);
+        }
+        for (var characterId in Config.configObject.characters.byId)
+        {
+            for (var propertyId in Config.configObject.characters.byId[characterId].properties.byId)
+            {
+                var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
+                addDefinitionElement(property, "property", nameSpace, propertyDefinitionsEl);
+            }
+        }
 
-        // Save properties
+        // Save property values
         generatePropertyValuesXML(metadataEl, Metadata.metaObject.propertyValues, nameSpace);
 
         // Save parameter weights
@@ -312,30 +324,10 @@ var Save;
                 preconditionsEl.appendChild(preconditionsInXML);
             }
 
-            // Save the parameter effects.
-            var parameterEffectsEl = addAndReturnElement("parameterEffects", nameSpace, statementEl);
+            // Save the parameter effects
+            generateParameterEffectsXML(statementEl, node.parameterEffects, nameSpace);
 
-            for (var k = 0; k < node.parameterEffects.userDefined.length; k++)
-            {
-                var pEff = node.parameterEffects.userDefined[k];
-                var pEffElement = addAndReturnElement("parameterEffect", nameSpace, parameterEffectsEl);
-                pEffElement.setAttribute("idref", pEff.idRef);
-                pEffElement.setAttribute("changeType", pEff.changeType);
-                pEffElement.setAttribute("value", pEff.value);
-            }
-
-            /* for (var parameterIdRef in node.fixedParameterEffects)
-            {
-                node.fixedParameterEffects[parameterIdRef].forEach(function(parameterEffect)
-                {
-                    var pEffElement = addAndReturnElement("parameterEffect", nameSpace, parameterEffectsEl);
-                    pEffElement.setAttribute("idref", parameterEffect.idRef);
-                    pEffElement.setAttribute("changeType", parameterEffect.changeType);
-                    pEffElement.setAttribute("value", parameterEffect.value);
-                });
-            } */
-
-            // Save properties
+            // Save the property values
             generatePropertyValuesXML(statementEl, node.propertyValues, nameSpace);
 
             var connectionElName = 'response';
@@ -354,6 +346,55 @@ var Save;
                 connectionEl.setAttribute('idref', connections[l].targetId.replace(/^ext_/, '').replace(/_/g, '.'));
             }
         });
+    }
+
+    function generateParameterEffectsXML(element, parameterEffects, nameSpace)
+    {
+        var parameterEffectsEl = addAndReturnElement("parameterEffects", nameSpace, element);
+
+        var userDefinedParameterEffectsEl = addAndReturnElement("userDefined", nameSpace, parameterEffectsEl);
+        for (var k = 0; k < parameterEffects.userDefined.length; k++)
+        {
+            var pEff = parameterEffects.userDefined[k];
+            var pEffElement = addAndReturnElement("parameterEffect", nameSpace, userDefinedParameterEffectsEl);
+            pEffElement.setAttribute("idref", pEff.idRef);
+            pEffElement.setAttribute("changeType", pEff.changeType);
+            pEffElement.setAttribute("value", pEff.value);
+        }
+
+        var fixedParameterEffectsEl = addAndReturnElement("fixed", nameSpace, parameterEffectsEl);
+        for (var parameterIdRef in parameterEffects.fixed.characterIndependent)
+        {
+            parameterEffects.fixed.characterIndependent[parameterIdRef].forEach(function(parameterEffect)
+            {
+                var pEffElement = addAndReturnElement("parameterEffect", nameSpace, fixedParameterEffectsEl);
+                pEffElement.setAttribute("idref", parameterEffect.idRef);
+                pEffElement.setAttribute("changeType", parameterEffect.changeType);
+                Config.configObject.parameters.byId[parameterIdRef].type.toXML(pEffElement, parameterEffect.value);
+            });
+        }
+        for (var characterId in Config.configObject.characters.byId)
+        {
+            for (var parameterIdRef in parameterEffects.fixed.perCharacter[characterId])
+            {
+                parameterEffects.fixed.perCharacter[characterId][parameterIdRef].forEach(function(parameterEffect)
+                {
+                    var pEffElement = addAndReturnElement("characterParameterEffect", nameSpace, fixedParameterEffectsEl);
+                    pEffElement.setAttribute("idref", parameterEffect.idRef);
+                    pEffElement.setAttribute("characteridref", characterId);
+                    pEffElement.setAttribute("changeType", parameterEffect.changeType);
+
+                    if (parameterIdRef in Config.configObject.characters.parameters.byId)
+                    {
+                        Config.configObject.characters.parameters.byId[parameterIdRef].type.toXML(pEffElement, parameterEffect.value);
+                    }
+                    else
+                    {
+                        Config.configObject.characters.byId[characterId].parameters.byId[parameterIdRef].type.toXML(pEffElement, parameterEffect.value);
+                    }
+                });
+            }
+        }
     }
 
     function generatePropertyValuesXML(element, propertyValues, nameSpace)

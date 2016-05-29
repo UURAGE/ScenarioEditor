@@ -1185,7 +1185,7 @@ var Main;
         // Save preconditions.
         node.preconditions = ObjectGenerator.preconditionObject($("#preconditionsDiv").children().first());
 
-        // Save properties.
+        // Save property values.
         var acceptableScopes = ['per', 'per-' + node.type];
         for (var propertyId in Config.configObject.properties.byId)
         {
@@ -1828,7 +1828,7 @@ var Main;
                 }
             }
 
-            // Show the node properties
+            // Show the node's property values
             var anyPropertyShown = false;
             var showPropertyItem = function (propertyValuesObject, propertyItem, hLevel, container, idPrefix)
             {

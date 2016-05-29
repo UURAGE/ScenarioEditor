@@ -322,20 +322,7 @@ var Load;
         else
             preconditions = loadPreconditions(preconditionsXML.children()[0]);
 
-        var parameterEffects = Main.getNewDefaultParameterEffectsObject();
-
-        var pEffEl = $(statement).find('parameterEffects');
-        var pEffs = pEffEl.children(); //all parameter effects of the node.
-        for (var j = 0; j < pEffs.length; j++)
-        {
-            var parameter = pEffs[j];
-            parameterEffects.userDefined.push(
-            {
-                idRef: parameter.attributes.idref.value,
-                changeType: parameter.attributes.changeType.value,
-                value: parseInt(parameter.attributes.value.value)
-            });
-        }
+        var parameterEffects = loadParameterEffects($(statement).children('parameterEffects'));
 
         var propertyValues = loadPropertyValues($(statement).children('propertyValues'));
 
@@ -416,6 +403,71 @@ var Load;
             type: preconditionType,
             preconditions: preconditionsArray
         };
+    }
+
+    function loadParameterEffects(parameterEffectsXMLElement)
+    {
+        var parameterEffects = Main.getNewDefaultParameterEffectsObject();
+        parameterEffectsXMLElement.find('userDefined').children().each(function()
+        {
+            parameterEffects.userDefined.push(
+            {
+                idRef: this.attributes.idref.value,
+                changeType: this.attributes.changeType.value,
+                value: parseInt(this.attributes.value.value)
+            });
+        });
+        parameterEffectsXMLElement.find('fixed').children().each(function()
+        {
+            var parameterId = this.attributes.idref.value;
+            if (this.attributes.characteridref)
+            {
+                var characterId = this.attributes.characteridref.value;
+                if (characterId in Config.configObject.characters.byId)
+                {
+                    if (parameterId in Config.configObject.characters.parameters.byId)
+                    {
+                        if (!(parameterId in parameterEffects.fixed.perCharacter[characterId]))
+                        {
+                            parameterEffects.fixed.perCharacter[characterId][parameterId] = [];
+                        }
+                        parameterEffects.fixed.perCharacter[characterId][parameterId].push(
+                        {
+                            idRef: parameterId,
+                            changeType: this.attributes.changeType.value,
+                            value: Config.configObject.characters.parameters.byId[parameterId].type.fromXML(this)
+                        });
+                    }
+                    else if (parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
+                    {
+                        if (!(parameterId in parameterEffects.fixed.perCharacter[characterId]))
+                        {
+                            parameterEffects.fixed.perCharacter[characterId][parameterId] = [];
+                        }
+                        parameterEffects.fixed.perCharacter[characterId][parameterId].push(
+                        {
+                            idRef: parameterId,
+                            changeType: this.attributes.changeType.value,
+                            value: Config.configObject.characters.byId[characterId].parameters.byId[parameterId].type.fromXML(this)
+                        });
+                    }
+                }
+            }
+            else if (parameterId in Config.configObject.parameters.byId)
+            {
+                if (!(parameterId in parameterEffects.fixed.characterIndependent))
+                {
+                    parameterEffects.fixed.characterIndependent[parameterId] = [];
+                }
+                parameterEffects.fixed.characterIndependent[parameterId].push(
+                {
+                    idRef: parameterId,
+                    changeType: this.attributes.changeType.value,
+                    value: Config.configObject.parameters.byId[parameterId].type.fromXML(this)
+                });
+            }
+        });
+        return parameterEffects;
     }
 
     function loadPropertyValues(propertyValuesXMLElement)
