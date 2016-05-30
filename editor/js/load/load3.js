@@ -17,6 +17,9 @@ var Load3;
     function generateGraph(xml)
     {
         var level = 0;
+        // Conversations stores all the accumulated conversations so we can expand them and give the nodes fresh ids at the end
+        var conversations = {};
+
         $('interleave', xml).each(function()
         {
             $(this).children('tree').each(function()
@@ -61,7 +64,7 @@ var Load3;
                             loadStatement(this, Main.playerType, connections, treeID);
                             break;
                         case "conversation":
-                            // TODO: Resolve conversations to nodes
+                            loadConversation(this, conversations, treeID);
                             break;
                     }
                 });
@@ -80,6 +83,8 @@ var Load3;
 
             level++;
         });
+
+        expandConversations(conversations);
     }
 
     // Load the metadata of the scenario.
@@ -290,4 +295,199 @@ var Load3;
             preconditions: preconditionsArray
         };
     }
+
+    function loadConversation(conversationXMLElement, conversations, treeID)
+    {
+        var id = $(conversationXMLElement).attr('id').replace(/\./g, '_');
+
+        var idMatch = id.match(/^edit_(\d+)$/);
+        if (idMatch !== null)
+            Main.jsPlumbCounter = Math.max(Main.jsPlumbCounter, parseInt(idMatch[1]));
+        else
+            id = "ext_" + id;
+
+        var endNode = $(conversationXMLElement).attr('possibleEnd') == "true";
+        var comment = Main.unEscapeTags($(conversationXMLElement).find('comment').text());
+
+        var xPos = $(conversationXMLElement).find('x').text();
+        var yPos = $(conversationXMLElement).find('y').text();
+
+        conversations[id] = {};
+        conversations[id].xPos = xPos;
+        conversations[id].yPos = yPos;
+        conversations[id].textNodes = [];
+        // Get all the text elements of the conversation.
+        $(conversationXMLElement).children().each(function()
+        {
+            if (this.nodeName == "computerText")
+            {
+                conversations[id].textNodes.push(
+                {
+                    type: Main.computerType,
+                    text: Main.unEscapeTags(this.textContent)
+                });
+            }
+            else if (this.nodeName == "playerText")
+            {
+                conversations[id].textNodes.push(
+                {
+                    type: Main.playerType,
+                    text: Main.unEscapeTags(this.textContent)
+                });
+            }
+            else if (this.nodeName == "situationText")
+            {
+                conversations[id].textNodes.push(
+                {
+                    type: Main.situationType,
+                    text: Main.unEscapeTags(this.textContent)
+                });
+            }
+        });
+
+        // Load the preconditions of this node.
+        var preconditionsXML = $(conversationXMLElement).find("preconditions");
+        var preconditionsJS;
+        if (preconditionsXML.length === 0)
+            preconditionsJS = {type: "alwaysTrue", preconditions: []};
+        else
+            preconditionsJS = loadPreconditions(preconditionsXML.children()[0]);
+
+        var targets = $(conversationXMLElement).find('responses').children();
+        conversations[id].connections = [];
+        if (targets.length > 0)
+        {
+            // Save all the connections so we can expand the conversation later on and connect the expanded nodes
+            for (var m = 0; m < targets.length; m++)
+            {
+                var targetID = targets[m].attributes.idref.value.replace(/\./g, '_');
+                if (!/^edit_\d+$/.test(targetID))
+                    targetID = 'ext_' + targetID;
+                conversations[id].connections.push(targetID);
+            }
+        }
+
+        var firstConversationNode = conversations[id].textNodes.length > 0 ? conversations[id].textNodes[0] : null;
+        if (!firstConversationNode)
+        {
+            firstConversationNode = { type: Main.playerType, text: "" };
+        }
+
+        var node = Main.createAndReturnNode(firstConversationNode.type, id, Main.trees[treeID].div, Main.trees[treeID].dragDiv.attr('id'));
+        Main.nodes[id] = {
+            text: firstConversationNode.text,
+            type: firstConversationNode.type,
+            characterIdRef: Config.configObject.characters.sequence[0].id,
+            parameterEffects: Main.getNewDefaultParameterEffectsObject(),
+            preconditions: preconditionsJS,
+            propertyValues: Metadata.getNewDefaultPropertyValuesObject(),
+            comment: comment,
+            endNode: endNode,
+            initsNode: false,
+            jumpPoint: false,
+            visited: false,
+            topologicalRank: 0,
+            id: id,
+            parent: treeID
+        };
+
+        // Set the position of the node.
+        node.css({
+            top: yPos + "px",
+            left: xPos + "px"
+        });
+
+        // fill the insides with text
+        var txtArea = node.find('textarea.nodestatement');
+        var txtView = node.find('.statementText');
+        txtArea.val(firstConversationNode.text);
+        txtView.html(Main.escapeTags(firstConversationNode.text));
+    }
+
+    function expandConversations(conversations)
+    {
+        for (var firstConversationNodeId in conversations)
+        {
+            var firstConversationNode = Main.nodes[firstConversationNodeId];
+            var lastConversationNodeId = firstConversationNodeId;
+            // Stores the connections single between conversation nodes
+            var singleConnections = {};
+            var previousConversationNodeId = firstConversationNodeId;
+
+            // Loop over all textNodes except for the first, it has already been created
+            for (var i = 1; i < conversations[firstConversationNodeId].textNodes.length; i++)
+            {
+                var textNode = conversations[firstConversationNodeId].textNodes[i];
+
+                var node = Main.createAndReturnNode(textNode.type, null, Main.trees[firstConversationNode.parent].div, Main.trees[firstConversationNode.parent].dragDiv.attr('id'));
+                var id = node.attr('id');
+
+                var endNode = false;
+                if (i === conversations[firstConversationNodeId].textNodes.length - 1)
+                {
+                    endNode = firstConversationNode.endNode;
+                    firstConversationNode.endNode = false;
+                    lastConversationNodeId = id;
+                }
+
+                singleConnections[previousConversationNodeId] = id;
+
+                Main.nodes[id] = {
+                    text: textNode.text,
+                    type: textNode.type,
+                    characterIdRef: Config.configObject.characters.sequence[0].id,
+                    parameterEffects: Main.getNewDefaultParameterEffectsObject(),
+                    preconditions: {type: "alwaysTrue", preconditions: []},
+                    propertyValues: Metadata.getNewDefaultPropertyValuesObject(),
+                    comment: "",
+                    endNode: endNode,
+                    initsNode: false,
+                    jumpPoint: false,
+                    visited: false,
+                    topologicalRank: 0,
+                    id: id,
+                    parent: firstConversationNode.parent
+                };
+
+                // Set the position of the node and offset it by a small amount to show underlying nodes
+                var yPos = Utils.parseDecimalIntWithDefault(conversations[firstConversationNodeId].yPos, 0) + i * 8;
+                var xPos = Utils.parseDecimalIntWithDefault(conversations[firstConversationNodeId].xPos, 0) + i * 8;
+                node.css({
+                    top: yPos.toString() + "px",
+                    left: xPos.toString() + "px"
+                });
+
+                // fill the insides with text
+                var txtArea = node.find('textarea.nodestatement');
+                var txtView = node.find('.statementText');
+                txtArea.val(textNode.text);
+                txtView.html(Main.escapeTags(textNode.text));
+
+                previousConversationNodeId = id;
+            }
+
+            var plumbInstance = Main.getPlumbInstanceByNodeID(firstConversationNodeId);
+
+            // Connect each conversation node sequentially
+            for (var source in singleConnections)
+            {
+                plumbInstance.connect(
+                {
+                    source: source,
+                    target: singleConnections[source]
+                });
+            }
+
+            // Connect last node to the original conversation's targets
+            conversations[firstConversationNodeId].connections.forEach(function(target)
+            {
+                plumbInstance.connect(
+                {
+                    source: lastConversationNodeId,
+                    target: target
+                });
+            });
+        }
+    }
+
 })();
