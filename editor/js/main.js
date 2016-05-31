@@ -51,7 +51,7 @@ var Main;
     };
 
     //Private Variables.
-    var xselectableSelected = [],
+    var selectableSelected = [],
         ctrlDown = false,
         invalidateNodeClick = false;//a drag event also triggers a click event, use this flag to catch and stop these events
 
@@ -298,7 +298,7 @@ var Main;
                 Main.selectedElements = [];
                 selectElement(null);
             }
-            xselectableSelected = [];
+            selectableSelected = [];
         });
         $("#main").on('selectableselected', function(event, element)
         {
@@ -311,11 +311,9 @@ var Main;
                 if(!(id in Main.trees))
                 {
                     $("#" + id).removeClass("multiSelected");
-                    $("#" + id).removeClass(
-                        "selectable-selected");
+                    $("#" + id).removeClass("selectable-selected");
 
                     Main.selectedElements.push(id);
-                    xselectableSelected.push(id); // This must also be done with duplicate nodes to remove the xselectable.
 
                     Zoom.getZoomed().plumbInstance.addToDragSelection(element.selected);
                 }
@@ -329,14 +327,13 @@ var Main;
                         "selectable-selected");
 
                     Main.selectedElements.push(id);
-                    xselectableSelected.push(id); // This must also be done with duplicate nodes to remove the xselectable.
                 }
             }
         });
         $("#main").on('selectablestop', function()
         {
-            for (var i = 0; i < xselectableSelected.length; i++)
-                $("#" + xselectableSelected[i]).removeClass(
+            for (var i = 0; i < Main.selectedElements.length; i++)
+                $("#" + Main.selectedElements[i]).removeClass(
                     "selectable-selected").addClass(
                     "multiSelected");
 

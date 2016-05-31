@@ -8,14 +8,13 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="-1">
   <link rel="icon" type="image/png" href="<?php echo editor_url("png/small_logo.png");?>">
-  
+
   <?php
   $language = $this->session->userdata('language');
 
   $styles = array(
       "css/stylesheet.css",
       "css/jsPlumbStyle.css",
-      "css/selectableStyle.css",
       "jQueryUI/css/jquery-ui-1.10.4.custom.css"
   );
   foreach ($styles as $style)
@@ -96,7 +95,7 @@
           <div>
             <div id="toolbar">
               <div id="scriptNameTab">
-                <?php sLang("edt_scenario"); ?>: 
+                <?php sLang("edt_scenario"); ?>:
                 <span class="scriptName"></span>
               </div>
               <!-- commented this button, because the manuals are no longer up to date. TODO: add new manuals
@@ -214,7 +213,7 @@
                     {
                         $flagUrl = flag_url($name);
                         echo("<a href='".site_url()."/language/changeLanguage/".$name."'><img src='".$flagUrl."'></a>");
-                        
+
                         if ($name != $lastElement)
                             echo(" | ");
                     }
