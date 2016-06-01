@@ -266,7 +266,7 @@ var Load;
             parameters.byId[parameter.id] = parameter;
         });
 
-        var propertyValues = loadPropertyValues($(metadata).children('propertyValues'));
+        var propertyValues = loadPropertyValues($(metadata).children('propertyValues'), { statementScope: 'independent'});
 
         $(metadata).children('scoringFunction').children('sum').children('scale').children('paramRef').each(function()
         {
@@ -327,7 +327,7 @@ var Load;
 
         var parameterEffects = loadParameterEffects($(statement).children('parameterEffects'));
 
-        var propertyValues = loadPropertyValues($(statement).children('propertyValues'));
+        var propertyValues = loadPropertyValues($(statement).children('propertyValues'), { statementScope: 'per'});
 
         var comment = Main.unEscapeTags($(statement).find('comment').text());
 
@@ -473,9 +473,9 @@ var Load;
         return parameterEffects;
     }
 
-    function loadPropertyValues(propertyValuesXMLElement)
+    function loadPropertyValues(propertyValuesXMLElement, scopes)
     {
-        var propertyValues = Metadata.getNewDefaultPropertyValuesObject();
+        var propertyValues = Metadata.getNewDefaultPropertyValuesObject(scopes);
         propertyValuesXMLElement.children().each(function()
         {
             var propertyId = this.attributes.idref.value;

@@ -146,20 +146,38 @@ var Metadata;
             difficulty: "medium",
             description: "",
             parameters: getNewDefaultParametersObject(),
-            propertyValues: getNewDefaultPropertyValuesObject(),
+            propertyValues: getNewDefaultPropertyValuesObject({ statementScope: 'independent'}),
             defaultChangeType: LanguageManager.sLang("edt_parts_delta"),
         };
     }
 
-    function getNewDefaultPropertyValuesObject()
+    function getNewDefaultPropertyValuesObject(scopes)
     {
         var propertyValues = {};
+
         propertyValues.characterIndependent = {};
+        for (var propertyId in Config.configObject.properties.byId)
+        {
+            if (Config.configObject.properties.byId[propertyId].scopes.statementScope !== scopes.statementScope) continue;
+            propertyValues.characterIndependent[propertyId] = Config.configObject.properties.byId[propertyId].type.default;
+        }
+
         propertyValues.perCharacter = {};
         for (var characterId in Config.configObject.characters.byId)
         {
             propertyValues.perCharacter[characterId] = {};
+            for (var propertyId in Config.configObject.characters.properties.byId)
+            {
+                if (Config.configObject.characters.properties.byId[propertyId].scopes.statementScope !== scopes.statementScope) continue;
+                propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.properties.byId[propertyId].type.default;
+            }
+            for (var propertyId in Config.configObject.characters.byId[characterId].properties.byId)
+            {
+                if (Config.configObject.characters.byId[characterId].properties.byId[propertyId].scopes.statementScope !== scopes.statementScope) continue;
+                propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.byId[characterId].properties.byId[propertyId].type.default;
+            }
         }
+
         return propertyValues;
     }
 
@@ -210,13 +228,10 @@ var Metadata;
         $("#scenarioDescription").val(Metadata.metaObject.description);
         $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
 
-        var setPropertyInDOM = function(propertyValuesObject, propertyContainerId, property)
+        var setPropertyInDOM = function(propertyValues, propertyContainerId, property)
         {
             if (property.scopes.statementScope !== "independent") return;
-            if (property.id in propertyValuesObject)
-            {
-                property.type.setInDOM($(propertyContainerId + '-' + property.id), propertyValuesObject[property.id]);
-            }
+            property.type.setInDOM($(propertyContainerId + '-' + property.id), propertyValues[property.id]);
         };
         for (var propertyId in Config.configObject.properties.byId)
         {

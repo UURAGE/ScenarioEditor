@@ -666,7 +666,7 @@ var Main;
                 type: "alwaysTrue",
                 preconditions: []
             },
-            propertyValues: Metadata.getNewDefaultPropertyValuesObject(),
+            propertyValues: Metadata.getNewDefaultPropertyValuesObject({ statementScope: 'per'}),
             comment: "",
             endNode: false,
             initsNode: false,
@@ -1854,7 +1854,7 @@ var Main;
 
             // Show the node's property values
             var anyPropertyShown = false;
-            var showPropertyItem = function (propertyValuesObject, propertyItem, hLevel, container, idPrefix)
+            var showPropertyItem = function (propertyValues, propertyItem, hLevel, container, idPrefix)
             {
                 if (acceptableScopes.indexOf(propertyItem.scopes.statementScope) === -1) return;
                 if (propertyItem.kind === 'section')
@@ -1864,7 +1864,7 @@ var Main;
                     container.append(sectionContainer);
                     propertyItem.sequence.forEach(function (subItem)
                     {
-                        showPropertyItem(propertyValuesObject, subItem, hLevel + 1, sectionContainer, idPrefix);
+                        showPropertyItem(propertyValues, subItem, hLevel + 1, sectionContainer, idPrefix);
                     });
                 }
                 else
@@ -1875,10 +1875,9 @@ var Main;
                     container.append(propertyContainer);
                     propertyContainer.append($('<label>', { text: propertyItem.name + ':', 'for': controlHtmlId }));
                     propertyItem.type.appendControlTo(propertyContainer, controlHtmlId);
-                    if (propertyItem.id in propertyValuesObject)
-                    {
-                        propertyItem.type.setInDOM(propertyContainer, propertyValuesObject[propertyItem.id]);
-                    }
+
+                    propertyItem.type.setInDOM(propertyContainer, propertyValues[propertyItem.id]);
+
                     anyPropertyShown = true;
                 }
             };
