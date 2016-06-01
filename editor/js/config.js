@@ -120,16 +120,6 @@ var Config;
         return Config.types[typeName].loadType(typeXML);
     }
 
-    function appendChild(parentXML, name)
-    {
-        parentXML.appendChild(document.createElementNS(parentXML.namespaceURI, name));
-    }
-
-    function toXMLSimple(valueXML, value)
-    {
-        valueXML.textContent = value;
-    }
-
     function loadCharacterCollection(collectionXML)
     {
         var characters = {};
@@ -165,6 +155,16 @@ var Config;
             $.extend(collection, defaultCollection);
         }
         return collection;
+    }
+
+    function appendChild(parentXML, name)
+    {
+        parentXML.appendChild(document.createElementNS(parentXML.namespaceURI, name));
+    }
+
+    function toXMLSimple(valueXML, value)
+    {
+        valueXML.textContent = value;
     }
 
     Config.types =
