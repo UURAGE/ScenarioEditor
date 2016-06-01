@@ -14,7 +14,9 @@
 | path to your installation.
 |
 */
-$config['base_url']	= '';
+$base_url_protocol = empty($_SERVER['HTTPS']) ? 'http://' : 'https://';
+$base_url_path = str_replace(DIRECTORY_SEPARATOR, '/', dirname($_SERVER['SCRIPT_NAME']));
+$config['base_url'] = $base_url_protocol . $_SERVER['HTTP_HOST'] . $base_url_path;
 
 /*
 |--------------------------------------------------------------------------
