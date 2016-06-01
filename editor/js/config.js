@@ -172,9 +172,15 @@ var Config;
         'string':
         {
             name: 'string',
+            default: "",
             assignmentOperators: ['set'],
             relationalOperators: ['equalTo', 'notEqualTo'],
-            loadType: function(typeXML) { return this; },
+            loadType: function(typeXML)
+            {
+                var defaultEl = typeXML.children('default');
+                if (defaultEl.length > 0) return $.extend({}, this, { default: defaultEl[0].textContent });
+                else                      return this;
+            },
             insertUnderlyingType: function(typeXML)
             {
                 appendChild(typeXML, 'typeString');
@@ -200,9 +206,15 @@ var Config;
         'integer':
         {
             name: 'integer',
+            default: 0,
             assignmentOperators: ['set', 'delta'],
             relationalOperators: ['equalTo', 'notEqualTo', 'greaterThanEqualTo', 'lessThanEqualTo', 'greaterThan', 'lessThan'],
-            loadType: function(typeXML) { return this; },
+            loadType: function(typeXML)
+            {
+                var defaultEl = typeXML.children('default');
+                if (defaultEl.length > 0) return $.extend({}, this, { default: parseInt(defaultEl[0].textContent, 10) });
+                else                      return this;
+            },
             insertUnderlyingType: function(typeXML)
             {
                 appendChild(typeXML, 'typeInteger');
@@ -231,9 +243,15 @@ var Config;
         'boolean':
         {
             name: 'boolean',
+            default: false,
             assignmentOperators: ['set'],
             relationalOperators: ['equalTo', 'notEqualTo'],
-            loadType: function(typeXML) { return this; },
+            loadType: function(typeXML)
+            {
+                var defaultEl = typeXML.children('default');
+                if (defaultEl.length > 0) return $.extend({}, this, { default: Utils.parseBool(defaultEl[0].textContent) });
+                else                      return this;
+            },
             insertUnderlyingType: function(typeXML)
             {
                 appendChild(typeXML, 'typeBoolean');
@@ -259,6 +277,7 @@ var Config;
         'enumeration':
         {
             name: 'enumeration',
+            default: "",
             assignmentOperators: ['set'],
             relationalOperators: ['equalTo', 'notEqualTo'],
             loadType: function(typeXML)
@@ -268,7 +287,15 @@ var Config;
                 {
                     values.push(valueXML.textContent);
                 });
-                return $.extend({ values: values }, this);
+
+                var defaultValue = values[0];
+                var defaultEl = typeXML.children('default');
+                if (defaultEl.length > 0 && values.indexOf(defaultEl[0].textContent) !== -1)
+                {
+                    defaultValue = defaultEl[0].textContent;
+                }
+
+                return $.extend({ values: values }, this, { default: defaultValue });
             },
             insertUnderlyingType: function(typeXML)
             {
