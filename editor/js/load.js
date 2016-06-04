@@ -264,11 +264,11 @@ var Load;
             {
                 id: paramId,
                 name: Main.unEscapeTags(this.attributes.name.value),
-                initialValue: (this.hasAttribute('initialValue') ?
-                    Utils.parseDecimalIntWithDefault(this.attributes.initialValue.value, 0) : 0),
-                weightForFinalScore: 0,
-                minimumScore: this.attributes.minimumScore.value,
-                maximumScore: this.attributes.maximumScore.value,
+                // TODO support enumeration by loading the enumeration values
+                type: Config.types[this.childNodes[0].nodeName.substr("type".length).toLowerCase()],
+                // TODO: load initialValue as default
+                //initialValue: this.hasAttribute('initialValue') ?
+                    //Config.types[type.name].fromXML(this.hasAttribute('initialValue')) : Config.types[type.name].default,
                 description: this.hasAttribute("description") ? Main.unEscapeTags(this.attributes.description.value) : ""
             };
             parameters.sequence.push(parameter);
@@ -426,7 +426,7 @@ var Load;
             {
                 idRef: this.attributes.idref.value,
                 changeType: this.attributes.changeType.value,
-                value: parseInt(this.attributes.value.value)
+                value: Metadata.metaObject.parameters.byId[this.attributes.idref.value].type.fromXML(this)
             });
         });
         parameterEffectsXMLElement.find('fixed').children().each(function()

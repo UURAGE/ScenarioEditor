@@ -50,8 +50,6 @@ var Save;
 
         // Save user-defined parameters and collect data for saving weights
         var parametersEl = addAndReturnElement("parameters", nameSpace, definitionsEl);
-        var scoringFunctionEl = document.createElementNS(nameSpace, "scoringFunction");
-        var scoringSumEl = document.createElementNS(nameSpace, "sum");
 
         userDefinedParametersEl = addAndReturnElement("userDefined", nameSpace, parametersEl);
         for (var pId in Metadata.metaObject.parameters.byId)
@@ -61,18 +59,11 @@ var Save;
 
             parameterEl.setAttribute("id", pId);
             parameterEl.setAttribute("name", Main.escapeTags(parameter.name));
-            parameterEl.setAttribute("initialValue", parameter.initialValue);
-            parameterEl.setAttribute("minimumScore", parameter.minimumScore);
-            parameterEl.setAttribute("maximumScore", parameter.maximumScore);
             parameterEl.setAttribute("description", Main.escapeTags(parameter.description));
-
-            if (parameter.weightForFinalScore !== 0)
-                parameterEl.setAttribute("scored", "true");
-
-            var scaleEl = addAndReturnElement("scale", nameSpace, scoringSumEl);
-            scaleEl.setAttribute("scalar", parameter.weightForFinalScore);
-            var paramRefEl = addAndReturnElement("paramRef", nameSpace, scaleEl);
-            paramRefEl.setAttribute("idref", pId);
+            // TODO: support enumeration by saving the type instead of the underlying type
+            Metadata.metaObject.parameters.byId[parameter.id].type.insertUnderlyingType(parameterEl);
+            // TODO: save initialValue as default
+            //parameterEl.setAttribute("initialValue", parameter.initialValue);
         }
 
         var addDefinitionElement = function (definition, elementName, nameSpace, definitionsEl)
@@ -126,18 +117,6 @@ var Save;
 
         // Save property values
         generatePropertyValuesXML(metadataEl, Metadata.metaObject.propertyValues, nameSpace);
-
-        // Save parameter weights
-        if (scoringSumEl.childNodes.length === 0)
-        {
-            var constantEl = addAndReturnElement("constant", nameSpace, scoringFunctionEl);
-            constantEl.setAttribute("value", 0);
-        }
-        else
-        {
-            scoringFunctionEl.appendChild(scoringSumEl);
-        }
-        metadataEl.appendChild(scoringFunctionEl);
 
         var seqElement = addAndReturnElement("sequence", nameSpace, doc.documentElement);
 
@@ -359,7 +338,7 @@ var Save;
             var pEffElement = addAndReturnElement("parameterEffect", nameSpace, userDefinedParameterEffectsEl);
             pEffElement.setAttribute("idref", pEff.idRef);
             pEffElement.setAttribute("changeType", pEff.changeType);
-            pEffElement.setAttribute("value", pEff.value);
+            Metadata.metaObject.parameters.byId[pEff.idRef].type.toXML(pEffElement, pEff.value);
         }
 
         var fixedParameterEffectsEl = addAndReturnElement("fixed", nameSpace, parameterEffectsEl);

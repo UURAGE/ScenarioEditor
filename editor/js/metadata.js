@@ -292,9 +292,10 @@ var Metadata;
             {
                 $(".toBeRemoved").removeClass("toBeRemoved");
                 $(".newParameter").remove();
-                //Ugly test to determine if there are parameters. If there are, the table headers need to be visible in the metascreen the next time.
+
                 if (atLeastOneUserDefinedParameter())
                 {
+                    // The table headers need to be visible in the metascreen the next time.
                     $("#paramsTableHead").removeClass("hidden");
                 }
             }
@@ -305,17 +306,20 @@ var Metadata;
 
         Metadata.metaObject.parameters.sequence.forEach(function(parameter)
         {
-            var addedDiv = $("#params").append(HtmlGenerator.parameterHTML).children().last();
+            var addedDiv = HtmlGenerator.addEmptyUserDefinedParameterDefinition();
             addedDiv.removeClass("newParameter").addClass("existingParameter");
 
             addedDiv.prop('id', parameter.id);
             if(parameter.id === "t")
+            {
                 addedDiv.addClass("isT");
+                addedDiv.find(".parameter-type-select").val("integer");
+                addedDiv.find(".parameter-type-select").prop("disabled", "disabled");
+                addedDiv.find(".parameter-initial-value-container").remove();
+            }
             addedDiv.find(".name").val(parameter.name);
-            addedDiv.find(".initialValue").val(parameter.initialValue);
-            addedDiv.find(".weightForFinalScore").val(parameter.weightForFinalScore);
-            addedDiv.find(".minimumScore").val(parameter.minimumScore);
-            addedDiv.find(".maximumScore").val(parameter.maximumScore);
+            addedDiv.find(".parameter-type-select").val(parameter.type.name).change();
+            parameter.type.setInDOM(addedDiv.find(".parameter-initial-value-container"), parameter.initialValue);
             addedDiv.find(".description").val(parameter.description);
         });
         if ($("#params").children().length > 0)
@@ -346,6 +350,7 @@ var Metadata;
         var timeEffect =
         {
             idRef: newParameter.id,
+            type: Config.types["integer"],
             changeType: "delta",
             value: 1
         };
@@ -400,7 +405,7 @@ var Metadata;
         $(".existingParameter").each(function()
         {
             var parameter = ObjectGenerator.parameterObject($(this));
-            Metadata.metaObject.parameters.byId[parameter.id] = parameter;
+            $.extend(Metadata.metaObject.parameters.byId[parameter.id], parameter);
         });
 
         // All new parameters.

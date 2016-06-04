@@ -6,18 +6,17 @@ var HtmlGenerator;
 {
     "use strict";
 
-    var parameterHTML = Parts.getParameterDefinitionHTML();
-
     HtmlGenerator =
     {
-        parameterHTML: parameterHTML,
-        addEmptyParameterEffect: addEmptyParameterEffect,
+        addEmptyUserDefinedParameterDefinition: addEmptyUserDefinedParameterDefinition,
+        addEmptyUserDefinedParameterEffect: addEmptyUserDefinedParameterEffect,
         insertPreconditions: insertPreconditions,
         nullToHTMLValue: nullToHTMLValue,
         showScores: showScores
     };
 
     //Get all the raw HTLM from Parts.js
+    var parameterHTML = Parts.getParameterDefinitionHTML();
     var preconditionHTML = Parts.getPreconditionHTML();
     var groupPreconditionHTML = Parts.getGroupPreconditionHTML();
     var parameterEffectHTML = Parts.getParameterEffectHTML();
@@ -66,7 +65,7 @@ var HtmlGenerator;
         {
             if (Metadata.atLeastOneUserDefinedParameter())
             {
-                addEmptyParameterEffect(Metadata.metaObject.parameters);
+                addEmptyUserDefinedParameterEffect();
                 focusFirstTabindexedDescendant($(".effect").last());
             }
             else
@@ -79,8 +78,8 @@ var HtmlGenerator;
 
         $("#addParameter").on('click', function()
         {
-            $("#params").append(HtmlGenerator.parameterHTML);
-            focusFirstTabindexedDescendant($("#params").children().last());
+            var addedDiv = addEmptyUserDefinedParameterDefinition();
+            focusFirstTabindexedDescendant(addedDiv);
             $("#paramsTableHead").removeClass("hidden");
         });
 
@@ -96,14 +95,15 @@ var HtmlGenerator;
             // timeParameterObject has not been updated yet)
             if (Metadata.timePId === null || isTimeRemoved === isTime)
             {
-                $("#params").append(HtmlGenerator.parameterHTML);
+                $("#params").append(parameterHTML);
                 var div = $("#params").children().last();
                 // console.log(div.children());
                 // div.children().children().prop('disabled', true);
                 $(div).prop('id', 't');
                 div.find(".name").val(LanguageManager.sLang("edt_html_time"));
-                div.find(".initialValue").val(0);
-                div.find(".weightForFinalScore").val(0);
+                div.find(".parameter-type-select").val("integer");
+                div.find(".parameter-type-select").prop("disabled", "disabled");
+                div.find(".parameter-initial-value-container").remove();
                 Metadata.addTimeParameter(div);
 
                 focusFirstTabindexedDescendant($("#params").children().last());
@@ -132,11 +132,54 @@ var HtmlGenerator;
      ** Public Functions
      */
 
-    function addEmptyParameterEffect(parameters)
+     function addEmptyUserDefinedParameterDefinition()
+     {
+        $("#params").append(parameterHTML);
+        var addedDiv = $("#params").children().last();
+        var typeSelect = addedDiv.find('.parameter-type-select');
+        var changeParameterType = function (typeName)
+        {
+            var initialValueContainer = addedDiv.find('.parameter-initial-value-container');
+            initialValueContainer.empty();
+            Config.types[typeName].appendControlTo(initialValueContainer);
+        };
+        typeSelect.on('change', function()
+        {
+            changeParameterType($(this).val());
+        });
+        typeSelect.change();
+        return addedDiv;
+     }
+
+    function addEmptyUserDefinedParameterEffect()
     {
         $("#userDefinedParameterEffects").append(parameterEffectHTML);
         var addedDiv = $("#userDefinedParameterEffects").children().last();
-        insertParameters(addedDiv, parameters);
+        
+        insertParameters(addedDiv, Metadata.metaObject.parameters);
+        
+        var idRefSelect = addedDiv.find(".parameter-idref-select");
+        var effectDiv = addedDiv.find(".parameter-effect-container");
+        var changeEffectType = function(pId)
+        {
+            var changeTypeSelect = $('<select>', { class: "parameter-effect-changetype-select" });
+            Metadata.metaObject.parameters.byId[pId].type.assignmentOperators.forEach(function(op)
+            {
+                changeTypeSelect.append($('<option>', { value: op, text: op }));
+            });
+            effectDiv.append(changeTypeSelect);
+
+            var controlContainer = $('<div>', { class: "parameter-effect-value-container", style:"display:inline" });
+            Metadata.metaObject.parameters.byId[pId].type.appendControlTo(controlContainer);
+            effectDiv.append(controlContainer);
+        };
+        changeEffectType(idRefSelect.val());
+        idRefSelect.on('change', function()
+        {
+            effectDiv.empty();
+            changeEffectType($(this).val());
+        });
+        
         return addedDiv;
     }
 

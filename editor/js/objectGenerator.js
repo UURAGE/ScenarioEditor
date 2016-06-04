@@ -20,29 +20,18 @@ var ObjectGenerator;
 
     function ParameterObject(div)
     {
-        var id = div.prop('id');
         var name = div.find(".name").val();
         // If the name is empty, we cannot create a valid parameter object.
         if (!name) return null;
 
-        var minimumScore = Utils.parseDecimalIntWithDefault(div.find(
-                ".minimumScore").val(), 0);
-        var maximumScore =  Utils.parseDecimalIntWithDefault(div.find(
-                ".maximumScore").val(), 0);
-
-        // Make sure maximumScore is always bigger than minimumScore!
-        if (maximumScore <= minimumScore)
-            maximumScore = minimumScore + 1;
+        var typeName = div.find(".parameter-type-select").val();
 
         return {
-            id: id,
+            id: div.prop('id'),
             name: name,
-            initialValue: Utils.parseDecimalIntWithDefault(div.find(
-                ".initialValue").val(), 0),
-            weightForFinalScore: Utils.parseDecimalIntWithDefault(div.find(
-                ".weightForFinalScore").val(), 0),
-            minimumScore: minimumScore,
-            maximumScore: maximumScore,
+            initialValue: Config.types[typeName].getFromDOM(div.find(".parameter-initial-value-container")),
+            // TODO: load type from DOM if it is an enumeration
+            type: Config.types[typeName],
             description: div.find(".description").val()
         };
     }
@@ -77,10 +66,11 @@ var ObjectGenerator;
 
     function EffectObject(div)
     {
+        var idRef = div.find(".parameter-idref-select").find("option:selected").val();
         return {
-            idRef: div.find(".parameter-idref-select").find("option:selected").val(),
-            changeType: div.find(".changeType").find("option:selected").val(),
-            value: Utils.parseDecimalIntWithDefault(div.find(".value").val(),0)
+            idRef: idRef,
+            changeType: div.find(".parameter-effect-changetype-select").find("option:selected").val(),
+            value: Metadata.metaObject.parameters.byId[idRef].type.getFromDOM(div.find(".parameter-effect-value-container"))
         };
     }
 

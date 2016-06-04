@@ -15,6 +15,11 @@
     LanguageManager.edt_common_save = "Opslaan";
     LanguageManager.edt_common_none = "(geen)";
 
+    LanguageManager.edt_config_types_boolean = "Boolean";
+    LanguageManager.edt_config_types_integer = "Integer";
+    LanguageManager.edt_config_types_string = "String";
+    LanguageManager.edt_config_types_enumeration = "Enumeratie";
+
     LanguageManager.edt_draft_letter_player = "S";
     LanguageManager.edt_draft_letter_computer = "C";
     LanguageManager.edt_draft_drag_all = "Sleep vanaf hier om alle items als losse nodes in het scherm te plaatsen";

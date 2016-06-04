@@ -127,27 +127,12 @@ var Load3;
             {
                 id: paramId,
                 name: Main.unEscapeTags(this.attributes.name.value),
+                type: Config.types["integer"],
                 initialValue: (this.hasAttribute('initialValue') ?
                     Utils.parseDecimalIntWithDefault(this.attributes.initialValue.value, 0) : 0),
-                weightForFinalScore: 0,
-                minimumScore: this.attributes.minimumScore.value,
-                maximumScore: this.attributes.maximumScore.value,
                 description: this.hasAttribute("parameterDescription") ? Main.unEscapeTags(this.attributes.parameterDescription.value) : ""
             };
             parameters.sequence.push(parameters.byId[paramId]);
-        });
-
-        $(metadata).children('scoringFunction').children('sum').children('scale').children('paramRef').each(function()
-        {
-            var parameterId = this.attributes.idref.value;
-            //if the parameter exists...
-            if (parameterId in parameters.byId)
-            {
-                //...add the weight of the parameter.
-                parameters.byId[parameterId].weightForFinalScore =
-                    Utils.parseDecimalIntWithDefault($(this).parent().attr('scalar'), 0);
-
-            }
         });
 
         var timePId = null;

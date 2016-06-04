@@ -78,8 +78,7 @@ var Parts;
         return '' +
             '<div>' +
                 '<select class="parameter-idref-select"></select>' +
-                getChangeTypeHTML() +
-                '<input type="number" class="value" pattern="[+\\-]?\\d*" style="width:40px;" />' +
+                '<div class="parameter-effect-container" style="display:inline"/>' +
                 '<button type="button" class="deleteParent" title="'+LanguageManager.sLang("edt_common_delete")+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
             '</div>';
     }
@@ -208,22 +207,23 @@ var Parts;
 
     function getParameterDefinitionHTML()
     {
+        var typeOptions = "";
+        for (var typeName in Config.types)
+        {
+            typeOptions += '<option value="' + typeName + '">' + LanguageManager.sLang("edt_config_types_" + typeName) + '</option>';
+        }
         return '' +
             '<tr class="newParameter">' +
                 '<td>' +
                     '<input type="text" class="name" style="width:197px;" />' +
                 '</td>' +
                 '<td>' +
-                    '<input type="number" class="initialValue" pattern="[+\\-]?\\d*" style="width:40px;" value="0" />' +
+                    '<select class="parameter-type-select">' +
+                        typeOptions +
+                    '</select>' +
                 '</td>' +
                 '<td>' +
-                    '<input type="number" class="weightForFinalScore" pattern="[+\\-]?\\d*" style="width:40px" value="0" />' +
-                '</td>' +
-                ' <td>' +
-                '<input type="number" class="minimumScore" pattern="[+\-]?\\d*" style="width:40px" value="0" />' +
-                '</td>' +
-                '<td>' +
-                    '<input type="number" class="maximumScore" min="0" pattern="[+\-]?\\d*" style="width:40px" value="10" />' +
+                    '<div style="display:inline" class="parameter-initial-value-container"/>' +
                 '</td>' +
                 '<td>' +
                     '<textarea class="description" style="height:1em;">' +

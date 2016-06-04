@@ -634,14 +634,16 @@ var Main;
         var id = node.attr('id');
 
         var parameterEffects = getNewDefaultParameterEffectsObject();
-        var timeEffect = {
-            idRef: 't',
-            changeType: "delta",
-            value: 1
-        };
 
         if (Metadata.timePId && type === Main.playerType)
+        {
+            var timeEffect = {
+                idRef: 't',
+                changeType: "delta",
+                value: 1
+            };
             parameterEffects.userDefined.push(timeEffect);
+        }
 
         var characterIdRef = "";
         if (type === Main.computerType)
@@ -1633,10 +1635,10 @@ var Main;
             {
                 var parameter = node.parameterEffects.userDefined[k];
 
-                addedDiv = HtmlGenerator.addEmptyParameterEffect(Metadata.metaObject.parameters);
-                addedDiv.find(".parameter-idref-select").val(parameter.idRef);
-                addedDiv.find(".changeType").val(parameter.changeType);
-                addedDiv.find(".value").val(parameter.value);
+                addedDiv = HtmlGenerator.addEmptyUserDefinedParameterEffect();
+                addedDiv.find(".parameter-idref-select").val(parameter.idRef).change();
+                addedDiv.find(".parameter-effect-changetype-select").val(parameter.changeType);
+                Metadata.metaObject.parameters.byId[parameter.idRef].type.setInDOM(addedDiv.find(".parameter-effect-value-container"), (parameter.value));
             }
 
             var acceptableScopes = ['per', 'per-' + node.type];
