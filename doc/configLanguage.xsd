@@ -108,21 +108,21 @@
 			<element name="typeBoolean">
 				<complexType>
 					<sequence>
-						<element name="default" type="boolean" minOccurs="0" maxOccurs="1"></element>
+						<element name="default" type="boolean" minOccurs="0" maxOccurs="1"/>
 					</sequence>
 				</complexType>
 			</element>
 			<element name="typeString">
 				<complexType>
 					<sequence>
-						<element name="default" type="string" minOccurs="0" maxOccurs="1"></element>
+						<element name="default" type="string" minOccurs="0" maxOccurs="1"/>
 					</sequence>
 				</complexType>
 			</element>
 			<element name="typeInteger">
 				<complexType>
 					<sequence>
-						<element name="default" type="integer" minOccurs="0" maxOccurs="1"></element>
+						<element name="default" type="integer" minOccurs="0" maxOccurs="1"/>
 					</sequence>
 				</complexType>
 			</element>
