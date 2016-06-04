@@ -10,9 +10,9 @@
 |
 */
 $hook['pre_system'] = array(
-    'class'    => 'SessionSettingFixer',
+    'class'    => 'SettingFixer',
     'function' => 'fix',
-    'filename' => 'SessionSettingFixer.php',
+    'filename' => 'SettingFixer.php',
     'filepath' => 'hooks'
 );
 
