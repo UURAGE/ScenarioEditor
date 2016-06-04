@@ -397,7 +397,7 @@ var Main;
     {
         if (!id)
         {
-            id = "tree" + Main.maxTreeNumber;
+            id = "dialogue" + Main.maxTreeNumber;
             Main.maxTreeNumber++;
             Main.unsavedChanges = true;
         }

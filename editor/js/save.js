@@ -254,8 +254,8 @@ var Save;
 
     function generateTreeXML(parentElement, tree, nameSpace)
     {
-        var treeElement = addAndReturnElement("tree", nameSpace, parentElement);
-        treeElement.setAttribute("id", tree.id);
+        var treeElement = addAndReturnElement("dialogue", nameSpace, parentElement);
+        treeElement.setAttribute("id", tree.id.replace(/^ext_/, ''));
         treeElement.setAttribute("optional", tree.optional);
 
         addAndReturnElement('subject', nameSpace, treeElement).textContent = Main.escapeTags(tree.subject);

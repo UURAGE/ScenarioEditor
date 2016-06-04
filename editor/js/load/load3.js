@@ -26,8 +26,19 @@ var Load3;
             {
                 var connections = {};
 
-                var treeID = this.getAttribute('id');
-                Main.maxTreeNumber = Math.max(parseInt(treeID.substring(4)) + 1, Main.maxTreeNumber);
+                var treeID = this.getAttribute('id').replace(/\./g, '_');
+                var idMatch = treeID.match(/^tree(\d+)$/);
+                if (idMatch)
+                {
+                    var treeNumber = parseInt(idMatch[1]);
+                    Main.maxTreeNumber = Math.max(treeNumber + 1, Main.maxTreeNumber);
+                    treeID = "dialogue" + treeNumber;
+                }
+                else
+                {
+                    treeID = "ext_" + treeID;
+                }
+
                 var tree = Main.createEmptyTree(treeID, false, 0, 0);
                 var plumbInstance = tree.plumbInstance;
 

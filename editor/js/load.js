@@ -161,12 +161,21 @@ var Load;
         var level = 0;
         $('interleave', xml).each(function()
         {
-            $(this).children('tree').each(function()
+            $(this).children('dialogue').each(function()
             {
                 var connections = {};
 
-                var treeID = this.getAttribute('id');
-                Main.maxTreeNumber = Math.max(parseInt(treeID.substring(4)) + 1, Main.maxTreeNumber);
+                var treeID = this.getAttribute('id').replace(/\./g, '_');
+                var idMatch = treeID.match(/^dialogue(\d+)$/);
+                if (idMatch)
+                {
+                    Main.maxTreeNumber = Math.max(parseInt(idMatch[1]) + 1, Main.maxTreeNumber);
+                }
+                else
+                {
+                    treeID = "ext_" + treeID;
+                }
+
                 var tree = Main.createEmptyTree(treeID, false, 0, 0);
                 var plumbInstance = tree.plumbInstance;
 
