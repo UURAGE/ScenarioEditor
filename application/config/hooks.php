@@ -9,13 +9,19 @@
 |	http://codeigniter.com/user_guide/general/hooks.html
 |
 */
+$hook['pre_system'] = array(
+    'class'    => 'SessionSettingFixer',
+    'function' => 'fix',
+    'filename' => 'SessionSettingFixer.php',
+    'filepath' => 'hooks'
+);
+
 $hook['post_controller_constructor'] = array(
     'class'    => 'LanguageLoader',
     'function' => 'load',
     'filename' => 'LanguageLoader.php',
     'filepath' => 'hooks'
  );
-
 
 /* End of file hooks.php */
 /* Location: ./application/config/hooks.php */
