@@ -115,24 +115,29 @@ var Load;
             Metadata.getNewDefaultMetaObject();
             loadedMetaObject = Metadata.metaObject;
         }
-
-        if(Main.nodes.length !== 0)
+        else
         {
-            $.each(Main.trees, function(id, tree)
+            if(Main.nodes.length !== 0)
             {
-                tree.plumbInstance.deleteEveryEndpoint();
-            });
+                $.each(Main.trees, function(id, tree)
+                {
+                    tree.plumbInstance.deleteEveryEndpoint();
+                });
+            }
+
+            Main.trees = {};
+            Main.nodes = {};
+            $(".w").remove();
+
+            Main.jsPlumbCounter = 0;
+            Main.maxTreeNumber = 0;
+            Metadata.parameterCounter = 0;
         }
-
-        $(".w").remove();
-
-        Main.jsPlumbCounter = 0;
     }
 
     // Generates the entire graph, including the objects.
     function generateGraph(xml)
     {
-        var plumbInstance;
         if (!loadedMetaObject.scriptVersion) //version is undefined. script does not have sequence, interleave or tree tags
         {
             generateGraphLegacy(xml);
@@ -198,7 +203,7 @@ var Load;
                                 target: targets[i]
                             });
                     });
-                    
+
                 });
 
                 level++;
