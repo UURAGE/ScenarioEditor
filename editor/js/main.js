@@ -162,8 +162,8 @@ var Main;
             DragBox.startDragging(e, text, function(pos)
             {
                 var position = $("#gridIndicator").position();
-                var leftOffsetPos = position.left; // + $("#main").scrollLeft();
-                var topOffsetPos = position.top; //+ $("#main").scrollTop();
+                var leftOffsetPos = position.left + $("#main").scrollLeft();
+                var topOffsetPos = position.top + $("#main").scrollTop();
 
                 var gridLeftPos = Math.round(leftOffsetPos / Main.gridX);
                 var gridTopPos = Math.round(topOffsetPos / Main.gridY);
@@ -521,8 +521,8 @@ var Main;
         if (indicatorSnap)
         {
             var position = $("#gridIndicator").position();
-            var leftOffsetPos = position.left + Main.gridX*offsetX; //+ $("#main").scrollLeft()
-            var topOffsetPos = position.top  + Main.gridY*offsetY; //+ $("#main").scrollTop()
+            var leftOffsetPos = position.left + Main.gridX*offsetX + $("#main").scrollLeft()
+            var topOffsetPos = position.top  + Main.gridY*offsetY + $("#main").scrollTop()
             dragDiv.css(
             {
                 "top": topOffsetPos,
@@ -530,8 +530,8 @@ var Main;
             });
         }
 
-        Main.trees[id].leftPos = Math.round(dragDiv.position().left / Main.gridX);
-        Main.trees[id].topPos = Math.round(dragDiv.position().top / Main.gridY);
+        Main.trees[id].leftPos = Math.round((dragDiv.position().left + $("#main").scrollLeft()) / Main.gridX);
+        Main.trees[id].topPos = Math.round((dragDiv.position().top + $("#main").scrollTop()) / Main.gridY);
         Main.trees[id].level = Main.trees[id].topPos;
 
         //(x,y) of upper left of containment and (x,y) of lower right
@@ -1366,8 +1366,8 @@ var Main;
             return;
 
         var position = $("#gridIndicator").position();
-        var leftOffsetPos = position.left; // + $("#main").scrollLeft();
-        var topOffsetPos = position.top; //+ $("#main").scrollTop();
+        var leftOffsetPos = position.left + $("#main").scrollLeft();
+        var topOffsetPos = position.top + $("#main").scrollTop();
 
         var gridLeftPos = Math.round(leftOffsetPos / Main.gridX);
         var gridTopPos = Math.round(topOffsetPos / Main.gridY);
