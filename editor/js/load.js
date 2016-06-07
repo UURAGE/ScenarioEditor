@@ -276,19 +276,6 @@ var Load;
 
         var propertyValues = loadPropertyValues($(metadata).children('propertyValues'), { statementScope: 'independent'});
 
-        $(metadata).children('scoringFunction').children('sum').children('scale').children('paramRef').each(function()
-        {
-            var parameterIdRef = this.attributes.idref.value;
-            //if the parameter exists...
-            if (parameterIdRef in parameters.byId)
-            {
-                //...add the weight of the parameter.
-                parameters.byId[parameterIdRef].weightForFinalScore =
-                    Utils.parseDecimalIntWithDefault($(this).parent().attr('scalar'), 0);
-
-            }
-        });
-
         var timePId = null;
         if (parameters.hasOwnProperty('t'))
             timePId = 't';

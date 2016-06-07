@@ -110,10 +110,6 @@
 	background-color:lightgreen;
 }
 
-.bestPath {
-	background-color:yellow !important;
-}
-
 .aLabel {
 	-webkit-transition:background-color 0.15s ease-in, color 0.15s ease-in;
 	-moz-transition:background-color 0.15s ease-in, color 0.15s ease-in;

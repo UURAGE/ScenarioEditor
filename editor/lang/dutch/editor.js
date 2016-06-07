@@ -70,10 +70,8 @@
     LanguageManager.edt_parts_add_group = "Groep toevoegen";
     LanguageManager.edt_parts_delete_group = "Groep verwijderen";
     LanguageManager.edt_parts_name = "Naam";
-    LanguageManager.edt_parts_value = "Waarde";
-    LanguageManager.edt_parts_weight = "Weging";
-    LanguageManager.edt_parts_min = "Min";
-    LanguageManager.edt_parts_max = "Max";
+    LanguageManager.edt_parts_type = "Type";
+    LanguageManager.edt_parts_initial_value = "Beginwaarde";
     LanguageManager.edt_parts_description = "Beschrijving";
     LanguageManager.edt_parts_add_time_title = "Parameter tijd +1 toevoegen aan elke knoop";
     LanguageManager.edt_parts_general = "Algemeen";

@@ -16,7 +16,6 @@ var Parts;
         getParameterScreenHTML: getParameterScreenHTML,
         getParameterDefinitionHTML: getParameterDefinitionHTML,
         getPreconditionHTML: getPreconditionHTML,
-        getScoreHTML: getScoreHTML,
         getImportScreenHTML: getImportScreenHTML
     };
 
@@ -123,10 +122,8 @@ var Parts;
                     '<thead id="paramsTableHead" class="hidden">' +
                         '<tr>' +
                             '<th>'+LanguageManager.sLang("edt_parts_name")+'</th>' +
-                            '<th>'+LanguageManager.sLang("edt_parts_value")+'</th>' +
-                            '<th>'+LanguageManager.sLang("edt_parts_weight")+'</th>' +
-                            '<th>'+LanguageManager.sLang("edt_parts_min")+'</th>' +
-                            '<th>'+LanguageManager.sLang("edt_parts_max")+'</th>' +
+                            '<th>'+LanguageManager.sLang("edt_parts_type")+'</th>' +
+                            '<th>'+LanguageManager.sLang("edt_parts_initial_value")+'</th>' +
                             '<th>'+LanguageManager.sLang("edt_parts_description")+'</th>' +
                         '</tr>' +
                     '</thead>' +
@@ -251,18 +248,6 @@ var Parts;
                 '</select>' +
                 '<input type="number" class="value" pattern="[+\\-]?\\d*" style="width:40px;"></input>' +
                 '<button type="button" class="deleteParent" title="'+LanguageManager.sLang("edt_common_delete")+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
-            '</div>';
-    }
-
-    function getScoreHTML()
-    {
-        return '' +
-            '<div class="scores">' +
-                '<span class="name">' +
-                '</span>' +
-                '<div class="score">' +
-                '</div>' +
-                '' +
             '</div>';
     }
 })();

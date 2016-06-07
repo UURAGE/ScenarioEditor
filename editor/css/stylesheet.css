@@ -505,7 +505,6 @@ button.enabled
 #properties.tree > #endNode,
 #properties.tree > #initsNode,
 #properties.tree > #jumpNode,
-#properties.tree > #calculateScore,
 #properties.tree > #effectsSection,
 #properties.tree > #propertyValuesSection,
 #properties.tree > #characterSection
@@ -596,18 +595,6 @@ button.enabled
   {
     display: none;
   }
-
-#bestPathTable td
-{
-  cursor: pointer;
-}
-
-#bestPathTable th
-{
-  text-align: left;
-  font-weight: bold;
-  cursor: default;
-}
 
 #scenarioNameTab
 {
@@ -1036,20 +1023,6 @@ td.dragHandle
 #dragBox.error
 {
   background-color: #c66;
-}
-
-#scores > .scores > .name
-{
-  padding: 3px;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-#scores > .scores > .score
-{
-  margin-left: 8px;
-  vertical-align: top;
-  font-size: 14px;
 }
 
 input[type=checkbox][disabled]

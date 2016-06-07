@@ -70,10 +70,8 @@
     LanguageManager.edt_parts_add_group = "Add group";
     LanguageManager.edt_parts_delete_group = "Delete group";
     LanguageManager.edt_parts_name = "Name";
-    LanguageManager.edt_parts_value = "Value";
-    LanguageManager.edt_parts_weight = "Weight";
-    LanguageManager.edt_parts_min = "Min";
-    LanguageManager.edt_parts_max = "Max";
+    LanguageManager.edt_parts_type = "Type";
+    LanguageManager.edt_parts_initial_value = "Initial value";
     LanguageManager.edt_parts_description = "Description";
     LanguageManager.edt_parts_add_time_title = "Add parameter time +1 to every node";
     LanguageManager.edt_parts_general = "General";

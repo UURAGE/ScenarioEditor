@@ -12,7 +12,6 @@ var HtmlGenerator;
         addEmptyUserDefinedParameterEffect: addEmptyUserDefinedParameterEffect,
         insertPreconditions: insertPreconditions,
         nullToHTMLValue: nullToHTMLValue,
-        showScores: showScores
     };
 
     //Get all the raw HTLM from Parts.js
@@ -20,7 +19,6 @@ var HtmlGenerator;
     var preconditionHTML = Parts.getPreconditionHTML();
     var groupPreconditionHTML = Parts.getGroupPreconditionHTML();
     var parameterEffectHTML = Parts.getParameterEffectHTML();
-    var scoreHTML = Parts.getScoreHTML();
     var radioButtonCounter = 0;
 
     $(document).ready(function()
@@ -155,9 +153,9 @@ var HtmlGenerator;
     {
         $("#userDefinedParameterEffects").append(parameterEffectHTML);
         var addedDiv = $("#userDefinedParameterEffects").children().last();
-        
+
         insertParameters(addedDiv, Metadata.metaObject.parameters);
-        
+
         var idRefSelect = addedDiv.find(".parameter-idref-select");
         var effectDiv = addedDiv.find(".parameter-effect-container");
         var changeEffectType = function(pId)
@@ -179,7 +177,7 @@ var HtmlGenerator;
             effectDiv.empty();
             changeEffectType($(this).val());
         });
-        
+
         return addedDiv;
     }
 
@@ -211,24 +209,6 @@ var HtmlGenerator;
     function nullToHTMLValue(value)
     {
         return (value !== null ? value : "(null)");
-    }
-
-    function showScores(scores)
-    {
-        $("#scores").empty();
-        var addedDiv;
-        for (var name in scores)
-        {
-            $("#scores").append(scoreHTML);
-            addedDiv = $("#scores").children().last();
-            addedDiv.find(".name").text(name);
-            if (scores[name].min == scores[name].max)
-                addedDiv.find(".score").append(scores[name].min);
-            else
-                addedDiv.find(".score").append(scores[name].min +
-                    " "+LanguageManager.sLang("edt_html_up_to")+" " + scores[name].max);
-        }
-        return addedDiv;
     }
 
     /*

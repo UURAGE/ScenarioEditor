@@ -54,8 +54,6 @@
       "js/lib/jquery-ui-1.11.4.min.js",
       "js/lib/jquery-ui-selectable-patched.js",
       "js/lib/jsPlumb-2.0.7.js",
-      //"js/lib/multidraggable.js",
-      //"js/lib/xselectable.js",
       "js/lib/colResizable-1.3.min.js",
       "js/utils.js",
       "js/config.js",
@@ -78,7 +76,6 @@
       "js/print.js",
       "js/draft.js",
       "js/zoom.js",
-      "js/calculateScore.js",
       "js/clipboard.js"
   );
   foreach($scripts as $script)
@@ -322,18 +319,6 @@
                     <input type="checkbox" id="endNodeCheckbox"/><label for="endNodeCheckbox"><?php sLang('edt_end_description');?></label>
                   </div>
                 </div>
-                <div class="sidebarSection" id="calculateScore">
-                  <div class="sub-header clickable">
-                    <h2 title="<?php sLang('edt_score_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/calculator.png");?>" alt=""><?php sLang('edt_score_header');?></h2>
-                  </div>
-                  <div class="collapsable">
-                    <input type="button" id="scoreParents" value="<?php sLang('edt_score_header');?>"/>
-                    <div id="scores"></div>
-                  </div>
-                </div>
-              </div>
-              <div id="bestPath" class="hidden">
-                <table id="bestPathTable"></table>
               </div>
             </div>
           </div>

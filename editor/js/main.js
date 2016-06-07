@@ -1054,7 +1054,6 @@ var Main;
         // Currently selected node(s) should now not be selected.
         $(".selected").removeClass("selected");
         $(".multiSelected").removeClass("multiSelected");
-        $(".bestPath").removeClass("bestPath");
         Main.selectedElements = [];
         dehighlightParents();
 
@@ -1598,9 +1597,6 @@ var Main;
     // Updates the side bar to show the selected node.
     function updateSideBar()
     {
-        // Don't show the table of best paths anymore.
-        $("#bestPath").addClass("hidden");
-
         // Clear everything in the sidebar.
         $(
             "#preconditionsDiv, #userDefinedParameterEffects, #node-property-values, #fixed-parameter-effects"
@@ -1934,8 +1930,6 @@ var Main;
             $("#jumpNodeCheckbox").prop("checked", node.jumpPoint);
 
             $("textarea#comment").val(node.comment);
-
-            $("#scores").empty();
         }
         else if (Main.selectedElement in Main.trees)
         {
