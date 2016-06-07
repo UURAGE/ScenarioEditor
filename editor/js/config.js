@@ -159,7 +159,7 @@ var Config;
 
     function appendChild(parentXML, name)
     {
-        parentXML.appendChild(document.createElementNS(parentXML.namespaceURI, name));
+        return parentXML.appendChild(document.createElementNS(parentXML.namespaceURI, name));
     }
 
     function toXMLSimple(valueXML, value)
@@ -183,7 +183,7 @@ var Config;
             },
             insertUnderlyingType: function(typeXML)
             {
-                appendChild(typeXML, 'typeString');
+                return appendChild(typeXML, 'typeString');
             },
             appendControlTo: function(containerEl, htmlId)
             {
@@ -217,7 +217,7 @@ var Config;
             },
             insertUnderlyingType: function(typeXML)
             {
-                appendChild(typeXML, 'typeInteger');
+                return appendChild(typeXML, 'typeInteger');
             },
             appendControlTo: function(containerEl, htmlId)
             {
@@ -254,7 +254,7 @@ var Config;
             },
             insertUnderlyingType: function(typeXML)
             {
-                appendChild(typeXML, 'typeBoolean');
+                return appendChild(typeXML, 'typeBoolean');
             },
             appendControlTo: function(containerEl, htmlId)
             {
@@ -299,7 +299,7 @@ var Config;
             },
             insertUnderlyingType: function(typeXML)
             {
-                appendChild(typeXML, 'typeString');
+                return appendChild(typeXML, 'typeString');
             },
             appendControlTo: function(containerEl, htmlId)
             {

@@ -66,11 +66,13 @@ var Save;
             //parameterEl.setAttribute("initialValue", parameter.initialValue);
         }
 
-        var addDefinitionElement = function (definition, elementName, nameSpace, definitionsEl)
+        var addDefinitionElement = function (definition, elementName, nameSpace, definitionsEl, insertDefault)
         {
             var definitionEl = addAndReturnElement(elementName, nameSpace, definitionsEl);
             definitionEl.setAttribute("id", definition.id);
-            definition.type.insertUnderlyingType(definitionEl);
+            var typeEl = definition.type.insertUnderlyingType(definitionEl);
+            var defaultEl = addAndReturnElement('default', nameSpace, typeEl);
+            definition.type.toXML(defaultEl, definition.type.default);
         };
 
         // Save fixed parameters
