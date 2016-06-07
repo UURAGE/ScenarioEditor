@@ -61,9 +61,9 @@ var Save;
             parameterEl.setAttribute("name", Main.escapeTags(parameter.name));
             parameterEl.setAttribute("description", Main.escapeTags(parameter.description));
             // TODO: support enumeration by saving the type instead of the underlying type
-            Metadata.metaObject.parameters.byId[parameter.id].type.insertUnderlyingType(parameterEl);
-            // TODO: save initialValue as default
-            //parameterEl.setAttribute("initialValue", parameter.initialValue);
+            var typeEl = Metadata.metaObject.parameters.byId[parameter.id].type.insertUnderlyingType(parameterEl);
+            var defaultEl = addAndReturnElement('default', nameSpace, typeEl);
+            parameter.type.toXML(defaultEl, parameter.initialValue);
         }
 
         var addDefinitionElement = function (definition, elementName, nameSpace, definitionsEl, insertDefault)

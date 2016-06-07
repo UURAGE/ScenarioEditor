@@ -250,25 +250,24 @@ var Load;
         var parameters = Metadata.getNewDefaultParametersObject();
         $(definitions).children('parameters').children('userDefined').children().each(function()
         {
-            var paramId = this.attributes.id.value;
+            var parameterId = this.attributes.id.value;
 
-            var paramMatch = paramId.match(/^p(\d+)$/);
-            if (paramMatch !== null)
+            var parameterMatch = parameterId.match(/^p(\d+)$/);
+            if (parameterMatch !== null)
             {
-                var paramNumber = parseInt(paramMatch[1]);
-                if (paramNumber > Metadata.parameterCounter)
-                    Metadata.parameterCounter = paramNumber;
+                var parameterNumber = parseInt(parameterMatch[1]);
+                if (parameterNumber > Metadata.parameterCounter)
+                    Metadata.parameterCounter = parameterNumber;
             }
 
+            // TODO support enumeration by loading the enumeration values
+            var parameterType = Config.types[this.childNodes[0].nodeName.substr("type".length).toLowerCase()];
             var parameter =
             {
-                id: paramId,
+                id: parameterId,
                 name: Main.unEscapeTags(this.attributes.name.value),
-                // TODO support enumeration by loading the enumeration values
-                type: Config.types[this.childNodes[0].nodeName.substr("type".length).toLowerCase()],
-                // TODO: load initialValue as default
-                //initialValue: this.hasAttribute('initialValue') ?
-                    //Config.types[type.name].fromXML(this.hasAttribute('initialValue')) : Config.types[type.name].default,
+                type: parameterType,
+                initialValue: Config.types[parameterType.name].fromXML(this.childNodes[0].childNodes[0]),
                 description: this.hasAttribute("description") ? Main.unEscapeTags(this.attributes.description.value) : ""
             };
             parameters.sequence.push(parameter);
