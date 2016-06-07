@@ -185,6 +185,20 @@ var Config;
             {
                 return appendChild(typeXML, 'typeString');
             },
+            castTo: function(type, value)
+            {
+                switch(type.name)
+                {
+                    case "string": return value;
+                    case "integer": return Utils.parseDecimalIntWithDefault(value, 0);
+                    case "boolean": return Utils.parseBool(value);
+                    case "enumeration":
+                        var index = type.values.indexOf(value);
+                        if (index !== -1) return type.values[index];
+                        else              return type.values[0];
+                    default: return value;
+                }
+            },
             appendControlTo: function(containerEl, htmlId)
             {
                 containerEl.append($('<input>', { id: htmlId, type: 'text' }));
@@ -215,6 +229,20 @@ var Config;
                 if (defaultEl.length > 0) return $.extend({}, this, { default: parseInt(defaultEl[0].textContent, 10) });
                 else                      return this;
             },
+            castTo: function(type, value)
+            {
+                switch(type.name)
+                {
+                    case "string": return String(value);
+                    case "integer": return value;
+                    case "boolean": return Boolean(value);
+                    case "enumeration":
+                        var index = type.values.indexOf(String(value));
+                        if (index !== -1) return type.values[index];
+                        else              return type.values[0];
+                    default: return value;
+                }
+            },
             insertUnderlyingType: function(typeXML)
             {
                 return appendChild(typeXML, 'typeInteger');
@@ -227,8 +255,7 @@ var Config;
             {
                 // Note the defaulting of NaN to 0: we want to avoid
                 // NaNs where integers are expected at all costs.
-                var value = parseInt(containerEl.children('input').first().val(), 10);
-                return isNaN(value) ? 0 : parseInt(value, 10);
+                return Utils.parseDecimalIntWithDefault(containerEl.children('input').first().val(), 0);
             },
             setInDOM: function(containerEl, value)
             {
@@ -251,6 +278,20 @@ var Config;
                 var defaultEl = typeXML.children('default');
                 if (defaultEl.length > 0) return $.extend({}, this, { default: Utils.parseBool(defaultEl[0].textContent) });
                 else                      return this;
+            },
+            castTo: function(type, value)
+            {
+                switch(type.name)
+                {
+                    case "string": return String(value);
+                    case "integer": return Number(value);
+                    case "boolean": return value;
+                    case "enumeration":
+                        var index = type.values.indexOf(String(value));
+                        if (index !== -1) return type.values[index];
+                        else              return type.values[0];
+                    default: return value;
+                }
             },
             insertUnderlyingType: function(typeXML)
             {
@@ -296,6 +337,22 @@ var Config;
                 }
 
                 return $.extend({ values: values }, this, { default: defaultValue });
+            },
+            castTo: function(type, value)
+            {
+                switch(type.name)
+                {
+                    case "string": return value;
+                    case "integer": return Utils.parseDecimalIntWithDefault(value, 10);
+                    case "boolean": return Utils.parseBool(value);
+                    case "enumeration":
+                        // The enumeration values could have changed, so we need to check if the current one is still valid
+                        // TODO: Check if only the name changed and not the option by index for example
+                        var index = type.values.indexOf(value);
+                        if (index !== -1) return type.values[index];
+                        else              return type.values[0];
+                    default: return value;
+                }
             },
             insertUnderlyingType: function(typeXML)
             {

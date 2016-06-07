@@ -127,7 +127,7 @@ var Load3;
             {
                 id: paramId,
                 name: Main.unEscapeTags(this.attributes.name.value),
-                type: Config.types["integer"],
+                type: Config.types.integer,
                 initialValue: (this.hasAttribute('initialValue') ?
                     Utils.parseDecimalIntWithDefault(this.attributes.initialValue.value, 0) : 0),
                 description: this.hasAttribute("parameterDescription") ? Main.unEscapeTags(this.attributes.parameterDescription.value) : ""

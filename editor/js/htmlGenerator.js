@@ -84,7 +84,7 @@ var HtmlGenerator;
         $("#addTimeParameter").on('click', function()
         {
             var isTime = $("#params").find(".isT").length;
-            var isTimeRemoved = $("#params").find(".isT.toBeRemoved").length;
+            var isTimeRemoved = $("#params").find(".isT.removedParameter").length;
             //console.log('t\'s: \t'+ isTime);
             //console.log('t.R\'s: \t'+ isTimeRemoved);
 
@@ -135,8 +135,9 @@ var HtmlGenerator;
         $("#params").append(parameterHTML);
         var addedDiv = $("#params").children().last();
         var typeSelect = addedDiv.find('.parameter-type-select');
-        var changeParameterType = function (typeName)
+        var changeParameterType = function(typeName)
         {
+            addedDiv.addClass("changedTypeParameter");
             var initialValueContainer = addedDiv.find('.parameter-initial-value-container');
             initialValueContainer.empty();
             Config.types[typeName].appendControlTo(initialValueContainer);
@@ -146,6 +147,7 @@ var HtmlGenerator;
             changeParameterType($(this).val());
         });
         typeSelect.change();
+        addedDiv.removeClass("changedTypeParameter");
         return addedDiv;
      }
 

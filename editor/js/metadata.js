@@ -50,14 +50,14 @@ var Metadata;
         $("#params").on('click', '.deleteParent', function()
         {
             var tr = $(this).closest('tr');
-            tr.addClass("toBeRemoved");
+            tr.addClass("removedParameter");
             // console.log("removed parameter with id:\t"+tr[0].id);
-            if(tr[0].id === "t" && tr.not(".toBeRemoved"))
+            if(tr[0].id === "t" && tr.not(".removedParameter"))
             {
                 // for time parameter: make visible when Time-parameter has been removed
                 $("#addTimeParameter").removeClass("hidden");
             }
-            if ($("#params").children().not(".toBeRemoved").length === 0)
+            if ($("#params").children().not(".removedParameter").length === 0)
                 $("#paramsTableHead").addClass("hidden");
         });
 
@@ -290,7 +290,7 @@ var Metadata;
             }],
             close: function()
             {
-                $(".toBeRemoved").removeClass("toBeRemoved");
+                $(".removedParameter").removeClass("removedParameter");
                 $(".newParameter").remove();
 
                 if (atLeastOneUserDefinedParameter())
@@ -319,6 +319,7 @@ var Metadata;
             }
             addedDiv.find(".name").val(parameter.name);
             addedDiv.find(".parameter-type-select").val(parameter.type.name).change();
+            addedDiv.removeClass("changedTypeParameter");
             parameter.type.setInDOM(addedDiv.find(".parameter-initial-value-container"), parameter.initialValue);
             addedDiv.find(".description").val(parameter.description);
         });
@@ -346,11 +347,12 @@ var Metadata;
         Metadata.timePId = newParameter.id;
 
         $(div).removeClass("newParameter").addClass("existingParameter").addClass('isT');
+        $(div).removeClass("changedTypeParameter");
 
         var timeEffect =
         {
             idRef: newParameter.id,
-            type: Config.types["integer"],
+            type: Config.types.integer,
             changeType: "delta",
             value: 1
         };
@@ -376,7 +378,7 @@ var Metadata;
     {
         Main.unsavedChanges = true;
 
-        $(".toBeRemoved").each(function()
+        $(".removedParameter").each(function()
         {
             var id = $(this).prop('id');
 
@@ -385,8 +387,12 @@ var Metadata;
             {
                 var node = Main.nodes[nodeID];
                 for (var i = 0; i < node.parameterEffects.userDefined.length; i++)
+                {
                     if (node.parameterEffects.userDefined[i].idRef === id)
+                    {
                         node.parameterEffects.userDefined.splice(i, 1);
+                    }
+                }
                 removeAllPreconditionsWithParam(id, node.preconditions);
             }
 
@@ -396,16 +402,39 @@ var Metadata;
             // Remove the parameter from the html and the object.
             $(this).remove();
 
-            parameterToBeRemoved = Metadata.metaObject.parameters.byId[id];
-            indexOfParameterToBeRemoved = Metadata.metaObject.parameters.sequence.indexOf(parameterToBeRemoved);
+            removedParameter = Metadata.metaObject.parameters.byId[id];
+            indexOfRemovedParameter = Metadata.metaObject.parameters.sequence.indexOf(removedParameter);
             delete Metadata.metaObject.parameters.byId[id];
-            delete Metadata.metaObject.parameters.sequence.splice(indexOfParameterToBeRemoved, 1);
+            Metadata.metaObject.parameters.sequence.splice(indexOfRemovedParameter, 1);
         });
 
         $(".existingParameter").each(function()
         {
-            var parameter = ObjectGenerator.parameterObject($(this));
-            $.extend(Metadata.metaObject.parameters.byId[parameter.id], parameter);
+            var newParameter = ObjectGenerator.parameterObject($(this));
+            var oldParameter = Metadata.metaObject.parameters.byId[newParameter.id];
+
+            // If an already existing parameter changed type, the effects on the nodes need to be adjusted accordingly
+            if ($(this).hasClass("changedTypeParameter"))
+            {
+                for (var nodeID in Main.nodes)
+                {
+                    Main.nodes[nodeID].parameterEffects.userDefined.forEach(function(effect)
+                    {
+                        if (effect.idRef === oldParameter.id)
+                        {
+                            var hasChangeType = newParameter.type.assignmentOperators.indexOf(effect.changeType) !== -1;
+                            if (!hasChangeType) effect.changeType = newParameter.type.assignmentOperators[0];
+
+                            effect.value = oldParameter.type.castTo(newParameter.type, effect.value);
+                        }
+                    });
+
+                    // TODO: Adjust preconditions
+                }
+                $(this).removeClass("changedTypeParameter");
+            }
+
+            $.extend(oldParameter, newParameter);
         });
 
         // All new parameters.
@@ -421,6 +450,7 @@ var Metadata;
             Metadata.metaObject.parameters.byId[newParameter.id] = newParameter;
 
             $(this).removeClass("newParameter").addClass("existingParameter");
+            $(this).removeClass("changedTypeParameter");
         });
 
         //console.log(Metadata.metaObject.parameters);

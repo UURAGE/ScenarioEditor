@@ -521,7 +521,7 @@ button.enabled
   width: 100%;
 }
 
-.hidden, .toBeRemoved
+.hidden, .removedParameter
 {
   display: none;
 }
