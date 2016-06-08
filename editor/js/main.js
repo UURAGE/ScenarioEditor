@@ -280,7 +280,8 @@ var Main;
         {
             distance: 5,
             filter: ".w", // Only select the nodes.
-            cancel: "#main *"
+            cancel: "#main *",
+            appendTo: "#main"
         });
 
         $("#main").on('mousedown', function(event)
@@ -402,6 +403,7 @@ var Main;
         {
             distance: 5,
             filter: ".w", // Only select the nodes.
+            appendTo: treeDiv
         });
         treeDiv.selectable('disable'); //box selection only useful in zoomed state
 
