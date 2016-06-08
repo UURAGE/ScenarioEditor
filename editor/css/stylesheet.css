@@ -476,7 +476,7 @@ button.enabled
 
   .w.treeContainer.zoom
   {
-    z-index: 100;
+    z-index: 50;
     overflow: hidden;
     width: 100%;
     height: 100%;
@@ -817,7 +817,7 @@ span.noSelect
   {
     position: absolute;
     top: 0;
-    z-index: 101;
+    z-index: 51;
     margin: 3px;
     width: auto;
     height: auto;
@@ -922,7 +922,6 @@ span.noSelect
   right: 366px;
   bottom: 0;
   left: 0;
-  z-index: 100;
   display: none;
   overflow-y: scroll;
   height: 300px;
