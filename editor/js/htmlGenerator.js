@@ -10,6 +10,7 @@ var HtmlGenerator;
     {
         addEmptyUserDefinedParameterDefinition: addEmptyUserDefinedParameterDefinition,
         addEmptyUserDefinedParameterEffect: addEmptyUserDefinedParameterEffect,
+        appendEnumerationValueListTo: appendEnumerationValueListTo,
         insertPreconditions: insertPreconditions,
         nullToHTMLValue: nullToHTMLValue,
     };
@@ -23,8 +24,25 @@ var HtmlGenerator;
 
     $(document).ready(function()
     {
+        var enumerationScreenHTML = Parts.getEnumerationScreenHTML();
+        $("#enumerationScreen").html(enumerationScreenHTML);
+
         // Set event handlers:
         // Event handlers for adding HTML.
+
+        $("#add-enumeration-value-button").on('click', function()
+        {
+            addEnumerationValue($(this).parent(), $("#enumeration-value-input").val());
+        });
+
+        $("#enumeration-value-input").on('keydown', function(e)
+        {
+            if (e.which === 13) // ENTER
+            {
+                addEnumerationValue($(this).parent(), $(this).val());
+            }
+        });
+
         $("#preconditionsDiv").on('click', ".addPrecondition",
             function()
             {
@@ -111,45 +129,161 @@ var HtmlGenerator;
         });
 
         // Event handlers for removing HTML.
-        $("#preconditionsDiv").on('click', '.deleteParent',
-            function()
-            {
-                var containingGroupPrecondition =
-                    $(this).parent().parent().closest(".groupprecondition");
-                $(this).parent().remove();
-                updateGroupPreconditionCounter(containingGroupPrecondition);
-            });
-        $("#userDefinedParameterEffects"
-        ).on('click', '.deleteParent', function()
+        $("#preconditionsDiv").on('click', '.deleteParent', function()
+        {
+            var containingGroupPrecondition =
+                $(this).parent().parent().closest(".groupprecondition");
+            $(this).parent().remove();
+            updateGroupPreconditionCounter(containingGroupPrecondition);
+        });
+
+        $("#userDefinedParameterEffects").on('click', '.deleteParent', function()
         {
             $(this).parent().remove();
         });
     });
 
     /*
-     ** Public Functions
-     */
+    ** Public Functions
+    */
 
-     function addEmptyUserDefinedParameterDefinition()
-     {
+    function addEmptyUserDefinedParameterDefinition()
+    {
         $("#params").append(parameterHTML);
         var addedDiv = $("#params").children().last();
-        var typeSelect = addedDiv.find('.parameter-type-select');
+
         var changeParameterType = function(typeName)
         {
             addedDiv.addClass("changedTypeParameter");
-            var initialValueContainer = addedDiv.find('.parameter-initial-value-container');
+            var initialValueContainer = addedDiv.find(".parameter-initial-value-container");
             initialValueContainer.empty();
-            Config.types[typeName].appendControlTo(initialValueContainer);
+
+            var type;
+            if (typeName === "enumeration")
+            {
+                // If this was an enumeration already, use the old button
+                if (!addedDiv.find(".enumeration-screen-button").length)
+                {
+                    var enumerationScreenButton = $('<button>', { class: "enumeration-screen-button" });
+                    enumerationScreenButton.button(
+                    {
+                        icons: { primary: "ui-icon-gear" },
+                        text: false
+                    });
+                    enumerationScreenButton.on('click', function()
+                    {
+                        enumerationDefinitionDialog(addedDiv);
+                    });
+                    addedDiv.find(".parameter-type-select").parent().append(enumerationScreenButton);
+                }
+
+                var enumerationValueList = addedDiv.find(".enumeration-value-list");
+                type = Config.types[typeName].loadTypeFromDOM(enumerationValueList);
+            }
+            else
+            {
+                addedDiv.find(".enumeration-screen-button").remove();
+                addedDiv.find(".enumeration-value-list").remove();
+
+                type = Config.types[typeName];
+            }
+
+            type.appendControlTo(initialValueContainer);
         };
+
+        var typeSelect = addedDiv.find('.parameter-type-select');
         typeSelect.on('change', function()
         {
             changeParameterType($(this).val());
         });
         typeSelect.change();
         addedDiv.removeClass("changedTypeParameter");
+
         return addedDiv;
-     }
+    }
+
+    function enumerationDefinitionDialog(enumerationDiv)
+    {
+        var enumerationValueInput = $("#enumeration-value-input");
+        enumerationDiv.find(".enumeration-value-list").children().each(function()
+        {
+            addEnumerationValue(enumerationValueInput.parent(), $(this).text());
+        });
+
+        $("#enumerationScreen").dialog(
+        {
+            title: LanguageManager.sLang("edt_html_enumeration_screen_title"),
+            height: ParameterValues.heightEnumerationScreen,
+            width: ParameterValues.widthEnumerationScreen,
+            modal: true,
+            buttons: [
+            {
+                text: LanguageManager.sLang("edt_common_confirm"),
+                click: function()
+                {
+                    saveEnumerationDefinition(enumerationDiv);
+                    $(this).dialog('close');
+                }
+            },
+            {
+                text: LanguageManager.sLang("edt_common_cancel"),
+                click: function()
+                {
+                    $(this).dialog('close');
+                }
+            }],
+            close: function()
+            {
+                $("#enumeration-value-list").children().not(":last-child").each(function() { $(this).remove(); });
+                $("#enumeration-value-input").val("");
+            }
+        });
+    }
+
+    function addEnumerationValue(enumerationValueInputItem, enumerationValue)
+    {
+        // The value of an enumeration can not be the empty string
+        if (enumerationValue)
+        {
+            var deleteParentButton = $(Parts.getDeleteParentButtonHTML());
+            deleteParentButton.on('click', function() { $(this).parent().remove(); });
+
+            var enumerationValueItem = $('<li>', { text: enumerationValue });
+            enumerationValueItem.append(deleteParentButton);
+            enumerationValueItem.insertBefore(enumerationValueInputItem);
+
+            $("#enumeration-value-input").val("");
+        }
+    }
+
+
+    function saveEnumerationDefinition(enumerationDiv)
+    {
+        var values = [];
+        // Last child is the input so don't include it
+        $("#enumeration-value-list").children().not(":last-child").each(function()
+        {
+            values.push($(this).text());
+        });
+
+        var enumerationList = enumerationDiv.find(".enumeration-value-list");
+        if (enumerationList.length) enumerationList.remove();
+
+        var typeSelect = enumerationDiv.find(".parameter-type-select");
+        appendEnumerationValueListTo(typeSelect.parent(), values);
+        typeSelect.change();
+    }
+
+    function appendEnumerationValueListTo(el, values)
+    {
+        var enumerationValueList = $('<ul class="enumeration-value-list hidden">');
+        values.forEach(function(value)
+        {
+            enumerationValueList.append($('<li>', { text: value }));
+        });
+        el.append(enumerationValueList);
+        return el;
+    }
 
     function addEmptyUserDefinedParameterEffect()
     {

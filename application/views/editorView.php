@@ -329,7 +329,7 @@
   <div id="metaScreen" style="display: none"></div>
   <div id="importScreen" style="display: none"></div>
   <div id="parameterScreen" style="display: none"></div>
-  <div id="returnScreen" style="display: none"><p><?php sLang('edt_return_dialog');?></p></div>
+  <div id="enumerationScreen" style="display: none"></div>
   <div id="dragBox" style="display: none"></div>
   <div class="lengthTest"></div>
 </body>

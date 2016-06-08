@@ -37,6 +37,7 @@
     LanguageManager.edt_html_error_no_effect = "Error: er zijn geen parameters. Dus er is niks waar deze knoop effect op kan hebben.";
     LanguageManager.edt_html_up_to = "tot";
     LanguageManager.edt_html_time = "Tijd";
+    LanguageManager.edt_html_enumeration_screen_title = "Enumeratie";
 
     LanguageManager.edt_plumb_error_tree_connection = "Error: kan geen connecties tussen bomen maken.";
     LanguageManager.edt_plumb_error_cycle = "Error: deze connectie kan niet worden gemaakt, want dat zou een cykel creëren.";
@@ -55,8 +56,8 @@
     LanguageManager.edt_main_default_subject = "Naam onderwerp";
     LanguageManager.edt_main_copy_of = "kopie van";
 
-    LanguageManager.edt_metadata_title = "Eigenschappen Aanpassen";
-    LanguageManager.edt_metadata_parameters_title = "Parameters Aanpassen";
+    LanguageManager.edt_metadata_title = "Eigenschappen";
+    LanguageManager.edt_metadata_parameters_title = "Parameters";
 
     LanguageManager.edt_parts_statement = "Zin";
     LanguageManager.edt_parts_type = "Type";
@@ -89,6 +90,7 @@
     LanguageManager.edt_parts_properties = "Eigenschappen";
     LanguageManager.edt_parts_character_properties = "Karakter eigenschappen";
     LanguageManager.edt_parts_add_effect = "Effect toevoegen";
+    LanguageManager.edt_parts_values = "Waarden";
 
     LanguageManager.edt_print_warning = "Het voorbereiden van het printen kan lang duren voor grote scenario's, weet u zeker dat u wilt doorgaan?";
 

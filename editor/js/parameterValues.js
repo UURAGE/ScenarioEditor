@@ -13,13 +13,13 @@ var ParameterValues;
     var heightImportScreen = 500;
     var widthImportScreen =  500;
 
-    // Values for the return dialog
-    var heightReturn = 300;
-    var widthReturn = 570;
+    // Values for the enumeration dialog
+    var heightEnumerationScreen = 360;
+    var widthEnumerationScreen = 360;
 
     // Values for the parameter dialog
-    var heightParameterScreen = 600;
-    var widthParameterScreen = 800;
+    var heightParameterScreen = 768;
+    var widthParameterScreen = 960;
 
     // Values for the message box
     var messageColors =
@@ -35,8 +35,8 @@ var ParameterValues;
         widthMetaScreen : widthMetaScreen,
         heightImportScreen : heightImportScreen,
         widthImportScreen : widthImportScreen,
-        heightReturn : heightReturn,
-        widthReturn : widthReturn,
+        heightEnumerationScreen : heightEnumerationScreen,
+        widthEnumerationScreen : widthEnumerationScreen,
         heightParameterScreen : heightParameterScreen,
         widthParameterScreen : widthParameterScreen,
         messageColors : messageColors

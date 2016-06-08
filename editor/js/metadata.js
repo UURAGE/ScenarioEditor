@@ -310,17 +310,28 @@ var Metadata;
             addedDiv.removeClass("newParameter").addClass("existingParameter");
 
             addedDiv.prop('id', parameter.id);
+
+            var typeSelect = addedDiv.find(".parameter-type-select");
+
             if(parameter.id === "t")
             {
                 addedDiv.addClass("isT");
-                addedDiv.find(".parameter-type-select").val("integer");
-                addedDiv.find(".parameter-type-select").prop("disabled", "disabled");
+                typeSelect.val("integer");
+                typeSelect.prop("disabled", "disabled");
                 addedDiv.find(".parameter-initial-value-container").remove();
             }
+
             addedDiv.find(".name").val(parameter.name);
-            addedDiv.find(".parameter-type-select").val(parameter.type.name).change();
+
+            if (parameter.type.name === "enumeration")
+            {
+                HtmlGenerator.appendEnumerationValueListTo(typeSelect.parent(), parameter.type.values);
+            }
+            typeSelect.val(parameter.type.name).change();
             addedDiv.removeClass("changedTypeParameter");
+
             parameter.type.setInDOM(addedDiv.find(".parameter-initial-value-container"), parameter.initialValue);
+
             addedDiv.find(".description").val(parameter.description);
         });
         if ($("#params").children().length > 0)

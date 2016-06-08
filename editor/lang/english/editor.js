@@ -37,6 +37,7 @@
     LanguageManager.edt_html_error_no_effect = "Error: there are no parameters to affect";
     LanguageManager.edt_html_up_to = "up to";
     LanguageManager.edt_html_time = "Time";
+    LanguageManager.edt_html_enumeration_screen_title = "Enumeration";
 
     LanguageManager.edt_plumb_error_tree_connection = "Error: connections must be contained in a single tree.";
     LanguageManager.edt_plumb_error_cycle = "Error: cannot create connections that complete a cycle.";
@@ -55,8 +56,8 @@
     LanguageManager.edt_main_default_subject = "Subject name";
     LanguageManager.edt_main_copy_of = "copy of";
 
-    LanguageManager.edt_metadata_title = "Edit properties";
-    LanguageManager.edt_metadata_parameters_title = "Edit parameters";
+    LanguageManager.edt_metadata_title = "Properties";
+    LanguageManager.edt_metadata_parameters_title = "Parameters";
 
     LanguageManager.edt_parts_statement = "Statement";
     LanguageManager.edt_parts_type = "Type";
@@ -89,6 +90,7 @@
     LanguageManager.edt_parts_properties = "Properties";
     LanguageManager.edt_parts_character_properties = "Character properties";
     LanguageManager.edt_parts_add_effect = "Add effect";
+    LanguageManager.edt_parts_values = "Values";
 
     LanguageManager.edt_print_warning = "Preparation for printing can take a long time for large scenarios, are you sure you want to continue?";
 

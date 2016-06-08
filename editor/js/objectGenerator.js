@@ -24,14 +24,23 @@ var ObjectGenerator;
         // If the name is empty, we cannot create a valid parameter object.
         if (!name) return null;
 
+        var type;
         var typeName = div.find(".parameter-type-select").val();
+        if (typeName === "enumeration")
+        {
+            type = Config.types[typeName].loadTypeFromDOM(div.find(".enumeration-value-list"));
+        }
+        else
+        {
+            type = Config.types[typeName];
+        }
 
         return {
             id: div.prop('id'),
             name: name,
+            // TODO: use type.default instead of separate initialValue
             initialValue: Config.types[typeName].getFromDOM(div.find(".parameter-initial-value-container")),
-            // TODO: load type from DOM if it is an enumeration
-            type: Config.types[typeName],
+            type: type,
             description: div.find(".description").val()
         };
     }

@@ -11,6 +11,7 @@ var Parts;
         getParameterEffectHTML: getParameterEffectHTML,
         getAddParameterEffectButtonHTML: getAddParameterEffectButtonHTML,
         getDeleteParentButtonHTML: getDeleteParentButtonHTML,
+        getEnumerationScreenHTML: getEnumerationScreenHTML,
         getGroupPreconditionHTML: getGroupPreconditionHTML,
         getMetaScreenHTML: getMetaScreenHTML,
         getParameterScreenHTML: getParameterScreenHTML,
@@ -117,7 +118,6 @@ var Parts;
     {
         return '' +
             '<div id="allParamsDiv">' +
-                '<label>Parameters:</label>' +
                 '<table>' +
                     '<thead id="paramsTableHead" class="hidden">' +
                         '<tr>' +
@@ -133,7 +133,20 @@ var Parts;
                 '<button type="button" id="addParameter"><img src="' + editor_url + 'png/others/plus.png" title="'+LanguageManager.sLang("edt_common_add")+'"></button>' +
                 '<button type="button" id="addTimeParameter"><img src="' + editor_url + 'png/others/stopwatch.png" title="'+LanguageManager.sLang("edt_parts_add_time_title")+'"></button>' +
             '</div>';
+    }
 
+    function getEnumerationScreenHTML()
+    {
+        return '' +
+            '<div>' +
+                '<label>' +LanguageManager.sLang("edt_parts_values")+'</label>' +
+                '<ul id="enumeration-value-list">' +
+                    '<li>' +
+                        '<input autofocus type="text" id="enumeration-value-input"/>' +
+                        '<button type="button" id="add-enumeration-value-button"><img src="' + editor_url + 'png/others/plus.png" title="'+LanguageManager.sLang("edt_common_add")+'"></button>' +
+                    '</li>' +
+                '</ul>' +
+            '</div>';
     }
 
     function getMetaScreenHTML()
@@ -214,8 +227,8 @@ var Parts;
                 '<td>' +
                     '<input type="text" class="name" style="width:197px;" />' +
                 '</td>' +
-                '<td>' +
-                    '<select class="parameter-type-select">' +
+                '<td style="display:inline-block; white-space:nowrap" >' +
+                    '<select class="parameter-type-select" >' +
                         typeOptions +
                     '</select>' +
                 '</td>' +

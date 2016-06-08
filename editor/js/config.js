@@ -338,12 +338,21 @@ var Config;
 
                 return $.extend({ values: values }, this, { default: defaultValue });
             },
+            loadTypeFromDOM: function(listEl)
+            {
+                var values = [];
+                listEl.children().each(function(index, valueItem)
+                {
+                    values.push($(valueItem).text());
+                });
+                return $.extend({ values: values }, this, { default: values[0] });
+            },
             castTo: function(type, value)
             {
                 switch(type.name)
                 {
                     case "string": return value;
-                    case "integer": return Utils.parseDecimalIntWithDefault(value, 10);
+                    case "integer": return Utils.parseDecimalIntWithDefault(value, 0);
                     case "boolean": return Utils.parseBool(value);
                     case "enumeration":
                         // The enumeration values could have changed, so we need to check if the current one is still valid
