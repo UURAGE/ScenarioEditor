@@ -327,7 +327,7 @@ var Metadata;
             {
                 HtmlGenerator.appendEnumerationValueListTo(typeSelect.parent(), parameter.type.values);
             }
-            typeSelect.val(parameter.type.name).change();
+            typeSelect.val(parameter.type.name).trigger('change');
             addedDiv.removeClass("changedTypeParameter");
 
             parameter.type.setInDOM(addedDiv.find(".parameter-initial-value-container"), parameter.initialValue);

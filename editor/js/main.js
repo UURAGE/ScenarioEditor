@@ -1632,7 +1632,7 @@ var Main;
                 var parameter = node.parameterEffects.userDefined[k];
 
                 addedDiv = HtmlGenerator.addEmptyUserDefinedParameterEffect();
-                addedDiv.find(".parameter-idref-select").val(parameter.idRef).change();
+                addedDiv.find(".parameter-idref-select").val(parameter.idRef).trigger('change');
                 addedDiv.find(".parameter-effect-changetype-select").val(parameter.changeType);
                 Metadata.metaObject.parameters.byId[parameter.idRef].type.setInDOM(addedDiv.find(".parameter-effect-value-container"), (parameter.value));
             }
@@ -1818,7 +1818,7 @@ var Main;
                         appendEffectContainerTo(effectsContainer, classPrefix, Config.configObject.parameters.byId);
                         var addedEffectContainer = effectsContainer.children().last();
 
-                        addedEffectContainer.find('.' + classPrefix + '-effect-idref-select').val(effect.idRef).change();
+                        addedEffectContainer.find('.' + classPrefix + '-effect-idref-select').val(effect.idRef).trigger('change');
                         addedEffectContainer.find('.' + classPrefix + '-effect-changetype-select').val(effect.changeType);
                         Config.configObject.parameters.byId[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + classPrefix + '-effect-control-container'), effect.value);
                     });
@@ -1842,7 +1842,7 @@ var Main;
                             appendEffectContainerTo(effectsContainer, classCharacterPrefix, characterParameterDefinitions);
                             var addedEffectContainer = effectsContainer.children().last();
 
-                            addedEffectContainer.find('.' + classCharacterPrefix + '-effect-idref-select').val(effect.idRef).change();
+                            addedEffectContainer.find('.' + classCharacterPrefix + '-effect-idref-select').val(effect.idRef).trigger('change');
                             addedEffectContainer.find('.' + classCharacterPrefix + '-effect-changetype-select').val(effect.changeType);
                             characterParameterDefinitions[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + classCharacterPrefix + '-effect-control-container'), effect.value);
                         });

@@ -196,7 +196,7 @@ var HtmlGenerator;
         {
             changeParameterType($(this).val());
         });
-        typeSelect.change();
+        typeSelect.trigger('change');
         addedDiv.removeClass("changedTypeParameter");
 
         return addedDiv;
@@ -271,7 +271,7 @@ var HtmlGenerator;
 
         var typeSelect = enumerationDiv.find(".parameter-type-select");
         appendEnumerationValueListTo(typeSelect.parent(), values);
-        typeSelect.change();
+        typeSelect.trigger('change');
     }
 
     function appendEnumerationValueListTo(el, values)
