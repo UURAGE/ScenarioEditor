@@ -159,7 +159,7 @@ var Metadata;
         for (var propertyId in Config.configObject.properties.byId)
         {
             if (Config.configObject.properties.byId[propertyId].scopes.statementScope !== scopes.statementScope) continue;
-            propertyValues.characterIndependent[propertyId] = Config.configObject.properties.byId[propertyId].type.default;
+            propertyValues.characterIndependent[propertyId] = Config.configObject.properties.byId[propertyId].type.defaultValue;
         }
 
         propertyValues.perCharacter = {};
@@ -169,12 +169,12 @@ var Metadata;
             for (var propertyId in Config.configObject.characters.properties.byId)
             {
                 if (Config.configObject.characters.properties.byId[propertyId].scopes.statementScope !== scopes.statementScope) continue;
-                propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.properties.byId[propertyId].type.default;
+                propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.properties.byId[propertyId].type.defaultValue;
             }
             for (var propertyId in Config.configObject.characters.byId[characterId].properties.byId)
             {
                 if (Config.configObject.characters.byId[characterId].properties.byId[propertyId].scopes.statementScope !== scopes.statementScope) continue;
-                propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.byId[characterId].properties.byId[propertyId].type.default;
+                propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.byId[characterId].properties.byId[propertyId].type.defaultValue;
             }
         }
 

@@ -28,7 +28,7 @@ var ObjectGenerator;
         var typeName = div.find(".parameter-type-select").val();
         if (typeName === "enumeration")
         {
-            type = Config.types[typeName].loadTypeFromDOM(div.find(".enumeration-value-list"));
+            type = Config.types[typeName].loadTypeFromDOM(div.find(".enumeration-value-list"), div.find(".parameter-initial-value-container"));
         }
         else
         {
@@ -38,7 +38,7 @@ var ObjectGenerator;
         return {
             id: div.prop('id'),
             name: name,
-            // TODO: use type.default instead of separate initialValue
+            // TODO: use type.defaultValue instead of separate initialValue
             initialValue: Config.types[typeName].getFromDOM(div.find(".parameter-initial-value-container")),
             type: type,
             description: div.find(".description").val()

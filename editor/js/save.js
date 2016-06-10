@@ -72,7 +72,7 @@ var Save;
             definitionEl.setAttribute("id", definition.id);
             var typeEl = definition.type.insertUnderlyingType(definitionEl);
             var defaultEl = addAndReturnElement('default', nameSpace, typeEl);
-            definition.type.toXML(defaultEl, definition.type.default);
+            definition.type.toXML(defaultEl, definition.type.defaultValue);
         };
 
         // Save fixed parameters
