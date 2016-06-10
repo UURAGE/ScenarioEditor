@@ -330,7 +330,7 @@ var Metadata;
             typeSelect.val(parameter.type.name).trigger('change');
             addedDiv.removeClass("changedTypeParameter");
 
-            parameter.type.setInDOM(addedDiv.find(".parameter-initial-value-container"), parameter.initialValue);
+            parameter.type.setInDOM(addedDiv.find(".parameter-initial-value-container"), parameter.type.defaultValue);
 
             addedDiv.find(".description").val(parameter.description);
         });

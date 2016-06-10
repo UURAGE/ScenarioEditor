@@ -155,10 +155,10 @@ var HtmlGenerator;
         var changeParameterType = function(typeName)
         {
             addedDiv.addClass("changedTypeParameter");
+
             var initialValueContainer = addedDiv.find(".parameter-initial-value-container");
             initialValueContainer.empty();
 
-            var type;
             if (typeName === "enumeration")
             {
                 // If this was an enumeration already, use the old button
@@ -176,18 +176,14 @@ var HtmlGenerator;
                     });
                     addedDiv.find(".parameter-type-select").parent().append(enumerationScreenButton);
                 }
-
-                var enumerationValueList = addedDiv.find(".enumeration-value-list");
-                type = Config.types[typeName].loadTypeFromDOM(enumerationValueList);
             }
             else
             {
                 addedDiv.find(".enumeration-screen-button").remove();
                 addedDiv.find(".enumeration-value-list").remove();
-
-                type = Config.types[typeName];
             }
 
+            var type = Config.types[typeName].loadTypeFromDOM(addedDiv, addedDiv.find(".parameter-initial-value-container"));
             type.appendControlTo(initialValueContainer);
         };
 

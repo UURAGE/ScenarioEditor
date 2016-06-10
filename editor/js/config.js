@@ -181,6 +181,10 @@ var Config;
                 if (defaultEl.length > 0) return $.extend({}, this, { defaultValue: defaultEl[0].textContent });
                 else                      return this;
             },
+            loadTypeFromDOM: function(typeEl, defaultValueContainer)
+            {
+                return $.extend({}, this, { defaultValue: this.getFromDOM(defaultValueContainer) });
+            },
             insertUnderlyingType: function(typeXML)
             {
                 return appendChild(typeXML, 'typeString');
@@ -228,6 +232,10 @@ var Config;
                 var defaultEl = typeXML.children('default');
                 if (defaultEl.length > 0) return $.extend({}, this, { defaultValue: parseInt(defaultEl[0].textContent, 10) });
                 else                      return this;
+            },
+            loadTypeFromDOM: function(typeEl, defaultValueContainer)
+            {
+                return $.extend({}, this, { defaultValue: this.getFromDOM(defaultValueContainer) });
             },
             castTo: function(type, value)
             {
@@ -278,6 +286,10 @@ var Config;
                 var defaultEl = typeXML.children('default');
                 if (defaultEl.length > 0) return $.extend({}, this, { defaultValue: Utils.parseBool(defaultEl[0].textContent) });
                 else                      return this;
+            },
+            loadTypeFromDOM: function(typeEl, defaultValueContainer)
+            {
+                return $.extend({}, this, { defaultValue: this.getFromDOM(defaultValueContainer) });
             },
             castTo: function(type, value)
             {
@@ -338,14 +350,15 @@ var Config;
 
                 return $.extend({ values: values }, this, { defaultValue: defaultValue });
             },
-            loadTypeFromDOM: function(listEl, defaultContainer)
+            loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
                 var values = [];
-                listEl.children().each(function(index, valueItem)
+                typeEl.find(".enumeration-value-list").children().each(function(index, valueItem)
                 {
                     values.push($(valueItem).text());
                 });
-                return $.extend({ values: values }, this, { defaultValue: values[0] });
+                var defaultValue = defaultValueContainer.length ? this.getFromDOM(defaultValueContainer) : values[0];
+                return $.extend({ values: values }, this, { defaultValue: this.getFromDOM(defaultValueContainer) });
             },
             castTo: function(type, value)
             {

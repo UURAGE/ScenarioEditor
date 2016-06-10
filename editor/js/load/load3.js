@@ -123,13 +123,12 @@ var Load3;
                     Metadata.parameterCounter = paramNumber;
             }
 
+            var defaultValue = this.hasAttribute('initialValue') ? Utils.parseDecimalIntWithDefault(this.attributes.initialValue.value, 0) : 0;
             parameters.byId[paramId] =
             {
                 id: paramId,
                 name: Main.unEscapeTags(this.attributes.name.value),
-                type: Config.types.integer,
-                initialValue: (this.hasAttribute('initialValue') ?
-                    Utils.parseDecimalIntWithDefault(this.attributes.initialValue.value, 0) : 0),
+                type: $.extend({}, Config.types.integer, { defaultValue: defaultValue }),
                 description: this.hasAttribute("parameterDescription") ? Main.unEscapeTags(this.attributes.parameterDescription.value) : ""
             };
             parameters.sequence.push(parameters.byId[paramId]);

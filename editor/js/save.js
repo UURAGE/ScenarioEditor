@@ -63,7 +63,7 @@ var Save;
             // TODO: support enumeration by saving the type instead of the underlying type
             var typeEl = Metadata.metaObject.parameters.byId[parameter.id].type.insertUnderlyingType(parameterEl);
             var defaultEl = addAndReturnElement('default', nameSpace, typeEl);
-            parameter.type.toXML(defaultEl, parameter.initialValue);
+            parameter.type.toXML(defaultEl, parameter.type.defaultValue);
         }
 
         var addDefinitionElement = function (definition, elementName, nameSpace, definitionsEl, insertDefault)
