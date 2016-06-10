@@ -260,13 +260,12 @@ var Load;
                     Metadata.parameterCounter = parameterNumber;
             }
 
-            // TODO: support enumeration by loading the enumeration values
-            var parameterType = Config.types[this.childNodes[0].nodeName.substr("type".length).toLowerCase()].loadType($(this.childNodes[0]));
+            var typeXML = $(this).children().eq(0);
             var parameter =
             {
                 id: parameterId,
                 name: Main.unEscapeTags(this.attributes.name.value),
-                type: parameterType,
+                type: Config.types[typeXML[0].nodeName.substr("type".length).toLowerCase()].loadType(typeXML),
                 description: this.hasAttribute("description") ? Main.unEscapeTags(this.attributes.description.value) : ""
             };
             parameters.sequence.push(parameter);

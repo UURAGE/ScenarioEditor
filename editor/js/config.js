@@ -185,7 +185,7 @@ var Config;
             {
                 return $.extend({}, this, { defaultValue: this.getFromDOM(defaultValueContainer) });
             },
-            insertUnderlyingType: function(typeXML)
+            insertType: function(typeXML)
             {
                 return appendChild(typeXML, 'typeString');
             },
@@ -251,7 +251,7 @@ var Config;
                     default: return value;
                 }
             },
-            insertUnderlyingType: function(typeXML)
+            insertType: function(typeXML)
             {
                 return appendChild(typeXML, 'typeInteger');
             },
@@ -305,7 +305,7 @@ var Config;
                     default: return value;
                 }
             },
-            insertUnderlyingType: function(typeXML)
+            insertType: function(typeXML)
             {
                 return appendChild(typeXML, 'typeBoolean');
             },
@@ -376,9 +376,16 @@ var Config;
                     default: return value;
                 }
             },
-            insertUnderlyingType: function(typeXML)
+            insertType: function(typeXML)
             {
-                return appendChild(typeXML, 'typeString');
+                var enumerationXML = appendChild(typeXML, 'typeEnumeration');
+                var appendOptionChild = function(value)
+                {
+                    var optionXML = appendChild(enumerationXML, 'option');
+                    this.toXML(optionXML, value);
+                }
+                this.values.forEach(appendOptionChild.bind(this));
+                return enumerationXML;
             },
             appendControlTo: function(containerEl, htmlId)
             {
