@@ -378,42 +378,51 @@ var Load;
         var preconditionChildren = $(preconditionXMLElement).children();
         for (var i = 0; i < preconditionChildren.length; i++)
         {
-            if (preconditionChildren[i].nodeName == "condition")
+            if (preconditionChildren[i].nodeName == "condition" || preconditionChildren[i].nodeName == "characterCondition")
             {
                 var parameterIdRef = preconditionChildren[i].attributes.idref.value;
+                var characterIdRef;
+                if (preconditionChildren[i].nodeName == "characterCondition" && preconditionChildren[i].attributes.characteridref)
+                {
+                    characterIdRef = preconditionChildren[i].attributes.characteridref.value;
+                }
+
                 var parameter;
-                if (parameterIdRef in Metadata.metaObject.parameters.byId)
+                if (characterIdRef)
                 {
-                    parameter = Metadata.metaObject.parameters.byId[parameterIdRef];
-                }
-                else if (parameterIdRef in Config.configObject.parameters.byId)
-                {
-                    parameter = Config.configObject.parameters.byId[parameterIdRef];
-                }
-                else if (parameterIdRef in Config.configObject.characters.parameters.byId)
-                {
-                    parameter = Config.configObject.characters.parameters.byId[parameterIdRef];
+                    if (parameterIdRef in Config.configObject.characters.parameters.byId)
+                    {
+                        parameter = Config.configObject.characters.parameters.byId[parameterIdRef];
+                    }
+                    else
+                    {
+                        if (parameterIdRef in Config.configObject.characters.byId[characterIdRef].parameters.byId)
+                        {
+                            parameter = Config.configObject.characters.byId[characterIdRef].parameters.byId[parameterIdRef];
+                        }
+                    }
                 }
                 else
                 {
-                    for (var characterId in Config.configObject.characters.byId)
+                    if (parameterIdRef in Metadata.metaObject.parameters.byId)
                     {
-                        if (parameterIdRef in Config.configObject.characters.byId[characterId].parameters.byId)
-                        {
-                            parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterIdRef];
-                            break;
-                        }
+                        parameter = Metadata.metaObject.parameters.byId[parameterIdRef];
+                    }
+                    else if (parameterIdRef in Config.configObject.parameters.byId)
+                    {
+                        parameter = Config.configObject.parameters.byId[parameterIdRef];
                     }
                 }
 
                 if (parameter)
                 {
-                    preconditionsArray.push(
-                    {
+                    var precondition = {
                         idRef: parameterIdRef,
                         operator: preconditionChildren[i].attributes.operator.value,
                         value: parameter.type.fromXML(preconditionChildren[i])
-                    });
+                    }
+                    if (characterIdRef) precondition.characterIdRef = characterIdRef;
+                    preconditionsArray.push(precondition);
                 }
             }
             else

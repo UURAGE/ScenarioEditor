@@ -79,37 +79,43 @@ var ObjectGenerator;
     function SinglePreconditionObject(div)
     {
         var parameterIdRef = div.find(".parameter-idref-select").val();
+        var characterIdRef = div.find(".character-idref-select").val();
 
         var parameter;
-        if (parameterIdRef in Metadata.metaObject.parameters.byId)
+        if (characterIdRef)
         {
-            parameter = Metadata.metaObject.parameters.byId[parameterIdRef];
-        }
-        else if (parameterIdRef in Config.configObject.parameters.byId)
-        {
-            parameter = Config.configObject.parameters.byId[parameterIdRef];
-        }
-        else if (parameterIdRef in Config.configObject.characters.parameters.byId)
-        {
-            parameter = Config.configObject.characters.parameters.byId[parameterIdRef];
-        }
-        else
-        {
-            for (var characterId in Config.configObject.characters.byId)
+            if (parameterIdRef in Config.configObject.characters.parameters.byId)
             {
-                if (parameterIdRef in Config.configObject.characters.byId[characterId].parameters.byId)
+                parameter = Config.configObject.characters.parameters.byId[parameterIdRef];
+            }
+            else
+            {
+                if (parameterIdRef in Config.configObject.characters.byId[characterIdRef].parameters.byId)
                 {
-                    parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterIdRef];
-                    break;
+                    parameter = Config.configObject.characters.byId[characterIdRef].parameters.byId[parameterIdRef];
                 }
             }
         }
+        else
+        {
+            if (parameterIdRef in Metadata.metaObject.parameters.byId)
+            {
+                parameter = Metadata.metaObject.parameters.byId[parameterIdRef];
+            }
+            else if (parameterIdRef in Config.configObject.parameters.byId)
+            {
+                parameter = Config.configObject.parameters.byId[parameterIdRef];
+            }
+        }
 
-        return {
+        var precondition = {
             idRef: parameterIdRef,
             operator: div.find(".precondition-operator-select").val(),
             value: parameter.type.getFromDOM(div.find(".precondition-value-container"))
         };
+
+        if (characterIdRef) precondition.characterIdRef = characterIdRef;
+        return precondition;
     }
 
 })();
