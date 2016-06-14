@@ -496,18 +496,17 @@ button.enabled
   display: none;
 }
 
-#properties.tree > #statementHTML,
-#properties.tree > #allPreconditionsHTML,
-#properties.tree > #commentHTML,
 #properties.tree > #headerPlayer,
 #properties.tree > #headerComputer,
 #properties.tree > #headerSituation,
+#properties.tree > #preconditionsSection,
 #properties.tree > #endNode,
 #properties.tree > #initsNode,
 #properties.tree > #jumpNode,
 #properties.tree > #effectsSection,
 #properties.tree > #propertyValuesSection,
-#properties.tree > #characterSection
+#properties.tree > #characterSection,
+#properties.tree > #commentSection
 {
   display: none;
 }
@@ -552,7 +551,7 @@ button.enabled
   display: block;
 }
 
-.precondition > .value + button
+.precondition > .precondition-test-container + button
 {
   display: inline-block;
 }
@@ -586,12 +585,12 @@ button.enabled
   margin-bottom: 0;
 }
 
-#allPreconditionsHTML
+#preconditionsSection
 {
   white-space: nowrap;
 }
 
-  #allPreconditionsHTML > #preconditionsDiv > .precondition > .deleteParent
+  #preconditionsSection > #preconditionsDiv > .precondition > .deleteParent
   {
     display: none;
   }

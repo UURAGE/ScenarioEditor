@@ -426,7 +426,7 @@ var Save;
         {
             conditionEl = document.createElementNS(nameSpace, "condition");
             conditionEl.setAttribute("idref", precondition.idRef);
-            conditionEl.setAttribute("test", precondition.test);
+            conditionEl.setAttribute("operator", precondition.operator);
             conditionEl.setAttribute("value", precondition.value);
             return conditionEl;
         }

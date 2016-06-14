@@ -37,26 +37,22 @@ var ObjectGenerator;
     {
         var preconditionObject = {};
         // Save selected type of precondition
-        preconditionObject.type = preconditionDiv.children(
-            ".groupPreconditionRadioDiv").find(
-            'input[type=radio]:checked').val();
+        preconditionObject.type = preconditionDiv.children(".groupPreconditionRadioDiv").find('input[type=radio]:checked').val();
 
         // Save preconditions.
         var preconditionsArray = [];
 
-        preconditionDiv.children(".groupPreconditionDiv").children().each(
-            function()
+        preconditionDiv.children(".groupPreconditionDiv").children().each(function()
+        {
+            if ($(this).hasClass("groupprecondition"))
             {
-                if ($(this).hasClass("groupprecondition"))
-                {
-                    preconditionsArray.push(PreconditionObject($(this)));
-                }
-                else
-                {
-                    preconditionsArray.push(
-                        SinglePreconditionObject($(this)));
-                }
-            });
+                preconditionsArray.push(PreconditionObject($(this)));
+            }
+            else
+            {
+                preconditionsArray.push(SinglePreconditionObject($(this)));
+            }
+        });
         preconditionObject.preconditions = preconditionsArray;
         return preconditionObject;
     }
@@ -82,11 +78,36 @@ var ObjectGenerator;
 
     function SinglePreconditionObject(div)
     {
+        var parameterIdRef = div.find(".parameter-idref-select").val();
+
+        var parameter;
+        if (parameterIdRef in Metadata.metaObject.parameters.byId)
+        {
+            parameter = Metadata.metaObject.parameters.byId[parameterIdRef];
+        }
+        else if (parameterIdRef in Config.configObject.parameters.byId)
+        {
+            parameter = Config.configObject.parameters.byId[parameterIdRef];
+        }
+        else if (parameterIdRef in Config.configObject.characters.parameters.byId)
+        {
+            parameter = Config.configObject.characters.parameters.byId[parameterIdRef];
+        }
+        else
+        {
+            for (var characterId in Config.configObject.characters.byId)
+            {
+                if (parameterIdRef in Config.configObject.characters.byId[characterId].parameters.byId)
+                {
+                    parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterIdRef];
+                }
+            }
+        }
+
         return {
-            idRef: div.find(".parameter-idref-select").val(),
-            test: div.find(".test").val(),
-            value: Utils.parseDecimalIntWithDefault(div.find(".value").val(),
-                0)
+            idRef: parameterIdRef,
+            operator: div.find(".precondition-operator-select").val(),
+            value: parameter.type.getFromDOM(div.find(".precondition-value-container"))
         };
     }
 

@@ -252,7 +252,7 @@
                     <div id="node-character-own-properties"></div>
                   </div>
                 </div>
-                <div id="allPreconditionsHTML" class="sidebarSection withMarginTop">
+                <div id="preconditionsSection" class="sidebarSection withMarginTop">
                   <div class="sub-header clickable">
                     <h2 title="<?php sLang('edt_preconditions_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/preconditions.png");?>" alt=""><?php sLang('edt_preconditions');?></h2>
                   </div>
@@ -279,7 +279,7 @@
                     <div id="node-property-values"></div>
                   </div>
                 </div>
-                <div id="commentHTML" class="sidebarSection">
+                <div id="commentSection" class="sidebarSection">
                   <div class="sub-header clickable">
                     <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/comments.png");?>" alt=""><?php sLang('edt_authors_note');?></h2>
                   </div>

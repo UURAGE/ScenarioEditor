@@ -43,40 +43,38 @@ var HtmlGenerator;
             }
         });
 
-        $("#preconditionsDiv").on('click', ".addPrecondition",
-            function()
+        $("#preconditionsDiv").on('click', ".addPrecondition", function()
+        {
+            if (Metadata.atLeastOneUserDefinedParameter() || Config.atLeastOneParameter())
             {
-                if (Metadata.atLeastOneUserDefinedParameter())
-                {
-                    var container = $(this).parent().children(".groupPreconditionDiv");
-                    addEmptyPrecondition(container);
-                    var addedDiv = container.children(".precondition").last();
-                    focusFirstTabindexedDescendant(addedDiv);
-                }
-                else
-                {
-                    alert(
-                        LanguageManager.sLang("edt_html_error_no_test")
-                    );
-                }
-            });
-        $("#preconditionsDiv").on('click', ".addGroupPrecondition",
-            function()
+                var container = $(this).parent().children(".groupPreconditionDiv");
+                addEmptyPrecondition(container);
+                var addedDiv = container.children(".precondition").last();
+                focusFirstTabindexedDescendant(addedDiv);
+            }
+            else
             {
-                if (Metadata.atLeastOneUserDefinedParameter())
-                {
-                    var container = $(this).parent().children(".groupPreconditionDiv");
-                    addEmptyGroupPrecondition(container);
-                    container.children(".precondition").last().find(
-                        'button').first().focus();
-                }
-                else
-                {
-                    alert(
-                        LanguageManager.sLang("edt_html_error_no_test")
-                    );
-                }
-            });
+                alert(
+                    LanguageManager.sLang("edt_html_error_no_test")
+                );
+            }
+        });
+        $("#preconditionsDiv").on('click', ".addGroupPrecondition", function()
+        {
+            if (Metadata.atLeastOneUserDefinedParameter() || Config.atLeastOneParameter())
+            {
+                var container = $(this).parent().children(".groupPreconditionDiv");
+                addEmptyGroupPrecondition(container);
+                container.children(".precondition").last().find('button').first().focus();
+            }
+            else
+            {
+                alert(
+                    LanguageManager.sLang("edt_html_error_no_test")
+                );
+            }
+        });
+
         $("#addUserDefinedParameterEffect").on('click', function()
         {
             if (Metadata.atLeastOneUserDefinedParameter())
@@ -131,8 +129,7 @@ var HtmlGenerator;
         // Event handlers for removing HTML.
         $("#preconditionsDiv").on('click', '.deleteParent', function()
         {
-            var containingGroupPrecondition =
-                $(this).parent().parent().closest(".groupprecondition");
+            var containingGroupPrecondition = $(this).parent().parent().closest(".groupprecondition");
             $(this).parent().remove();
             updateGroupPreconditionCounter(containingGroupPrecondition);
         });
@@ -330,10 +327,34 @@ var HtmlGenerator;
             }
             else
             {
+                var parameter;
+                if (currentPrecondition.idRef in Metadata.metaObject.parameters.byId)
+                {
+                    parameter = Metadata.metaObject.parameters.byId[currentPrecondition.idRef];
+                }
+                else if (currentPrecondition.idRef in Config.configObject.parameters.byId)
+                {
+                    parameter = Config.configObject.parameters.byId[currentPrecondition.idRef];
+                }
+                else if (currentPrecondition.idRef in Config.configObject.characters.parameters.byId)
+                {
+                    parameter = Config.configObject.characters.parameters.byId[currentPrecondition.idRef];
+                }
+                else
+                {
+                    for (var characterId in Config.configObject.characters.byId)
+                    {
+                        if (currentPrecondition.idRef in Config.configObject.characters.byId[characterId].parameters.byId)
+                        {
+                            parameter = Config.configObject.characters.byId[characterId].parameters.byId[currentPrecondition.idRef];
+                        }
+                    }
+                }
+
                 addedDiv = addEmptyPrecondition(divToAddChildren);
-                addedDiv.find(".parameter-idref-select").val(currentPrecondition.idRef);
-                addedDiv.find(".test").val(currentPrecondition.test);
-                addedDiv.find(".value").val(currentPrecondition.value);
+                addedDiv.find(".parameter-idref-select").val(currentPrecondition.idRef).trigger('change');
+                addedDiv.find(".precondition-operator-select").val(currentPrecondition.operator);
+                parameter.type.setInDOM(addedDiv.find(".precondition-value-container"), currentPrecondition.value);
             }
         }
     }
@@ -351,8 +372,62 @@ var HtmlGenerator;
     {
         divToAdd.append(preconditionHTML);
         var addedDiv = $(divToAdd).children().last();
+
         insertParameters(addedDiv, Metadata.metaObject.parameters);
         insertParameters(addedDiv, Config.configObject.parameters);
+        // TODO: add insertion and UI for per-character parameters
+        //insertParameters(addedDiv, Config.configObject.characters.parameters);
+        for (var characterId in Config.configObject.characters.byId)
+        {
+            //insertParameters(addedDiv, Config.configObject.characters.byId[characterId].parameters);
+        }
+
+        var idRefSelect = addedDiv.find(".parameter-idref-select");
+        var testContainer = addedDiv.find(".precondition-test-container");
+        var changeTestType = function(parameterIdRef)
+        {
+            var parameter;
+            if (parameterIdRef in Metadata.metaObject.parameters.byId)
+            {
+                parameter = Metadata.metaObject.parameters.byId[parameterIdRef];
+            }
+            else if (parameterIdRef in Config.configObject.parameters.byId)
+            {
+                parameter = Config.configObject.parameters.byId[parameterIdRef];
+            }
+            else if (parameterIdRef in Config.configObject.characters.parameters.byId)
+            {
+                parameter = Config.configObject.characters.parameters.byId[parameterIdRef];
+            }
+            else
+            {
+                for (var characterId in Config.configObject.characters.byId)
+                {
+                    if (parameterIdRef in Config.configObject.characters.byId[characterId].parameters.byId)
+                    {
+                        parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterIdRef];
+                    }
+                }
+            }
+
+            var operatorSelect = $('<select>', { class: "precondition-operator-select" });
+            parameter.type.relationalOperators.forEach(function(relOp)
+            {
+                operatorSelect.append($('<option>', { value: relOp.name, text: relOp.uiName }));
+            });
+            testContainer.append(operatorSelect);
+
+            var controlContainer = $('<div>', { class: "precondition-value-container", style:"display:inline" });
+            parameter.type.appendControlTo(controlContainer);
+            testContainer.append(controlContainer);
+        };
+        changeTestType(idRefSelect.val());
+        idRefSelect.on('change', function()
+        {
+            testContainer.empty();
+            changeTestType($(this).val());
+        });
+
         updateGroupPreconditionCounter(divToAdd.closest(".groupprecondition"));
         return addedDiv;
     }
@@ -362,13 +437,11 @@ var HtmlGenerator;
         divToAdd.append(groupPreconditionHTML);
         var addedDiv = $(divToAdd).children().last();
         radioButtonCounter += 1;
-        addedDiv.children(".groupPreconditionRadioDiv").find("input").each(
-            function()
-            {
-                $(this).prop("name", "preconRadio" + radioButtonCounter);
-            });
-        updateGroupPreconditionCounter(divToAdd.closest(
-            ".groupprecondition"));
+        addedDiv.children(".groupPreconditionRadioDiv").find("input").each(function()
+        {
+            $(this).prop("name", "preconRadio" + radioButtonCounter);
+        });
+        updateGroupPreconditionCounter(divToAdd.closest(".groupprecondition"));
         return addedDiv;
     }
 

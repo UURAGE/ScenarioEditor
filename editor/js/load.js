@@ -385,7 +385,7 @@ var Load;
                     preconditionsArray.push(
                     {
                         idRef: preconditionChildren[i].attributes.idref.value,
-                        test: preconditionChildren[i].attributes.test .value,
+                        operator: preconditionChildren[i].attributes.operator.value,
                         value: parseInt(preconditionChildren[i].attributes.value.value)
                     });
                 }

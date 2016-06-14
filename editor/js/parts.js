@@ -251,15 +251,7 @@ var Parts;
             '<div class="precondition">' +
                 '<select class="parameter-idref-select">' +
                 '</select>' +
-                '<select class="test">' +
-                    '<option value="greaterThan">&gt;</option>' +
-                    '<option value="lessThan">&lt;</option>' +
-                    '<option value="equalTo">=</option>' +
-                    '<option value="notEqualTo">&ne;</option>' +
-                    '<option value="lessThanEqualTo">&le;</option>' +
-                    '<option value="greaterThanEqualTo">&ge;</option>' +
-                '</select>' +
-                '<input type="number" class="value" pattern="[+\\-]?\\d*" style="width:40px;"></input>' +
+                '<div class="precondition-test-container" style="display:inline"/>' +
                 '<button type="button" class="deleteParent" title="'+LanguageManager.sLang("edt_common_delete")+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
             '</div>';
     }

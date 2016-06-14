@@ -7,7 +7,9 @@ var Config;
     Config =
     {
         configObject: {},
-        types: {}
+        types: {},
+        relationalOperators: {},
+        atLeastOneParameter: atLeastOneParameter,
     };
 
     var defaultPropertyScopes = { statementScope: 'independent' };
@@ -157,6 +159,40 @@ var Config;
         return collection;
     }
 
+    Config.relationalOperators =
+    {
+        'equalTo':
+        {
+            name: 'equalTo',
+            uiName: "="
+        },
+        'notEqualTo':
+        {
+            name: 'notEqualTo',
+            uiName: "≠"
+        },
+        'greaterThanEqualTo':
+        {
+            name: 'greaterThanEqualTo',
+            uiName: "≥"
+        },
+        'lessThanEqualTo':
+        {
+            name: 'lessThanEqualTo',
+            uiName: "≤"
+        },
+        'greaterThan':
+        {
+            name: 'greaterThan',
+            uiName: ">"
+        },
+        'lessThan':
+        {
+            name: 'lessThan',
+            uiName: "<"
+        }
+    };
+
     function appendChild(parentXML, name)
     {
         return parentXML.appendChild(document.createElementNS(parentXML.namespaceURI, name));
@@ -174,7 +210,7 @@ var Config;
             name: 'string',
             defaultValue: "",
             assignmentOperators: ['set'],
-            relationalOperators: ['equalTo', 'notEqualTo'],
+            relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
             loadType: function(typeXML)
             {
                 var defaultEl = typeXML.children('default');
@@ -226,7 +262,9 @@ var Config;
             name: 'integer',
             defaultValue: 0,
             assignmentOperators: ['set', 'delta'],
-            relationalOperators: ['equalTo', 'notEqualTo', 'greaterThanEqualTo', 'lessThanEqualTo', 'greaterThan', 'lessThan'],
+            relationalOperators: [Config.relationalOperators.equalTo,            Config.relationalOperators.notEqualTo,
+                                  Config.relationalOperators.greaterThanEqualTo, Config.relationalOperators.lessThanEqualTo,
+                                  Config.relationalOperators.greaterThan,        Config.relationalOperators.lessThan],
             loadType: function(typeXML)
             {
                 var defaultEl = typeXML.children('default');
@@ -280,7 +318,7 @@ var Config;
             name: 'boolean',
             defaultValue: false,
             assignmentOperators: ['set'],
-            relationalOperators: ['equalTo', 'notEqualTo'],
+            relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
             loadType: function(typeXML)
             {
                 var defaultEl = typeXML.children('default');
@@ -335,7 +373,7 @@ var Config;
             name: 'enumeration',
             defaultValue: "",
             assignmentOperators: ['set'],
-            relationalOperators: ['equalTo', 'notEqualTo'],
+            relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
             loadType: function(typeXML)
             {
                 var values = [];
@@ -414,4 +452,19 @@ var Config;
             toXML: toXMLSimple
         }
     };
+
+    function atLeastOneParameter()
+    {
+        var atLeastOnePerCharacterParameter;
+        for (var characterId in Config.configObject.characters.byId)
+        {
+            if (Config.configObject.characters.byId[characterId].parameters.sequence.length > 0)
+            {
+                atLeastOnePerCharacterParameter = true;
+                break;
+            }
+        }
+        return Config.configObject.parameters.sequence.length > 0 || Config.configObject.characters.parameters.sequence.length > 0 || atLeastOnePerCharacterParameter;
+    }
+
 })();
