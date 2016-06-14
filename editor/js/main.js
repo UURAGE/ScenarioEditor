@@ -668,7 +668,7 @@ var Main;
                 type: "alwaysTrue",
                 preconditions: []
             },
-            propertyValues: Metadata.getNewDefaultPropertyValuesObject({ statementScope: 'per'}),
+            propertyValues: Metadata.getNewDefaultPropertyValuesObject(['per', 'per-' + type]),
             comment: "",
             endNode: false,
             initsNode: false,

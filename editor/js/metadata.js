@@ -146,19 +146,19 @@ var Metadata;
             difficulty: "medium",
             description: "",
             parameters: getNewDefaultParametersObject(),
-            propertyValues: getNewDefaultPropertyValuesObject({ statementScope: 'independent'}),
+            propertyValues: getNewDefaultPropertyValuesObject(['independent']),
             defaultChangeType: LanguageManager.sLang("edt_parts_delta"),
         };
     }
 
-    function getNewDefaultPropertyValuesObject(scopes)
+    function getNewDefaultPropertyValuesObject(acceptableStatementScopes)
     {
         var propertyValues = {};
 
         propertyValues.characterIndependent = {};
         for (var propertyId in Config.configObject.properties.byId)
         {
-            if (Config.configObject.properties.byId[propertyId].scopes.statementScope !== scopes.statementScope) continue;
+            if (acceptableStatementScopes.indexOf(Config.configObject.properties.byId[propertyId].scopes.statementScope) === -1) continue;
             propertyValues.characterIndependent[propertyId] = Config.configObject.properties.byId[propertyId].type.defaultValue;
         }
 
@@ -168,12 +168,12 @@ var Metadata;
             propertyValues.perCharacter[characterId] = {};
             for (var propertyId in Config.configObject.characters.properties.byId)
             {
-                if (Config.configObject.characters.properties.byId[propertyId].scopes.statementScope !== scopes.statementScope) continue;
+                if (acceptableStatementScopes.indexOf(Config.configObject.characters.properties.byId[propertyId].scopes.statementScope) === -1) continue;
                 propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.properties.byId[propertyId].type.defaultValue;
             }
             for (var propertyId in Config.configObject.characters.byId[characterId].properties.byId)
             {
-                if (Config.configObject.characters.byId[characterId].properties.byId[propertyId].scopes.statementScope !== scopes.statementScope) continue;
+                if (acceptableStatementScopes.indexOf(Config.configObject.characters.byId[characterId].properties.byId[propertyId].scopes.statementScope) === -1) continue;
                 propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.byId[characterId].properties.byId[propertyId].type.defaultValue;
             }
         }

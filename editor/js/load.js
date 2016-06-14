@@ -272,7 +272,7 @@ var Load;
             parameters.byId[parameter.id] = parameter;
         });
 
-        var propertyValues = loadPropertyValues($(metadata).children('propertyValues'), { statementScope: 'independent'});
+        var propertyValues = loadPropertyValues($(metadata).children('propertyValues'), ['independent']);
 
         var timePId = null;
         if (parameters.hasOwnProperty('t'))
@@ -320,7 +320,7 @@ var Load;
 
         var parameterEffects = loadParameterEffects($(statement).children('parameterEffects'));
 
-        var propertyValues = loadPropertyValues($(statement).children('propertyValues'), { statementScope: 'per'});
+        var propertyValues = loadPropertyValues($(statement).children('propertyValues'), ['per', 'per-' + type]);
 
         var comment = Main.unEscapeTags($(statement).find('comment').text());
 
@@ -501,9 +501,9 @@ var Load;
         return parameterEffects;
     }
 
-    function loadPropertyValues(propertyValuesXMLElement, scopes)
+    function loadPropertyValues(propertyValuesXMLElement, acceptableScopes)
     {
-        var propertyValues = Metadata.getNewDefaultPropertyValuesObject(scopes);
+        var propertyValues = Metadata.getNewDefaultPropertyValuesObject(acceptableScopes);
         propertyValuesXMLElement.children().each(function()
         {
             var propertyId = this.attributes.idref.value;
