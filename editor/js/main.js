@@ -1690,6 +1690,8 @@ var Main;
                 if (parameterItem.kind === 'section')
                 {
                     var sectionContainer = $('<div>');
+                    if (hLevel === hStartLevel) sectionContainer.addClass("section");
+                    else                        sectionContainer.addClass("subsection");
                     sectionContainer.append($('<h' + hLevel + '>', { text: parameterItem.name }));
                     container.append(sectionContainer);
 
@@ -1759,13 +1761,12 @@ var Main;
             fixedCharacterParameterEffectsEl = $("#fixed-parameter-effects");
             var accordionDiv = $('<div>');
             fixedCharacterParameterEffectsEl.append(accordionDiv);
-            var characterHeaderStartLevel = 3;
             var anyCharacterParameterShown = false;
             // Accumulator for mapping a character parameter id to its effects container
             var idRefToCharacterEffectsContainer = {};
             Config.configObject.characters.sequence.forEach(function(character)
             {
-                var characterHeader = $('<h' + characterHeaderStartLevel +'>', { text: character.id });
+                var characterHeader = $('<h' + hStartLevel +'>', { text: character.id });
                 var characterDiv = $('<div>');
                 accordionDiv.append(characterHeader).append(characterDiv);
 
@@ -1780,7 +1781,7 @@ var Main;
 
                 Config.configObject.characters.parameters.sequence.forEach(function(parameterItem)
                 {
-                    if (showParameterItem(characterParameterDefinitions, parameterItem, characterHeaderStartLevel + 1,
+                    if (showParameterItem(characterParameterDefinitions, parameterItem, hStartLevel + 1,
                                           characterDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[character.id]))
                     {
                         anyCharacterParameterShown = true;
@@ -1789,7 +1790,7 @@ var Main;
 
                 Config.configObject.characters.byId[character.id].parameters.sequence.forEach(function(parameterItem)
                 {
-                    if (showParameterItem(characterParameterDefinitions, parameterItem, characterHeaderStartLevel + 1,
+                    if (showParameterItem(characterParameterDefinitions, parameterItem, hStartLevel + 1,
                                           characterDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[character.id]))
                     {
                         anyCharacterParameterShown = true;
@@ -1858,6 +1859,8 @@ var Main;
                 if (propertyItem.kind === 'section')
                 {
                     var sectionContainer = $('<div>');
+                    if (hLevel === hStartLevel) sectionContainer.addClass("section");
+                    else                        sectionContainer.addClass("subsection");
                     sectionContainer.append($('<h' + hLevel + '>', { text: propertyItem.name }));
                     container.append(sectionContainer);
                     propertyItem.sequence.forEach(function (subItem)
@@ -1882,7 +1885,7 @@ var Main;
             var nodePropertiesEl = $('#node-property-values');
             Config.configObject.properties.sequence.forEach(function (subItem)
             {
-                showPropertyItem(node.propertyValues.characterIndependent, subItem, 3, nodePropertiesEl, nodePropertiesEl.attr('id'));
+                showPropertyItem(node.propertyValues.characterIndependent, subItem, hStartLevel, nodePropertiesEl, nodePropertiesEl.attr('id'));
             });
 
             var nodePropertyShown = anyPropertyShown;
@@ -1893,7 +1896,7 @@ var Main;
             nodeCharacterPropertiesEl.append(accordionDiv);
             Config.configObject.characters.sequence.forEach(function(character)
             {
-                var characterHeader = $('<h' + characterHeaderStartLevel +'>', { text: character.id });
+                var characterHeader = $('<h' + hStartLevel +'>', { text: character.id });
                 var characterDiv = $('<div>');
                 accordionDiv.append(characterHeader).append(characterDiv);
 
@@ -1901,12 +1904,12 @@ var Main;
 
                 Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
                 {
-                    showPropertyItem(node.propertyValues.perCharacter[character.id], propertyItem, characterHeaderStartLevel + 1, characterDiv, containerIdPrefix);
+                    showPropertyItem(node.propertyValues.perCharacter[character.id], propertyItem, hStartLevel + 1, characterDiv, containerIdPrefix);
                 });
 
                 Config.configObject.characters.byId[character.id].properties.sequence.forEach(function(propertyItem)
                 {
-                    showPropertyItem(node.propertyValues.perCharacter[character.id], propertyItem, characterHeaderStartLevel + 1, characterDiv, containerIdPrefix);
+                    showPropertyItem(node.propertyValues.perCharacter[character.id], propertyItem, hStartLevel + 1, characterDiv, containerIdPrefix);
                 });
             });
 

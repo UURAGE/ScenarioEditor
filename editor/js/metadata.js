@@ -72,9 +72,11 @@ var Metadata;
             {
                 propertyItem.sequence.forEach(function (subItem)
                 {
-                    var headerContainer = $('<div>');
-                    headerContainer.append($('<h' + hLevel + '>', { text: propertyItem.name }));
-                    container.append(headerContainer);
+                    var sectionContainer = $('<div>');
+                    if (hLevel === hStartLevel) sectionContainer.addClass("section");
+                    else                        sectionContainer.addClass("subsection");
+                    sectionContainer.append($('<h' + hLevel + '>', { text: propertyItem.name }));
+                    container.append(sectionContainer);
                     showPropertyItem(subItem, hLevel + 1, container, idPrefix);
                 });
             }

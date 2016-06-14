@@ -1097,3 +1097,15 @@ input[type=checkbox][disabled]
 {
   width: auto;
 }
+
+/* This is the class for sections for property values and parameter effects */
+.section
+{
+    margin: 0 auto 15px;
+}
+/* This is the class for subsections for property values and parameter effects */
+.subsection
+{
+    margin-left: 15px;
+    margin-bottom: 15px;
+}

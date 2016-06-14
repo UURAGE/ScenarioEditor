@@ -265,10 +265,10 @@
                   <div class="collapsable">
                     <div>
                       <h3>User-defined</h3>
-                      <div id="userDefinedParameterEffects"></div>
+                      <div id="userDefinedParameterEffects" class="section"></div>
                       <button id="addUserDefinedParameterEffect" title="<?php sLang('edt_add');?>"><img src="<?php echo editor_url("png/others/plus.png");?>" alt=""> <?php sLang('edt_add_effect');?></button>
                     </div>
-                    <div id="fixed-parameter-effects"></div>
+                    <div id="fixed-parameter-effects" class="section"></div>
                   </div>
                 </div>
                 <div id="propertyValuesSection" class="sidebarSection">
@@ -276,7 +276,7 @@
                     <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/properties.png");?>" alt=""><?php sLang('edt_properties');?></h2>
                   </div>
                   <div class="collapsable">
-                    <div id="node-property-values"></div>
+                    <div id="node-property-values" class="section"></div>
                   </div>
                 </div>
                 <div id="commentSection" class="sidebarSection">
