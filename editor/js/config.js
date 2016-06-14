@@ -361,7 +361,7 @@ var Config;
                     values.push($(valueItem).text());
                 });
                 var defaultValue = defaultValueContainer.length ? this.getFromDOM(defaultValueContainer) : values[0];
-                return $.extend({ values: values }, this, { defaultValue: this.getFromDOM(defaultValueContainer) });
+                return $.extend({ values: values }, this, { defaultValue: defaultValue });
             },
             castTo: function(type, value)
             {
@@ -386,7 +386,7 @@ var Config;
                 {
                     var optionXML = appendChild(enumerationXML, 'option');
                     this.toXML(optionXML, value);
-                }
+                };
                 this.values.forEach(appendOptionChild.bind(this));
                 return enumerationXML;
             },
