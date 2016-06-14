@@ -16,6 +16,8 @@
     LanguageManager.edt_common_none = "(none)";
 
     LanguageManager.edt_config_types_boolean = "Boolean";
+    LanguageManager.edt_config_types_boolean_false = "False";
+    LanguageManager.edt_config_types_boolean_true = "True";
     LanguageManager.edt_config_types_integer = "Integer";
     LanguageManager.edt_config_types_string = "String";
     LanguageManager.edt_config_types_enumeration = "Enumeration";

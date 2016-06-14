@@ -16,6 +16,8 @@
     LanguageManager.edt_common_none = "(geen)";
 
     LanguageManager.edt_config_types_boolean = "Boolean";
+    LanguageManager.edt_config_types_boolean_false = "Niet waar";
+    LanguageManager.edt_config_types_boolean_true = "Waar";
     LanguageManager.edt_config_types_integer = "Integer";
     LanguageManager.edt_config_types_string = "String";
     LanguageManager.edt_config_types_enumeration = "Enumeratie";

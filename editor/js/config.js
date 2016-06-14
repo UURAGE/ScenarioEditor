@@ -311,15 +311,18 @@ var Config;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                containerEl.append($('<input>', { id: htmlId, type: 'checkbox' }));
+                var booleanSelect = $('<select>', { id: htmlId });
+                booleanSelect.append($('<option>', { value: String(false), text: LanguageManager.sLang("edt_config_types_boolean_false") }));
+                booleanSelect.append($('<option>', { value: String(true),  text: LanguageManager.sLang("edt_config_types_boolean_true")  }));
+                containerEl.append(booleanSelect);
             },
             getFromDOM: function(containerEl)
             {
-                return containerEl.children('input').first().prop('checked');
+                return Utils.parseBool(containerEl.children('select').first().val());
             },
             setInDOM: function(containerEl, value)
             {
-                containerEl.children('input').first().prop('checked', value);
+                containerEl.children('select').first().val(String(value));
             },
             fromXML: function(valueXML)
             {
