@@ -66,7 +66,7 @@ var Save;
             parameter.type.toXML(defaultEl, parameter.type.defaultValue);
         }
 
-        var addDefinitionElement = function (definition, elementName, nameSpace, definitionsEl, insertDefault)
+        var addDefinitionElement = function (definition, elementName, nameSpace, definitionsEl)
         {
             var definitionEl = addAndReturnElement(elementName, nameSpace, definitionsEl);
             definitionEl.setAttribute("id", definition.id);
@@ -424,10 +424,35 @@ var Save;
         var conditionEl;
         if (!("type" in precondition))
         {
+            var parameter;
+            if (precondition.idRef in Metadata.metaObject.parameters.byId)
+            {
+                parameter = Metadata.metaObject.parameters.byId[precondition.idRef];
+            }
+            else if (precondition.idRef in Config.configObject.parameters.byId)
+            {
+                parameter = Config.configObject.parameters.byId[precondition.idRef];
+            }
+            else if (precondition.idRef in Config.configObject.characters.parameters.byId)
+            {
+                parameter = Config.configObject.characters.parameters.byId[precondition.idRef];
+            }
+            else
+            {
+                for (var characterId in Config.configObject.characters.byId)
+                {
+                    if (precondition.idRef in Config.configObject.characters.byId[characterId].parameters.byId)
+                    {
+                        parameter = Config.configObject.characters.byId[characterId].parameters.byId[precondition.idRef];
+                        break;
+                    }
+                }
+            }
+
             conditionEl = document.createElementNS(nameSpace, "condition");
             conditionEl.setAttribute("idref", precondition.idRef);
             conditionEl.setAttribute("operator", precondition.operator);
-            conditionEl.setAttribute("value", precondition.value);
+            parameter.type.toXML(conditionEl, precondition.value);
             return conditionEl;
         }
 

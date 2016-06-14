@@ -380,13 +380,39 @@ var Load;
         {
             if (preconditionChildren[i].nodeName == "condition")
             {
-                if (preconditionChildren[i].attributes.idref.value in Metadata.metaObject.parameters.byId)
+                var parameterIdRef = preconditionChildren[i].attributes.idref.value;
+                var parameter;
+                if (parameterIdRef in Metadata.metaObject.parameters.byId)
+                {
+                    parameter = Metadata.metaObject.parameters.byId[parameterIdRef];
+                }
+                else if (parameterIdRef in Config.configObject.parameters.byId)
+                {
+                    parameter = Config.configObject.parameters.byId[parameterIdRef];
+                }
+                else if (parameterIdRef in Config.configObject.characters.parameters.byId)
+                {
+                    parameter = Config.configObject.characters.parameters.byId[parameterIdRef];
+                }
+                else
+                {
+                    for (var characterId in Config.configObject.characters.byId)
+                    {
+                        if (parameterIdRef in Config.configObject.characters.byId[characterId].parameters.byId)
+                        {
+                            parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterIdRef];
+                            break;
+                        }
+                    }
+                }
+
+                if (parameter)
                 {
                     preconditionsArray.push(
                     {
-                        idRef: preconditionChildren[i].attributes.idref.value,
+                        idRef: parameterIdRef,
                         operator: preconditionChildren[i].attributes.operator.value,
-                        value: parseInt(preconditionChildren[i].attributes.value.value)
+                        value: parameter.type.fromXML(preconditionChildren[i])
                     });
                 }
             }

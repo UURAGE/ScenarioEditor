@@ -100,6 +100,7 @@ var ObjectGenerator;
                 if (parameterIdRef in Config.configObject.characters.byId[characterId].parameters.byId)
                 {
                     parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterIdRef];
+                    break;
                 }
             }
         }

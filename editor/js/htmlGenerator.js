@@ -347,6 +347,7 @@ var HtmlGenerator;
                         if (currentPrecondition.idRef in Config.configObject.characters.byId[characterId].parameters.byId)
                         {
                             parameter = Config.configObject.characters.byId[characterId].parameters.byId[currentPrecondition.idRef];
+                            break;
                         }
                     }
                 }
@@ -406,6 +407,7 @@ var HtmlGenerator;
                     if (parameterIdRef in Config.configObject.characters.byId[characterId].parameters.byId)
                     {
                         parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterIdRef];
+                        break;
                     }
                 }
             }
