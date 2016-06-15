@@ -24,6 +24,7 @@ var Config;
     {
         var configXML = $($.parseXML($('#config').text())).children('config');
         var config = {};
+        config.id = configXML.attr('id');
 
         config.properties = loadCollection(configXML.children('properties'), 'property', 'toplevel', defaultPropertyScopes);
         config.parameters = loadCollection(configXML.children('parameters'), 'parameter', 'toplevel', defaultParameterScopes);

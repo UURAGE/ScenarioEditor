@@ -29,6 +29,7 @@ var Save;
         var doc = document.implementation.createDocument(nameSpace, 'scenario', null);
 
         doc.documentElement.setAttribute("schemaVersion", 4);
+        doc.documentElement.setAttribute("configidref", Config.configObject.id);
 
         // Handles the metadata
         var metadataEl = addAndReturnElement("metadata", nameSpace, doc.documentElement);
