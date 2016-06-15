@@ -26,6 +26,7 @@
 					</element>
 				</choice>
 			</sequence>
+			<attribute name="id" type="string" use="required"></attribute>
 		</complexType>
 		<key name="propertyID">
 			<selector xpath=".//tns:property" />
