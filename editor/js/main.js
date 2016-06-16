@@ -34,7 +34,6 @@ var Main;
         deleteAllSelected: deleteAllSelected,
         deselectConnection: deselectConnection,
         escapeTags: escapeTags,
-        getNewDefaultParameterEffectsObject: getNewDefaultParameterEffectsObject,
         getPlumbInstanceByNodeID: getPlumbInstanceByNodeID,
         highlightParents: highlightParents,
         makeConnection: makeConnection,
@@ -633,7 +632,7 @@ var Main;
 
         var id = node.attr('id');
 
-        var parameterEffects = getNewDefaultParameterEffectsObject();
+        var parameterEffects = Config.getNewDefaultParameterEffects();
 
         if (Metadata.timePId && type === Main.playerType)
         {
@@ -668,7 +667,7 @@ var Main;
                 type: "alwaysTrue",
                 preconditions: []
             },
-            propertyValues: Metadata.getNewDefaultPropertyValuesObject(['per', 'per-' + type]),
+            propertyValues: Config.getNewDefaultPropertyValues(['per', 'per-' + type]),
             comment: "",
             endNode: false,
             initsNode: false,
@@ -1999,20 +1998,6 @@ var Main;
     {
         var connections = Main.getPlumbInstanceByNodeID(sourceId).getConnections({ source: sourceId });
         return (connections.length === 0 ? null : connections[0].targetId);
-    }
-
-    function getNewDefaultParameterEffectsObject()
-    {
-        var parameterEffects = {};
-        parameterEffects.userDefined = [];
-        parameterEffects.fixed = {};
-        parameterEffects.fixed.characterIndependent = {};
-        parameterEffects.fixed.perCharacter = {};
-        for (var characterId in Config.configObject.characters.byId)
-        {
-            parameterEffects.fixed.perCharacter[characterId] = {};
-        }
-        return parameterEffects;
     }
 
     //Make .collapsable div sections collapse and expand when .clickable sibling element is clicked

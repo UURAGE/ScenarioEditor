@@ -10,8 +10,7 @@ var Metadata;
     {
         metaObject: {},
         getNewDefaultMetaObject: getNewDefaultMetaObject,
-        getNewDefaultParametersObject: getNewDefaultParametersObject,
-        getNewDefaultPropertyValuesObject: getNewDefaultPropertyValuesObject,
+        getNewDefaultParameters: getNewDefaultParameters,
         parameterCounter: parameterCounter,
         parameterDialog: parameterDialog,
         atLeastOneUserDefinedParameter: atLeastOneUserDefinedParameter,
@@ -147,44 +146,14 @@ var Metadata;
             name: "",
             difficulty: "medium",
             description: "",
-            parameters: getNewDefaultParametersObject(),
-            propertyValues: getNewDefaultPropertyValuesObject(['independent']),
+            parameters: getNewDefaultParameters(),
+            propertyValues: Config.getNewDefaultPropertyValues(['independent']),
             defaultChangeType: LanguageManager.sLang("edt_parts_delta"),
         };
     }
 
-    function getNewDefaultPropertyValuesObject(acceptableStatementScopes)
-    {
-        var propertyValues = {};
-
-        propertyValues.characterIndependent = {};
-        for (var propertyId in Config.configObject.properties.byId)
-        {
-            if (acceptableStatementScopes.indexOf(Config.configObject.properties.byId[propertyId].scopes.statementScope) === -1) continue;
-            propertyValues.characterIndependent[propertyId] = Config.configObject.properties.byId[propertyId].type.defaultValue;
-        }
-
-        propertyValues.perCharacter = {};
-        for (var characterId in Config.configObject.characters.byId)
-        {
-            propertyValues.perCharacter[characterId] = {};
-            for (var propertyId in Config.configObject.characters.properties.byId)
-            {
-                if (acceptableStatementScopes.indexOf(Config.configObject.characters.properties.byId[propertyId].scopes.statementScope) === -1) continue;
-                propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.properties.byId[propertyId].type.defaultValue;
-            }
-            for (var propertyId in Config.configObject.characters.byId[characterId].properties.byId)
-            {
-                if (acceptableStatementScopes.indexOf(Config.configObject.characters.byId[characterId].properties.byId[propertyId].scopes.statementScope) === -1) continue;
-                propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.byId[characterId].properties.byId[propertyId].type.defaultValue;
-            }
-        }
-
-        return propertyValues;
-    }
-
     // This function returns an object suitable for user-defined parameter definitions
-    function getNewDefaultParametersObject()
+    function getNewDefaultParameters()
     {
         var parameters = {};
         parameters.byId = {};

@@ -110,7 +110,7 @@ var Load3;
         if (defaultChangeType === "")
             defaultChangeType = LanguageManager.sLang("edt_parts_delta");
 
-        var parameters = Metadata.getNewDefaultParametersObject();
+        var parameters = Metadata.getNewDefaultParameters();
         $(metadata).find('parameters').children().each(function()
         {
             var paramId = this.attributes.id.value;
@@ -145,7 +145,7 @@ var Load3;
             name: name,
             difficulty: difficulty,
             description: description,
-            propertyValues: Metadata.getNewDefaultPropertyValuesObject(['independent']),
+            propertyValues: Config.getNewDefaultPropertyValues(['independent']),
             parameters: parameters,
             defaultChangeType: defaultChangeType
         };
@@ -179,7 +179,7 @@ var Load3;
         else
             preconditionsJS = loadPreconditions(preconditionsXML.children()[0]);
 
-        var parameterEffects = Main.getNewDefaultParameterEffectsObject();
+        var parameterEffects = Config.getNewDefaultParameterEffects();
         var intentsArray = [];
         var targets;
         if (type === Main.playerType)
@@ -235,7 +235,7 @@ var Load3;
             parameterEffects: parameterEffects,
             preconditions: preconditionsJS,
             intent: intentsArray,
-            propertyValues: Metadata.getNewDefaultPropertyValuesObject(['per', 'per-' + type]),
+            propertyValues: Config.getNewDefaultPropertyValues(['per', 'per-' + type]),
             comment: comment,
             endNode: endNode,
             initsNode: initsNode,
@@ -373,9 +373,9 @@ var Load3;
             text: firstConversationNode.text,
             type: firstConversationNode.type,
             characterIdRef: Config.configObject.characters.sequence[0].id,
-            parameterEffects: Main.getNewDefaultParameterEffectsObject(),
+            parameterEffects: Config.getNewDefaultParameterEffects(),
             preconditions: preconditionsJS,
-            propertyValues: Metadata.getNewDefaultPropertyValuesObject(['independent']),
+            propertyValues: Config.getNewDefaultPropertyValues(['independent']),
             comment: comment,
             endNode: endNode,
             initsNode: false,
@@ -431,9 +431,9 @@ var Load3;
                     text: textNode.text,
                     type: textNode.type,
                     characterIdRef: Config.configObject.characters.sequence[0].id,
-                    parameterEffects: Main.getNewDefaultParameterEffectsObject(),
+                    parameterEffects: Config.getNewDefaultParameterEffects(),
                     preconditions: {type: "alwaysTrue", preconditions: []},
-                    propertyValues: Metadata.getNewDefaultPropertyValuesObject(['per', 'per-' + textNode.type]),
+                    propertyValues: Config.getNewDefaultPropertyValues(['per', 'per-' + textNode.type]),
                     comment: "",
                     endNode: endNode,
                     initsNode: false,

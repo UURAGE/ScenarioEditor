@@ -247,7 +247,7 @@ var Load;
         if (defaultChangeType === "")
             defaultChangeType = LanguageManager.sLang("edt_parts_delta");
 
-        var parameters = Metadata.getNewDefaultParametersObject();
+        var parameters = Metadata.getNewDefaultParameters();
         $(definitions).children('parameters').children('userDefined').children().each(function()
         {
             var parameterId = this.attributes.id.value;
@@ -438,7 +438,7 @@ var Load;
 
     function loadParameterEffects(parameterEffectsXMLElement)
     {
-        var parameterEffects = Main.getNewDefaultParameterEffectsObject();
+        var parameterEffects = Config.getNewDefaultParameterEffects();
         parameterEffectsXMLElement.find('userDefined').children().each(function()
         {
             parameterEffects.userDefined.push(
@@ -503,7 +503,7 @@ var Load;
 
     function loadPropertyValues(propertyValuesXMLElement, acceptableScopes)
     {
-        var propertyValues = Metadata.getNewDefaultPropertyValuesObject(acceptableScopes);
+        var propertyValues = Config.getNewDefaultPropertyValues(acceptableScopes);
         propertyValuesXMLElement.children().each(function()
         {
             var propertyId = this.attributes.idref.value;
