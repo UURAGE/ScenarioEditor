@@ -451,11 +451,14 @@ var Main;
         var zoomTreeButton = $('<div>',{text:"[+]", class:"zoomTreeButton button"});
         zoomTreeButton.on("click", function()
         {
-            // open/close tree
-            changeNameInput.trigger("focusout");
-            Zoom.toggleZoom(Main.trees[id]);
-            MiniMap.update(true);
-            repaintZoomedNodes();
+            if(!DragBox.dragging())
+            {
+                // open/close tree
+                changeNameInput.trigger("focusout");
+                Zoom.toggleZoom(Main.trees[id]);
+                MiniMap.update(true);
+                repaintZoomedNodes();
+            }
         });
 
         var inputSpan = $('<span>');

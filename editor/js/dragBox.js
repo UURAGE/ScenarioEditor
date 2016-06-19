@@ -3,12 +3,13 @@
 var DragBox;
 
 (function(){
-    DragBox = 
+    DragBox =
     {
         startDragging : startDragging,
         showError : showError,
         isDroppable : isDroppable,
-        cancel: cancel
+        cancel: cancel,
+        dragging: function(){return dragging;}//to prevent other code from modifying this value
     };
 
     var dragging = false,
