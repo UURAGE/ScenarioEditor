@@ -2,10 +2,10 @@
 /* ©Copyright Utrecht University (Department of Information and Computing Sciences) */
 
 /*
- * This class is used to emulate auto loading of language files, normal autoloading can not be based on session data 
+ * This class is used to emulate auto loading of language files, normal autoloading can not be based on session data
  */
 class LanguageLoader
-{   
+{
     function load()
     {
         $this->CI =&get_instance();
@@ -19,8 +19,8 @@ class LanguageLoader
         $availableLanguages = config_item('browserCodes');
 
         // Strict equality to prevent nasty behaviour
-        if ($language === FALSE)
-        {            
+        if (!$language)
+        {
             $browserLang = explode(",",$_SERVER['HTTP_ACCEPT_LANGUAGE']);
 
             $languages = array();
