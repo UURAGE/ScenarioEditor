@@ -49,32 +49,28 @@ var Save;
             characterEl.setAttribute("id", character.id);
         });
 
-        // Save user-defined parameters and collect data for saving weights
-        var parametersEl = addAndReturnElement("parameters", nameSpace, definitionsEl);
-
-        userDefinedParametersEl = addAndReturnElement("userDefined", nameSpace, parametersEl);
-        for (var pId in Metadata.metaObject.parameters.byId)
-        {
-            var parameter = Metadata.metaObject.parameters.byId[pId];
-            var parameterEl = addAndReturnElement("parameter", nameSpace, userDefinedParametersEl);
-
-            parameterEl.setAttribute("id", pId);
-            parameterEl.setAttribute("name", Main.escapeTags(parameter.name));
-            parameterEl.setAttribute("description", Main.escapeTags(parameter.description));
-
-            var typeEl = Metadata.metaObject.parameters.byId[parameter.id].type.insertType(parameterEl);
-            var defaultEl = addAndReturnElement('default', nameSpace, typeEl);
-            parameter.type.toXML(defaultEl, parameter.type.defaultValue);
-        }
-
         var addDefinitionElement = function (definition, elementName, nameSpace, definitionsEl)
         {
             var definitionEl = addAndReturnElement(elementName, nameSpace, definitionsEl);
+
             definitionEl.setAttribute("id", definition.id);
+            definitionEl.setAttribute("name", Main.escapeTags(definition.name));
+            if (definition.description) definitionEl.setAttribute("description", Main.escapeTags(definition.description));
+
             var typeEl = definition.type.insertType(definitionEl);
             var defaultEl = addAndReturnElement('default', nameSpace, typeEl);
             definition.type.toXML(defaultEl, definition.type.defaultValue);
         };
+
+        var parametersEl = addAndReturnElement("parameters", nameSpace, definitionsEl);
+
+        // Save user-defined parameters
+        var userDefinedParametersEl = addAndReturnElement("userDefined", nameSpace, parametersEl);
+        for (var pId in Metadata.metaObject.parameters.byId)
+        {
+            var parameter = Metadata.metaObject.parameters.byId[pId];
+            addDefinitionElement(parameter, "parameter", nameSpace, userDefinedParametersEl);
+        }
 
         // Save fixed parameters
         var fixedParametersEl = addAndReturnElement("fixed", nameSpace, parametersEl);
@@ -97,7 +93,7 @@ var Save;
             }
         }
 
-        // Save property definitions
+        // Save properties
         var propertyDefinitionsEl = addAndReturnElement("properties", nameSpace, definitionsEl);
         for (var propertyId in Config.configObject.properties.byId)
         {
