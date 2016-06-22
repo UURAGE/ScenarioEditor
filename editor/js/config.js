@@ -39,7 +39,7 @@ var Config;
 
         if (configXML.children('character').length === 1)
         {
-            config.characters = { properties: $.extend({}, defaultPropertyCollection), byId: {} };
+            config.characters = { parameters: $.extend({}, defaultParameterCollection), properties: $.extend({}, defaultPropertyCollection), byId: {} };
             var character = loadCharacterNode(configXML.children('character')[0]);
             config.characters.byId[character.id] = character;
             config.characters.sequence = [character];
