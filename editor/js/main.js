@@ -63,12 +63,21 @@ var Main;
 
         if (Config.configObject.characters.sequence.length > 1)
         {
+            var characterSelection = $("#characterSelection");
             Config.configObject.characters.sequence.forEach(function (character)
             {
                 var option = $("<option>");
-                option.val(character.id);
                 option.text(character.id);
-                $("#characterSelection").append(option);
+                characterSelection.append(option);
+            });
+
+            characterSelection.on('change', function()
+            {
+                if (Main.selectedElement)
+                {
+                    Main.nodes[Main.selectedElement].characterIdRef = $(this).val();
+                    changeNodeText(Main.selectedElement);
+                }
             });
         }
         else
@@ -1153,12 +1162,6 @@ var Main;
 
         // Get the selected node.
         var node = Main.nodes[Main.selectedElement];
-
-        // Save the selected characterId when there are multiple characters.
-        if (node.type === Main.computerType && Config.configObject.characters.sequence.length > 1)
-        {
-            node.characterIdRef = $("#characterSelection option:selected").val();
-        }
 
         // Save user-defined parameter effects.
         node.parameterEffects.userDefined = [];
