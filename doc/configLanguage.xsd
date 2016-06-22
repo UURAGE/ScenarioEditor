@@ -7,6 +7,19 @@
 	<element name="config">
 		<complexType>
 			<sequence>
+				<element name="settings">
+					<complexType>
+						<sequence>
+							<element name="statement" minOccurs="0" maxOccurs="1">
+								<complexType>
+									<sequence>
+										<element ref="tns:typeString"></element>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
 				<element name="properties" type="tns:propertiesType" />
 				<element name="parameters" type="tns:parameterType" />
 				<choice>
@@ -113,13 +126,7 @@
 					</sequence>
 				</complexType>
 			</element>
-			<element name="typeString">
-				<complexType>
-					<sequence>
-						<element name="default" type="string" minOccurs="0" maxOccurs="1"/>
-					</sequence>
-				</complexType>
-			</element>
+			<element ref="tns:typeString"></element>
 			<element name="typeInteger">
 				<complexType>
 					<sequence>
@@ -137,6 +144,14 @@
 			</element>
 		</choice>
 	</group>
+	<element name="typeString">
+		<complexType>
+			<sequence>
+				<element name="default" type="string" minOccurs="0" maxOccurs="1"/>
+			</sequence>
+			<attribute name="maxLength" type="integer"></attribute>
+		</complexType>
+	</element>
 	<attributeGroup name="propertyScopes">
 		<attribute name="statementScope" use="optional" default="independent">
 			<simpleType>
