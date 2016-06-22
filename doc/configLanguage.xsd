@@ -55,7 +55,6 @@
 			<group ref="tns:typeGroup" />
 			<attribute name="id" type="string" use="required" />
 			<attribute name="name" type="string" use="required" />
-			<attribute name="optional" type="boolean" use="optional" default="false" />
 			<attribute name="description" type="string" use="optional" />
 			<attributeGroup ref="tns:propertyScopes" />
 		</complexType>
@@ -71,7 +70,6 @@
 				</simpleType>
 			</attribute>
 			<attribute name="name" type="string" use="required" />
-			<attribute name="optional" type="boolean" use="optional" default="false" />
 			<attribute name="description" type="string" use="optional" />
 			<attributeGroup ref="tns:parameterScopes" />
 		</complexType>
