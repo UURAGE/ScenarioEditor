@@ -304,9 +304,27 @@ var Config;
                                   Config.relationalOperators.greaterThan,        Config.relationalOperators.lessThan],
             loadType: function(typeXML)
             {
+                var type = this;
+
+                var minimumAttr = typeXML.attr('minimum');
+                if (minimumAttr)
+                {
+                    type = $.extend({}, type, { minimum: Utils.parseDecimalIntWithDefault(minimumAttr) });
+                }
+
+                var maximumAttr = typeXML.attr('maximum');
+                if (maximumAttr)
+                {
+                    type = $.extend({}, type, { maximum: Utils.parseDecimalIntWithDefault(maximumAttr) });
+                }
+
                 var defaultEl = typeXML.children('default');
-                if (defaultEl.length > 0) return $.extend({}, this, { defaultValue: parseInt(defaultEl[0].textContent, 10) });
-                else                      return this;
+                if (defaultEl.length > 0)
+                {
+                    type = $.extend({}, type, { defaultValue: parseInt(defaultEl[0].textContent, 10) });
+                }
+
+                return type;
             },
             loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
@@ -332,13 +350,11 @@ var Config;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                containerEl.append($('<input>', { id: htmlId, type: 'number', value: 0 }));
+                containerEl.append($('<input>', { id: htmlId, type: 'number', value: this.minimum ? this.minimum : 0, min: this.minimum, max: this.maximum }));
             },
             getFromDOM: function(containerEl)
             {
-                // Note the defaulting of NaN to 0: we want to avoid
-                // NaNs where integers are expected at all costs.
-                return Utils.parseDecimalIntWithDefault(containerEl.children('input').first().val(), 0);
+                return Utils.parseDecimalIntWithDefault(containerEl.children('input').first().val(), this.minimum ? this.minimum : 0);
             },
             setInDOM: function(containerEl, value)
             {
