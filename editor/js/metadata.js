@@ -69,14 +69,14 @@ var Metadata;
             if (propertyItem.scopes.statementScope !== 'independent') return;
             if (propertyItem.kind === 'section')
             {
+                var sectionContainer = $('<div>');
+                if (hLevel === hStartLevel) sectionContainer.addClass("section");
+                else                        sectionContainer.addClass("subsection");
+                sectionContainer.append($('<h' + hLevel + '>', { text: propertyItem.name }));
+                container.append(sectionContainer);
                 propertyItem.sequence.forEach(function (subItem)
                 {
-                    var sectionContainer = $('<div>');
-                    if (hLevel === hStartLevel) sectionContainer.addClass("section");
-                    else                        sectionContainer.addClass("subsection");
-                    sectionContainer.append($('<h' + hLevel + '>', { text: propertyItem.name }));
-                    container.append(sectionContainer);
-                    showPropertyItem(subItem, hLevel + 1, container, idPrefix);
+                    showPropertyItem(subItem, hLevel + 1, sectionContainer, idPrefix);
                 });
             }
             else
