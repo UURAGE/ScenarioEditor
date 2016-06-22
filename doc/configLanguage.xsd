@@ -132,6 +132,8 @@
 					<sequence>
 						<element name="default" type="integer" minOccurs="0" maxOccurs="1"/>
 					</sequence>
+					<attribute name="minimum" type="integer" use="optional"></attribute>
+					<attribute name="maximum" type="integer" use="optional"></attribute>
 				</complexType>
 			</element>
 			<element name="typeEnumeration">
