@@ -79,7 +79,6 @@ var Config;
                 id: nodeXML.getAttribute('id'),
                 name: nodeXML.getAttribute('name'),
                 description: nodeXML.getAttribute('description'),
-                optional: Utils.parseBool(nodeXML.getAttribute('optional')),
                 scopes: nodeScopes,
                 type: loadType($(nodeXML).children().eq(0))
             };
