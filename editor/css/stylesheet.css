@@ -88,40 +88,6 @@ a[data-disabled]
   cursor: pointer;
 }
 
-/* Utility screen */
-.formTable select, .formTable input
-{
-  width: 100%;
-}
-.formTable
-{
-  width: 100%;
-}
-.formTable h3 {
-  display: table-caption;
-}
-  .formTable .sub-formTable
-  {
-    width: 100%;
-    display: table;
-  }
-  .formTable label {
-    width: 200px;
-  }
-  .formTable .sub-formTable >div {
-    display: table-row;
-  }
-
-    .formTable >div> div > *
-    {
-      display: table-cell;
-    }
-    .formTable #scenarioDescription {
-      display: block;
-    }
-    .formTable #scenarioDescription-container {
-    }
-
 #gridIndicator
 {
   position: absolute;

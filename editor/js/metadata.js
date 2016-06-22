@@ -28,11 +28,6 @@ var Metadata;
 
         var metaScreenHTML = Parts.getMetaScreenHTML();
         $("#metaScreen").html(metaScreenHTML);
-        $("#metaForm").on('submit', function()
-        {
-            saveMetaObject();
-            return false;
-        });
 
         var parameterScreenHTML = Parts.getParameterScreenHTML();
         $("#parameterScreen").html(parameterScreenHTML);

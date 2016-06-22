@@ -153,53 +153,49 @@ var Parts;
     {
         return '' +
             '<div>' +
-                '<form id="metaForm" action="">' +
-                    '<div class="formTable">' +
-                        '<div id="general" class="sub-formTable">' +
-                            '<h3>'+LanguageManager.sLang("edt_parts_general")+'</h3>' +
-                            '<div>' +
-                                '<label for="scenarioName">'+LanguageManager.sLang("edt_parts_scenario_name")+':</label>' +
-                                '<input type="text" id="scenarioName" />' +
-                            '</div>' +
-                            '<div>' +
-                                '<label for="scenarioDifficulty">'+LanguageManager.sLang("edt_parts_difficulty")+':</label>' +
-                                '<select id="scenarioDifficulty">' +
-                                    '<option value="very_easy">'+LanguageManager.sLang("edt_parts_very_easy")+'</option>' +
-                                    '<option value="easy">'+LanguageManager.sLang("edt_parts_easy")+'</option>' +
-                                    '<option value="medium" selected="selected">'+LanguageManager.sLang("edt_parts_medium")+'</option>' +
-                                    '<option value="difficult">'+LanguageManager.sLang("edt_parts_hard")+'</option>' +
-                                    '<option value="very_difficult">'+LanguageManager.sLang("edt_parts_very_hard")+'</option>' +
-                                '</select>' +
-                            '</div>' +
-                            '<div id="scenarioDescription-container">' +
-                                '<div>' +
-                                    '<label for="scenarioDescription">'+LanguageManager.sLang("edt_parts_description")+':</label></ br>' +
-                                '</div>' +
-                                '<textarea id="scenarioDescription"' +
-                                    'style="height: 200px; width: 100%; -moz-box-sizing: border-box; box-sizing: border-box">' +
-                                '</textarea>' +
-                            '</div>' +
-                        '</div>' +
-                        '<div id="meta-character-property-values" class="sub-formTable" style="display:none">' +
-                            '<h3>' +LanguageManager.sLang("edt_parts_character_properties")+ '</h3>' +
-                            '<div>'+'<div id="character-tabs"/>'+'</div>' +
-                        '</div>' +
-                        '<div id="meta-property-values" class="sub-formTable" style="display:none">' +
-                            '<h3>'+LanguageManager.sLang("edt_parts_properties")+'</h3>' +
-                        '</div>' +
-                        '<div id="advanced"class="sub-formTable">' +
-                            '<h3>'+LanguageManager.sLang("edt_parts_advanced")+'</h3>' +
-                            '<div>' +
-                                '<label for="changeTypeSelection">'+LanguageManager.sLang("edt_parts_change_type")+':</label>' +
-                                '<select class="changeType" name="defaultChangeType" id="defaultChangeTypeSelect">' +
-                                    '<option value="delta" selected="selected">'+LanguageManager.sLang("edt_parts_delta")+'</option>' +
-                                    '<option value="set">'+LanguageManager.sLang("edt_parts_set")+'</option>' +
-                                '</select>' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>' +
-                    '<input class="hidden" type="submit" value="Opslaan" />' +
-                '</form>' +
+                '<table>' +
+                    '<thead id="general"><th><h3>'+LanguageManager.sLang("edt_parts_general")+'</h3></th></thead>' +
+                    '<tbody>' +
+                        '<tr>' +
+                            '<th><label for="scenarioName">'+LanguageManager.sLang("edt_parts_scenario_name")+':</label></th>' +
+                            '<td><input type="text" id="scenarioName" /></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<th><label for="scenarioDifficulty">'+LanguageManager.sLang("edt_parts_difficulty")+':</label></th>' +
+                            '<td><select id="scenarioDifficulty">' +
+                                '<option value="very_easy">'+LanguageManager.sLang("edt_parts_very_easy")+'</option>' +
+                                '<option value="easy">'+LanguageManager.sLang("edt_parts_easy")+'</option>' +
+                                '<option value="medium" selected="selected">'+LanguageManager.sLang("edt_parts_medium")+'</option>' +
+                                '<option value="difficult">'+LanguageManager.sLang("edt_parts_hard")+'</option>' +
+                                '<option value="very_difficult">'+LanguageManager.sLang("edt_parts_very_hard")+'</option>' +
+                            '</select></td>' +
+                        '</tr>' +
+                        '<tr id="scenarioDescription-container">' +
+                            '<th><label for="scenarioDescription">'+LanguageManager.sLang("edt_parts_description")+':</label></th>' +
+                            '<td><textarea id="scenarioDescription"' +
+                                'style="height: 200px; width: 100%; -moz-box-sizing: border-box; box-sizing: border-box">' +
+                            '</textarea></td>' +
+                        '</tr>' +
+                    '</tbody>' +
+                    '<thead><th><h3>' +LanguageManager.sLang("edt_parts_character_properties")+ '</h3></th></thead>' +
+                    '<tbody id="meta-character-property-values" style="display:none">' +
+                        '<tr><td colspan="2" id="character-tabs"/></tr>' +
+                    '</tbody>' +
+                    '<thead><th><h3>'+LanguageManager.sLang("edt_parts_properties")+'</h3></th></thead>' +
+                    '<tbody>' +
+                        '<tr><td colspan="2" id="meta-property-values" style="display:none"/></tr>' +
+                    '</tbody>' +
+                    '<thead><th><h3>'+LanguageManager.sLang("edt_parts_advanced")+'</h3></th></thead>' +
+                    '<tbody id="advanced">' +
+                        '<tr>' +
+                            '<th><label for="changeTypeSelection">'+LanguageManager.sLang("edt_parts_change_type")+':</label></th>' +
+                            '<td><select class="changeType" name="defaultChangeType" id="defaultChangeTypeSelect">' +
+                                '<option value="delta" selected="selected">'+LanguageManager.sLang("edt_parts_delta")+'</option>' +
+                                '<option value="set">'+LanguageManager.sLang("edt_parts_set")+'</option>' +
+                            '</select></td>' +
+                        '</tr>' +
+                    '</tr>' +
+                '</table>' +
             '</div>';
     }
 
