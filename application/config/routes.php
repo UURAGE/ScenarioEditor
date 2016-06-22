@@ -39,13 +39,7 @@
 */
 
 $route['default_controller'] = "editor";
-$route['404_override'] = "error/index/404";
-
-//remove index from url
-$route['profile/(:num)'] = 'profile/index/$1';
-$route['editor/(:num)'] = 'editor/index/$1';
-
-
+$route['404_override'] = "";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
