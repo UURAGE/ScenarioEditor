@@ -27,7 +27,7 @@ var Config;
         var configXML = $($.parseXML($('#config').text())).children('config');
         var config = {};
         config.id = configXML.attr('id');
-
+        config.settings = loadSettings(configXML.children('settings'));
         config.properties = loadCollection(configXML.children('properties'), 'property', 'toplevel', defaultPropertyScopes);
         config.parameters = loadCollection(configXML.children('parameters'), 'parameter', 'toplevel', defaultParameterScopes);
 
@@ -44,6 +44,22 @@ var Config;
         }
 
         Config.configObject = config;
+    }
+
+    function loadSettings(settingsXML)
+    {
+        var settings = {};
+        settings.statement = {};
+        statementSettingXML = settingsXML.children('statement');
+        if (statementSettingXML.length > 0)
+        {
+            settings.statement.type = loadType(statementSettingXML.children().eq(0));
+        }
+        else
+        {
+            settings.statement.type = Config.types.string;
+        }
+        return settings;
     }
 
     function loadNode(nodeXML, nodeName, parentScopes)
