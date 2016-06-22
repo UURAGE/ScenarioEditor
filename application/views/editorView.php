@@ -45,7 +45,7 @@
       echo '<script type="text/javascript" src="' .editor_url($script). '?t='.  filemtime(editor_path($script)) .'"></script>';
   }
 
-  $fileName = $this->router->fetch_class().".js";
+  $fileName = $this->router->class.".js";
     echo '<script type="text/javascript" src="' . editor_js_lang_url($language).'/'.$fileName. '?t='. filemtime(editor_path('lang/'.$language.'/'.$fileName)). '"></script>';
 
   //non language related scripts
