@@ -216,9 +216,21 @@ var Config;
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
             loadType: function(typeXML)
             {
+                var type = this;
+
+                var maxLengthAttr = typeXML.attr('maxLength');
+                if (maxLengthAttr)
+                {
+                    type = $.extend({}, type, { maxLength: Utils.parseDecimalIntWithDefault(maxLengthAttr) });
+                }
+
                 var defaultEl = typeXML.children('default');
-                if (defaultEl.length > 0) return $.extend({}, this, { defaultValue: defaultEl[0].textContent });
-                else                      return this;
+                if (defaultEl.length > 0)
+                {
+                    type = $.extend({}, type, { defaultValue: defaultEl[0].textContent });
+                }
+
+                return type;
             },
             loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
@@ -244,7 +256,7 @@ var Config;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                containerEl.append($('<input>', { id: htmlId, type: 'text' }));
+                containerEl.append($('<input>', { id: htmlId, type: 'text', maxlength: this.maxLength }));
             },
             getFromDOM: function(containerEl)
             {
