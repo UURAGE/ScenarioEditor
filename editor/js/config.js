@@ -25,6 +25,12 @@ var Config;
     function loadConfig()
     {
         var configXML = $($.parseXML($('#config').text())).children('config');
+        if (!configXML.length)
+        {
+            alert("The configuration for the editor was not loaded");
+            return;
+        }
+
         var config = {};
         config.id = configXML.attr('id');
         config.settings = loadSettings(configXML.children('settings'));
