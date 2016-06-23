@@ -585,6 +585,15 @@ button.enabled
   margin-bottom: 0;
 }
 
+.ui-accordion .ui-accordion-content {
+    padding: 0.5em 1em !important;
+}
+
+.ui-widget
+{
+  font-size: inherit !important;
+}
+
 #preconditionsSection
 {
   white-space: nowrap;

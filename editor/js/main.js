@@ -1782,7 +1782,7 @@ var Main;
 
                 Config.configObject.characters.parameters.sequence.forEach(function(parameterItem)
                 {
-                    if (showParameterItem(characterParameterDefinitions, parameterItem, hStartLevel + 1,
+                    if (showParameterItem(characterParameterDefinitions, parameterItem, hStartLevel,
                                           characterDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[character.id]))
                     {
                         anyCharacterParameterShown = true;
@@ -1791,7 +1791,7 @@ var Main;
 
                 Config.configObject.characters.byId[character.id].parameters.sequence.forEach(function(parameterItem)
                 {
-                    if (showParameterItem(characterParameterDefinitions, parameterItem, hStartLevel + 1,
+                    if (showParameterItem(characterParameterDefinitions, parameterItem, hStartLevel,
                                           characterDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[character.id]))
                     {
                         anyCharacterParameterShown = true;
@@ -1911,7 +1911,6 @@ var Main;
             nodeCharacterPropertiesEl = $('#node-character-property-values');
             characterAccordion = $('<div>');
             nodeCharacterPropertiesEl.append(characterAccordion);
-            hStartLevel += 1;
             Config.configObject.characters.sequence.forEach(function(character)
             {
                 var characterHeader = $('<h' + hStartLevel +'>', { text: character.id });
@@ -1943,7 +1942,7 @@ var Main;
             else
             {
                 $("#propertyValuesSection").show();
-                characterAccordion.accordion({ active: false, collapsible: true });
+                characterAccordion.accordion({ active: false, collapsible: true, heightStyle: "content" });
             }
 
             $("#endNodeCheckbox").prop("checked", node.endNode);
