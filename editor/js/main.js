@@ -6,8 +6,7 @@ var Main;
 {
     //Public Variables
     var gridX,
-        gridY,
-        domainID;
+        gridY;
 
     Main =
     {
@@ -22,7 +21,6 @@ var Main;
         maxTreeNumber: 0,
         gridX: gridX,
         gridY: gridY,
-        domainID: domainID,
         unsavedChanges: false,
         //Functions
         addNewNode: addNewNode,
