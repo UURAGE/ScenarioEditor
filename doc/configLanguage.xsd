@@ -160,6 +160,7 @@
 					<enumeration value="per" />
 					<enumeration value="per-computer" />
 					<enumeration value="per-player" />
+					<enumeration value="per-situation" />
 				</restriction>
 			</simpleType>
 		</attribute>
@@ -171,6 +172,7 @@
 					<enumeration value="per" />
 					<enumeration value="per-computer" />
 					<enumeration value="per-player" />
+					<enumeration value="per-situation" />
 				</restriction>
 			</simpleType>
 		</attribute>
