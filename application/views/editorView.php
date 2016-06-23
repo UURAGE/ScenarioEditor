@@ -3,7 +3,7 @@
 
 <html>
 <head>
-  <title>Editor - UURAGE</title>
+  <title>UURAGE - Scenario Editor</title>
   <meta charset="utf-8">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="-1">
