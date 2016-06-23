@@ -154,7 +154,7 @@ var Parts;
         return '' +
             '<div>' +
                 '<table>' +
-                    '<thead id="general"><th><h3>'+LanguageManager.sLang("edt_parts_general")+'</h3></th></thead>' +
+                    '<thead id="general"><th colspan="2"><h3>'+LanguageManager.sLang("edt_parts_general")+'</h3></th></thead>' +
                     '<tbody>' +
                         '<tr>' +
                             '<th><label for="scenarioName">'+LanguageManager.sLang("edt_parts_scenario_name")+':</label></th>' +
@@ -177,15 +177,13 @@ var Parts;
                             '</textarea></td>' +
                         '</tr>' +
                     '</tbody>' +
-                    '<thead><th><h3>' +LanguageManager.sLang("edt_parts_character_properties")+ '</h3></th></thead>' +
+                    '<thead id="meta-property-values-header" ></thead>' +
+                    '<tbody id="meta-property-values" style="display:none"/>' +
+                    '<thead><th colspan="2"><h3>' +LanguageManager.sLang("edt_parts_character_properties")+ '</h3></th></thead>' +
                     '<tbody id="meta-character-property-values" style="display:none">' +
                         '<tr><td colspan="2" id="character-tabs"/></tr>' +
                     '</tbody>' +
-                    '<thead><th><h3>'+LanguageManager.sLang("edt_parts_properties")+'</h3></th></thead>' +
-                    '<tbody>' +
-                        '<tr><td colspan="2" id="meta-property-values" style="display:none"/></tr>' +
-                    '</tbody>' +
-                    '<thead><th><h3>'+LanguageManager.sLang("edt_parts_advanced")+'</h3></th></thead>' +
+                    '<thead><th colspan="2"><h3>'+LanguageManager.sLang("edt_parts_advanced")+'</h3></th></thead>' +
                     '<tbody id="advanced">' +
                         '<tr>' +
                             '<th><label for="changeTypeSelection">'+LanguageManager.sLang("edt_parts_change_type")+':</label></th>' +

@@ -157,6 +157,23 @@ a[data-disabled]
   height: 100%;
 }
 
+#metaScreen th
+{
+    font-weight: normal;
+}
+
+#metaScreen th
+{
+    text-align: left;
+    vertical-align: top;
+}
+
+#metaScreen td
+{
+    text-align: left;
+    vertical-align: top;
+}
+
 #toolbar
 {
   background-color: #d6d6d6;

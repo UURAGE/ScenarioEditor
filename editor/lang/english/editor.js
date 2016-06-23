@@ -90,7 +90,7 @@
     LanguageManager.edt_parts_file_to_import = "File to import";
     LanguageManager.edt_parts_advanced = "Advanced";
     LanguageManager.edt_parts_properties = "Properties";
-    LanguageManager.edt_parts_character_properties = "Character properties";
+    LanguageManager.edt_parts_character_properties = "Characters";
     LanguageManager.edt_parts_add_effect = "Add effect";
     LanguageManager.edt_parts_values = "Values";
 
