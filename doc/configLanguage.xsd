@@ -38,6 +38,17 @@
 						</key>
 					</element>
 				</choice>
+				<element name="migration" minOccurs="0" maxOccurs="1">
+					<complexType>
+						<sequence>
+							<element name="intentProperty" minOccurs="0" maxOccurs="1">
+								<complexType>
+									<attribute name="idref" type="string" use="required"></attribute>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
 			</sequence>
 			<attribute name="id" type="string" use="required"></attribute>
 		</complexType>
@@ -49,6 +60,10 @@
 			<selector xpath=".//tns:parameter" />
 			<field xpath="@id" />
 		</key>
+		<keyref name="propertyidref" refer="tns:propertyID">
+			<selector xpath=".//tns:intentProperty" />
+			<field xpath="@idref" />
+		</keyref>
 	</element>
 	<element name="property">
 		<complexType>
