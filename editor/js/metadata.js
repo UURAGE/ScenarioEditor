@@ -83,14 +83,14 @@ var Metadata;
             }
             else
             {
-                var propertyRow = $('<tr>', { id: idPrefix + '-container-' + propertyItem.id });
+                var propertyRow = $('<tr>');
 
                 var propertyHeader = $('<th>');
                 var controlHtmlId = idPrefix + '-' + propertyItem.id;
                 propertyHeader.append($('<label>', { text: propertyItem.name + ':', 'for': controlHtmlId }));
                 propertyRow.append(propertyHeader);
 
-                var propertyData = $('<td>');
+                var propertyData = $('<td>', { id: idPrefix + '-container-' + propertyItem.id });
                 propertyItem.type.appendControlTo(propertyData, controlHtmlId);
                 propertyRow.append(propertyData);
 
@@ -120,17 +120,17 @@ var Metadata;
             var li = $('<li>').append($('<a>', { href:'#' + characterTabId, text: character.id }));
             characterTabList.append(li);
 
-            var characterTabDiv = $('<table>', { id: characterTabId });
-            characterTabs.append(characterTabDiv);
+            var characterTab = $('<table>', { id: characterTabId });
+            characterTabs.append(characterTab);
 
             Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
             {
-                showPropertyItem(propertyItem, hStartLevel, characterTabDiv, characterTabId);
+                showPropertyItem(propertyItem, hStartLevel, characterTab, characterTabId);
             });
 
             Config.configObject.characters.byId[character.id].properties.sequence.forEach(function(propertyItem)
             {
-                showPropertyItem(propertyItem, hStartLevel, characterTabDiv, characterTabId);
+                showPropertyItem(propertyItem, hStartLevel, characterTab, characterTabId);
             });
         });
 

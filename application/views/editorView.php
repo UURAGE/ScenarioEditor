@@ -277,6 +277,7 @@
                   </div>
                   <div class="collapsable">
                     <div id="node-property-values" class="section"></div>
+                    <div id="node-character-property-values" class="section"></div>
                   </div>
                 </div>
                 <div id="commentSection" class="sidebarSection">

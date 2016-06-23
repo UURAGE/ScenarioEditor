@@ -82,8 +82,7 @@ var Main;
         }
         else
         {
-            $("#characterSection").remove();
-            $("#propertyValuesSection .collapsable").append($('<div>', { id:"node-character-own-properties" }));
+            $("#characterSelection").remove();
         }
 
         var scenarioNameInput = $('<input type="text" maxlength="35">');
@@ -1225,7 +1224,7 @@ var Main;
             {
                 var property = Config.configObject.characters.properties.byId[propertyId];
                 if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
-                node.propertyValues.perCharacter[characterId][propertyId] = property.type.getFromDOM($("#node-property-values-" + characterId + "-container-" + property.id));
+                node.propertyValues.perCharacter[characterId][propertyId] = property.type.getFromDOM($("#node-character-property-values-" + characterId + "-container-" + property.id));
             }
         }
         for (var characterId in Config.configObject.characters.byId)
@@ -1234,7 +1233,7 @@ var Main;
             {
                 var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
                 if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
-                node.propertyValues.perCharacter[characterId][propertyId] = property.type.getFromDOM($("#node-property-values-" + characterId + "-container-" + property.id));
+                node.propertyValues.perCharacter[characterId][propertyId] = property.type.getFromDOM($("#node-character-property-values-" + characterId + "-container-" + property.id));
             }
         }
 
@@ -1601,7 +1600,7 @@ var Main;
     {
         // Clear everything in the sidebar.
         $(
-            "#preconditionsDiv, #userDefinedParameterEffects, #node-property-values, #fixed-parameter-effects"
+            "#preconditionsDiv, #userDefinedParameterEffects, #node-property-values, #node-character-property-values, #fixed-parameter-effects"
         ).children().remove();
 
         // Don't show properties if no node or tree is selected. Display the minimap
@@ -1855,63 +1854,80 @@ var Main;
 
             // Show the node's property values
             var anyPropertyShown = false;
-            var showPropertyItem = function (propertyValues, propertyItem, hLevel, container, idPrefix)
+            var showPropertyItem = function (propertyValues, propertyItem, hLevel, tableBody, idPrefix)
             {
                 if (acceptableScopes.indexOf(propertyItem.scopes.statementScope) === -1) return;
                 if (propertyItem.kind === 'section')
                 {
-                    var sectionContainer = $('<div>');
+                    var sectionTable = $('<table>');
+
+                    var sectionTableHeader = $('<thead>').append($('<th colspan="2">').append($('<h' + hLevel + '>', { text: propertyItem.name })));
+                    sectionTable.append(sectionTableHeader);
+
+                    var sectionTableBody = $('<tbody>');
+                    sectionTable.append(sectionTableBody);
+
+                    var sectionContainer = $('<div>').append(sectionTable);
                     if (hLevel === hStartLevel) sectionContainer.addClass("section");
                     else                        sectionContainer.addClass("subsection");
-                    sectionContainer.append($('<h' + hLevel + '>', { text: propertyItem.name }));
-                    container.append(sectionContainer);
+                    tableBody.append($('<tr>').append($('<td colspan="2">').append(sectionContainer)));
+
                     propertyItem.sequence.forEach(function (subItem)
                     {
-                        showPropertyItem(propertyValues, subItem, hLevel + 1, sectionContainer, idPrefix);
+                         showPropertyItem(propertyValues, subItem, hLevel + 1, sectionTableBody, idPrefix);
                     });
                 }
                 else
                 {
+                    var propertyRow = $('<tr>');
+
+                    var propertyHeader = $('<th>');
                     var controlHtmlId = idPrefix + '-' + propertyItem.id;
+                    propertyHeader.append($('<label>', { text: propertyItem.name + ':', 'for': controlHtmlId }));
+                    propertyRow.append(propertyHeader);
 
-                    var propertyContainer = $('<div>', { id: idPrefix + '-container-' + propertyItem.id });
-                    container.append(propertyContainer);
-                    propertyContainer.append($('<label>', { text: propertyItem.name + ':', 'for': controlHtmlId }));
-                    propertyItem.type.appendControlTo(propertyContainer, controlHtmlId);
+                    var propertyData = $('<td>', { id: idPrefix + '-container-' + propertyItem.id });
+                    propertyItem.type.appendControlTo(propertyData, controlHtmlId);
+                    propertyItem.type.setInDOM(propertyData, propertyValues[propertyItem.id]);
 
-                    propertyItem.type.setInDOM(propertyContainer, propertyValues[propertyItem.id]);
+                    propertyRow.append(propertyData);
+
+                    tableBody.append(propertyRow);
 
                     anyPropertyShown = true;
                 }
             };
             var nodePropertiesEl = $('#node-property-values');
+            var nodePropertiesTable = $('<table>');
             Config.configObject.properties.sequence.forEach(function (subItem)
             {
-                showPropertyItem(node.propertyValues.characterIndependent, subItem, hStartLevel, nodePropertiesEl, nodePropertiesEl.attr('id'));
+                showPropertyItem(node.propertyValues.characterIndependent, subItem, hStartLevel, nodePropertiesTable, nodePropertiesEl.attr('id'));
             });
+            nodePropertiesEl.append(nodePropertiesTable);
 
             var nodePropertyShown = anyPropertyShown;
             anyPropertyShown = false;
 
-            nodeCharacterPropertiesEl = $('#node-property-values');
-            accordionDiv = $('<div>');
-            nodeCharacterPropertiesEl.append(accordionDiv);
+            nodeCharacterPropertiesEl = $('#node-character-property-values');
+            characterAccordion = $('<div>');
+            nodeCharacterPropertiesEl.append(characterAccordion);
+            hStartLevel += 1;
             Config.configObject.characters.sequence.forEach(function(character)
             {
                 var characterHeader = $('<h' + hStartLevel +'>', { text: character.id });
-                var characterDiv = $('<div>');
-                accordionDiv.append(characterHeader).append(characterDiv);
+                var characterTab = $('<table>');
+                characterAccordion.append(characterHeader).append($('<div>').append(characterTab));
 
                 var containerIdPrefix = nodeCharacterPropertiesEl.attr('id') + '-' + character.id;
 
                 Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
                 {
-                    showPropertyItem(node.propertyValues.perCharacter[character.id], propertyItem, hStartLevel + 1, characterDiv, containerIdPrefix);
+                    showPropertyItem(node.propertyValues.perCharacter[character.id], propertyItem, hStartLevel, characterTab, containerIdPrefix);
                 });
 
                 Config.configObject.characters.byId[character.id].properties.sequence.forEach(function(propertyItem)
                 {
-                    showPropertyItem(node.propertyValues.perCharacter[character.id], propertyItem, hStartLevel + 1, characterDiv, containerIdPrefix);
+                    showPropertyItem(node.propertyValues.perCharacter[character.id], propertyItem, hStartLevel, characterTab, containerIdPrefix);
                 });
             });
 
@@ -1922,12 +1938,12 @@ var Main;
             else if (!anyPropertyShown)
             {
                 $("#propertyValuesSection").show();
-                accordionDiv.remove();
+                characterAccordion.remove();
             }
             else
             {
                 $("#propertyValuesSection").show();
-                accordionDiv.accordion({ active: false, collapsible: true });
+                characterAccordion.accordion({ active: false, collapsible: true });
             }
 
             $("#endNodeCheckbox").prop("checked", node.endNode);
