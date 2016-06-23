@@ -49,6 +49,8 @@ var Config;
             config.characters = loadCharacterCollection(configXML.children('characters'));
         }
 
+        config.migration = loadMigration(configXML.children('migration'), config.properties, config.parameters, config.characters);
+
         Config.configObject = config;
     }
 
@@ -181,6 +183,20 @@ var Config;
             $.extend(collection, defaultCollection);
         }
         return collection;
+    }
+
+    function loadMigration(migrationXML, properties, parameters, characters)
+    {
+        var migration = {};
+        if (migrationXML.length > 0)
+        {
+            intentPropertyXML = migrationXML.children('intentProperty').eq(0);
+            if (intentPropertyXML.length > 0)
+            {
+                migration.intentProperty = { idRef: intentPropertyXML[0].getAttribute('idref') };
+            }
+        }
+        return migration;
     }
 
     Config.relationalOperators =

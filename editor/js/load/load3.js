@@ -173,14 +173,14 @@ var Load3;
 
         // Load the preconditions of this node.
         var preconditionsXML = $(statement).find("preconditions");
-        var preconditionsJS;
+        var preconditions;
         if (preconditionsXML.length === 0)
-            preconditionsJS = {type: "alwaysTrue", preconditions: []};
+            preconditions = { type: "alwaysTrue", preconditions: [] };
         else
-            preconditionsJS = loadPreconditions(preconditionsXML.children()[0]);
+            preconditions = loadPreconditions(preconditionsXML.children()[0]);
 
         var parameterEffects = Config.getNewDefaultParameterEffects();
-        var intentsArray = [];
+        var propertyValues = Config.getNewDefaultPropertyValues(['per', 'per-' + type]);
         var targets;
         if (type === Main.playerType)
         {
@@ -197,13 +197,24 @@ var Load3;
                 });
             }
 
-            var intents = $(statement).find('intents').children();
-
-            for (var l = 0; l < intents.length; l++)
-                intentsArray.push(
+            if (Config.configObject.migration.intentProperty)
+            {
+                var intents = $(statement).find('intents').children();
+                if (intents.length > 0)
                 {
-                    name: Main.unEscapeTags($(intents[l]).text())
-                });
+                    var intent = Main.unEscapeTags($(intents[0]).text());
+                    var intentPropertyIdRef = Config.configObject.migration.intentProperty.idRef;
+                    var firstCharacterId = Config.configObject.characters.sequence[0].id;
+                    if (intentPropertyIdRef in propertyValues.characterIndependent)
+                    {
+                        propertyValues.characterIndependent[intentPropertyIdRef] = intent;
+                    }
+                    else if (intentPropertyIdRef in propertyValues.perCharacter[firstCharacterId])
+                    {
+                        propertyValues.perCharacter[firstCharacterId][intentPropertyIdRef] = intent;
+                    }
+                }
+            }
 
             targets = $(statement).find('nextComputerStatements').children();
             if (targets.length === 0)
@@ -232,10 +243,9 @@ var Load3;
             text: text,
             type: type,
             characterIdRef: Config.configObject.characters.sequence[0].id,
+            preconditions: preconditions,
             parameterEffects: parameterEffects,
-            preconditions: preconditionsJS,
-            intent: intentsArray,
-            propertyValues: Config.getNewDefaultPropertyValues(['per', 'per-' + type]),
+            propertyValues: propertyValues,
             comment: comment,
             endNode: endNode,
             initsNode: initsNode,
