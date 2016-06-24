@@ -64,7 +64,6 @@ var Load;
 
         var reader = new FileReader();
 
-        $("#loading").show();
         reader.onload = function()
         {
             var xml;
@@ -78,35 +77,37 @@ var Load;
                 return;
             }
 
-            prepareRebuild();
-
-            // Try to find the schemaVersion of the XML and to find the old version
-            var schemaVersion = parseInt($('scenario', xml).attr('schemaVersion'));
-            var oldVersion = parseInt($($('metadata', xml)[0]).find('version').text());
-
-            // Load with the newest version of the schema
-            if (schemaVersion)
-            {
-                loadMetadata($($('metadata', xml)[0]));
-                suspendedly(generateGraph, jsPlumb)(xml);
-            }
-            // Load versions 2 and 3
-            else if (oldVersion)
-            {
-                Load3.loadMetadata($($('metadata', xml)[0]));
-                suspendedly(Load3.generateGraph, jsPlumb)(xml);
-            }
-            // Load version 1
-            else
-            {
-                Load1.generateGraph(xml);
-            }
+            loadScenario(xml);
         };
 
         reader.readAsText(input[0]);
+    }
 
-        //Loading of scenario complete, hide loading div:
-        $("#loading").hide();
+    function loadScenario(xml)
+    {
+        prepareRebuild();
+
+        // Try to find the schemaVersion of the XML and to find the old version
+        var schemaVersion = parseInt($('scenario', xml).attr('schemaVersion'));
+        var oldVersion = parseInt($($('metadata', xml)[0]).find('version').text());
+
+        // Load with the newest version of the schema
+        if (schemaVersion)
+        {
+            loadMetadata($($('metadata', xml)[0]));
+            suspendedly(generateGraph, jsPlumb)(xml);
+        }
+        // Load versions 2 and 3
+        else if (oldVersion)
+        {
+            Load3.loadMetadata($($('metadata', xml)[0]));
+            suspendedly(Load3.generateGraph, jsPlumb)(xml);
+        }
+        // Load version 1
+        else
+        {
+            Load1.generateGraph(xml);
+        }
     }
 
     // Wraps a function so that it is executed while jsPlumb drawing is suspended.
