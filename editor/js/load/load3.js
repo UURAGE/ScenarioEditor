@@ -10,7 +10,9 @@ var Load3;
     {
         generateGraph: generateGraph,
         loadMetadata: loadMetadata,
-        loadStatement: loadStatement
+        loadStatement: loadStatement,
+        loadConversation: loadConversation,
+        expandConversations: expandConversations
     };
 
     // Generates the entire graph, including the objects.

@@ -478,7 +478,6 @@ var Config;
                     case "boolean": return Utils.parseBool(value);
                     case "enumeration":
                         // The enumeration values could have changed, so we need to check if the current one is still valid
-                        // TODO: Check if only the name changed and not the option by index for example
                         var index = type.values.indexOf(value);
                         if (index !== -1) return type.values[index];
                         else              return type.values[0];
