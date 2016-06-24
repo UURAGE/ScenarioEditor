@@ -420,8 +420,27 @@ var Metadata;
                         }
                     });
 
-                    // TODO: Adjust preconditions
+                    var changeTypeOfPreconditionParameter = function(precondition)
+                    {
+                        if (!precondition.type && precondition.idRef === oldParameter.id)
+                        {
+                            var hasRelationalOperator = newParameter.type.relationalOperators.indexOf(Config.relationalOperators[precondition.operator]) !== -1;
+                            if (!hasRelationalOperator) precondition.operator = newParameter.type.relationalOperators[0].name;
+
+                            precondition.value = oldParameter.type.castTo(newParameter.type, precondition.value);
+                        }
+
+                        if (precondition.type !== "alwaysTrue" && precondition.preconditions)
+                        {
+                            precondition.preconditions.map(function(precondition)
+                            {
+                                changeTypeOfPreconditionParameter(precondition);
+                            });
+                        }
+                    };
+                    changeTypeOfPreconditionParameter(Main.nodes[nodeID].preconditions);
                 }
+
                 $(this).removeClass("changedTypeParameter");
             }
 
