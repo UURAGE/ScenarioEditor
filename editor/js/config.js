@@ -277,19 +277,9 @@ var Config;
             {
                 return appendChild(typeXML, 'typeString');
             },
-            castTo: function(type, value)
+            castFrom: function(type, value)
             {
-                switch(type.name)
-                {
-                    case "string": return value;
-                    case "integer": return Utils.parseDecimalIntWithDefault(value, 0);
-                    case "boolean": return Utils.parseBool(value);
-                    case "enumeration":
-                        var index = type.values.indexOf(value);
-                        if (index !== -1) return type.values[index];
-                        else              return type.values[0];
-                    default: return value;
-                }
+                return String(value);
             },
             appendControlTo: function(containerEl, htmlId)
             {
@@ -345,17 +335,14 @@ var Config;
             {
                 return $.extend({}, this, { defaultValue: this.getFromDOM(defaultValueContainer) });
             },
-            castTo: function(type, value)
+            castFrom: function(type, value)
             {
                 switch(type.name)
                 {
-                    case "string": return String(value);
+                    case "string": return Utils.parseDecimalIntWithDefault(value, 0);
                     case "integer": return value;
-                    case "boolean": return Boolean(value);
-                    case "enumeration":
-                        var index = type.values.indexOf(String(value));
-                        if (index !== -1) return type.values[index];
-                        else              return type.values[0];
+                    case "boolean": return Number(value);
+                    case "enumeration": return Utils.parseDecimalIntWithDefault(value, 0);
                     default: return value;
                 }
             },
@@ -397,17 +384,14 @@ var Config;
             {
                 return $.extend({}, this, { defaultValue: this.getFromDOM(defaultValueContainer) });
             },
-            castTo: function(type, value)
+            castFrom: function(type, value)
             {
                 switch(type.name)
                 {
-                    case "string": return String(value);
-                    case "integer": return Number(value);
+                    case "string": return Utils.parseBool(value.toLowerCase());
+                    case "integer": return Boolean(value);
                     case "boolean": return value;
-                    case "enumeration":
-                        var index = type.values.indexOf(String(value));
-                        if (index !== -1) return type.values[index];
-                        else              return type.values[0];
+                    case "enumeration": return Utils.parseBool(value.toLowerCase());
                     default: return value;
                 }
             },
@@ -469,20 +453,11 @@ var Config;
                 var defaultValue = defaultValueContainer.length ? this.getFromDOM(defaultValueContainer) : values[0];
                 return $.extend({ values: values }, this, { defaultValue: defaultValue });
             },
-            castTo: function(type, value)
+            castFrom: function(type, value)
             {
-                switch(type.name)
-                {
-                    case "string": return value;
-                    case "integer": return Utils.parseDecimalIntWithDefault(value, 0);
-                    case "boolean": return Utils.parseBool(value);
-                    case "enumeration":
-                        // The enumeration values could have changed, so we need to check if the current one is still valid
-                        var index = type.values.indexOf(value);
-                        if (index !== -1) return type.values[index];
-                        else              return type.values[0];
-                    default: return value;
-                }
+                var index = this.values.indexOf(String(value));
+                if (index !== -1) return this.values[index];
+                else              return this.values[0];
             },
             insertType: function(typeXML)
             {

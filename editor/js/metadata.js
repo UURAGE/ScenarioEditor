@@ -416,7 +416,7 @@ var Metadata;
                             var hasChangeType = newParameter.type.assignmentOperators.indexOf(effect.changeType) !== -1;
                             if (!hasChangeType) effect.changeType = newParameter.type.assignmentOperators[0];
 
-                            effect.value = oldParameter.type.castTo(newParameter.type, effect.value);
+                            effect.value = newParameter.type.castFrom(oldParameter.type, effect.value);
                         }
                     });
 
@@ -427,7 +427,7 @@ var Metadata;
                             var hasRelationalOperator = newParameter.type.relationalOperators.indexOf(Config.relationalOperators[precondition.operator]) !== -1;
                             if (!hasRelationalOperator) precondition.operator = newParameter.type.relationalOperators[0].name;
 
-                            precondition.value = oldParameter.type.castTo(newParameter.type, precondition.value);
+                            precondition.value = newParameter.type.castFrom(oldParameter.type, precondition.value);
                         }
 
                         if (precondition.type !== "alwaysTrue" && precondition.preconditions)
