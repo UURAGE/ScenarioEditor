@@ -47,7 +47,7 @@ var Load3;
                 // get the subject from the XML
                 tree.subject = Utils.unEscapeHTML($(this).children('subject')[0].textContent);
 
-                tree.optional = $(this).attr('optional') == "true";
+                tree.optional = Utils.parseBool($(this).attr('optional'));
 
                 // get the position from the XML, note that this is in grid coordinates, not screen coordinates
                 var position = $(this).children('position')[0];
@@ -57,8 +57,8 @@ var Load3;
 
                 tree.dragDiv.css(
                 { // set style position
-                    top : tree.topPos  * (Main.gridY) + "px", //grid variables are from main.js
-                    left: tree.leftPos * (Main.gridX) + "px"
+                    top : tree.topPos  * Main.gridY + "px", //grid variables are from main.js
+                    left: tree.leftPos * Main.gridX + "px"
                 });
 
                 $('.subjectName', tree.dragDiv).text(tree.subject); // set subject in HTML
@@ -164,9 +164,9 @@ var Load3;
         else
             id = "ext_" + id;
 
-        var jumpPoint = $(statement).attr('jumpPoint') == "true";
-        var initsNode = $(statement).attr('inits') == "true";
-        var endNode = $(statement).attr('possibleEnd') == "true";
+        var jumpPoint = Utils.parseBool($(statement).attr('jumpPoint'));
+        var initsNode = Utils.parseBool($(statement).attr('inits'));
+        var endNode = Utils.parseBool($(statement).attr('possibleEnd'));
 
         var text = Utils.unEscapeHTML($(statement).find('text').text());
 
@@ -313,7 +313,7 @@ var Load3;
         else
             id = "ext_" + id;
 
-        var endNode = $(conversationXMLElement).attr('possibleEnd') == "true";
+        var endNode = Utils.parseBool($(conversationXMLElement).attr('possibleEnd'));
         var comment = Utils.unEscapeHTML($(conversationXMLElement).find('comment').text());
 
         var xPos = $(conversationXMLElement).find('x').text();

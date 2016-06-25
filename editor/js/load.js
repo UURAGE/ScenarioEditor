@@ -179,7 +179,7 @@ var Load;
                 // get the subject from the XML
                 tree.subject = Utils.unEscapeHTML($(this).children('subject')[0].textContent);
 
-                tree.optional = $(this).attr('optional') == "true";
+                tree.optional = Utils.parseBool($(this).attr('optional'));
 
                 // get the position from the XML, note that this is in grid coordinates, not screen coordinates
                 var position = $(this).children('position')[0];
@@ -298,9 +298,9 @@ var Load;
             id = "ext_" + id;
 
         var characterIdRef = $(statement).attr('characteridref');
-        var jumpPoint = $(statement).attr('jumpPoint') == "true";
-        var initsNode = $(statement).attr('inits') == "true";
-        var endNode = $(statement).attr('end') == "true";
+        var jumpPoint = Utils.parseBool($(statement).attr('jumpPoint'));
+        var initsNode = Utils.parseBool($(statement).attr('inits'));
+        var endNode = Utils.parseBool($(statement).attr('end'));
 
         var text = Utils.unEscapeHTML($(statement).find('text').text());
 

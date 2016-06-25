@@ -29,7 +29,7 @@ var Load1;
                     Load3.loadStatement(this, Main.playerType, connections, tree.id);
                     break;
                 case "conversation":
-                    Load3.loadConversation(this, conversations, tree.id)
+                    Load3.loadConversation(this, conversations, tree.id);
                     break;
             }
         });
