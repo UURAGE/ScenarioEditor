@@ -16,25 +16,23 @@ function printScript()
     // and is called inside that window HTML on load
     var setHeights = function setHeights()
     {
-        var containers = document.getElementsByClassName('container');
-        for (var i = 0; i < containers.length; i++)
+        [].forEach.call(document.getElementsByClassName('container'), function (container)
         {
             // Set the height to include all bounding rectangles
             var containerHeight = container.getBoundingClientRect().top;
             var maxHeight = 0;
-            var divs = containers[i].getElementsByTagName('div');
-            for (var j = 0; j < divs.length; j++)
+            [].forEach.call(container.getElementsByTagName('div'), function (div)
             {
-                var newHeight = divs[j].getBoundingClientRect().bottom - containers[i].getBoundingClientRect().top;
+                var newHeight = div.getBoundingClientRect().bottom - containerHeight;
                 if (newHeight > maxHeight)
                 {
                     maxHeight = newHeight;
                 }
-            }
-            containers[i].style.height = maxHeight;
-        }
+            });
+            container.style.height = maxHeight;
+        });
     };
-
+    
     var htmlList = [];
     $('.treeContainer').each(function()
     {
