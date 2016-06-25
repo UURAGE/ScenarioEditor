@@ -179,7 +179,7 @@ var Parts;
                     '</tbody>' +
                     '<thead id="meta-property-values-header" ></thead>' +
                     '<tbody id="meta-property-values" style="display:none"/>' +
-                    '<thead><th colspan="2"><h3>' +LanguageManager.sLang("edt_parts_character_properties")+ '</h3></th></thead>' +
+                    '<thead><th colspan="2"><h3>' +LanguageManager.sLang("edt_common_characters")+ '</h3></th></thead>' +
                     '<tbody id="meta-character-property-values" style="display:none">' +
                         '<tr><td colspan="2" id="character-tabs"/></tr>' +
                     '</tbody>' +

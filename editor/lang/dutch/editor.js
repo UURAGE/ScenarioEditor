@@ -14,6 +14,7 @@
     LanguageManager.edt_common_add = "Toevoegen";
     LanguageManager.edt_common_save = "Opslaan";
     LanguageManager.edt_common_none = "(geen)";
+    LanguageManager.edt_common_characters = "Karakters";
 
     LanguageManager.edt_config_types_boolean = "Boolean";
     LanguageManager.edt_config_types_boolean_false = "Niet waar";
@@ -89,7 +90,6 @@
     LanguageManager.edt_parts_change_type = "Standaard verander type";
     LanguageManager.edt_parts_file_to_import = "Bestand om te importeren";
     LanguageManager.edt_parts_advanced = "Geavanceerd";
-    LanguageManager.edt_parts_properties = "Eigenschappen";
     LanguageManager.edt_parts_character_properties = "Karakters";
     LanguageManager.edt_parts_add_effect = "Effect toevoegen";
     LanguageManager.edt_parts_values = "Waarden";

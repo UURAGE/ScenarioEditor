@@ -260,7 +260,7 @@
                 </div>
                 <div id="effectsSection" class="sidebarSection">
                   <div class="sub-header clickable">
-                    <h2 title="<?php sLang('edt_effects_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/effects.png");?>" alt=""><?php sLang('edt_effects');?></h2>
+                    <h2 title="<?php sLang('edt_parameter_effects_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/effects.png");?>" alt=""><?php sLang('edt_parameter_effects');?></h2>
                   </div>
                   <div class="collapsable">
                     <div>
@@ -269,11 +269,12 @@
                       <button id="addUserDefinedParameterEffect" title="<?php sLang('edt_add');?>"><img src="<?php echo editor_url("png/others/plus.png");?>" alt=""> <?php sLang('edt_add_effect');?></button>
                     </div>
                     <div id="fixed-parameter-effects" class="section"></div>
+                    <div id="fixed-character-parameter-effects" class="section"></div>
                   </div>
                 </div>
                 <div id="propertyValuesSection" class="sidebarSection">
                   <div class="sub-header clickable">
-                    <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/properties.png");?>" alt=""><?php sLang('edt_properties');?></h2>
+                    <h2 title="<?php sLang('edt_property_values_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/properties.png");?>" alt=""><?php sLang('edt_property_values');?></h2>
                   </div>
                   <div class="collapsable">
                     <div id="node-property-values" class="section"></div>

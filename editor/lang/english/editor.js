@@ -14,6 +14,7 @@
     LanguageManager.edt_common_add = "Add";
     LanguageManager.edt_common_save = "Save";
     LanguageManager.edt_common_none = "(none)";
+    LanguageManager.edt_common_characters = "Characters";
 
     LanguageManager.edt_config_types_boolean = "Boolean";
     LanguageManager.edt_config_types_boolean_false = "False";
@@ -89,7 +90,6 @@
     LanguageManager.edt_parts_change_type = "Default change type";
     LanguageManager.edt_parts_file_to_import = "File to import";
     LanguageManager.edt_parts_advanced = "Advanced";
-    LanguageManager.edt_parts_properties = "Properties";
     LanguageManager.edt_parts_character_properties = "Characters";
     LanguageManager.edt_parts_add_effect = "Add effect";
     LanguageManager.edt_parts_values = "Values";

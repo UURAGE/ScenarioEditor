@@ -546,8 +546,8 @@ var Main;
         if (indicatorSnap)
         {
             var position = $("#gridIndicator").position();
-            var leftOffsetPos = position.left + Main.gridX*offsetX + $("#main").scrollLeft()
-            var topOffsetPos = position.top  + Main.gridY*offsetY + $("#main").scrollTop()
+            var leftOffsetPos = position.left + Main.gridX*offsetX + $("#main").scrollLeft();
+            var topOffsetPos = position.top  + Main.gridY*offsetY + $("#main").scrollTop();
             dragDiv.css(
             {
                 "top": topOffsetPos,
@@ -1170,7 +1170,7 @@ var Main;
         });
 
         // Save fixed parameter effects.
-        getFixedParameterEffectFromDOMAndSetInNode = function(effectContainer, parameterDefinitions, fixedParameterEffects, classPrefix)
+        var getFixedParameterEffectFromDOMAndSetInNode = function(effectContainer, parameterDefinitions, fixedParameterEffects, classPrefix)
         {
             var parameterIdRef = $(effectContainer).find('.' + classPrefix + '-effect-idref-select').val();
             var controlContainer = $(effectContainer).find('.' + classPrefix + '-effect-control-container');
@@ -1190,17 +1190,17 @@ var Main;
         };
 
         node.parameterEffects.fixed.characterIndependent = {};
-        var classPrefix = "fixed-parameter-effects";
-        $("#fixed-parameter-effects").find('.' + classPrefix + '-effect-container').each(function()
+        var fixedParameterEffectsEl = $("#fixed-parameter-effects");
+        fixedParameterEffectsEl.find('.' + fixedParameterEffectsEl.attr('id') + '-effect-container').each(function()
         {
-            getFixedParameterEffectFromDOMAndSetInNode(this, Config.configObject.parameters.byId, node.parameterEffects.fixed.characterIndependent, classPrefix);
+            getFixedParameterEffectFromDOMAndSetInNode(this, Config.configObject.parameters.byId, node.parameterEffects.fixed.characterIndependent, fixedParameterEffectsEl.attr('id'));
         });
-
+        var fixedCharacterParameterEffectsEl = $("#fixed-character-parameter-effects");
         for (var characterId in Config.configObject.characters.byId)
         {
             node.parameterEffects.fixed.perCharacter[characterId] = {};
-            var classCharacterPrefix = classPrefix + '-' + characterId;
-            $("#fixed-parameter-effects").find('.' + classCharacterPrefix + '-effect-container').each(function()
+            var classCharacterPrefix = fixedCharacterParameterEffectsEl.attr('id') + '-' + characterId;
+            fixedCharacterParameterEffectsEl.find('.' + classCharacterPrefix + '-effect-container').each(function()
             {
                 var parameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[characterId].parameters.byId);
                 getFixedParameterEffectFromDOMAndSetInNode(this, parameterDefinitions, node.parameterEffects.fixed.perCharacter[characterId], classCharacterPrefix);
@@ -1600,7 +1600,7 @@ var Main;
     {
         // Clear everything in the sidebar.
         $(
-            "#preconditionsDiv, #userDefinedParameterEffects, #node-property-values, #node-character-property-values, #fixed-parameter-effects"
+            "#preconditionsDiv, #userDefinedParameterEffects, #node-property-values, #node-character-property-values, #fixed-parameter-effects, #fixed-character-parameter-effects"
         ).children().remove();
 
         // Don't show properties if no node or tree is selected. Display the minimap
@@ -1737,7 +1737,7 @@ var Main;
                         parameterIdRefSelect = container.children('select.' + classPrefix + '-idref-select.hidden');
                         effectsContainer = container.children('.' + classPrefix + '-container');
                     }
-                    parameterIdRefOption = $('<option>', { value: parameterItem.id, text:  Main.escapeTags(parameterItem.name)});
+                    var parameterIdRefOption = $('<option>', { value: parameterItem.id, text:  Main.escapeTags(parameterItem.name)});
                     parameterIdRefSelect.append(parameterIdRefOption);
 
                     idRefToEffectsContainer[parameterItem.id] = effectsContainer;
@@ -1747,7 +1747,7 @@ var Main;
             };
 
             // Show the sections for all character-independent fixed parameter effects
-            fixedParameterEffectsEl = $("#fixed-parameter-effects");
+            var fixedParameterEffectsEl = $("#fixed-parameter-effects");
             var classPrefix = fixedParameterEffectsEl.attr('id');
             fixedParameterEffectsEl.removeClass(classPrefix + '-possible');
             var hStartLevel = 3;
@@ -1759,7 +1759,8 @@ var Main;
             });
 
             // Show the sections for all per-character fixed parameter effects
-            fixedCharacterParameterEffectsEl = $("#fixed-parameter-effects");
+            var fixedCharacterParameterEffectsEl = $("#fixed-character-parameter-effects");
+            var characterClassPrefix = fixedCharacterParameterEffectsEl.attr('id');
             var accordionDiv = $('<div>');
             fixedCharacterParameterEffectsEl.append(accordionDiv);
             var anyCharacterParameterShown = false;
@@ -1771,7 +1772,7 @@ var Main;
                 var characterDiv = $('<div>');
                 accordionDiv.append(characterHeader).append(characterDiv);
 
-                var classCharacterPrefix = classPrefix + '-' + character.id;
+                var classCharacterPrefix = characterClassPrefix + '-' + character.id;
 
                 idRefToCharacterEffectsContainer[character.id] = {};
 
@@ -1801,6 +1802,7 @@ var Main;
 
             if (anyCharacterParameterShown)
             {
+                fixedCharacterParameterEffectsEl.prepend($('<h3>', { text: LanguageManager.sLang('edt_common_characters') }));
                 // Set the heightStyle to "content", because the content changes dynamically
                 accordionDiv.accordion({ active: false, collapsible: true, heightStyle: "content" });
             }
@@ -1830,7 +1832,7 @@ var Main;
             // Add the per-character effects that were previously defined
             for (var characterId in Config.configObject.characters.byId)
             {
-                var classCharacterPrefix = classPrefix + '-' + characterId;
+                var classCharacterPrefix = characterClassPrefix + '-' + characterId;
 
                 for (var parameterIdRef in node.parameterEffects.fixed.perCharacter[characterId])
                 {
@@ -1908,8 +1910,8 @@ var Main;
             var nodePropertyShown = anyPropertyShown;
             anyPropertyShown = false;
 
-            nodeCharacterPropertiesEl = $('#node-character-property-values');
-            characterAccordion = $('<div>');
+            var nodeCharacterPropertiesEl = $('#node-character-property-values');
+            var characterAccordion = $('<div>');
             nodeCharacterPropertiesEl.append(characterAccordion);
             Config.configObject.characters.sequence.forEach(function(character)
             {
@@ -1942,6 +1944,7 @@ var Main;
             else
             {
                 $("#propertyValuesSection").show();
+                nodeCharacterPropertiesEl.prepend($('<h3>', { text: LanguageManager.sLang('edt_common_characters') }));
                 characterAccordion.accordion({ active: false, collapsible: true, heightStyle: "content" });
             }
 
