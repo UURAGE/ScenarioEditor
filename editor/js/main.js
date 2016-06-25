@@ -279,6 +279,8 @@ var Main;
                 $(this).addClass("enabled");
                 highlightParents(Main.selectedElement);
             }
+
+            $("#main").focus();
         });
 
         $("#main").on('mouseenter', function()

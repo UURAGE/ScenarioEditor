@@ -8,6 +8,7 @@ var Load;
 
     Load =
     {
+        importDialog: importDialog,
         importScenario: importScenario
     };
 
@@ -18,35 +19,44 @@ var Load;
         $("#importScreen").html(Parts.getImportScreenHTML());
         $("#importScenario").on('click', function()
         {
-            $("#importScreen").dialog(
-            {
-                title : LanguageManager.sLang("edt_load_import_title"),
-                height: ParameterValues.heightImportScreen,
-                width: ParameterValues.widthImportScreen,
-                modal: true,
-                buttons:
-                [{
-                    text: LanguageManager.sLang("edt_load_import"),
-                    click: function()
-                    {
-                        importScenario();
-                        $("#importScreen").dialog('close');
-                    }
-                },
-                {
-                    text: LanguageManager.sLang("edt_common_close"),
-                    click: function()
-                    {
-                        $("#importScreen").dialog('close');
-                    }
-                }]
-            });
+            importDialog();
         });
 
         // At the beginning no XML is loaded, so we need to define a metaObject
         Metadata.getNewDefaultMetaObject();
         loadedMetaObject = Metadata.metaObject;
     });
+
+    function importDialog()
+    {
+        $("#importScreen").dialog(
+        {
+            title : LanguageManager.sLang("edt_load_import_title"),
+            height: ParameterValues.heightImportScreen,
+            width: ParameterValues.widthImportScreen,
+            modal: true,
+            buttons:
+            [{
+                text: LanguageManager.sLang("edt_load_import"),
+                click: function()
+                {
+                    importScenario();
+                    $("#importScreen").dialog('close');
+                }
+            },
+            {
+                text: LanguageManager.sLang("edt_common_close"),
+                click: function()
+                {
+                    $("#importScreen").dialog('close');
+                }
+            }],
+            close: function()
+            {
+                $("#main").focus();
+            }
+        });
+    }
 
     // Creates a graph and metadata from xml file provided by user
     function importScenario()

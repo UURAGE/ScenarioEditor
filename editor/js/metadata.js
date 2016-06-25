@@ -274,6 +274,8 @@ var Metadata;
                     // The table headers need to be visible in the metascreen the next time.
                     $("#paramsTableHead").removeClass("hidden");
                 }
+
+                $("#main").focus();
             }
         });
 

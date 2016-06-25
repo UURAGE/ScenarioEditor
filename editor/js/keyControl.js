@@ -81,9 +81,29 @@ var KeyControl;
             if(!Zoom.isZoomed())
                 Main.addNewTree(null, true, 0, 0);
         },
+        A: function()
+        {
+            var allParentsButton = $("#allParents");
+            if (!allParentsButton.is(":disabled"))
+            {
+                allParentsButton.trigger('click');
+            }
+        },
         B: function()
         {
             Metadata.metadataDialog();
+        },
+        P: function()
+        {
+            Metadata.parameterDialog();
+        },
+        I: function()
+        {
+            Load.importDialog();
+        },
+        O: function()
+        {
+            Save.exportScenario();
         },
         V: function()
         {
