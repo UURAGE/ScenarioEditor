@@ -11,8 +11,7 @@ var HtmlGenerator;
         addEmptyUserDefinedParameterDefinition: addEmptyUserDefinedParameterDefinition,
         addEmptyUserDefinedParameterEffect: addEmptyUserDefinedParameterEffect,
         appendEnumerationValueListTo: appendEnumerationValueListTo,
-        insertPreconditions: insertPreconditions,
-        nullToHTMLValue: nullToHTMLValue,
+        insertPreconditions: insertPreconditions
     };
 
     //Get all the raw HTLM from Parts.js
@@ -354,11 +353,6 @@ var HtmlGenerator;
                 parameter.type.setInDOM(addedDiv.find(".precondition-value-container"), currentPrecondition.value);
             }
         }
-    }
-
-    function nullToHTMLValue(value)
-    {
-        return (value !== null ? value : "(null)");
     }
 
     function addEmptyPrecondition(divToAdd)

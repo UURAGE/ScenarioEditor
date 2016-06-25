@@ -12,8 +12,7 @@ var ObjectGenerator;
     {
         parameterObject: ParameterObject,
         preconditionObject: PreconditionObject,
-        effectObject: EffectObject,
-        nullFromHTMLValue: NullFromHTMLValue
+        effectObject: EffectObject
     };
 
     function ParameterObject(div)
@@ -63,11 +62,6 @@ var ObjectGenerator;
             changeType: div.find(".parameter-effect-changetype-select").find("option:selected").val(),
             value: Metadata.metaObject.parameters.byId[idRef].type.getFromDOM(div.find(".parameter-effect-value-container"))
         };
-    }
-
-    function NullFromHTMLValue(value)
-    {
-        return (value != "(null)" ? value : null);
     }
 
     function SinglePreconditionObject(div)
