@@ -127,17 +127,8 @@ var MiniMap;
         $("#minimapSelector").css("top", minimapSelectorY+"px");
         $("#minimapSelector").css("left", minimapSelectorX+"px");
 
-        //Debugging:
-        //console.log("minimapZoom:" + minimapZoom);
-        //console.log("minimapSelectorX:" + minimapSelectorX);
-        //console.log("minimapSelectorY:" + minimapSelectorY);
-
         minimapSelectorX /= zoom;
         minimapSelectorY /= zoom;
-
-        //Debugging:
-        //console.log("scrollPositionX:" + minimapSelectorX);
-        //console.log("scrollPositionY:" + minimapSelectorY);
 
         if(!Zoom.isZoomed())   //Nothing is zoomed
         {
@@ -169,10 +160,6 @@ var MiniMap;
         var realWidth, realHeight;
         var viewportWidth, viewportHeight, viewportX, viewportY, zoomFactor;
         var main, treeDiv;
-
-        //Debugging:
-        //console.log("Trees open:" + $('#mainCell .zoom').length);
-        //console.log("Minimap updated, refreshed: " + refresh);
 
         main = $("#mainCell > #main");
         treeDiv = $("#mainCell .treeContainer.zoom > .treeDiv");
@@ -221,9 +208,6 @@ var MiniMap;
                 $("#scaledDiv .treeContainer").not(".zoom").remove();
         }
 
-        //Debugging:
-        //console.log(realWidth + "x" + realHeight);
-
         //Standard width/height for minimap container
         var width = 300;
         var height = 300;
@@ -237,11 +221,6 @@ var MiniMap;
         {
             zoomFactor = $("#sidebar").height()/(realHeight+realHeight*0.1);
         }
-
-        //Debugging:
-        //console.log("widthFactor:" + widthFactor);
-        //console.log("heightFactor:" + heightFactor);
-        //console.log("zoomFactor:" + zoomFactor);
 
         $("#minimap").css("width", (realWidth * zoomFactor) + "px");
         $("#minimap").css("height", (realHeight * zoomFactor) + "px");

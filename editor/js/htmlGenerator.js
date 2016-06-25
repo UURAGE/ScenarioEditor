@@ -101,8 +101,6 @@ var HtmlGenerator;
         {
             var isTime = $("#params").find(".isT").length;
             var isTimeRemoved = $("#params").find(".isT.removedParameter").length;
-            //console.log('t\'s: \t'+ isTime);
-            //console.log('t.R\'s: \t'+ isTimeRemoved);
 
             // if the timeParameterObject is empty, or if it is filled, but
             // the parameter in the dialog has been removed (in that case the
@@ -111,7 +109,6 @@ var HtmlGenerator;
             {
                 $("#params").append(parameterHTML);
                 var div = $("#params").children().last();
-                // console.log(div.children());
                 // div.children().children().prop('disabled', true);
                 $(div).prop('id', 't');
                 div.find(".name").val(LanguageManager.sLang("edt_html_time"));

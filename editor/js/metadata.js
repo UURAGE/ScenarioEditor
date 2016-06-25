@@ -47,7 +47,6 @@ var Metadata;
         {
             var tr = $(this).closest('tr');
             tr.addClass("removedParameter");
-            // console.log("removed parameter with id:\t"+tr[0].id);
             if(tr[0].id === "t" && tr.not(".removedParameter"))
             {
                 // for time parameter: make visible when Time-parameter has been removed
@@ -238,7 +237,6 @@ var Metadata;
     {
         Main.selectNode(null);
 
-        //console.log('timePId:\t'+Metadata.timePId);
         if (Metadata.timePId !== null )
         {
             $("#addTimeParameter").addClass("hidden");
@@ -456,8 +454,6 @@ var Metadata;
             $(this).removeClass("newParameter").addClass("existingParameter");
             $(this).removeClass("changedTypeParameter");
         });
-
-        //console.log(Metadata.metaObject.parameters);
     }
 
     // Save all changes to the metaObject.
