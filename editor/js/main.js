@@ -983,7 +983,7 @@ var Main;
         if (Main.selectedElements.length > 0)
         {
             // Suspend the jsplumb instance that handles the tree containers
-            jsPlumb.doWhileSuspended(function()
+            jsPlumb.batch(function()
             {
                 for (var i = 0; i < Main.selectedElements.length; i++)
                 {

@@ -17,17 +17,15 @@
             Main.unsavedChanges = true;
 
             // First we distribute the nodes vertically based on the longest path to the Node.
-            var verticalOrder =
-                distributeNodesVertically(
-                    tree);
+            var verticalOrder = distributeNodesVertically(tree);
             // Next we try to find a way to place the nodes horizontally to minimize edge crossings.
-            var optimizedOrder =
-                optimizeHorizontalDistribution(
-                    verticalOrder);
+            var optimizedOrder = optimizeHorizontalDistribution(verticalOrder);
             // Reposition the jsPlumb nodes based on the optimizedOrder, we suspend drawing while moving the nodes.
-            Load.suspendedly(
-                repositionNodes, tree.plumbInstance)(
-                optimizedOrder);
+            tree.plumbInstance.batch(function()
+            {
+                repositionNodes(optimizedOrder);
+            });
+
             startNodeIDs.forEach(function(startNodeID)
             {
                 tree.plumbInstance.revalidate(startNodeID, 0);
@@ -405,9 +403,9 @@
                     {
                         // If it does, we add a virtual node between them on the rank below this one.
                         // Note that we will visit this virtualNode when we loop over the next rank.
-                        var virtualNode = 
+                        var virtualNode =
                         {
-                            topologicalChildren: 
+                            topologicalChildren:
                             [
                                 childrenOfCurrentNode[n]
                             ],
@@ -575,7 +573,7 @@
                 Main.nodes[nodeID].topologicalOrderingVisited = false;
             }
         });
-        
+
         $.each(Save.getStartNodeIDs(tree), function(index, startNodeID)
         {
             // Recursively find a reversed topological ordering.

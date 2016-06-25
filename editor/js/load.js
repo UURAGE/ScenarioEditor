@@ -8,8 +8,7 @@ var Load;
 
     Load =
     {
-        importScenario: importScenario,
-        suspendedly: suspendedly,
+        importScenario: importScenario
     };
 
     var loadedMetaObject;
@@ -90,32 +89,28 @@ var Load;
         if (schemaVersion)
         {
             loadMetadata($($('metadata', xml)[0]));
-            suspendedly(generateGraph, jsPlumb)(xml);
+            jsPlumb.batch(function()
+            {
+                generateGraph(xml);
+            });
         }
         // Load versions 2 and 3
         else if (oldVersion)
         {
             Load3.loadMetadata($($('metadata', xml)[0]));
-            suspendedly(Load3.generateGraph, jsPlumb)(xml);
+            jsPlumb.batch(function()
+            {
+                Load3.generateGraph(xml);
+            });
         }
         // Load version 1
         else
         {
-            Load1.generateGraph(xml);
-        }
-    }
-
-    // Wraps a function so that it is executed while jsPlumb drawing is suspended.
-    function suspendedly(func, plumbInstance)
-    {
-        return function()
-        {
-            var args = Array.prototype.slice.call(arguments);
-            plumbInstance.doWhileSuspended(function()
+            jsPlumb.batch(function()
             {
-                func.apply(this, args);
+                Load1.generateGraph(xml);
             });
-        };
+        }
     }
 
     function prepareRebuild()
@@ -412,7 +407,7 @@ var Load;
                         idRef: parameterIdRef,
                         operator: preconditionChildren[i].attributes.operator.value,
                         value: parameter.type.fromXML(preconditionChildren[i])
-                    }
+                    };
                     if (characterIdRef) precondition.characterIdRef = characterIdRef;
                     preconditionsArray.push(precondition);
                 }
