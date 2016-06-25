@@ -554,7 +554,7 @@
                 //... the new rank of the childnode is the maximum of its current rank and this parents rank + 1.
                 // This means that the rank of every node is one bigger than the largest rank of any of it's parents.
                 // This in turn is the length of the longest path to this node from the source.
-                if (Main.nodes[connections[j].targetId].topologicalRank < (Main.nodes[topologicalOrdening[i]].topologicalRank + 1))
+                if (Main.nodes[connections[j].targetId].topologicalRank < Main.nodes[topologicalOrdening[i]].topologicalRank + 1)
                 {
                     Main.nodes[connections[j].targetId].topologicalRank = Main.nodes[topologicalOrdening[i]].topologicalRank + 1;
                 }

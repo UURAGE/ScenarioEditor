@@ -154,7 +154,7 @@ var Metadata;
             description: "",
             parameters: getNewDefaultParameters(),
             propertyValues: Config.getNewDefaultPropertyValues(['independent']),
-            defaultChangeType: LanguageManager.sLang("edt_parts_delta"),
+            defaultChangeType: LanguageManager.sLang("edt_parts_delta")
         };
     }
 

@@ -113,8 +113,8 @@ var MiniMap;
 
     function updateScrollPosition(e)
     {
-        var minimapSelectorX = (e.pageX - $("#minimap").offset().left) - ($("#minimapSelector").width()/2);
-        var minimapSelectorY = (e.pageY - $("#minimap").offset().top) - ($("#minimapSelector").height()/2);
+        var minimapSelectorX = e.pageX - $("#minimap").offset().left - $("#minimapSelector").width() / 2;
+        var minimapSelectorY = e.pageY - $("#minimap").offset().top - $("#minimapSelector").height() / 2;
 
         //Limit the minimum/maximum positions of the selector
         var maxX = $("#minimap").width() - $("#minimapSelector").width();
@@ -222,8 +222,8 @@ var MiniMap;
             zoomFactor = $("#sidebar").height()/(realHeight+realHeight*0.1);
         }
 
-        $("#minimap").css("width", (realWidth * zoomFactor) + "px");
-        $("#minimap").css("height", (realHeight * zoomFactor) + "px");
+        $("#minimap").css("width", realWidth * zoomFactor + "px");
+        $("#minimap").css("height", realHeight * zoomFactor + "px");
 
         if(detailed && refresh)
         {

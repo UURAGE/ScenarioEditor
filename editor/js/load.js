@@ -189,8 +189,8 @@ var Load;
 
                 tree.dragDiv.css(
                 { // set style position
-                    top : tree.topPos  * (Main.gridY) + "px", //grid variables are from main.js
-                    left: tree.leftPos * (Main.gridX) + "px"
+                    top : tree.topPos  * Main.gridY + "px", //grid variables are from main.js
+                    left: tree.leftPos * Main.gridX + "px"
                 });
 
                 $('.subjectName', tree.dragDiv).text(tree.subject); // set subject in HTML

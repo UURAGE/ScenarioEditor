@@ -916,7 +916,7 @@ var Main;
         // make each ".ep" div a source
         plumbInstance.makeSource(node,
         {
-            filter: ".ep",
+            filter: ".ep"
         });
 
         // initialise all '.w' elements as connection targets.
@@ -925,7 +925,7 @@ var Main;
             dropOptions:
             {
                 hoverClass: "dragHover"
-            },
+            }
         });
 
         // Used for dragging of multiple nodes.
@@ -1337,7 +1337,7 @@ var Main;
             tree.dragDiv.css(
             {
                 "top": tree.topPos*Main.gridY,
-                "left": tree.leftPos*Main.gridX,
+                "left": tree.leftPos*Main.gridX
             });
         }
     }
@@ -1594,7 +1594,7 @@ var Main;
                 addedDiv = HtmlGenerator.addEmptyUserDefinedParameterEffect();
                 addedDiv.find(".parameter-idref-select").val(parameter.idRef).trigger('change');
                 addedDiv.find(".parameter-effect-changetype-select").val(parameter.changeType);
-                Metadata.metaObject.parameters.byId[parameter.idRef].type.setInDOM(addedDiv.find(".parameter-effect-value-container"), (parameter.value));
+                Metadata.metaObject.parameters.byId[parameter.idRef].type.setInDOM(addedDiv.find(".parameter-effect-value-container"), parameter.value);
             }
 
             var acceptableScopes = ['per', 'per-' + node.type];
@@ -1977,7 +1977,7 @@ var Main;
     function getFirstChildIdOrNull(sourceId)
     {
         var connections = Main.getPlumbInstanceByNodeID(sourceId).getConnections({ source: sourceId });
-        return (connections.length === 0 ? null : connections[0].targetId);
+        return connections.length === 0 ? null : connections[0].targetId;
     }
 
     //Make .collapsable div sections collapse and expand when .clickable sibling element is clicked

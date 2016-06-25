@@ -60,7 +60,7 @@ var Zoom;
             var heightOffset = tree.div.position().top - tree.dragDiv.position().top;
             var dragDivHeight = tree.dragDiv.outerHeight();
 
-            $(tree.div).css({ "height": (dragDivHeight - heightOffset) + "px", "width": "100%" });
+            $(tree.div).css({ "height": dragDivHeight - heightOffset + "px", "width": "100%" });
             jsPlumb.setSuspendDrawing(false);
             tree.nodes.forEach(function(n)
             {
@@ -92,7 +92,7 @@ var Zoom;
             tree.div.scrollLeft(0);
 
             tree.dragDiv.removeClass("zoom");
-            tree.dragDiv.css({ "top": (tree.topPos * Main.gridY), "left": (tree.leftPos * Main.gridX) });
+            tree.dragDiv.css({ "top": tree.topPos * Main.gridY, "left": tree.leftPos * Main.gridX });
             jsPlumb.toggleDraggable(tree.dragDiv);
             tree.div.selectable('disable');
 

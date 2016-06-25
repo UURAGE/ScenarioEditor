@@ -262,7 +262,7 @@ var Validator;
         var hasErrors = false;
         $.each(errors, function(index, value)
         {
-            hasErrors = hasErrors || (value.level === 'error');
+            hasErrors = hasErrors || value.level === 'error';
         });
 
         if (!hasErrors)

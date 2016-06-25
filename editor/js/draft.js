@@ -146,7 +146,7 @@
                     var xdif = -75 + 150 * Math.random(), ydif = -75 + 150 * Math.random();
                     var nodePos = {
                         left : Math.max(0,pos.left + xdif),
-                        top : Math.max(pos.top + ydif, min),
+                        top : Math.max(pos.top + ydif, min)
                     };
                     $('#' + node.id).offset(nodePos);
                 });
@@ -389,7 +389,7 @@
         $('tr.draftItem').removeClass("odd").removeClass("even");
         $('tr.draftItem').each(function()
         {
-            $(this).addClass((i % 2 === 1 ? "odd" : "even"));
+            $(this).addClass(i % 2 === 1 ? "odd" : "even");
             i += 1;
         });
     }
@@ -409,8 +409,8 @@
                 for (i = 0; i < itemProperties.length; i += 1)
                 {
                     p = itemProperties[i];
-                    e = (propEditors[p] === undefined ?
-                        propEditors.fallback : propEditors[p]);
+                    e = propEditors[p] === undefined ?
+                        propEditors.fallback : propEditors[p];
 
                     if (e.indexOf('<select') !== -1)
                     {

@@ -40,7 +40,7 @@ var Utils;
     {
         // Make sure radix 10 is used (the default is browser-dependent).
         var value = parseInt(string, 10);
-        return (isNaN(value) ? defaultValue : value);
+        return isNaN(value) ? defaultValue : value;
     }
 
     function parseBool(string)

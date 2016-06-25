@@ -460,7 +460,7 @@ var KeyControl;
                 tree.dragDiv.css(
                 {
                     "top": tree.topPos*Main.gridY,
-                    "left": tree.leftPos*Main.gridX,
+                    "left": tree.leftPos*Main.gridX
                 });
             }
         }
@@ -605,9 +605,9 @@ var KeyControl;
                 var nodeLookedAt = connections2[j].targetId;
                 var leftLookedAt = $("#" + nodeLookedAt).offset().left;
 
-                if ((nodeLookedAt != Main.selectedElement) && (
-                        leftLookedAt > leftCurrent) && (left >
-                        leftLookedAt))
+                if (nodeLookedAt != Main.selectedElement &&
+                    leftLookedAt > leftCurrent &&
+                    left > leftLookedAt)
                 {
                     closestNode = nodeLookedAt;
                     left = leftLookedAt;
@@ -645,9 +645,9 @@ var KeyControl;
                 var nodeLookedAt = sourceConnections[j].targetId;
                 var rightLookedAt = $("#" + nodeLookedAt).offset().left;
 
-                if ((nodeLookedAt != Main.selectedElement) &&
-                    (rightLookedAt < rightCurrent) &&
-                    (right < rightLookedAt))
+                if (nodeLookedAt != Main.selectedElement &&
+                    rightLookedAt < rightCurrent &&
+                    right < rightLookedAt)
                 {
                     closestNode = nodeLookedAt;
                     right = rightLookedAt;
