@@ -16,10 +16,6 @@ var Save;
         $("#exportScenario").on('click', exportScenario);
     });
 
-    /*
-     ** Public Functions
-     */
-
     // Generates the XML
     function generateXML()
     {
@@ -165,10 +161,6 @@ var Save;
 
         return orphanNodes;
     }
-
-    /*
-     ** Private Functions
-     */
 
     // Offers the XML of the current scenario for download
     // Adapted from work by Eric Bidelman (ericbidelman@chromium.org)

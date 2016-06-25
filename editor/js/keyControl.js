@@ -228,10 +228,6 @@ var KeyControl;
         }
     };
 
-    /*
-     ** Public Functions
-     */
-
     //If the user clicked on a node while ctrl is pressed, check if he need to be selected or deselected.
     function ctrlClickOnElement(node)
     {
@@ -264,10 +260,6 @@ var KeyControl;
         if(elementID !== null && elementID !== undefined && elementID in Main.nodes)
             Main.getPlumbInstanceByNodeID(elementID).addToDragSelection($("#"+elementID)[0]);
     }
-
-    /*
-     ** Private Functions
-     */
 
     //If the user clicked on a selected node while ctrl is pressed, deselect the node.
     function deselectElement(node)

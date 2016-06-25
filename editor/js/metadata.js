@@ -142,10 +142,6 @@ var Metadata;
         if (anyPropertyShown) characterPropertyValuesEl.show();
     });
 
-    /*
-     ** Public Functions
-     */
-
     // Creates and returns a new default meta object containing sensible defaults.
     // If needed, change the defaults here.
     function getNewDefaultMetaObject()
@@ -360,10 +356,6 @@ var Metadata;
             }
         }
     }
-
-    /*
-     ** Private Functions
-     */
 
     function saveParameters()
     {

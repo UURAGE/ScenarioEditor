@@ -140,10 +140,6 @@ var HtmlGenerator;
         });
     });
 
-    /*
-    ** Public Functions
-    */
-
     function addEmptyUserDefinedParameterDefinition()
     {
         $("#params").append(parameterHTML);
@@ -367,10 +363,6 @@ var HtmlGenerator;
     {
         return (value !== null ? value : "(null)");
     }
-
-    /*
-     ** Private Functions
-     */
 
     function addEmptyPrecondition(divToAdd)
     {

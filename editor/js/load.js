@@ -50,10 +50,6 @@ var Load;
         loadedMetaObject = Metadata.metaObject;
     });
 
-    /*
-     ** Public Functions
-     */
-
     // Creates a graph and metadata from xml file provided by user
     function importScenario()
     {
@@ -122,10 +118,6 @@ var Load;
             });
         };
     }
-
-    /*
-     ** Private Functions
-     */
 
     function prepareRebuild()
     {

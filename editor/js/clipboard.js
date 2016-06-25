@@ -11,9 +11,6 @@ var Clipboard;
         pasteElement: pasteElement
     };
 
-    //Public Variables
-
-    //Private Variables
     var copiedElement = null,
         copiedElements = [],
         copiedTrees = false;

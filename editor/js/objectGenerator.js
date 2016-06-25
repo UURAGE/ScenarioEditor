@@ -14,10 +14,6 @@ var ObjectGenerator;
         nullFromHTMLValue: NullFromHTMLValue
     };
 
-    /*
-     ** Public funtions
-     */
-
     function ParameterObject(div)
     {
         var name = div.find(".name").val();
@@ -71,10 +67,6 @@ var ObjectGenerator;
     {
         return (value != "(null)" ? value : null);
     }
-
-    /*
-     ** Private Functions
-     */
 
     function SinglePreconditionObject(div)
     {

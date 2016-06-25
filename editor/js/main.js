@@ -4,7 +4,6 @@ var Main;
 
 (function()
 {
-    //Public Variables
     var gridX,
         gridY;
 
@@ -46,7 +45,6 @@ var Main;
         updateButtons: updateButtons
     };
 
-    //Private Variables.
     var selectableSelected = [],
         ctrlDown = false,
         invalidateNodeClick = false;//a drag event also triggers a click event, use this flag to catch and stop these events
@@ -395,10 +393,6 @@ var Main;
             return LanguageManager.sLang("edt_main_pending_changes");
         }
     });
-
-    /*
-     ** Public Functions
-     */
 
     function createEmptyTree(id, indicatorSnap, offsetX, offsetY)
     {
@@ -1317,10 +1311,6 @@ var Main;
                 .replace(/<br\/>/g, "\n"); // \n
         }
     }
-
-    /*
-     ** Private Functions
-     */
 
     //grid is based on the css specified size of tree containers.
     function initialiseGrid(domGridElement)
