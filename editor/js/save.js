@@ -31,9 +31,9 @@ var Save;
 
         // Handles the metadata
         var metadataEl = addAndReturnElement("metadata", nameSpace, doc.documentElement);
-        addAndReturnElement("name", nameSpace, metadataEl).textContent = Main.escapeTags(Metadata.metaObject.name);
+        addAndReturnElement("name", nameSpace, metadataEl).textContent = Utils.escapeHTML(Metadata.metaObject.name);
         addAndReturnElement("date", nameSpace, metadataEl).textContent =new Date().toISOString();
-        addAndReturnElement("description", nameSpace, metadataEl).textContent = Main.escapeTags(Metadata.metaObject.description);
+        addAndReturnElement("description", nameSpace, metadataEl).textContent = Utils.escapeHTML(Metadata.metaObject.description);
         addAndReturnElement("difficulty", nameSpace, metadataEl).textContent = Metadata.metaObject.difficulty;
         addAndReturnElement("defaultChangeType", nameSpace, metadataEl).textContent = Metadata.metaObject.defaultChangeType;
 
@@ -52,8 +52,8 @@ var Save;
             var definitionEl = addAndReturnElement(elementName, nameSpace, definitionsEl);
 
             definitionEl.setAttribute("id", definition.id);
-            definitionEl.setAttribute("name", Main.escapeTags(definition.name));
-            if (definition.description) definitionEl.setAttribute("description", Main.escapeTags(definition.description));
+            definitionEl.setAttribute("name", Utils.escapeHTML(definition.name));
+            if (definition.description) definitionEl.setAttribute("description", Utils.escapeHTML(definition.description));
 
             var typeEl = definition.type.insertType(definitionEl);
             var defaultEl = addAndReturnElement('default', nameSpace, typeEl);
@@ -230,7 +230,7 @@ var Save;
         treeElement.setAttribute("id", tree.id.replace(/^ext_/, ''));
         treeElement.setAttribute("optional", tree.optional);
 
-        addAndReturnElement('subject', nameSpace, treeElement).textContent = Main.escapeTags(tree.subject);
+        addAndReturnElement('subject', nameSpace, treeElement).textContent = Utils.escapeHTML(tree.subject);
 
         var positionElement = addAndReturnElement('position', nameSpace, treeElement);
 
@@ -269,7 +269,7 @@ var Save;
             statementEl.setAttribute('end', node.endNode);
 
             // Add a text element to the XML element
-            addAndReturnElement("text", nameSpace, statementEl).textContent = Main.escapeTags(node.text);
+            addAndReturnElement("text", nameSpace, statementEl).textContent = Utils.escapeHTML(node.text);
 
             // Save the position
             var visible = $("#" + node.id).is(":visible");
@@ -286,7 +286,7 @@ var Save;
 
             // Save the comment
             if (node.comment !== "")
-                addAndReturnElement("comment", nameSpace, statementEl).textContent = Main.escapeTags(node.comment);
+                addAndReturnElement("comment", nameSpace, statementEl).textContent = Utils.escapeHTML(node.comment);
 
             // Save the preconditions
             var preconditionsInXML = createAndReturnPreconditionXML(node.preconditions, nameSpace);

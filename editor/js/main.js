@@ -34,7 +34,6 @@ var Main;
         dehighlightParents: dehighlightParents,
         deleteAllSelected: deleteAllSelected,
         deselectConnection: deselectConnection,
-        escapeTags: escapeTags,
         getPlumbInstanceByNodeID: getPlumbInstanceByNodeID,
         highlightParents: highlightParents,
         makeConnection: makeConnection,
@@ -43,7 +42,6 @@ var Main;
         repaintZoomedNodes: repaintZoomedNodes,
         selectElement: selectElement,
         selectNode: selectNode,
-        unEscapeTags: unEscapeTags,
         updateButtons: updateButtons
     };
 
@@ -1281,38 +1279,6 @@ var Main;
         Zoom.getZoomed().plumbInstance.repaintEverything();
     }
 
-    function escapeTags(str)
-    {
-        if (str === undefined)
-            return str;
-        else
-        {
-            return str
-                .replace(/&/g, '&amp;')   // &
-                .replace(/</g, '&lt;')  // <
-                .replace(/>/g, '&gt;')  // >
-                .replace(/\"/g, '&quot;') // "
-                .replace(/\'/g, '&#39;')  // '
-                .replace(/\n/g, "<br/>"); // \n
-        }
-    }
-
-    function unEscapeTags(str)
-    {
-        if (str === undefined)
-            return str;
-        else
-        {
-            return str
-                .replace(/&amp;/g, '&') // &
-                .replace(/&lt;/g, '<') // <
-                .replace(/&gt;/g, '>') // >
-                .replace(/&quot;/g, '"') // "
-                .replace(/&#39;/g, '\'') // '
-                .replace(/<br\/>/g, "\n"); // \n
-        }
-    }
-
     //grid is based on the css specified size of tree containers.
     function initialiseGrid(domGridElement)
     {
@@ -1453,12 +1419,12 @@ var Main;
                 {
                     text += "<b>" + node.characterIdRef + ": </b>";
                 }
-                text += escapeTags(node.text);
+                text += Utils.escapeHTML(node.text);
                 break;
             case Main.playerType:
             case Main.situationType:
                 // for playerType node: show text input
-                text = escapeTags(node.text);
+                text = Utils.escapeHTML(node.text);
                 break;
         }
         // Calculate the node width

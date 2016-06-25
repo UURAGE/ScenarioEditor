@@ -167,7 +167,7 @@ var Load;
                 var plumbInstance = tree.plumbInstance;
 
                 // get the subject from the XML
-                tree.subject = Main.unEscapeTags($(this).children('subject')[0].textContent);
+                tree.subject = Utils.unEscapeHTML($(this).children('subject')[0].textContent);
 
                 tree.optional = $(this).attr('optional') == "true";
 
@@ -223,9 +223,9 @@ var Load;
     // Load the metadata of the scenario.
     function loadMetadata(metadata)
     {
-        var name = Main.unEscapeTags($(metadata).find('name').text());
+        var name = Utils.unEscapeHTML($(metadata).find('name').text());
         $('#scenarioNameTab .scenarioName').text(name);
-        var description = Main.unEscapeTags($(metadata).find('description').text());
+        var description = Utils.unEscapeHTML($(metadata).find('description').text());
         var difficulty = $(metadata).find('difficulty').text();
         var definitions = $(metadata).find('definitions');
 
@@ -251,9 +251,9 @@ var Load;
             var parameter =
             {
                 id: parameterId,
-                name: Main.unEscapeTags(this.attributes.name.value),
+                name: Utils.unEscapeHTML(this.attributes.name.value),
                 type: Config.types[typeXML[0].nodeName.substr("type".length).toLowerCase()].loadType(typeXML),
-                description: this.hasAttribute("description") ? Main.unEscapeTags(this.attributes.description.value) : ""
+                description: this.hasAttribute("description") ? Utils.unEscapeHTML(this.attributes.description.value) : ""
             };
             parameters.sequence.push(parameter);
             parameters.byId[parameter.id] = parameter;
@@ -292,7 +292,7 @@ var Load;
         var initsNode = $(statement).attr('inits') == "true";
         var endNode = $(statement).attr('end') == "true";
 
-        var text = Main.unEscapeTags($(statement).find('text').text());
+        var text = Utils.unEscapeHTML($(statement).find('text').text());
 
         var xPos = $(statement).find('x').text();
         var yPos = $(statement).find('y').text();
@@ -309,7 +309,7 @@ var Load;
 
         var propertyValues = loadPropertyValues($(statement).children('propertyValues'), ['per', 'per-' + type]);
 
-        var comment = Main.unEscapeTags($(statement).find('comment').text());
+        var comment = Utils.unEscapeHTML($(statement).find('comment').text());
 
         var targets = $(statement).find('responses').children();
         if (targets.length > 0)
@@ -353,7 +353,7 @@ var Load;
         var txtArea = node.find('textarea.nodestatement');
         var txtView = node.find('.statementText');
         txtArea.val(text);
-        txtView.html(Main.escapeTags(text));
+        txtView.html(Utils.escapeHTML(text));
     }
 
     // Load all preconditions from a given precondition element tree.

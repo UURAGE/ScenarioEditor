@@ -11,7 +11,9 @@ var Utils;
         clone: clone,
         ensurePreventDefault: ensurePreventDefault,
         parseDecimalIntWithDefault: parseDecimalIntWithDefault,
-        parseBool: parseBool
+        parseBool: parseBool,
+        escapeHTML: escapeHTML,
+        unEscapeHTML: unEscapeHTML
     };
 
     // Taken from stackoverflow
@@ -44,5 +46,37 @@ var Utils;
     function parseBool(string)
     {
         return string == "true";
+    }
+
+    function escapeHTML(str)
+    {
+        if (str === undefined)
+            return str;
+        else
+        {
+            return str
+                .replace(/&/g, '&amp;')   // &
+                .replace(/</g, '&lt;')  // <
+                .replace(/>/g, '&gt;')  // >
+                .replace(/\"/g, '&quot;') // "
+                .replace(/\'/g, '&#39;')  // '
+                .replace(/\n/g, "<br/>"); // \n
+        }
+    }
+
+    function unEscapeHTML(str)
+    {
+        if (str === undefined)
+            return str;
+        else
+        {
+            return str
+                .replace(/&amp;/g, '&') // &
+                .replace(/&lt;/g, '<') // <
+                .replace(/&gt;/g, '>') // >
+                .replace(/&quot;/g, '"') // "
+                .replace(/&#39;/g, '\'') // '
+                .replace(/<br\/>/g, "\n"); // \n
+        }
     }
 })();

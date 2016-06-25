@@ -45,7 +45,7 @@ var Load3;
                 var plumbInstance = tree.plumbInstance;
 
                 // get the subject from the XML
-                tree.subject = Main.unEscapeTags($(this).children('subject')[0].textContent);
+                tree.subject = Utils.unEscapeHTML($(this).children('subject')[0].textContent);
 
                 tree.optional = $(this).attr('optional') == "true";
 
@@ -103,9 +103,9 @@ var Load3;
     // Load the metadata of the scenario.
     function loadMetadata(metadata)
     {
-        var name = Main.unEscapeTags($(metadata).find('name').text());
+        var name = Utils.unEscapeHTML($(metadata).find('name').text());
         $('#scenarioNameTab .scenarioName').text(name);
-        var description = Main.unEscapeTags($(metadata).find('description').text());
+        var description = Utils.unEscapeHTML($(metadata).find('description').text());
         var difficulty = $(metadata).find('difficulty').text();
         var defaultChangeType = $(metadata).find('defaultChangeType').text();
         // Allows the editor to load older XML versions without defaultChangeType
@@ -129,9 +129,9 @@ var Load3;
             parameters.byId[paramId] =
             {
                 id: paramId,
-                name: Main.unEscapeTags(this.attributes.name.value),
+                name: Utils.unEscapeHTML(this.attributes.name.value),
                 type: $.extend({}, Config.types.integer, { defaultValue: defaultValue }),
-                description: this.hasAttribute("parameterDescription") ? Main.unEscapeTags(this.attributes.parameterDescription.value) : ""
+                description: this.hasAttribute("parameterDescription") ? Utils.unEscapeHTML(this.attributes.parameterDescription.value) : ""
             };
             parameters.sequence.push(parameters.byId[paramId]);
         });
@@ -168,7 +168,7 @@ var Load3;
         var initsNode = $(statement).attr('inits') == "true";
         var endNode = $(statement).attr('possibleEnd') == "true";
 
-        var text = Main.unEscapeTags($(statement).find('text').text());
+        var text = Utils.unEscapeHTML($(statement).find('text').text());
 
         var xPos = $(statement).find('x').text();
         var yPos = $(statement).find('y').text();
@@ -204,7 +204,7 @@ var Load3;
                 var intents = $(statement).find('intents').children();
                 if (intents.length > 0)
                 {
-                    var intent = Main.unEscapeTags($(intents[0]).text());
+                    var intent = Utils.unEscapeHTML($(intents[0]).text());
                     var intentPropertyIdRef = Config.configObject.migration.intentProperty.idRef;
                     var firstCharacterId = Config.configObject.characters.sequence[0].id;
                     if (intentPropertyIdRef in propertyValues.characterIndependent)
@@ -225,7 +225,7 @@ var Load3;
         else
             targets = $(statement).find('responses').children();
 
-        var comment = Main.unEscapeTags($(statement).find('comment').text());
+        var comment = Utils.unEscapeHTML($(statement).find('comment').text());
 
         if (targets.length > 0)
         {
@@ -268,7 +268,7 @@ var Load3;
         var txtArea = node.find('textarea.nodestatement');
         var txtView = node.find('.statementText');
         txtArea.val(text);
-        txtView.html(Main.escapeTags(text));
+        txtView.html(Utils.escapeHTML(text));
     }
 
     // Load all preconditions from a given precondition element tree.
@@ -314,7 +314,7 @@ var Load3;
             id = "ext_" + id;
 
         var endNode = $(conversationXMLElement).attr('possibleEnd') == "true";
-        var comment = Main.unEscapeTags($(conversationXMLElement).find('comment').text());
+        var comment = Utils.unEscapeHTML($(conversationXMLElement).find('comment').text());
 
         var xPos = $(conversationXMLElement).find('x').text();
         var yPos = $(conversationXMLElement).find('y').text();
@@ -331,7 +331,7 @@ var Load3;
                 conversations[id].textNodes.push(
                 {
                     type: Main.computerType,
-                    text: Main.unEscapeTags(this.textContent)
+                    text: Utils.unEscapeHTML(this.textContent)
                 });
             }
             else if (this.nodeName == "playerText")
@@ -339,7 +339,7 @@ var Load3;
                 conversations[id].textNodes.push(
                 {
                     type: Main.playerType,
-                    text: Main.unEscapeTags(this.textContent)
+                    text: Utils.unEscapeHTML(this.textContent)
                 });
             }
             else if (this.nodeName == "situationText")
@@ -347,7 +347,7 @@ var Load3;
                 conversations[id].textNodes.push(
                 {
                     type: Main.situationType,
-                    text: Main.unEscapeTags(this.textContent)
+                    text: Utils.unEscapeHTML(this.textContent)
                 });
             }
         });
@@ -408,7 +408,7 @@ var Load3;
         var txtArea = node.find('textarea.nodestatement');
         var txtView = node.find('.statementText');
         txtArea.val(firstConversationNode.text);
-        txtView.html(Main.escapeTags(firstConversationNode.text));
+        txtView.html(Utils.escapeHTML(firstConversationNode.text));
     }
 
     function expandConversations(conversations)
@@ -468,7 +468,7 @@ var Load3;
                 var txtArea = node.find('textarea.nodestatement');
                 var txtView = node.find('.statementText');
                 txtArea.val(textNode.text);
-                txtView.html(Main.escapeTags(textNode.text));
+                txtView.html(Utils.escapeHTML(textNode.text));
 
                 previousConversationNodeId = id;
             }

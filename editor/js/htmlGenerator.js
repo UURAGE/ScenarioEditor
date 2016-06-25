@@ -473,7 +473,7 @@ var HtmlGenerator;
         for (var pId in parameters.byId)
         {
             div.find(".parameter-idref-select").append('<option value="' + pId + '">' +
-                Main.escapeTags(parameters.byId[pId].name) + '</option>');
+                Utils.escapeHTML(parameters.byId[pId].name) + '</option>');
         }
     }
 
