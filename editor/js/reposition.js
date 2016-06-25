@@ -28,6 +28,10 @@
             Load.suspendedly(
                 repositionNodes, tree.plumbInstance)(
                 optimizedOrder);
+            startNodeIDs.forEach(function(startNodeID)
+            {
+                tree.plumbInstance.revalidate(startNodeID, 0);
+            });
             // Redraw zoomed tree to reflect all the changes.
             Main.repaintZoomedNodes();
         });
