@@ -1728,7 +1728,7 @@ var Main;
                         parameterIdRefSelect = container.children('select.' + classPrefix + '-idref-select.hidden');
                         effectsContainer = container.children('.' + classPrefix + '-container');
                     }
-                    var parameterIdRefOption = $('<option>', { value: parameterItem.id, text:  Main.escapeTags(parameterItem.name)});
+                    var parameterIdRefOption = $('<option>', { value: parameterItem.id, text: parameterItem.name });
                     parameterIdRefSelect.append(parameterIdRefOption);
 
                     idRefToEffectsContainer[parameterItem.id] = effectsContainer;
