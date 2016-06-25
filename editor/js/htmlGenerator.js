@@ -372,7 +372,7 @@ var HtmlGenerator;
         var testContainer = addedDiv.find(".precondition-test-container");
         var changeTestType = function(parameterIdRef)
         {
-            var parameter;
+            var parameter, characterId, characterIdRefSelect;
             if (parameterIdRef in Metadata.metaObject.parameters.byId)
             {
                 parameter = Metadata.metaObject.parameters.byId[parameterIdRef];
@@ -385,8 +385,8 @@ var HtmlGenerator;
             {
                 parameter = Config.configObject.characters.parameters.byId[parameterIdRef];
 
-                var characterIdRefSelect = $('<select>', { class: "character-idref-select" });
-                for (var characterId in Config.configObject.characters.byId)
+                characterIdRefSelect = $('<select>', { class: "character-idref-select" });
+                for (characterId in Config.configObject.characters.byId)
                 {
                     characterIdRefSelect.append($('<option>', { text: characterId }));
                 }
@@ -395,13 +395,13 @@ var HtmlGenerator;
             else
             {
                 // TODO: merge parameter selection with different id and same display name and type for two different characters
-                for (var characterId in Config.configObject.characters.byId)
+                for (characterId in Config.configObject.characters.byId)
                 {
                     if (parameterIdRef in Config.configObject.characters.byId[characterId].parameters.byId)
                     {
                         parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterIdRef];
 
-                        var characterIdRefSelect = $('<select>', { class: "character-idref-select" });
+                        characterIdRefSelect = $('<select>', { class: "character-idref-select" });
                         characterIdRefSelect.append($('<option>', { text: characterId }));
                         testContainer.append(characterIdRefSelect);
 

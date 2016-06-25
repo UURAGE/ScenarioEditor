@@ -210,24 +210,25 @@ var Metadata;
             if (property.scopes.statementScope !== "independent") return;
             property.type.setInDOM($(propertyContainerId + '-' + property.id), propertyValues[property.id]);
         };
-        for (var propertyId in Config.configObject.properties.byId)
+        var propertyId, characterId, property;
+        for (propertyId in Config.configObject.properties.byId)
         {
-            var property = Config.configObject.properties.byId[propertyId];
+            property = Config.configObject.properties.byId[propertyId];
             setPropertyInDOM(Metadata.metaObject.propertyValues.characterIndependent, "#meta-property-values-container", property);
         }
-        for (var propertyId in Config.configObject.characters.properties.byId)
+        for (propertyId in Config.configObject.characters.properties.byId)
         {
-            for (var characterId in Config.configObject.characters.byId)
+            for (characterId in Config.configObject.characters.byId)
             {
-                var property = Config.configObject.characters.properties.byId[propertyId];
+                property = Config.configObject.characters.properties.byId[propertyId];
                 setPropertyInDOM(Metadata.metaObject.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + characterId + "-container", property);
             }
         }
-        for (var characterId in Config.configObject.characters.byId)
+        for (characterId in Config.configObject.characters.byId)
         {
-            for (var propertyId in Config.configObject.characters.byId[characterId].properties.byId)
+            for (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
             {
-                var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
+                property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
                 setPropertyInDOM(Metadata.metaObject.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + characterId + "-container", property);
             }
         }
@@ -476,28 +477,29 @@ var Metadata;
         Metadata.metaObject.difficulty = $("#scenarioDifficulty").val();
         Metadata.metaObject.description = $("#scenarioDescription").val();
 
-        for (var propertyId in Config.configObject.properties.byId)
+        var propertyId, characterId, property;
+        for (propertyId in Config.configObject.properties.byId)
         {
-            var property = Config.configObject.properties.byId[propertyId];
+            property = Config.configObject.properties.byId[propertyId];
             if (property.scopes.statementScope !== "independent") continue;
             Metadata.metaObject.propertyValues.characterIndependent[property.id] =
                 property.type.getFromDOM($("#meta-property-values-container-" + property.id));
         }
-        for (var propertyId in Config.configObject.characters.properties.byId)
+        for (propertyId in Config.configObject.characters.properties.byId)
         {
-            for (var characterId in Config.configObject.characters.byId)
+            for (characterId in Config.configObject.characters.byId)
             {
-                var property = Config.configObject.characters.properties.byId[propertyId];
+                property = Config.configObject.characters.properties.byId[propertyId];
                 if (property.scopes.statementScope !== "independent") continue;
                 Metadata.metaObject.propertyValues.perCharacter[characterId][property.id] =
                     property.type.getFromDOM($("#meta-character-property-values-" + characterId + "-container-" + property.id));
             }
         }
-        for (var characterId in Config.configObject.characters.byId)
+        for (characterId in Config.configObject.characters.byId)
         {
-            for (var propertyId in Config.configObject.characters.byId[characterId].properties.byId)
+            for (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
             {
-                var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
+                property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
                 if (property.scopes.statementScope !== "independent") continue;
                 Metadata.metaObject.propertyValues.perCharacter[characterId][property.id] =
                     property.type.getFromDOM($("#meta-character-property-values-" + characterId + "-container-" + property.id));

@@ -421,12 +421,13 @@ var KeyControl;
     function moveTree(modifyX, modifyY)
     {
         var allClear = true;
+        var tree, newGridX, newGridY;
 
         for (var i = 0; i < Main.selectedElements.length; i++)
         {
-            var tree = Main.trees[Main.selectedElements[i]];
-            var newGridX = modifyX(tree.leftPos);
-            var newGridY = modifyY(tree.topPos);
+            tree = Main.trees[Main.selectedElements[i]];
+            newGridX = modifyX(tree.leftPos);
+            newGridY = modifyY(tree.topPos);
 
             //new position is within bounds
             if(newGridX >= 0 && newGridY >= 0)
@@ -448,11 +449,11 @@ var KeyControl;
 
         if(allClear)
         {
-            for (var i = 0; i < Main.selectedElements.length; i++)
+            for (var j = 0; j < Main.selectedElements.length; j++)
             {
-                var tree = Main.trees[Main.selectedElements[i]];
-                var newGridX = modifyX(tree.leftPos);
-                var newGridY = modifyY(tree.topPos);
+                tree = Main.trees[Main.selectedElements[j]];
+                newGridX = modifyX(tree.leftPos);
+                newGridY = modifyY(tree.topPos);
 
                 tree.leftPos = newGridX;
                 tree.topPos = newGridY;

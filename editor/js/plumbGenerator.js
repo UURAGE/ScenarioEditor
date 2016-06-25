@@ -47,6 +47,7 @@ var PlumbGenerator;
             if (Main.selectedElements.length > 0) Main.selectElement(null);
 
             var selectedConnections = Zoom.getZoomed().selectedConnections;
+            var connectionId;
             if (c.id in selectedConnections)
             {
                 if (e.ctrlKey)
@@ -55,7 +56,7 @@ var PlumbGenerator;
                 }
                 else
                 {
-                    for (var connectionId in selectedConnections)
+                    for (connectionId in selectedConnections)
                     {
                         Main.deselectConnection(instance, selectedConnections, connectionId);
                     }
@@ -65,7 +66,7 @@ var PlumbGenerator;
             {
                 if (!e.ctrlKey)
                 {
-                    for (var connectionId in selectedConnections)
+                    for (connectionId in selectedConnections)
                     {
                         Main.deselectConnection(instance, selectedConnections, connectionId);
                     }

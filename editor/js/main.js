@@ -1191,7 +1191,8 @@ var Main;
             getFixedParameterEffectFromDOMAndSetInNode(this, Config.configObject.parameters.byId, node.parameterEffects.fixed.characterIndependent, fixedParameterEffectsEl.attr('id'));
         });
         var fixedCharacterParameterEffectsEl = $("#fixed-character-parameter-effects");
-        for (var characterId in Config.configObject.characters.byId)
+        var characterId;
+        for (characterId in Config.configObject.characters.byId)
         {
             node.parameterEffects.fixed.perCharacter[characterId] = {};
             var classCharacterPrefix = fixedCharacterParameterEffectsEl.attr('id') + '-' + characterId;
@@ -1207,26 +1208,27 @@ var Main;
 
         // Save property values.
         var acceptableScopes = ['per', 'per-' + node.type];
-        for (var propertyId in Config.configObject.properties.byId)
+        var propertyId, property;
+        for (propertyId in Config.configObject.properties.byId)
         {
-            var property = Config.configObject.properties.byId[propertyId];
+            property = Config.configObject.properties.byId[propertyId];
             if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
             node.propertyValues.characterIndependent[propertyId] = property.type.getFromDOM($("#node-property-values-container-" + property.id));
         }
-        for (var propertyId in Config.configObject.characters.properties.byId)
+        for (propertyId in Config.configObject.characters.properties.byId)
         {
-            for (var characterId in Config.configObject.characters.byId)
+            for (characterId in Config.configObject.characters.byId)
             {
-                var property = Config.configObject.characters.properties.byId[propertyId];
+                property = Config.configObject.characters.properties.byId[propertyId];
                 if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
                 node.propertyValues.perCharacter[characterId][propertyId] = property.type.getFromDOM($("#node-character-property-values-" + characterId + "-container-" + property.id));
             }
         }
-        for (var characterId in Config.configObject.characters.byId)
+        for (characterId in Config.configObject.characters.byId)
         {
-            for (var propertyId in Config.configObject.characters.byId[characterId].properties.byId)
+            for (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
             {
-                var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
+                property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
                 if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
                 node.propertyValues.perCharacter[characterId][propertyId] = property.type.getFromDOM($("#node-character-property-values-" + characterId + "-container-" + property.id));
             }
@@ -1771,7 +1773,8 @@ var Main;
             }
 
             // Add the character-independent effects that were previously defined
-            for (var parameterIdRef in node.parameterEffects.fixed.characterIndependent)
+            var parameterIdRef;
+            for (parameterIdRef in node.parameterEffects.fixed.characterIndependent)
             {
                 if (parameterIdRef in idRefToEffectsContainer)
                 {
@@ -1793,7 +1796,7 @@ var Main;
             {
                 var classCharacterPrefix = characterClassPrefix + '-' + characterId;
 
-                for (var parameterIdRef in node.parameterEffects.fixed.perCharacter[characterId])
+                for (parameterIdRef in node.parameterEffects.fixed.perCharacter[characterId])
                 {
                     if (parameterIdRef in idRefToCharacterEffectsContainer[characterId])
                     {

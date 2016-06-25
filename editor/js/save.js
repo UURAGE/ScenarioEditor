@@ -63,50 +63,53 @@ var Save;
 
         // Save user-defined parameters
         var userDefinedParametersEl = addAndReturnElement("userDefined", nameSpace, parametersEl);
-        for (var pId in Metadata.metaObject.parameters.byId)
+        var parameterId, parameter;
+        for (parameterId in Metadata.metaObject.parameters.byId)
         {
-            var parameter = Metadata.metaObject.parameters.byId[pId];
+            parameter = Metadata.metaObject.parameters.byId[parameterId];
             addDefinitionElement(parameter, "parameter", nameSpace, userDefinedParametersEl);
         }
 
         // Save fixed parameters
         var fixedParametersEl = addAndReturnElement("fixed", nameSpace, parametersEl);
-        for (var parameterId in Config.configObject.parameters.byId)
+        var characterId;
+        for (parameterId in Config.configObject.parameters.byId)
         {
-            var parameter = Config.configObject.parameters.byId[parameterId];
+            parameter = Config.configObject.parameters.byId[parameterId];
             addDefinitionElement(parameter, "parameter", nameSpace, fixedParametersEl);
         }
-        for (var parameterId in Config.configObject.characters.parameters.byId)
+        for (parameterId in Config.configObject.characters.parameters.byId)
         {
-            var parameter = Config.configObject.characters.parameters.byId[parameterId];
+            parameter = Config.configObject.characters.parameters.byId[parameterId];
             addDefinitionElement(parameter, "parameter", nameSpace, fixedParametersEl);
         }
-        for (var characterId in Config.configObject.characters.byId)
+        for (characterId in Config.configObject.characters.byId)
         {
-            for (var parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
+            for (parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
             {
-                var parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterId];
+                parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterId];
                 addDefinitionElement(parameter, "parameter", nameSpace, fixedParametersEl);
             }
         }
 
         // Save properties
         var propertyDefinitionsEl = addAndReturnElement("properties", nameSpace, definitionsEl);
-        for (var propertyId in Config.configObject.properties.byId)
+        var propertyId, property;
+        for (propertyId in Config.configObject.properties.byId)
         {
-            var property = Config.configObject.properties.byId[propertyId];
+            property = Config.configObject.properties.byId[propertyId];
             addDefinitionElement(property, "property", nameSpace, propertyDefinitionsEl);
         }
-        for (var propertyId in Config.configObject.characters.properties.byId)
+        for (propertyId in Config.configObject.characters.properties.byId)
         {
-            var property = Config.configObject.characters.properties.byId[propertyId];
+            property = Config.configObject.characters.properties.byId[propertyId];
             addDefinitionElement(property, "property", nameSpace, propertyDefinitionsEl);
         }
-        for (var characterId in Config.configObject.characters.byId)
+        for (characterId in Config.configObject.characters.byId)
         {
-            for (var propertyId in Config.configObject.characters.byId[characterId].properties.byId)
+            for (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
             {
-                var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
+                property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
                 addDefinitionElement(property, "property", nameSpace, propertyDefinitionsEl);
             }
         }
@@ -334,34 +337,35 @@ var Save;
         }
 
         var fixedParameterEffectsEl = addAndReturnElement("fixed", nameSpace, parameterEffectsEl);
-        for (var parameterIdRef in parameterEffects.fixed.characterIndependent)
+        var parameterId;
+        for (parameterId in parameterEffects.fixed.characterIndependent)
         {
-            parameterEffects.fixed.characterIndependent[parameterIdRef].forEach(function(parameterEffect)
+            parameterEffects.fixed.characterIndependent[parameterId].forEach(function(parameterEffect)
             {
                 var pEffElement = addAndReturnElement("parameterEffect", nameSpace, fixedParameterEffectsEl);
                 pEffElement.setAttribute("idref", parameterEffect.idRef);
                 pEffElement.setAttribute("changeType", parameterEffect.changeType);
-                Config.configObject.parameters.byId[parameterIdRef].type.toXML(pEffElement, parameterEffect.value);
+                Config.configObject.parameters.byId[parameterId].type.toXML(pEffElement, parameterEffect.value);
             });
         }
         for (var characterId in Config.configObject.characters.byId)
         {
-            for (var parameterIdRef in parameterEffects.fixed.perCharacter[characterId])
+            for (parameterId in parameterEffects.fixed.perCharacter[characterId])
             {
-                parameterEffects.fixed.perCharacter[characterId][parameterIdRef].forEach(function(parameterEffect)
+                parameterEffects.fixed.perCharacter[characterId][parameterId].forEach(function(parameterEffect)
                 {
                     var pEffElement = addAndReturnElement("characterParameterEffect", nameSpace, fixedParameterEffectsEl);
                     pEffElement.setAttribute("idref", parameterEffect.idRef);
                     pEffElement.setAttribute("characteridref", characterId);
                     pEffElement.setAttribute("changeType", parameterEffect.changeType);
 
-                    if (parameterIdRef in Config.configObject.characters.parameters.byId)
+                    if (parameterId in Config.configObject.characters.parameters.byId)
                     {
-                        Config.configObject.characters.parameters.byId[parameterIdRef].type.toXML(pEffElement, parameterEffect.value);
+                        Config.configObject.characters.parameters.byId[parameterId].type.toXML(pEffElement, parameterEffect.value);
                     }
                     else
                     {
-                        Config.configObject.characters.byId[characterId].parameters.byId[parameterIdRef].type.toXML(pEffElement, parameterEffect.value);
+                        Config.configObject.characters.byId[characterId].parameters.byId[parameterId].type.toXML(pEffElement, parameterEffect.value);
                     }
                 });
             }
@@ -371,17 +375,17 @@ var Save;
     function generatePropertyValuesXML(element, propertyValues, nameSpace)
     {
         var propertyValuesEl = addAndReturnElement("propertyValues", nameSpace, element);
-        for (var propertyId in propertyValues.characterIndependent)
+        var propertyId;
+        for (propertyId in propertyValues.characterIndependent)
         {
-            var propertyValue = propertyValues.characterIndependent[propertyId];
             var propertyValueEl = addAndReturnElement("propertyValue", nameSpace, propertyValuesEl);
             propertyValueEl.setAttribute("idref", propertyId);
-            Config.configObject.properties.byId[propertyId].type.toXML(propertyValueEl, propertyValue);
+            Config.configObject.properties.byId[propertyId].type.toXML(propertyValueEl, propertyValues.characterIndependent[propertyId]);
         }
 
         for (var characterId in Config.configObject.characters.byId)
         {
-            for (var propertyId in propertyValues.perCharacter[characterId])
+            for (propertyId in propertyValues.perCharacter[characterId])
             {
                 var characterPropertyValueEl = addAndReturnElement("characterPropertyValue", nameSpace, propertyValuesEl);
                 characterPropertyValueEl.setAttribute("characteridref", characterId);
