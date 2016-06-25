@@ -2,6 +2,8 @@
 
 (function()
 {
+    "use strict";
+
     $(document).ready(function()
     {
         // Event handlers.

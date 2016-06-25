@@ -4,6 +4,8 @@ var Main;
 
 (function()
 {
+    "use strict";
+
     var gridX,
         gridY;
 

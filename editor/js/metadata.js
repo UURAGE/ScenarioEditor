@@ -4,6 +4,8 @@ var Metadata;
 
 (function()
 {
+    "use strict";
+
     var parameterCounter = 0;
 
     Metadata =
@@ -107,7 +109,7 @@ var Metadata;
 
         anyPropertyShown = false;
 
-        characterPropertyValuesEl = $('#meta-character-property-values');
+        var characterPropertyValuesEl = $('#meta-character-property-values');
         var characterTabs = $("#character-tabs");
         var characterTabList = $('<ul>');
         characterTabs.append(characterTabList);

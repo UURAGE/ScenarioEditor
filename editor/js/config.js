@@ -4,6 +4,8 @@ var Config;
 
 (function ()
 {
+    "use strict";
+
     Config =
     {
         configObject: {},
@@ -58,7 +60,7 @@ var Config;
     {
         var settings = {};
         settings.statement = {};
-        statementSettingXML = settingsXML.children('statement');
+        var statementSettingXML = settingsXML.children('statement');
         if (statementSettingXML.length > 0)
         {
             settings.statement.type = loadType(statementSettingXML.children().eq(0));

@@ -6,6 +6,8 @@ var ObjectGenerator;
 
 (function()
 {
+    "use strict";
+
     ObjectGenerator =
     {
         parameterObject: ParameterObject,

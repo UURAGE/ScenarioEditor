@@ -4,6 +4,8 @@ var KeyControl;
 
 (function()
 {
+    "use strict";
+
     var hotKeysActive;
 
     KeyControl =
@@ -110,7 +112,10 @@ var KeyControl;
             else if(Main.selectedElements[0] in Main.trees)
             {
                 var selectedTree = Main.trees[Main.selectedElements[0]];
-                var upPredicate = function(tree){return tree.topPos < selectedTree.topPos && tree.leftPos === selectedTree.leftPos};
+                var upPredicate = function(tree)
+                {
+                    return tree.topPos < selectedTree.topPos && tree.leftPos === selectedTree.leftPos;
+                };
 
                 selectClosestOffsetTree(upPredicate, Main.selectedElements[0]);
             }
@@ -122,7 +127,10 @@ var KeyControl;
             else if(Main.selectedElements[0] in Main.trees)
             {
                 var selectedTree = Main.trees[Main.selectedElements[0]];
-                var downPredicate = function(tree){return tree.topPos > selectedTree.topPos && tree.leftPos === selectedTree.leftPos};
+                var downPredicate = function(tree)
+                {
+                    return tree.topPos > selectedTree.topPos && tree.leftPos === selectedTree.leftPos;
+                };
 
                 selectClosestOffsetTree(downPredicate, Main.selectedElements[0]);
             }
@@ -134,7 +142,10 @@ var KeyControl;
             else if(Main.selectedElements[0] in Main.trees)
             {
                 var selectedTree = Main.trees[Main.selectedElements[0]];
-                var rightPredicate = function(tree){return tree.topPos == selectedTree.topPos && tree.leftPos > selectedTree.leftPos};
+                var rightPredicate = function(tree)
+                {
+                    return tree.topPos == selectedTree.topPos && tree.leftPos > selectedTree.leftPos;
+                };
 
                 selectClosestOffsetTree(rightPredicate, Main.selectedElements[0]);
             }
@@ -146,7 +157,10 @@ var KeyControl;
             else if(Main.selectedElements[0] in Main.trees)
             {
                 var selectedTree = Main.trees[Main.selectedElements[0]];
-                var leftPredicate = function(tree){return tree.topPos === selectedTree.topPos && tree.leftPos < selectedTree.leftPos};
+                var leftPredicate = function(tree)
+                {
+                    return tree.topPos === selectedTree.topPos && tree.leftPos < selectedTree.leftPos;
+                };
 
                 selectClosestOffsetTree(leftPredicate, Main.selectedElements[0]);
             }

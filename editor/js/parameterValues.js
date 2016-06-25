@@ -5,6 +5,8 @@ var ParameterValues;
 
 (function()
 {
+    "use strict";
+
     // Values for the meta dialog
     var heightMetaScreen = 600;
     var widthMetaScreen = 600;

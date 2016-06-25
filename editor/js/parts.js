@@ -4,6 +4,8 @@ var Parts;
 
 (function ()
 {
+    "use strict";
+
     //Raw HTML that needs to be exported.
     Parts =
     {

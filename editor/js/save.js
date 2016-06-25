@@ -4,6 +4,8 @@ var Save;
 
 (function()
 {
+    "use strict";
+
     Save =
     {
         exportScenario: exportScenario,

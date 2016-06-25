@@ -4,6 +4,8 @@ var Zoom;
 
 (function()
 {
+    "use strict";
+
     Zoom =
     {
         toggleZoom : toggleZoom,

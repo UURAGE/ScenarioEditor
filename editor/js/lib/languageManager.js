@@ -7,10 +7,6 @@
     The correct one of these is automatically loaded by editorView.php
 */
 
-/*global
-  $: false,
-*/
-
 var LanguageManager;
 
 (function()
@@ -37,7 +33,7 @@ var LanguageManager;
             if(line === undefined)
                 throw "id not present: "+id;
 
-            return vsprintf(line, inserts);            
+            return vsprintf(line, inserts);
         }
     }
 })();

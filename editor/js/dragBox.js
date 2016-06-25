@@ -2,7 +2,10 @@
 
 var DragBox;
 
-(function(){
+(function()
+{
+    "use strict";
+
     DragBox =
     {
         startDragging : startDragging,

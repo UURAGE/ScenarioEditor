@@ -4,6 +4,8 @@ var Validator;
 
 (function()
 {
+    "use strict";
+
     Validator =
     {
         validate: validate,

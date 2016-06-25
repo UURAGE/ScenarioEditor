@@ -10,6 +10,7 @@ $(document).ready(function()
 
 function printScenario()
 {
+    "use strict"
     if (!confirm(LanguageManager.sLang("edt_print_warning"))) return;
 
     // This function is used to set the heights inside the window to be printed
@@ -32,7 +33,7 @@ function printScenario()
             container.style.height = maxHeight;
         });
     };
-    
+
     var htmlList = [];
     $('.treeContainer').each(function()
     {

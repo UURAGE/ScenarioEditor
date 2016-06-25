@@ -8,6 +8,8 @@ var MiniMap;
 
 (function()
 {
+    "use strict";
+
     var zoom = 1,
         // Show details? Set to false to speed up editor processing in large scenarios
         detailed = true;

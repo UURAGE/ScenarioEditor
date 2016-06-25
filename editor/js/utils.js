@@ -4,6 +4,8 @@ var Utils;
 
 (function()
 {
+    "use strict";
+
     Utils =
     {
         clone: clone,
