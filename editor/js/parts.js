@@ -66,15 +66,6 @@ var Parts;
             '<button id="addDraftItem" class="add">' + LanguageManager.sLang("edt_draft_add_item") + '</button>';
     }
 
-    function getChangeTypeHTML()
-    {
-        return '' +
-            '<select class="changeType">' +
-                        '<option value="delta" selected="selected">'+LanguageManager.sLang("edt_parts_delta")+'</option>' +
-                        '<option value="set" >'+LanguageManager.sLang("edt_parts_set")+'</option>' +
-            '</select>';
-    }
-
     function getParameterEffectHTML()
     {
         return '' +
