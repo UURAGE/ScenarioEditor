@@ -9,7 +9,6 @@ var Save;
     Save =
     {
         exportScenario: exportScenario,
-        generateXML: generateXML,
         getStartNodeIDs: getStartNodeIDs
     };
 
