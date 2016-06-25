@@ -4,7 +4,7 @@ var Zoom;
 
 (function()
 {
-    Zoom = 
+    Zoom =
     {
         toggleZoom : toggleZoom,
         zoomIn : zoomIn,
@@ -14,7 +14,7 @@ var Zoom;
     };
 
     // Tree (the object, not the id) contains a div and original positions before zoom
-    function toggleZoom(tree) 
+    function toggleZoom(tree)
     {
         if(!tree.dragDiv.hasClass("zoom"))
             zoomIn(tree);
@@ -28,13 +28,13 @@ var Zoom;
         {
             // Unselect the selected tree(s), because we are zooming in
             Main.selectElement(null);
-            
+
             // Find the treeContainer
             var parent = tree.dragDiv.parent();
 
             // Zoom out all the other trees if they are zoomed in
             $.each(Main.trees, function(key, value) {
-                zoomOut(value); 
+                zoomOut(value);
             });
 
             tree.dragDiv.addClass("zoom");
@@ -63,8 +63,6 @@ var Zoom;
             tree.nodes.forEach(function(n)
             {
                 Main.changeNodeText(n);
-                tree.plumbInstance.updateOffset({elId:n, recalc:true});
-                tree.plumbInstance.repaint(n, null, 0);
             });
         }
 
@@ -105,7 +103,7 @@ var Zoom;
 
             parent.css({"overflow": "auto"});
             jsPlumb.setSuspendDrawing(true);
-            
+
             Main.updateButtons();
         }
     }
@@ -117,14 +115,14 @@ var Zoom;
 
         return Main.trees[zoomedTrees.eq(0).attr("id")];
     }
-    
+
     function isZoomed(treeID)
     {
         if (treeID === undefined)
         {
             return getZoomed() !== null;
-        }  
-        else 
+        }
+        else
         {
             return $("#"+treeID).hasClass('zoom');
         }

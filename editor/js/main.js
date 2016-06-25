@@ -471,7 +471,6 @@ var Main;
                 changeNameInput.trigger("focusout");
                 Zoom.toggleZoom(Main.trees[id]);
                 MiniMap.update(true);
-                repaintZoomedNodes();
             }
         });
 
