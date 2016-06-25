@@ -10,7 +10,6 @@ var Load;
     {
         importScenario: importScenario,
         suspendedly: suspendedly,
-        nullIfMissing: nullIfMissing
     };
 
     var loadedMetaObject;
@@ -521,16 +520,6 @@ var Load;
             }
         });
         return propertyValues;
-    }
-
-    function nullIfMissing(elements)
-    {
-        if (elements === undefined || elements.length === 0)
-            return null;
-        else if (typeof elements == "string")
-            return elements;
-        else
-            return elements.text();
     }
 })();
 
