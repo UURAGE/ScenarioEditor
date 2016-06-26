@@ -210,7 +210,8 @@ button.enabled
 #properties button,
 #general button,
 #sidebar button,
-#parameterScreen button
+#parameterScreen button,
+#enumerationScreen button
 {
   border: 0;
   background: none;
