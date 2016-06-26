@@ -9,19 +9,19 @@
   <meta http-equiv="Expires" content="-1">
   <link rel="icon" type="image/png" href="<?php echo editor_url("png/small_logo.png");?>">
 
-  <?php
+    <?php
   $language = $this->session->userdata('language');
 
   $styles = array(
       "css/stylesheet.css",
       "css/jsPlumbStyle.css",
-      "jQueryUI/css/jquery-ui-1.10.4.custom.css"
+      "jQueryUI/css/jquery-ui-1.11.4.css",
   );
   foreach ($styles as $style)
   {   //filemtime appends last edited time, to fix using cached files
       echo '<link rel="stylesheet" type="text/css" href="' .editor_url($style) . '?t='.  filemtime(editor_path($style)) . '" />';
   }
-  ?>
+    ?>
 
   <script>
   <?php
