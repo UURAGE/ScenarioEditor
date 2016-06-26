@@ -34,7 +34,7 @@ var Save;
         addAndReturnElement("date", nameSpace, metadataEl).textContent =new Date().toISOString();
         addAndReturnElement("description", nameSpace, metadataEl).textContent = Utils.escapeHTML(Metadata.metaObject.description);
         addAndReturnElement("difficulty", nameSpace, metadataEl).textContent = Metadata.metaObject.difficulty;
-        addAndReturnElement("defaultChangeType", nameSpace, metadataEl).textContent = Metadata.metaObject.defaultChangeType;
+        addAndReturnElement("defaultOperator", nameSpace, metadataEl).textContent = Metadata.metaObject.defaultOperator;
 
         var definitionsEl = addAndReturnElement("definitions", nameSpace, metadataEl);
 
@@ -332,7 +332,7 @@ var Save;
             var pEff = parameterEffects.userDefined[k];
             var pEffElement = addAndReturnElement("parameterEffect", nameSpace, userDefinedParameterEffectsEl);
             pEffElement.setAttribute("idref", pEff.idRef);
-            pEffElement.setAttribute("changeType", pEff.changeType);
+            pEffElement.setAttribute("operator", pEff.operator);
             Metadata.metaObject.parameters.byId[pEff.idRef].type.toXML(pEffElement, pEff.value);
         }
 
@@ -344,7 +344,7 @@ var Save;
             {
                 var pEffElement = addAndReturnElement("parameterEffect", nameSpace, fixedParameterEffectsEl);
                 pEffElement.setAttribute("idref", parameterEffect.idRef);
-                pEffElement.setAttribute("changeType", parameterEffect.changeType);
+                pEffElement.setAttribute("operator", parameterEffect.operator);
                 Config.configObject.parameters.byId[parameterId].type.toXML(pEffElement, parameterEffect.value);
             });
         }
@@ -357,7 +357,7 @@ var Save;
                     var pEffElement = addAndReturnElement("characterParameterEffect", nameSpace, fixedParameterEffectsEl);
                     pEffElement.setAttribute("idref", parameterEffect.idRef);
                     pEffElement.setAttribute("characteridref", characterId);
-                    pEffElement.setAttribute("changeType", parameterEffect.changeType);
+                    pEffElement.setAttribute("operator", parameterEffect.operator);
 
                     if (parameterId in Config.configObject.characters.parameters.byId)
                     {

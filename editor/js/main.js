@@ -641,7 +641,7 @@ var Main;
         {
             var timeEffect = {
                 idRef: 't',
-                changeType: "delta",
+                operator: "delta",
                 value: 1
             };
             parameterEffects.userDefined.push(timeEffect);
@@ -1170,10 +1170,10 @@ var Main;
             var parameterIdRef = $(effectContainer).find('.' + classPrefix + '-effect-idref-select').val();
             var controlContainer = $(effectContainer).find('.' + classPrefix + '-effect-control-container');
             var parameterValue = parameterDefinitions[parameterIdRef].type.getFromDOM(controlContainer);
-            var parameterChangeType = $(effectContainer).find('.' + classPrefix + '-effect-changetype-select').val();
+            var parameterOperator = $(effectContainer).find('.' + classPrefix + '-effect-operator-select').val();
             var parameterEffect = {
                 idRef: parameterIdRef,
-                changeType: parameterChangeType,
+                operator: parameterOperator,
                 value: parameterValue
             };
 
@@ -1595,7 +1595,7 @@ var Main;
 
                 addedDiv = HtmlGenerator.addEmptyUserDefinedParameterEffect();
                 addedDiv.find(".parameter-idref-select").val(parameter.idRef).trigger('change');
-                addedDiv.find(".parameter-effect-changetype-select").val(parameter.changeType);
+                addedDiv.find(".parameter-effect-operator-select").val(parameter.operator);
                 Metadata.metaObject.parameters.byId[parameter.idRef].type.setInDOM(addedDiv.find(".parameter-effect-value-container"), parameter.value);
             }
 
@@ -1605,19 +1605,19 @@ var Main;
             // Appends a default effect to the container, which changes dynamically based on the parameter selected
             var appendEffectContainerTo = function(effectsContainer, containerClassPrefix, parameterDefinitions)
             {
-                // This element contains the dynamically changing changeType and control for possible values
+                // This element contains the dynamically changing operator and control for possible values
                 // It is separate from the rest so that it can be emptied
                 var effectDiv = $('<div>', { style:"display:inline" });
 
                 // Dynamically changes the type of the effect according to the given parameter
                 var changeEffectType = function(pId)
                 {
-                    var changeTypeSelect = $('<select>', { class: containerClassPrefix + "-effect-changetype-select" });
+                    var operatorSelect = $('<select>', { class: containerClassPrefix + "-effect-operator-select" });
                     parameterDefinitions[pId].type.assignmentOperators.forEach(function(op)
                     {
-                        changeTypeSelect.append($('<option>', { value: op, text: op }));
+                        operatorSelect.append($('<option>', { value: op, text: op }));
                     });
-                    effectDiv.append(changeTypeSelect);
+                    effectDiv.append(operatorSelect);
 
                     var controlContainer = $('<div>', { class: containerClassPrefix + "-effect-control-container", style:"display:inline" });
                     parameterDefinitions[pId].type.appendControlTo(controlContainer);
@@ -1785,7 +1785,7 @@ var Main;
                         var addedEffectContainer = effectsContainer.children().last();
 
                         addedEffectContainer.find('.' + classPrefix + '-effect-idref-select').val(effect.idRef).trigger('change');
-                        addedEffectContainer.find('.' + classPrefix + '-effect-changetype-select').val(effect.changeType);
+                        addedEffectContainer.find('.' + classPrefix + '-effect-operator-select').val(effect.operator);
                         Config.configObject.parameters.byId[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + classPrefix + '-effect-control-container'), effect.value);
                     });
                 }
@@ -1809,7 +1809,7 @@ var Main;
                             var addedEffectContainer = effectsContainer.children().last();
 
                             addedEffectContainer.find('.' + classCharacterPrefix + '-effect-idref-select').val(effect.idRef).trigger('change');
-                            addedEffectContainer.find('.' + classCharacterPrefix + '-effect-changetype-select').val(effect.changeType);
+                            addedEffectContainer.find('.' + classCharacterPrefix + '-effect-operator-select').val(effect.operator);
                             characterParameterDefinitions[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + classCharacterPrefix + '-effect-control-container'), effect.value);
                         });
                     }

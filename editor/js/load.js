@@ -239,10 +239,10 @@ var Load;
         var difficulty = $(metadata).find('difficulty').text();
         var definitions = $(metadata).find('definitions');
 
-        var defaultChangeType = $(metadata).find('defaultChangeType').text();
-        // Allows the editor to load older XML versions without defaultChangeType
-        if (defaultChangeType === "")
-            defaultChangeType = LanguageManager.sLang("edt_parts_delta");
+        var defaultOperator = $(metadata).find('defaultOperator').text();
+        // Allows the editor to load older XML versions without defaultOperator
+        if (defaultOperator === "")
+            defaultOperator = LanguageManager.sLang("edt_parts_delta");
 
         var parameters = Metadata.getNewDefaultParameters();
         $(definitions).children('parameters').children('userDefined').children().each(function()
@@ -282,7 +282,7 @@ var Load;
             propertyValues: propertyValues,
             parameters: parameters,
             timePId: timePId,
-            defaultChangeType: defaultChangeType
+            defaultOperator: defaultOperator
         };
     }
 
@@ -441,7 +441,7 @@ var Load;
             parameterEffects.userDefined.push(
             {
                 idRef: this.attributes.idref.value,
-                changeType: this.attributes.changeType.value,
+                operator: this.attributes.operator.value,
                 value: Metadata.metaObject.parameters.byId[this.attributes.idref.value].type.fromXML(this)
             });
         });
@@ -462,7 +462,7 @@ var Load;
                         parameterEffects.fixed.perCharacter[characterId][parameterId].push(
                         {
                             idRef: parameterId,
-                            changeType: this.attributes.changeType.value,
+                            operator: this.attributes.operator.value,
                             value: Config.configObject.characters.parameters.byId[parameterId].type.fromXML(this)
                         });
                     }
@@ -475,7 +475,7 @@ var Load;
                         parameterEffects.fixed.perCharacter[characterId][parameterId].push(
                         {
                             idRef: parameterId,
-                            changeType: this.attributes.changeType.value,
+                            operator: this.attributes.operator.value,
                             value: Config.configObject.characters.byId[characterId].parameters.byId[parameterId].type.fromXML(this)
                         });
                     }
@@ -490,7 +490,7 @@ var Load;
                 parameterEffects.fixed.characterIndependent[parameterId].push(
                 {
                     idRef: parameterId,
-                    changeType: this.attributes.changeType.value,
+                    operator: this.attributes.operator.value,
                     value: Config.configObject.parameters.byId[parameterId].type.fromXML(this)
                 });
             }

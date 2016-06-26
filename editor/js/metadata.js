@@ -154,7 +154,7 @@ var Metadata;
             description: "",
             parameters: getNewDefaultParameters(),
             propertyValues: Config.getNewDefaultPropertyValues(['independent']),
-            defaultChangeType: LanguageManager.sLang("edt_parts_delta")
+            defaultOperator: LanguageManager.sLang("edt_parts_delta")
         };
     }
 
@@ -203,7 +203,7 @@ var Metadata;
         $("#scenarioName").val(Metadata.metaObject.name);
         $("#scenarioDifficulty").val(Metadata.metaObject.difficulty);
         $("#scenarioDescription").val(Metadata.metaObject.description);
-        $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
+        $("#defaultOperatorSelect").val(Metadata.metaObject.defaultOperator);
 
         var setPropertyInDOM = function(propertyValues, propertyContainerId, property)
         {
@@ -317,7 +317,7 @@ var Metadata;
             $("#paramsTableHead").removeClass("hidden");
 
         $("#scenarioDescription").val(Metadata.metaObject.description);
-        $("#defaultChangeTypeSelect").val(Metadata.metaObject.defaultChangeType);
+        $("#defaultOperatorSelect").val(Metadata.metaObject.defaultOperator);
     }
 
     function atLeastOneUserDefinedParameter()
@@ -343,7 +343,7 @@ var Metadata;
         {
             idRef: newParameter.id,
             type: Config.types.integer,
-            changeType: "delta",
+            operator: "delta",
             value: 1
         };
 
@@ -408,8 +408,8 @@ var Metadata;
                     {
                         if (effect.idRef === oldParameter.id)
                         {
-                            var hasChangeType = newParameter.type.assignmentOperators.indexOf(effect.changeType) !== -1;
-                            if (!hasChangeType) effect.changeType = newParameter.type.assignmentOperators[0];
+                            var hasOperator = newParameter.type.assignmentOperators.indexOf(effect.operator) !== -1;
+                            if (!hasOperator) effect.operator = newParameter.type.assignmentOperators[0];
 
                             effect.value = newParameter.type.castFrom(oldParameter.type, effect.value);
                         }
@@ -468,7 +468,7 @@ var Metadata;
         var previouslySelectedNode = Main.selectedElement;
         Main.selectNode(null);
 
-        Metadata.metaObject.defaultChangeType = $("#defaultChangeTypeSelect").val();
+        Metadata.metaObject.defaultOperator = $("#defaultOperatorSelect").val();
 
         // Save all values in the dialog to the metaObject
         Metadata.metaObject.name = formatScenarioName($("#scenarioName").val());

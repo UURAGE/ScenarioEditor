@@ -299,12 +299,12 @@ var HtmlGenerator;
         var effectDiv = addedDiv.find(".parameter-effect-container");
         var changeEffectType = function(pId)
         {
-            var changeTypeSelect = $('<select>', { class: "parameter-effect-changetype-select" });
+            var operatorSelect = $('<select>', { class: "parameter-effect-operator-select" });
             Metadata.metaObject.parameters.byId[pId].type.assignmentOperators.forEach(function(op)
             {
-                changeTypeSelect.append($('<option>', { value: op, text: op }));
+                operatorSelect.append($('<option>', { value: op, text: op }));
             });
-            effectDiv.append(changeTypeSelect);
+            effectDiv.append(operatorSelect);
 
             var controlContainer = $('<div>', { class: "parameter-effect-value-container", style:"display:inline" });
             Metadata.metaObject.parameters.byId[pId].type.appendControlTo(controlContainer);

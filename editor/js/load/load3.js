@@ -107,10 +107,10 @@ var Load3;
         $('#scenarioNameTab .scenarioName').text(name);
         var description = Utils.unEscapeHTML($(metadata).find('description').text());
         var difficulty = $(metadata).find('difficulty').text();
-        var defaultChangeType = $(metadata).find('defaultChangeType').text();
-        // Allows the editor to load older XML versions without defaultChangeType
-        if (defaultChangeType === "")
-            defaultChangeType = LanguageManager.sLang("edt_parts_delta");
+        var defaultOperator = $(metadata).find('defaultChangeType').text();
+        // Allows the editor to load older XML versions without defaultOperator
+        if (defaultOperator === "")
+            defaultOperator = LanguageManager.sLang("edt_parts_delta");
 
         var parameters = Metadata.getNewDefaultParameters();
         $(metadata).find('parameters').children().each(function()
@@ -149,7 +149,7 @@ var Load3;
             description: description,
             propertyValues: Config.getNewDefaultPropertyValues(['independent']),
             parameters: parameters,
-            defaultChangeType: defaultChangeType
+            defaultOperator: defaultOperator
         };
     }
 
@@ -194,7 +194,7 @@ var Load3;
                 parameterEffects.userDefined.push(
                 {
                     idRef: parameter.attributes.idref.value,
-                    changeType: parameter.attributes.changeType.value,
+                    operator: parameter.attributes.changeType.value,
                     value: parseInt(parameter.attributes.value.value)
                 });
             }

@@ -179,8 +179,8 @@ var Parts;
                     '<thead><th colspan="2"><h3>'+LanguageManager.sLang("edt_parts_advanced")+'</h3></th></thead>' +
                     '<tbody id="advanced">' +
                         '<tr>' +
-                            '<th><label for="changeTypeSelection">'+LanguageManager.sLang("edt_parts_change_type")+':</label></th>' +
-                            '<td><select class="changeType" name="defaultChangeType" id="defaultChangeTypeSelect">' +
+                            '<th><label for="operatorSelection">'+LanguageManager.sLang("edt_parts_change_type")+':</label></th>' +
+                            '<td><select class="operator" name="defaultOperator" id="defaultOperatorSelect">' +
                                 '<option value="delta" selected="selected">'+LanguageManager.sLang("edt_parts_delta")+'</option>' +
                                 '<option value="set">'+LanguageManager.sLang("edt_parts_set")+'</option>' +
                             '</select></td>' +
