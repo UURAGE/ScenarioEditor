@@ -22,6 +22,7 @@
     LanguageManager.edt_config_types_integer = "Integer";
     LanguageManager.edt_config_types_string = "String";
     LanguageManager.edt_config_types_enumeration = "Enumeratie";
+    LanguageManager.edt_html_enumeration_screen_button_alt = "Definieer enumeratie";
 
     LanguageManager.edt_draft_letter_player = "S";
     LanguageManager.edt_draft_letter_computer = "C";

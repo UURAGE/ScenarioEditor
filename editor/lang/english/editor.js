@@ -41,6 +41,7 @@
     LanguageManager.edt_html_up_to = "up to";
     LanguageManager.edt_html_time = "Time";
     LanguageManager.edt_html_enumeration_screen_title = "Enumeration";
+    LanguageManager.edt_html_enumeration_screen_button_alt = "Define enumeration";
 
     LanguageManager.edt_plumb_error_tree_connection = "Error: connections must be contained in a single tree.";
     LanguageManager.edt_plumb_error_cycle = "Error: cannot create connections that complete a cycle.";

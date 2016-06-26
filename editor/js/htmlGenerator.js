@@ -141,7 +141,7 @@ var HtmlGenerator;
         $("#params").append(parameterHTML);
         var addedDiv = $("#params").children().last();
 
-        var changeParameterType = function(typeName)
+        var changeParameterType = function(typeName, userTypeChange)
         {
             addedDiv.addClass("changedTypeParameter");
 
@@ -154,16 +154,29 @@ var HtmlGenerator;
                 if (!addedDiv.find(".enumeration-screen-button").length)
                 {
                     var enumerationScreenButton = $('<button>', { class: "enumeration-screen-button" });
-                    enumerationScreenButton.button(
+                    enumerationScreenButton.attr('title', LanguageManager.sLang("edt_html_enumeration_screen_button_alt"));
+                    var buttonIcon = $('<img>');
+                    buttonIcon.attr('src', editor_url + "png/others/list.png");
+                    enumerationScreenButton.on('mouseover', function()
                     {
-                        icons: { primary: "ui-icon-gear" },
-                        text: false
+                        buttonIcon.attr('src', editor_url + "png/others/list_hover.png");
                     });
+                    enumerationScreenButton.on('mouseout', function()
+                    {
+                        buttonIcon.attr('src', editor_url + "png/others/list.png");
+                    });
+                    buttonIcon.attr('alt', LanguageManager.sLang("edt_html_enumeration_screen_button_alt"));
+                    enumerationScreenButton.append($('<div>').append(buttonIcon));
                     enumerationScreenButton.on('click', function()
                     {
                         enumerationDefinitionDialog(addedDiv);
                     });
                     addedDiv.find(".parameter-type-select").parent().append(enumerationScreenButton);
+                }
+
+                if (userTypeChange)
+                {
+                    enumerationDefinitionDialog(addedDiv);
                 }
             }
             else
@@ -177,9 +190,9 @@ var HtmlGenerator;
         };
 
         var typeSelect = addedDiv.find('.parameter-type-select');
-        typeSelect.on('change', function()
+        typeSelect.on('change', function(e)
         {
-            changeParameterType($(this).val());
+            changeParameterType($(this).val(), e.originalEvent);
         });
         typeSelect.trigger('change');
         addedDiv.removeClass("changedTypeParameter");
@@ -230,14 +243,19 @@ var HtmlGenerator;
         // The value of an enumeration can not be the empty string
         if (enumerationValue)
         {
+            var enumerationValueInput = $("#enumeration-value-input");
+
             var deleteParentButton = $(Parts.getDeleteParentButtonHTML());
-            deleteParentButton.on('click', function() { $(this).parent().remove(); });
+            deleteParentButton.on('click', function()
+            {
+                $(this).parent().remove(); enumerationValueInput.focus();
+            });
 
             var enumerationValueItem = $('<li>', { text: enumerationValue });
             enumerationValueItem.append(deleteParentButton);
             enumerationValueItem.insertBefore(enumerationValueInputItem);
 
-            $("#enumeration-value-input").val("");
+            enumerationValueInput.val("").focus();
         }
     }
 
