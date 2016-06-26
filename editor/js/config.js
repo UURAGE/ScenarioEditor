@@ -16,16 +16,21 @@ var Config;
         getNewDefaultPropertyValues: getNewDefaultPropertyValues
     };
 
+    // The default scopes used when there is no statementScope attribute specified for the property in the config
     var defaultPropertyScopes = { statementScope: 'independent' };
+    // The default collection used when the property collection is not present in the XML
     var defaultPropertyCollection = { kind: 'toplevel', scopes: defaultPropertyScopes, sequence: [], byId: {} };
 
+    // The default scopes used when there is no statementScope attribute specified for the parameter in the config
     var defaultParameterScopes = { statementScope: 'per' };
+    // The default collection used when the parameter collection is not present in the XML
     var defaultParameterCollection = { kind: 'toplevel', scopes: defaultParameterScopes, sequence: [], byId: {} };
 
     $(document).ready(loadConfig);
 
     function loadConfig()
     {
+        // The config.xml is loaded into the DOM on the server-side, so we can parse the XML from the DOM
         var configXML = $($.parseXML($('#config').text())).children('config');
         if (!configXML.length)
         {
@@ -133,6 +138,8 @@ var Config;
         return { statementScope: scopedXML.getAttribute('statementScope') };
     }
 
+    // Merges the parent's scopes and it's local scopes
+    // The local scope always has precedence over the parent scope
     function mergeScopes(localScopes, parentScopes)
     {
         for (var scopeName in parentScopes)
