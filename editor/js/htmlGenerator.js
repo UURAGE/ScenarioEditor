@@ -302,7 +302,7 @@ var HtmlGenerator;
             var operatorSelect = $('<select>', { class: "parameter-effect-operator-select" });
             Metadata.metaObject.parameters.byId[pId].type.assignmentOperators.forEach(function(op)
             {
-                operatorSelect.append($('<option>', { value: op, text: op }));
+                operatorSelect.append($('<option>', { value: op.name, text: op.uiName }));
             });
             effectDiv.append(operatorSelect);
 

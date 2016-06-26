@@ -239,11 +239,6 @@ var Load;
         var difficulty = $(metadata).find('difficulty').text();
         var definitions = $(metadata).find('definitions');
 
-        var defaultOperator = $(metadata).find('defaultOperator').text();
-        // Allows the editor to load older XML versions without defaultOperator
-        if (defaultOperator === "")
-            defaultOperator = LanguageManager.sLang("edt_parts_delta");
-
         var parameters = Metadata.getNewDefaultParameters();
         $(definitions).children('parameters').children('userDefined').children().each(function()
         {
@@ -281,8 +276,7 @@ var Load;
             description: description,
             propertyValues: propertyValues,
             parameters: parameters,
-            timePId: timePId,
-            defaultOperator: defaultOperator
+            timePId: timePId
         };
     }
 

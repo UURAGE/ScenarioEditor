@@ -641,7 +641,7 @@ var Main;
         {
             var timeEffect = {
                 idRef: 't',
-                operator: "delta",
+                operator: "addAssign",
                 value: 1
             };
             parameterEffects.userDefined.push(timeEffect);
@@ -1615,7 +1615,7 @@ var Main;
                     var operatorSelect = $('<select>', { class: containerClassPrefix + "-effect-operator-select" });
                     parameterDefinitions[pId].type.assignmentOperators.forEach(function(op)
                     {
-                        operatorSelect.append($('<option>', { value: op, text: op }));
+                        operatorSelect.append($('<option>', { value: op.name, text: op.uiName }));
                     });
                     effectDiv.append(operatorSelect);
 

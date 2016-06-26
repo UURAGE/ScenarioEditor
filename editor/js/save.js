@@ -34,7 +34,6 @@ var Save;
         addAndReturnElement("date", nameSpace, metadataEl).textContent =new Date().toISOString();
         addAndReturnElement("description", nameSpace, metadataEl).textContent = Utils.escapeHTML(Metadata.metaObject.description);
         addAndReturnElement("difficulty", nameSpace, metadataEl).textContent = Metadata.metaObject.difficulty;
-        addAndReturnElement("defaultOperator", nameSpace, metadataEl).textContent = Metadata.metaObject.defaultOperator;
 
         var definitionsEl = addAndReturnElement("definitions", nameSpace, metadataEl);
 

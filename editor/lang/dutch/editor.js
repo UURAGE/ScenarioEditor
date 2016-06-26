@@ -65,8 +65,6 @@
 
     LanguageManager.edt_parts_statement = "Zin";
     LanguageManager.edt_parts_type = "Type";
-    LanguageManager.edt_parts_delta = "delta";
-    LanguageManager.edt_parts_set = "set";
     LanguageManager.edt_parts_empty_group = "Lege groep";
     LanguageManager.edt_parts_one_condition_group = "Groep met één preconditie";
     LanguageManager.edt_parts_all_true = "alles waar";

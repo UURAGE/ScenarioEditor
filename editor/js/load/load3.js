@@ -107,10 +107,6 @@ var Load3;
         $('#scenarioNameTab .scenarioName').text(name);
         var description = Utils.unEscapeHTML($(metadata).find('description').text());
         var difficulty = $(metadata).find('difficulty').text();
-        var defaultOperator = $(metadata).find('defaultChangeType').text();
-        // Allows the editor to load older XML versions without defaultOperator
-        if (defaultOperator === "")
-            defaultOperator = LanguageManager.sLang("edt_parts_delta");
 
         var parameters = Metadata.getNewDefaultParameters();
         $(metadata).find('parameters').children().each(function()
@@ -148,8 +144,7 @@ var Load3;
             difficulty: difficulty,
             description: description,
             propertyValues: Config.getNewDefaultPropertyValues(['independent']),
-            parameters: parameters,
-            defaultOperator: defaultOperator
+            parameters: parameters
         };
     }
 
@@ -194,7 +189,7 @@ var Load3;
                 parameterEffects.userDefined.push(
                 {
                     idRef: parameter.attributes.idref.value,
-                    operator: parameter.attributes.changeType.value,
+                    operator: parameter.attributes.changeType.value == "delta" ? Config.assignmentOperators.addAssign.name : Config.assignmentOperators.assign.name,
                     value: parseInt(parameter.attributes.value.value)
                 });
             }

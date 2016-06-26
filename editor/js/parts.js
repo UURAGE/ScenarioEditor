@@ -176,16 +176,6 @@ var Parts;
                     '<tbody id="meta-character-property-values" style="display:none">' +
                         '<tr><td colspan="2" id="character-tabs"/></tr>' +
                     '</tbody>' +
-                    '<thead><th colspan="2"><h3>'+LanguageManager.sLang("edt_parts_advanced")+'</h3></th></thead>' +
-                    '<tbody id="advanced">' +
-                        '<tr>' +
-                            '<th><label for="operatorSelection">'+LanguageManager.sLang("edt_parts_change_type")+':</label></th>' +
-                            '<td><select class="operator" name="defaultOperator" id="defaultOperatorSelect">' +
-                                '<option value="delta" selected="selected">'+LanguageManager.sLang("edt_parts_delta")+'</option>' +
-                                '<option value="set">'+LanguageManager.sLang("edt_parts_set")+'</option>' +
-                            '</select></td>' +
-                        '</tr>' +
-                    '</tr>' +
                 '</table>' +
             '</div>';
     }

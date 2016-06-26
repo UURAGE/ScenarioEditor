@@ -10,6 +10,7 @@ var Config;
     {
         configObject: {},
         types: {},
+        assignmentOperators: {},
         relationalOperators: {},
         atLeastOneParameter: atLeastOneParameter,
         getNewDefaultParameterEffects: getNewDefaultParameterEffects,
@@ -208,6 +209,25 @@ var Config;
         return migration;
     }
 
+    Config.assignmentOperators =
+    {
+        'assign':
+        {
+            name: 'assign',
+            uiName: ":="
+        },
+        'addAssign':
+        {
+            name: 'addAssign',
+            uiName: "+="
+        },
+        'subtractAssign':
+        {
+            name: 'subtractAssign',
+            uiName: "-="
+        }
+    };
+
     Config.relationalOperators =
     {
         'equalTo':
@@ -258,7 +278,7 @@ var Config;
         {
             name: 'string',
             defaultValue: "",
-            assignmentOperators: ['set'],
+            assignmentOperators: [Config.assignmentOperators.assign],
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
             loadType: function(typeXML)
             {
@@ -312,10 +332,11 @@ var Config;
         {
             name: 'integer',
             defaultValue: 0,
-            assignmentOperators: ['set', 'delta'],
-            relationalOperators: [Config.relationalOperators.equalTo,            Config.relationalOperators.notEqualTo,
-                                  Config.relationalOperators.greaterThanEqualTo, Config.relationalOperators.lessThanEqualTo,
-                                  Config.relationalOperators.greaterThan,        Config.relationalOperators.lessThan],
+            assignmentOperators: [Config.assignmentOperators.assign,             Config.assignmentOperators.addAssign,
+                                  Config.assignmentOperators.subtractAssign],
+            relationalOperators: [Config.relationalOperators.equalTo,                Config.relationalOperators.notEqualTo,
+                                  Config.relationalOperators.greaterThanEqualTo,     Config.relationalOperators.lessThanEqualTo,
+                                  Config.relationalOperators.greaterThan,            Config.relationalOperators.lessThan],
             loadType: function(typeXML)
             {
                 var type = this;
@@ -381,7 +402,7 @@ var Config;
         {
             name: 'boolean',
             defaultValue: false,
-            assignmentOperators: ['set'],
+            assignmentOperators: [Config.assignmentOperators.assign],
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
             loadType: function(typeXML)
             {
@@ -433,7 +454,7 @@ var Config;
         {
             name: 'enumeration',
             defaultValue: "",
-            assignmentOperators: ['set'],
+            assignmentOperators: [Config.assignmentOperators.assign],
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
             loadType: function(typeXML)
             {

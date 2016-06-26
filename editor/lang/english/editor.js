@@ -65,8 +65,6 @@
 
     LanguageManager.edt_parts_statement = "Statement";
     LanguageManager.edt_parts_type = "Type";
-    LanguageManager.edt_parts_delta = "delta";
-    LanguageManager.edt_parts_set = "set";
     LanguageManager.edt_parts_empty_group = "Empty group";
     LanguageManager.edt_parts_one_condition_group = "Group with one precondition";
     LanguageManager.edt_parts_all_true = "all true";
