@@ -52,7 +52,10 @@ var Save;
 
             definitionEl.setAttribute("id", definition.id);
             definitionEl.setAttribute("name", Utils.escapeHTML(definition.name));
-            if (definition.description) definitionEl.setAttribute("description", Utils.escapeHTML(definition.description));
+            if (definition.description)
+            {
+                addAndReturnElement("description", nameSpace, definitionEl).textContent = Utils.escapeHTML(definition.description);
+            }
 
             var typeEl = definition.type.insertType(definitionEl);
             var defaultEl = addAndReturnElement('default', nameSpace, typeEl);

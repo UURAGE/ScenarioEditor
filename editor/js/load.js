@@ -257,13 +257,13 @@ var Load;
                     Metadata.parameterCounter = parameterNumber;
             }
 
-            var typeXML = $(this).children().eq(0);
+            var typeXML = $(this).children().not('description').eq(0);
             var parameter =
             {
                 id: parameterId,
                 name: Utils.unEscapeHTML(this.attributes.name.value),
                 type: Config.types[typeXML[0].nodeName.substr("type".length).toLowerCase()].loadType(typeXML),
-                description: this.hasAttribute("description") ? Utils.unEscapeHTML(this.attributes.description.value) : ""
+                description: Utils.unEscapeHTML($(this).children('description').text())
             };
             parameters.sequence.push(parameter);
             parameters.byId[parameter.id] = parameter;
