@@ -98,6 +98,11 @@ var Load;
         // Load with the newest version of the schema
         if (schemaVersion)
         {
+            if (Config.configObject.id !== $('scenario', xml).attr('configidref'))
+            {
+                alert("The config id does not match the config id referred to in the scenario");
+            }
+
             loadMetadata($($('metadata', xml)[0]));
             jsPlumb.batch(function()
             {
