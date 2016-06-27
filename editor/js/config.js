@@ -200,7 +200,7 @@ var Config;
         var migration = {};
         if (migrationXML.length > 0)
         {
-            intentPropertyXML = migrationXML.children('intentProperty').eq(0);
+            var intentPropertyXML = migrationXML.children('intentProperty').eq(0);
             if (intentPropertyXML.length > 0)
             {
                 migration.intentProperty = { idRef: intentPropertyXML[0].getAttribute('idref') };
