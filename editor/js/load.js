@@ -176,8 +176,7 @@ var Load;
                 var tree = Main.createEmptyTree(treeID, false, 0, 0);
                 var plumbInstance = tree.plumbInstance;
 
-                // get the subject from the XML
-                tree.subject = Utils.unEscapeHTML($(this).children('subject')[0].textContent);
+                tree.subject = $(this).children('subject')[0].textContent;
 
                 tree.optional = Utils.parseBool($(this).attr('optional'));
 
@@ -233,9 +232,9 @@ var Load;
     // Load the metadata of the scenario.
     function loadMetadata(metadata)
     {
-        var name = Utils.unEscapeHTML($(metadata).find('name').text());
+        var name = $(metadata).find('name').text();
         $('#scenarioNameTab .scenarioName').text(name);
-        var description = Utils.unEscapeHTML($(metadata).find('description').text());
+        var description = $(metadata).find('description').text();
         var difficulty = $(metadata).find('difficulty').text();
         var definitions = $(metadata).find('definitions');
 
@@ -256,9 +255,9 @@ var Load;
             var parameter =
             {
                 id: parameterId,
-                name: Utils.unEscapeHTML(this.attributes.name.value),
+                name: this.attributes.name.value,
                 type: Config.types[typeXML[0].nodeName.substr("type".length).toLowerCase()].loadType(typeXML),
-                description: Utils.unEscapeHTML($(this).children('description').text())
+                description:$(this).children('description').text()
             };
             parameters.sequence.push(parameter);
             parameters.byId[parameter.id] = parameter;
@@ -296,7 +295,7 @@ var Load;
         var initsNode = Utils.parseBool($(statement).attr('inits'));
         var endNode = Utils.parseBool($(statement).attr('end'));
 
-        var text = Utils.unEscapeHTML($(statement).find('text').text());
+        var text = $(statement).find('text').text();
 
         var xPos = $(statement).find('x').text();
         var yPos = $(statement).find('y').text();
@@ -313,7 +312,7 @@ var Load;
 
         var propertyValues = loadPropertyValues($(statement).children('propertyValues'), ['per', 'per-' + type]);
 
-        var comment = Utils.unEscapeHTML($(statement).find('comment').text());
+        var comment = $(statement).find('comment').text();
 
         var targets = $(statement).find('responses').children();
         if (targets.length > 0)

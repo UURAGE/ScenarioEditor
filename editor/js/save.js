@@ -12,6 +12,8 @@ var Save;
         getStartNodeIDs: getStartNodeIDs
     };
 
+    var xmlNameSpace = "http://www.w3.org/XML/1998/namespace";
+
     $(document).ready(function()
     {
         $("#exportScenario").on('click', exportScenario);
@@ -30,9 +32,9 @@ var Save;
 
         // Handles the metadata
         var metadataEl = addAndReturnElement("metadata", nameSpace, doc.documentElement);
-        addAndReturnElement("name", nameSpace, metadataEl).textContent = Utils.escapeHTML(Metadata.metaObject.name);
+        addAndReturnElement("name", nameSpace, metadataEl).textContent = Metadata.metaObject.name;
         addAndReturnElement("date", nameSpace, metadataEl).textContent =new Date().toISOString();
-        addAndReturnElement("description", nameSpace, metadataEl).textContent = Utils.escapeHTML(Metadata.metaObject.description);
+        addAndReturnElement("description", nameSpace, metadataEl, true).textContent = Metadata.metaObject.description;
         addAndReturnElement("difficulty", nameSpace, metadataEl).textContent = Metadata.metaObject.difficulty;
 
         var definitionsEl = addAndReturnElement("definitions", nameSpace, metadataEl);
@@ -50,10 +52,10 @@ var Save;
             var definitionEl = addAndReturnElement(elementName, nameSpace, definitionsEl);
 
             definitionEl.setAttribute("id", definition.id);
-            definitionEl.setAttribute("name", Utils.escapeHTML(definition.name));
+            definitionEl.setAttribute("name", definition.name);
             if (definition.description)
             {
-                addAndReturnElement("description", nameSpace, definitionEl).textContent = Utils.escapeHTML(definition.description);
+                addAndReturnElement("description", nameSpace, definitionEl, true).textContent = definition.description;
             }
 
             var typeEl = definition.type.insertType(definitionEl);
@@ -234,7 +236,7 @@ var Save;
         treeElement.setAttribute("id", tree.id.replace(/^ext_/, ''));
         treeElement.setAttribute("optional", tree.optional);
 
-        addAndReturnElement('subject', nameSpace, treeElement).textContent = Utils.escapeHTML(tree.subject);
+        addAndReturnElement('subject', nameSpace, treeElement).textContent = tree.subject;
 
         var positionElement = addAndReturnElement('position', nameSpace, treeElement);
 
@@ -273,7 +275,7 @@ var Save;
             statementEl.setAttribute('end', node.endNode);
 
             // Add a text element to the XML element
-            addAndReturnElement("text", nameSpace, statementEl).textContent = Utils.escapeHTML(node.text);
+            addAndReturnElement("text", nameSpace, statementEl, true).textContent = node.text;
 
             // Save the position
             var visible = $("#" + node.id).is(":visible");
@@ -290,7 +292,7 @@ var Save;
 
             // Save the comment
             if (node.comment !== "")
-                addAndReturnElement("comment", nameSpace, statementEl).textContent = Utils.escapeHTML(node.comment);
+                addAndReturnElement("comment", nameSpace, statementEl, true).textContent = node.comment;
 
             // Save the preconditions
             var preconditionsInXML = createAndReturnPreconditionXML(node.preconditions, nameSpace);
@@ -407,9 +409,13 @@ var Save;
     }
 
     // Creates an XML element, adds it to another element, and returns the created element
-    function addAndReturnElement(elNameToAdd, nameSpace, xmlElement)
+    function addAndReturnElement(elNameToAdd, nameSpace, xmlElement, preserveSpaces)
     {
         var elToAdd = document.createElementNS(nameSpace, elNameToAdd);
+        if (preserveSpaces)
+        {
+            elToAdd.setAttributeNS(xmlNameSpace, "space", "preserve");
+        }
         xmlElement.appendChild(elToAdd);
         return elToAdd;
     }
