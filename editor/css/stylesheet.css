@@ -51,7 +51,7 @@ textarea
   /* Thanks to Herb Caudill comment */
 }
 
-textarea.nodestatement
+.nodestatement
 {
   margin: auto;
   padding: 0;
@@ -60,7 +60,7 @@ textarea.nodestatement
   font: inherit;
 }
 
-textarea.text
+.text
 {
   width: 420px;
 }
@@ -201,7 +201,7 @@ button img
   vertical-align: middle;
 }
 
-button.enabled
+.enabled
 {
   background-color: Highlight !important;
 }
@@ -288,7 +288,7 @@ button.enabled
 
   #toolbar .big-buttons div
   {
-    margin: 0px 1px;
+    margin: 0 1px;
   }
 
   #toolbar .big-buttons img
@@ -307,7 +307,7 @@ button.enabled
   font-size: 12px;
 }
 
-#toolbar button:hover, #toolbar button.hovered
+#toolbar button:hover, #toolbar .hovered
 {
   background-color: #2ecc71;
   color: #fff;
@@ -401,7 +401,7 @@ button.enabled
 
 .sub-header h2
 {
-  margin-top: 0px;
+  margin-top: 0;
   margin-bottom: 7px;
   white-space: nowrap;
   font-size: 20px;
@@ -419,7 +419,7 @@ button.enabled
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  padding: 0px;
+  padding: 0;
   width: 250px;
   height: 50px;
   border-color: #000000;
@@ -540,9 +540,9 @@ button.enabled
 
 .groupPreconditionDiv
 {
-  margin: 0px;
+  margin: 0;
   margin-left: 12px;
-  padding: 0px;
+  padding: 0;
   padding-left: 10px;
   border-left: 2px solid white;
 }
@@ -610,7 +610,6 @@ button.enabled
   display: inline-block;
   margin: 0;
   padding: 5px 0;
-  width: calc(100% - 35px);
   background-color: #ecf0f1;
   color: #888;
   text-align: center;
@@ -635,7 +634,7 @@ button.enabled
   #scenarioNameTab span
   {
     margin: 3px 0;
-    padding: 0px 10px;
+    padding: 0 10px;
     min-width: 50px;
     height: 1em;
     color: #000;
@@ -653,7 +652,7 @@ button.enabled
       font: inherit;
     }
 
-span.noSelect
+.noSelect
 {
   -khtml-user-select: none;
   -moz-user-select: none;
@@ -677,7 +676,7 @@ span.noSelect
 
 #validationReport h2
 {
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 #validationReport table
@@ -819,8 +818,8 @@ span.noSelect
 
 .ui-tabs
 {
-  padding: 0px !important;
-  border: 0px;
+  padding: 0 !important;
+  border: 0;
 }
 
   .ui-tabs .ui-tabs-nav
@@ -863,7 +862,7 @@ span.noSelect
   height: 300px;
 }
 
-div#tableSizeFixer
+#tableSizeFixer
 {
   overflow-y: auto;
   max-height: 140px;
@@ -931,7 +930,7 @@ div#tableSizeFixer
     color: white;
   }
 
-.disabled span.disabled-text
+.disabled .disabled-text
 {
   position: absolute;
   top: 0;
@@ -979,7 +978,7 @@ td.dragHandle
   /*color: #d44;*/
 }
 
-#draftTableHeaders th#draftDragAll
+#draftTableHeaders #draftDragAll
 {
   -webkit-touch-callout: none;
   -khtml-user-select: none;
@@ -993,7 +992,7 @@ td.dragHandle
   cursor: move;
 }
 
-  #draftTableHeaders th#draftDragAll:hover
+  #draftTableHeaders #draftDragAll:hover
   {
     background-color: #e7e7ff;
   }
@@ -1010,7 +1009,6 @@ td.dragHandle
   #itemControls button
   {
     display: inline-block;
-    float: right;
     width: 15%;
     text-align: center;
   }
@@ -1072,8 +1070,8 @@ input[type=checkbox][disabled]
 #minimapSelector
 {
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 296px;
   height: 296px;
   border: 2px solid #27ae60;
