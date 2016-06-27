@@ -238,10 +238,10 @@ var Save;
 
         addAndReturnElement('subject', nameSpace, treeElement).textContent = tree.subject;
 
-        var positionElement = addAndReturnElement('position', nameSpace, treeElement);
-
-        addAndReturnElement('x', nameSpace,positionElement).textContent = tree.leftPos;
-        addAndReturnElement('y', nameSpace,positionElement).textContent = tree.topPos;
+        var editingDataElement = addAndReturnElement('editingData', nameSpace, treeElement);
+        var positionElement = addAndReturnElement('position', nameSpace, editingDataElement);
+        addAndReturnElement('x', nameSpace, positionElement).textContent = tree.leftPos;
+        addAndReturnElement('y', nameSpace, positionElement).textContent = tree.topPos;
 
         var startsElement = addAndReturnElement('starts', nameSpace, treeElement);
         var startNodeIDs = getStartNodeIDs(tree);
@@ -282,8 +282,9 @@ var Save;
             if (!visible) // cannot get pos for hidden elements
                 $("#" + node.id).show();
 
+            var editingDataEl = addAndReturnElement("editingData", nameSpace, statementEl);
             var position = $("#" + node.id).position();
-            var positionEl = addAndReturnElement("position", nameSpace, statementEl);
+            var positionEl = addAndReturnElement("position", nameSpace, editingDataEl);
             addAndReturnElement("x", nameSpace, positionEl).textContent = position.left;
             addAndReturnElement("y", nameSpace, positionEl).textContent = position.top;
 
@@ -292,7 +293,7 @@ var Save;
 
             // Save the comment
             if (node.comment !== "")
-                addAndReturnElement("comment", nameSpace, statementEl, true).textContent = node.comment;
+                addAndReturnElement("comment", nameSpace, editingDataEl, true).textContent = node.comment;
 
             // Save the preconditions
             var preconditionsInXML = createAndReturnPreconditionXML(node.preconditions, nameSpace);

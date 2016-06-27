@@ -181,7 +181,7 @@ var Load;
                 tree.optional = Utils.parseBool($(this).attr('optional'));
 
                 // get the position from the XML, note that this is in grid coordinates, not screen coordinates
-                var position = $(this).children('position')[0];
+                var position = $(this).children('editingData').children('position')[0];
                 tree.leftPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('x')[0].textContent, 0)); // set x
                 tree.topPos  = Math.round(Utils.parseDecimalIntWithDefault($(position).children('y')[0].textContent, 0)); // set y
                 tree.level = Math.round(level); // set level
@@ -297,8 +297,11 @@ var Load;
 
         var text = $(statement).find('text').text();
 
-        var xPos = $(statement).find('x').text();
-        var yPos = $(statement).find('y').text();
+        var editingDataXML = $(statement).find('editingData');
+        var positionXML = editingDataXML.find('position');
+        var xPos = positionXML.find('x').text();
+        var yPos = positionXML.find('y').text();
+        var comment = editingDataXML.find('comment').text();
 
         // Load the preconditions of this node.
         var preconditionsXML = $(statement).find("preconditions");
@@ -311,8 +314,6 @@ var Load;
         var parameterEffects = loadParameterEffects($(statement).children('parameterEffects'));
 
         var propertyValues = loadPropertyValues($(statement).children('propertyValues'), ['per', 'per-' + type]);
-
-        var comment = $(statement).find('comment').text();
 
         var targets = $(statement).find('responses').children();
         if (targets.length > 0)
