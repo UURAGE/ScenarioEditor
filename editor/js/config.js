@@ -88,9 +88,9 @@ var Config;
                 kind: nodeName,
                 id: nodeXML.getAttribute('id'),
                 name: nodeXML.getAttribute('name'),
-                description: nodeXML.getAttribute('description'),
+                description: $(nodeXML).children('description').text(),
                 scopes: nodeScopes,
-                type: loadType($(nodeXML).children().eq(0))
+                type: loadType($(nodeXML).children().last())
             };
         }
         else if (nodeXML.nodeName === nodeName + "Section")
