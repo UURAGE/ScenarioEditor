@@ -21,9 +21,9 @@ var PlumbGenerator;
         instance.importDefaults(
         {
             Endpoint : ["Dot", {radius:2}],
-            Anchor : "Continuous",
+            Anchor: "Continuous",
             HoverPaintStyle : {strokeStyle:"#1e8151", lineWidth:2 },
-            Connector: ["StateMachine", {curviness: 20}],
+            Connector: ["StateMachine", { curviness: 14, margin: 5, proximityLimit: 75 }],
             PaintStyle : {strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4},
             ConnectionOverlays : [
                 [ "Arrow", {
