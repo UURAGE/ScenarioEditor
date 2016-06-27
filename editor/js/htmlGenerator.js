@@ -194,7 +194,10 @@ var HtmlGenerator;
         {
             changeParameterType($(this).val(), e.originalEvent);
         });
-        typeSelect.trigger('change');
+
+        // The default type for a user-defined parameter is integer
+        typeSelect.val("integer").trigger('change');
+
         addedDiv.removeClass("changedTypeParameter");
 
         return addedDiv;
