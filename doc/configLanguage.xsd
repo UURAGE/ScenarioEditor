@@ -67,16 +67,33 @@
 	</element>
 	<element name="property">
 		<complexType>
-			<group ref="tns:typeGroup" />
+			<sequence>
+				<element name="description" type="tns:stringWithXMLAttributes" minOccurs="0" maxOccurs="1">
+					<annotation>
+						<documentation>
+							A human-readable description of the definition.
+						</documentation>
+					</annotation>
+				</element>
+				<group ref="tns:typeGroup" />
+			</sequence>
 			<attribute name="id" type="string" use="required" />
 			<attribute name="name" type="string" use="required" />
-			<attribute name="description" type="string" use="optional" />
 			<attributeGroup ref="tns:propertyScopes" />
 		</complexType>
 	</element>
 	<element name="parameter">
 		<complexType>
-			<group ref="tns:typeGroup" />
+			<sequence>
+				<element name="description" type="tns:stringWithXMLAttributes" minOccurs="0" maxOccurs="1">
+					<annotation>
+						<documentation>
+							A human-readable description of the definition.
+						</documentation>
+					</annotation>
+				</element>
+				<group ref="tns:typeGroup" />
+			</sequence>
 			<attribute name="id" use="required">
 				<simpleType>
 					<restriction base="string">
@@ -85,7 +102,6 @@
 				</simpleType>
 			</attribute>
 			<attribute name="name" type="string" use="required" />
-			<attribute name="description" type="string" use="optional" />
 			<attributeGroup ref="tns:parameterScopes" />
 		</complexType>
 	</element>
@@ -129,6 +145,13 @@
 			</element>
 		</choice>
 		<attributeGroup ref="tns:parameterScopes" />
+	</complexType>
+	<complexType name="stringWithXMLAttributes">
+		<simpleContent>
+			<extension base="string">
+				<anyAttribute namespace="http://www.w3.org/XML/1998/namespace" processContents="lax" />
+			</extension>
+		</simpleContent>
 	</complexType>
 	<group name="typeGroup">
 		<choice>
