@@ -157,6 +157,13 @@ a[data-disabled]
   height: 100%;
 }
 
+#metaScreen table,
+#propertyValuesSection table
+{
+    margin-bottom: 20px;
+    width: 100%;
+}
+
 #metaScreen th
 {
     font-weight: normal;
