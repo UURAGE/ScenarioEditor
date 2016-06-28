@@ -386,7 +386,10 @@ var Config;
             },
             getFromDOM: function(containerEl)
             {
-                return Utils.parseDecimalIntWithDefault(containerEl.children('input').first().val(), this.minimum ? this.minimum : 0);
+                var value = Utils.parseDecimalIntWithDefault(containerEl.children('input').first().val(), this.minimum ? this.minimum : 0);
+                if (this.minimum) value = Math.max(value, this.minimum);
+                if (this.maximum) value = Math.min(value, this.maximum);
+                return value;
             },
             setInDOM: function(containerEl, value)
             {
