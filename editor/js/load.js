@@ -237,11 +237,11 @@ var Load;
     // Load the metadata of the scenario.
     function loadMetadata(metadata)
     {
-        var name = $(metadata).find('name').text();
+        var name = $(metadata).children('name').text();
         $('#scenarioNameTab .scenarioName').text(name);
-        var description = $(metadata).find('description').text();
-        var difficulty = $(metadata).find('difficulty').text();
-        var definitions = $(metadata).find('definitions');
+        var description = $(metadata).children('description').text();
+        var difficulty = $(metadata).children('difficulty').text();
+        var definitions = $(metadata).children('definitions');
 
         var parameters = Metadata.getNewDefaultParameters();
         $(definitions).children('parameters').children('userDefined').children().each(function()
@@ -300,16 +300,16 @@ var Load;
         var initsNode = Utils.parseBool($(statement).attr('inits'));
         var endNode = Utils.parseBool($(statement).attr('end'));
 
-        var text = $(statement).find('text').text();
+        var text = $(statement).children('text').text();
 
-        var editingDataXML = $(statement).find('editingData');
-        var positionXML = editingDataXML.find('position');
-        var xPos = positionXML.find('x').text();
-        var yPos = positionXML.find('y').text();
-        var comment = editingDataXML.find('comment').text();
+        var editingDataXML = $(statement).children('editingData');        
+        var positionXML = editingDataXML.children('position');
+        var xPos = positionXML.children('x').text();
+        var yPos = positionXML.children('y').text();
+        var comment = editingDataXML.children('comment').text();
 
         // Load the preconditions of this node.
-        var preconditionsXML = $(statement).find("preconditions");
+        var preconditionsXML = $(statement).children("preconditions");
         var preconditions;
         if (preconditionsXML.length === 0)
             preconditions = {type: "alwaysTrue", preconditions: []};
@@ -320,7 +320,7 @@ var Load;
 
         var propertyValues = loadPropertyValues($(statement).children('propertyValues'), ['per', 'per-' + type]);
 
-        var targets = $(statement).find('responses').children();
+        var targets = $(statement).children('responses').children();
         if (targets.length > 0)
         {
             // Save all the connections. We will create the connections when all nodes have been added.
@@ -435,7 +435,7 @@ var Load;
     function loadParameterEffects(parameterEffectsXMLElement)
     {
         var parameterEffects = Config.getNewDefaultParameterEffects();
-        parameterEffectsXMLElement.find('userDefined').children().each(function()
+        parameterEffectsXMLElement.children('userDefined').children().each(function()
         {
             parameterEffects.userDefined.push(
             {
@@ -444,7 +444,7 @@ var Load;
                 value: Metadata.metaObject.parameters.byId[this.attributes.idref.value].type.fromXML(this)
             });
         });
-        parameterEffectsXMLElement.find('fixed').children().each(function()
+        parameterEffectsXMLElement.children('fixed').children().each(function()
         {
             var parameterId = this.attributes.idref.value;
             if (this.attributes.characteridref)
