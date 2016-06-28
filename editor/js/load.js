@@ -318,7 +318,9 @@ var Load;
 
         var parameterEffects = loadParameterEffects($(statement).children('parameterEffects'));
 
-        var propertyValues = loadPropertyValues($(statement).children('propertyValues'), ['per', 'per-' + type]);
+        var acceptableScopes = ['per', 'per-' + type];
+        if (type === Main.computerType) acceptableScopes.push('per-computer-own');
+        var propertyValues = loadPropertyValues($(statement).children('propertyValues'), acceptableScopes, characterIdRef);
 
         var targets = $(statement).children('responses').children();
         if (targets.length > 0)
@@ -497,9 +499,9 @@ var Load;
         return parameterEffects;
     }
 
-    function loadPropertyValues(propertyValuesXMLElement, acceptableScopes)
+    function loadPropertyValues(propertyValuesXMLElement, acceptableScopes, characterIdRef)
     {
-        var propertyValues = Config.getNewDefaultPropertyValues(acceptableScopes);
+        var propertyValues = Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef);
         propertyValuesXMLElement.children().each(function()
         {
             var propertyId = this.attributes.idref.value;

@@ -158,41 +158,25 @@ a[data-disabled]
 }
 
 #metaScreen table,
-#propertyValuesSection table
+#propertyValuesSection table,
+#characterSection table
 {
     margin-bottom: 20px;
     width: 100%;
 }
 
-#metaScreen th
+#metaScreen th,
+#propertyValuesSection th,
+#characterSection th
 {
     font-weight: normal;
-}
-
-#metaScreen th
-{
     text-align: left;
     vertical-align: top;
 }
 
-#metaScreen td
-{
-    text-align: left;
-    vertical-align: top;
-}
-
-#propertyValuesSection th
-{
-    font-weight: normal;
-}
-
-#propertyValuesSection th
-{
-    text-align: left;
-    vertical-align: top;
-}
-
-#propertyValuesSection td
+#metaScreen td,
+#propertyValuesSection td,
+#characterSection td
 {
     text-align: left;
     vertical-align: top;

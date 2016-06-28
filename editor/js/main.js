@@ -68,15 +68,6 @@ var Main;
                 option.text(character.id);
                 characterSelection.append(option);
             });
-
-            characterSelection.on('change', function()
-            {
-                if (Main.selectedElement)
-                {
-                    Main.nodes[Main.selectedElement].characterIdRef = $(this).val();
-                    changeNodeText(Main.selectedElement);
-                }
-            });
         }
         else
         {
@@ -659,6 +650,8 @@ var Main;
                 characterIdRef = Config.configObject.characters.sequence[0].id;
             }
         }
+        var acceptableScopes = ['per', 'per-' + type];
+        if (type === Main.computerType) acceptableScopes.push('per-computer-own');
 
         Main.nodes[id] = {
             text: "",
@@ -670,7 +663,7 @@ var Main;
                 type: "alwaysTrue",
                 preconditions: []
             },
-            propertyValues: Config.getNewDefaultPropertyValues(['per', 'per-' + type]),
+            propertyValues:  Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef),
             comment: "",
             endNode: false,
             initsNode: false,
@@ -1208,6 +1201,7 @@ var Main;
 
         // Save property values.
         var acceptableScopes = ['per', 'per-' + node.type];
+        if (node.type === Main.computerType) acceptableScopes.push('per-computer-own');
         var propertyId, property;
         for (propertyId in Config.configObject.properties.byId)
         {
@@ -1221,6 +1215,11 @@ var Main;
             {
                 property = Config.configObject.characters.properties.byId[propertyId];
                 if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
+                if (property.scopes.statementScope === 'per-computer-own' && characterId !== node.characterIdRef)
+                {
+                    delete node.propertyValues.perCharacter[characterId][propertyId];
+                    continue;
+                }
                 node.propertyValues.perCharacter[characterId][propertyId] = property.type.getFromDOM($("#node-character-property-values-" + characterId + "-container-" + property.id));
             }
         }
@@ -1230,6 +1229,11 @@ var Main;
             {
                 property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
                 if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
+                if (property.scopes.statementScope === 'per-computer-own' && characterId !== node.characterIdRef)
+                {
+                    delete node.propertyValues.perCharacter[characterId][propertyId];
+                    continue;
+                }
                 node.propertyValues.perCharacter[characterId][propertyId] = property.type.getFromDOM($("#node-character-property-values-" + characterId + "-container-" + property.id));
             }
         }
@@ -1561,7 +1565,8 @@ var Main;
     {
         // Clear everything in the sidebar.
         $(
-            "#preconditionsDiv, #userDefinedParameterEffects, #node-property-values, #node-character-property-values, #fixed-parameter-effects, #fixed-character-parameter-effects"
+            "#preconditionsDiv, #userDefinedParameterEffects, #node-property-values, #node-character-property-values, #node-computer-own-property-values," + 
+            "#fixed-parameter-effects, #fixed-character-parameter-effects, #node-computer-own-parameter-effects"
         ).children().remove();
 
         // Don't show properties if no node or tree is selected. Display the minimap
@@ -1599,7 +1604,12 @@ var Main;
                 Metadata.metaObject.parameters.byId[parameter.idRef].type.setInDOM(addedDiv.find(".parameter-effect-value-container"), parameter.value);
             }
 
-            var acceptableScopes = ['per', 'per-' + node.type];
+            var acceptableScopes = [];
+            if (node.type !== Main.computerType || Config.configObject.characters.sequence.length > 1)
+            {
+                acceptableScopes.push('per');
+                acceptableScopes.push("per-" + node.type);
+            }
 
             // Show fixed parameters
             // Appends a default effect to the container, which changes dynamically based on the parameter selected
@@ -1861,27 +1871,27 @@ var Main;
                     anyPropertyShown = true;
                 }
             };
-            var nodePropertiesEl = $('#node-property-values');
-            var nodePropertiesTable = $('<table>');
+            var nodePropertyValuesEl = $('#node-property-values');
+            var nodePropertyValuesTable = $('<table>');
             Config.configObject.properties.sequence.forEach(function (subItem)
             {
-                showPropertyItem(node.propertyValues.characterIndependent, subItem, hStartLevel, nodePropertiesTable, nodePropertiesEl.attr('id'));
+                showPropertyItem(node.propertyValues.characterIndependent, subItem, hStartLevel, nodePropertyValuesTable, nodePropertyValuesEl.attr('id'));
             });
-            nodePropertiesEl.append(nodePropertiesTable);
+            nodePropertyValuesEl.append(nodePropertyValuesTable);
 
             var nodePropertyShown = anyPropertyShown;
             anyPropertyShown = false;
 
-            var nodeCharacterPropertiesEl = $('#node-character-property-values');
+            var nodeCharacterPropertyValuesEl = $('#node-character-property-values');
             var characterAccordion = $('<div>');
-            nodeCharacterPropertiesEl.append(characterAccordion);
+            nodeCharacterPropertyValuesEl.append(characterAccordion);
             Config.configObject.characters.sequence.forEach(function(character)
             {
                 var characterHeader = $('<h' + hStartLevel +'>', { text: character.id });
                 var characterTab = $('<table>');
                 characterAccordion.append(characterHeader).append($('<div>').append(characterTab));
 
-                var containerIdPrefix = nodeCharacterPropertiesEl.attr('id') + '-' + character.id;
+                var containerIdPrefix = nodeCharacterPropertyValuesEl.attr('id') + '-' + character.id;
 
                 Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
                 {
@@ -1906,8 +1916,102 @@ var Main;
             else
             {
                 $("#propertyValuesSection").show();
-                nodeCharacterPropertiesEl.prepend($('<h3>', { text: LanguageManager.sLang('edt_common_characters') }));
+                nodeCharacterPropertyValuesEl.prepend($('<h3>', { text: LanguageManager.sLang('edt_common_characters') }));
                 characterAccordion.accordion({ active: false, collapsible: true, heightStyle: "content" });
+            }
+
+            // Show the per-computer-own parameter effects and property values
+            if (node.type === Main.computerType)
+            {
+                var updateSideBarCharacterSection = function()
+                {
+                    acceptableScopes = ['per-computer-own'];
+                    if (Config.configObject.characters.sequence.length === 1)
+                    {
+                        acceptableScopes.push('per');
+                        acceptableScopes.push('per-' + Main.computerType);
+                    }
+
+                    var computerOwnPropertyValuesEl = $("#node-computer-own-property-values");
+                    computerOwnPropertyValuesEl.children().remove();
+                    anyPropertyShown = false;
+                   
+                    var computerOwnPropertyValuesTable = $('<table>');
+                    computerOwnPropertyValuesEl.append(computerOwnPropertyValuesTable);
+
+                    // The same id prefix as the other character property values, so they can be easily retrieved
+                    var containerIdPrefix = nodeCharacterPropertyValuesEl.attr('id') + '-' + node.characterIdRef;
+
+                    Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
+                    {
+                        showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], propertyItem, hStartLevel + 1, computerOwnPropertyValuesTable, containerIdPrefix);
+                    });
+
+                    Config.configObject.characters.byId[node.characterIdRef].properties.sequence.forEach(function(propertyItem)
+                    {
+                        showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], propertyItem, hStartLevel + 1, computerOwnPropertyValuesTable, containerIdPrefix);
+                    });
+
+                    if (!anyPropertyShown)
+                    {
+                        computerOwnPropertyValuesEl.parent().hide();
+                    }
+                    else
+                    {
+                        computerOwnPropertyValuesEl.parent().show();
+                    }
+                };
+
+                var characterSelection = $("#characterSelection");
+                if (characterSelection)
+                {
+                    characterSelection.unbind('change');
+                    characterSelection.on('change', function(e)
+                    {
+                        if (Main.selectedElement)
+                        {
+                            // Save the changes of the user if the character changed by the user, so we can store them in the new property values and parameter effects
+                            applyNodeChanges();
+
+                            var node = Main.nodes[Main.selectedElement];
+
+                            var newCharacterIdRef = $(this).val();
+                            // Get the new default property values for the character
+                            var acceptableScopes = ['per', 'per-' + node.type, 'per-computer-own'];
+                            var perCharacterPropertyValues = Config.getNewDefaultPropertyValues(acceptableScopes, newCharacterIdRef).perCharacter;
+                            // Store old property values in the new property values and
+                            // check for each per-character property value if it is per-computer-own and
+                            // if the other character also has that property then store it in the new character property values
+                            for (var characterId in perCharacterPropertyValues)
+                            {
+                                for (var propertyId in perCharacterPropertyValues[characterId])
+                                {
+                                    var property = Config.configObject.characters.properties.byId[propertyId];
+                                    if (!property) property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
+
+                                    if (property.scopes.statementScope === 'per-computer-own')
+                                    {
+                                        if (node.propertyValues.perCharacter[node.characterIdRef][propertyId])
+                                        {
+                                            perCharacterPropertyValues[characterId][propertyId] = node.propertyValues.perCharacter[node.characterIdRef][propertyId];
+                                        }
+                                    }
+                                    else if (node.propertyValues.perCharacter[characterId][propertyId])
+                                    {
+                                        perCharacterPropertyValues[characterId][propertyId] = node.propertyValues.perCharacter[characterId][propertyId];
+                                    }
+                                }
+                            }
+                            node.propertyValues.perCharacter = perCharacterPropertyValues;
+                            node.characterIdRef = newCharacterIdRef;
+
+                            updateSideBarCharacterSection();
+                            changeNodeText(Main.selectedElement);
+                        }
+                    });
+                }
+
+                updateSideBarCharacterSection();
             }
 
             $("#endNodeCheckbox").prop("checked", node.endNode);

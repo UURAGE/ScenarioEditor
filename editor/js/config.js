@@ -556,7 +556,7 @@ var Config;
         return parameterEffects;
     }
 
-    function getNewDefaultPropertyValues(acceptableStatementScopes)
+    function getNewDefaultPropertyValues(acceptableStatementScopes, characterIdRef)
     {
         var propertyValues = {};
         var propertyId;
@@ -571,15 +571,20 @@ var Config;
         propertyValues.perCharacter = {};
         for (var characterId in Config.configObject.characters.byId)
         {
+            var statementScope;
             propertyValues.perCharacter[characterId] = {};
             for (propertyId in Config.configObject.characters.properties.byId)
             {
-                if (acceptableStatementScopes.indexOf(Config.configObject.characters.properties.byId[propertyId].scopes.statementScope) === -1) continue;
+                statementScope = Config.configObject.characters.properties.byId[propertyId].scopes.statementScope;
+                if (acceptableStatementScopes.indexOf(statementScope) === -1) continue;
+                if (statementScope === 'per-computer-own' && characterId !== characterIdRef) continue;
                 propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.properties.byId[propertyId].type.defaultValue;
             }
             for (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
             {
-                if (acceptableStatementScopes.indexOf(Config.configObject.characters.byId[characterId].properties.byId[propertyId].scopes.statementScope) === -1) continue;
+                statementScope = Config.configObject.characters.byId[characterId].properties.byId[propertyId].scopes.statementScope;
+                if (acceptableStatementScopes.indexOf(statementScope) === -1) continue;
+                if (statementScope === 'per-computer-own' && characterId !== characterIdRef) continue;
                 propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.byId[characterId].properties.byId[propertyId].type.defaultValue;
             }
         }

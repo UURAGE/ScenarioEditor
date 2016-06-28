@@ -249,7 +249,14 @@
                   </div>
                   <div class="collapsable">
                     <select name="characterSelection" id="characterSelection" class="subjectButton"></select>
-                    <div id="node-character-own-properties"></div>
+                    <div>
+                      <h3><?php sLang('edt_parameter_effects');?></h3>
+                      <div id="node-computer-own-parameter-effects"></div>
+                    </div>
+                    <div>
+                      <h3><?php sLang('edt_property_values');?></h3>
+                      <div id="node-computer-own-property-values"></div>
+                    </div>
                   </div>
                 </div>
                 <div id="preconditionsSection" class="sidebarSection withMarginTop">

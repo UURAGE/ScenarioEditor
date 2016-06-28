@@ -159,6 +159,12 @@ var Load3;
         else
             id = "ext_" + id;
 
+        var characterIdRef;
+        if (type === Main.computerType)
+        {
+            characterIdRef = Config.configObject.characters.sequence[0].id;
+        }
+
         var jumpPoint = Utils.parseBool($(statement).attr('jumpPoint'));
         var initsNode = Utils.parseBool($(statement).attr('inits'));
         var endNode = Utils.parseBool($(statement).attr('possibleEnd'));
@@ -177,7 +183,9 @@ var Load3;
             preconditions = loadPreconditions(preconditionsXML.children()[0]);
 
         var parameterEffects = Config.getNewDefaultParameterEffects();
-        var propertyValues = Config.getNewDefaultPropertyValues(['per', 'per-' + type]);
+        var acceptableScopes = ['per', 'per-' + type];
+        if (type === Main.computerType) acceptableScopes.push('per-' + type + '-own');
+        var propertyValues = Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef);
         var targets;
         if (type === Main.playerType)
         {
@@ -233,12 +241,6 @@ var Load3;
                     targetID = 'ext_' + targetID;
                 connections[id].push(targetID);
             }
-        }
-
-        var characterIdRef;
-        if (type === Main.computerType) 
-        {
-            characterIdRef = Config.configObject.characters.sequence[0].id;
         }
 
         var node = Main.createAndReturnNode(type, id, Main.trees[treeID].div, Main.trees[treeID].dragDiv.attr('id'));
@@ -440,13 +442,18 @@ var Load3;
 
                 singleConnections[previousConversationNodeId] = id;
 
+                var acceptableScopes = ['per', 'per-' + type];
+                if (type === Main.computerType) acceptableScopes.push('per-' + type + '-own');
+
+                var characterIdRef = Config.configObject.characters.sequence[0].id;
+
                 Main.nodes[id] = {
                     text: textNode.text,
                     type: textNode.type,
-                    characterIdRef: Config.configObject.characters.sequence[0].id,
+                    characterIdRef: characterIdRef,
                     parameterEffects: Config.getNewDefaultParameterEffects(),
                     preconditions: {type: "alwaysTrue", preconditions: []},
-                    propertyValues: Config.getNewDefaultPropertyValues(['per', 'per-' + textNode.type]),
+                    propertyValues: Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef),
                     comment: "",
                     endNode: endNode,
                     initsNode: false,
