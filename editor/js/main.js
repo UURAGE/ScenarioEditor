@@ -647,7 +647,7 @@ var Main;
             parameterEffects.userDefined.push(timeEffect);
         }
 
-        var characterIdRef = "";
+        var characterIdRef;
         if (type === Main.computerType)
         {
             if (Config.configObject.characters.sequence.length > 1)

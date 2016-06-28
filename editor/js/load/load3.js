@@ -235,11 +235,17 @@ var Load3;
             }
         }
 
+        var characterIdRef;
+        if (type === Main.computerType) 
+        {
+            characterIdRef = Config.configObject.characters.sequence[0].id;
+        }
+
         var node = Main.createAndReturnNode(type, id, Main.trees[treeID].div, Main.trees[treeID].dragDiv.attr('id'));
         Main.nodes[id] = {
             text: text,
             type: type,
-            characterIdRef: Config.configObject.characters.sequence[0].id,
+            characterIdRef: characterIdRef,
             preconditions: preconditions,
             parameterEffects: parameterEffects,
             propertyValues: propertyValues,
