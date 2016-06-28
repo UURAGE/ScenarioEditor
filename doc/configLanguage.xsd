@@ -39,9 +39,20 @@
 					</element>
 				</choice>
 				<element name="migration" minOccurs="0" maxOccurs="1">
+					<annotation>
+						<documentation>
+							This contains the elements of previous versions of the scenarioLanguage expressed as properties or parameters.
+						</documentation>
+					</annotation>
 					<complexType>
 						<sequence>
 							<element name="intentProperty" minOccurs="0" maxOccurs="1">
+								<annotation>
+									<documentation>
+										Has a reference to the property that defines the current configuration of intent.
+										When included the intent as previously found in scenarios of scenarioLanguage version 3 is converted to the referred property where applicable.
+									</documentation>
+								</annotation>
 								<complexType>
 									<attribute name="idref" type="string" use="required"></attribute>
 								</complexType>
