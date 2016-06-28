@@ -207,9 +207,10 @@
 				<restriction base="string">
 					<enumeration value="independent" />
 					<enumeration value="per" />
-					<enumeration value="per-computer" />
 					<enumeration value="per-player" />
 					<enumeration value="per-situation" />
+					<enumeration value="per-computer" />
+					<enumeration value="per-computer-own"/>
 				</restriction>
 			</simpleType>
 		</attribute>
@@ -219,9 +220,10 @@
 			<simpleType>
 				<restriction base="string">
 					<enumeration value="per" />
-					<enumeration value="per-computer" />
 					<enumeration value="per-player" />
 					<enumeration value="per-situation" />
+					<enumeration value="per-computer" />
+					<enumeration value="per-computer-own"/>
 				</restriction>
 			</simpleType>
 		</attribute>
