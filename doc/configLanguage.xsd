@@ -62,6 +62,7 @@
 				</element>
 			</sequence>
 			<attribute name="id" type="string" use="required"></attribute>
+			<attribute name="version" type="int" use="optional"></attribute>
 		</complexType>
 		<key name="propertyID">
 			<selector xpath=".//tns:property" />
