@@ -542,16 +542,35 @@ var Config;
         return Config.configObject.parameters.sequence.length > 0 || Config.configObject.characters.parameters.sequence.length > 0 || atLeastOnePerCharacterParameter;
     }
 
-    function getNewDefaultParameterEffects()
+    function getNewDefaultParameterEffects(characterIdRef)
     {
         var parameterEffects = {};
         parameterEffects.userDefined = [];
         parameterEffects.fixed = {};
         parameterEffects.fixed.characterIndependent = {};
+        var parameterId;
+        for (parameterId in Config.configObject.parameters.byId)
+        {
+            parameterEffects.fixed.characterIndependent[parameterId] = [];
+        }
         parameterEffects.fixed.perCharacter = {};
         for (var characterId in Config.configObject.characters.byId)
         {
             parameterEffects.fixed.perCharacter[characterId] = {};
+
+            var statementScope;
+            for (parameterId in Config.configObject.characters.parameters.byId)
+            {
+                statementScope = Config.configObject.characters.parameters.byId[parameterId].scopes.statementScope;
+                if (statementScope === 'per-computer-own' && characterId !== characterIdRef) continue;
+                parameterEffects.fixed.perCharacter[characterId][parameterId] = [];
+            }
+            for (parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
+            {
+                statementScope = Config.configObject.characters.byId[characterId].parameters.byId[parameterId].scopes.statementScope;
+                if (statementScope === 'per-computer-own' && characterId !== characterIdRef) continue;
+                parameterEffects.fixed.perCharacter[characterId][parameterId] = [];
+            }
         }
         return parameterEffects;
     }

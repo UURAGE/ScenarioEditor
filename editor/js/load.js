@@ -316,7 +316,7 @@ var Load;
         else
             preconditions = loadPreconditions(preconditionsXML.children()[0]);
 
-        var parameterEffects = loadParameterEffects($(statement).children('parameterEffects'));
+        var parameterEffects = loadParameterEffects($(statement).children('parameterEffects'), characterIdRef);
 
         var acceptableScopes = ['per', 'per-' + type];
         if (type === Main.computerType) acceptableScopes.push('per-computer-own');
@@ -434,9 +434,9 @@ var Load;
         };
     }
 
-    function loadParameterEffects(parameterEffectsXMLElement)
+    function loadParameterEffects(parameterEffectsXMLElement, characterIdRef)
     {
-        var parameterEffects = Config.getNewDefaultParameterEffects();
+        var parameterEffects = Config.getNewDefaultParameterEffects(characterIdRef);
         parameterEffectsXMLElement.children('userDefined').children().each(function()
         {
             parameterEffects.userDefined.push(
@@ -454,46 +454,40 @@ var Load;
                 var characterId = this.attributes.characteridref.value;
                 if (characterId in Config.configObject.characters.byId)
                 {
-                    if (parameterId in Config.configObject.characters.parameters.byId)
+                    if (parameterId in parameterEffects.fixed.perCharacter[characterId])
                     {
-                        if (!(parameterId in parameterEffects.fixed.perCharacter[characterId]))
+                        if (parameterId in Config.configObject.characters.parameters.byId)
                         {
-                            parameterEffects.fixed.perCharacter[characterId][parameterId] = [];
+                            parameterEffects.fixed.perCharacter[characterId][parameterId].push(
+                            {
+                                idRef: parameterId,
+                                operator: this.attributes.operator.value,
+                                value: Config.configObject.characters.parameters.byId[parameterId].type.fromXML(this)
+                            });
                         }
-                        parameterEffects.fixed.perCharacter[characterId][parameterId].push(
+                        else if (parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
                         {
-                            idRef: parameterId,
-                            operator: this.attributes.operator.value,
-                            value: Config.configObject.characters.parameters.byId[parameterId].type.fromXML(this)
-                        });
-                    }
-                    else if (parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
-                    {
-                        if (!(parameterId in parameterEffects.fixed.perCharacter[characterId]))
-                        {
-                            parameterEffects.fixed.perCharacter[characterId][parameterId] = [];
+                            parameterEffects.fixed.perCharacter[characterId][parameterId].push(
+                            {
+                                idRef: parameterId,
+                                operator: this.attributes.operator.value,
+                                value: Config.configObject.characters.byId[characterId].parameters.byId[parameterId].type.fromXML(this)
+                            });
                         }
-                        parameterEffects.fixed.perCharacter[characterId][parameterId].push(
-                        {
-                            idRef: parameterId,
-                            operator: this.attributes.operator.value,
-                            value: Config.configObject.characters.byId[characterId].parameters.byId[parameterId].type.fromXML(this)
-                        });
                     }
                 }
             }
             else if (parameterId in Config.configObject.parameters.byId)
             {
-                if (!(parameterId in parameterEffects.fixed.characterIndependent))
+                if (parameterId in parameterEffects.fixed.characterIndependent)
                 {
-                    parameterEffects.fixed.characterIndependent[parameterId] = [];
+                    parameterEffects.fixed.characterIndependent[parameterId].push(
+                    {
+                        idRef: parameterId,
+                        operator: this.attributes.operator.value,
+                        value: Config.configObject.parameters.byId[parameterId].type.fromXML(this)
+                    });
                 }
-                parameterEffects.fixed.characterIndependent[parameterId].push(
-                {
-                    idRef: parameterId,
-                    operator: this.attributes.operator.value,
-                    value: Config.configObject.parameters.byId[parameterId].type.fromXML(this)
-                });
             }
         });
         return parameterEffects;

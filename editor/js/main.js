@@ -626,18 +626,6 @@ var Main;
 
         var id = node.attr('id');
 
-        var parameterEffects = Config.getNewDefaultParameterEffects();
-
-        if (Metadata.timePId && type === Main.playerType)
-        {
-            var timeEffect = {
-                idRef: 't',
-                operator: "addAssign",
-                value: 1
-            };
-            parameterEffects.userDefined.push(timeEffect);
-        }
-
         var characterIdRef;
         if (type === Main.computerType)
         {
@@ -650,6 +638,19 @@ var Main;
                 characterIdRef = Config.configObject.characters.sequence[0].id;
             }
         }
+
+        var parameterEffects = Config.getNewDefaultParameterEffects(characterIdRef);
+
+        if (Metadata.timePId && type === Main.playerType)
+        {
+            var timeEffect = {
+                idRef: 't',
+                operator: "addAssign",
+                value: 1
+            };
+            parameterEffects.userDefined.push(timeEffect);
+        }
+
         var acceptableScopes = ['per', 'per-' + type];
         if (type === Main.computerType) acceptableScopes.push('per-computer-own');
 
@@ -1149,9 +1150,9 @@ var Main;
 
         // Get the selected node.
         var node = Main.nodes[Main.selectedElement];
+        node.parameterEffects = Config.getNewDefaultParameterEffects(node.characterIdRef);
 
         // Save user-defined parameter effects.
-        node.parameterEffects.userDefined = [];
         $("#userDefinedParameterEffects").children().each(function()
         {
             node.parameterEffects.userDefined.push(ObjectGenerator.effectObject($(this)));
@@ -1170,14 +1171,12 @@ var Main;
                 value: parameterValue
             };
 
-            if (!(parameterEffect.idRef in fixedParameterEffects))
+            if (parameterEffect.idRef in fixedParameterEffects)
             {
-                fixedParameterEffects[parameterEffect.idRef] = [];
+                fixedParameterEffects[parameterEffect.idRef].push(parameterEffect);
             }
-            fixedParameterEffects[parameterEffect.idRef].push(parameterEffect);
         };
 
-        node.parameterEffects.fixed.characterIndependent = {};
         var fixedParameterEffectsEl = $("#fixed-parameter-effects");
         fixedParameterEffectsEl.find('.' + fixedParameterEffectsEl.attr('id') + '-effect-container').each(function()
         {
@@ -1187,7 +1186,6 @@ var Main;
         var characterId, classCharacterPrefix, parameterDefinitions;
         for (characterId in Config.configObject.characters.byId)
         {
-            node.parameterEffects.fixed.perCharacter[characterId] = {};
             classCharacterPrefix = fixedCharacterParameterEffectsEl.attr('id') + '-' + characterId;
             parameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[characterId].parameters.byId);
             fixedCharacterParameterEffectsEl.find('.' + classCharacterPrefix + '-effect-container').each(function()
@@ -2030,7 +2028,7 @@ var Main;
 
                             var acceptableScopes = ['per', 'per-' + node.type, 'per-computer-own'];
 
-                            var perCharacterParameterEffects = Config.getNewDefaultParameterEffects().fixed.perCharacter;
+                            var perCharacterParameterEffects = Config.getNewDefaultParameterEffects(newCharacterIdRef).fixed.perCharacter;
 
                             for (characterId in node.parameterEffects.fixed.perCharacter)
                             {
