@@ -177,10 +177,10 @@
 			<element name="typeInteger">
 				<complexType>
 					<sequence>
-						<element name="default" type="integer" minOccurs="0" maxOccurs="1"/>
+						<element name="default" type="int" minOccurs="0" maxOccurs="1"/>
 					</sequence>
-					<attribute name="minimum" type="integer" use="optional"></attribute>
-					<attribute name="maximum" type="integer" use="optional"></attribute>
+					<attribute name="minimum" type="int" use="optional"></attribute>
+					<attribute name="maximum" type="int" use="optional"></attribute>
 				</complexType>
 			</element>
 			<element name="typeEnumeration">
@@ -198,7 +198,7 @@
 			<sequence>
 				<element name="default" type="string" minOccurs="0" maxOccurs="1"/>
 			</sequence>
-			<attribute name="maxLength" type="integer"></attribute>
+			<attribute name="maxLength" type="int"></attribute>
 		</complexType>
 	</element>
 	<attributeGroup name="propertyScopes">
