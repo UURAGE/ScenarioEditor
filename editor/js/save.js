@@ -26,7 +26,12 @@ var Save;
 
         var nameSpace = "urn:uurage-temporary";
         var doc = document.implementation.createDocument(nameSpace, 'scenario', null);
-
+        
+        if (Metadata.metaObject.version !== null)
+        {
+            if (Main.unsavedChanges) Metadata.metaObject.version++;
+            doc.documentElement.setAttribute("version", Metadata.metaObject.version);
+        }
         doc.documentElement.setAttribute("schemaVersion", 4);
         doc.documentElement.setAttribute("configidref", Config.configObject.id);
 
@@ -271,8 +276,7 @@ var Save;
         a.href = window.URL.createObjectURL(bb);
         a.textContent = LanguageManager.sLang("edt_save_download_available");
 
-        a.dataset.downloadurl = [MIME_TYPE, a.download, a.href].join(
-            ':');
+        a.dataset.downloadurl = [MIME_TYPE, a.download, a.href].join(':');
         a.draggable = true; // Don't really need, but good practice
         a.classList.add('dragout');
 

@@ -380,7 +380,8 @@ var Main;
     });
 
     $(window).bind('beforeunload', function()
-    { // confirmation for leaving the page
+    {
+        // confirmation for leaving the page
         if (Main.unsavedChanges)
         {
             return LanguageManager.sLang("edt_main_pending_changes");

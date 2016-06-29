@@ -105,7 +105,7 @@ var Load;
                 alert("The config id does not match the config id referred to in the scenario");
             }
 
-            loadMetadata($(scenarioXML).children('definitions').eq(0), $(scenarioXML).children('metadata').eq(0));
+            loadMetadata($(scenarioXML).attr('version'), $(scenarioXML).children('definitions').eq(0), $(scenarioXML).children('metadata').eq(0));
             jsPlumb.batch(function()
             {
                 generateGraph(xml);
@@ -237,7 +237,7 @@ var Load;
     }
 
     // Load the metadata of the scenario.
-    function loadMetadata(definitions, metadata)
+    function loadMetadata(version, definitions, metadata)
     {
         var name = $(metadata).children('name').text();
         $('#scenarioNameTab .scenarioName').text(name);
@@ -277,6 +277,7 @@ var Load;
 
         Metadata.metaObject = {
             name: name,
+            version: version ? version : null,
             difficulty: difficulty,
             description: description,
             propertyValues: propertyValues,

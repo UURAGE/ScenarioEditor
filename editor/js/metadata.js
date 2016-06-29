@@ -150,6 +150,7 @@ var Metadata;
         Metadata.parameterCounter = 0;
         Metadata.metaObject = {
             name: "",
+            version: 0,
             difficulty: "medium",
             description: "",
             parameters: getNewDefaultParameters(),
