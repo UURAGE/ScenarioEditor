@@ -30,16 +30,16 @@ var Save;
         doc.documentElement.setAttribute("schemaVersion", 4);
         doc.documentElement.setAttribute("configidref", Config.configObject.id);
 
-        // Handles the metadata
+        // Save definitions
+        generateDefinitionsXML(doc.documentElement, nameSpace);
+
+        // Save metadata
         var metadataEl = addAndReturnElement("metadata", nameSpace, doc.documentElement);
         addAndReturnElement("name", nameSpace, metadataEl).textContent = Metadata.metaObject.name;
-        addAndReturnElement("date", nameSpace, metadataEl).textContent =new Date().toISOString();
+        addAndReturnElement("date", nameSpace, metadataEl).textContent = new Date().toISOString();
         addAndReturnElement("description", nameSpace, metadataEl, true).textContent = Metadata.metaObject.description;
         addAndReturnElement("difficulty", nameSpace, metadataEl).textContent = Metadata.metaObject.difficulty;
 
-        // Save definitions
-        generateDefinitionsXML(metadataEl, nameSpace);
-        
         // Save parameter initial values
         generateInitialParameterValuesXML(metadataEl, nameSpace);
 

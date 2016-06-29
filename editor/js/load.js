@@ -73,7 +73,7 @@ var Load;
             var xml;
             try
             {
-                xml = $($.parseXML(reader.result));
+                xml = $.parseXML(reader.result);
             }
             catch (err)
             {
@@ -91,19 +91,21 @@ var Load;
     {
         prepareRebuild();
 
+        var scenarioXML = xml.documentElement;
+
         // Try to find the schemaVersion of the XML and to find the old version
-        var schemaVersion = parseInt($('scenario', xml).attr('schemaVersion'));
-        var oldVersion = parseInt($($('metadata', xml)[0]).find('version').text());
+        var schemaVersion = parseInt($(scenarioXML).attr('schemaVersion'));
+        var oldVersion = parseInt($(scenarioXML).children('metadata').eq(0).children('version').text());
 
         // Load with the newest version of the schema
         if (schemaVersion)
         {
-            if (Config.configObject.id !== $('scenario', xml).attr('configidref'))
+            if (Config.configObject.id !== $(scenarioXML).attr('configidref'))
             {
                 alert("The config id does not match the config id referred to in the scenario");
             }
 
-            loadMetadata($($('metadata', xml)[0]));
+            loadMetadata($(scenarioXML).children('definitions').eq(0), $(scenarioXML).children('metadata').eq(0));
             jsPlumb.batch(function()
             {
                 generateGraph(xml);
@@ -112,7 +114,7 @@ var Load;
         // Load versions 2 and 3
         else if (oldVersion)
         {
-            Load3.loadMetadata($($('metadata', xml)[0]));
+            Load3.loadMetadata($(scenarioXML).children('metadata').eq(0));
             jsPlumb.batch(function()
             {
                 Load3.generateGraph(xml);
@@ -235,13 +237,12 @@ var Load;
     }
 
     // Load the metadata of the scenario.
-    function loadMetadata(metadata)
+    function loadMetadata(definitions, metadata)
     {
         var name = $(metadata).children('name').text();
         $('#scenarioNameTab .scenarioName').text(name);
         var description = $(metadata).children('description').text();
         var difficulty = $(metadata).children('difficulty').text();
-        var definitions = $(metadata).children('definitions');
 
         var parameters = Metadata.getNewDefaultParameters();
         $(definitions).children('parameters').children('userDefined').children().each(function()
