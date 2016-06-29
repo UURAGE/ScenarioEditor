@@ -37,17 +37,62 @@ var Save;
         addAndReturnElement("description", nameSpace, metadataEl, true).textContent = Metadata.metaObject.description;
         addAndReturnElement("difficulty", nameSpace, metadataEl).textContent = Metadata.metaObject.difficulty;
 
-        var definitionsEl = addAndReturnElement("definitions", nameSpace, metadataEl);
+        // Save definitions
+        generateDefinitionsXML(metadataEl, nameSpace);
+        
+        // Save parameter initial values
+        generateInitialParameterValuesXML(metadataEl, nameSpace);
+
+        // Save property values
+        generatePropertyValuesXML(metadataEl, Metadata.metaObject.propertyValues, nameSpace);
+
+        var seqElement = addAndReturnElement("sequence", nameSpace, doc.documentElement);
+
+        var i = 0;
+
+        var makeTreeXML = function(id, tree)
+        {
+            generateTreeXML(interleave, tree, nameSpace);
+        };
+
+        while (i < sortedTrees.length) // this loop gets all the levels
+        {
+            //one interleave tag for each level
+            var interleave = addAndReturnElement("interleave", nameSpace, seqElement);
+            var treeArray = [];
+            treeArray.push(sortedTrees[i]);
+            i++;
+            // lets see if more trees are at this level
+            for (i; i < sortedTrees.length; i++)
+            {
+                var tree = sortedTrees[i];
+
+                if (tree.level == treeArray[0].level)
+                    treeArray.push(tree);
+                else
+                    break;
+            }
+
+            //for each tree at this level, make the xml
+            $.each(treeArray, makeTreeXML);
+        }
+        var s = new XMLSerializer();
+        return s.serializeToString(doc);
+    }
+
+    function generateDefinitionsXML(parentElement, nameSpace)
+    {
+        var definitionsEl = addAndReturnElement("definitions", nameSpace, parentElement);
 
         // Save characters
         var charactersEl = addAndReturnElement("characters", nameSpace, definitionsEl);
-        Config.configObject.characters.sequence.forEach(function (character)
+        Config.configObject.characters.sequence.forEach(function(character)
         {
             var characterEl = addAndReturnElement("character", nameSpace, charactersEl);
             characterEl.setAttribute("id", character.id);
         });
 
-        var addDefinitionElement = function (definition, elementName, nameSpace, definitionsEl)
+        var addDefinitionElement = function(definition, elementName, nameSpace, definitionsEl)
         {
             var definitionEl = addAndReturnElement(elementName, nameSpace, definitionsEl);
 
@@ -117,42 +162,52 @@ var Save;
                 addDefinitionElement(property, "property", nameSpace, propertyDefinitionsEl);
             }
         }
+    }
 
-        // Save property values
-        generatePropertyValuesXML(metadataEl, Metadata.metaObject.propertyValues, nameSpace);
+    function generateInitialParameterValuesXML(parentElement, nameSpace)
+    {
+        var initialParameterValuesEl = addAndReturnElement("initialParameterValues", nameSpace, parentElement);
 
-        var seqElement = addAndReturnElement("sequence", nameSpace, doc.documentElement);
-
-        var i = 0;
-
-        var makeTreeXML = function(id, tree)
+        // Save user-defined parameter initial values
+        var userDefinedEl = addAndReturnElement("userDefined", nameSpace, initialParameterValuesEl);
+        var parameterId, parameter, parameterValueEl;
+        for (parameterId in Metadata.metaObject.parameters.byId)
         {
-            generateTreeXML(interleave, tree, nameSpace);
-        };
-
-        while (i < sortedTrees.length) // this loop gets all the levels
-        {
-            //one interleave tag for each level
-            var interleave = addAndReturnElement("interleave", nameSpace, seqElement);
-            var treeArray = [];
-            treeArray.push(sortedTrees[i]);
-            i++;
-            // lets see if more trees are at this level
-            for (i; i < sortedTrees.length; i++)
-            {
-                var tree = sortedTrees[i];
-
-                if (tree.level == treeArray[0].level)
-                    treeArray.push(tree);
-                else
-                    break;
-            }
-
-            //for each tree at this level, make the xml
-            $.each(treeArray, makeTreeXML);
+            parameter = Metadata.metaObject.parameters.byId[parameterId];
+            parameterValueEl = addAndReturnElement("parameterValue", nameSpace, userDefinedEl);
+            parameterValueEl.setAttribute("idref", parameterId);
+            parameter.type.toXML(parameterValueEl, parameter.type.defaultValue);
         }
-        var s = new XMLSerializer();
-        return s.serializeToString(doc);
+
+        // Save fixed parameter initial values
+        var fixedEl = addAndReturnElement("fixed", nameSpace, initialParameterValuesEl);
+        var characterId;
+        for (parameterId in Config.configObject.parameters.byId)
+        {
+            parameter = Config.configObject.parameters.byId[parameterId];
+            parameterValueEl = addAndReturnElement("parameterValue", nameSpace, fixedEl);
+            parameterValueEl.setAttribute("idref", parameterId);
+            parameter.type.toXML(parameterValueEl, parameter.type.defaultValue);
+        }
+        for (parameterId in Config.configObject.characters.parameters.byId)
+        {
+            parameter = Config.configObject.characters.parameters.byId[parameterId];
+            parameterValueEl = addAndReturnElement("characterParameterValue", nameSpace, fixedEl);
+            parameterValueEl.setAttribute("idref", parameterId);
+            parameterValueEl.setAttribute("characteridref", characterId);
+            parameter.type.toXML(parameterValueEl, parameter.type.defaultValue);
+        }
+        for (characterId in Config.configObject.characters.byId)
+        {
+            for (parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
+            {
+                parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterId];
+                parameterValueEl = addAndReturnElement("characterParameterValue", nameSpace, fixedEl);
+                parameterValueEl.setAttribute("idref", parameterId);
+                parameterValueEl.setAttribute("characteridref", characterId);
+                parameter.type.toXML(parameterValueEl, parameter.type.defaultValue);
+            }
+        }
     }
 
     // Gets all the starting nodes of a tree. Returns -1 if none is found
