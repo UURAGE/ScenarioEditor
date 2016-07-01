@@ -24,7 +24,7 @@ var Save;
     {
         var sortedTrees = sortTrees(Main.trees);
 
-        var nameSpace = "urn:uurage-temporary";
+        var nameSpace = "http://uudsl.github.io/scenario/namespace";
         var doc = document.implementation.createDocument(nameSpace, 'scenario', null);
         
         if (Metadata.metaObject.version !== null)
