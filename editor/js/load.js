@@ -257,12 +257,12 @@ var Load;
                     Metadata.parameterCounter = parameterNumber;
             }
 
-            var typeXML = $(this).children().not('description').eq(0);
+            var typeXML = $(this).children('type').children();
             var parameter =
             {
                 id: parameterId,
                 name: this.attributes.name.value,
-                type: Config.types[typeXML[0].nodeName.substr("type".length).toLowerCase()].loadType(typeXML),
+                type: Config.types[typeXML[0].nodeName].loadType(typeXML),
                 description:$(this).children('description').text()
             };
             parameters.sequence.push(parameter);

@@ -108,7 +108,8 @@ var Save;
                 addAndReturnElement("description", nameSpace, definitionEl, true).textContent = definition.description;
             }
 
-            var typeEl = definition.type.insertType(definitionEl);
+            var typeContainerEl = addAndReturnElement("type", nameSpace, definitionEl);
+            var typeEl = definition.type.insertType(typeContainerEl);
             var defaultEl = addAndReturnElement('default', nameSpace, typeEl);
             definition.type.toXML(defaultEl, definition.type.defaultValue);
         };

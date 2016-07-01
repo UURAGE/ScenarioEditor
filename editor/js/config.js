@@ -69,7 +69,7 @@ var Config;
         var statementSettingXML = settingsXML.children('statement');
         if (statementSettingXML.length > 0)
         {
-            settings.statement.type = loadType(statementSettingXML.children().eq(0));
+            settings.statement.type = loadType(statementSettingXML.children('type').children());
         }
         else
         {
@@ -90,7 +90,7 @@ var Config;
                 name: nodeXML.getAttribute('name'),
                 description: $(nodeXML).children('description').text(),
                 scopes: nodeScopes,
-                type: loadType($(nodeXML).children().last())
+                type: loadType($(nodeXML).children('type').children())
             };
         }
         else if (nodeXML.nodeName === nodeName + "Section")
@@ -154,7 +154,7 @@ var Config;
 
     function loadType(typeXML)
     {
-        var typeName = typeXML[0].nodeName.substr('type'.length).toLowerCase();
+        var typeName = typeXML[0].nodeName;
         return Config.types[typeName].loadType(typeXML);
     }
 
@@ -304,7 +304,7 @@ var Config;
             },
             insertType: function(typeXML)
             {
-                return appendChild(typeXML, 'typeString');
+                return appendChild(typeXML, 'string');
             },
             castFrom: function(type, value)
             {
@@ -378,7 +378,7 @@ var Config;
             },
             insertType: function(typeXML)
             {
-                return appendChild(typeXML, 'typeInteger');
+                return appendChild(typeXML, 'integer');
             },
             appendControlTo: function(containerEl, htmlId)
             {
@@ -430,7 +430,7 @@ var Config;
             },
             insertType: function(typeXML)
             {
-                return appendChild(typeXML, 'typeBoolean');
+                return appendChild(typeXML, 'boolean');
             },
             appendControlTo: function(containerEl, htmlId)
             {
@@ -494,7 +494,7 @@ var Config;
             },
             insertType: function(typeXML)
             {
-                var enumerationXML = appendChild(typeXML, 'typeEnumeration');
+                var enumerationXML = appendChild(typeXML, 'enumeration');
                 var appendOptionChild = function(value)
                 {
                     var optionXML = appendChild(enumerationXML, 'option');
