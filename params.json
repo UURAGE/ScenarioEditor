@@ -1,0 +1,6 @@
+{
+  "name": "UURAGE ScenarioEditor",
+  "tagline": "The UURAGE Scenario Editor allows designers to create and edit dialogue scenarios using a web browser.",
+  "body": "# Scenario Editor\r\n\r\nThe UURAGE Scenario Editor is a web application component for editing dialogue scenarios using the [Utrecht University Dialogue Scenario Language](https://uudsl.github.io/scenario/).\r\n\r\n# RAGE Project\r\n\r\nLearn more about the [RAGE project](http://rageproject.eu/).",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
