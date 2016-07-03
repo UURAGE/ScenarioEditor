@@ -13,7 +13,13 @@
 							<element name="statement" minOccurs="0" maxOccurs="1">
 								<complexType>
 									<sequence>
-										<element ref="tns:typeString"></element>
+										<element name="type">
+											<complexType>
+												<sequence>
+													<element ref="tns:string"></element>
+												</sequence>
+											</complexType>
+										</element>
 									</sequence>
 								</complexType>
 							</element>
@@ -166,35 +172,41 @@
 		</simpleContent>
 	</complexType>
 	<group name="typeGroup">
-		<choice>
-			<element name="typeBoolean">
+		<sequence>
+			<element name="type">
 				<complexType>
-					<sequence>
-						<element name="default" type="boolean" minOccurs="0" maxOccurs="1"/>
-					</sequence>
+					<choice>
+						<element name="boolean">
+							<complexType>
+								<sequence>
+									<element name="default" type="boolean" minOccurs="0" maxOccurs="1"/>
+								</sequence>
+							</complexType>
+						</element>
+						<element ref="tns:string"></element>
+						<element name="integer">
+							<complexType>
+								<sequence>
+									<element name="default" type="int" minOccurs="0" maxOccurs="1"/>
+								</sequence>
+								<attribute name="minimum" type="int" use="optional"></attribute>
+								<attribute name="maximum" type="int" use="optional"></attribute>
+							</complexType>
+						</element>
+						<element name="enumeration">
+							<complexType>
+								<sequence>
+									<element name="option" type="string" minOccurs="1" maxOccurs="unbounded" />
+									<element name="default" type="string" minOccurs="0" maxOccurs="1"/>
+								</sequence>
+							</complexType>
+						</element>
+					</choice>
 				</complexType>
 			</element>
-			<element ref="tns:typeString"></element>
-			<element name="typeInteger">
-				<complexType>
-					<sequence>
-						<element name="default" type="int" minOccurs="0" maxOccurs="1"/>
-					</sequence>
-					<attribute name="minimum" type="int" use="optional"></attribute>
-					<attribute name="maximum" type="int" use="optional"></attribute>
-				</complexType>
-			</element>
-			<element name="typeEnumeration">
-				<complexType>
-					<sequence>
-						<element name="option" type="string" minOccurs="1" maxOccurs="unbounded" />
-						<element name="default" type="string" minOccurs="0" maxOccurs="1"/>
-					</sequence>
-				</complexType>
-			</element>
-		</choice>
+		</sequence>
 	</group>
-	<element name="typeString">
+	<element name="string">
 		<complexType>
 			<sequence>
 				<element name="default" type="string" minOccurs="0" maxOccurs="1"/>
