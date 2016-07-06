@@ -2,7 +2,7 @@
 
 This is a tutorial for creating a configuration XML file for initialisation of the Scenario Editor.
 I will give a walkthrough, general guidelines to the creation process and keep it as simple as possible.
-It is generally a good idea to expirement with the configuration, so you get an intuitive feeling for what goes where.
+It is generally a good idea to experiment with the configuration, so you get an intuitive feeling for what goes where.
 
 The Scenario Editor needs to know how many characters should be available, 
 which properties the scenario will have and what kind of parameters can be manipulated.
