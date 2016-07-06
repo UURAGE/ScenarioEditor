@@ -13,6 +13,7 @@ var Save;
     };
 
     var xmlNameSpace = "http://www.w3.org/XML/1998/namespace";
+    var schemaVersion = "4.0.0";
 
     $(document).ready(function()
     {
@@ -32,7 +33,7 @@ var Save;
             if (Main.unsavedChanges) Metadata.metaObject.version++;
             doc.documentElement.setAttribute("version", Metadata.metaObject.version);
         }
-        doc.documentElement.setAttribute("schemaVersion", 4);
+        doc.documentElement.setAttribute("schemaVersion", schemaVersion);
         doc.documentElement.setAttribute("configidref", Config.configObject.id);
 
         // Save definitions
