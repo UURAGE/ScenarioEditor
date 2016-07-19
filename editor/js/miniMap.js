@@ -44,6 +44,14 @@ var MiniMap;
         if (navigator.userAgent.match(/Chrome/i) || navigator.userAgent.match(/Opera/i) ||  navigator.userAgent.match(/Edge/i))
         {
             enabled = true;
+
+            recallShown();
+            if (!shown)
+            {
+                $("#minimap").hide();
+                $("#enableMinimap").prop("checked", false);
+            }
+
             $("#miniwrap").css("display","block");
             $("#minimap").css("width", "300px");
             $("#minimap").css("height", "300px");
@@ -69,13 +77,13 @@ var MiniMap;
             {
                 if (this.checked)
                 {
-                    shown = true;
+                    setAndStoreShown(true);
                     showAnimated($("#minimap"));
                 }
                 else
                 {
                     hideAnimated($("#minimap"));
-                    shown = false;
+                    setAndStoreShown(false);
                 }
             });
             $("#simpleMinimap").on("click", function()
@@ -292,6 +300,25 @@ var MiniMap;
         });
         */
 
+    }
+
+    function recallShown()
+    {
+        var recalledShown = localStorage.getItem('MiniMap.shown');
+        if (recalledShown !== null) shown = Boolean(JSON.parse(recalledShown));
+    }
+
+    function setAndStoreShown(newShown)
+    {
+        shown = Boolean(newShown);
+        try
+        {
+            localStorage.setItem('MiniMap.shown', JSON.stringify(shown));
+        }
+        catch (e)
+        {
+            // storage is an enhancement, so ignore failure
+        }
     }
 
     function showAnimated(element)
