@@ -150,12 +150,6 @@ var MiniMap;
         }
 
         update(false);
-
-        //Decouple objects for garbage collection:
-        minimapSelectorX = null;
-        minimapSelectorY = null;
-        maxX = null;
-        maxY = null;
     }
 
     //Scale the minimap according to the main div dimensions
@@ -261,45 +255,6 @@ var MiniMap;
         $("#minimapSelector").css("left", viewportX+"px");
 
         zoom = zoomFactor;
-
-        //Decouple objects for garbage collection:
-        width = null;
-        height = null;
-        widthFactor = null;
-        heightFactor = null;
-        zoomFactor = null;
-        realWidth = null;
-        realHeight = null;
-        viewportWidth = null;
-        viewportHeight = null;
-        viewportX = null;
-        viewportY = null;
-        main = null;
-        treeDiv = null;
-
-        //Deprecated: take canvas screenshot of visible html DOM:
-        /*
-        html2canvas($("#main"),
-        {
-            onrendered: function(canvas)
-            {
-                var aspectRatio = canvas.height/canvas.width;
-                var divWidth = parseInt($("#minimap").css("width"));
-                var extra_canvas = document.createElement("canvas");
-                extra_canvas.setAttribute('width', divWidth);
-                extra_canvas.setAttribute('height', divWidth*aspectRatio);
-                var ctx = extra_canvas.getContext('2d');
-                ctx.drawImage(canvas,0,0,canvas.width, canvas.height,0,0,divWidth,divWidth*aspectRatio);
-                var dataURL = extra_canvas.toDataURL();
-                //var img = $(document.createElement('img'));
-                //img.attr('src', dataURL);
-                // insert the thumbnail
-                $("#minimap").css("background-image", "url(" + dataURL + ")");
-                $("#minimap").css("height", (divWidth * aspectRatio) + "px");
-            }
-        });
-        */
-
     }
 
     function recallShown()
