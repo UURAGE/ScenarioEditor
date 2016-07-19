@@ -200,133 +200,131 @@
       <div id="sidebar">
         <div>
           <div>
-            <div>
-              <div id="languages">
-                <?php
-                $languages = scandir(getcwd()."/application/language");
-                $lastElement = end($languages);
-                foreach($languages as $index=>$name)
-                {
-                    if(ctype_alnum($name))
-                    {
-                        $flagUrl = flag_url($name);
-                        echo("<a href='".site_url()."/language/changeLanguage/".$name."'><img src='".$flagUrl."'></a>");
+            <div id="languages">
+              <?php
+              $languages = scandir(getcwd()."/application/language");
+              $lastElement = end($languages);
+              foreach($languages as $index=>$name)
+              {
+                  if(ctype_alnum($name))
+                  {
+                      $flagUrl = flag_url($name);
+                      echo("<a href='".site_url()."/language/changeLanguage/".$name."'><img src='".$flagUrl."'></a>");
 
-                        if ($name != $lastElement)
-                            echo(" | ");
-                    }
-                }
-                ?>
+                      if ($name != $lastElement)
+                          echo(" | ");
+                  }
+              }
+              ?>
+            </div>
+            <div id="miniwrap" style="display: none">
+              <label for="enableMinimap" style="margin-left: 30px" title="<?php sLang('edt_toggle_minimap'); ?>"><?php sLang("edt_minimap"); ?>:</label>
+              <input type="checkbox" id="enableMinimap" style="display:inline" checked title="<?php sLang('edt_toggle_minimap'); ?>"/>
+              <label for="simpleMinimap" style="margin-left: 10px" title="<?php sLang('edt_minimap_title');?>"><?php sLang("edt_simple"); ?>:</label>
+              <input type="checkbox" id="simpleMinimap" style="display:inline" title="<?php sLang("edt_minimap_title"); ?>"/>
+              <div id="minimap">
+                  <div id="scaledDiv">
+                    <h2 style="text-align:center; position:relative; top:100px;">[+]<?php sLang("edt_minimap"); ?></h2>
+                  </div>
+                  <div id="minimapSelector"></div>
               </div>
-              <div id="miniwrap" style="display: none">
-                <label for="enableMinimap" style="margin-left: 30px" title="<?php sLang('edt_toggle_minimap'); ?>"><?php sLang("edt_minimap"); ?>:</label>
-                <input type="checkbox" id="enableMinimap" style="display:inline" checked title="<?php sLang('edt_toggle_minimap'); ?>"/>
-                <label for="simpleMinimap" style="margin-left: 10px" title="<?php sLang('edt_minimap_title');?>"><?php sLang("edt_simple"); ?>:</label>
-                <input type="checkbox" id="simpleMinimap" style="display:inline" title="<?php sLang("edt_minimap_title"); ?>"/>
-                <div id="minimap">
-                    <div id="scaledDiv">
-                      <h2 style="text-align:center; position:relative; top:100px;">[+]<?php sLang("edt_minimap"); ?></h2>
-                    </div>
-                    <div id="minimapSelector"></div>
+            </div>
+            <div id="properties" class="hidden">
+              <div id="treeSubject">
+                <h1><?php sLang("edt_subject_name"); ?></h1>
+              </div>
+              <div id="headerPlayer" class="header clickable collapseAll">
+                <h1><span class="masterclicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/player.png");?>" alt=""><?php sLang('edt_player');?></h1>
+              </div>
+              <div id="headerComputer" class="header clickable collapseAll">
+                <h1><span class="masterclicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/computer.png");?>" alt=""><?php sLang('edt_computer');?></h1>
+              </div>
+              <div id="headerSituation" class="header clickable collapseAll">
+                <h1><span class="masterclicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/situation.png");?>" alt=""><?php sLang('edt_situation');?></h1>
+              </div>
+              <div id="characterSection" class="sidebarSection">
+                <div class="sub-header clickable">
+                  <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/character.png");?>" alt=""><?php sLang('edt_character');?></h2>
+                </div>
+                <div class="collapsable">
+                  <select name="characterSelection" id="characterSelection" class="subjectButton"></select>
+                  <div>
+                    <h3><?php sLang('edt_parameter_effects');?></h3>
+                    <div id="node-computer-own-parameter-effects"></div>
+                  </div>
+                  <div>
+                    <h3><?php sLang('edt_property_values');?></h3>
+                    <div id="node-computer-own-property-values"></div>
+                  </div>
                 </div>
               </div>
-              <div id="properties" class="hidden">
-                <div id="treeSubject">
-                  <h1><?php sLang("edt_subject_name"); ?></h1>
+              <div id="preconditionsSection" class="sidebarSection withMarginTop">
+                <div class="sub-header clickable">
+                  <h2 title="<?php sLang('edt_preconditions_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/preconditions.png");?>" alt=""><?php sLang('edt_preconditions');?></h2>
                 </div>
-                <div id="headerPlayer" class="header clickable collapseAll">
-                  <h1><span class="masterclicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/player.png");?>" alt=""><?php sLang('edt_player');?></h1>
+                <div id="preconditionsDiv" class="collapsable"></div>
+              </div>
+              <div id="effectsSection" class="sidebarSection">
+                <div class="sub-header clickable">
+                  <h2 title="<?php sLang('edt_parameter_effects_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/effects.png");?>" alt=""><?php sLang('edt_parameter_effects');?></h2>
                 </div>
-                <div id="headerComputer" class="header clickable collapseAll">
-                  <h1><span class="masterclicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/computer.png");?>" alt=""><?php sLang('edt_computer');?></h1>
+                <div class="collapsable">
+                  <div>
+                    <h3>User-defined</h3>
+                    <div id="userDefinedParameterEffects" class="section"></div>
+                    <button id="addUserDefinedParameterEffect" title="<?php sLang('edt_add');?>"><img src="<?php echo editor_url("png/others/plus.png");?>" alt=""> <?php sLang('edt_add_effect');?></button>
+                  </div>
+                  <div id="fixed-parameter-effects" class="section"></div>
+                  <div id="fixed-character-parameter-effects" class="section"></div>
                 </div>
-                <div id="headerSituation" class="header clickable collapseAll">
-                  <h1><span class="masterclicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/situation.png");?>" alt=""><?php sLang('edt_situation');?></h1>
+              </div>
+              <div id="propertyValuesSection" class="sidebarSection">
+                <div class="sub-header clickable">
+                  <h2 title="<?php sLang('edt_property_values_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/properties.png");?>" alt=""><?php sLang('edt_property_values');?></h2>
                 </div>
-                <div id="characterSection" class="sidebarSection">
-                  <div class="sub-header clickable">
-                    <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/character.png");?>" alt=""><?php sLang('edt_character');?></h2>
-                  </div>
-                  <div class="collapsable">
-                    <select name="characterSelection" id="characterSelection" class="subjectButton"></select>
-                    <div>
-                      <h3><?php sLang('edt_parameter_effects');?></h3>
-                      <div id="node-computer-own-parameter-effects"></div>
-                    </div>
-                    <div>
-                      <h3><?php sLang('edt_property_values');?></h3>
-                      <div id="node-computer-own-property-values"></div>
-                    </div>
-                  </div>
+                <div class="collapsable">
+                  <div id="node-property-values" class="section"></div>
+                  <div id="node-character-property-values" class="section"></div>
                 </div>
-                <div id="preconditionsSection" class="sidebarSection withMarginTop">
-                  <div class="sub-header clickable">
-                    <h2 title="<?php sLang('edt_preconditions_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/preconditions.png");?>" alt=""><?php sLang('edt_preconditions');?></h2>
-                  </div>
-                  <div id="preconditionsDiv" class="collapsable"></div>
+              </div>
+              <div id="commentSection" class="sidebarSection">
+                <div class="sub-header clickable">
+                  <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/comments.png");?>" alt=""><?php sLang('edt_authors_note');?></h2>
                 </div>
-                <div id="effectsSection" class="sidebarSection">
-                  <div class="sub-header clickable">
-                    <h2 title="<?php sLang('edt_parameter_effects_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/effects.png");?>" alt=""><?php sLang('edt_parameter_effects');?></h2>
-                  </div>
-                  <div class="collapsable">
-                    <div>
-                      <h3>User-defined</h3>
-                      <div id="userDefinedParameterEffects" class="section"></div>
-                      <button id="addUserDefinedParameterEffect" title="<?php sLang('edt_add');?>"><img src="<?php echo editor_url("png/others/plus.png");?>" alt=""> <?php sLang('edt_add_effect');?></button>
-                    </div>
-                    <div id="fixed-parameter-effects" class="section"></div>
-                    <div id="fixed-character-parameter-effects" class="section"></div>
-                  </div>
+                <div class="collapsable">
+                  <textarea id="comment"></textarea>
                 </div>
-                <div id="propertyValuesSection" class="sidebarSection">
-                  <div class="sub-header clickable">
-                    <h2 title="<?php sLang('edt_property_values_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/properties.png");?>" alt=""><?php sLang('edt_property_values');?></h2>
-                  </div>
-                  <div class="collapsable">
-                    <div id="node-property-values" class="section"></div>
-                    <div id="node-character-property-values" class="section"></div>
-                  </div>
+              </div>
+              <div class="sidebarSection" id="optionalSubject">
+                <div class="sub-header clickable">
+                  <h2 title="<?php sLang('edt_optional_title');?>"><span class="clicktag">[+]</span> <?php sLang('edt_optional_header');?></h2>
                 </div>
-                <div id="commentSection" class="sidebarSection">
-                  <div class="sub-header clickable">
-                    <h2><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/comments.png");?>" alt=""><?php sLang('edt_authors_note');?></h2>
-                  </div>
-                  <div class="collapsable">
-                    <textarea id="comment"></textarea>
-                  </div>
+                <div class="collapsable">
+                  <input type="checkbox" id="optionalCheckbox"/><label for="optionalCheckbox"><?php sLang('edt_optional_description');?></label>
                 </div>
-                <div class="sidebarSection" id="optionalSubject">
-                  <div class="sub-header clickable">
-                    <h2 title="<?php sLang('edt_optional_title');?>"><span class="clicktag">[+]</span> <?php sLang('edt_optional_header');?></h2>
-                  </div>
-                  <div class="collapsable">
-                    <input type="checkbox" id="optionalCheckbox"/><label for="optionalCheckbox"><?php sLang('edt_optional_description');?></label>
-                  </div>
+              </div>
+              <div class="sidebarSection" id="jumpNode">
+                <div class="sub-header clickable">
+                  <h2 title="<?php sLang('edt_jump_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/jump.png");?>" alt=""><?php sLang('edt_jump_header');?></h2>
                 </div>
-                <div class="sidebarSection" id="jumpNode">
-                  <div class="sub-header clickable">
-                    <h2 title="<?php sLang('edt_jump_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/jump.png");?>" alt=""><?php sLang('edt_jump_header');?></h2>
-                  </div>
-                  <div class="collapsable">
-                    <input type="checkbox" id="jumpNodeCheckbox"/><label for="jumpNodeCheckbox"><?php sLang('edt_jump_description');?></label>
-                  </div>
+                <div class="collapsable">
+                  <input type="checkbox" id="jumpNodeCheckbox"/><label for="jumpNodeCheckbox"><?php sLang('edt_jump_description');?></label>
                 </div>
-                <div class="sidebarSection" id="initsNode">
-                  <div class="sub-header clickable">
-                    <h2 title="<?php sLang('edt_inits_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/premature_end.png");?>" alt=""><?php sLang('edt_inits_header');?></h2>
-                  </div>
-                  <div class="collapsable">
-                    <input type="checkbox" id="initsNodeCheckbox"/><label for="initsNodeCheckbox"><?php sLang('edt_inits_description');?></label>
-                  </div>
+              </div>
+              <div class="sidebarSection" id="initsNode">
+                <div class="sub-header clickable">
+                  <h2 title="<?php sLang('edt_inits_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/premature_end.png");?>" alt=""><?php sLang('edt_inits_header');?></h2>
                 </div>
-                <div class="sidebarSection" id="endNode">
-                  <div class="sub-header clickable">
-                    <h2 title="<?php sLang('edt_end_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/end.png");?>" alt=""><?php sLang('edt_end_header');?></h2>
-                  </div>
-                  <div class="collapsable">
-                    <input type="checkbox" id="endNodeCheckbox"/><label for="endNodeCheckbox"><?php sLang('edt_end_description');?></label>
-                  </div>
+                <div class="collapsable">
+                  <input type="checkbox" id="initsNodeCheckbox"/><label for="initsNodeCheckbox"><?php sLang('edt_inits_description');?></label>
+                </div>
+              </div>
+              <div class="sidebarSection" id="endNode">
+                <div class="sub-header clickable">
+                  <h2 title="<?php sLang('edt_end_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/end.png");?>" alt=""><?php sLang('edt_end_header');?></h2>
+                </div>
+                <div class="collapsable">
+                  <input type="checkbox" id="endNodeCheckbox"/><label for="endNodeCheckbox"><?php sLang('edt_end_description');?></label>
                 </div>
               </div>
             </div>
