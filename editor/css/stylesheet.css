@@ -458,6 +458,16 @@ button img
   background-color: white;
 }
 
+.treeDiv
+{
+  display: none;
+}
+
+.w.treeContainer.zoom .treeDiv
+{
+  display: block;
+}
+
 #properties.player > #headerComputer,
 #properties.player > #headerSituation,
 #properties.player > #treeSubject,
