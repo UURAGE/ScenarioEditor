@@ -59,12 +59,9 @@ var MiniMap;
 
             $("#minimap").on("click", function(e)
             {
-                update(true);
                 updateScrollPosition(e);
-                //e.stopPropagation();
             });
-            // Listener for change in scroll position in main div
-            $("#mainCell #main").scroll(function()
+            $("#mainCell #main").on("scroll", function()
             {
                 update(false);
             });
@@ -161,12 +158,10 @@ var MiniMap;
 
         var realWidth, realHeight;
         var viewportWidth, viewportHeight, viewportX, viewportY, zoomFactor;
-        var main, treeDiv;
 
-        main = $("#mainCell > #main");
-        treeDiv = $("#mainCell .treeContainer.zoom > .treeDiv");
+        var main = $("#mainCell > #main");
 
-        if(!Zoom.isZoomed())   //Nothing is zoomed
+        if (!Zoom.isZoomed())   //Nothing is zoomed
         {
             realWidth = main[0].scrollWidth;
             realHeight = main[0].scrollHeight;
@@ -175,20 +170,11 @@ var MiniMap;
         }
         else
         {
-            if (treeDiv == "undefined")
-            {
-                realWidth = main[0].scrollWidth;
-                realHeight = main[0].scrollHeight;
-                viewportX = main.scrollLeft();
-                viewportY = main.scrollTop();
-            }
-            else
-            {
-                realWidth = treeDiv[0].scrollWidth;
-                realHeight = treeDiv[0].scrollHeight + $("#mainCell .subjectDiv")[0].scrollHeight;
-                viewportX = treeDiv.scrollLeft();
-                viewportY = treeDiv.scrollTop() + $("#mainCell .subjectDiv")[0].scrollHeight;
-            }
+            var treeDiv = $("#mainCell .treeContainer.zoom > .treeDiv");
+            realWidth = treeDiv[0].scrollWidth;
+            realHeight = treeDiv[0].scrollHeight + $("#mainCell .subjectDiv")[0].scrollHeight;
+            viewportX = treeDiv.scrollLeft();
+            viewportY = treeDiv.scrollTop() + $("#mainCell .subjectDiv")[0].scrollHeight;
         }
         viewportWidth = main.width();
         viewportHeight = main.height();
@@ -198,7 +184,7 @@ var MiniMap;
         $("#minimap").css("height", $("#sidebar").height()-25+"px");
 
         //Show a cloned and scaled down version of the main div in the minimap if detailedMinimap is set to true
-        if(detailed && refresh)
+        if (detailed && refresh)
         {
             $("#scaledDiv").empty();
             main.clone().appendTo($("#scaledDiv"));
@@ -227,7 +213,7 @@ var MiniMap;
         $("#minimap").css("width", realWidth * zoomFactor + "px");
         $("#minimap").css("height", realHeight * zoomFactor + "px");
 
-        if(detailed && refresh)
+        if (detailed && refresh)
         {
             $("#scaledDiv *").css("overflow", "hidden");
 
@@ -245,14 +231,12 @@ var MiniMap;
         //$("#scaledDiv #main").css("-moz-transform:", "scale("zoomFactor+")");
 
         //Scale and reposition the minimap selector
-        viewportWidth = viewportWidth*zoomFactor;
-        viewportHeight = viewportHeight*zoomFactor;
-        viewportX = viewportX*zoomFactor;
-        viewportY = viewportY*zoomFactor;
-        $("#minimapSelector").css("width", viewportWidth+"px");
-        $("#minimapSelector").css("height", viewportHeight+"px");
-        $("#minimapSelector").css("top", viewportY+"px");
-        $("#minimapSelector").css("left", viewportX+"px");
+        $("#minimapSelector").css({
+            width: viewportWidth * zoomFactor + "px",
+            height: viewportHeight * zoomFactor + "px",
+            top: viewportY * zoomFactor + "px",
+            left: viewportX * zoomFactor + "px"
+        });
 
         zoom = zoomFactor;
     }
