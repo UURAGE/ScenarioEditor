@@ -8,8 +8,7 @@ var Save;
 
     Save =
     {
-        exportScenario: exportScenario,
-        getStartNodeIDs: getStartNodeIDs
+        exportScenario: exportScenario
     };
 
     var xmlNameSpace = "http://www.w3.org/XML/1998/namespace";
@@ -27,7 +26,7 @@ var Save;
 
         var nameSpace = "http://uudsl.github.io/scenario/namespace";
         var doc = document.implementation.createDocument(nameSpace, 'scenario', null);
-        
+
         if (Metadata.metaObject.version !== null)
         {
             if (Main.unsavedChanges) Metadata.metaObject.version++;
@@ -217,21 +216,6 @@ var Save;
         }
     }
 
-    // Gets all the starting nodes of a tree. Returns -1 if none is found
-    function getStartNodeIDs(tree)
-    {
-        var orphanNodes = getNodesWithoutParents(tree);
-        var error = [];
-
-        if (orphanNodes.length === 0)
-        {
-            error.push(-1);
-            return error;
-        }
-
-        return orphanNodes;
-    }
-
     // Offers the XML of the current scenario for download
     // Adapted from work by Eric Bidelman (ericbidelman@chromium.org)
     function exportScenario()
@@ -305,11 +289,9 @@ var Save;
         addAndReturnElement('y', nameSpace, positionElement).textContent = tree.topPos;
 
         var startsElement = addAndReturnElement('starts', nameSpace, treeElement);
-        var startNodeIDs = getStartNodeIDs(tree);
-        $.each(startNodeIDs, function(index, startNodeID)
+        Main.getStartNodeIDs(tree).forEach(function(startNodeID)
         {
-            if (startNodeID !== -1)
-                addAndReturnElement("start", nameSpace, startsElement).setAttribute("idref", startNodeID.replace(/^ext_/, '').replace(/_/g, '.'));
+            addAndReturnElement("start", nameSpace, startsElement).setAttribute("idref", startNodeID.replace(/^ext_/, '').replace(/_/g, '.'));
         });
 
         var statementsElement = addAndReturnElement('statements', nameSpace, treeElement);
@@ -554,22 +536,6 @@ var Save;
                 return typeEl;
         }
     }
-
-    // Get all nodes without parents
-    function getNodesWithoutParents(tree) //nodes is an array
-        {
-            var orphanNodes = [];
-            $.each(tree.nodes, function(index, nodeID)
-            {
-                var connections = tree.plumbInstance.getConnections(
-                {
-                    target: nodeID
-                });
-                if (connections.length === 0)
-                    orphanNodes.push(nodeID);
-            });
-            return orphanNodes;
-        }
 
     //trees is now an object with individual trees as properties
     //objects cant be sorted, so we return an array of trees, sorted by level

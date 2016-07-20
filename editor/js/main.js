@@ -35,6 +35,7 @@ var Main;
         deleteAllSelected: deleteAllSelected,
         deselectConnection: deselectConnection,
         getPlumbInstanceByNodeID: getPlumbInstanceByNodeID,
+        getStartNodeIDs: getStartNodeIDs,
         highlightParents: highlightParents,
         makeConnection: makeConnection,
         placeNewNode: placeNewNode,
@@ -959,6 +960,26 @@ var Main;
         return Main.trees[Main.nodes[nodeID].parent].plumbInstance;
     }
 
+    function getStartNodeIDs(tree)
+    {
+        return getNodesWithoutParents(tree);
+    }
+
+    function getNodesWithoutParents(tree)
+    {
+        var orphanNodes = [];
+        $.each(tree.nodes, function(index, nodeID)
+        {
+            var connections = tree.plumbInstance.getConnections(
+            {
+                target: nodeID
+            });
+            if (connections.length === 0)
+                orphanNodes.push(nodeID);
+        });
+        return orphanNodes;
+    }
+
     function triggerSubjectNameInput(id, selectAllInput)
     {
         KeyControl.hotKeysActive = false;
@@ -1566,7 +1587,7 @@ var Main;
     {
         // Clear everything in the sidebar.
         $(
-            "#preconditionsDiv, #userDefinedParameterEffects, #node-property-values, #node-character-property-values, #node-computer-own-property-values," + 
+            "#preconditionsDiv, #userDefinedParameterEffects, #node-property-values, #node-character-property-values, #node-computer-own-property-values," +
             "#fixed-parameter-effects, #fixed-character-parameter-effects, #node-computer-own-parameter-effects"
         ).children().remove();
 
@@ -1989,7 +2010,7 @@ var Main;
 
                     var computerOwnPropertyValuesEl = $("#node-computer-own-property-values");
                     computerOwnPropertyValuesEl.children().remove();
-                    anyPropertyShown = false;                   
+                    anyPropertyShown = false;
                     var computerOwnPropertyValuesTable = $('<table>');
                     computerOwnPropertyValuesEl.append(computerOwnPropertyValuesTable);
                     // The same id prefix as the other character property values, so they can be easily retrieved

@@ -13,8 +13,8 @@
             if (!tree) return;
 
             // Return if there is no start node.
-            var startNodeIDs = Save.getStartNodeIDs(tree);
-            if(startNodeIDs[0] === -1) { return; }
+            var startNodeIDs = Main.getStartNodeIDs(tree);
+            if (startNodeIDs.length === 0) return;
 
             Main.unsavedChanges = true;
 
@@ -576,7 +576,7 @@
             }
         });
 
-        $.each(Save.getStartNodeIDs(tree), function(index, startNodeID)
+        $.each(Main.getStartNodeIDs(tree), function(index, startNodeID)
         {
             // Recursively find a reversed topological ordering.
             findTopologicalOrderingRec(startNodeID, topologicalOrderening, tree.plumbInstance);

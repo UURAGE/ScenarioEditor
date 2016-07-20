@@ -63,42 +63,45 @@ var Validator;
         $.each(Main.trees, function(id, tree)
         {
             // Check whether there is exactly one node without parents.
-            var startNodeIDs = Save.getStartNodeIDs(tree); //defined in save.js
+            var startNodeIDs = Main.getStartNodeIDs(tree);
 
-            $.each(startNodeIDs, function(index, startNodeID)
+            if (startNodeIDs.length === 0)
             {
-                if(startNodeID === -1)
+                validationReport.push(
                 {
-                    validationReport.push(
-                    {
-                        message: LanguageManager.fLang("edt_validator_empty_subject", [tree.subject]),
-                        level: 'error',
-                        jumpToFunction: function() { Zoom.zoomIn(tree); }
-                    });
-                }
-                // the tree on the first level can start with anything, but the trees following can only start with player nodes
-                else if(tree.level !== 0 && Main.nodes[startNodeID].type !== Main.playerType)
+                    message: LanguageManager.fLang("edt_validator_empty_subject", [tree.subject]),
+                    level: 'error',
+                    jumpToFunction: function() { Zoom.zoomIn(tree); }
+                });
+            }
+            else
+            {
+                $.each(startNodeIDs, function(index, startNodeID)
                 {
-                    if (Main.nodes[startNodeID].type === Main.computerType)
+                    // the tree on the first level can start with anything, but the trees following can only start with player nodes
+                    if(tree.level !== 0 && Main.nodes[startNodeID].type !== Main.playerType)
                     {
-                        validationReport.push(
+                        if (Main.nodes[startNodeID].type === Main.computerType)
                         {
-                            message: LanguageManager.fLang("edt_validator_subject_start_type_error_computer", [tree.subject]),
-                            level: 'error',
-                            jumpToFunction: function() { Zoom.zoomIn(tree); }
-                        });
-                    }
-                    else
-                    {
-                        validationReport.push(
+                            validationReport.push(
+                            {
+                                message: LanguageManager.fLang("edt_validator_subject_start_type_error_computer", [tree.subject]),
+                                level: 'error',
+                                jumpToFunction: function() { Zoom.zoomIn(tree); }
+                            });
+                        }
+                        else
                         {
-                            message: LanguageManager.fLang("edt_validator_subject_start_type_error_situation", [tree.subject]),
-                            level: 'error',
-                            jumpToFunction: function() { Zoom.zoomIn(tree); }
-                        });
+                            validationReport.push(
+                            {
+                                message: LanguageManager.fLang("edt_validator_subject_start_type_error_situation", [tree.subject]),
+                                level: 'error',
+                                jumpToFunction: function() { Zoom.zoomIn(tree); }
+                            });
+                        }
                     }
-                }
-            });
+                });
+            }
 
             // gets all nodes marked as end node
             var markedEnds = findAllMarkedEnds(tree);
