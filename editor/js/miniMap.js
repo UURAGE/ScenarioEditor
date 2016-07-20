@@ -34,76 +34,58 @@ var MiniMap;
 
     function initialise()
     {
-        // Minimap does not work yet in firefox,
-        // due to css zoom not being supported,
-        // updateMinimap code needs to be rewritten for css translate: scale(v)
-        // but this bugs out a lot of other css properties in the cloned main DOM
-        // meanwhile the minimap is disabled for mozilla
-        // minimap disabled in ie, until minimap displacement bug is fixed
-
-        if (navigator.userAgent.match(/Chrome/i) || navigator.userAgent.match(/Opera/i) ||  navigator.userAgent.match(/Edge/i))
+        recallShown();
+        if (!shown)
         {
-            enabled = true;
+            $("#minimap").hide();
+            $("#enableMinimap").prop("checked", false);
+        }
 
-            recallShown();
-            if (!shown)
+        $("#miniwrap").css("display","block");
+        $("#minimap").css("width", "300px");
+        $("#minimap").css("height", "300px");
+        $("#minimap").css("overflow", "hidden");
+
+        $("#minimap").on("click", function(e)
+        {
+            updateScrollPosition(e);
+        });
+        $("#mainCell #main").on("scroll", function()
+        {
+            update(false);
+        });
+
+        // Zoomed in scroll event listeners for minimap are created by attachScrollListener,
+        // called by createEmptyTree()!
+
+        // Listeners for minimap checkboxes
+        $("#enableMinimap").on("click", function()
+        {
+            if (this.checked)
             {
-                $("#minimap").hide();
-                $("#enableMinimap").prop("checked", false);
+                setAndStoreShown(true);
+                showAnimated($("#minimap"));
             }
-
-            $("#miniwrap").css("display","block");
-            $("#minimap").css("width", "300px");
-            $("#minimap").css("height", "300px");
-            $("#minimap").css("overflow", "hidden");
-
-            $("#minimap").on("click", function(e)
+            else
             {
-                updateScrollPosition(e);
-            });
-            $("#mainCell #main").on("scroll", function()
-            {
-                update(false);
-            });
-
-            // Zoomed in scroll event listeners for minimap are created by attachScrollListener,
-            // called by createEmptyTree()!
-
-            // Listeners for minimap checkboxes
-            $("#enableMinimap").on("click", function()
-            {
-                if (this.checked)
-                {
-                    setAndStoreShown(true);
-                    showAnimated($("#minimap"));
-                }
-                else
-                {
-                    hideAnimated($("#minimap"));
-                    setAndStoreShown(false);
-                }
-            });
-            $("#simpleMinimap").on("click", function()
-            {
-                if (this.checked)
-                {
-                    detailed = false;
-                    $("#scaledDiv").empty();
-                    update(false);
-                }
-                else
-                {
-                    detailed = true;
-                    update(true);
-                }
-            });
-        }
-        else
+                hideAnimated($("#minimap"));
+                setAndStoreShown(false);
+            }
+        });
+        $("#simpleMinimap").on("click", function()
         {
-            enabled = false;
-            $("#miniwrap").css("display","none");
-            console.log("It appears you're using Firefox or IE, minimap display:" + $("#miniwrap").css("display") + ". We recommend running this game in Chrome or Opera.");
-        }
+            if (this.checked)
+            {
+                detailed = false;
+                $("#scaledDiv").empty();
+                update(false);
+            }
+            else
+            {
+                detailed = true;
+                update(true);
+            }
+        });
     }
 
     function attachScrollListener(treeDiv)
@@ -194,6 +176,7 @@ var MiniMap;
             //Remove inappropriate subjects from minimap
             if(Zoom.isZoomed())
                 $("#scaledDiv .treeContainer").not(".zoom").remove();
+            $("#scaledDiv *").off();
         }
 
         //Standard width/height for minimap container
@@ -210,25 +193,25 @@ var MiniMap;
             zoomFactor = $("#sidebar").height()/(realHeight+realHeight*0.1);
         }
 
-        $("#minimap").css("width", realWidth * zoomFactor + "px");
-        $("#minimap").css("height", realHeight * zoomFactor + "px");
+        var minimapSize = {
+            width: realWidth * zoomFactor + "px",
+            height: realHeight * zoomFactor + "px"
+        };
+        $("#minimap").css(minimapSize);
+        $("#minimap").data("savedSize", minimapSize);
 
         if (detailed && refresh)
         {
-            $("#scaledDiv *").css("overflow", "hidden");
-
             $("#scaledDiv .treeContainer.zoom").css("left", 0 + "px");
             $("#scaledDiv .treeContainer.zoom").css("top", 0 + "px");
             $("#scaledDiv .treeContainer.zoom > .treeDiv").css("height", realHeight + "px");
             $("#scaledDiv .treeContainer.zoom > .treeDiv").css("width", realWidth + "px");
-
-            $("#scaledDiv *").off();
         }
 
-        $("#scaledDiv").css("zoom", zoomFactor+"");
-        // css zoom code needs to be rewritten for css translate: scale(v)
-        // but this bugs out a lot of other css properties in the cloned main DOM:
-        //$("#scaledDiv #main").css("-moz-transform:", "scale("zoomFactor+")");
+        $("#scaledDiv").css({
+            transform: "scale(" + zoomFactor + ")",
+            transformOrigin: "top left"
+        });
 
         //Scale and reposition the minimap selector
         $("#minimapSelector").css({
@@ -263,8 +246,9 @@ var MiniMap;
     function showAnimated(element)
     {
         // slide Down with animation stopper
-        var autoHeight = element.css('height', 'auto').height();
-        element.height(0).show().stop(true,false).animate({height: autoHeight}, 400);
+        var savedSize = element.data('savedSize');
+        var finalHeight = savedSize ? savedSize.height : element.css('height', 'auto').height();
+        element.height(0).show().stop(true,false).animate({height: finalHeight}, 400);
     }
 
     function hideAnimated(element)
