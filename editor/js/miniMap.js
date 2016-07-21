@@ -103,13 +103,13 @@ var MiniMap;
         var minimapSelectorX = e.pageX - $("#minimap").offset().left - $("#minimapSelector").width() / 2;
         var minimapSelectorY = e.pageY - $("#minimap").offset().top - $("#minimapSelector").height() / 2;
 
-        //Limit the minimum/maximum positions of the selector
+        // Limit the minimum/maximum positions of the selector
         var maxX = $("#minimap").width() - $("#minimapSelector").width();
         var maxY = $("#minimap").height() - $("#minimapSelector").height();
-        if(minimapSelectorX < 0) minimapSelectorX = 0;
-        if(minimapSelectorY < 0) minimapSelectorY = 0;
-        if(minimapSelectorX > maxX) minimapSelectorX = maxX;
-        if(minimapSelectorY > maxY) minimapSelectorY = maxY;
+        if (minimapSelectorX < 0) minimapSelectorX = 0;
+        if (minimapSelectorY < 0) minimapSelectorY = 0;
+        if (minimapSelectorX > maxX) minimapSelectorX = maxX;
+        if (minimapSelectorY > maxY) minimapSelectorY = maxY;
 
         $("#minimapSelector").css("top", minimapSelectorY+"px");
         $("#minimapSelector").css("left", minimapSelectorX+"px");
@@ -117,7 +117,7 @@ var MiniMap;
         minimapSelectorX /= zoom;
         minimapSelectorY /= zoom;
 
-        if(!Zoom.isZoomed())   //Nothing is zoomed
+        if (!Zoom.isZoomed())   // Nothing is zoomed
         {
             $("#mainCell > #main").scrollLeft(minimapSelectorX);
             $("#mainCell > #main").scrollTop(minimapSelectorY);
@@ -131,9 +131,8 @@ var MiniMap;
         update(false);
     }
 
-    //Scale the minimap according to the main div dimensions
-    //and optionally refresh the background by cloning the main div
-    ///refresh boolean to effect a new clone of the main div and its children
+    // Scale the minimap according to the main div dimensions
+    // and optionally refresh the map by cloning the main div
     function update(refresh)
     {
         if (!(enabled && active && shown)) return;
@@ -143,7 +142,7 @@ var MiniMap;
 
         var main = $("#mainCell > #main");
 
-        if (!Zoom.isZoomed())   //Nothing is zoomed
+        if (!Zoom.isZoomed())   // Nothing is zoomed
         {
             realWidth = main[0].scrollWidth;
             realHeight = main[0].scrollHeight;
@@ -165,21 +164,21 @@ var MiniMap;
         $("#scaledDiv").css("height", realHeight+"px");
         $("#minimap").css("height", $("#sidebar").height()-25+"px");
 
-        //Show a cloned and scaled down version of the main div in the minimap if detailedMinimap is set to true
+        // Show a cloned and scaled down version of the main div in the minimap
         if (detailed && refresh)
         {
             $("#scaledDiv").empty();
             main.clone().appendTo($("#scaledDiv"));
             $("#scaledDiv #gridIndicator").remove();
-            //Rename cloned div ids!
+            // Rename cloned div ids!
             $("#scaledDiv > #main").attr("id","miniMain");
-            //Remove inappropriate subjects from minimap
-            if(Zoom.isZoomed())
+            // Remove inappropriate subjects from minimap
+            if (Zoom.isZoomed())
                 $("#scaledDiv .treeContainer").not(".zoom").remove();
             $("#scaledDiv *").off();
         }
 
-        //Standard width/height for minimap container
+        // Standard width/height for minimap container
         var width = 300;
         var height = 300;
 
@@ -187,7 +186,7 @@ var MiniMap;
         var heightFactor = height/realHeight;
 
         zoomFactor = widthFactor;
-        //minimap gets taller than the allowed screenheight
+        // minimap gets taller than the allowed screenheight
         if (zoomFactor * realHeight > $("#sidebar").height())
         {
             zoomFactor = $("#sidebar").height()/(realHeight+realHeight*0.1);
@@ -213,7 +212,7 @@ var MiniMap;
             transformOrigin: "top left"
         });
 
-        //Scale and reposition the minimap selector
+        // Scale and reposition the minimap selector
         $("#minimapSelector").css({
             width: viewportWidth * zoomFactor + "px",
             height: viewportHeight * zoomFactor + "px",
