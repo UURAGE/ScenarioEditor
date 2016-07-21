@@ -168,14 +168,14 @@ var MiniMap;
         if (detailed && refresh)
         {
             $("#scaledDiv").empty();
-            main.clone().appendTo($("#scaledDiv"));
-            $("#scaledDiv #gridIndicator").remove();
-            // Rename cloned div ids!
-            $("#scaledDiv > #main").attr("id","miniMain");
-            // Remove inappropriate subjects from minimap
-            if (Zoom.isZoomed())
-                $("#scaledDiv .treeContainer").not(".zoom").remove();
-            $("#scaledDiv *").off();
+            var clonedMain = main.clone();
+            // Remove inappropriate elements from the cloned main
+            clonedMain.find("#gridIndicator").remove();
+            if (Zoom.isZoomed()) clonedMain.find(".treeContainer").not(".zoom").remove();
+            else clonedMain.find(".treeDiv").remove();
+            // Remove all event handlers and IDs from the cloned main
+            clonedMain.find("*").addBack().off().removeAttr("id");
+            $("#scaledDiv").append(clonedMain);
         }
 
         // Standard width/height for minimap container
