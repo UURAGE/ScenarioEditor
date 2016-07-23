@@ -35,7 +35,7 @@ function printScenario()
     };
 
     var htmlList = [];
-    $('.treeContainer').each(function()
+    $('#main > .treeContainer').each(function()
     {
         // Zoom in and out to create correct HTML for nodes and connections,
         // because jsPlumb does this dynamically when a tree is zoomed
