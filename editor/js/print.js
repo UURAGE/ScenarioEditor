@@ -58,7 +58,7 @@ function printScenario()
                 // If it's a statement we need to loop over its contents and add only the relevant HTML
                 if (treeDivContentList[i].classList.contains('player')     ||
                     treeDivContentList[i].classList.contains('computer')   ||
-                    treeDivContentList[i].classList.contains('conversation'))
+                    treeDivContentList[i].classList.contains('situation'))
                 {
                     // Manually add the inner HTML
                     outerHTML = outerHTML.slice(0, outerHTML.indexOf(treeDivContentList[i].innerHTML));
