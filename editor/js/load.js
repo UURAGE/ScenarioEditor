@@ -163,7 +163,7 @@ var Load;
     function generateGraph(xml)
     {
         var level = 0;
-        $('interleave', xml).each(function()
+        $(xml).find('interleave').each(function()
         {
             $(this).children('dialogue').each(function()
             {
@@ -199,8 +199,8 @@ var Load;
                     left: tree.leftPos * Main.gridX + "px"
                 });
 
-                $('.subjectName', tree.dragDiv).text(tree.subject); // set subject in HTML
-                $('.subjectNameInput', tree.dragDiv).val(tree.subject); // set subject in HTML
+                tree.dragDiv.find('.subjectName').text(tree.subject); // set subject in HTML
+                tree.dragDiv.find('.subjectNameInput').val(tree.subject); // set subject in HTML
 
                 tree.dragDiv.css('border-color', '');
 

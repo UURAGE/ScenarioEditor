@@ -22,7 +22,7 @@ var Load3;
         // Conversations stores all the accumulated conversations so we can expand them and give the nodes fresh ids at the end
         var conversations = {};
 
-        $('interleave', xml).each(function()
+        $(xml).find('interleave').each(function()
         {
             $(this).children('tree').each(function()
             {
@@ -61,8 +61,8 @@ var Load3;
                     left: tree.leftPos * Main.gridX + "px"
                 });
 
-                $('.subjectName', tree.dragDiv).text(tree.subject); // set subject in HTML
-                $('.subjectNameInput', tree.dragDiv).val(tree.subject); // set subject in HTML
+                tree.dragDiv.find('.subjectName').text(tree.subject); // set subject in HTML
+                tree.dragDiv.find('.subjectNameInput').val(tree.subject); // set subject in HTML
 
                 tree.dragDiv.css('border-color', '');
 

@@ -18,7 +18,7 @@ var Load1;
         // Conversations stores all the accumulated conversations so we can expand them and give the nodes fresh ids at the end
         var conversations = {};
 
-        $('script', xml).children().each(function()
+        $(xml).find('script').children().each(function()
         { //xml has one child: the script
             switch (this.nodeName)
             {

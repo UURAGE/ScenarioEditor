@@ -622,7 +622,7 @@ var Main;
             return null; //no selected or zoomed in tree container
         }
 
-        var node = createAndReturnNode(type, null, $('.treeDiv', container), container.attr('id'));
+        var node = createAndReturnNode(type, null, container.find('.treeDiv'), container.attr('id'));
 
         container.focus();
 
@@ -1471,7 +1471,7 @@ var Main;
         // get the node
         var nodeHTML = $('#' + nodeID);
         // fill div that can hold the images that visualize if the node has certain settings
-        var imageDiv = $('.imgDiv', nodeHTML);
+        var imageDiv = nodeHTML.find('.imgDiv');
         imageDiv.empty();
         if (node.comment !== "")
             imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_comments.png'>");
@@ -1485,7 +1485,7 @@ var Main;
         // add the text and imageDiv to the node itself
         // apply text changes
         nodeHTML.width(width + "em");
-        var nodeTextDiv = $('.statementText', nodeHTML);
+        var nodeTextDiv = nodeHTML.find('.statementText');
         nodeTextDiv.show();
         nodeTextDiv.html(text);
 

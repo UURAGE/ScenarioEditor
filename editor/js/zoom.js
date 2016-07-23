@@ -52,10 +52,10 @@ var Zoom;
 
             tree.div.selectable('enable');
 
-            var zoomTreeButton = $('.zoomTreeButton', tree.dragDiv);
+            var zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
             zoomTreeButton.text("[-]");
 
-            $('.subjectName', tree.dragDiv).text(tree.subject);
+            tree.dragDiv.find('.subjectName').text(tree.subject);
 
             var heightOffset = tree.div.position().top - tree.dragDiv.position().top;
             var dragDivHeight = tree.dragDiv.outerHeight();
@@ -96,11 +96,11 @@ var Zoom;
             jsPlumb.toggleDraggable(tree.dragDiv);
             tree.div.selectable('disable');
 
-            $('.subjectName', tree.dragDiv).text(tree.subject);
+            tree.dragDiv.find('.subjectName').text(tree.subject);
             //$(tree.div).css('width', 0);
             //$(tree.div).css('height', 0);
 
-            var zoomTreeButton = $('.zoomTreeButton', tree.dragDiv);
+            var zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
             zoomTreeButton.text("[+]");
 
             parent.css({"overflow": "auto"});
