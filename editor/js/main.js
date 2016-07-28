@@ -765,8 +765,8 @@ var Main;
             // Reposition the new node
             var nodeDiv = $('#'+node.id);
             var parentDiv = $('#'+parent.id);
-            var left = parentDiv.position().left;
-            var top = parentDiv.position().top + 55 + parentDiv.height();
+            var left = Utils.parseDecimalIntWithDefault(parentDiv.css("left"), 0);
+            var top = Utils.parseDecimalIntWithDefault(parentDiv.css("top"), 0) + 55 + parentDiv.height();
 
             // Actually move node
             nodeDiv.css({"top": top, "left": left});
