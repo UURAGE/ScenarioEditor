@@ -320,19 +320,15 @@ var Save;
             // Add a text element to the XML element
             addAndReturnElement("text", nameSpace, statementEl, true).textContent = node.text;
 
-            // Save the position
-            var visible = $("#" + node.id).is(":visible");
-            if (!visible) // cannot get pos for hidden elements
-                $("#" + node.id).show();
-
             var editingDataEl = addAndReturnElement("editingData", nameSpace, statementEl);
-            var position = $("#" + node.id).position();
-            var positionEl = addAndReturnElement("position", nameSpace, editingDataEl);
-            addAndReturnElement("x", nameSpace, positionEl).textContent = position.left;
-            addAndReturnElement("y", nameSpace, positionEl).textContent = position.top;
 
-            if (!visible)
-                $("#" + node.id).hide();
+            // Save the position
+            var position = $("#" + node.id).css(["left", "top"]);
+            var positionEl = addAndReturnElement("position", nameSpace, editingDataEl);
+            addAndReturnElement("x", nameSpace, positionEl).textContent =
+                Utils.parseDecimalIntWithDefault(position.left, 0);
+            addAndReturnElement("y", nameSpace, positionEl).textContent =
+                Utils.parseDecimalIntWithDefault(position.top, 0);
 
             // Save the comment
             if (node.comment !== "")
