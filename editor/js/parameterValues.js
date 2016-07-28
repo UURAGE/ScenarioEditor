@@ -23,14 +23,6 @@ var ParameterValues;
     var heightParameterScreen = 768;
     var widthParameterScreen = 960;
 
-    // Values for the message box
-    var messageColors =
-    {
-        error: '#F00',
-        warning: '#F80',
-        info: '#05F'
-    };
-
     ParameterValues =
     {
         heightMetaScreen : heightMetaScreen,
@@ -40,7 +32,6 @@ var ParameterValues;
         heightEnumerationScreen : heightEnumerationScreen,
         widthEnumerationScreen : widthEnumerationScreen,
         heightParameterScreen : heightParameterScreen,
-        widthParameterScreen : widthParameterScreen,
-        messageColors : messageColors
+        widthParameterScreen : widthParameterScreen
     };
 })();

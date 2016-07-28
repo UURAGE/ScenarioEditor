@@ -676,18 +676,17 @@ button img
   position: relative;
   display: none;
   overflow: auto;
-  padding: 20px 20px 0 20px;
+  padding: 0 20px;
   max-height: 200px;
 }
 
-#validationReport h2
+#validationReport > *
 {
-  margin-top: 0;
+  margin: 20px 0;
 }
 
 #validationReport table
 {
-  margin-bottom: 20px;
   width: 100%;
   border: 1px solid black;
   border-collapse: collapse;
@@ -709,6 +708,26 @@ button img
   #validationReport table tr td:nth-child(2)
   {
     width: 85%;
+  }
+
+  #validationReport .no-problems
+  {
+    color: green;
+  }
+
+  #validationReport .level-error
+  {
+    color: #F00;
+  }
+
+  #validationReport .level-warning
+  {
+    color: #F80;
+  }
+
+  #validationReport .level-info
+  {
+    color: #05F;
   }
 
 /*.buttonSeperator

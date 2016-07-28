@@ -268,26 +268,23 @@ var Validator;
             hasErrors = hasErrors || value.level === 'error';
         });
 
+        $('#validationReport').empty();
         if (!hasErrors)
         {
-            $('#validationReport table').hide().children()
-                .remove();
-            $('#validationReport span').remove();
-            $('#validationReport br').remove();
-            $('#validationReport').append($('<span>').text(LanguageManager.sLang("edt_validator_no_problems")).css('color', 'green')).append($('<br>')).append($('<br>'));
+            $('#validationReport').append($('<p>').addClass('no-problems').text(LanguageManager.sLang("edt_validator_no_problems")));
         }
         else
         {
-            $('#validationReport span').remove();
-            $('#validationReport table').show().children().remove();
+            var table = $('<table>');
             $.each(errors, function(index, e)
             {
-                var row = $('<tr>').css('color', ParameterValues.messageColors[e.level]);
+                var row = $('<tr>').addClass('level-' + e.level);
                 var error = $('<td>').text(LanguageManager.sLang("edt_validator_"+e.level));
                 var message = $('<td>').append($('<span>').text(e.message).on('click', e.jumpToFunction).css('cursor', 'pointer'));
                 row.append(error).append(message);
-                $('#validationReport table').append(row);
+                table.append(row);
             });
+            $('#validationReport').append(table);
         }
         $('#draftScreen').hide();
         $('#validationReport').show();

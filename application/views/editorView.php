@@ -190,7 +190,6 @@
               </div>
               <div id="draftScreen" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-resizable"></div>
               <div id="validationReport" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-resizable">
-                <table></table>
               </div>
             </div>
           </div>
