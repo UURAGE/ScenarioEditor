@@ -826,7 +826,6 @@ var Main;
             {
                 Main.nodes[id].text = text;
                 changeNodeText(id);
-                jsPlumb.repaint(id);
             }
             //Enable dragging for this component
             jsPlumb.setDraggable(thisNode, true);
