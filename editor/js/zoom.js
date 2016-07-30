@@ -55,8 +55,6 @@ var Zoom;
             var zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
             zoomTreeButton.text("[-]");
 
-            tree.dragDiv.find('.subjectName').text(tree.subject);
-
             jsPlumb.setSuspendDrawing(false);
             tree.nodes.forEach(function(n)
             {
@@ -91,8 +89,6 @@ var Zoom;
             tree.dragDiv.css({ "top": tree.topPos * Main.gridY, "left": tree.leftPos * Main.gridX });
             jsPlumb.toggleDraggable(tree.dragDiv);
             tree.div.selectable('disable');
-
-            tree.dragDiv.find('.subjectName').text(tree.subject);
 
             var zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
             zoomTreeButton.text("[+]");
