@@ -414,6 +414,8 @@ button img
   width: 250px;
   height: 50px;
   border-color: #000000;
+  display: table;
+  table-layout: fixed;
 }
 
   .w.treeContainer.zoom
@@ -444,6 +446,22 @@ button img
     font-size: 17px;
     line-height: 50px;
   }
+
+  .w.treeContainer > div
+  {
+    display: table-row;
+  }
+
+    .w.treeContainer > div > div
+    {
+      display: table-cell;
+    }
+
+    .w.treeContainer > div:nth-child(2) > div
+    {
+      width: 100%;
+      height: 100%;
+    }
 
 .treeDiv
 {

@@ -40,7 +40,7 @@ function printScenario()
         // Zoom in and out to create correct HTML for nodes and connections,
         // because jsPlumb does this dynamically when a tree is zoomed
         Zoom.zoomIn(Main.trees[this.id]);
-        var treeDiv = $(this).children('.treeDiv')[0];
+        var treeDiv = $(this).find('.treeDiv')[0];
         var treeDivContentList = $(treeDiv).children();
         var name = $(this).find('.subjectName')[0].innerHTML;
         Zoom.zoomOut();

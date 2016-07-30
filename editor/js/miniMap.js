@@ -151,7 +151,7 @@ var MiniMap;
         }
         else
         {
-            var treeDiv = $("#mainCell .treeContainer.zoom > .treeDiv");
+            var treeDiv = $("#mainCell .treeContainer.zoom .treeDiv");
             realWidth = treeDiv[0].scrollWidth;
             realHeight = treeDiv[0].scrollHeight + $("#mainCell .subjectDiv")[0].scrollHeight;
             viewportX = treeDiv.scrollLeft();

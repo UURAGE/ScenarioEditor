@@ -57,10 +57,6 @@ var Zoom;
 
             tree.dragDiv.find('.subjectName').text(tree.subject);
 
-            var heightOffset = tree.div.position().top - tree.dragDiv.position().top;
-            var dragDivHeight = tree.dragDiv.outerHeight();
-
-            $(tree.div).css({ "height": dragDivHeight - heightOffset + "px", "width": "100%" });
             jsPlumb.setSuspendDrawing(false);
             tree.nodes.forEach(function(n)
             {
@@ -97,8 +93,6 @@ var Zoom;
             tree.div.selectable('disable');
 
             tree.dragDiv.find('.subjectName').text(tree.subject);
-            //$(tree.div).css('width', 0);
-            //$(tree.div).css('height', 0);
 
             var zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
             zoomTreeButton.text("[+]");
