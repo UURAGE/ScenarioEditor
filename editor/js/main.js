@@ -40,7 +40,6 @@ var Main;
         makeConnection: makeConnection,
         placeNewNode: placeNewNode,
         placeNewTree: placeNewTree,
-        repaintZoomedNodes: repaintZoomedNodes,
         selectElement: selectElement,
         selectNode: selectNode,
         updateButtons: updateButtons
@@ -1031,7 +1030,8 @@ var Main;
             }
         }
 
-        repaintZoomedNodes();
+        var zoomedTree = Zoom.getZoomed();
+        if (zoomedTree) zoomedTree.plumbInstance.repaintEverything();
         MiniMap.update(true);
     }
 
@@ -1300,12 +1300,6 @@ var Main;
     function dehighlightParents()
     {
         $(".parentSelected").removeClass("parentSelected");
-    }
-
-    function repaintZoomedNodes()
-    {
-        if (!Zoom.isZoomed()) return;
-        Zoom.getZoomed().plumbInstance.repaintEverything();
     }
 
     //grid is based on the css specified size of tree containers.
