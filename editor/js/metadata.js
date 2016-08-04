@@ -386,8 +386,8 @@ var Metadata;
             // Remove the parameter from the html and the object.
             $(this).remove();
 
-            removedParameter = Metadata.metaObject.parameters.byId[id];
-            indexOfRemovedParameter = Metadata.metaObject.parameters.sequence.indexOf(removedParameter);
+            var removedParameter = Metadata.metaObject.parameters.byId[id];
+            var indexOfRemovedParameter = Metadata.metaObject.parameters.sequence.indexOf(removedParameter);
             delete Metadata.metaObject.parameters.byId[id];
             Metadata.metaObject.parameters.sequence.splice(indexOfRemovedParameter, 1);
         });
