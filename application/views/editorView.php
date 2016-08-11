@@ -179,7 +179,7 @@
           <div>
             <div id="mainCell">
               <div id="main" tabindex="0">
-                <div id="gridIndicator"></div>
+                <div id="gridIndicator" class="gridded"></div>
               </div>
             </div>
           </div>

@@ -88,12 +88,19 @@ a[data-disabled]
   cursor: pointer;
 }
 
-#gridIndicator
+/* Warning: initialiseGrid looks up this rule using the exact selector text.
+ * If you change the selector, change the lookup too!
+ */
+.gridded
 {
   position: absolute;
-  display: none;
   width: 250px;
   height: 50px;
+}
+
+#gridIndicator
+{
+  display: none;
   -moz-border-radius: 0.5em;
   -webkit-border-radius: 0.5em;
   border-radius: 0.5em;
@@ -411,8 +418,6 @@ button img
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   padding: 0;
-  width: 250px;
-  height: 50px;
   border-color: #000000;
   display: table;
   table-layout: fixed;

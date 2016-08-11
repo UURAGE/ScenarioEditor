@@ -59,6 +59,8 @@ var Main;
 
         $("#main").focus();
 
+        initialiseGrid();
+
         if (Config.configObject.characters.sequence.length > 1)
         {
             var characterSelection = $("#characterSelection");
@@ -277,8 +279,6 @@ var Main;
         $("#main").on('mouseenter', function()
         {
             $("#gridIndicator").show();
-            //the method checks for previous initialisation itself
-            initialiseGrid($("#gridIndicator"));
         });
 
         $("#main").on('mouseleave', function()
@@ -503,7 +503,7 @@ var Main;
             e.stopPropagation();
         });
 
-        var dragDiv = $('<div>', {class: "w treeContainer selectable", id: id});
+        var dragDiv = $('<div>', {class: "w treeContainer gridded selectable", id: id});
         dragDiv.append($('<div>').append(subjectDiv));
         dragDiv.append($('<div>').append($('<div>').append(treeDiv)));
 
@@ -524,11 +524,6 @@ var Main;
             selectedConnections: {}, // The keys for this object are the connection ids
             plumbInstance: PlumbGenerator.genJsPlumbInstance(treeDiv)
         };
-
-        //first time a treecontainer is made we set the grid all containers will snap to (if the grid indicator has not displayed already)
-        //height and width are known only after the append to main
-        //the method checks or previous initialisations itself
-        initialiseGrid(dragDiv);
 
         if (indicatorSnap)
         {
@@ -1302,22 +1297,23 @@ var Main;
         $(".parentSelected").removeClass("parentSelected");
     }
 
-    //grid is based on the css specified size of tree containers.
-    function initialiseGrid(domGridElement)
+    // Determines grid size from the relevant CSS rules.
+    // The units are assumed to be pixels!
+    function initialiseGrid()
     {
-        if (Main.gridX === undefined && Main.gridY === undefined)
+        for (var iStyleSheet = 0; iStyleSheet < document.styleSheets.length; iStyleSheet++)
         {
-            Main.gridX = domGridElement.outerWidth();
-            Main.gridY = domGridElement.outerHeight();
-
-            var screenWidth = $("#main").innerWidth();
-            var screenHeight = $("#main").innerHeight();
-            //when the grid size is not an integer pixel amount some browsers do a floor, others do a ceiling
-            //if the browser does a ceiling the grid is 1px too large for the screen and tree containers will not snap to grid properly
-            if (4 * Main.gridX > screenWidth) //the browser did a ceiling, grid is too large
-                Main.gridX--;
-            if (4 * Main.gridY > screenHeight)
-                Main.gridY--;
+            var styleSheet = document.styleSheets[iStyleSheet];
+            for (var iCSSRule = 0; iCSSRule < styleSheet.cssRules.length; iCSSRule++)
+            {
+                var cssRule = styleSheet.cssRules[iCSSRule];
+                if (cssRule.selectorText == '.gridded')
+                {
+                    Main.gridX = Utils.parseDecimalIntWithDefault(cssRule.style.width);
+                    Main.gridY = Utils.parseDecimalIntWithDefault(cssRule.style.height);
+                    return;
+                }
+            }
         }
     }
 
