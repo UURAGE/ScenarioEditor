@@ -1,0 +1,31 @@
+{
+    "browser": true,
+    "devel": true,
+    "jquery": true,
+    "undef": true,
+    "-W079": true,
+    "predef": [
+        "editor_url",
+        "LanguageManager",
+        "jsPlumb",
+        "Utils",
+        "Config",
+        "ParameterValues",
+        "DragBox",
+        "MiniMap",
+        "Main",
+        "Parts",
+        "PlumbGenerator",
+        "Load",
+        "Load1",
+        "Load3",
+        "Save",
+        "Metadata",
+        "HtmlGenerator",
+        "ObjectGenerator",
+        "Validator",
+        "KeyControl",
+        "Zoom",
+        "Clipboard"
+    ]
+}
