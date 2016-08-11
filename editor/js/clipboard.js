@@ -4,6 +4,8 @@ var Clipboard;
 
 (function()
 {
+    "use strict";
+
     Clipboard =
     {
         copyElement: copyElement,
@@ -95,7 +97,7 @@ var Clipboard;
         delete Main.nodes[nodeID].topologicalOrderingVisited;
         delete Main.nodes[nodeID].topologicalParent;
 
-        toCopy = Utils.clone(Main.nodes[nodeID]);
+        var toCopy = Utils.clone(Main.nodes[nodeID]);
         var plumbInstance = Main.getPlumbInstanceByNodeID(nodeID);
 
         //Get node connections
