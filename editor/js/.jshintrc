@@ -25,6 +25,7 @@
         "ObjectGenerator",
         "Validator",
         "KeyControl",
+        "Print",
         "Zoom",
         "Clipboard"
     ]

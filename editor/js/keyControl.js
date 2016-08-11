@@ -219,7 +219,7 @@ var KeyControl;
         },
         P: function()
         {
-            printScenario();
+            Print.printScenario();
         }
     };
 
