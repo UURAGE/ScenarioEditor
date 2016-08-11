@@ -30,7 +30,7 @@ var MiniMap;
     // Allowed by the context? If not, hidden completely, including controls
     active = true,
     // Turned on by the user? If not, hidden, but controls are still visible
-    shown = true;
+    shown = false;
 
     function initialise()
     {
