@@ -45,8 +45,7 @@ var Main;
         updateButtons: updateButtons
     };
 
-    var selectableSelected = [],
-        ctrlDown = false,
+    var ctrlDown = false,
         invalidateNodeClick = false;//a drag event also triggers a click event, use this flag to catch and stop these events
 
     $(document).ready(function()
@@ -317,7 +316,6 @@ var Main;
                 Main.selectedElements = [];
                 selectElement(null);
             }
-            selectableSelected = [];
         });
         $("#main").on('selectableselected', function(event, element)
         {
