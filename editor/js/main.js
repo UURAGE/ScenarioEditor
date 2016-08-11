@@ -158,10 +158,6 @@ var Main;
             if(!Zoom.isZoomed())
                 addNewTree(null, true, 0, 0);//first argument of false generates a new id
         });
-        $('#manual').on('click', function()
-        {
-            window.open(site_url + 'guide');
-        });
         $('#newTree').on('mousedown', function(e)
         {
             selectElement(null);
