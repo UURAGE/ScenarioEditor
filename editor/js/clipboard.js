@@ -140,29 +140,25 @@ var Clipboard;
             if (copiedTrees && !Zoom.isZoomed())
             {
                 // In grid positions
-                var minY = Number.MAX_VALUE;
                 var minX = Number.MAX_VALUE;
-                var offSetY = [];
-                var offSetX = [];
+                var minY = Number.MAX_VALUE;
 
                 $.each(copiedElements, function(index, tree)
                 {
-                    if(tree.leftPos < minX)
-                        minX = tree.leftPos;
-                    if(tree.topPos < minY)
-                        minY = tree.topPos;
-                });
-
-                $.each(copiedElements, function(index, tree)
-                {
-                    offSetY[index] = tree.topPos-minY;
-                    offSetX[index] = tree.leftPos-minX;
+                    if (tree.leftPos < minX) minX = tree.leftPos;
+                    if (tree.topPos < minY) minY = tree.topPos;
                 });
 
                 // Paste trees relative to top left of smallest bounding box
-                $.each(copiedElements, function(index, tree)
+                var pastedTrees = $.map(copiedElements, function(tree, index)
                 {
-                    pasteTree(tree, offSetX[index], offSetY[index]);
+                    return pasteTree(tree, tree.leftPos - minX, tree.topPos - minY);
+                });
+
+                Main.selectElement(null);
+                $.each(pastedTrees, function(index, pastedTree)
+                {
+                    KeyControl.selectExtraElement(pastedTree.id);
                 });
             }
             else if (Zoom.isZoomed() && !copiedTrees)
@@ -251,7 +247,7 @@ var Clipboard;
         //idmappings[originalID] = copyID
         //all other information like dom elements and position should not be copied
 
-        var newTree = Main.addNewTree(null, true, offSetX, offSetY);
+        var newTree = Main.createEmptyTree(null, true, offSetX, offSetY);
 
         newTree.subject = LanguageManager.fLang("edt_clipboard_copy_of", [toCopy.subject]);
         newTree.optional = toCopy.optional;
@@ -301,6 +297,8 @@ var Clipboard;
                 });
             });
         });
+
+        return newTree;
     }
 
 }());
