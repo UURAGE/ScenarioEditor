@@ -40,6 +40,7 @@ var Main;
         makeConnection: makeConnection,
         placeNewNode: placeNewNode,
         placeNewTree: placeNewTree,
+        selectElements: selectElements,
         selectElement: selectElement,
         selectNode: selectNode,
         updateButtons: updateButtons
@@ -1021,6 +1022,24 @@ var Main;
         var zoomedTree = Zoom.getZoomed();
         if (zoomedTree) zoomedTree.plumbInstance.repaintEverything();
         MiniMap.update(true);
+    }
+
+    function selectElements(elementIds)
+    {
+        if (elementIds.length == 1)
+        {
+            selectElement(elementIds[0]);
+        }
+        else
+        {
+            selectElement(null);
+            Main.selectedElements = elementIds.slice();
+            elementIds.forEach(function (elementId)
+            {
+                $("#" + elementId).addClass("multiSelected");
+                if (elementId in Main.nodes) Main.getPlumbInstanceByNodeID(elementId).addToDragSelection(elementId);
+            });
+        }
     }
 
     function selectElement(elementId)

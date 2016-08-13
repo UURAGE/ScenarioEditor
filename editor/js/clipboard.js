@@ -150,16 +150,12 @@ var Clipboard;
                 });
 
                 // Paste trees relative to top left of smallest bounding box
-                var pastedTrees = $.map(copiedElements, function(tree, index)
+                var pastedTreeIds = $.map(copiedElements, function(tree, index)
                 {
-                    return pasteTree(tree, tree.leftPos - minX, tree.topPos - minY);
+                    return pasteTree(tree, tree.leftPos - minX, tree.topPos - minY).id;
                 });
 
-                Main.selectElement(null);
-                $.each(pastedTrees, function(index, pastedTree)
-                {
-                    KeyControl.selectExtraElement(pastedTree.id);
-                });
+                Main.selectElements(pastedTreeIds);
             }
             else if (Zoom.isZoomed() && !copiedTrees)
             {
@@ -199,11 +195,7 @@ var Clipboard;
                     });
                 });
                 // select all nodes just copied
-                for (var key in idMappings)
-                {
-                    // function that allows for more than one selected node at a time
-                    KeyControl.selectExtraElement(idMappings[key]);
-                }
+                Main.selectElements($.map(idMappings, function (newId) { return newId; }));
             }
         }
     }

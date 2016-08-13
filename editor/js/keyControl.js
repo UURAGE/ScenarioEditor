@@ -11,7 +11,6 @@ var KeyControl;
     KeyControl =
     {
         ctrlClickOnElement: ctrlClickOnElement,
-        selectExtraElement: selectExtraElement,
         hotKeysActive  : hotKeysActive
     };
 
@@ -512,22 +511,13 @@ var KeyControl;
 
     function selectAll()
     {
-        Main.selectElement(null);
-        Main.selectedElements = [];
-
         if (Zoom.isZoomed())
         {
-            Zoom.getZoomed().nodes.forEach(function(nodeID)
-            {
-                selectExtraElement(nodeID);
-            });
+            Main.selectElements(Zoom.getZoomed().nodes);
         }
         else
         {
-            $('.treeContainer').each(function(i, tree)
-            {
-                selectExtraElement(tree.id);
-            });
+            Main.selectElements(Object.keys(Main.trees));
         }
     }
 
