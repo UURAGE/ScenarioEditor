@@ -41,25 +41,19 @@ var Load3;
                     treeID = "ext_" + treeID;
                 }
 
-                var tree = Main.createEmptyTree(treeID, false, 0, 0);
+                // get the position from the XML, note that this is in grid coordinates, not screen coordinates
+                var position = $(this).children('position')[0];
+                var leftPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('x')[0].textContent, 0));
+                var topPos  = Math.round(Utils.parseDecimalIntWithDefault($(position).children('y')[0].textContent, 0));
+
+                var tree = Main.createEmptyTree(treeID, false, leftPos, topPos);
                 var plumbInstance = tree.plumbInstance;
 
-                // get the subject from the XML
                 tree.subject = Utils.unEscapeHTML($(this).children('subject')[0].textContent);
 
                 tree.optional = Utils.parseBool($(this).attr('optional'));
 
-                // get the position from the XML, note that this is in grid coordinates, not screen coordinates
-                var position = $(this).children('position')[0];
-                tree.leftPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('x')[0].textContent, 0)); // set x
-                tree.topPos  = Math.round(Utils.parseDecimalIntWithDefault($(position).children('y')[0].textContent, 0)); // set y
-                tree.level = Math.round(level); // set level
-
-                tree.dragDiv.css(
-                { // set style position
-                    top : tree.topPos  * Main.gridY + "px", //grid variables are from main.js
-                    left: tree.leftPos * Main.gridX + "px"
-                });
+                tree.level = level;
 
                 tree.dragDiv.find('.subjectName').text(tree.subject); // set subject in HTML
                 tree.dragDiv.find('.subjectNameInput').val(tree.subject); // set subject in HTML
@@ -447,7 +441,7 @@ var Load3;
                 }
 
                 singleConnections[previousConversationNodeId] = id;
-                
+
                 var characterIdRef;
                 var acceptableScopes = ['per', 'per-' + type];
                 if (type === Main.computerType)

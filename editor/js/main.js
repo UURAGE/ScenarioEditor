@@ -503,37 +503,36 @@ var Main;
 
         $("#main").append(dragDiv);
 
+        var leftPos = offsetX;
+        var topPos = offsetY;
+
+        if (indicatorSnap)
+        {
+            var position = $("#gridIndicator").css(["left", "top"]);
+            leftPos += Math.round(Utils.parseDecimalIntWithDefault(position.left) / Main.gridX);
+            topPos += Math.round(Utils.parseDecimalIntWithDefault(position.top) / Main.gridY);
+        }
+
+        dragDiv.css({
+            "left": Main.gridX * leftPos,
+            "top": Main.gridY * topPos
+        });
+
         Main.trees[id] = {
             dragDiv: dragDiv,
             div: treeDiv,
             id: id,
             subject: defaultName,
             optional: false,
-            leftPos: 0, //necessary to return to the right spot after zooming out
-            topPos: 0, //left and topPos are in grid coordinates (if leftPos == 2 screen pos == 2*gridX)
+            leftPos: leftPos, //necessary to return to the right spot after zooming out
+            topPos: topPos, //left and topPos are in grid coordinates (if leftPos == 2 screen pos == 2*gridX)
             leftScroll: 0, //necessary to zoom in to the spot on the graph where last zoomed out
             topScroll: 0,
-            level: 0,
+            level: topPos,
             nodes: [],
             selectedConnections: {}, // The keys for this object are the connection ids
             plumbInstance: PlumbGenerator.genJsPlumbInstance(treeDiv)
         };
-
-        if (indicatorSnap)
-        {
-            var position = $("#gridIndicator").position();
-            var leftOffsetPos = position.left + Main.gridX*offsetX + $("#main").scrollLeft();
-            var topOffsetPos = position.top  + Main.gridY*offsetY + $("#main").scrollTop();
-            dragDiv.css(
-            {
-                "top": topOffsetPos,
-                "left": leftOffsetPos
-            });
-        }
-
-        Main.trees[id].leftPos = Math.round((dragDiv.position().left + $("#main").scrollLeft()) / Main.gridX);
-        Main.trees[id].topPos = Math.round((dragDiv.position().top + $("#main").scrollTop()) / Main.gridY);
-        Main.trees[id].level = Main.trees[id].topPos;
 
         //(x,y) of upper left of containment and (x,y) of lower right
         jsPlumb.draggable(dragDiv,
