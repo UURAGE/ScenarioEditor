@@ -685,9 +685,9 @@ var Main;
         // the canvas is open; get the canvas div
         var treeDiv = Zoom.getZoomed().div;
         // calculate canvas boundaries
-        var leftBound = $('#main').position().left;
+        var leftBound = treeDiv.offset().left;
         var rightBound = leftBound + treeDiv.width();
-        var upperBound = $('#main').position().top + 50;
+        var upperBound = treeDiv.offset().top;
         var underBound = upperBound + treeDiv.height();
         // get mouseposition
         var posL = pos.left;
