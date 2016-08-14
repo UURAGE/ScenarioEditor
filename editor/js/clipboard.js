@@ -100,17 +100,8 @@ var Clipboard;
         var toCopy = Utils.clone(Main.nodes[nodeID]);
         var plumbInstance = Main.getPlumbInstanceByNodeID(nodeID);
 
-        //Get node connections
-        var connections = plumbInstance.getConnections(
-                    {
-                        target: nodeID
-                    });
-        //Get node position
-        var position = $('#' + nodeID).position();
-
-        //Save extra node info
-        toCopy.connections = connections;
-        toCopy.position = position;
+        toCopy.connections = plumbInstance.getConnections({ target: nodeID });
+        toCopy.position = Utils.cssPosition($('#' + nodeID));
 
         return toCopy;
     }
@@ -220,7 +211,7 @@ var Clipboard;
 
         var nodeElem = $('#' + newNode.id);
         //Set position
-        nodeElem.css(
+        Utils.cssPosition(nodeElem,
         {
             "top": top,
             "left": left
@@ -263,11 +254,7 @@ var Clipboard;
 
             var newNodeDiv = $("#" + newNode.id);
 
-            newNodeDiv.css(
-            {
-                "top": node.position.top,
-                "left": node.position.left
-            }); //position is relative to dom parent, so can be copied directly
+            Utils.cssPosition(newNodeDiv, node.position);
         });
 
         //all nodes have been created. now copy connectors

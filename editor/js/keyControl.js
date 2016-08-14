@@ -457,7 +457,7 @@ var KeyControl;
                 tree.leftPos = newGridX;
                 tree.topPos = newGridY;
 
-                tree.dragDiv.css(
+                Utils.cssPosition(tree.dragDiv,
                 {
                     "top": tree.topPos*Main.gridY,
                     "left": tree.leftPos*Main.gridX

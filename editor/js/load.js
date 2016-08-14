@@ -352,9 +352,9 @@ var Load;
         };
 
         // Set the position of the node.
-        node.css({
-            top: yPos + "px",
-            left: xPos + "px"
+        Utils.cssPosition(node, {
+            top: yPos,
+            left: xPos
         });
 
         // fill the insides with text

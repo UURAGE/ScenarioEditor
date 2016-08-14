@@ -323,12 +323,10 @@ var Save;
             var editingDataEl = addAndReturnElement("editingData", nameSpace, statementEl);
 
             // Save the position
-            var position = $("#" + node.id).css(["left", "top"]);
+            var position = Utils.cssPosition($("#" + node.id));
             var positionEl = addAndReturnElement("position", nameSpace, editingDataEl);
-            addAndReturnElement("x", nameSpace, positionEl).textContent =
-                Utils.parseDecimalIntWithDefault(position.left, 0);
-            addAndReturnElement("y", nameSpace, positionEl).textContent =
-                Utils.parseDecimalIntWithDefault(position.top, 0);
+            addAndReturnElement("x", nameSpace, positionEl).textContent = position.left;
+            addAndReturnElement("y", nameSpace, positionEl).textContent = position.top;
 
             // Save the comment
             if (node.comment !== "")

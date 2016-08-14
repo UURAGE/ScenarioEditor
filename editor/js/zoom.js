@@ -41,10 +41,14 @@ var Zoom;
 
             tree.dragDiv.addClass("zoom");
             // Ensure it looks right
-            parent.css({"overflow": "hidden"}); // hide overflowing content
-            tree.dragDiv.css({"top": parent.scrollTop(), "left": parent.scrollLeft()});//put it in gridposition(0,0)
-            jsPlumb.toggleDraggable(tree.dragDiv); //make it undraggable
-            tree.dragDiv.removeClass("ui-state-disabled");//remove default disable-draggable-style
+            // Hide overflowing content
+            parent.css({"overflow": "hidden"});
+            // Put it in the current top left corner of the parent
+            Utils.cssPosition(tree.dragDiv, { "top": parent.scrollTop(), "left": parent.scrollLeft() });
+            // Make it undraggable
+            jsPlumb.toggleDraggable(tree.dragDiv);
+            // Remove default disable-draggable-style
+            tree.dragDiv.removeClass("ui-state-disabled");
 
             // Return to the last scroll position
             tree.div.scrollLeft(tree.leftScroll);
@@ -86,7 +90,7 @@ var Zoom;
             tree.div.scrollLeft(0);
 
             tree.dragDiv.removeClass("zoom");
-            tree.dragDiv.css({ "top": tree.topPos * Main.gridY, "left": tree.leftPos * Main.gridX });
+            Utils.cssPosition(tree.dragDiv, { "top": tree.topPos * Main.gridY, "left": tree.leftPos * Main.gridX });
             jsPlumb.toggleDraggable(tree.dragDiv);
             tree.div.selectable('disable');
 

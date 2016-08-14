@@ -256,9 +256,9 @@ var Load3;
         };
 
         // Set the position of the node.
-        node.css({
-            top: yPos + "px",
-            left: xPos + "px"
+        Utils.cssPosition(node, {
+            top: yPos,
+            left: xPos
         });
 
         // fill the insides with text
@@ -402,9 +402,9 @@ var Load3;
         };
 
         // Set the position of the node.
-        node.css({
-            top: yPos + "px",
-            left: xPos + "px"
+        Utils.cssPosition(node, {
+            top: yPos,
+            left: xPos
         });
 
         // fill the insides with text
@@ -468,11 +468,9 @@ var Load3;
                 };
 
                 // Set the position of the node and offset it by a small amount to show underlying nodes
-                var yPos = Utils.parseDecimalIntWithDefault(conversations[firstConversationNodeId].yPos, 0) + i * 8;
-                var xPos = Utils.parseDecimalIntWithDefault(conversations[firstConversationNodeId].xPos, 0) + i * 8;
-                node.css({
-                    top: yPos.toString() + "px",
-                    left: xPos.toString() + "px"
+                Utils.cssPosition(node, {
+                    top: Utils.parseDecimalIntWithDefault(conversations[firstConversationNodeId].yPos, 0) + i * 8,
+                    left: Utils.parseDecimalIntWithDefault(conversations[firstConversationNodeId].xPos, 0) + i * 8
                 });
 
                 // fill the insides with text

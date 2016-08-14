@@ -147,7 +147,7 @@ var Main;
             if (topPos > e.pageY - mainPos.top + $("#main").scrollTop())
                 topPos -= Main.gridY;
 
-            $("#gridIndicator").css(
+            Utils.cssPosition($("#gridIndicator"),
             {
                 "top": topPos,
                 "left": leftPos
@@ -509,12 +509,12 @@ var Main;
 
         if (indicatorSnap)
         {
-            var position = $("#gridIndicator").css(["left", "top"]);
-            leftPos += Math.round(Utils.parseDecimalIntWithDefault(position.left) / Main.gridX);
-            topPos += Math.round(Utils.parseDecimalIntWithDefault(position.top) / Main.gridY);
+            var position = Utils.cssPosition($("#gridIndicator"));
+            leftPos += Math.round(position.left / Main.gridX);
+            topPos += Math.round(position.top / Main.gridY);
         }
 
-        dragDiv.css({
+        Utils.cssPosition(dragDiv, {
             "left": Main.gridX * leftPos,
             "top": Main.gridY * topPos
         });
@@ -753,11 +753,11 @@ var Main;
             // Reposition the new node
             var nodeDiv = $('#'+node.id);
             var parentDiv = $('#'+parent.id);
-            var left = Utils.parseDecimalIntWithDefault(parentDiv.css("left"), 0);
-            var top = Utils.parseDecimalIntWithDefault(parentDiv.css("top"), 0) + 55 + parentDiv.height();
-
-            // Actually move node
-            nodeDiv.css({"top": top, "left": left});
+            var parentPosition = Utils.cssPosition(parentDiv);
+            Utils.cssPosition(nodeDiv, {
+                "top": parentPosition.top + parentDiv.height() + 55,
+                "left": parentPosition.left
+            });
 
             Zoom.getZoomed().plumbInstance.revalidate(node.id, 0);
         }
@@ -868,9 +868,10 @@ var Main;
             txtArea.focus();
         });
 
-        var topOffset = parent.scrollTop();
-        var leftOffset = parent.scrollLeft();
-        node.css({"top": topOffset, "left": leftOffset});
+        Utils.cssPosition(node, {
+            "top": parent.scrollTop(),
+            "left": parent.scrollLeft()
+        });
 
         // initialise draggable elements.
         plumbInstance.draggable(node,
@@ -1339,20 +1340,17 @@ var Main;
         if (Zoom.isZoomed(id)) //when someone drags a node, the dragstop event is also captured by the tree conatiner. only an issue when zoomed in because it erases the coordinates to return to post zoom
             return;
 
-        var position = $("#gridIndicator").position();
-        var leftOffsetPos = position.left + $("#main").scrollLeft();
-        var topOffsetPos = position.top + $("#main").scrollTop();
-
-        var gridLeftPos = Math.round(leftOffsetPos / Main.gridX);
-        var gridTopPos = Math.round(topOffsetPos / Main.gridY);
+        var position = Utils.cssPosition($("#gridIndicator"));
+        var gridLeftPos = Math.round(position.left / Main.gridX);
+        var gridTopPos = Math.round(position.top / Main.gridY);
 
         //make sure no trees can be dragged on top of each other
         if(checkGridAvailable(gridLeftPos, gridTopPos))
         {
-            tree.dragDiv.css(
+            Utils.cssPosition(tree.dragDiv,
             {
-                "top": topOffsetPos,
-                "left": leftOffsetPos
+                "top": gridTopPos*Main.gridY,
+                "left": gridLeftPos*Main.gridX
             });
 
             tree.leftPos = gridLeftPos; //store position to return to this point when zoomed in and out again
@@ -1363,7 +1361,7 @@ var Main;
         }
         else
         {
-            tree.dragDiv.css(
+            Utils.cssPosition(tree.dragDiv,
             {
                 "top": tree.topPos*Main.gridY,
                 "left": tree.leftPos*Main.gridX

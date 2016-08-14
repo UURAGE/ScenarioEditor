@@ -13,7 +13,8 @@ var Utils;
         parseDecimalIntWithDefault: parseDecimalIntWithDefault,
         parseBool: parseBool,
         escapeHTML: escapeHTML,
-        unEscapeHTML: unEscapeHTML
+        unEscapeHTML: unEscapeHTML,
+        cssPosition: cssPosition
     };
 
     // Taken from stackoverflow
@@ -77,6 +78,31 @@ var Utils;
                 .replace(/&quot;/g, '"') // "
                 .replace(/&#39;/g, '\'') // '
                 .replace(/<br\/>/g, "\n"); // \n
+        }
+    }
+
+    // Gets or sets the "CSS position", which is defined as the combination of
+    // the "left" and "top" CSS properties of an element.
+    // The values in the argument/return value are expected to be/returned as
+    // plain Numbers representing pixels, not strings ending with a unit.
+    function cssPosition(elem, newPosition)
+    {
+        if (newPosition === undefined)
+        {
+            // "Computed styles of dimensions are almost always pixels"
+            // (http://api.jquery.com/css/). We assume this is the case.
+            var position = elem.css(['left', 'top']);
+            return {
+                'left': parseDecimalIntWithDefault(position.left, 0),
+                'top': parseDecimalIntWithDefault(position.top, 0)
+            };
+        }
+        else
+        {
+            return elem.css({
+               'left': newPosition.left + 'px',
+               'top': newPosition.top + 'px'
+            });
         }
     }
 })();

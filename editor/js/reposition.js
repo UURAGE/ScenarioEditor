@@ -497,10 +497,10 @@
                     continue;
                 }
                 // If it isn't a virtual node, set the position of the node to the current offset.
-                $('#' + currentNode.id).css(
+                Utils.cssPosition($('#' + currentNode.id),
                 {
-                    top: Math.floor(currentYOffset) + "px",
-                    left: Math.floor(currentXOffset) + "px"
+                    top: Math.floor(currentYOffset),
+                    left: Math.floor(currentXOffset)
                 });
                 // Find the width and height of the node.
                 currentNodeWidth = $('#' + currentNode.id).outerWidth();
