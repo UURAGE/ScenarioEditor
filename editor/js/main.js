@@ -1064,22 +1064,18 @@ var Main;
     // Select a node.
     function selectNode(nodeID)
     {
-        if(nodeID !== null)
-            Main.getPlumbInstanceByNodeID(nodeID).clearDragSelection();
-
         // Before we change the node, we first apply the changes that may have been made.
         if (Main.selectedElement !== null)
         {
             applyChanges();
-
-            if(Main.selectedElement in Main.nodes)
-                Main.getPlumbInstanceByNodeID(Main.selectedElement).clearDragSelection();
         }
 
         // Currently selected node(s) should now not be selected.
         $(".selected").removeClass("selected");
         $(".multiSelected").removeClass("multiSelected");
         Main.selectedElements = [];
+        var zoomedTree = Zoom.getZoomed();
+        if (zoomedTree) zoomedTree.plumbInstance.clearDragSelection();
         dehighlightParents();
 
         // Change the selected node.
