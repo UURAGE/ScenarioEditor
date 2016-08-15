@@ -170,12 +170,9 @@ var Main;
 
             DragBox.startDragging(e, text, function(pos)
             {
-                var position = $("#gridIndicator").position();
-                var leftOffsetPos = position.left + $("#main").scrollLeft();
-                var topOffsetPos = position.top + $("#main").scrollTop();
-
-                var gridLeftPos = Math.round(leftOffsetPos / Main.gridX);
-                var gridTopPos = Math.round(topOffsetPos / Main.gridY);
+                var position = Utils.cssPosition($("#gridIndicator"));
+                var gridLeftPos = Math.round(position.left / Main.gridX);
+                var gridTopPos = Math.round(position.top / Main.gridY);
 
                 //make sure no trees can be dragged on top of each other
                 if(checkGridAvailable(gridLeftPos, gridTopPos))
