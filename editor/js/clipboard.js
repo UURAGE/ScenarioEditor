@@ -191,25 +191,25 @@ var Clipboard;
         }
     }
 
-    function pasteNode(copiedNode)
+    function pasteNode(copiedNode, tree)
     {
+        if (!tree) tree = Zoom.getZoomed();
+        if (!tree) return;
+
         var node = Utils.clone(copiedNode); //no dom action just yet. this just copies the object in the nodes object
-        var newNode = Main.addNewNode(node.type); //to do dom manipulations and create the id. no data now present in nodes[newNode.id] is kept
+        var nodeElem = Main.createAndReturnNode(node.type, null, tree.div, tree.id); //to do dom manipulations and create the id
 
-        Main.selectElement(null);
-
-        node.id = newNode.id;
-        node.parent = newNode.parent;
+        node.id = nodeElem.attr('id');
+        node.parent = tree.id;
         delete node.position;
         delete node.connections;
 
-        Main.nodes[newNode.id] = node;
+        Main.nodes[node.id] = node;
 
         // set nodeposition relatively to the positions off the original node(s)
         var left = copiedNode.position.left + 50;
         var top = copiedNode.position.top + 50;
 
-        var nodeElem = $('#' + newNode.id);
         //Set position
         Utils.cssPosition(nodeElem,
         {
@@ -219,7 +219,7 @@ var Clipboard;
         //Save node text
         nodeElem.find("textarea.nodestatement").val(copiedNode.text);
 
-        Main.changeNodeText(newNode.id);
+        Main.changeNodeText(node.id);
 
         return node;
     }
@@ -239,16 +239,12 @@ var Clipboard;
         treeDiv.find(".subjectName").text(newTree.subject);
         treeDiv.find(".subjectNameInput").val(newTree.subject);
 
-        Main.selectElement(newTree.id); //tree needs to be selected when copied nodes are created
-
         $.each(toCopy.nodes, function(index, node)
         {
             if (!node) //due to deleting from arrays in js leaving values undefined
                 return true; //$.each version of continue
 
-            var newNode = pasteNode(node);
-
-            Main.selectElement(newTree.id); //after creation a new node is immediately selected. so we need to reselect the tree
+            var newNode = pasteNode(node, newTree);
 
             idMappings[node.id] = newNode.id; //needed to also copy over jsplumb connectors.
 
@@ -276,6 +272,8 @@ var Clipboard;
                 });
             });
         });
+
+        Main.selectElement(newTree.id);
 
         return newTree;
     }
