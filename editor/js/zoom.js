@@ -46,7 +46,7 @@ var Zoom;
             // Put it in the current top left corner of the parent
             Utils.cssPosition(tree.dragDiv, { "top": parent.scrollTop(), "left": parent.scrollLeft() });
             // Make it undraggable
-            jsPlumb.toggleDraggable(tree.dragDiv);
+            jsPlumb.setDraggable(tree.dragDiv, false);
             // Remove default disable-draggable-style
             tree.dragDiv.removeClass("ui-state-disabled");
 
@@ -91,7 +91,7 @@ var Zoom;
 
             tree.dragDiv.removeClass("zoom");
             Utils.cssPosition(tree.dragDiv, { "top": tree.topPos * Main.gridY, "left": tree.leftPos * Main.gridX });
-            jsPlumb.toggleDraggable(tree.dragDiv);
+            jsPlumb.setDraggable(tree.dragDiv, true);
             tree.div.selectable('disable');
 
             var zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');

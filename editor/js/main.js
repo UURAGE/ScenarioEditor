@@ -816,7 +816,7 @@ var Main;
                 changeNodeText(id);
             }
             //Enable dragging for this component
-            jsPlumb.setDraggable(thisNode, true);
+            plumbInstance.setDraggable(thisNode, true);
         });
 
         input.on('keydown', function(e)
@@ -853,7 +853,7 @@ var Main;
             nodeTextInput.show();
 
             // Disable dragging for this component
-            jsPlumb.setDraggable(thisNode, false);
+            plumbInstance.setDraggable(thisNode, false);
 
             // Make room for typing text in the node
             thisNode.height(h+35);
