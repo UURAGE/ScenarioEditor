@@ -185,7 +185,7 @@ var Load;
                 var leftPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('x')[0].textContent, 0));
                 var topPos  = Math.round(Utils.parseDecimalIntWithDefault($(position).children('y')[0].textContent, 0));
 
-                var tree = Main.createEmptyTree(treeID, false, leftPos, topPos);
+                var tree = Main.createEmptyTree(treeID, leftPos, topPos);
                 var plumbInstance = tree.plumbInstance;
 
                 tree.subject = $(this).children('subject')[0].textContent;

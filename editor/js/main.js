@@ -34,12 +34,12 @@ var Main;
         dehighlightParents: dehighlightParents,
         deleteAllSelected: deleteAllSelected,
         deselectConnection: deselectConnection,
+        getGridIndicatorPosition: getGridIndicatorPosition,
         getPlumbInstanceByNodeID: getPlumbInstanceByNodeID,
         getStartNodeIDs: getStartNodeIDs,
         highlightParents: highlightParents,
         makeConnection: makeConnection,
         placeNewNode: placeNewNode,
-        placeNewTree: placeNewTree,
         selectElements: selectElements,
         selectElement: selectElement,
         selectNode: selectNode,
@@ -148,7 +148,7 @@ var Main;
         $('#main').on('dblclick', function()
         {
             if(!Zoom.isZoomed())
-                addNewTree(null, true, 0, 0);//first argument of false generates a new id
+                addNewTree();
         });
         $('#newTree').on('mousedown', function(e)
         {
@@ -161,23 +161,8 @@ var Main;
 
             DragBox.startDragging(e, text, function(pos)
             {
-                var position = Utils.cssPosition($("#gridIndicator"));
-                var gridLeftPos = Math.round(position.left / Main.gridX);
-                var gridTopPos = Math.round(position.top / Main.gridY);
-
-                //make sure no trees can be dragged on top of each other
-                if(checkGridAvailable(gridLeftPos, gridTopPos))
-                {
-
-                    addNewTree(null, true, 0, 0);
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return addNewTree();
             });
-
         });
         $('#newComputerNode').on("mousedown", function(e)
         {
@@ -371,7 +356,7 @@ var Main;
         }
     });
 
-    function createEmptyTree(id, indicatorSnap, offsetX, offsetY)
+    function createEmptyTree(id, leftPos, topPos)
     {
         if (!id)
         {
@@ -492,16 +477,6 @@ var Main;
 
         $("#main").append(dragDiv);
 
-        var leftPos = offsetX;
-        var topPos = offsetY;
-
-        if (indicatorSnap)
-        {
-            var position = Utils.cssPosition($("#gridIndicator"));
-            leftPos += Math.round(position.left / Main.gridX);
-            topPos += Math.round(position.top / Main.gridY);
-        }
-
         Utils.cssPosition(dragDiv, {
             "left": Main.gridX * leftPos,
             "top": Main.gridY * topPos
@@ -549,35 +524,18 @@ var Main;
         return Main.trees[id];
     }
 
-    function addNewTree(id, indicatorSnap, offsetX, offsetY)
+    function addNewTree()
     {
         Zoom.zoomOut();
 
-        //creates empty tree and selects it
-        var tree = createEmptyTree(id, indicatorSnap, offsetX, offsetY);
-        selectTree(tree.id);
+        var indicatorPos = getGridIndicatorPosition();
+        if (!checkGridAvailable(indicatorPos.left, indicatorPos.top)) return null;
 
-        // Triggers the input for a subject name
-        var selectAllInput = true;
-        triggerSubjectNameInput(tree.id, selectAllInput);
+        var tree = createEmptyTree(null, indicatorPos.left, indicatorPos.top);
+        selectTree(tree.id);
+        triggerSubjectNameInput(tree.id, true);
 
         return tree;
-    }
-
-    // Creates a new subject and ensures it does not spawn on top of an existing one
-    function placeNewTree()
-    {
-        var maxY = -1;
-        $.each(Main.trees,function(k,t)
-        {
-            if(maxY < t.topPos)
-                maxY = t.topPos;
-        });
-        var newT = addNewTree(null, false, 0, 0);
-        newT.topPos = maxY+1;
-        newT.level = Math.round(newT.topPos);
-        newT.dragDiv.css({"top":newT.topPos*Main.gridY});
-        return newT;
     }
 
     // Add a new node with the given type.
@@ -1363,6 +1321,15 @@ var Main;
         });
 
         return available;
+    }
+
+    function getGridIndicatorPosition()
+    {
+        var position = Utils.cssPosition($("#gridIndicator"));
+        return {
+            "left": Math.round(position.left / Main.gridX),
+            "top": Math.round(position.top / Main.gridY)
+        };
     }
 
     // Transforms a free position to a grid position

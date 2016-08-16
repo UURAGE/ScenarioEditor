@@ -13,7 +13,7 @@ var Load1;
 
     function generateGraph(xml)
     {
-        var tree = Main.createEmptyTree(null, false, 0, 0);
+        var tree = Main.createEmptyTree(null, 0, 0);
         var connections = {};
         // Conversations stores all the accumulated conversations so we can expand them and give the nodes fresh ids at the end
         var conversations = {};

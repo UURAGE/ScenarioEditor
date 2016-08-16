@@ -114,11 +114,13 @@ var Clipboard;
 
     function pasteElement()
     {
+        var indicatorPos = Main.getGridIndicatorPosition();
         if (copiedElement !== null && copiedElement !== undefined)
         {
             if (copiedTrees && !Zoom.isZoomed())
             {
-                pasteTree(copiedElement, 0, 0);
+                var newTree = pasteTree(copiedElement, indicatorPos.left, indicatorPos.top);
+                Main.selectElement(newTree.id);
             }
             else if (Zoom.isZoomed() && !copiedTrees)
             {
@@ -143,7 +145,9 @@ var Clipboard;
                 // Paste trees relative to top left of smallest bounding box
                 var pastedTreeIds = $.map(copiedElements, function(tree, index)
                 {
-                    return pasteTree(tree, tree.leftPos - minX, tree.topPos - minY).id;
+                    var leftPos = tree.leftPos - minX + indicatorPos.left;
+                    var topPos = tree.topPos - minY + indicatorPos.top;
+                    return pasteTree(tree, leftPos, topPos).id;
                 });
 
                 Main.selectElements(pastedTreeIds);
@@ -224,13 +228,13 @@ var Clipboard;
         return node;
     }
 
-    function pasteTree(toCopy, offSetX, offSetY)
+    function pasteTree(toCopy, leftPos, topPos)
     {
         var idMappings = {}; //record wich original node id was copied to which id
         //idmappings[originalID] = copyID
         //all other information like dom elements and position should not be copied
 
-        var newTree = Main.createEmptyTree(null, true, offSetX, offSetY);
+        var newTree = Main.createEmptyTree(null, leftPos, topPos);
 
         newTree.subject = LanguageManager.fLang("edt_clipboard_copy_of", [toCopy.subject]);
         newTree.optional = toCopy.optional;
@@ -272,8 +276,6 @@ var Clipboard;
                 });
             });
         });
-
-        Main.selectElement(newTree.id);
 
         return newTree;
     }
