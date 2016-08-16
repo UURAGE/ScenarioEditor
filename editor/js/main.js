@@ -137,20 +137,11 @@ var Main;
         $('#main').on('mousemove', function(e)
         {
             var mainPos = $("#main").offset();
-            var leftPos = gridPos(e.pageX - mainPos.left + $("#main").scrollLeft(), Main.gridX);
-            var topPos  = gridPos(e.pageY - mainPos.top  + $("#main").scrollTop(), Main.gridY);
-
-            //the grid positions refer to the upper left corners of the cells, the grid indicator
-            //should not snap to the closest upper left corner but to the cell the mouse is currently on
-            if (leftPos > e.pageX - mainPos.left + $("#main").scrollLeft())
-                leftPos -= Main.gridX;
-            if (topPos > e.pageY - mainPos.top + $("#main").scrollTop())
-                topPos -= Main.gridY;
 
             Utils.cssPosition($("#gridIndicator"),
             {
-                "top": topPos,
-                "left": leftPos
+                "top":  gridPos(e.pageY - mainPos.top  + $("#main").scrollTop(),  Main.gridY),
+                "left": gridPos(e.pageX - mainPos.left + $("#main").scrollLeft(), Main.gridX)
             });
         });
 
@@ -1374,21 +1365,13 @@ var Main;
         return available;
     }
 
-    //transforms a free position, for example x=43 and grid size=15, to a grid position x=45 (round to nearest multiple of gridsize)
+    // Transforms a free position to a grid position
+    // (finds the greatest multiple of gridSize less than freePos)
     function gridPos(freePos, gridSize)
     {
-        var quotient = Math.floor(freePos / gridSize);
-
-        var remainder = freePos / gridSize - quotient; //leaves decimal part
-
-        if (remainder >= 0.5)
-        {
-            return gridSize * (quotient + 1);
-        }
-        else
-        {
-            return gridSize * quotient;
-        }
+        // The grid positions refer to the upper left corners of the cells, we want to find
+        // not the closest upper left corner but the cell that contains the position
+        return Math.floor(freePos / gridSize) * gridSize;
     }
 
     function selectTree(id)
