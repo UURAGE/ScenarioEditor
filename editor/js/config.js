@@ -178,7 +178,7 @@ var Config;
     {
         var properties = loadCollectionOrDefault($(nodeXML).children('properties'), 'property', defaultPropertyCollection, defaultPropertyScopes);
         var parameters = loadCollectionOrDefault($(nodeXML).children('parameters'), 'parameter', defaultParameterCollection, defaultParameterScopes);
-        return { id: nodeXML.getAttribute('id'), properties: properties, parameters: parameters};
+        return { id: nodeXML.getAttribute('id'), name: nodeXML.getAttribute('name'), properties: properties, parameters: parameters};
     }
 
     function loadCollectionOrDefault(collectionXML, nodeName, defaultCollection, defaultScopes)

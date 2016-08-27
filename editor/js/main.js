@@ -66,9 +66,7 @@ var Main;
             var characterSelection = $("#characterSelection");
             Config.configObject.characters.sequence.forEach(function (character)
             {
-                var option = $("<option>");
-                option.text(character.id);
-                characterSelection.append(option);
+                characterSelection.append($("<option>", { value: character.id, text: character.name ? character.name : character.id }));
             });
         }
         else
@@ -1389,7 +1387,9 @@ var Main;
                 // with characterId prefix when there are multiple characters
                 if (Config.configObject.characters.sequence.length > 1)
                 {
-                    text += "<b>" + node.characterIdRef + ": </b>";
+                    var character = Config.configObject.characters.byId[node.characterIdRef];
+                    var characterPrefix = character.name ? Utils.escapeHTML(character.name) : character.id;
+                    text += "<b>" + characterPrefix + ": </b>";
                 }
                 text += Utils.escapeHTML(node.text);
                 break;
@@ -1703,7 +1703,7 @@ var Main;
             var idRefToCharacterEffectsContainer = {};
             Config.configObject.characters.sequence.forEach(function(character)
             {
-                var characterHeader = $('<h' + hStartLevel +'>', { text: character.id });
+                var characterHeader = $('<h' + hStartLevel +'>', { value: character.id, text: character.name ? character.name : character.id });
                 var characterDiv = $('<div>');
                 accordionDiv.append(characterHeader).append(characterDiv);
 
@@ -1850,7 +1850,7 @@ var Main;
             nodeCharacterPropertyValuesEl.append(characterAccordion);
             Config.configObject.characters.sequence.forEach(function(character)
             {
-                var characterHeader = $('<h' + hStartLevel +'>', { text: character.id });
+                var characterHeader = $('<h' + hStartLevel +'>', { value: character.id, text: character.name ? character.name : character.id });
                 var characterTab = $('<table>');
                 characterAccordion.append(characterHeader).append($('<div>').append(characterTab));
 

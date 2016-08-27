@@ -95,6 +95,7 @@ var Save;
         {
             var characterEl = addAndReturnElement("character", nameSpace, charactersEl);
             characterEl.setAttribute("id", character.id);
+            if (character.name) characterEl.setAttribute("name", character.name);
         });
 
         var addDefinitionElement = function(definition, elementName, nameSpace, definitionsEl)

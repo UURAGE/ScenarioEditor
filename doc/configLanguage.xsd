@@ -130,6 +130,7 @@
 				<element name="parameters" type="tns:parameterType" minOccurs="0" maxOccurs="1"/>
 			</sequence>
 			<attribute name="id" type="string" use="required" />
+			<attribute name="name" type="string" use="optional" />
 		</complexType>
 	</element>
 	<complexType name="propertiesType">

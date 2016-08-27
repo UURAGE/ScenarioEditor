@@ -393,7 +393,7 @@ var HtmlGenerator;
         var testContainer = addedDiv.find(".precondition-test-container");
         var changeTestType = function(parameterIdRef)
         {
-            var parameter, characterId, characterIdRefSelect;
+            var parameter, characterIdRefSelect;
             if (parameterIdRef in Metadata.metaObject.parameters.byId)
             {
                 parameter = Metadata.metaObject.parameters.byId[parameterIdRef];
@@ -407,28 +407,28 @@ var HtmlGenerator;
                 parameter = Config.configObject.characters.parameters.byId[parameterIdRef];
 
                 characterIdRefSelect = $('<select>', { class: "character-idref-select" });
-                for (characterId in Config.configObject.characters.byId)
+                Config.configObject.characters.sequence.forEach(function(character)
                 {
-                    characterIdRefSelect.append($('<option>', { text: characterId }));
-                }
+                    characterIdRefSelect.append($('<option>', { value: character.id, text: character.name ? character.name : character.id }));
+                });
                 testContainer.append(characterIdRefSelect);
             }
             else
             {
                 // TODO: merge parameter selection with different id and same display name and type for two different characters
-                for (characterId in Config.configObject.characters.byId)
+                Config.configObject.characters.sequence.forEach(function(character)
                 {
-                    if (parameterIdRef in Config.configObject.characters.byId[characterId].parameters.byId)
+                    if (parameterIdRef in Config.configObject.characters.byId[character.id].parameters.byId)
                     {
-                        parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterIdRef];
+                        parameter = Config.configObject.characters.byId[character.id].parameters.byId[parameterIdRef];
 
                         characterIdRefSelect = $('<select>', { class: "character-idref-select" });
-                        characterIdRefSelect.append($('<option>', { text: characterId }));
+                        characterIdRefSelect.append($('<option>', { value: character.id, text: character.name ? character.name : character.id }));
                         testContainer.append(characterIdRefSelect);
 
-                        break;
+                        return;
                     }
-                }
+                });
             }
 
             var operatorSelect = $('<select>', { class: "precondition-operator-select" });

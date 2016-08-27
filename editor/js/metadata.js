@@ -118,7 +118,7 @@ var Metadata;
             var characterTabId = characterPropertyValuesEl.attr('id') + '-' + character.id;
 
             // Make a character tab with a link to the div it contains
-            var li = $('<li>').append($('<a>', { href:'#' + characterTabId, text: character.id }));
+            var li = $('<li>').append($('<a>', { href:'#' + characterTabId, value: character.id, text: character.name ? character.name : character.id }));
             characterTabList.append(li);
 
             var characterTab = $('<table>', { id: characterTabId });
