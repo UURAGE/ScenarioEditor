@@ -443,11 +443,11 @@ var Load3;
                 singleConnections[previousConversationNodeId] = id;
 
                 var characterIdRef;
-                var acceptableScopes = ['per', 'per-' + type];
-                if (type === Main.computerType)
+                var acceptableScopes = ['per', 'per-' + textNode.type];
+                if (textNode.type === Main.computerType)
                 {
                     characterIdRef = Config.configObject.characters.sequence[0].id;
-                    acceptableScopes.push('per-' + type + '-own');
+                    acceptableScopes.push('per-' + textNode.type + '-own');
                 }
 
                 Main.nodes[id] = {
