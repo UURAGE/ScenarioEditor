@@ -123,6 +123,7 @@ var Load;
         // Load version 1
         else
         {
+            Load3.loadMetadata($(scenarioXML).children('metadata').eq(0));
             jsPlumb.batch(function()
             {
                 Load1.generateGraph(xml);
