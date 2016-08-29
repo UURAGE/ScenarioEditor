@@ -1935,7 +1935,7 @@ var Main;
                     // Add the previously defined per-computer-own fixed parameter effects
                     for (parameterIdRef in node.parameterEffects.fixed.perCharacter[node.characterIdRef])
                     {
-                        if (parameterIdRef in idRefToCharacterEffectsContainer[node.characterIdRef])
+                        if (acceptableScopes.indexOf(characterParameterDefinitions[parameterIdRef].scopes.statementScope) !== -1)
                         {
                             node.parameterEffects.fixed.perCharacter[node.characterIdRef][parameterIdRef].forEach(function(effect)
                             {
