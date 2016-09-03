@@ -97,7 +97,7 @@ The author of the scenario can choose a name for the character in the editor if 
     ...
   </settings>
   <properties>
-    <property id="characterName" name="Character name">
+    <property id="characterAge" name="Character age">
       <description xml:space="preserve">A description that preserves 
       space</description>
       <type>
@@ -163,8 +163,8 @@ In the `characters` element you can specify all your characters or you can speci
   <!-- Multiple characters -->
   <characters>
   </characters>
-  <!-- Or                  -->
-  <!-- Single character    -->
+  <!-- or                  -->
+  <!-- a single character    -->
   <character>
   </character>
 </config>
@@ -298,8 +298,7 @@ The following sections will explain each scope and give some examples of possibl
 
 ### Independent
 
-The name of the character is a typical example of a property with statement-independent scope: it is not set to a value each statement, 
-just once for the entire scenario.
+The age of the character is a typical example of a property with statement-independent scope: it is not set to a value at each statement or at some statements, just once for the entire scenario.
 By default the statement scope of a property is `independent`.
 
 ```
@@ -308,9 +307,9 @@ By default the statement scope of a property is `independent`.
     ...
   </settings>
   <properties>
-    <property id="characterName" name="Character name" statementScope="independent">
+    <property id="characterAge" name="Character age" statementScope="independent">
       <type>
-        <string/>
+        <integer/>
       </type>
     </property>
   </properties>
@@ -325,8 +324,8 @@ By default the statement scope of a property is `independent`.
 
 ### Per
 
-If a property or parameter has the per-statement scope, its value can be specified per statement for each statement type.
-This is the default scope for parameters, parameters can't have the `independent` scope.
+If a property or parameter has the statement scope `per`, its value can be specified per statement for each statement type.
+This is the default scope for parameters, parameters can't have the `independent` statement scope.
 
 ### Per-player, per-computer and per-situation
 
@@ -339,9 +338,9 @@ The intent of the player is a good example of a per-player-statement property.
     ...
   </settings>
   <properties>
-    <property id="characterName" name="Character name" statementScope="independent">
+    <property id="characterAge" name="Character age" statementScope="independent">
       <type>
-        <string/>
+        <integer/>
       </type>
     </property>
     <property id="playerIntent" name="Intent" statementScope="per-player">
@@ -403,9 +402,9 @@ Both parameters and properties can be contained in a `group` element.
   </settings>
   <properties>
     <propertyGroup statementScope="independent">
-      <property id="characterName" name="Character name">
+      <property id="characterAge" name="Character age">
         <type>
-          <string/>
+          <integer/>
         </type>
       </property>
       <property id="playerIntent" name="Intent" statementScope="per-player">
@@ -424,7 +423,7 @@ Both parameters and properties can be contained in a `group` element.
 </config>
 ```
 
-The statement scope specified for the group, will be inherited by its child elements, so the `characterName` will get statement scope `independent` and the `playerIntent` will get statement scope `per-player`, because it overrides the group statement scope. 
+The statement scope specified for the group, will be inherited by its child elements, so the `characterAge` will get statement scope `independent` and the `playerIntent` will get statement scope `per-player`, because it overrides the group statement scope. 
 
 ## Sections
 
@@ -438,9 +437,9 @@ Properties and parameters can be put into sections in the editor UI, the `sectio
   <properties>
     <propertySection name="Property section">
       <propertyGroup statementScope="independent">
-        <property id="characterName" name="Character name">
+        <property id="characterAge" name="Character age">
           <type>
-            <string/>
+            <integer/>
           </type>
         </property>
         <property id="playerIntent" name="Intent" statementScope="per-player">
