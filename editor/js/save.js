@@ -12,7 +12,7 @@ var Save;
     };
 
     var xmlNameSpace = "http://www.w3.org/XML/1998/namespace";
-    var schemaVersion = "4.0.0";
+    var schemaVersion = "4.1.0";
 
     $(document).ready(function()
     {
