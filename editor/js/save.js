@@ -188,7 +188,6 @@ var Save;
 
         // Save fixed parameter initial values
         var fixedEl = addAndReturnElement("fixed", nameSpace, initialParameterValuesEl);
-        var characterId;
         for (parameterId in Config.configObject.parameters.byId)
         {
             parameter = Config.configObject.parameters.byId[parameterId];
@@ -196,16 +195,17 @@ var Save;
             parameterValueEl.setAttribute("idref", parameterId);
             parameter.type.toXML(parameterValueEl, parameter.type.defaultValue);
         }
-        for (parameterId in Config.configObject.characters.parameters.byId)
+        for (var characterId in Config.configObject.characters.byId)
         {
-            parameter = Config.configObject.characters.parameters.byId[parameterId];
-            parameterValueEl = addAndReturnElement("characterParameterValue", nameSpace, fixedEl);
-            parameterValueEl.setAttribute("idref", parameterId);
-            parameterValueEl.setAttribute("characteridref", characterId);
-            parameter.type.toXML(parameterValueEl, parameter.type.defaultValue);
-        }
-        for (characterId in Config.configObject.characters.byId)
-        {
+            for (parameterId in Config.configObject.characters.parameters.byId)
+            {
+                parameter = Config.configObject.characters.parameters.byId[parameterId];
+                parameterValueEl = addAndReturnElement("characterParameterValue", nameSpace, fixedEl);
+                parameterValueEl.setAttribute("idref", parameterId);
+                parameterValueEl.setAttribute("characteridref", characterId);
+                parameter.type.toXML(parameterValueEl, parameter.type.defaultValue);
+            }
+
             for (parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
             {
                 parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterId];
