@@ -500,7 +500,7 @@ var KeyControl;
 
         $.each(Main.trees, function(id, tree)
         {
-            if(id in Main.selectedElements)
+            if(Main.selectedElements.indexOf(id) !== -1)
                 return;
 
             available = available && !(tree.leftPos === gridX && tree.topPos === gridY);
