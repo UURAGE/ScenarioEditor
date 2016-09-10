@@ -259,7 +259,7 @@ var Save;
         addAndReturnElement('y', nameSpace, positionElement).textContent = tree.topPos;
 
         var startsElement = addAndReturnElement('starts', nameSpace, treeElement);
-        Main.getStartNodeIDs(tree).forEach(function(startNodeID)
+        sortNodeIDs(Main.getStartNodeIDs(tree)).forEach(function(startNodeID)
         {
             addAndReturnElement("start", nameSpace, startsElement).setAttribute("idref", startNodeID.replace(/^ext_/, '').replace(/_/g, '.'));
         });
@@ -316,20 +316,45 @@ var Save;
             // Save the property values
             generatePropertyValuesXML(statementEl, node.propertyValues, nameSpace);
 
-            var connectionElName = 'response';
-
             // Get the outgoing connections of the node
             var connections = tree.plumbInstance.getConnections(
             {
                 source: node.id
             });
 
-            // Save the connections
-            var connectionsEl = addAndReturnElement(connectionElName + "s", nameSpace,statementEl);
-            for (var l = 0; l < connections.length; l++)
+            var targetNodeIDs = connections.map(function(connection) { return connection.targetId; });
+            sortNodeIDs(targetNodeIDs);
+
+            // Save the responses
+            var responseElName = 'response';
+            var responsesEl = addAndReturnElement(responseElName + "s", nameSpace, statementEl);
+            targetNodeIDs.forEach(function(targetNodeID)
             {
-                var connectionEl = addAndReturnElement(connectionElName, nameSpace,connectionsEl);
-                connectionEl.setAttribute('idref', connections[l].targetId.replace(/^ext_/, '').replace(/_/g, '.'));
+                var responseEl = addAndReturnElement(responseElName, nameSpace, responsesEl);
+                responseEl.setAttribute('idref', targetNodeID.replace(/^ext_/, '').replace(/_/g, '.'));
+            });
+        });
+    }
+
+    // Sorts nodes on the axis with the largest span and based on the position on that axis
+    function sortNodeIDs(nodeIDs)
+    {
+        // Calculate the spans between the nodes on the X and Y axes
+        var xPositions = nodeIDs.map(function(nodeID) { return Utils.cssPosition($("#" + nodeID)).left; });
+        var yPositions = nodeIDs.map(function(nodeID) { return Utils.cssPosition($("#" + nodeID)).top;  });
+        var spanX = Math.max.apply(null, xPositions) - Math.min.apply(null, xPositions);
+        var spanY = Math.max.apply(null, yPositions) - Math.min.apply(null, yPositions);
+
+        // Sort the nodeIDs based on the largest span between the nodes
+        return nodeIDs.sort(function(a, b)
+        {
+            if (spanX > spanY)
+            {
+                return Utils.cssPosition($("#" + a)).left - Utils.cssPosition($("#" + b)).left;
+            }
+            else
+            {
+                return Utils.cssPosition($("#" + a)).top - Utils.cssPosition($("#" + b)).top;
             }
         });
     }
