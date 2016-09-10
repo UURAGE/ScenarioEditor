@@ -218,7 +218,6 @@ var Save;
     }
 
     // Offers the XML of the current scenario for download
-    // Adapted from work by Eric Bidelman (ericbidelman@chromium.org)
     function exportScenario()
     {
         // Warn user before exporting an invalid scenario
@@ -241,39 +240,9 @@ var Save;
 
         Main.applyChanges();
 
-        window.URL = window.webkitURL || window.URL;
-
-        var MIME_TYPE = 'text/xml';
-        var prevLink = $('#impExp a');
-
-        if (prevLink)
-        {
-            window.URL.revokeObjectURL(prevLink.href);
-            prevLink.remove();
-        }
-
         var xml = generateXML();
-        var bb = new Blob([xml],
-        {
-            type: MIME_TYPE
-        });
-
-        var a = document.createElement('a');
-        a.download = Metadata.metaObject.name + ".xml";
-        a.href = window.URL.createObjectURL(bb);
-        a.textContent = LanguageManager.sLang("edt_save_download_available");
-
-        a.dataset.downloadurl = [MIME_TYPE, a.download, a.href].join(':');
-        a.draggable = true; // Don't really need, but good practice
-        a.classList.add('dragout');
-
-        $('#impExp').append(a);
-
-        document.body.appendChild(a);
-
-        a.click();
-
-        document.body.removeChild(a);
+        var blob = new Blob([xml], { type: 'text/xml' });
+        saveAs(blob, Metadata.metaObject.name + '.xml');
     }
 
     function generateTreeXML(parentElement, tree, nameSpace)
@@ -453,7 +422,7 @@ var Save;
         var elToAdd = document.createElementNS(nameSpace, elNameToAdd);
         if (preserveSpaces)
         {
-            elToAdd.setAttributeNS(xmlNameSpace, "space", "preserve");
+            elToAdd.setAttributeNS(xmlNameSpace, "xml:space", "preserve");
         }
         xmlElement.appendChild(elToAdd);
         return elToAdd;

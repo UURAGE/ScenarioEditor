@@ -55,6 +55,7 @@
       "js/lib/jquery-ui-selectable-patched.js",
       "js/lib/jsPlumb-2.0.7.js",
       "js/lib/colResizable-1.3.min.js",
+      "js/lib/FileSaver.min.js",
       "js/utils.js",
       "js/config.js",
       "js/parameterValues.js",
