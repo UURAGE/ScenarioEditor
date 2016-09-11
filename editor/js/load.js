@@ -504,17 +504,35 @@ var Load;
                 {
                     if (propertyId in Config.configObject.characters.properties.byId)
                     {
-                        propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.properties.byId[propertyId].type.fromXML(this);
+                        var property = Config.configObject.characters.properties.byId[propertyId];
+                        propertyValues.perCharacter[characterId][propertyId] = property.type.fromXML(this);
+                        if (property.type.autoComplete)
+                        {
+                            if (!property.autoCompleteList) property.autoCompleteList = [];
+                            property.autoCompleteList.push(propertyValues.perCharacter[characterId][propertyId]);
+                        }
                     }
                     else if (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
                     {
-                        propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.byId[characterId].properties.byId[propertyId].type.fromXML(this);
+                        var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
+                        propertyValues.perCharacter[characterId][propertyId] = property.type.fromXML(this);
+                        if (property.type.autoComplete)
+                        {
+                            if (!property.autoCompleteList) property.autoCompleteList = [];
+                            property.autoCompleteList.push(propertyValues.perCharacter[characterId][propertyId]);
+                        }
                     }
                 }
             }
             else if (propertyId in Config.configObject.properties.byId)
             {
-                propertyValues.characterIndependent[propertyId] = Config.configObject.properties.byId[propertyId].type.fromXML(this);
+                var property = Config.configObject.properties.byId[propertyId];
+                propertyValues.characterIndependent[propertyId] = property.type.fromXML(this);
+                if (property.type.autoComplete)
+                {
+                    if (!property.autoCompleteList) property.autoCompleteList = [];
+                    property.autoCompleteList.push(propertyValues.characterIndependent[propertyId]);
+                }
             }
         });
         return propertyValues;

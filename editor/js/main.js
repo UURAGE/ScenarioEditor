@@ -1186,8 +1186,7 @@ var Main;
             if (property.scopes.statementScope === 'per-computer-own' && (!characterId || characterId !== nodeCharacterIdRef)) return;
             propertyValues[propertyId] = property.type.getFromDOM($('#' + idPrefix + "-container-" + property.id));
 
-            if (property.type.name === "string" && property.type.autoComplete &&
-                property.autoCompleteList.indexOf(propertyValues[property.id]) === -1)
+            if (property.type.autoComplete && property.autoCompleteList.indexOf(propertyValues[property.id]) === -1)
             {
                 property.autoCompleteList.push(propertyValues[property.id]);
             }
@@ -1835,7 +1834,7 @@ var Main;
                     propertyItem.type.appendControlTo(propertyData, controlHtmlId);
                     propertyItem.type.setInDOM(propertyData, propertyValues[propertyItem.id]);
 
-                    if (propertyItem.type.name === "string" && propertyItem.type.autoComplete)
+                    if (propertyItem.type.autoComplete)
                     {
                         if (!propertyItem.autoCompleteList) propertyItem.autoCompleteList = [];
                         propertyData.children("input").autocomplete({ autoFocus: true, source: propertyItem.autoCompleteList });
