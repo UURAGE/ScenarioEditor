@@ -344,18 +344,12 @@ var Save;
         var yPositions = nodeIDs.map(function(nodeID) { return Utils.cssPosition($("#" + nodeID)).top;  });
         var spanX = Math.max.apply(null, xPositions) - Math.min.apply(null, xPositions);
         var spanY = Math.max.apply(null, yPositions) - Math.min.apply(null, yPositions);
+        var sortProperty = spanX > spanY ? 'left' : 'top';
 
         // Sort the nodeIDs based on the largest span between the nodes
         return nodeIDs.sort(function(a, b)
         {
-            if (spanX > spanY)
-            {
-                return Utils.cssPosition($("#" + a)).left - Utils.cssPosition($("#" + b)).left;
-            }
-            else
-            {
-                return Utils.cssPosition($("#" + a)).top - Utils.cssPosition($("#" + b)).top;
-            }
+            return Utils.cssPosition($("#" + a))[sortProperty] - Utils.cssPosition($("#" + b))[sortProperty];
         });
     }
 
