@@ -1179,21 +1179,31 @@ var Main;
         // Save property values.
         var acceptableScopes = ['per', 'per-' + node.type];
         if (node.type === Main.computerType) acceptableScopes.push('per-computer-own');
+
+        var getPropertyFromDOMAndSetInNode = function(property, propertyValues, idPrefix, nodeCharacterIdRef, characterId)
+        {
+            if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) return;
+            if (property.scopes.statementScope === 'per-computer-own' && (!characterId || characterId !== nodeCharacterIdRef)) return;
+            propertyValues[propertyId] = property.type.getFromDOM($('#' + idPrefix + "-container-" + property.id));
+
+            if (property.type.name === "string" && property.type.autoComplete &&
+                property.autoCompleteList.indexOf(propertyValues[property.id]) === -1)
+            {
+                property.autoCompleteList.push(propertyValues[property.id]);
+            }
+        };
+
         var propertyId, property;
         for (propertyId in Config.configObject.properties.byId)
         {
-            property = Config.configObject.properties.byId[propertyId];
-            if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
-            node.propertyValues.characterIndependent[propertyId] = property.type.getFromDOM($("#node-property-values-container-" + property.id));
+            getPropertyFromDOMAndSetInNode(Config.configObject.properties.byId[propertyId], node.propertyValues.characterIndependent, "node-property-values");
         }
         for (propertyId in Config.configObject.characters.properties.byId)
         {
             for (characterId in Config.configObject.characters.byId)
             {
                 property = Config.configObject.characters.properties.byId[propertyId];
-                if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
-                if (property.scopes.statementScope === 'per-computer-own' && characterId !== node.characterIdRef) continue;
-                node.propertyValues.perCharacter[characterId][propertyId] = property.type.getFromDOM($("#node-character-property-values-" + characterId + "-container-" + property.id));
+                getPropertyFromDOMAndSetInNode(property, node.propertyValues.perCharacter[characterId], "node-character-property-values-" + characterId, node.characterIdRef, characterId);
             }
         }
         for (characterId in Config.configObject.characters.byId)
@@ -1201,9 +1211,7 @@ var Main;
             for (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
             {
                 property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
-                if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) continue;
-                if (property.scopes.statementScope === 'per-computer-own' && characterId !== node.characterIdRef) continue;
-                node.propertyValues.perCharacter[characterId][propertyId] = property.type.getFromDOM($("#node-character-property-values-" + characterId + "-container-" + property.id));
+                getPropertyFromDOMAndSetInNode(property, node.propertyValues.perCharacter[characterId], "node-character-property-values-" + characterId, node.characterIdRef, characterId);
             }
         }
 
@@ -1826,6 +1834,12 @@ var Main;
                     var propertyData = $('<td>', { id: idPrefix + '-container-' + propertyItem.id });
                     propertyItem.type.appendControlTo(propertyData, controlHtmlId);
                     propertyItem.type.setInDOM(propertyData, propertyValues[propertyItem.id]);
+
+                    if (propertyItem.type.name === "string" && propertyItem.type.autoComplete)
+                    {
+                        if (!propertyItem.autoCompleteList) propertyItem.autoCompleteList = [];
+                        propertyData.children("input").autocomplete({ autoFocus: true, source: propertyItem.autoCompleteList });
+                    }
 
                     propertyRow.append(propertyData);
 

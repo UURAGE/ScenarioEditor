@@ -899,6 +899,14 @@ button img
   height: 10px;
 }
 
+.ui-autocomplete
+{
+  max-height: 135px;
+  overflow-y: auto;
+  /* prevent horizontal scrollbar */
+  overflow-x: hidden;
+}
+
 #content > #draftScreen
 {
   position: absolute;

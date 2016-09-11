@@ -290,6 +290,12 @@ var Config;
                     type = $.extend({}, type, { maxLength: Utils.parseDecimalIntWithDefault(maxLengthAttr) });
                 }
 
+                var autoComplete = Utils.parseBool(typeXML.attr('autoComplete'));
+                if (autoComplete)
+                {
+                    type = $.extend({}, type, { autoComplete: autoComplete });
+                }
+
                 var defaultEl = typeXML.children('default');
                 if (defaultEl.length > 0)
                 {

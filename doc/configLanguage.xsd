@@ -212,7 +212,8 @@
 			<sequence>
 				<element name="default" type="string" minOccurs="0" maxOccurs="1"/>
 			</sequence>
-			<attribute name="maxLength" type="int"></attribute>
+			<attribute name="maxLength" type="int" use="optional"></attribute>
+			<attribute name="autoComplete" type="boolean" use="optional"></attribute>
 		</complexType>
 	</element>
 	<attributeGroup name="propertyScopes">
