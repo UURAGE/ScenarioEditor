@@ -26,12 +26,12 @@
             tree.plumbInstance.batch(function()
             {
                 repositionNodes(optimizedOrder);
-            }, false);
+            }, true);
 
-            // Redraw zoomed tree to reflect all the changes.
-            // Note: this is *in addition to* setting doNotRepaintAfterwards to false in batch,
-            // because of a jsPlumb-related issue.
-            tree.plumbInstance.repaintEverything();
+            tree.nodes.forEach(function(nodeID)
+            {
+                tree.plumbInstance.revalidate(nodeID);
+            });
         });
     });
 
