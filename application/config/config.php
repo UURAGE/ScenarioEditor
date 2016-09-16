@@ -269,7 +269,7 @@ $config['cache_path'] = '';
 |
 */
 $config['sess_driver'] = 'files';
-$config['sess_cookie_name'] = 'scenario_editor_ci_session';
+$config['sess_cookie_name'] = 'sess_uurage_scenario_editor';
 $config['sess_expiration'] = 7200;
 $config['sess_save_path'] = NULL;
 $config['sess_match_ip'] = FALSE;
