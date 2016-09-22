@@ -3,6 +3,7 @@
     "devel": true,
     "jquery": true,
     "undef": true,
+    "unused": "vars",
     "-W079": true,
     "predef": [
         "editor_url",
