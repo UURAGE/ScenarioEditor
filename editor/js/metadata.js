@@ -407,7 +407,7 @@ var Metadata;
                         if (effect.idRef === oldParameter.id)
                         {
                             var hasOperator = newParameter.type.assignmentOperators.indexOf(Config.assignmentOperators[effect.operator]) !== -1;
-                            if (!hasOperator) effect.operator = newParameter.type.assignmentOperators[0];
+                            if (!hasOperator) effect.operator = newParameter.type.assignmentOperators[0].name;
 
                             effect.value = newParameter.type.castFrom(oldParameter.type, effect.value);
                         }
