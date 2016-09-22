@@ -211,6 +211,8 @@ var HtmlGenerator;
             addEnumerationValue(enumerationValueInput.parent(), $(this).text());
         });
 
+        var alertUserNoEnumValuesDefined = function() { alert(LanguageManager.sLang("edt_html_enumeration_no_values_defined")); };
+
         $("#enumerationScreen").dialog(
         {
             title: LanguageManager.sLang("edt_html_enumeration_screen_title"),
@@ -222,8 +224,9 @@ var HtmlGenerator;
                 text: LanguageManager.sLang("edt_common_confirm"),
                 click: function()
                 {
-                    saveEnumerationDefinition(enumerationDiv);
-                    $(this).dialog('close');
+                    var success = saveEnumerationDefinition(enumerationDiv);
+                    if (success) $(this).dialog('close');
+                    else         alertUserNoEnumValuesDefined();
                 }
             },
             {
@@ -233,6 +236,14 @@ var HtmlGenerator;
                     $(this).dialog('close');
                 }
             }],
+            beforeClose: function()
+            {
+                if (enumerationDiv.find(".enumeration-value-list").children().length === 0)
+                {
+                    alertUserNoEnumValuesDefined();
+                    return false;
+                }
+            },
             close: function()
             {
                 $("#enumeration-value-list").children().not(":last-child").each(function() { $(this).remove(); });
@@ -262,7 +273,6 @@ var HtmlGenerator;
         }
     }
 
-
     function saveEnumerationDefinition(enumerationDiv)
     {
         var values = [];
@@ -272,12 +282,15 @@ var HtmlGenerator;
             values.push($(this).text());
         });
 
+        if (values.length === 0) return false;
+
         var enumerationList = enumerationDiv.find(".enumeration-value-list");
         if (enumerationList.length) enumerationList.remove();
 
         var typeSelect = enumerationDiv.find(".parameter-type-select");
         appendEnumerationValueListTo(typeSelect.parent(), values);
         typeSelect.trigger('change');
+        return true;
     }
 
     function appendEnumerationValueListTo(el, values)

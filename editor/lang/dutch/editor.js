@@ -22,7 +22,6 @@
     LanguageManager.edt_config_types_integer = "Integer";
     LanguageManager.edt_config_types_string = "String";
     LanguageManager.edt_config_types_enumeration = "Enumeratie";
-    LanguageManager.edt_html_enumeration_screen_button_alt = "Definieer enumeratie";
 
     LanguageManager.edt_draft_letter_player = "S";
     LanguageManager.edt_draft_letter_computer = "C";
@@ -42,6 +41,8 @@
     LanguageManager.edt_html_up_to = "tot";
     LanguageManager.edt_html_time = "Tijd";
     LanguageManager.edt_html_enumeration_screen_title = "Enumeratie";
+    LanguageManager.edt_html_enumeration_screen_button_alt = "Definieer enumeratie";
+    LanguageManager.edt_html_enumeration_no_values_defined = "Er zijn geen waarden gedefinieerd voor de enumeratie";
 
     LanguageManager.edt_plumb_error_tree_connection = "Error: kan geen connecties tussen bomen maken.";
     LanguageManager.edt_plumb_error_cycle = "Error: deze connectie kan niet worden gemaakt, want dat zou een cykel creëren.";
