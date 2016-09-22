@@ -1576,10 +1576,15 @@ var Main;
             }
 
             var acceptableScopes = [];
+            var scopes = {};
+            scopes.characterIndependent = [];
+            scopes.characterIndependent.push('per');
+            scopes.characterIndependent.push("per-" + node.type);
+            scopes.perCharacter = [];
             if (node.type !== Main.computerType || Config.configObject.characters.sequence.length > 1)
             {
-                acceptableScopes.push('per');
-                acceptableScopes.push("per-" + node.type);
+                scopes.perCharacter.push('per');
+                scopes.perCharacter.push("per-" + node.type);
             }
 
             // Show fixed parameters
@@ -1695,6 +1700,7 @@ var Main;
             var hStartLevel = 3;
             // Accumulator for mapping a parameter id to its effects container
             var idRefToEffectsContainer = {};
+            acceptableScopes = scopes.characterIndependent;
             Config.configObject.parameters.sequence.forEach(function(subItem)
             {
                 showParameterItem(Config.configObject.parameters.byId, subItem, hStartLevel, fixedParameterEffectsEl, classPrefix, idRefToEffectsContainer);
@@ -1708,6 +1714,7 @@ var Main;
             var anyCharacterParameterShown = false;
             // Accumulator for mapping a character parameter id to its effects container
             var idRefToCharacterEffectsContainer = {};
+            acceptableScopes = scopes.perCharacter;
             Config.configObject.characters.sequence.forEach(function(character)
             {
                 var characterHeader = $('<h' + hStartLevel +'>', { value: character.id, text: character.name ? character.name : character.id });
@@ -1849,6 +1856,7 @@ var Main;
             };
             var nodePropertyValuesEl = $('#node-property-values');
             var nodePropertyValuesTable = $('<table>');
+            acceptableScopes = scopes.characterIndependent;
             Config.configObject.properties.sequence.forEach(function (subItem)
             {
                 showPropertyItem(node.propertyValues.characterIndependent, subItem, hStartLevel, nodePropertyValuesTable, nodePropertyValuesEl.attr('id'));
@@ -1861,6 +1869,7 @@ var Main;
             var nodeCharacterPropertyValuesEl = $('#node-character-property-values');
             var characterAccordion = $('<div>');
             nodeCharacterPropertyValuesEl.append(characterAccordion);
+            acceptableScopes = scopes.perCharacter;
             Config.configObject.characters.sequence.forEach(function(character)
             {
                 var characterHeader = $('<h' + hStartLevel +'>', { value: character.id, text: character.name ? character.name : character.id });
@@ -1927,7 +1936,6 @@ var Main;
                             anyCharacterParameterShown = true;
                         }
                     });
-
                     Config.configObject.characters.byId[node.characterIdRef].parameters.sequence.forEach(function(parameterItem)
                     {
                         if (showParameterItem(characterParameterDefinitions, parameterItem, hStartLevel,
