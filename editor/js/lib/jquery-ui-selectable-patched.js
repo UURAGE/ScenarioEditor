@@ -11,6 +11,7 @@
  * Base: d6713024e16de90ea71dc0544ba34e1df01b4d8a
  *   (https://github.com/jquery/jquery-ui/blob/1.11.4/ui/selectable.js)
  * Patch 1: fix helper position when using appendTo
+ * Patch 2: do not start when mouseStart event is on scrollbar
  */
 
 (function( factory ) {
@@ -106,18 +107,28 @@ var selectable = $.widget("ui.selectable", base, {
 			return;
 		}
 
+		var appendToOffset = $(options.appendTo).offset(),
+			appendToScrollLeft = options.appendTo ? $(options.appendTo).scrollLeft() : 0,
+			appendToScrollTop = options.appendTo ? $(options.appendTo).scrollTop() : 0,
+			leftDelta = options.appendTo ? appendToOffset.left - appendToScrollLeft : 0,
+			topDelta = options.appendTo ? appendToOffset.top - appendToScrollTop : 0,
+			helperLeft = event.pageX - leftDelta,
+			helperTop = event.pageY - topDelta;
+
+		if (helperLeft - appendToScrollLeft > this.element[0].clientWidth ||
+				helperTop - appendToScrollTop > this.element[0].clientHeight) {
+			return;
+		}
+
 		this.selectees = $(options.filter, this.element[0]);
 
 		this._trigger("start", event);
 
 		$(options.appendTo).append(this.helper);
-		var appendToOffset = $(options.appendTo).offset(),
-			leftDelta = options.appendTo ? appendToOffset.left - $(options.appendTo).scrollLeft() : 0,
-			topDelta = options.appendTo ? appendToOffset.top - $(options.appendTo).scrollTop() : 0
 		// position helper (lasso)
 		this.helper.css({
-			"left": event.pageX - leftDelta,
-			"top": event.pageY - topDelta,
+			"left": helperLeft,
+			"top": helperTop,
 			"width": 0,
 			"height": 0
 		});
