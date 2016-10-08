@@ -135,6 +135,7 @@ var Load3;
 
         Metadata.metaObject = {
             name: name,
+            version: 0,
             difficulty: difficulty,
             description: description,
             propertyValues: Config.getNewDefaultPropertyValues(['independent']),
