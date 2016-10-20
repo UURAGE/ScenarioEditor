@@ -428,7 +428,8 @@ var Main;
             if(!DragBox.dragging())
             {
                 // open/close tree
-                changeNameInput.trigger("focusout");
+                Main.trees[id].subject = changeNameInput.val();
+                $("#"+id).find('.subjectName').text(Main.trees[id].subject);
                 Zoom.toggleZoom(Main.trees[id]);
                 MiniMap.update(true);
             }

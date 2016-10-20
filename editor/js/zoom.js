@@ -76,6 +76,9 @@ var Zoom;
 
         if ($('#' + tree.id).hasClass('zoom'))
         {
+            // Unselect the selected nodes(s), because we are zooming out of a tree
+            Main.selectElement(null);
+
             var parent = tree.dragDiv.parent();
 
             $('#tabDock').hide();
