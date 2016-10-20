@@ -110,16 +110,26 @@ var Metadata;
 
         var characterPropertyValuesEl = $('#meta-character-property-values');
         var characterTabs = $("#character-tabs");
-        var characterTabList = $('<ul>');
-        characterTabs.append(characterTabList);
+        var characterList = Config.configObject.characters.sequence.length > 1 ? $('<ul>') : $('<div>');
+        characterTabs.append(characterList);
 
         Config.configObject.characters.sequence.forEach(function (character)
         {
             var characterTabId = characterPropertyValuesEl.attr('id') + '-' + character.id;
 
-            // Make a character tab with a link to the div it contains
-            var li = $('<li>').append($('<a>', { href:'#' + characterTabId, value: character.id, text: character.name ? character.name : character.id }));
-            characterTabList.append(li);
+            var characterHeaderText = character.name ? character.name : character.id;
+
+            if (Config.configObject.characters.sequence.length > 1)
+            {
+                // Make a character tab with a link to the div it contains
+                var li = $('<li>').append($('<a>', { href:'#' + characterTabId, value: character.id, text: characterHeaderText }));
+                characterList.append(li);
+            }
+            else
+            {
+                var characterHeader = $('<h4>', { text: characterHeaderText });
+                characterList.append(characterHeader);
+            }
 
             var characterTab = $('<table>', { id: characterTabId });
             characterTabs.append(characterTab);
@@ -135,11 +145,14 @@ var Metadata;
             });
         });
 
-        characterTabs.tabs(
+        if (Config.configObject.characters.sequence.length > 1)
         {
-            active: false,
-            collapsible: true
-        });
+            characterTabs.tabs(
+            {
+                active: 0,
+                collapsible: true
+            });
+        }
         if (anyPropertyShown) characterPropertyValuesEl.show();
     });
 
