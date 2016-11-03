@@ -20,6 +20,7 @@ button
   vertical-align: middle;
   text-align: center;
   font-size: 2em;
+  cursor: pointer;
 }
 
   .zoomTreeButton:hover
