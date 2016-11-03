@@ -93,13 +93,14 @@
 	background-color:#123456;
 }
 
-/* On hover of treecontainer: change the text color of nodes inside it to black (they inherit white from .w:hover{})*/
-.w.treeContainer:hover > .player ,
-.w.treeContainer:hover > .player.computer
-
 .w.selected, .w.ui-selected {
 	color:white;
 	background-color:green;
+}
+
+.w.ui-selecting {
+    color:white;
+    background-color:olivedrab;
 }
 
 #clone{
