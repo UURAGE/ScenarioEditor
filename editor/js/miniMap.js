@@ -64,6 +64,7 @@ var MiniMap;
             if (this.checked)
             {
                 setAndStoreShown(true);
+                update(true);
                 showAnimated($("#minimap"));
             }
             else
