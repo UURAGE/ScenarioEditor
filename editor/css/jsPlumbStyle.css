@@ -97,7 +97,7 @@
 .w.treeContainer:hover > .player ,
 .w.treeContainer:hover > .player.computer
 
-.selected, .multiSelected {
+.w.selected, .w.ui-selected {
 	color:white;
 	background-color:green;
 }

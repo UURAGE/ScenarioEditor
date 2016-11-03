@@ -295,9 +295,6 @@ var Main;
             {
                 if(!(id in Main.trees))
                 {
-                    $("#" + id).removeClass("multiSelected");
-                    $("#" + id).removeClass("selectable-selected");
-
                     Main.selectedElements.push(id);
 
                     Zoom.getZoomed().plumbInstance.addToDragSelection(element.selected);
@@ -307,21 +304,12 @@ var Main;
             {
                 if(id in Main.trees)
                 {
-                    $("#" + id).removeClass("multiSelected");
-                    $("#" + id).removeClass(
-                        "selectable-selected");
-
                     Main.selectedElements.push(id);
                 }
             }
         });
         $("#main").on('selectablestop', function()
         {
-            for (var i = 0; i < Main.selectedElements.length; i++)
-                $("#" + Main.selectedElements[i]).removeClass(
-                    "selectable-selected").addClass(
-                    "multiSelected");
-
             // If there's only one node selected, show the node.
             if (Main.selectedElements.length === 1)
                 selectElement(Main.selectedElements[0]);
@@ -542,7 +530,7 @@ var Main;
     {
         Main.unsavedChanges = true;
 
-        var container = $(".selected.treeContainer"); //when multiple things are selected their class is .multiselected.
+        var container = $(".selected.treeContainer");
 
         if (container.length === 0)
         {
@@ -857,13 +845,6 @@ var Main;
             }
         });
 
-        // Used for dragging of multiple nodes.
-        //node.multiDraggable(
-        //{
-        //    container: parent,
-        //    groupSel: ".multiSelected"
-        //});
-
         // Make the node selected when we click on it.
         node.on("click", function(event)
         {
@@ -982,7 +963,7 @@ var Main;
             Main.selectedElements = elementIds.slice();
             elementIds.forEach(function (elementId)
             {
-                $("#" + elementId).addClass("multiSelected");
+                $("#" + elementId).addClass("ui-selected");
                 if (elementId in Main.nodes) Main.getPlumbInstanceByNodeID(elementId).addToDragSelection(elementId);
             });
         }
@@ -1017,7 +998,7 @@ var Main;
 
         // Currently selected node(s) should now not be selected.
         $(".selected").removeClass("selected");
-        $(".multiSelected").removeClass("multiSelected");
+        $(".ui-selected").removeClass("ui-selected");
         Main.selectedElements = [];
         var zoomedTree = Zoom.getZoomed();
         if (zoomedTree) zoomedTree.plumbInstance.clearDragSelection();
@@ -1031,7 +1012,7 @@ var Main;
         {
             $("#" + Main.selectedElement).addClass("selected");
             Main.selectedElements.push(Main.selectedElement);
-            $("#" + nodeID).addClass("multiSelected");
+            $("#" + nodeID).addClass("ui-selected");
             if ($("#allParents").hasClass("enabled"))
                 highlightParents(nodeID);
         }
@@ -1367,13 +1348,13 @@ var Main;
         }
 
         $(".selected").removeClass("selected");
-        $(".multiSelected").removeClass("multiSelected");
+        $(".ui-selected").removeClass("ui-selected");
         Main.selectedElements = [];
 
         dragDiv.addClass("selected");
         Main.selectedElement = id;
 
-        dragDiv.addClass("multiSelected");
+        dragDiv.addClass("ui-selected");
         Main.selectedElements.push(Main.selectedElement);
 
         updateSideBar();

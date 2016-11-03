@@ -264,7 +264,7 @@ var KeyControl;
     //If the user clicked on a node while ctrl is pressed, check if he need to be selected or deselected.
     function ctrlClickOnElement(node)
     {
-        if ($("#" + node).hasClass("multiSelected"))
+        if (Main.selectedElements.indexOf(node) !== -1)
             deselectElement(node);
         else selectExtraElement(node);
     }
@@ -285,7 +285,7 @@ var KeyControl;
                 var selectedElementID = Main.selectedElements[0];
                 Main.selectElement(null);
                 Main.selectedElements.push(selectedElementID);
-                $("#" + selectedElementID).addClass("multiSelected");
+                $("#" + selectedElementID).addClass("ui-selected");
                 if (selectedElementID in Main.nodes)
                 {
                     Main.getPlumbInstanceByNodeID(selectedElementID).addToDragSelection(selectedElementID);
@@ -293,7 +293,7 @@ var KeyControl;
             }
 
             Main.selectedElements.push(elementID);
-            $("#" + elementID).addClass("multiSelected");
+            $("#" + elementID).addClass("ui-selected");
             if (elementID in Main.nodes)
             {
                 Main.getPlumbInstanceByNodeID(elementID).addToDragSelection(elementID);
@@ -317,7 +317,7 @@ var KeyControl;
         }
         else
         {
-            $("#" + elementID).removeClass("multiSelected");
+            $("#" + elementID).removeClass("ui-selected");
             Main.selectedElements = jQuery.grep(Main.selectedElements,
                 function(value)
                 {
