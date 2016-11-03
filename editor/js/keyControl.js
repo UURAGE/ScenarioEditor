@@ -301,24 +301,32 @@ var KeyControl;
         }
     }
 
-    //If the user clicked on a selected node while ctrl is pressed, deselect the node.
-    function deselectElement(node)
+    // If the user clicked on a selected element while ctrl is pressed, deselect the element.
+    function deselectElement(elementID)
     {
-        if(node !== null && node !== undefined && !(node in Main.trees))
-            Main.getPlumbInstanceByNodeID(node).removeFromDragSelection($("#"+node)[0]);
+        if (elementID === null) return;
+
+        if (elementID in Main.nodes)
+        {
+            Main.getPlumbInstanceByNodeID(elementID).removeFromDragSelection(elementID);
+        }
 
         if (Main.selectedElement !== null)
+        {
             Main.selectElement(null);
+        }
         else
         {
-            $("#" + node).removeClass("multiSelected");
+            $("#" + elementID).removeClass("multiSelected");
             Main.selectedElements = jQuery.grep(Main.selectedElements,
                 function(value)
                 {
-                    return value != node;
+                    return value != elementID;
                 });
             if (Main.selectedElements.length == 1)
+            {
                 Main.selectElement(Main.selectedElements[0]);
+            }
         }
     }
 
