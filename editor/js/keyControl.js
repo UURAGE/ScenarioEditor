@@ -272,6 +272,8 @@ var KeyControl;
     // Multiselect an extra element
     function selectExtraElement(elementID)
     {
+        if (elementID === null) return;
+
         if (Main.selectedElements.length === 0)
         {
             Main.selectElement(elementID);
@@ -280,18 +282,23 @@ var KeyControl;
         {
             if (Main.selectedElements.length === 1)
             {
-                var selectedElementID = Main.selectedElement;
+                var selectedElementID = Main.selectedElements[0];
                 Main.selectElement(null);
                 Main.selectedElements.push(selectedElementID);
                 $("#" + selectedElementID).addClass("multiSelected");
+                if (selectedElementID in Main.nodes)
+                {
+                    Main.getPlumbInstanceByNodeID(selectedElementID).addToDragSelection(selectedElementID);
+                }
             }
 
             Main.selectedElements.push(elementID);
             $("#" + elementID).addClass("multiSelected");
+            if (elementID in Main.nodes)
+            {
+                Main.getPlumbInstanceByNodeID(elementID).addToDragSelection(elementID);
+            }
         }
-
-        if(elementID !== null && elementID !== undefined && elementID in Main.nodes)
-            Main.getPlumbInstanceByNodeID(elementID).addToDragSelection($("#"+elementID)[0]);
     }
 
     //If the user clicked on a selected node while ctrl is pressed, deselect the node.
