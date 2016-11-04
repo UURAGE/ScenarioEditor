@@ -2110,12 +2110,6 @@ var Main;
             }
         }
 
-        // This check needs revision, maybe we can allow a node to have more than 10 outgoing connections
-        if (plumbInstance.getConnections({source: sourceID}).length >= 10)
-        {
-            alert(LanguageManager.sLang("edt_plumb_error_child_type"));
-            return false;
-        }
         if(Validator.testDuplicateConnection(sourceID, targetID))
         {
             return false;
