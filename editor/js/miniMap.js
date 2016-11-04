@@ -149,6 +149,8 @@ var MiniMap;
             realHeight = main[0].scrollHeight;
             viewportX = main.scrollLeft();
             viewportY = main.scrollTop();
+            viewportWidth = main.width();
+            viewportHeight = main.height();
         }
         else
         {
@@ -157,13 +159,12 @@ var MiniMap;
             realHeight = treeDiv[0].scrollHeight + $("#mainCell .subjectDiv")[0].scrollHeight;
             viewportX = treeDiv.scrollLeft();
             viewportY = treeDiv.scrollTop() + $("#mainCell .subjectDiv")[0].scrollHeight;
+            viewportWidth = treeDiv.width();
+            viewportHeight = treeDiv.height();
         }
-        viewportWidth = main.width();
-        viewportHeight = main.height();
 
         $("#scaledDiv").css("width", realWidth+"px");
         $("#scaledDiv").css("height", realHeight+"px");
-        $("#minimap").css("height", $("#sidebar").height()-25+"px");
 
         // Show a cloned and scaled down version of the main div in the minimap
         if (detailed && refresh)
