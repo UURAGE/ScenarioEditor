@@ -453,6 +453,7 @@ var Main;
 
         subjectDiv.on("dblclick", function(e)
         {
+            if ($(e.target).hasClass("zoomTreeButton")) return;
             var selectAllInput = false;
             triggerSubjectNameInput(id, selectAllInput);
             e.stopPropagation();
