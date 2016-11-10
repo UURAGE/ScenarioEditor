@@ -59,6 +59,8 @@ var Main;
 
         $("#main").focus();
 
+        initialiseMenuBar();
+
         initialiseGrid();
 
         if (Config.configObject.characters.sequence.length > 1)
@@ -119,17 +121,6 @@ var Main;
             nameInputSpan.show();
             nameInput.focus();
         });
-
-        // Event handlers.
-        $(".dropdown").hover(function () {
-            $(this).find(".dropdownItems:first").slideDown('medium');
-            $(this).find(".dropdownButton:first").addClass("hovered");
-        },
-            function () {
-                $(this).find(".dropdownItems:first").stop().slideUp('medium');
-                $(this).find('.dropdownButton:first').removeClass("hovered");
-            }
-        );
 
         //handle movement of the div indicating which grid cell youre hovering over
         $('#main').on('mousemove', function(e)
@@ -341,6 +332,51 @@ var Main;
             return LanguageManager.sLang("edt_main_pending_changes");
         }
     });
+
+    function initialiseMenuBar()
+    {
+        var buttons = $(".dropdownButton");
+
+        // These functions reference each other
+        var closeOpenMenu, closeMenu, openMenu;
+
+        closeOpenMenu = function(e)
+        {
+            var dropdownButton = $(".dropdownButton.dropped");
+            // Let the button's regular click handler close the button's own menu
+            // (closing it here would cause the click handler to open it again)
+            if (e && e.target == dropdownButton[0]) return;
+
+            closeMenu.call(dropdownButton);
+        };
+
+        // The following functions use this instead of an argument so they can be
+        // used as event handlers without wrapping.
+        // The non-jQuery capturing event handler ensures all clicks are handled.
+
+        closeMenu = function()
+        {
+            $(this).removeClass("dropped");
+            $(this).closest(".dropdown").find(".dropdownItems").hide();
+            document.removeEventListener("click", closeOpenMenu, true);
+            buttons.off("mouseenter", openMenu);
+        };
+
+        openMenu = function()
+        {
+            closeOpenMenu();
+            $(this).addClass("dropped");
+            $(this).closest(".dropdown").find(".dropdownItems").show();
+            document.addEventListener("click", closeOpenMenu, true);
+            buttons.on("mouseenter", openMenu);
+        }
+
+        buttons.on("click", function()
+        {
+            var handler = $(this).hasClass("dropped") ? closeMenu : openMenu;
+            handler.call(this);
+        });
+    }
 
     function createEmptyTree(id, leftPos, topPos)
     {

@@ -306,7 +306,7 @@ button img
   font-size: 12px;
 }
 
-#toolbar button:hover, #toolbar .hovered
+#toolbar button:hover, #toolbar .dropped
 {
   background-color: #2ecc71;
   color: #fff;
