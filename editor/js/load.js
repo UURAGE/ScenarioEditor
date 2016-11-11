@@ -274,7 +274,7 @@ var Load;
 
         Metadata.metaObject = {
             name: name,
-            version: version ? version : null,
+            version: version ? version : 0,
             difficulty: difficulty,
             description: description,
             propertyValues: propertyValues,

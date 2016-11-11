@@ -26,12 +26,8 @@ var Save;
 
         var nameSpace = "http://uudsl.github.io/scenario/namespace";
         var doc = document.implementation.createDocument(nameSpace, 'scenario', null);
-
-        if (Metadata.metaObject.version !== null)
-        {
-            if (Main.unsavedChanges) Metadata.metaObject.version++;
-            doc.documentElement.setAttribute("version", Metadata.metaObject.version);
-        }
+        if (Main.unsavedChanges) Metadata.metaObject.version++;
+        doc.documentElement.setAttribute("version", Metadata.metaObject.version);
         doc.documentElement.setAttribute("schemaVersion", schemaVersion);
         doc.documentElement.setAttribute("configidref", Config.configObject.id);
 
