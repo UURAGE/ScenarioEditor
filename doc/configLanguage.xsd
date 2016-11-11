@@ -23,6 +23,27 @@
 									</sequence>
 								</complexType>
 							</element>
+							<element name="languages" minOccurs="0" maxOccurs="1">
+								<complexType>
+									<sequence>
+										<element name="language" minOccurs="1" maxOccurs="unbounded">
+											<annotation>
+												<documentation>
+													Defines a language that is available for the authoring of the scenario.
+													The language element content is a display name and the code attribute must be a language code defined by RFC 1766.
+												</documentation>
+											</annotation>
+											<complexType>
+												<simpleContent>
+													<extension base="string">
+														<attribute name="code" type="language"/>
+													</extension>
+												</simpleContent>
+											</complexType>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
 						</sequence>
 					</complexType>
 				</element>

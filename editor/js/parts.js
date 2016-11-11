@@ -144,6 +144,18 @@ var Parts;
 
     function getMetaScreenHTML()
     {
+        var scenarioLanguageRow;
+        if (Config.configObject.settings.languages.sequence.length > 0)
+        {
+            var scenarioLanguageSelect = $('<select>', { id: "scenarioLanguage" });
+            Config.configObject.settings.languages.sequence.forEach(function(language)
+            {
+                scenarioLanguageSelect.append($('<option>', { value: language.code, text: language.name }));
+            });
+            scenarioLanguageRow = $('<tr>');
+            scenarioLanguageRow.append($('<th>').append($('<label>', { for: "scenarioLanguage", text: LanguageManager.sLang("edt_parts_language") + ':' })));
+            scenarioLanguageRow.append($('<td>').append(scenarioLanguageSelect));
+        }
         return '' +
             '<div>' +
                 '<table>' +
@@ -153,6 +165,7 @@ var Parts;
                             '<th><label for="scenarioName">'+LanguageManager.sLang("edt_parts_scenario_name")+':</label></th>' +
                             '<td><input type="text" id="scenarioName" /></td>' +
                         '</tr>' +
+                        (scenarioLanguageRow ? scenarioLanguageRow.prop('outerHTML') : "") +
                         '<tr>' +
                             '<th><label for="scenarioDifficulty">'+LanguageManager.sLang("edt_parts_difficulty")+':</label></th>' +
                             '<td><select id="scenarioDifficulty">' +

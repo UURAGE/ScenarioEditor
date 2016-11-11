@@ -11,7 +11,7 @@ var Metadata;
     Metadata =
     {
         metaObject: {},
-        getNewDefaultMetaObject: getNewDefaultMetaObject,
+        reset: reset,
         getNewDefaultParameters: getNewDefaultParameters,
         parameterCounter: parameterCounter,
         parameterDialog: parameterDialog,
@@ -156,9 +156,8 @@ var Metadata;
         if (anyPropertyShown) characterPropertyValuesEl.show();
     });
 
-    // Creates and returns a new default meta object containing sensible defaults.
-    // If needed, change the defaults here.
-    function getNewDefaultMetaObject()
+    // Resets the metadata to the default
+    function reset()
     {
         Metadata.parameterCounter = 0;
         Metadata.metaObject = {
@@ -169,6 +168,11 @@ var Metadata;
             parameters: getNewDefaultParameters(),
             propertyValues: Config.getNewDefaultPropertyValues(['independent'])
         };
+
+        if (Config.configObject.settings.languages.sequence.length > 0)
+        {
+            Metadata.metaObject.language = Config.configObject.settings.languages.sequence[0];
+        }
     }
 
     // This function returns an object suitable for user-defined parameter definitions
@@ -214,6 +218,7 @@ var Metadata;
 
         // Show the stored values for the metadata.
         $("#scenarioName").val(Metadata.metaObject.name);
+        if (Metadata.metaObject.language) $("#scenarioLanguage").val(Metadata.metaObject.language.code).change();
         $("#scenarioDifficulty").val(Metadata.metaObject.difficulty);
         $("#scenarioDescription").val(Metadata.metaObject.description);
 
@@ -482,7 +487,8 @@ var Metadata;
         // Save all values in the dialog to the metaObject
         Metadata.metaObject.name = formatScenarioName($("#scenarioName").val());
         $('#scenarioNameTab .scenarioName').text(Metadata.metaObject.name);
-
+        var languageCode = $("#scenarioLanguage").val();
+        if (languageCode) Metadata.metaObject.language = Config.configObject.settings.languages.byCode[languageCode];
         Metadata.metaObject.difficulty = $("#scenarioDifficulty").val();
         Metadata.metaObject.description = $("#scenarioDescription").val();
 

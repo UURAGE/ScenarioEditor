@@ -86,6 +86,7 @@
     LanguageManager.edt_parts_medium = "Gemiddeld";
     LanguageManager.edt_parts_hard = "Moeilijk";
     LanguageManager.edt_parts_very_hard = "Zeer moeilijk";
+    LanguageManager.edt_parts_language = "Taal";
     LanguageManager.edt_parts_none = "Geen";
     LanguageManager.edt_parts_change_type = "Standaard verander type";
     LanguageManager.edt_parts_file_to_import = "Bestand om te importeren";

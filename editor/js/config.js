@@ -75,6 +75,19 @@ var Config;
         {
             settings.statement.type = Config.types.string;
         }
+        settings.languages = {};
+        settings.languages.sequence = [];
+        settings.languages.byCode = {};
+        var languageSettingsXML = settingsXML.children('languages');
+        if (languageSettingsXML.length > 0)
+        {
+            languageSettingsXML.children().each(function(index, languageSettingXML)
+            {
+                var language = { code: languageSettingXML.getAttribute('code'), name: $(languageSettingXML).text() };
+                settings.languages.byCode[language.code] = language;
+                settings.languages.sequence.push(language);
+            });
+        }
         return settings;
     }
 

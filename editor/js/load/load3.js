@@ -141,6 +141,11 @@ var Load3;
             propertyValues: Config.getNewDefaultPropertyValues(['independent']),
             parameters: parameters
         };
+
+        if (Config.configObject.settings.languages.sequence.length > 0)
+        {
+            Metadata.metaObject.language = Config.configObject.settings.languages.sequence[0];
+        }
     }
 
     // Load a statement.

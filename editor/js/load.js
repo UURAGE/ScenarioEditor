@@ -12,8 +12,6 @@ var Load;
         importScenario: importScenario
     };
 
-    var loadedMetaObject;
-
     $(document).ready(function()
     {
         $("#importScreen").html(Parts.getImportScreenHTML());
@@ -23,8 +21,7 @@ var Load;
         });
 
         // At the beginning no XML is loaded, so we need to define a metaObject
-        Metadata.getNewDefaultMetaObject();
-        loadedMetaObject = Metadata.metaObject;
+        Metadata.reset();
     });
 
     function importDialog()
@@ -135,29 +132,21 @@ var Load;
     {
         Main.selectElement(null);
 
-        if (loadedMetaObject === undefined)
+        if(Main.nodes.length !== 0)
         {
-            Metadata.getNewDefaultMetaObject();
-            loadedMetaObject = Metadata.metaObject;
-        }
-        else
-        {
-            if(Main.nodes.length !== 0)
+            $.each(Main.trees, function(id, tree)
             {
-                $.each(Main.trees, function(id, tree)
-                {
-                    tree.plumbInstance.deleteEveryEndpoint();
-                });
-            }
-
-            Main.trees = {};
-            Main.nodes = {};
-            $(".w").remove();
-
-            Main.jsPlumbCounter = 0;
-            Main.maxTreeNumber = 0;
-            Metadata.parameterCounter = 0;
+                tree.plumbInstance.deleteEveryEndpoint();
+            });
         }
+
+        Main.trees = {};
+        Main.nodes = {};
+        $(".w").remove();
+
+        Main.jsPlumbCounter = 0;
+        Main.maxTreeNumber = 0;
+        Metadata.reset();
     }
 
     // Generates the entire graph, including the objects.
@@ -238,6 +227,18 @@ var Load;
         var name = $(metadata).children('name').text();
         $('#scenarioNameTab .scenarioName').text(name);
         var description = $(metadata).children('description').text();
+        var language;
+        var languageXML = $(metadata).children('language');
+        if (languageXML.length > 0)
+        {
+            var languageCode = $(languageXML).attr('code');
+            if (languageCode in Config.configObject.settings.languages.byCode)
+            {
+                language = {};
+                language.code = languageCode;
+                language.name = $(languageXML).text();
+            }
+        }
         var difficulty = $(metadata).children('difficulty').text();
 
         var parameters = Metadata.getNewDefaultParameters();
@@ -280,6 +281,15 @@ var Load;
             parameters: parameters,
             timePId: timePId
         };
+
+        if (language)
+        {
+            Metadata.metaObject.language = language;
+        }
+        else if (Config.configObject.settings.languages.sequence.length > 0)
+        {
+            Metadata.metaObject.language = Config.configObject.settings.languages.sequence[0];
+        }
     }
 
     // Load a statement.

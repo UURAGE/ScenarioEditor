@@ -42,6 +42,12 @@ var Save;
         var metadataEl = addAndReturnElement("metadata", nameSpace, doc.documentElement);
         addAndReturnElement("name", nameSpace, metadataEl).textContent = Metadata.metaObject.name;
         addAndReturnElement("date", nameSpace, metadataEl).textContent = new Date().toISOString();
+        if (Metadata.metaObject.language)
+        {
+            var languageEl = addAndReturnElement("language", nameSpace, metadataEl);
+            languageEl.setAttribute("code", Metadata.metaObject.language.code);
+            languageEl.textContent = Metadata.metaObject.language.name;
+        }
         addAndReturnElement("description", nameSpace, metadataEl, true).textContent = Metadata.metaObject.description;
         addAndReturnElement("difficulty", nameSpace, metadataEl).textContent = Metadata.metaObject.difficulty;
 

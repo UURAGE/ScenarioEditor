@@ -86,6 +86,7 @@
     LanguageManager.edt_parts_medium = "Medium";
     LanguageManager.edt_parts_hard = "Hard";
     LanguageManager.edt_parts_very_hard = "Very hard";
+    LanguageManager.edt_parts_language = "Language";
     LanguageManager.edt_parts_none = "None";
     LanguageManager.edt_parts_change_type = "Default change type";
     LanguageManager.edt_parts_file_to_import = "File to import";
