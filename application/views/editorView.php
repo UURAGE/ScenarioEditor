@@ -9,7 +9,7 @@
   <meta http-equiv="Expires" content="-1">
   <link rel="icon" type="image/png" href="<?php echo editor_url("png/small_logo.png");?>">
 
-    <?php
+  <?php
   $language = $this->session->userdata('language');
 
   $styles = array(
@@ -21,7 +21,7 @@
   {   //filemtime appends last edited time, to fix using cached files
       echo '<link rel="stylesheet" type="text/css" href="' .editor_url($style) . '?t='.  filemtime(editor_path($style)) . '" />';
   }
-    ?>
+  ?>
 
   <script>
   <?php
@@ -34,19 +34,21 @@
 
   <?php
 
+  echo "<script> localStorage.setItem('i18nextLanguage','" . $this->config->item('languageCodes')[$language] . "');</script>";
+
   //load language related scripts first since all others depend on them
   $languageScripts = array(
-      "js/lib/sprintf.js",
-      "js/lib/languageManager.js",
+      "js/lib/i18nextBrowserLanguageDetector.min.js",
+      "js/lib/i18nextXHRBackend.min.js",
+      "js/lib/i18nextSprintfPostProcessor.min.js",
+      "js/lib/i18next.min.js",
+      "js/i18n.js"
     );
 
   foreach($languageScripts as $script)
   {
       echo '<script type="text/javascript" src="' .editor_url($script). '?t='.  filemtime(editor_path($script)) .'"></script>';
   }
-
-  $fileName = $this->router->class.".js";
-    echo '<script type="text/javascript" src="' . editor_js_lang_url($language).'/'.$fileName. '?t='. filemtime(editor_path('lang/'.$language.'/'.$fileName)). '"></script>';
 
   //non language related scripts
   $scripts = array(

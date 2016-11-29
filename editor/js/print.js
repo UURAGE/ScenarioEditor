@@ -21,7 +21,7 @@ var Print;
 
     function printScenario()
     {
-        if (!confirm(LanguageManager.sLang("edt_print_warning"))) return;
+        if (!confirm(i18next.t('print:warning'))) return;
 
         // This function is used to set the heights inside the window to be printed
         // and is called inside that window HTML on load

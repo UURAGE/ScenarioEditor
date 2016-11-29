@@ -16,7 +16,7 @@ class LanguageLoader
         }
 
         $language = $this->CI->session->userdata('language');
-        $availableLanguages = config_item('browserCodes');
+        $availableLanguages = config_item('languageNames');
 
         // Strict equality to prevent nasty behaviour
         if (!$language)

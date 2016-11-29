@@ -1,0 +1,16 @@
+{
+    "no_problems": "Geen problemen gevonden!",
+    "no_name": "Het scenario heeft geen naam.",
+    "empty_subject": "Onderwerp \"%s\" is leeg.",
+    "subject_start_type_error": "Onderwerp \"{{subject}}\" begint met een $t(common:{{type}})knoop. De speler moet een onderwerp beginnen.",
+    "end_outgoing_connections": "Onderwerp \"%s\" bevat een gemarkeerd einde dat nog uitgaande pijlen heeft.",
+    "unmarked_end": "Onderwerp \"%s\" bevat een einde dat niet is gemarkeerd als het einde van het gesprek.",
+    "unnamed_subject": "Er is een onderwerp zonder naam.",
+    "first_layer_count": "De eerste laag moet precies 1 onderwerp bevatten.",
+    "no_ending": "De laatste laag van onderwerpen moet tenminste één gemarkeerd einde hebben.",
+    "no_valid_ending": "Er is geen valide einde gemarkeerd.",
+    "empty_scenario": "Scenario bevat geen onderwerpen.",
+    "info": "Info",
+    "warning": "Waarschuwing",
+    "error": "Fout"
+}

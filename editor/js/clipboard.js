@@ -236,7 +236,7 @@ var Clipboard;
 
         var newTree = Main.createEmptyTree(null, leftPos, topPos);
 
-        newTree.subject = LanguageManager.fLang("edt_clipboard_copy_of", [toCopy.subject]);
+        newTree.subject = i18next.t('clipboard:copy_of', { postProcess: 'sprintf', sprintf: [toCopy.subject]});
         newTree.optional = toCopy.optional;
 
         var treeDiv = $("#" + newTree.id);

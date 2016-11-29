@@ -144,7 +144,7 @@ var Main;
             selectElement(null);
 
             e.preventDefault(); // Prevent selecting text
-            var text = "[+" + LanguageManager.sLang("edt_common_subject") + "]";
+            var text = "[+" + i18next.t('common:subject') + "]";
 
             Zoom.zoomOut();
 
@@ -158,11 +158,11 @@ var Main;
             selectElement(null);
 
             e.preventDefault(); // Prevent selecting text
-            var text = "[+" + LanguageManager.sLang("edt_common_computer") + "]";
+            var text = "[+" + i18next.t('common:computer') + "]";
 
             if (!Zoom.isZoomed())
             {
-                DragBox.showError(e, LanguageManager.sLang("edt_main_no_subject_open"));
+                DragBox.showError(e, i18next.t('main:no_subject_open'));
                 return;
             }
 
@@ -177,11 +177,11 @@ var Main;
             selectElement(null);
 
             e.preventDefault(); // Prevent selecting text
-            var text = "[+" + LanguageManager.sLang("edt_common_player") + "]";
+            var text = "[+" + i18next.t('common:player') + "]";
 
             if (!Zoom.isZoomed())
             {
-                DragBox.showError(e, LanguageManager.sLang("edt_main_no_subject_open"));
+                DragBox.showError(e, i18next.t('main:no_subject_open'));
                 return;
             }
 
@@ -196,11 +196,11 @@ var Main;
             selectElement(null);
 
             e.preventDefault(); // Prevent selecting text
-            var text = "[+" + LanguageManager.sLang("edt_common_situation") + "]";
+            var text = "[+" + i18next.t('common:situation') + "]";
 
             if (!Zoom.isZoomed())
             {
-                DragBox.showError(e, LanguageManager.sLang("edt_main_no_subject_open"));
+                DragBox.showError(e, i18next.t('main:no_subject_open'));
                 return;
             }
 
@@ -329,7 +329,7 @@ var Main;
         // confirmation for leaving the page
         if (Main.unsavedChanges)
         {
-            return LanguageManager.sLang("edt_main_pending_changes");
+            return i18next.t('main:pending_changes');
         }
     });
 
@@ -369,7 +369,7 @@ var Main;
             $(this).closest(".dropdown").find(".dropdownItems").show();
             document.addEventListener("click", closeOpenMenu, true);
             buttons.on("mouseenter", openMenu);
-        }
+        };
 
         buttons.on("click", function()
         {
@@ -405,7 +405,7 @@ var Main;
         });
         treeDiv.selectable('disable'); //box selection only useful in zoomed state
 
-        var defaultName = LanguageManager.sLang("edt_main_default_subject");
+        var defaultName = i18next.t('main:default_subject');
         var changeNameInput = $('<input type="text" class="subjectNameInput" maxlength="20">');
         changeNameInput.val(defaultName);
         changeNameInput.hide();
@@ -1772,7 +1772,7 @@ var Main;
 
             if (anyCharacterParameterShown)
             {
-                fixedCharacterParameterEffectsEl.prepend($('<h3>', { text: LanguageManager.sLang('edt_common_characters') }));
+                fixedCharacterParameterEffectsEl.prepend($('<h3>', { text: i18next.t('common:characters') }));
                 // Set the heightStyle to "content", because the content changes dynamically
                 accordionDiv.accordion({ active: false, collapsible: true, heightStyle: "content" });
             }
@@ -1922,7 +1922,7 @@ var Main;
             else
             {
                 $("#propertyValuesSection").show();
-                nodeCharacterPropertyValuesEl.prepend($('<h3>', { text: LanguageManager.sLang('edt_common_characters') }));
+                nodeCharacterPropertyValuesEl.prepend($('<h3>', { text: i18next.t('common:characters') }));
                 characterAccordion.accordion({ active: false, collapsible: true, heightStyle: "content" });
             }
 
@@ -2126,13 +2126,13 @@ var Main;
         //do not connect between trees
         if(targetNode.parent !== sourceNode.parent)
         {
-            console.log(LanguageManager.sLang("edt_plumb_error_tree_connection"));
+            console.log(i18next.t('main:error.tree_connection'));
             return false;
         }
 
         if (Validator.testCycle(targetID, sourceID))
         {
-            alert(LanguageManager.sLang("edt_plumb_error_cycle"));
+            alert(i18next.t('main:error.cycle'));
             return false;
         }
 
@@ -2142,7 +2142,7 @@ var Main;
         {
             if (targetNode.type != Main.nodes[firstChildId].type)
             {
-                alert(LanguageManager.sLang("edt_plumb_error_child_type"));
+                alert(i18next.t('main:error.child_type'));
                 return false;
             }
         }

@@ -9,8 +9,8 @@
         {
             fallback: '<input tabindex="1" type="text">',
             type: '<select tabindex="1" class="type">' +
-                '<option value="player">' + LanguageManager.sLang("edt_draft_letter_player") + '</option>' +
-                '<option value="computer">' + LanguageManager.sLang("edt_draft_letter_computer") + '</option>' +
+                '<option value="player">' + i18next.t('draft:letter.player') + '</option>' +
+                '<option value="computer">' + i18next.t('draft:letter.computer') + '</option>' +
                 '</select>',
             statement: '<textarea tabindex="1"></textarea>'
         },
@@ -98,7 +98,7 @@
                 {
                     playerOnlyTds.addClass("disabled");
                     playerOnlyTds.append(
-                        '<span class="disabled-text">'+LanguageManager.sLang("edt_draft_not_available")+'</span>'
+                        '<span class="disabled-text">'+i18next.t('draft:not_available')+'</span>'
                     );
                 }
                 if (value === "player")
@@ -123,19 +123,19 @@
 
             if (!Zoom.isZoomed())
             {
-                DragBox.showError(e, LanguageManager.sLang("edt_draft_no_subject_open"));
+                DragBox.showError(e, i18next.t('draft:no_subject_open'));
                 return;
             }
 
             if (allIsEmpty())
             {
-                DragBox.showError(e, LanguageManager.sLang("edt_draft_no_filled_items"));
+                DragBox.showError(e, i18next.t('draft:no_filled_items'));
                 return;
             }
 
             if (editing) editing.find(':input:focus').trigger("blur");
 
-            var text = LanguageManager.sLang("edt_draft_all_items");
+            var text = i18next.t('draft:all_items');
             DragBox.startDragging(e, text, function(pos)
             {
                 var nodes = allItemsToNodes(),
@@ -165,14 +165,14 @@
 
             if (!Zoom.isZoomed())
             {
-                DragBox.showError(e, LanguageManager.sLang("edt_draft_no_subject_open"));
+                DragBox.showError(e, i18next.t('draft:no_subject_open'));
                 return;
             }
 
             var tr = $(this).closest('tr');
             if (isItemEmpty(tr))
             {
-                DragBox.showError(e, LanguageManager.sLang("edt_draft_empty_item"));
+                DragBox.showError(e, i18next.t('draft:empty_item'));
                 return;
             }
 
@@ -180,8 +180,8 @@
 
             var stmt = tr.data('item').properties.statement.trimToLength(25);
             var index = $('#draftTable tr.draftItem').index(tr);
-            var text = LanguageManager.fLang("edt_draft_item_number", [parseInt(index, 10) + 1]) +
-                (stmt === "" ? "" : " " + stmt);
+            var text = i18next.t('draft:item_number', { postProcess: 'sprintf', sprintf: [parseInt(index, 10) + 1]});
+            if (stmt) text += ' ' + stmt;
 
             if (DragBox.isDroppable())
             {
@@ -453,7 +453,7 @@
     // Clear the table and remove all items
     function clearTable()
     {
-        if (!confirm(LanguageManager.sLang("edt_draft_delete_all_confirm")))
+        if (!confirm(i18next.t('draft:delete_all_confirm')))
         {
             return;
         }

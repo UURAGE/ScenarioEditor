@@ -28,13 +28,13 @@ var Load;
     {
         $("#importScreen").dialog(
         {
-            title : LanguageManager.sLang("edt_load_import_title"),
+            title : i18next.t('load:import_title'),
             height: ParameterValues.heightImportScreen,
             width: ParameterValues.widthImportScreen,
             modal: true,
             buttons:
             [{
-                text: LanguageManager.sLang("edt_load_import"),
+                text: i18next.t('load:import'),
                 click: function()
                 {
                     importScenario();
@@ -42,7 +42,7 @@ var Load;
                 }
             },
             {
-                text: LanguageManager.sLang("edt_common_close"),
+                text: i18next.t('common:close'),
                 click: function()
                 {
                     $("#importScreen").dialog('close');
@@ -74,7 +74,7 @@ var Load;
             }
             catch (err)
             {
-                alert(LanguageManager.sLang("edt_load_invalid_xml"));
+                alert(i18next.t('load:invalid_xml'));
                 return;
             }
 

@@ -53,9 +53,7 @@ var HtmlGenerator;
             }
             else
             {
-                alert(
-                    LanguageManager.sLang("edt_html_error_no_test")
-                );
+                alert(i18next.t('htmlGenerator:error.no_test'));
             }
         });
         $("#preconditionsDiv").on('click', ".addGroupPrecondition", function()
@@ -68,9 +66,7 @@ var HtmlGenerator;
             }
             else
             {
-                alert(
-                    LanguageManager.sLang("edt_html_error_no_test")
-                );
+                alert(i18next.t('htmlGenerator:error.no_test'));
             }
         });
 
@@ -83,9 +79,7 @@ var HtmlGenerator;
             }
             else
             {
-                alert(
-                    LanguageManager.sLang("edt_html_error_no_effect")
-                );
+                alert(i18next.t('htmlGenerator:error.no_effect'));
             }
         });
 
@@ -110,7 +104,7 @@ var HtmlGenerator;
                 var div = $("#params").children().last();
                 // div.children().children().prop('disabled', true);
                 $(div).prop('id', 't');
-                div.find(".name").val(LanguageManager.sLang("edt_html_time"));
+                div.find(".name").val(i18next.t('htmlGenerator:time'));
                 div.find(".parameter-type-select").val("integer");
                 div.find(".parameter-type-select").prop("disabled", "disabled");
                 div.find(".parameter-initial-value-container").remove();
@@ -154,7 +148,7 @@ var HtmlGenerator;
                 if (!addedDiv.find(".enumeration-screen-button").length)
                 {
                     var enumerationScreenButton = $('<button>', { class: "enumeration-screen-button" });
-                    enumerationScreenButton.attr('title', LanguageManager.sLang("edt_html_enumeration_screen_button_alt"));
+                    enumerationScreenButton.attr('title', i18next.t('htmlGenerator:enumeration.button_alt'));
                     var buttonIcon = $('<img>');
                     buttonIcon.attr('src', editor_url + "png/others/list.png");
                     enumerationScreenButton.on('mouseover', function()
@@ -165,7 +159,7 @@ var HtmlGenerator;
                     {
                         buttonIcon.attr('src', editor_url + "png/others/list.png");
                     });
-                    buttonIcon.attr('alt', LanguageManager.sLang("edt_html_enumeration_screen_button_alt"));
+                    buttonIcon.attr('alt', i18next.t('htmlGenerator:enumeration.button_alt'));
                     enumerationScreenButton.append($('<div>').append(buttonIcon));
                     enumerationScreenButton.on('click', function()
                     {
@@ -211,17 +205,17 @@ var HtmlGenerator;
             addEnumerationValue(enumerationValueInput.parent(), $(this).text());
         });
 
-        var alertUserNoEnumValuesDefined = function() { alert(LanguageManager.sLang("edt_html_enumeration_no_values_defined")); };
+        var alertUserNoEnumValuesDefined = function() { alert(i18next.t('htmlGenerator:enumeration.no_values_defined')); };
 
         $("#enumerationScreen").dialog(
         {
-            title: LanguageManager.sLang("edt_html_enumeration_screen_title"),
+            title: i18next.t('htmlGenerator:enumeration.title'),
             height: ParameterValues.heightEnumerationScreen,
             width: ParameterValues.widthEnumerationScreen,
             modal: true,
             buttons: [
             {
-                text: LanguageManager.sLang("edt_common_confirm"),
+                text: i18next.t('common:confirm'),
                 click: function()
                 {
                     var success = saveEnumerationDefinition(enumerationDiv);
@@ -230,7 +224,7 @@ var HtmlGenerator;
                 }
             },
             {
-                text: LanguageManager.sLang("edt_common_cancel"),
+                text: i18next.t('common:cancel'),
                 click: function()
                 {
                     $(this).dialog('close');

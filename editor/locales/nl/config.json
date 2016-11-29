@@ -1,0 +1,21 @@
+{
+    "types": {
+        "boolean": {
+            "translation": "Boolean",
+            "false": "Onwaar",
+            "true": "Waar"
+        },
+        "integer":
+        {
+            "translation": "Integer"
+        },
+        "string":
+        {
+            "translation": "String"
+        },
+        "enumeration":
+        {
+            "translation": "Enumeratie"
+        }
+    }
+}

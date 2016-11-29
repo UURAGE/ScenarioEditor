@@ -36,7 +36,7 @@ var Validator;
         {
             validationReport.push(
             {
-                message: LanguageManager.sLang("edt_validator_no_name"),
+                message: i18next.t('validator:no_name'),
                 level: 'warning',
                 jumpToFunction: function() {
                     Metadata.metadataDialog();
@@ -49,7 +49,7 @@ var Validator;
         {
             validationReport.push(
             {
-                message: LanguageManager.sLang("edt_validator_empty_scenario"),
+                message: i18next.t('validator:empty_scenario'),
                 level: 'error',
                 jumpToFunction: function() { }
             });
@@ -69,7 +69,7 @@ var Validator;
             {
                 validationReport.push(
                 {
-                    message: LanguageManager.fLang("edt_validator_empty_subject", [tree.subject]),
+                    message: i18next.t('validator:empty_subject', { postProcess: 'sprintf', sprintf: [tree.subject] }),
                     level: 'error',
                     jumpToFunction: function() { Zoom.zoomIn(tree); }
                 });
@@ -81,24 +81,13 @@ var Validator;
                     // the tree on the first level can start with anything, but the trees following can only start with player nodes
                     if(tree.level !== 0 && Main.nodes[startNodeID].type !== Main.playerType)
                     {
-                        if (Main.nodes[startNodeID].type === Main.computerType)
+                        validationReport.push(
                         {
-                            validationReport.push(
-                            {
-                                message: LanguageManager.fLang("edt_validator_subject_start_type_error_computer", [tree.subject]),
-                                level: 'error',
-                                jumpToFunction: function() { Zoom.zoomIn(tree); }
-                            });
-                        }
-                        else
-                        {
-                            validationReport.push(
-                            {
-                                message: LanguageManager.fLang("edt_validator_subject_start_type_error_situation", [tree.subject]),
-                                level: 'error',
-                                jumpToFunction: function() { Zoom.zoomIn(tree); }
-                            });
-                        }
+                            message: i18next.t('validator:subject_start_type_error',
+                                { subject: tree.subject, type: Main.nodes[startNodeID].type }),
+                            level: 'error',
+                            jumpToFunction: function() { Zoom.zoomIn(tree); }
+                        });
                     }
                 });
             }
@@ -113,7 +102,7 @@ var Validator;
                 {
                     validationReport.push(
                     {
-                        message: LanguageManager.fLang("edt_validator_end_outgoing_connections", [tree.subject]),
+                        message: i18next.t('validator:end_with_outgoing_connections', { postProcess: 'sprintf', sprintf: [tree.subject] }),
                         level: 'error',
                         jumpToFunction: function() {
                             Zoom.zoomIn(tree);
@@ -140,7 +129,7 @@ var Validator;
                         { // node is a dead end, but not marked as end node
                             validationReport.push(
                             {
-                                message: LanguageManager.fLang("edt_validator_unmarked_end", [tree.subject]),
+                                message: i18next.t('validator:unmarked_end', { postProcess: 'sprintf', sprintf: [tree.subject] }),
                                 level: 'error',
                                 jumpToFunction: function() {
                                     Zoom.zoomIn(tree);
@@ -170,7 +159,7 @@ var Validator;
             {
                 validationReport.push(
                 {
-                    message: LanguageManager.sLang("edt_validator_unnamed_subject"),
+                    message: i18next.t('validator:unnamed_subject'),
                     level: 'info',
                     jumpToFunction: function() { Main.selectTree(tree.id); }
                 });
@@ -181,7 +170,7 @@ var Validator;
         {
             validationReport.push(
             {
-                message: LanguageManager.sLang("edt_validator_first_layer_count"),
+                message: i18next.t('validator:first_layer_count'),
                 level: 'error',
                 jumpToFunction: function() { }
             });
@@ -191,7 +180,7 @@ var Validator;
         { // no single iteration errors, but there is no valid end
             validationReport.push(
             {
-                message: LanguageManager.sLang("edt_validator_no_ending"),
+                message: i18next.t('validator:no_ending'),
                 level: 'error',
                 jumpToFunction: function() { }
             });
@@ -201,7 +190,7 @@ var Validator;
         { // no single iteration errors, but there is no valid end
             validationReport.push(
             {
-                message: LanguageManager.sLang("edt_validator_no_valid_ending"),
+                message: i18next.t('validator:no_valid_ending'),
                 level: 'error',
                 jumpToFunction: function() { }
             });
@@ -271,7 +260,7 @@ var Validator;
         $('#validationReport').empty();
         if (!hasErrors)
         {
-            $('#validationReport').append($('<p>').addClass('no-problems').text(LanguageManager.sLang("edt_validator_no_problems")));
+            $('#validationReport').append($('<p>').addClass('no-problems').text(i18next.t('validator:no_problems')));
         }
         else
         {
@@ -279,7 +268,7 @@ var Validator;
             $.each(errors, function(index, e)
             {
                 var row = $('<tr>').addClass('level-' + e.level);
-                var error = $('<td>').text(LanguageManager.sLang("edt_validator_"+e.level));
+                var error = $('<td>').text(i18next.t('validator:' + e.level));
                 var message = $('<td>').append($('<span>').text(e.message).on('click', e.jumpToFunction).css('cursor', 'pointer'));
                 row.append(error).append(message);
                 table.append(row);

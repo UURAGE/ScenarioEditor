@@ -232,9 +232,7 @@ var Save;
 
         if (hasErrors)
         {
-            if (!window.confirm(
-                    LanguageManager.sLang("edt_save_export_error")
-                ))
+            if (!window.confirm(i18next.t('save:error.export')))
             {
                 return false;
             }

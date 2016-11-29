@@ -191,20 +191,20 @@ var Metadata;
 
         $("#metaScreen").dialog(
         {
-            title: LanguageManager.sLang("edt_metadata_title"),
+            title: i18next.t('metadata:properties_title'),
             height: ParameterValues.heightMetaScreen,
             width: ParameterValues.widthMetaScreen,
             modal: true,
             buttons: [
             {
-                text: LanguageManager.sLang("edt_common_confirm"),
+                text: i18next.t('common:confirm'),
                 click: function()
                 {
                     saveMetaObject();
                 }
             },
             {
-                text: LanguageManager.sLang("edt_common_cancel"),
+                text: i18next.t('common:cancel'),
                 click: function()
                 {
                     $("#metaScreen").dialog('close');
@@ -262,13 +262,13 @@ var Metadata;
 
         $("#parameterScreen").dialog(
         {
-            title: LanguageManager.sLang("edt_metadata_parameters_title"),
+            title: i18next.t('metadata:parameters_title'),
             height: ParameterValues.heightParameterScreen,
             width: ParameterValues.widthParameterScreen,
             modal: true,
             buttons: [
             {
-                text: LanguageManager.sLang("edt_common_confirm"),
+                text: i18next.t('common:confirm'),
                 click: function()
                 {
                     saveParameters();
@@ -276,7 +276,7 @@ var Metadata;
                 }
             },
             {
-                text: LanguageManager.sLang("edt_common_cancel"),
+                text: i18next.t('common:cancel'),
                 click: function()
                 {
                     $(this).dialog('close');

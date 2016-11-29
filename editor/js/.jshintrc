@@ -7,8 +7,12 @@
     "-W079": true,
     "predef": [
         "editor_url",
-        "LanguageManager",
+        "language",
         "jsPlumb",
+        "i18next",
+        "i18nextBrowserLanguageDetector",
+        "i18nextXHRBackend",
+        "i18nextSprintfPostProcessor",
         "Utils",
         "Config",
         "ParameterValues",

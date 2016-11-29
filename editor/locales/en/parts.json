@@ -1,0 +1,30 @@
+{
+    "statement": "Statement",
+    "empty_group": "Empty group",
+    "one_condition_group": "Group with one precondition",
+    "all_true": "all true",
+    "one_true": "at least one true",
+    "add_condition": "Add precondition",
+    "add_group": "Add group",
+    "delete_group": "Delete group",
+    "add_effect": "Add effect",
+    "name": "Name",
+    "type": "Type",
+    "initial_value": "Initial value",
+    "description": "Description",
+    "add_time_title": "Add parameter time +1 to every node",
+    "general": "General",
+    "scenario_name": "Scenario name",
+    "difficulty": {
+        "translation": "Difficulty",
+        "very_easy": "Very easy",
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Hard",
+        "very_hard": "Very hard"
+    },
+    "language": "Language",
+    "change_type": "Default change type",
+    "file_to_import": "File to import",
+    "values": "Values"
+}

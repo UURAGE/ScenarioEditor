@@ -1,0 +1,12 @@
+{
+    "error": {
+        "no_test": "Error: there are no parameters to test on.",
+        "no_effect": "Error: there are no parameters to affect"
+    },
+    "time": "Time",
+    "enumeration": {
+        "title": "Enumeration",
+        "button_alt": "Define enumeration",
+        "no_values_defined": "There are no values defined for the enumeration"
+    }
+}

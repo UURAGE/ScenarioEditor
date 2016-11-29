@@ -26,7 +26,7 @@ var Parts;
     {
         return '' +
             '<div id="itemControls">' +
-                '<button class="clear">' + LanguageManager.sLang("edt_draft_delete_all") + '</button>' +
+                '<button class="clear">' + i18next.t('draft:delete_all') + '</button>' +
             '</div>' +
             '<table style="width:100%">' +
                 '<tr>' +
@@ -40,11 +40,11 @@ var Parts;
                             '<col span="1" style="width: 15%;">' +
                          '</colgroup>' +
                          '<tr>' +
-                            '<th class="dragHandle" id="draftDragAll" title="' + LanguageManager.sLang("edt_draft_drag_all") + '">[[::]]</th>' +
-                            '<th class="col0" title="' + LanguageManager.sLang("edt_common_player") + ' / ' + LanguageManager.sLang("edt_common_computer") + '">' +
-                                LanguageManager.sLang("edt_draft_letter_player") + '/' + LanguageManager.sLang("edt_draft_letter_computer") +
+                            '<th class="dragHandle" id="draftDragAll" title="' + i18next.t('draft:drag_all') + '">[[::]]</th>' +
+                            '<th class="col0" title="' + i18next.t('common:player') + ' / ' + i18next.t('common:computer') + '">' +
+                                i18next.t('draft:letter.player') + '/' + i18next.t('draft:letter.computer') +
                             '</th>' +
-                            '<th class="col1">' + LanguageManager.sLang("edt_parts_statement") + '</th>' +
+                            '<th class="col1">' + i18next.t('parts:statement') + '</th>' +
                         '</tr>' +
                     '</table>' +
                 '</tr>' +
@@ -63,7 +63,7 @@ var Parts;
                     '</div>' +
                 '</tr>' +
             '</table>' +
-            '<button id="addDraftItem" class="add">' + LanguageManager.sLang("edt_draft_add_item") + '</button>';
+            '<button id="addDraftItem" class="add">' + i18next.t('draft:add_item') + '</button>';
     }
 
     function getParameterEffectHTML()
@@ -72,20 +72,20 @@ var Parts;
             '<div>' +
                 '<select class="parameter-idref-select"></select>' +
                 '<div class="parameter-effect-container" style="display:inline"/>' +
-                '<button type="button" class="deleteParent" title="'+LanguageManager.sLang("edt_common_delete")+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
+                '<button type="button" class="deleteParent" title="'+i18next.t('common:delete')+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
             '</div>';
     }
 
     function getDeleteParentButtonHTML()
     {
-        return '' + '<button type="button" class="deleteParent" title="'+LanguageManager.sLang("edt_common_delete")+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>';
+        return '' + '<button type="button" class="deleteParent" title="'+i18next.t('common:delete')+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>';
     }
 
     function getAddParameterEffectButtonHTML()
     {
         return '' +
-            '<button title="' + LanguageManager.sLang('edt_common_add') + '">' +
-                '<img src="' + editor_url + 'png/others/plus.png" alt="+">' + ' ' + LanguageManager.sLang('edt_parts_add_effect') +
+            '<button title="' + i18next.t('common:add') + '">' +
+                '<img src="' + editor_url + 'png/others/plus.png" alt="+">' + ' ' + i18next.t('parts:add_effect') +
             '</button>';
     }
 
@@ -93,17 +93,17 @@ var Parts;
     {
         return '' +
             '<div class="precondition groupprecondition empty">' +
-                '<div class="emptyLabel">'+LanguageManager.sLang("edt_parts_empty_group")+'</div>' +
-                '<div class="singleLabel hidden">'+LanguageManager.sLang("edt_parts_one_condition_group")+':</div>' +
+                '<div class="emptyLabel">'+i18next.t('parts:empty_group')+'</div>' +
+                '<div class="singleLabel hidden">'+i18next.t('parts:one_condition_group')+':</div>' +
                 '<div class="groupPreconditionRadioDiv">' +
-                    '<label><input type="radio" name="initialRadioName" value="and" checked="checked" />'+LanguageManager.sLang("edt_parts_all_true")+'</label>' +
-                    '<label><input type="radio" name="initialRadioName" value="or" />'+LanguageManager.sLang("edt_parts_one_true")+'</label>' +
+                    '<label><input type="radio" name="initialRadioName" value="and" checked="checked" />'+i18next.t('parts:all_true')+'</label>' +
+                    '<label><input type="radio" name="initialRadioName" value="or" />'+i18next.t('parts:one_true')+'</label>' +
                 '</div>' +
                 '<div class="groupPreconditionDiv"></div>' +
-                '<button class="addPrecondition"><img src="' + editor_url + 'png/others/plus.png" alt="+"> '+LanguageManager.sLang("edt_parts_add_condition")+'</button>' +
-                '<button class="addGroupPrecondition"><img src="' + editor_url + 'png/others/plus.png" alt="+"> '+LanguageManager.sLang("edt_parts_add_group")+'</button>' +
+                '<button class="addPrecondition"><img src="' + editor_url + 'png/others/plus.png" alt="+"> '+i18next.t('parts:add_condition')+'</button>' +
+                '<button class="addGroupPrecondition"><img src="' + editor_url + 'png/others/plus.png" alt="+"> '+i18next.t('parts:add_group')+'</button>' +
                 '' +
-                '<button type="button" class="deleteParent" title="'+LanguageManager.sLang("edt_common_delete")+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"> '+LanguageManager.sLang("edt_parts_delete_group")+'</button>' +
+                '<button type="button" class="deleteParent" title="'+i18next.t('common:delete')+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"> '+i18next.t('parts:delete_group')+'</button>' +
             '</div>';
     }
 
@@ -114,17 +114,17 @@ var Parts;
                 '<table>' +
                     '<thead id="paramsTableHead" class="hidden">' +
                         '<tr>' +
-                            '<th>'+LanguageManager.sLang("edt_parts_name")+'</th>' +
-                            '<th>'+LanguageManager.sLang("edt_parts_type")+'</th>' +
-                            '<th>'+LanguageManager.sLang("edt_parts_initial_value")+'</th>' +
-                            '<th>'+LanguageManager.sLang("edt_parts_description")+'</th>' +
+                            '<th>'+i18next.t('parts:name')+'</th>' +
+                            '<th>'+i18next.t('parts:type')+'</th>' +
+                            '<th>'+i18next.t('parts:initial_value')+'</th>' +
+                            '<th>'+i18next.t('parts:description')+'</th>' +
                         '</tr>' +
                     '</thead>' +
                     '<tbody id="params">' +
                     '</tbody>' +
                 '</table>' +
-                '<button type="button" id="addParameter"><img src="' + editor_url + 'png/others/plus.png" title="'+LanguageManager.sLang("edt_common_add")+'"></button>' +
-                '<button type="button" id="addTimeParameter"><img src="' + editor_url + 'png/others/stopwatch.png" title="'+LanguageManager.sLang("edt_parts_add_time_title")+'"></button>' +
+                '<button type="button" id="addParameter"><img src="' + editor_url + 'png/others/plus.png" title="'+i18next.t('common:add')+'"></button>' +
+                '<button type="button" id="addTimeParameter"><img src="' + editor_url + 'png/others/stopwatch.png" title="'+i18next.t('parts:add_time_title')+'"></button>' +
             '</div>';
     }
 
@@ -132,11 +132,11 @@ var Parts;
     {
         return '' +
             '<div>' +
-                '<label>' +LanguageManager.sLang("edt_parts_values")+'</label>' +
+                '<label>' +i18next.t('parts:values')+'</label>' +
                 '<ul id="enumeration-value-list">' +
                     '<li>' +
                         '<input autofocus type="text" id="enumeration-value-input"/>' +
-                        '<button type="button" id="add-enumeration-value-button"><img src="' + editor_url + 'png/others/plus.png" title="'+LanguageManager.sLang("edt_common_add")+'"></button>' +
+                        '<button type="button" id="add-enumeration-value-button"><img src="' + editor_url + 'png/others/plus.png" title="'+i18next.t('common:add')+'"></button>' +
                     '</li>' +
                 '</ul>' +
             '</div>';
@@ -153,31 +153,31 @@ var Parts;
                 scenarioLanguageSelect.append($('<option>', { value: language.code, text: language.name }));
             });
             scenarioLanguageRow = $('<tr>');
-            scenarioLanguageRow.append($('<th>').append($('<label>', { for: "scenarioLanguage", text: LanguageManager.sLang("edt_parts_language") + ':' })));
+            scenarioLanguageRow.append($('<th>').append($('<label>', { for: "scenarioLanguage", text: i18next.t('parts:language') + ':' })));
             scenarioLanguageRow.append($('<td>').append(scenarioLanguageSelect));
         }
         return '' +
             '<div>' +
                 '<table>' +
-                    '<thead id="general"><th colspan="2"><h3>'+LanguageManager.sLang("edt_parts_general")+'</h3></th></thead>' +
+                    '<thead id="general"><th colspan="2"><h3>'+i18next.t('parts:general')+'</h3></th></thead>' +
                     '<tbody>' +
                         '<tr>' +
-                            '<th><label for="scenarioName">'+LanguageManager.sLang("edt_parts_scenario_name")+':</label></th>' +
+                            '<th><label for="scenarioName">'+i18next.t('parts:scenario_name')+':</label></th>' +
                             '<td><input type="text" id="scenarioName" /></td>' +
                         '</tr>' +
                         (scenarioLanguageRow ? scenarioLanguageRow.prop('outerHTML') : "") +
                         '<tr>' +
-                            '<th><label for="scenarioDifficulty">'+LanguageManager.sLang("edt_parts_difficulty")+':</label></th>' +
+                            '<th><label for="scenarioDifficulty">'+i18next.t('parts:difficulty.translation')+':</label></th>' +
                             '<td><select id="scenarioDifficulty">' +
-                                '<option value="very_easy">'+LanguageManager.sLang("edt_parts_very_easy")+'</option>' +
-                                '<option value="easy">'+LanguageManager.sLang("edt_parts_easy")+'</option>' +
-                                '<option value="medium" selected="selected">'+LanguageManager.sLang("edt_parts_medium")+'</option>' +
-                                '<option value="difficult">'+LanguageManager.sLang("edt_parts_hard")+'</option>' +
-                                '<option value="very_difficult">'+LanguageManager.sLang("edt_parts_very_hard")+'</option>' +
+                                '<option value="very_easy">'+i18next.t('parts:difficulty.very_easy')+'</option>' +
+                                '<option value="easy">'+i18next.t('parts:difficulty.easy')+'</option>' +
+                                '<option value="medium" selected="selected">'+i18next.t('parts:difficulty.medium')+'</option>' +
+                                '<option value="difficult">'+i18next.t('parts:difficulty.hard')+'</option>' +
+                                '<option value="very_difficult">'+i18next.t('parts:difficulty.very_hard')+'</option>' +
                             '</select></td>' +
                         '</tr>' +
                         '<tr id="scenarioDescription-container">' +
-                            '<th><label for="scenarioDescription">'+LanguageManager.sLang("edt_parts_description")+':</label></th>' +
+                            '<th><label for="scenarioDescription">'+i18next.t('parts:description')+':</label></th>' +
                             '<td><textarea id="scenarioDescription"' +
                                 'style="height: 200px; width: 100%; -moz-box-sizing: border-box; box-sizing: border-box">' +
                             '</textarea></td>' +
@@ -185,7 +185,7 @@ var Parts;
                     '</tbody>' +
                     '<thead id="meta-property-values-header" ></thead>' +
                     '<tbody id="meta-property-values" style="display:none"/>' +
-                    '<thead><th colspan="2"><h3>' +LanguageManager.sLang("edt_common_characters")+ '</h3></th></thead>' +
+                    '<thead><th colspan="2"><h3>' +i18next.t('common:characters')+ '</h3></th></thead>' +
                     '<tbody id="meta-character-property-values" style="display:none">' +
                         '<tr><td colspan="2" id="character-tabs"/></tr>' +
                     '</tbody>' +
@@ -198,7 +198,7 @@ var Parts;
         return '' +
                 '<div id="impExp">' +
                     '<form id="importForm" action="" method="post" enctype="multipart/form-data">' +
-                        '<label for="file">'+LanguageManager.sLang("edt_parts_file_to_import")+':</label>' +
+                        '<label for="file">'+i18next.t('parts:file_to_import')+':</label>' +
                         '<input type="file" accept=".txt,.xml" name="import[]" id="import" multiple="false"/>' +
                     '</form>' +
                 '</div>' +
@@ -210,7 +210,7 @@ var Parts;
         var typeOptions = "";
         for (var typeName in Config.types)
         {
-            typeOptions += '<option value="' + typeName + '">' + LanguageManager.sLang("edt_config_types_" + typeName) + '</option>';
+            typeOptions += '<option value="' + typeName + '">' + i18next.t('config:types.' + typeName + '.translation') + '</option>';
         }
         return '' +
             '<tr class="newParameter">' +
@@ -230,7 +230,7 @@ var Parts;
                     '</textarea>' +
                 '</td>' +
                 '<td>' +
-                    '<button type="button" class="deleteParent" title="'+LanguageManager.sLang("edt_common_delete")+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
+                    '<button type="button" class="deleteParent" title="'+i18next.t('common:delete')+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
                 '</td>' +
             '</tr>';
     }
@@ -242,7 +242,7 @@ var Parts;
                 '<select class="parameter-idref-select">' +
                 '</select>' +
                 '<div class="precondition-test-container" style="display:inline"/>' +
-                '<button type="button" class="deleteParent" title="'+LanguageManager.sLang("edt_common_delete")+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
+                '<button type="button" class="deleteParent" title="'+i18next.t('common:delete')+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
             '</div>';
     }
 })();

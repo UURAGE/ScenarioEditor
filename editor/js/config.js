@@ -454,8 +454,8 @@ var Config;
             appendControlTo: function(containerEl, htmlId)
             {
                 var booleanSelect = $('<select>', { id: htmlId });
-                booleanSelect.append($('<option>', { value: String(false), text: LanguageManager.sLang("edt_config_types_boolean_false") }));
-                booleanSelect.append($('<option>', { value: String(true),  text: LanguageManager.sLang("edt_config_types_boolean_true")  }));
+                booleanSelect.append($('<option>', { value: String(false), text: i18next.t('config:types.boolean.false') }));
+                booleanSelect.append($('<option>', { value: String(true),  text: i18next.t('config:types.boolean.true') }));
                 containerEl.append(booleanSelect);
             },
             getFromDOM: function(containerEl)

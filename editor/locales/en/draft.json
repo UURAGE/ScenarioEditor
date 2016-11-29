@@ -1,0 +1,17 @@
+{
+    "letter":
+    {
+        "player": "P",
+        "computer": "C"
+    },
+    "drag_all": "Drag from here to place all items on the screen as separate nodes",
+    "add_item": "Add item",
+    "not_available": "[Not available]",
+    "all_items": "[All items]",
+    "item_number": "[Item #%i]",
+    "no_filled_items": "No filled items present!",
+    "no_subject_open": "No subject open!",
+    "empty_item": "Item is empty!",
+    "delete_all": "Delete all",
+    "delete_all_confirm": "Delete all items from the note pad?"
+}

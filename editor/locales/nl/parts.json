@@ -1,0 +1,30 @@
+{
+    "statement": "Zin",
+    "empty_group": "Lege groep",
+    "one_condition_group": "Groep met één preconditie",
+    "all_true": "alles waar",
+    "one_true": "minstens één waar",
+    "add_condition": "Preconditie toevoegen",
+    "add_group": "Groep toevoegen",
+    "delete_group": "Groep verwijderen",
+    "add_effect": "Effect toevoegen",
+    "name": "Naam",
+    "type": "Type",
+    "initial_value": "Beginwaarde",
+    "description": "Beschrijving",
+    "add_time_title": "Parameter tijd +1 toevoegen aan elke knoop",
+    "general": "Algemeen",
+    "scenario_name": "Naam scenario",
+    "difficulty": {
+        "translation": "Moeilijkheidsgraad",
+        "very_easy": "Zeer makkelijk",
+        "easy": "Makkelijk",
+        "medium": "Gemiddeld",
+        "hard": "Moeilijk",
+        "very_hard": "Zeer moeilijk"
+    },
+    "language": "Taal",
+    "change_type": "Standaard verander type",
+    "file_to_import": "Bestand om te importeren",
+    "values": "Waarden"
+}

@@ -2,9 +2,9 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-if (!function_exists('editor_path')) 
+if (!function_exists('editor_path'))
 {
-    
+
     /**
      * Get the path to the editor folder, and possible subfolders.
      * @param string $string
@@ -14,9 +14,9 @@ if (!function_exists('editor_path'))
     {
         return FCPATH . "editor/" . $string;
     }
-}  
-    
-if(!function_exists('flag_path')) 
+}
+
+if(!function_exists('flag_path'))
 {
     /**
     * Get the path to the flag of a corrsesponding language
@@ -25,11 +25,11 @@ if(!function_exists('flag_path'))
     */
     function flag_path($language)
     {
-        $codes = config_item("flagCodes");
+        $codes = config_item("languageCodes");
 
         return game_path('images/flags/'.$codes[$language].".png");
     }
-}  
+}
 
 
 
