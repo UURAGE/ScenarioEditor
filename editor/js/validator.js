@@ -84,7 +84,7 @@ var Validator;
                         validationReport.push(
                         {
                             message: i18next.t('validator:subject_start_type_error',
-                                { subject: tree.subject, type: Main.nodes[startNodeID].type }),
+                                { subject: tree.subject, type: i18next.t('common:' + Main.nodes[startNodeID].type) }),
                             level: 'error',
                             jumpToFunction: function() { Zoom.zoomIn(tree); }
                         });

@@ -5,16 +5,13 @@
             "false": "Onwaar",
             "true": "Waar"
         },
-        "integer":
-        {
+        "integer": {
             "translation": "Integer"
         },
-        "string":
-        {
+        "string": {
             "translation": "String"
         },
-        "enumeration":
-        {
+        "enumeration": {
             "translation": "Enumeratie"
         }
     }

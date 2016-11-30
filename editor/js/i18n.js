@@ -32,6 +32,17 @@
             'save',
             'validator'
         ],
+        interpolation:
+        {
+            format: function(value, format, lng)
+            {
+                if (format === 'uppercase') return value.toUpperCase();
+                if (format === 'lowercase') return value.toLowerCase();
+                // Future: For formatting dates in multiple locales we can use 'moment.js' and for numbers 'numerical.js'
+                // if(value instanceof Date) return moment(value).format(format);
+                return value;
+            }
+        },
         detection:
         {
             // order and from where user language should be detected
