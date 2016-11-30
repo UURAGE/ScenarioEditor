@@ -752,7 +752,7 @@ var Main;
         node.append( $('<div>',{class:"ep"}) );
 
         var input =  $('<div>',{class:"statementInput"});
-        var txtArea = $('<textarea>',{ class:"nodestatement", maxlength: Config.configObject.settings.statement.type.maxLength, text: Config.configObject.settings.statement.type.defaultValue });
+        var txtArea = $('<textarea>',{ class: "nodestatement", maxlength: Config.configObject.settings.statement.type.maxLength, text: Config.configObject.settings.statement.type.defaultValue });
         // Because textareas apparently don't act normally:
         // Manual deselect for txtArea
         txtArea.on("mousedown", function(event)

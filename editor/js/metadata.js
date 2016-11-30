@@ -321,7 +321,8 @@ var Metadata;
 
             if (parameter.type.name === "enumeration")
             {
-                HtmlGenerator.appendEnumerationValueListTo(typeSelect.parent(), parameter.type.values);
+                var enumerationValues = parameter.type.options.sequence.map(function(option) { return option.text; });
+                HtmlGenerator.appendEnumerationValueListTo(typeSelect.parent(), enumerationValues);
             }
             typeSelect.val(parameter.type.name).trigger('change');
             addedDiv.removeClass("changedTypeParameter");

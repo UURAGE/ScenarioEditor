@@ -218,8 +218,24 @@
 						<element name="enumeration">
 							<complexType>
 								<sequence>
-									<element name="option" type="string" minOccurs="1" maxOccurs="unbounded" />
-									<element name="default" type="string" minOccurs="0" maxOccurs="1"/>
+									<element name="option" minOccurs="1" maxOccurs="unbounded">
+										<complexType>
+											<simpleContent>
+												<extension base="string">
+													<attribute name="value" type="NCName" use="optional" />
+												</extension>
+											</simpleContent>
+										</complexType>
+									</element>
+									<element name="default" minOccurs="0" maxOccurs="1">
+										<complexType>
+											<simpleContent>
+												<extension base="string">
+													<attribute name="value" type="NCName" use="optional" />
+												</extension>
+											</simpleContent>
+										</complexType>
+									</element>
 								</sequence>
 							</complexType>
 						</element>

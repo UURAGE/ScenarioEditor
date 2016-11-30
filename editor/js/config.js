@@ -109,7 +109,7 @@ var Config;
                 name: name,
                 description: $(nodeXML).children('description').text(),
                 scopes: nodeScopes,
-                type: loadType($(nodeXML).children('type').children())
+                type: loadType($(nodeXML).children('type').children(), id)
             };
         }
         else if (nodeXML.nodeName === nodeName + "Section")
@@ -171,10 +171,10 @@ var Config;
         }
     }
 
-    function loadType(typeXML)
+    function loadType(typeXML, id)
     {
         var typeName = typeXML[0].nodeName;
-        return Config.types[typeName].loadType(typeXML);
+        return Config.types[typeName].loadType(typeXML, id);
     }
 
     function loadCharacterCollection(collectionXML)
@@ -200,7 +200,10 @@ var Config;
 
         var id = nodeXML.getAttribute('id');
         var name = nodeXML.getAttribute('name');
-        if (!name) name = i18next.t('configXML:character.' + id);
+        if (!name && i18next.exists('configXML:character.' + id))
+        {
+            name = i18next.t('configXML:character.' + id);
+        }
         return { id: id, name: name, properties: properties, parameters: parameters};
     }
 
@@ -488,56 +491,90 @@ var Config;
             defaultValue: "",
             assignmentOperators: [Config.assignmentOperators.assign],
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
-            loadType: function(typeXML)
+            loadType: function(typeXML, id)
             {
-                var values = [];
-                typeXML.children('option').each(function(index, valueXML)
+                var options = { sequence: [] };
+                var addOption = function(index, optionXML)
                 {
-                    values.push(valueXML.textContent);
-                });
+                    var value = $(optionXML).attr('value');
+                    var text = optionXML.textContent;
+                    if (!text)
+                    {
+                        text = i18next.t(['configXML:type', this.name, id, value].join('.'));
+                        if (!options.byValue) options.byValue = {};
+                    }
+                    var option = { text: text };
+                    if (options.byValue)
+                    {
+                        option.value = value;
+                        options.byValue[option.value] = option;
+                    }
+                    options.sequence.push(option);
+                };
+                typeXML.children('option').each(addOption.bind(this));
 
-                var defaultValue = values[0];
+                var defaultValue = options.byValue ? options.sequence[0].value : options.sequence[0].text;
                 var defaultEl = typeXML.children('default');
-                if (defaultEl.length > 0 && values.indexOf(defaultEl[0].textContent) !== -1)
+                if (defaultEl.length > 0)
                 {
-                    defaultValue = defaultEl[0].textContent;
+                    var value = $(defaultEl).attr('value');
+                    if (defaultEl[0].textContent)
+                    {
+                        options.sequence.forEach(function(option)
+                        {
+                            if (option.text === defaultEl[0].textContent)
+                            {
+                                defaultValue = option.text;
+                            }
+                        });
+                    }
+                    else if (options.byValue && value)
+                    {
+                        defaultValue = value;
+                    }
                 }
 
-                return $.extend({ values: values }, this, { defaultValue: defaultValue });
+                return $.extend({ options: options }, this, { defaultValue: defaultValue });
             },
             loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
-                var values = [];
+                var options = { sequence: [] };
                 typeEl.find(".enumeration-value-list").children().each(function(index, valueItem)
                 {
-                    values.push($(valueItem).text());
+                    var option = { text: $(valueItem).text() };
+                    options.sequence.push(option);
                 });
-                var defaultValue = defaultValueContainer.length ? this.getFromDOM(defaultValueContainer) : values[0];
-                return $.extend({ values: values }, this, { defaultValue: defaultValue });
+                var defaultValue = defaultValueContainer.length ? this.getFromDOM(defaultValueContainer) : options.sequence[0].text;
+                return $.extend({ options: options }, this, { defaultValue: defaultValue });
             },
-            castFrom: function(type, value)
+            castFrom: function(type, text)
             {
-                var index = this.values.indexOf(String(value));
-                if (index !== -1) return this.values[index];
-                else              return this.values[0];
+                // Only called for user-defined parameters
+                var castValue = this.options.sequence[0].text;
+                this.options.sequence.forEach(function(option)
+                {
+                    if (option.text === text)
+                        castValue = option.text;
+                });
+                return castValue;
             },
             insertType: function(typeXML)
             {
                 var enumerationXML = appendChild(typeXML, 'enumeration');
-                var appendOptionChild = function(value)
+                var appendOptionChild = function(option)
                 {
                     var optionXML = appendChild(enumerationXML, 'option');
-                    this.toXML(optionXML, value);
+                    this.toXML(optionXML, this.options.byValue ? option.value : option.text);
                 };
-                this.values.forEach(appendOptionChild.bind(this));
+                this.options.sequence.forEach(appendOptionChild.bind(this));
                 return enumerationXML;
             },
             appendControlTo: function(containerEl, htmlId)
             {
                 var selectEl = $('<select>', { id: htmlId });
-                this.values.forEach(function(value)
+                this.options.sequence.forEach(function(option)
                 {
-                    selectEl.append($('<option>', { text: value, value: value }));
+                    selectEl.append($('<option>', option));
                 });
                 containerEl.append(selectEl);
             },

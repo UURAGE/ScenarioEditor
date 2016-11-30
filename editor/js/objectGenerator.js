@@ -24,7 +24,7 @@ var ObjectGenerator;
         var typeName = div.find(".parameter-type-select").val();
         var type = Config.types[typeName].loadTypeFromDOM(div, div.find(".parameter-initial-value-container"));
         // If it's an enumeration and there are no values defined, we can't define it either
-        if(typeName === "enumeration" && type.values.length === 0) return;
+        if(typeName === "enumeration" && type.options.sequence.length === 0) return;
         return {
             id: div.prop('id'),
             name: name,
