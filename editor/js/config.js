@@ -83,7 +83,10 @@ var Config;
         {
             languageSettingsXML.children().each(function(index, languageSettingXML)
             {
-                var language = { code: languageSettingXML.getAttribute('code'), name: $(languageSettingXML).text() };
+                var languageName = $(languageSettingXML).text();
+                var languageCode = languageSettingXML.getAttribute('code');
+                if (!languageName) languageName = i18next.t('configXML:language.' + languageCode);
+                var language = { code: languageCode, name: languageName };
                 settings.languages.byCode[language.code] = language;
                 settings.languages.sequence.push(language);
             });
@@ -97,10 +100,13 @@ var Config;
         {
             var nodeScopes = loadScopes(nodeXML);
             mergeScopes(nodeScopes, parentScopes);
+            var id = nodeXML.getAttribute('id');
+            var name = nodeXML.getAttribute('name');
+            if (!name) name = i18next.t('configXML:' + nodeName + '.' + id);
             return {
                 kind: nodeName,
-                id: nodeXML.getAttribute('id'),
-                name: nodeXML.getAttribute('name'),
+                id: id,
+                name: name,
                 description: $(nodeXML).children('description').text(),
                 scopes: nodeScopes,
                 type: loadType($(nodeXML).children('type').children())
@@ -191,7 +197,11 @@ var Config;
     {
         var properties = loadCollectionOrDefault($(nodeXML).children('properties'), 'property', defaultPropertyCollection, defaultPropertyScopes);
         var parameters = loadCollectionOrDefault($(nodeXML).children('parameters'), 'parameter', defaultParameterCollection, defaultParameterScopes);
-        return { id: nodeXML.getAttribute('id'), name: nodeXML.getAttribute('name'), properties: properties, parameters: parameters};
+
+        var id = nodeXML.getAttribute('id');
+        var name = nodeXML.getAttribute('name');
+        if (!name) name = i18next.t('configXML:character.' + id);
+        return { id: id, name: name, properties: properties, parameters: parameters};
     }
 
     function loadCollectionOrDefault(collectionXML, nodeName, defaultCollection, defaultScopes)

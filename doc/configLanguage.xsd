@@ -117,7 +117,7 @@
 				<group ref="tns:typeGroup" />
 			</sequence>
 			<attribute name="id" type="NCName" use="required" />
-			<attribute name="name" type="string" use="required" />
+			<attribute name="name" type="string" use="optional" />
 			<attributeGroup ref="tns:propertyScopes" />
 		</complexType>
 	</element>
@@ -140,7 +140,7 @@
 					</restriction>
 				</simpleType>
 			</attribute>
-			<attribute name="name" type="string" use="required" />
+			<attribute name="name" type="string" use="optional" />
 			<attributeGroup ref="tns:parameterScopes" />
 		</complexType>
 	</element>

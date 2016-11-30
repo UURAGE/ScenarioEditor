@@ -22,6 +22,7 @@
             'clipboard',
             'common',
             'config',
+            'configXML',
             'draft',
             'htmlGenerator',
             'load',
@@ -46,14 +47,13 @@
         detection:
         {
             // order and from where user language should be detected
-            order: ['localStorage', 'cookie', 'navigator', 'htmlTag'],
+            order: ['localStorage', 'navigator', 'htmlTag'],
 
             // keys or params to lookup language from
             lookupLocalStorage: 'i18nextLanguage',
-            lookupCookie: 'i18next',
 
             // cache user language on
-            caches: ['localStorage', 'cookie'],
+            caches: ['localStorage'],
 
             // optional htmlTag with lang attribute, the default is:
             htmlTag: document.documentElement
