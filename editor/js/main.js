@@ -364,6 +364,7 @@ var Main;
 
         openMenu = function()
         {
+            if ($(this).hasClass("dropped")) return;
             closeOpenMenu();
             $(this).addClass("dropped");
             $(this).closest(".dropdown").find(".dropdownItems").show();
