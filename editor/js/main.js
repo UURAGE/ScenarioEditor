@@ -345,7 +345,7 @@ var Main;
             var dropdownButton = $(".dropdownButton.dropped");
             // Let the button's regular click handler close the button's own menu
             // (closing it here would cause the click handler to open it again)
-            if (e && e.target == dropdownButton[0]) return;
+            if (e && (e.target == dropdownButton[0] || $.contains(dropdownButton[0], e.target))) return;
 
             closeMenu.call(dropdownButton);
         };
