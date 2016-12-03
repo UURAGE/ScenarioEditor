@@ -26,5 +26,9 @@
     "language": "Taal",
     "change_type": "Standaard verander type",
     "file_to_import": "Bestand om te importeren",
-    "values": "Waarden"
+    "values": "Waarden",
+    "authors": "Auteurs",
+    "email": "Email",
+    "startDate": "Begindatum",
+    "endDate":  "Einddatum"
 }

@@ -138,6 +138,7 @@ var Load3;
             version: 0,
             difficulty: difficulty,
             description: description,
+            authors: [],
             propertyValues: Config.getNewDefaultPropertyValues(['independent']),
             parameters: parameters
         };

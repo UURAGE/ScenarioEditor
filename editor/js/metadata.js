@@ -19,7 +19,8 @@ var Metadata;
         metadataDialog: metadataDialog,
         timePId : null,
         addTimeParameter: addTimeParameter,
-        formatScenarioName: formatScenarioName
+        formatScenarioName: formatScenarioName,
+        addOrExtendAuthor: addOrExtendAuthor
     };
 
     $(document).ready(function()
@@ -42,7 +43,6 @@ var Metadata;
         {
             $(this).animate({height:"1em"}, 500);
         });
-
         $("#params").on('click', '.deleteParent', function()
         {
             var tr = $(this).closest('tr');
@@ -165,6 +165,7 @@ var Metadata;
             version: 0,
             difficulty: "medium",
             description: "",
+            authors: [],
             parameters: getNewDefaultParameters(),
             propertyValues: Config.getNewDefaultPropertyValues(['independent'])
         };
@@ -221,6 +222,29 @@ var Metadata;
         if (Metadata.metaObject.language) $("#scenarioLanguage").val(Metadata.metaObject.language.code).change();
         $("#scenarioDifficulty").val(Metadata.metaObject.difficulty);
         $("#scenarioDescription").val(Metadata.metaObject.description);
+
+        var authorsHeaderEl = $("#authors-header");
+        var authorsEl = $("#authors");
+        authorsEl.find("tr").not("tr:first").remove();
+        if (Metadata.metaObject.authors.length > 0)
+        {
+            authorsHeaderEl.show();
+            authorsEl.show();
+            Metadata.metaObject.authors.forEach(function(author)
+            {
+                var authorRow = $('<tr>');
+                authorRow.append($('<td>', { text: author.name }));
+                authorRow.append($('<td>', { text: author.email ? author.email : "" }));
+                authorRow.append($('<td>', { text: author.startDate }));
+                authorRow.append($('<td>', { text: author.endDate ? author.endDate : "" }));
+                authorsEl.append(authorRow);
+            });
+        }
+        else
+        {
+            authorsHeaderEl.hide();
+            authorsEl.hide();
+        }
 
         var setPropertyInDOM = function(propertyValues, propertyContainerId, property)
         {
@@ -562,6 +586,32 @@ var Metadata;
         else
         {
             return Metadata.metaObject.name;
+        }
+    }
+
+    function addOrExtendAuthor(name, email, startDate, endDate)
+    {
+        var found = false;
+        Metadata.metaObject.authors.forEach(function(existingAuthor)
+        {
+            if (existingAuthor.name === name)
+            {
+                if (email) existingAuthor.email = email;
+                if (startDate) existingAuthor.startDate = startDate;
+                if (endDate) existingAuthor.endDate = endDate;
+                found = true;
+            }
+        });
+
+        if (!found)
+        {
+            var author = {};
+            author.name = name;
+            if (email) author.email = email;
+            author.startDate = startDate;
+            if (endDate) author.endDate = endDate;
+
+            Metadata.metaObject.authors.push(author);
         }
     }
 })();

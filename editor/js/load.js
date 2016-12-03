@@ -227,6 +227,18 @@ var Load;
         var name = $(metadata).children('name').text();
         $('#scenarioNameTab .scenarioName').text(name);
         var description = $(metadata).children('description').text();
+
+        var authors = [];
+        $(metadata).children('authors').children().each(function()
+        {
+            var author = {};
+            author.name = this.attributes.name.value;
+            if (this.attributes.email) author.email = this.attributes.email.value;
+            author.startDate = this.attributes.startDate.value;
+            if (this.attributes.endDate) author.endDate = this.attributes.endDate.value;
+            authors.push(author);
+        });
+
         var language;
         var languageXML = $(metadata).children('language');
         if (languageXML.length > 0)
@@ -277,6 +289,7 @@ var Load;
             version: version ? version : 0,
             difficulty: difficulty,
             description: description,
+            authors: authors,
             propertyValues: propertyValues,
             parameters: parameters,
             timePId: timePId

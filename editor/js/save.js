@@ -45,6 +45,20 @@ var Save;
             languageEl.textContent = Metadata.metaObject.language.name;
         }
         addAndReturnElement("description", nameSpace, metadataEl, true).textContent = Metadata.metaObject.description;
+
+        if (Metadata.metaObject.authors.length > 0)
+        {
+            var authorsEl = addAndReturnElement("authors", nameSpace, metadataEl);
+            Metadata.metaObject.authors.forEach(function(author)
+            {
+                var authorEl = addAndReturnElement("author", nameSpace, authorsEl);
+                authorEl.setAttribute("name", author.name);
+                if (author.email) authorEl.setAttribute("email", author.email);
+                authorEl.setAttribute("startDate", author.startDate);
+                if(author.endDate) authorEl.setAttribute("endDate", author.endDate);
+            });
+        }
+
         addAndReturnElement("difficulty", nameSpace, metadataEl).textContent = Metadata.metaObject.difficulty;
 
         // Save parameter initial values

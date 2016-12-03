@@ -26,5 +26,9 @@
     "language": "Language",
     "change_type": "Default change type",
     "file_to_import": "File to import",
-    "values": "Values"
+    "values": "Values",
+    "authors": "Authors",
+    "email": "Email",
+    "startDate": "Start date",
+    "endDate":  "End date"
 }

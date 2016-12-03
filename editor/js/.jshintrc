@@ -13,6 +13,7 @@
         "i18nextBrowserLanguageDetector",
         "i18nextXHRBackend",
         "i18nextSprintfPostProcessor",
+        "saveAs",
         "Utils",
         "Config",
         "ParameterValues",

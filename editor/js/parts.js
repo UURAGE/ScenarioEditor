@@ -183,6 +183,15 @@ var Parts;
                             '</textarea></td>' +
                         '</tr>' +
                     '</tbody>' +
+                    '<thead id="authors-header"><th><h3>'+i18next.t('parts:authors')+'</h3></th></thead>' +
+                    '<tbody id="authors">' +
+                        '<tr>' +
+                            '<th><h4>'+i18next.t('parts:name')+'</h4></th>' +
+                            '<th><h4>'+i18next.t('parts:email')+'</h4></th>' +
+                            '<th><h4>'+i18next.t('parts:startDate')+'</h4></th>' +
+                            '<th><h4>'+i18next.t('parts:endDate')+'</h4></th>' +
+                        '</tr>' +
+                    '</tbody>' +
                     '<thead id="meta-property-values-header" ></thead>' +
                     '<tbody id="meta-property-values" style="display:none"/>' +
                     '<thead><th colspan="2"><h3>' +i18next.t('common:characters')+ '</h3></th></thead>' +
