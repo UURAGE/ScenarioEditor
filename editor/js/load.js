@@ -382,9 +382,7 @@ var Load;
         });
 
         // fill the insides with text
-        var txtArea = node.find('textarea.nodestatement');
         var txtView = node.find('.statementText');
-        txtArea.val(text);
         txtView.html(Utils.escapeHTML(text));
     }
 

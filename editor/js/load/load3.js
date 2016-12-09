@@ -269,9 +269,7 @@ var Load3;
         });
 
         // fill the insides with text
-        var txtArea = node.find('textarea.nodestatement');
         var txtView = node.find('.statementText');
-        txtArea.val(text);
         txtView.html(Utils.escapeHTML(text));
     }
 
@@ -415,9 +413,7 @@ var Load3;
         });
 
         // fill the insides with text
-        var txtArea = node.find('textarea.nodestatement');
         var txtView = node.find('.statementText');
-        txtArea.val(firstConversationNode.text);
         txtView.html(Utils.escapeHTML(firstConversationNode.text));
     }
 
@@ -481,9 +477,7 @@ var Load3;
                 });
 
                 // fill the insides with text
-                var txtArea = node.find('textarea.nodestatement');
                 var txtView = node.find('.statementText');
-                txtArea.val(textNode.text);
                 txtView.html(Utils.escapeHTML(textNode.text));
 
                 previousConversationNodeId = id;

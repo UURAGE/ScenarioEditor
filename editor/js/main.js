@@ -566,7 +566,7 @@ var Main;
     }
 
     // Add a new node with the given type.
-    function addNewNode(type)
+    function addNewNode(type, triggerEdit, text)
     {
         Main.unsavedChanges = true;
 
@@ -618,7 +618,7 @@ var Main;
         if (type === Main.computerType) acceptableScopes.push('per-computer-own');
 
         Main.nodes[id] = {
-            text: "",
+            text: text ? text : "",
             type: type,
             characterIdRef: characterIdRef,
             parameterEffects: parameterEffects,
@@ -641,7 +641,7 @@ var Main;
         // Always select the node after the creation.
         selectElement(id);
 
-        if (Zoom.isZoomed())
+        if (triggerEdit && Zoom.isZoomed())
             node.trigger("dblclick");
         return Main.nodes[id];
     }
@@ -651,7 +651,7 @@ var Main;
     {
         selectElement(null);
         // create a node of the right type
-        var node = addNewNode(nodeType);
+        var node = addNewNode(nodeType, true);
 
         // node is undefined if there is no zoomed .TreeContainer
         if (node === undefined) return;
@@ -702,13 +702,13 @@ var Main;
             switch(parent.type)
             {
                 case Main.playerType:
-                    node = addNewNode(Main.computerType);
+                    node = addNewNode(Main.computerType, true);
                     break;
                 case Main.computerType:
-                    node = addNewNode(Main.playerType);
+                    node = addNewNode(Main.playerType, true);
                     break;
                 case Main.situationType:
-                    node = addNewNode(Main.playerType);
+                    node = addNewNode(Main.playerType, true);
                     break;
             }
 
@@ -749,99 +749,108 @@ var Main;
         var plumbInstance = Main.trees[parentID].plumbInstance;
 
         // Add the node to the html.
-        var node = $('<div id="'+id+'" class="w '+ type +'">');
-        node.append( $('<div>',{class:"ep"}) );
+        var node = $('<div>', { id: id, class: 'w ' + type });
+        node.append( $('<div>', { class: "ep" }));
 
-        var input =  $('<div>',{class:"statementInput"});
-        var txtArea = $('<textarea>',{ class: "nodestatement", maxlength: Config.configObject.settings.statement.type.maxLength, text: Config.configObject.settings.statement.type.defaultValue });
-        // Because textareas apparently don't act normally:
-        // Manual deselect for txtArea
-        txtArea.on("mousedown", function(event)
-        {
-            if (this.selectionStart !== this.selectionEnd)
-            {
+        var inputDiv =  $('<div>', { class: "statementInput" });
+        node.append(inputDiv);
 
-                this.selectionStart = this.selectionEnd = -1;
-            }
-            event.stopPropagation();
-        });
-        input.append(txtArea);
+        var textDiv = $('<div>', { class:"statementText" });
+        node.append(textDiv);
 
-        input.on('focusout',function(e, cancel)
-        {
-            // Turn hotkeys on again (they are turned off while typing in the node)
-            KeyControl.hotKeysActive = true;
-            var thisNode = $('#'+id);
-
-            var val = thisNode.find('textarea').val();
-            var text = val ? val : "";
-
-            thisNode.find('.statementInput').hide();
-            thisNode.find('.statementText').text(text).show();
-
-            if(cancel)
-            {
-                thisNode.find('textarea').val(Main.nodes[id].text);
-            }
-            else
-            {
-                Main.nodes[id].text = text;
-                changeNodeText(id);
-            }
-            //Enable dragging for this component
-            plumbInstance.setDraggable(thisNode, true);
-        });
-
-        input.on('keydown', function(e)
-        {
-            if(e.ctrlKey && e.keyCode === 13) // enter
-            {
-                input.trigger('focusout', [false]);
-            }
-            if(e.keyCode === 27) // escape
-            {
-                input.trigger('focusout', [true]);
-            }
-        });
-
-        node.append( input );
-        node.append( $('<div>',{class:"statementText"}).hide() );
-        node.append( $('<div>',{class:'imgDiv'} ) );
+        node.append($('<div>', { class:'imgDiv' }));
 
         parent.append(node);
 
-        node.on("dblclick", function()
+        var onStartEdit = function()
         {
-            var thisNode = $('#'+id);
+            node.off('dblclick');
+
             var text = Main.nodes[id].text ? Main.nodes[id].text : "";
 
             KeyControl.hotKeysActive = false;
 
             // Make sure the text fits inside the node
-            var nodeTextDiv = thisNode.find('.statementText');
-            var nodeTextInput = thisNode.find('.statementInput');
             // Retrieve the height before the div becomes invisible
-            var h = nodeTextDiv[0].clientHeight;
-            nodeTextDiv.hide();
-            nodeTextInput.show();
+            var height = textDiv.height();
+            textDiv.hide();
+            inputDiv.show();
+
+            var txtArea = $('<textarea>',
+            {
+                class: "nodestatement",
+                maxlength: Config.configObject.settings.statement.type.maxLength,
+                text: Config.configObject.settings.statement.type.defaultValue
+            });
+
+            // Because textareas apparently don't act normally:
+            // Manual deselect for txtArea
+            txtArea.on("mousedown", function(event)
+            {
+                if (this.selectionStart !== this.selectionEnd)
+                {
+                    this.selectionStart = this.selectionEnd = -1;
+                }
+                event.stopPropagation();
+            });
+
+            var onExitEdit = function(e, cancel)
+            {
+                // Turn hotkeys on again (they are turned off while typing in the node)
+                KeyControl.hotKeysActive = true;
+
+                var text = txtArea.val();
+                inputDiv.empty();
+                inputDiv.hide();
+                textDiv.show();
+
+                if(!cancel)
+                {
+                    Main.nodes[id].text = text;
+                }
+
+                changeNodeText(id);
+
+                //Enable dragging for this component
+                plumbInstance.setDraggable(node, true);
+
+                node.on('dblclick', onStartEdit);
+            };
+
+            txtArea.on('focusout', onExitEdit);
+
+            txtArea.on('keydown', function(e)
+            {
+                if(e.ctrlKey && e.keyCode === 13) // enter
+                {
+                    onExitEdit(e, false);
+                }
+                if(e.keyCode === 27) // escape
+                {
+                    onExitEdit(e, true);
+                }
+            });
+
+            inputDiv.append(txtArea);
 
             // Disable dragging for this component
-            plumbInstance.setDraggable(thisNode, false);
+            plumbInstance.setDraggable(node, false);
 
             // Make room for typing text in the node
-            thisNode.height(h+35);
-            if (thisNode.width() < 128)
-                thisNode.width(128);
+            node.height(height + 35);
+            if (node.width() < 128) node.width(128);
 
-            nodeTextInput.height("100%");
+            inputDiv.height("100%");
 
             // Fill node with current node text
-            var txtArea = thisNode.find('textarea.nodestatement');
-            txtArea.value = text;
+            txtArea.val(text);
             txtArea.focus();
-        });
+        };
 
-        Utils.cssPosition(node, {
+        node.on('dblclick', onStartEdit);
+
+        Utils.cssPosition(node,
+        {
             "top": parent.scrollTop(),
             "left": parent.scrollLeft()
         });
@@ -1463,10 +1472,6 @@ var Main;
         // make sure the text fits inside the node
         var h = nodeTextDiv[0].clientHeight;
         nodeHTML.height(h);
-        var nodeTextInput = nodeHTML.find('.statementInput');
-        nodeTextInput.hide();
-        nodeTextInput.height("100%");
-        nodeTextInput.hide();
 
         Main.trees[node.parent].plumbInstance.updateOffset({elId:nodeID, recalc:true});
         Main.trees[node.parent].plumbInstance.repaint(nodeID, null, 0);
@@ -1578,10 +1583,6 @@ var Main;
 
             // Show the correct divs for the type.
             $("#properties").attr("class", node.type);
-
-            // Show the values of the node in the side bar.
-            // Statement:
-            $("textarea#statement").val(node.text);
 
             // Insert the preconditions in the sidebar
             HtmlGenerator.insertPreconditions(node.preconditions, $("#preconditionsDiv"));

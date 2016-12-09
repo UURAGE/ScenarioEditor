@@ -194,7 +194,7 @@
             }
             DragBox.startDragging(e, text, function(pos)
             {
-                var node = itemToNode(tr);
+                var node = itemToNode(tr, true);
                 $('#' + node.id).offset(pos);
                 return true;
             });
@@ -229,7 +229,7 @@
                         else
                         {
                             // Makes node of current item
-                            itemToNode(tr);
+                            itemToNode(tr, true);
                         }
                     }
                     else if (!e.shiftKey)
@@ -474,12 +474,12 @@
         }
     }
 
-    function itemToNode(tr)
+    function itemToNode(tr, triggerEdit)
     {
         if (isItemEmpty(tr)) return;
 
         var props = tr.data('item').properties,
-            node = Main.addNewNode(props.type);
+            node = Main.addNewNode(props.type, triggerEdit, props.statement);
 
         if (node === null)
         {
@@ -487,17 +487,8 @@
             console.error("Item to node failed.");
             return;
         }
-        // deselect the node before making changes in the object
-        // (otherwise chages will be oversaved with empty values)
-        Main.selectElement(null);
-        node.text = props.statement;
 
-        // make sure the starting input-text equals current saved node.text
-        var nodeDiv = $("#"+node.id);
-        var inputText = nodeDiv.find(".nodestatement");
-        inputText.val(node.text);
-        Main.changeNodeText(node.id);
-        Main.selectElement(node.id);
+        if (!triggerEdit) Main.changeNodeText(node.id);
 
         removeItem(tr);
         return node;
@@ -510,7 +501,7 @@
         {
             if (!isItemEmpty($(this)))
             {
-                nodes.push(itemToNode($(this)));
+                nodes.push(itemToNode($(this), false));
             }
         });
         return nodes;

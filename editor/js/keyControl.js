@@ -58,17 +58,17 @@ var KeyControl;
         Q: function()
         {
             if(Zoom.isZoomed())
-                Main.addNewNode(Main.playerType);
+                Main.addNewNode(Main.playerType, true);
         },
         W: function()
         {
             if(Zoom.isZoomed())
-                Main.addNewNode(Main.computerType);
+                Main.addNewNode(Main.computerType, true);
         },
         E: function()
         {
             if(Zoom.isZoomed())
-                Main.addNewNode(Main.situationType);
+                Main.addNewNode(Main.situationType, true);
         },
         R: function()
         {

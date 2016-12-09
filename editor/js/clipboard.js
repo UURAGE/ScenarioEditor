@@ -220,8 +220,6 @@ var Clipboard;
             "top": top,
             "left": left
         });
-        //Save node text
-        nodeElem.find("textarea.nodestatement").val(copiedNode.text);
 
         Main.changeNodeText(node.id);
 
