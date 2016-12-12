@@ -358,6 +358,8 @@ button img
   height: 100%;
   background-color: #bdc3c7;
   color: #666;
+  position: relative;
+  min-width: 10px; /* Grip */
 }
 
   #sidebar > div
@@ -377,7 +379,24 @@ button img
       overflow: auto;
       padding: 5px;
     }
-
+    #sidebar .grip {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 10px;
+        z-index: 10;
+        cursor: ew-resize;
+        user-select: none;
+        background: #000;
+        opacity: 0.05;
+    }
+    #sidebar .grip:hover {
+        opacity: 0.25;
+    }
+    #sidebar.dragging {
+        opacity: 0.5;
+    }
 #properties
 {
   display: inline-block;

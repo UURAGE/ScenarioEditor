@@ -200,6 +200,7 @@
       </div>
       <!-- Sidebar -->
       <div id="sidebar">
+        <div class="grip"></div>
         <div>
           <div>
             <div id="languages">

@@ -323,6 +323,8 @@ var Main;
         });
 
         Metadata.reset();
+
+        initialiseSidebar();
     });
 
     $(window).bind('beforeunload', function()
@@ -378,6 +380,72 @@ var Main;
             var handler = $(this).hasClass("dropped") ? closeMenu : openMenu;
             handler.call(this);
         });
+    }
+
+    function initialiseSidebar()
+    {
+        if (localStorage.getItem('sidebarWidth')) {
+            setSidebarWidth(localStorage.getItem('sidebarWidth'));
+        }
+        if (localStorage.getItem('sidebarCollapsed') == 'true') {
+            collapseSidebar();
+        }
+
+        var mousehelddown = false;
+        var domSidebarGrip = $('#sidebar').find('.grip');
+        var mouseX = 0;
+
+        $(domSidebarGrip).mousedown(function(event){
+            localStorage.setItem('sidebarCollapsed', false);
+            // Clear selection so browser doesn't try to drag selected items
+            // Copied from: http://stackoverflow.com/a/3169849/1765330
+            if (window.getSelection) {
+              if (window.getSelection().empty) {  // Chrome
+                window.getSelection().empty();
+              } else if (window.getSelection().removeAllRanges) {  // Firefox
+                window.getSelection().removeAllRanges();
+              }
+            } else if (document.selection) {  // IE?
+              document.selection.empty();
+            }
+
+            var parentOffset = $(this).offset();
+            mouseX = event.pageX - parentOffset.left;
+            mousehelddown = true;
+            $('#sidebar').addClass('dragging');
+        });
+
+        $(domSidebarGrip).dblclick(function(event){
+            collapseSidebar();
+        });
+
+        $(window).mouseup(function(){
+            mousehelddown = false;
+            $('#sidebar').removeClass('dragging');
+        });
+
+        $(document).on("mousemove", function(event) {
+            if (mousehelddown)
+            {
+                var width = $(window).width() - event.pageX + mouseX;
+                setSidebarWidth(width);
+            }
+        });
+    }
+
+    function setSidebarWidth(width)
+    {
+        var minWidth = 100;
+        var maxWidth = 475;
+        var w = Math.min(Math.max(width, minWidth), maxWidth);
+        $('#sidebar').css('width', w + 'px');
+        localStorage.setItem('sidebarWidth', width);
+    }
+
+    function collapseSidebar()
+    {
+        $('#sidebar').css('width', $('#sidebar').css('min-width'));
+        localStorage.setItem('sidebarCollapsed', true);
     }
 
     function createEmptyTree(id, leftPos, topPos)
