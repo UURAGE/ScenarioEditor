@@ -14,7 +14,7 @@ Throughout the XSD you can find documentation annotations, which you can also us
 In the same editor or IDE, open a new XML file, name it "config" and put it in the editor directory of the Scenario Editor. 
 Now you can begin creating your own configuration, add the `config` element to the XML and refer to the config language namespace.
 
-```
+``` xml
 <config xmlns="http://uurage.github.io/ScenarioEditor/config/namespace"/>
 ```
 
@@ -27,7 +27,7 @@ We recommend using this as a unique identifier for your configurations.
 For example you can have a separate git repository for the configuration files and 
 increment the version of a configuration each time you change it.
 
-```
+``` xml
 <config xmlns="http://uurage.github.io/ScenarioEditor/config/namespace" id="tutorial" version="1"/>
 ```
 
@@ -35,7 +35,7 @@ increment the version of a configuration each time you change it.
 Currently there are four different types that can be used: integer, string, boolean and enumeration.
 Suppose we would make an enumeration for size:
 
-```
+``` xml
 <type>
   <enumeration>
     <option>Small</option>
@@ -50,7 +50,7 @@ A default can also be specified, which refers to an option previously defined.
 The size enumeration will then default to `Medium` in this case.
 
 The elements for integer, string and boolean are rather straightforward and can also have a default element inside:
-```
+``` xml
 <type>
   <integer/>
 </type>
@@ -71,7 +71,7 @@ in which you can set the maximum length and default of the statement text in the
 Currently the type for the statement should always be string. If the `maxLength` attribute is left out, 
 the statement length is unbounded and by default it is empty, when there is no `default` element.
 
-```
+``` xml
 <config xmlns="http://uurage.github.io/ScenarioEditor/config/namespace" id="tutorial" version="1">
   <settings>
     <statement>
@@ -91,7 +91,7 @@ A property is a piece of information to be stored in the scenario.
 An example of a property is the name of a character.
 The author of the scenario can choose a name for the character in the editor if we specify this property in the config.
 
-```
+``` xml
 <config xmlns="http://uurage.github.io/ScenarioEditor/config/namespace" id="tutorial" version="1">
   <settings>
     ...
@@ -121,7 +121,7 @@ The definition in the configuration is very similar to the property definition.
 A typical example of a parameter that changes state during the scenario is the environment.
 The grassland environment can change to a mountains environment for example.
 
-```
+``` xml
 <config xmlns="http://uurage.github.io/ScenarioEditor/config/namespace" id="tutorial" version="1">
   <settings>
     ...
@@ -149,7 +149,7 @@ The grassland environment can change to a mountains environment for example.
 
 In the `characters` element you can specify all your characters or you can specify just one character with the `character` element.
 
-```
+``` xml
 <config xmlns="http://uurage.github.io/ScenarioEditor/config/namespace" id="tutorial" version="1">
   <settings>
     ...
@@ -172,7 +172,7 @@ In the `characters` element you can specify all your characters or you can speci
 
 Suppose we have multiple characters, the structure would look as follows:
 
-```
+``` xml
 <config xmlns="http://uurage.github.io/ScenarioEditor/config/namespace" id="tutorial" version="1">
   <settings>
     ...
@@ -195,7 +195,7 @@ used in the UI of the editor.
 
 Of course we would like to add properties and parameters per character, for example emotion:
 
-```
+``` xml
 <config xmlns="http://uurage.github.io/ScenarioEditor/config/namespace" id="tutorial" version="1">
   <settings>
     ...
@@ -245,7 +245,7 @@ Now each character has a separate emotion parameter.
 Fortunately you don't have to copy each emotion parameter for each character if they are the same,
 because you can also add a parameter or property for all characters.
 
-```
+``` xml
 <config xmlns="http://uurage.github.io/ScenarioEditor/config/namespace" id="tutorial" version="1">
   <settings>
     ...
@@ -301,7 +301,7 @@ The following sections will explain each scope and give some examples of possibl
 The age of the character is a typical example of a property with statement-independent scope: it is not set to a value at each statement or at some statements, just once for the entire scenario.
 By default the statement scope of a property is `independent`.
 
-```
+``` xml
 <config xmlns="http://uurage.github.io/ScenarioEditor/config/namespace" id="tutorial" version="1">
   <settings>
     ...
@@ -332,7 +332,7 @@ This is the default scope for parameters, parameters can't have the `independent
 The per-statement scopes with a statement type suffix specify that the property can only be set if per-statement of the given type.
 The intent of the player is a good example of a per-player-statement property.
 
-```
+``` xml
 <config xmlns="http://uurage.github.io/ScenarioEditor/config/namespace" id="tutorial" version="1">
   <settings>
     ...
@@ -362,7 +362,7 @@ The intent of the player is a good example of a per-player-statement property.
 
 This scope is useful for limiting character parameters or properties to the scope of a statement by that character.
 
-```
+``` xml
 <config xmlns="http://uurage.github.io/ScenarioEditor/config/namespace" id="tutorial" version="1">
   <settings>
     ...
@@ -395,7 +395,7 @@ To limit the scope to the computer statement of a specific character, use the `p
 
 Both parameters and properties can be contained in a `group` element. 
 
-```
+``` xml
 <config xmlns="http://uurage.github.io/ScenarioEditor/config/namespace" id="tutorial" version="1">
   <settings>
     ...
@@ -429,7 +429,7 @@ The statement scope specified for the group, will be inherited by its child elem
 
 Properties and parameters can be put into sections in the editor UI, the `section` element provides the means to do this.
 
-```
+``` xml
 <config xmlns="http://uurage.github.io/ScenarioEditor/config/namespace" id="tutorial" version="1">
   <settings>
     ...
@@ -473,7 +473,7 @@ so in this case we refer to the previously defined `playerIntent` property in th
 The intent is then converted from version 3 to a version 4 property. The first intent specified for the player statement is not lost, 
 but stored as a property value, if the scope of the property is `per` or `per-player`.
 
-```
+``` xml
 <config xmlns="http://uurage.github.io/ScenarioEditor/config/namespace" id="tutorial" version="1">
   <settings>
     ...
@@ -496,4 +496,46 @@ but stored as a property value, if the scope of the property is `per` or `per-pl
     <intentProperty idref="playerIntent"/>
   </migration>
 </config>
+```
+
+## Language support
+
+Language support is available in the editor and is also supported for configurations. To translate the names of properties, parameters and characters, the option contents of enumerations and the available language names, you need to create a `configXML.json` file inside the locale folder (`editor/locales/`) for a language. All names, option contents and available language names should be left out and only ids, values and language codes should be defined as keys to the translation. Below is an example of an English translation file.
+
+``` json
+{
+    "language": {
+        "en": "English",
+        "nl": "Dutch"
+    },
+    "property": {
+        "intent": {
+            "player": "Intent",
+            "computer": "Intent"
+        },
+        "clothingColor": "Color"
+    },
+    "parameter": {
+        "emotion": "Emotion"
+    },
+    "character": {
+        "merchant": "Merchant"
+    },
+    "type": {
+        "enumeration": {
+            "clothingColor": {
+                "blue": "Blue",
+                "green": "Green",
+                "brown": "Brown",
+                "black": "Black"
+            },
+            "emotion": {
+                "angry": "Angry",
+                "happy": "Happy",
+                "sad": "Sad",
+                "neutral": "Neutral"
+            }
+        }
+    }
+}
 ```
