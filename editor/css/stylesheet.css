@@ -359,7 +359,7 @@ button img
   background-color: #bdc3c7;
   color: #666;
   position: relative;
-  min-width: 10px; /* Grip */
+  min-width: 5px; /* Grip */
 }
 
   #sidebar > div
@@ -383,18 +383,18 @@ button img
         position: absolute;
         top: 0;
         bottom: 0;
-        left: 0;
+        left: -5px;
         width: 10px;
-        z-index: 10;
+        z-index: 100;
         cursor: ew-resize;
         user-select: none;
         background: #000;
-        opacity: 0.05;
+        opacity: 0;
     }
     #sidebar .grip:hover {
         opacity: 0.25;
     }
-    #sidebar.dragging {
+    #sidebar.dragging > * {
         opacity: 0.5;
     }
 #properties

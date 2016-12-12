@@ -384,11 +384,11 @@ var Main;
 
     function initialiseSidebar()
     {
-        if (localStorage.getItem('sidebarWidth')) {
-            setSidebarWidth(localStorage.getItem('sidebarWidth'));
+        if (localStorage.getItem('sidebarCollapsed') === 'true') {
+            collapseSidebar(true);
         }
-        if (localStorage.getItem('sidebarCollapsed') == 'true') {
-            collapseSidebar();
+        else if (localStorage.getItem('sidebarWidth')) {
+            setSidebarWidth(localStorage.getItem('sidebarWidth'));
         }
 
         var mousehelddown = false;
@@ -396,7 +396,6 @@ var Main;
         var mouseX = 0;
 
         $(domSidebarGrip).mousedown(function(event){
-            localStorage.setItem('sidebarCollapsed', false);
             // Clear selection so browser doesn't try to drag selected items
             // Copied from: http://stackoverflow.com/a/3169849/1765330
             if (window.getSelection) {
@@ -410,7 +409,7 @@ var Main;
             }
 
             var parentOffset = $(this).offset();
-            mouseX = event.pageX - parentOffset.left;
+            mouseX = (event.pageX - parentOffset.left) / 2;
             mousehelddown = true;
             $('#sidebar').addClass('dragging');
         });
@@ -439,13 +438,23 @@ var Main;
         var maxWidth = 475;
         var w = Math.min(Math.max(width, minWidth), maxWidth);
         $('#sidebar').css('width', w + 'px');
-        localStorage.setItem('sidebarWidth', width);
+        localStorage.setItem('sidebarWidth', w);
+        localStorage.setItem('sidebarCollapsed', false);
     }
 
-    function collapseSidebar()
+    function collapseSidebar(set)
     {
-        $('#sidebar').css('width', $('#sidebar').css('min-width'));
-        localStorage.setItem('sidebarCollapsed', true);
+        set = set || false; // Dont toggle, just collapse
+        if (set || localStorage.getItem('sidebarCollapsed') === "false")
+        {
+            $('#sidebar').css('width', $('#sidebar').css('min-width'));
+            localStorage.setItem('sidebarCollapsed', 'true');
+        }
+        else if (localStorage.getItem('sidebarCollapsed') === "true")
+        {
+            setSidebarWidth(1000);
+            localStorage.setItem('sidebarCollapsed', 'false');
+        }
     }
 
     function createEmptyTree(id, leftPos, topPos)
