@@ -1817,7 +1817,6 @@ var Main;
             }
 
             // Show the node's property values
-            var anyPropertyShown = false;
             var showPropertyItem = function (propertyValues, acceptableScopes, propertyItem, hLevel, tableBody, idPrefix)
             {
                 if (acceptableScopes.indexOf(propertyItem.scopes.statementScope) === -1) return;
@@ -1836,10 +1835,15 @@ var Main;
                     else                        sectionContainer.addClass("subsection");
                     tableBody.append($('<tr>').append($('<td colspan="2">').append(sectionContainer)));
 
+                    var anyPropertyShown = false;
                     propertyItem.sequence.forEach(function (subItem)
                     {
-                         showPropertyItem(propertyValues, acceptableScopes, subItem, hLevel + 1, sectionTableBody, idPrefix);
+                         if (showPropertyItem(propertyValues, acceptableScopes, subItem, hLevel + 1, sectionTableBody, idPrefix))
+                         {
+                             anyPropertyShown = true;
+                         }
                     });
+                    return anyPropertyShown;
                 }
                 else
                 {
@@ -1864,25 +1868,27 @@ var Main;
 
                     tableBody.append(propertyRow);
 
-                    anyPropertyShown = true;
+                    return true;
                 }
             };
             var nodePropertyValuesEl = $('#node-property-values');
             var nodePropertyValuesTable = $('<table>');
+            var anyNodePropertyShown = false;
             Config.configObject.properties.sequence.forEach(function (subItem)
             {
-                showPropertyItem(node.propertyValues.characterIndependent, scopes, subItem, hStartLevel, nodePropertyValuesTable, nodePropertyValuesEl.attr('id'));
+                if (showPropertyItem(node.propertyValues.characterIndependent, scopes, subItem, hStartLevel, nodePropertyValuesTable, nodePropertyValuesEl.attr('id')))
+                {
+                    anyNodePropertyShown = true;
+                }
             });
             nodePropertyValuesEl.append(nodePropertyValuesTable);
-
-            var nodePropertyShown = anyPropertyShown;
-            anyPropertyShown = false;
 
             var nodeCharacterPropertyValuesEl = $('#node-character-property-values');
             if (node.type !== Main.computerType || Config.configObject.characters.sequence.length > 1)
             {
                 var characterAccordion = $('<div>');
                 nodeCharacterPropertyValuesEl.append(characterAccordion);
+                var anyCharacterPropertyShown = false;
                 Config.configObject.characters.sequence.forEach(function(character)
                 {
                     var characterHeader = $('<h' + hStartLevel +'>', { value: character.id, text: character.name ? character.name : character.id });
@@ -1893,19 +1899,26 @@ var Main;
 
                     Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
                     {
-                        showPropertyItem(node.propertyValues.perCharacter[character.id], scopes, propertyItem, hStartLevel, characterTab, containerIdPrefix);
+                        if (showPropertyItem(node.propertyValues.perCharacter[character.id], scopes, propertyItem, hStartLevel, characterTab, containerIdPrefix))
+                        {
+                            anyCharacterPropertyShown = true;
+                        }
                     });
 
                     Config.configObject.characters.byId[character.id].properties.sequence.forEach(function(propertyItem)
                     {
-                        showPropertyItem(node.propertyValues.perCharacter[character.id], scopes, propertyItem, hStartLevel, characterTab, containerIdPrefix);
+                        if (showPropertyItem(node.propertyValues.perCharacter[character.id], scopes, propertyItem, hStartLevel, characterTab, containerIdPrefix))
+                        {
+                            anyCharacterPropertyShown = true;
+                        }
                     });
                 });
 
-                if (anyPropertyShown)
+                if (anyCharacterPropertyShown)
                 {
                     nodeCharacterPropertyValuesEl.prepend($('<h3>', { text: i18next.t('common:characters') }));
                     characterAccordion.accordion({ active: false, collapsible: true, heightStyle: "content" });
+                    anyNodePropertyShown = true;
                 }
                 else
                 {
@@ -1913,7 +1926,7 @@ var Main;
                 }
             }
 
-            if (!nodePropertyShown && !anyPropertyShown)
+            if (!anyNodePropertyShown)
             {
                 $("#propertyValuesSection").hide();
             }
@@ -1990,18 +2003,24 @@ var Main;
 
                     var computerOwnPropertyValuesEl = $("#node-computer-own-property-values");
                     computerOwnPropertyValuesEl.children().remove();
-                    anyPropertyShown = false;
                     var computerOwnPropertyValuesTable = $('<table>');
                     computerOwnPropertyValuesEl.append(computerOwnPropertyValuesTable);
                     // The same id prefix as the other character property values, so they can be easily retrieved
                     var containerIdPrefix = nodeCharacterPropertyValuesEl.attr('id') + '-' + node.characterIdRef;
+                    var anyPropertyShown = false;
                     Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
                     {
-                        showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], acceptableScopes, propertyItem, hStartLevel + 1, computerOwnPropertyValuesTable, containerIdPrefix);
+                        if (showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], acceptableScopes, propertyItem, hStartLevel + 1, computerOwnPropertyValuesTable, containerIdPrefix))
+                        {
+                            anyPropertyShown = true;
+                        }
                     });
                     Config.configObject.characters.byId[node.characterIdRef].properties.sequence.forEach(function(propertyItem)
                     {
-                        showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], acceptableScopes, propertyItem, hStartLevel + 1, computerOwnPropertyValuesTable, containerIdPrefix);
+                        if (showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], acceptableScopes, propertyItem, hStartLevel + 1, computerOwnPropertyValuesTable, containerIdPrefix))
+                        {
+                            anyPropertyShown = true;
+                        }
                     });
                     if (!anyPropertyShown)
                     {
