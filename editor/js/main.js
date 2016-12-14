@@ -1597,16 +1597,12 @@ var Main;
                 Metadata.metaObject.parameters.byId[parameter.idRef].type.setInDOM(addedDiv.find(".parameter-effect-value-container"), parameter.value);
             }
 
-            var acceptableScopes = [];
             var scopes = {};
-            scopes.characterIndependent = [];
-            scopes.characterIndependent.push('per');
-            scopes.characterIndependent.push("per-" + node.type);
+            scopes.characterIndependent = ['per', 'per-' + node.type];
             scopes.perCharacter = [];
             if (node.type !== Main.computerType || Config.configObject.characters.sequence.length > 1)
             {
-                scopes.perCharacter.push('per');
-                scopes.perCharacter.push("per-" + node.type);
+                scopes.perCharacter = ['per', 'per-' + node.type];
             }
 
             // Show fixed parameters
@@ -1654,7 +1650,7 @@ var Main;
             };
 
             // Shows the sections and add buttons when there are effects that can be added
-            var showParameterItem = function(parameterDefinitions, parameterItem, hLevel, container, classPrefix, idRefToEffectsContainer)
+            var showParameterItem = function(parameterDefinitions, acceptableScopes, parameterItem, hLevel, container, classPrefix, idRefToEffectsContainer)
             {
                 if (acceptableScopes.indexOf(parameterItem.scopes.statementScope) === -1) return false;
                 if (parameterItem.kind === 'section')
@@ -1669,7 +1665,7 @@ var Main;
                     var anyParameterShown = false;
                     parameterItem.sequence.forEach(function (subItem)
                     {
-                        if (showParameterItem(parameterDefinitions, subItem, hLevel + 1, sectionContainer, classPrefix, idRefToEffectsContainer))
+                        if (showParameterItem(parameterDefinitions, acceptableScopes, subItem, hLevel + 1, sectionContainer, classPrefix, idRefToEffectsContainer))
                             anyParameterShown = true;
                     });
 
@@ -1722,10 +1718,9 @@ var Main;
             var hStartLevel = 3;
             // Accumulator for mapping a parameter id to its effects container
             var idRefToEffectsContainer = {};
-            acceptableScopes = scopes.characterIndependent;
             Config.configObject.parameters.sequence.forEach(function(subItem)
             {
-                showParameterItem(Config.configObject.parameters.byId, subItem, hStartLevel, fixedParameterEffectsEl, classPrefix, idRefToEffectsContainer);
+                showParameterItem(Config.configObject.parameters.byId, scopes.characterIndependent, subItem, hStartLevel, fixedParameterEffectsEl, classPrefix, idRefToEffectsContainer);
             });
 
             // Show the sections for all per-character fixed parameter effects
@@ -1736,7 +1731,6 @@ var Main;
             var anyCharacterParameterShown = false;
             // Accumulator for mapping a character parameter id to its effects container
             var idRefToCharacterEffectsContainer = {};
-            acceptableScopes = scopes.perCharacter;
             Config.configObject.characters.sequence.forEach(function(character)
             {
                 var characterHeader = $('<h' + hStartLevel +'>', { value: character.id, text: character.name ? character.name : character.id });
@@ -1754,7 +1748,7 @@ var Main;
 
                 Config.configObject.characters.parameters.sequence.forEach(function(parameterItem)
                 {
-                    if (showParameterItem(characterParameterDefinitions, parameterItem, hStartLevel,
+                    if (showParameterItem(characterParameterDefinitions, scopes.perCharacter, parameterItem, hStartLevel,
                                           characterDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[character.id]))
                     {
                         anyCharacterParameterShown = true;
@@ -1763,7 +1757,7 @@ var Main;
 
                 Config.configObject.characters.byId[character.id].parameters.sequence.forEach(function(parameterItem)
                 {
-                    if (showParameterItem(characterParameterDefinitions, parameterItem, hStartLevel,
+                    if (showParameterItem(characterParameterDefinitions, scopes.perCharacter, parameterItem, hStartLevel,
                                           characterDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[character.id]))
                     {
                         anyCharacterParameterShown = true;
@@ -1827,7 +1821,7 @@ var Main;
 
             // Show the node's property values
             var anyPropertyShown = false;
-            var showPropertyItem = function (propertyValues, propertyItem, hLevel, tableBody, idPrefix)
+            var showPropertyItem = function (propertyValues, acceptableScopes, propertyItem, hLevel, tableBody, idPrefix)
             {
                 if (acceptableScopes.indexOf(propertyItem.scopes.statementScope) === -1) return;
                 if (propertyItem.kind === 'section')
@@ -1847,7 +1841,7 @@ var Main;
 
                     propertyItem.sequence.forEach(function (subItem)
                     {
-                         showPropertyItem(propertyValues, subItem, hLevel + 1, sectionTableBody, idPrefix);
+                         showPropertyItem(propertyValues, acceptableScopes, subItem, hLevel + 1, sectionTableBody, idPrefix);
                     });
                 }
                 else
@@ -1878,10 +1872,9 @@ var Main;
             };
             var nodePropertyValuesEl = $('#node-property-values');
             var nodePropertyValuesTable = $('<table>');
-            acceptableScopes = scopes.characterIndependent;
             Config.configObject.properties.sequence.forEach(function (subItem)
             {
-                showPropertyItem(node.propertyValues.characterIndependent, subItem, hStartLevel, nodePropertyValuesTable, nodePropertyValuesEl.attr('id'));
+                showPropertyItem(node.propertyValues.characterIndependent, scopes.characterIndependent, subItem, hStartLevel, nodePropertyValuesTable, nodePropertyValuesEl.attr('id'));
             });
             nodePropertyValuesEl.append(nodePropertyValuesTable);
 
@@ -1891,7 +1884,6 @@ var Main;
             var nodeCharacterPropertyValuesEl = $('#node-character-property-values');
             var characterAccordion = $('<div>');
             nodeCharacterPropertyValuesEl.append(characterAccordion);
-            acceptableScopes = scopes.perCharacter;
             Config.configObject.characters.sequence.forEach(function(character)
             {
                 var characterHeader = $('<h' + hStartLevel +'>', { value: character.id, text: character.name ? character.name : character.id });
@@ -1902,12 +1894,12 @@ var Main;
 
                 Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
                 {
-                    showPropertyItem(node.propertyValues.perCharacter[character.id], propertyItem, hStartLevel, characterTab, containerIdPrefix);
+                    showPropertyItem(node.propertyValues.perCharacter[character.id], scopes.perCharacter, propertyItem, hStartLevel, characterTab, containerIdPrefix);
                 });
 
                 Config.configObject.characters.byId[character.id].properties.sequence.forEach(function(propertyItem)
                 {
-                    showPropertyItem(node.propertyValues.perCharacter[character.id], propertyItem, hStartLevel, characterTab, containerIdPrefix);
+                    showPropertyItem(node.propertyValues.perCharacter[character.id], scopes.perCharacter, propertyItem, hStartLevel, characterTab, containerIdPrefix);
                 });
             });
 
@@ -1932,11 +1924,10 @@ var Main;
             {
                 var updateSideBarCharacterSection = function()
                 {
-                    acceptableScopes = ['per-computer-own'];
+                    var acceptableScopes = ['per-computer-own'];
                     if (Config.configObject.characters.sequence.length === 1)
                     {
-                        acceptableScopes.push('per');
-                        acceptableScopes.push('per-' + Main.computerType);
+                        acceptableScopes.push('per', 'per-' + Main.computerType);
                     }
 
                     // Show the sections for all per-character fixed parameter effects
@@ -1952,7 +1943,7 @@ var Main;
                     var characterParameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[node.characterIdRef].parameters.byId);
                     Config.configObject.characters.parameters.sequence.forEach(function(parameterItem)
                     {
-                        if (showParameterItem(characterParameterDefinitions, parameterItem, hStartLevel,
+                        if (showParameterItem(characterParameterDefinitions, acceptableScopes, parameterItem, hStartLevel,
                                               computerOwnParameterEffectsDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[node.characterIdRef]))
                         {
                             anyCharacterParameterShown = true;
@@ -1960,7 +1951,7 @@ var Main;
                     });
                     Config.configObject.characters.byId[node.characterIdRef].parameters.sequence.forEach(function(parameterItem)
                     {
-                        if (showParameterItem(characterParameterDefinitions, parameterItem, hStartLevel,
+                        if (showParameterItem(characterParameterDefinitions, acceptableScopes, parameterItem, hStartLevel,
                                               computerOwnParameterEffectsDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[node.characterIdRef]))
                         {
                             anyCharacterParameterShown = true;
@@ -2002,11 +1993,11 @@ var Main;
                     var containerIdPrefix = nodeCharacterPropertyValuesEl.attr('id') + '-' + node.characterIdRef;
                     Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
                     {
-                        showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], propertyItem, hStartLevel + 1, computerOwnPropertyValuesTable, containerIdPrefix);
+                        showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], acceptableScopes, propertyItem, hStartLevel + 1, computerOwnPropertyValuesTable, containerIdPrefix);
                     });
                     Config.configObject.characters.byId[node.characterIdRef].properties.sequence.forEach(function(propertyItem)
                     {
-                        showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], propertyItem, hStartLevel + 1, computerOwnPropertyValuesTable, containerIdPrefix);
+                        showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], acceptableScopes, propertyItem, hStartLevel + 1, computerOwnPropertyValuesTable, containerIdPrefix);
                     });
                     if (!anyPropertyShown)
                     {
