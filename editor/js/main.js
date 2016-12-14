@@ -1782,9 +1782,12 @@ var Main;
 
                 if (anyCharacterParameterShown)
                 {
-                    fixedCharacterParameterEffectsEl.prepend($('<h3>', { text: i18next.t('common:characters') }));
-                    // Set the heightStyle to "content", because the content changes dynamically
-                    accordionDiv.accordion({ active: false, collapsible: true, heightStyle: "content" });
+                    if (Config.configObject.characters.sequence.length > 1)
+                    {
+                        fixedCharacterParameterEffectsEl.prepend($('<h3>', { text: i18next.t('common:characters') }));
+                        // Set the heightStyle to "content", because the content changes dynamically
+                        accordionDiv.accordion({ active: false, collapsible: true, heightStyle: "content" });
+                    }
                 }
                 else
                 {
@@ -1916,9 +1919,12 @@ var Main;
 
                 if (anyCharacterPropertyShown)
                 {
-                    nodeCharacterPropertyValuesEl.prepend($('<h3>', { text: i18next.t('common:characters') }));
-                    characterAccordion.accordion({ active: false, collapsible: true, heightStyle: "content" });
                     anyNodePropertyShown = true;
+                    if (Config.configObject.characters.sequence.length > 1)
+                    {
+                        nodeCharacterPropertyValuesEl.prepend($('<h3>', { text: i18next.t('common:characters') }));
+                        characterAccordion.accordion({ active: false, collapsible: true, heightStyle: "content" });
+                    }
                 }
                 else
                 {
