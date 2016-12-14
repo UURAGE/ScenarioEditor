@@ -1597,13 +1597,7 @@ var Main;
                 Metadata.metaObject.parameters.byId[parameter.idRef].type.setInDOM(addedDiv.find(".parameter-effect-value-container"), parameter.value);
             }
 
-            var scopes = {};
-            scopes.characterIndependent = ['per', 'per-' + node.type];
-            scopes.perCharacter = [];
-            if (node.type !== Main.computerType || Config.configObject.characters.sequence.length > 1)
-            {
-                scopes.perCharacter = ['per', 'per-' + node.type];
-            }
+            var scopes = ['per', 'per-' + node.type];
 
             // Show fixed parameters
             // Appends a default effect to the container, which changes dynamically based on the parameter selected
@@ -1720,61 +1714,8 @@ var Main;
             var idRefToEffectsContainer = {};
             Config.configObject.parameters.sequence.forEach(function(subItem)
             {
-                showParameterItem(Config.configObject.parameters.byId, scopes.characterIndependent, subItem, hStartLevel, fixedParameterEffectsEl, classPrefix, idRefToEffectsContainer);
+                showParameterItem(Config.configObject.parameters.byId, scopes, subItem, hStartLevel, fixedParameterEffectsEl, classPrefix, idRefToEffectsContainer);
             });
-
-            // Show the sections for all per-character fixed parameter effects
-            var fixedCharacterParameterEffectsEl = $("#fixed-character-parameter-effects");
-            var characterClassPrefix = fixedCharacterParameterEffectsEl.attr('id');
-            var accordionDiv = $('<div>');
-            fixedCharacterParameterEffectsEl.append(accordionDiv);
-            var anyCharacterParameterShown = false;
-            // Accumulator for mapping a character parameter id to its effects container
-            var idRefToCharacterEffectsContainer = {};
-            Config.configObject.characters.sequence.forEach(function(character)
-            {
-                var characterHeader = $('<h' + hStartLevel +'>', { value: character.id, text: character.name ? character.name : character.id });
-                var characterDiv = $('<div>');
-                accordionDiv.append(characterHeader).append(characterDiv);
-
-                var classCharacterPrefix = characterClassPrefix + '-' + character.id;
-
-                idRefToCharacterEffectsContainer[character.id] = {};
-
-                // The definitions for each parameter need to be available for changing the select,
-                // it can either be a parameter for an individual character or for all the characters,
-                // so we need to merge the definitions into one object and pass it.
-                var characterParameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[character.id].parameters.byId);
-
-                Config.configObject.characters.parameters.sequence.forEach(function(parameterItem)
-                {
-                    if (showParameterItem(characterParameterDefinitions, scopes.perCharacter, parameterItem, hStartLevel,
-                                          characterDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[character.id]))
-                    {
-                        anyCharacterParameterShown = true;
-                    }
-                });
-
-                Config.configObject.characters.byId[character.id].parameters.sequence.forEach(function(parameterItem)
-                {
-                    if (showParameterItem(characterParameterDefinitions, scopes.perCharacter, parameterItem, hStartLevel,
-                                          characterDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[character.id]))
-                    {
-                        anyCharacterParameterShown = true;
-                    }
-                });
-            });
-
-            if (anyCharacterParameterShown)
-            {
-                fixedCharacterParameterEffectsEl.prepend($('<h3>', { text: i18next.t('common:characters') }));
-                // Set the heightStyle to "content", because the content changes dynamically
-                accordionDiv.accordion({ active: false, collapsible: true, heightStyle: "content" });
-            }
-            else
-            {
-                accordionDiv.remove();
-            }
 
             // Add the character-independent effects that were previously defined
             var parameterIdRef;
@@ -1795,26 +1736,82 @@ var Main;
                 }
             }
 
-            // Add the per-character effects that were previously defined
-            for (var characterId in Config.configObject.characters.byId)
+            if (node.type !== Main.computerType || Config.configObject.characters.sequence.length > 1)
             {
-                var classCharacterPrefix = characterClassPrefix + '-' + characterId;
-                var characterParameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[characterId].parameters.byId);
-
-                for (parameterIdRef in node.parameterEffects.fixed.perCharacter[characterId])
+                // Show the sections for all per-character fixed parameter effects
+                var fixedCharacterParameterEffectsEl = $("#fixed-character-parameter-effects");
+                var characterClassPrefix = fixedCharacterParameterEffectsEl.attr('id');
+                var accordionDiv = $('<div>');
+                fixedCharacterParameterEffectsEl.append(accordionDiv);
+                var anyCharacterParameterShown = false;
+                // Accumulator for mapping a character parameter id to its effects container
+                var idRefToCharacterEffectsContainer = {};
+                Config.configObject.characters.sequence.forEach(function(character)
                 {
-                    if (parameterIdRef in idRefToCharacterEffectsContainer[characterId])
-                    {
-                        node.parameterEffects.fixed.perCharacter[characterId][parameterIdRef].forEach(function(effect)
-                        {
-                            var effectsContainer = idRefToCharacterEffectsContainer[characterId][parameterIdRef];
-                            appendEffectContainerTo(effectsContainer, classCharacterPrefix, characterParameterDefinitions);
-                            var addedEffectContainer = effectsContainer.children().last();
+                    var characterHeader = $('<h' + hStartLevel +'>', { value: character.id, text: character.name ? character.name : character.id });
+                    var characterDiv = $('<div>');
+                    accordionDiv.append(characterHeader).append(characterDiv);
 
-                            addedEffectContainer.find('.' + classCharacterPrefix + '-effect-idref-select').val(effect.idRef).trigger('change');
-                            addedEffectContainer.find('.' + classCharacterPrefix + '-effect-operator-select').val(effect.operator);
-                            characterParameterDefinitions[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + classCharacterPrefix + '-effect-control-container'), effect.value);
-                        });
+                    var classCharacterPrefix = characterClassPrefix + '-' + character.id;
+
+                    idRefToCharacterEffectsContainer[character.id] = {};
+
+                    // The definitions for each parameter need to be available for changing the select,
+                    // it can either be a parameter for an individual character or for all the characters,
+                    // so we need to merge the definitions into one object and pass it.
+                    var characterParameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[character.id].parameters.byId);
+
+                    Config.configObject.characters.parameters.sequence.forEach(function(parameterItem)
+                    {
+                        if (showParameterItem(characterParameterDefinitions, scopes, parameterItem, hStartLevel,
+                                              characterDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[character.id]))
+                        {
+                            anyCharacterParameterShown = true;
+                        }
+                    });
+
+                    Config.configObject.characters.byId[character.id].parameters.sequence.forEach(function(parameterItem)
+                    {
+                        if (showParameterItem(characterParameterDefinitions, scopes, parameterItem, hStartLevel,
+                                              characterDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[character.id]))
+                        {
+                            anyCharacterParameterShown = true;
+                        }
+                    });
+                });
+
+                if (anyCharacterParameterShown)
+                {
+                    fixedCharacterParameterEffectsEl.prepend($('<h3>', { text: i18next.t('common:characters') }));
+                    // Set the heightStyle to "content", because the content changes dynamically
+                    accordionDiv.accordion({ active: false, collapsible: true, heightStyle: "content" });
+                }
+                else
+                {
+                    accordionDiv.remove();
+                }
+
+                // Add the per-character effects that were previously defined
+                for (var characterId in Config.configObject.characters.byId)
+                {
+                    var classCharacterPrefix = characterClassPrefix + '-' + characterId;
+                    var characterParameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[characterId].parameters.byId);
+
+                    for (parameterIdRef in node.parameterEffects.fixed.perCharacter[characterId])
+                    {
+                        if (parameterIdRef in idRefToCharacterEffectsContainer[characterId])
+                        {
+                            node.parameterEffects.fixed.perCharacter[characterId][parameterIdRef].forEach(function(effect)
+                            {
+                                var effectsContainer = idRefToCharacterEffectsContainer[characterId][parameterIdRef];
+                                appendEffectContainerTo(effectsContainer, classCharacterPrefix, characterParameterDefinitions);
+                                var addedEffectContainer = effectsContainer.children().last();
+
+                                addedEffectContainer.find('.' + classCharacterPrefix + '-effect-idref-select').val(effect.idRef).trigger('change');
+                                addedEffectContainer.find('.' + classCharacterPrefix + '-effect-operator-select').val(effect.operator);
+                                characterParameterDefinitions[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + classCharacterPrefix + '-effect-control-container'), effect.value);
+                            });
+                        }
                     }
                 }
             }
@@ -1874,7 +1871,7 @@ var Main;
             var nodePropertyValuesTable = $('<table>');
             Config.configObject.properties.sequence.forEach(function (subItem)
             {
-                showPropertyItem(node.propertyValues.characterIndependent, scopes.characterIndependent, subItem, hStartLevel, nodePropertyValuesTable, nodePropertyValuesEl.attr('id'));
+                showPropertyItem(node.propertyValues.characterIndependent, scopes, subItem, hStartLevel, nodePropertyValuesTable, nodePropertyValuesEl.attr('id'));
             });
             nodePropertyValuesEl.append(nodePropertyValuesTable);
 
@@ -1882,41 +1879,47 @@ var Main;
             anyPropertyShown = false;
 
             var nodeCharacterPropertyValuesEl = $('#node-character-property-values');
-            var characterAccordion = $('<div>');
-            nodeCharacterPropertyValuesEl.append(characterAccordion);
-            Config.configObject.characters.sequence.forEach(function(character)
+            if (node.type !== Main.computerType || Config.configObject.characters.sequence.length > 1)
             {
-                var characterHeader = $('<h' + hStartLevel +'>', { value: character.id, text: character.name ? character.name : character.id });
-                var characterTab = $('<table>');
-                characterAccordion.append(characterHeader).append($('<div>').append(characterTab));
-
-                var containerIdPrefix = nodeCharacterPropertyValuesEl.attr('id') + '-' + character.id;
-
-                Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
+                var characterAccordion = $('<div>');
+                nodeCharacterPropertyValuesEl.append(characterAccordion);
+                Config.configObject.characters.sequence.forEach(function(character)
                 {
-                    showPropertyItem(node.propertyValues.perCharacter[character.id], scopes.perCharacter, propertyItem, hStartLevel, characterTab, containerIdPrefix);
+                    var characterHeader = $('<h' + hStartLevel +'>', { value: character.id, text: character.name ? character.name : character.id });
+                    var characterTab = $('<table>');
+                    characterAccordion.append(characterHeader).append($('<div>').append(characterTab));
+
+                    var containerIdPrefix = nodeCharacterPropertyValuesEl.attr('id') + '-' + character.id;
+
+                    Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
+                    {
+                        showPropertyItem(node.propertyValues.perCharacter[character.id], scopes, propertyItem, hStartLevel, characterTab, containerIdPrefix);
+                    });
+
+                    Config.configObject.characters.byId[character.id].properties.sequence.forEach(function(propertyItem)
+                    {
+                        showPropertyItem(node.propertyValues.perCharacter[character.id], scopes, propertyItem, hStartLevel, characterTab, containerIdPrefix);
+                    });
                 });
 
-                Config.configObject.characters.byId[character.id].properties.sequence.forEach(function(propertyItem)
+                if (anyPropertyShown)
                 {
-                    showPropertyItem(node.propertyValues.perCharacter[character.id], scopes.perCharacter, propertyItem, hStartLevel, characterTab, containerIdPrefix);
-                });
-            });
+                    nodeCharacterPropertyValuesEl.prepend($('<h3>', { text: i18next.t('common:characters') }));
+                    characterAccordion.accordion({ active: false, collapsible: true, heightStyle: "content" });
+                }
+                else
+                {
+                    characterAccordion.remove();
+                }
+            }
 
-            if (!nodePropertyShown && ! anyPropertyShown)
+            if (!nodePropertyShown && !anyPropertyShown)
             {
                 $("#propertyValuesSection").hide();
-            }
-            else if (!anyPropertyShown)
-            {
-                $("#propertyValuesSection").show();
-                characterAccordion.remove();
             }
             else
             {
                 $("#propertyValuesSection").show();
-                nodeCharacterPropertyValuesEl.prepend($('<h3>', { text: i18next.t('common:characters') }));
-                characterAccordion.accordion({ active: false, collapsible: true, heightStyle: "content" });
             }
 
             // Show the per-computer-own parameter effects and property values
@@ -1927,7 +1930,7 @@ var Main;
                     var acceptableScopes = ['per-computer-own'];
                     if (Config.configObject.characters.sequence.length === 1)
                     {
-                        acceptableScopes.push('per', 'per-' + Main.computerType);
+                        acceptableScopes = acceptableScopes.concat(scopes);
                     }
 
                     // Show the sections for all per-character fixed parameter effects
@@ -1937,6 +1940,7 @@ var Main;
                     computerOwnParameterEffectsEl.append(computerOwnParameterEffectsDiv);
                     var anyCharacterParameterShown = false;
                     var classCharacterPrefix = computerOwnParameterEffectsEl.attr('id') + '-' + node.characterIdRef;
+                    var idRefToThisCharacterEffectsContainer = {};
                     // The definitions for each parameter need to be available for changing the select,
                     // it can either be a parameter for an individual character or for all the characters,
                     // so we need to merge the definitions into one object and pass it.
@@ -1944,7 +1948,7 @@ var Main;
                     Config.configObject.characters.parameters.sequence.forEach(function(parameterItem)
                     {
                         if (showParameterItem(characterParameterDefinitions, acceptableScopes, parameterItem, hStartLevel,
-                                              computerOwnParameterEffectsDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[node.characterIdRef]))
+                                              computerOwnParameterEffectsDiv, classCharacterPrefix, idRefToThisCharacterEffectsContainer))
                         {
                             anyCharacterParameterShown = true;
                         }
@@ -1952,7 +1956,7 @@ var Main;
                     Config.configObject.characters.byId[node.characterIdRef].parameters.sequence.forEach(function(parameterItem)
                     {
                         if (showParameterItem(characterParameterDefinitions, acceptableScopes, parameterItem, hStartLevel,
-                                              computerOwnParameterEffectsDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[node.characterIdRef]))
+                                              computerOwnParameterEffectsDiv, classCharacterPrefix, idRefToThisCharacterEffectsContainer))
                         {
                             anyCharacterParameterShown = true;
                         }
@@ -1973,7 +1977,7 @@ var Main;
                         {
                             node.parameterEffects.fixed.perCharacter[node.characterIdRef][parameterIdRef].forEach(function(effect)
                             {
-                                var effectsContainer = idRefToCharacterEffectsContainer[node.characterIdRef][parameterIdRef];
+                                var effectsContainer = idRefToThisCharacterEffectsContainer[parameterIdRef];
                                 appendEffectContainerTo(effectsContainer, classCharacterPrefix, characterParameterDefinitions);
                                 var addedEffectContainer = effectsContainer.children().last();
 
