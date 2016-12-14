@@ -381,20 +381,6 @@
         $('#draftStyle').append(style);
     }
 
-    // Style the table rows with zebra striping
-    // Avoiding CSS3 for the sake of compatibility
-    function styleTableRows()
-    {
-        var i = 0;
-
-        $('tr.draftItem').removeClass("odd").removeClass("even");
-        $('tr.draftItem').each(function()
-        {
-            $(this).addClass(i % 2 === 1 ? "odd" : "even");
-            i += 1;
-        });
-    }
-
     // Creating an empty draft item and adding it to the table
     // Returns the item as an object
     function createDraftItem(ignore)
@@ -441,7 +427,6 @@
         var tr = $(item.toHtml());
         tr.data('item', item);
         $('#draftTable').append(tr);
-        styleTableRows();
 
         if (!ignore)
         {
@@ -482,7 +467,6 @@
     function removeItem(tr)
     {
         tr.remove();
-        styleTableRows();
 
         if ($('#draftTable tr.draftItem').length === 0)
         {
