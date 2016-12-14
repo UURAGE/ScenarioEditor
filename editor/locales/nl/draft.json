@@ -1,8 +1,9 @@
 {
     "letter":
     {
-        "player": "S",
-        "computer": "C"
+        "player": "Sp",
+        "computer": "Co",
+        "situation": "Si"
     },
     "drag_all": "Sleep vanaf hier om alle items als losse nodes in het scherm te plaatsen",
     "add_item": "Nieuw item",

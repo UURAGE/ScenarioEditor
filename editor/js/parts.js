@@ -33,16 +33,20 @@ var Parts;
                     '<table id="draftTableHeaders" style="width:100%">' +
                         '<colgroup>' +
                             '<col span="1" style="width: 15%;">' +
-                            '<col span="1" style="width: 5%;">' +
+                            '<col span="1" style="width: 7.5%;">' +
                             '<col span="1" style="width: 35%;">' +
                             '<col span="1" style="width: 15%;">' +
                             '<col span="1" style="width: 10%;">' +
-                            '<col span="1" style="width: 15%;">' +
+                            '<col span="1" style="width: 12.5%;">' +
                          '</colgroup>' +
                          '<tr>' +
                             '<th class="dragHandle" id="draftDragAll" title="' + i18next.t('draft:drag_all') + '">[[::]]</th>' +
-                            '<th class="col0" title="' + i18next.t('common:player') + ' / ' + i18next.t('common:computer') + '">' +
-                                i18next.t('draft:letter.player') + '/' + i18next.t('draft:letter.computer') +
+                            '<th class="col0" title="' + i18next.t('common:player') + ' / ' +
+                                i18next.t('common:computer') + ' / ' +
+                                i18next.t('common:situation') + '">' +
+                                    i18next.t('draft:letter.player') + '/' +
+                                    i18next.t('draft:letter.computer') + '/' +
+                                    i18next.t('draft:letter.situation') +
                             '</th>' +
                             '<th class="col1">' + i18next.t('parts:statement') + '</th>' +
                         '</tr>' +
@@ -53,11 +57,11 @@ var Parts;
                         '<table id="draftTable" data-properties="type,statement" style="width:100%">' +
                             '<colgroup>' +
                                '<col span="1" style="width: 15%;">' +
-                               '<col span="1" style="width: 5%;">' +
+                               '<col span="1" style="width: 7.5%;">' +
                                '<col span="1" style="width: 35%;">' +
                                '<col span="1" style="width: 15%;">' +
                                '<col span="1" style="width: 10%;">' +
-                               '<col span="1" style="width: 15%;">' +
+                               '<col span="1" style="width: 12.5%;">' +
                             '</colgroup>' +
                         '</table>' +
                     '</div>' +

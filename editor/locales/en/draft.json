@@ -2,7 +2,8 @@
     "letter":
     {
         "player": "P",
-        "computer": "C"
+        "computer": "C",
+        "situation": "S"
     },
     "drag_all": "Drag from here to place all items on the screen as separate nodes",
     "add_item": "Add item",

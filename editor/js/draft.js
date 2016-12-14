@@ -11,6 +11,7 @@
             type: '<select tabindex="1" class="type">' +
                 '<option value="player">' + i18next.t('draft:letter.player') + '</option>' +
                 '<option value="computer">' + i18next.t('draft:letter.computer') + '</option>' +
+                '<option value="situation">' + i18next.t('draft:letter.situation') + '</option>' +
                 '</select>',
             statement: '<textarea tabindex="1"></textarea>'
         },
