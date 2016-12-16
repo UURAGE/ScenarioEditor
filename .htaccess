@@ -1,5 +1,0 @@
-# Redirect errors to error.php, which redirects to the error controller.
-# CodeIgniter can handle 404 itself
-# ErrorDocument 404 /error.php
-ErrorDocument 403 /error.php
-ErrorDocument 500 /error.php
