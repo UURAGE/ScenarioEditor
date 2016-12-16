@@ -520,41 +520,37 @@ var Load;
         propertyValuesXMLElement.children().each(function()
         {
             var propertyId = this.attributes.idref.value;
+            var property = null;
+            var storage = null;
             if (this.attributes.characteridref)
             {
                 var characterId = this.attributes.characteridref.value;
                 if (characterId in Config.configObject.characters.byId)
                 {
+                    storage = propertyValues.perCharacter[characterId];
                     if (propertyId in Config.configObject.characters.properties.byId)
                     {
-                        var property = Config.configObject.characters.properties.byId[propertyId];
-                        propertyValues.perCharacter[characterId][propertyId] = property.type.fromXML(this);
-                        if (property.type.autoComplete)
-                        {
-                            if (!property.autoCompleteList) property.autoCompleteList = [];
-                            property.autoCompleteList.push(propertyValues.perCharacter[characterId][propertyId]);
-                        }
+                        property = Config.configObject.characters.properties.byId[propertyId];
                     }
                     else if (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
                     {
-                        var property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
-                        propertyValues.perCharacter[characterId][propertyId] = property.type.fromXML(this);
-                        if (property.type.autoComplete)
-                        {
-                            if (!property.autoCompleteList) property.autoCompleteList = [];
-                            property.autoCompleteList.push(propertyValues.perCharacter[characterId][propertyId]);
-                        }
+                        property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
                     }
                 }
             }
             else if (propertyId in Config.configObject.properties.byId)
             {
-                var property = Config.configObject.properties.byId[propertyId];
-                propertyValues.characterIndependent[propertyId] = property.type.fromXML(this);
+                storage = propertyValues.characterIndependent;
+                property = Config.configObject.properties.byId[propertyId];
+            }
+            if (property)
+            {
+                var propertyValue = property.type.fromXML(this);
+                storage[propertyId] = propertyValue;
                 if (property.type.autoComplete)
                 {
                     if (!property.autoCompleteList) property.autoCompleteList = [];
-                    property.autoCompleteList.push(propertyValues.characterIndependent[propertyId]);
+                    property.autoCompleteList.push(propertyValue);
                 }
             }
         });

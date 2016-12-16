@@ -1932,14 +1932,7 @@ var Main;
                 }
             }
 
-            if (!anyNodePropertyShown)
-            {
-                $("#propertyValuesSection").hide();
-            }
-            else
-            {
-                $("#propertyValuesSection").show();
-            }
+            Utils.showIfAndOnlyIf($("#propertyValuesSection"), anyNodePropertyShown);
 
             // Show the per-computer-own parameter effects and property values
             if (node.type === Main.computerType)
@@ -1980,14 +1973,7 @@ var Main;
                             anyCharacterParameterShown = true;
                         }
                     });
-                    if (!anyCharacterParameterShown)
-                    {
-                        computerOwnParameterEffectsEl.parent().hide();
-                    }
-                    else
-                    {
-                        computerOwnParameterEffectsEl.parent().show();
-                    }
+                    Utils.showIfAndOnlyIf(computerOwnParameterEffectsEl.parent(), anyCharacterParameterShown);
 
                     // Add the previously defined per-computer-own fixed parameter effects
                     for (parameterIdRef in node.parameterEffects.fixed.perCharacter[node.characterIdRef])
@@ -2028,14 +2014,7 @@ var Main;
                             anyPropertyShown = true;
                         }
                     });
-                    if (!anyPropertyShown)
-                    {
-                        computerOwnPropertyValuesEl.parent().hide();
-                    }
-                    else
-                    {
-                        computerOwnPropertyValuesEl.parent().show();
-                    }
+                    Utils.showIfAndOnlyIf(computerOwnPropertyValuesEl.parent(), anyPropertyShown);
                 };
 
                 var characterSelection = $("#characterSelection");
