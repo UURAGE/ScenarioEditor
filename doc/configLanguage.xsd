@@ -99,6 +99,10 @@
 			<selector xpath=".//tns:parameter" />
 			<field xpath="@id" />
 		</key>
+		<unique name="sectionID">
+			<selector xpath=".//tns:propertySection | .//tns:parameterSection" />
+			<field xpath="@id" />
+		</unique>
 		<keyref name="propertyidref" refer="tns:propertyID">
 			<selector xpath=".//tns:intentProperty" />
 			<field xpath="@idref" />
@@ -162,7 +166,8 @@
 				<complexType>
 					<complexContent>
 						<extension base="tns:propertiesType">
-							<attribute name="name" type="string" use="required" />
+							<attribute name="id" type="NCName" use="optional" />
+							<attribute name="name" type="string" use="optional" />
 						</extension>
 					</complexContent>
 				</complexType>
@@ -178,7 +183,8 @@
 				<complexType>
 					<complexContent>
 						<extension base="tns:parameterType">
-							<attribute name="name" type="string" use="required" />
+							<attribute name="id" type="NCName" use="optional" />
+							<attribute name="name" type="string" use="optional" />
 						</extension>
 					</complexContent>
 				</complexType>
