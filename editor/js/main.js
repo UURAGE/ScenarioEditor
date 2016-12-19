@@ -435,7 +435,8 @@ var Main;
     function setSidebarWidth(width)
     {
         var minWidth = 100;
-        var maxWidth = 475;
+        var maxWidth = $(window).width() / 3;
+        if (maxWidth < 475) maxWidth = 475;
         var w = Math.min(Math.max(width, minWidth), maxWidth);
         $('#sidebar').css('width', w + 'px');
         localStorage.setItem('sidebarWidth', w);
