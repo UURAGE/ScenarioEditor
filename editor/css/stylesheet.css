@@ -392,6 +392,7 @@ button img
         opacity: 0;
     }
     #sidebar .grip:hover {
+        transition: 0s opacity 0.1s linear;
         opacity: 0.25;
     }
     #sidebar.dragging > * {
