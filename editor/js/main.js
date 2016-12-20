@@ -46,8 +46,30 @@ var Main;
         updateButtons: updateButtons
     };
 
-    var ctrlDown = false,
+    var ctrlDown = false, spaceDown = false,
         invalidateNodeClick = false;//a drag event also triggers a click event, use this flag to catch and stop these events
+
+        $.fn.attachDragger = function(){
+            var attachment = false, lastPosition, position, difference;
+            $(this).on("mouseenter mousedown mouseup mousemove",function(e){
+                if( e.type == "mouseenter" ) lastPosition = [e.clientX, e.clientY];
+                if( e.type == "mousedown" ) attachment = true, lastPosition = [e.clientX, e.clientY];
+                if( e.type == "mouseup" ) attachment = false;
+                if( e.type == "mousemove" && attachment == true ){
+                    if (spaceDown)
+                    {
+                        position = [e.clientX, e.clientY];
+                        difference = [ (position[0]-lastPosition[0]), (position[1]-lastPosition[1]) ];
+                        $(this).scrollLeft( $(this).scrollLeft() - difference[0] );
+                        $(this).scrollTop( $(this).scrollTop() - difference[1] );
+                        lastPosition = [e.clientX, e.clientY];
+                    }
+                }
+            });
+            $(document).bind("mouseup", function(){
+                attachment = false;
+            });
+        }
 
     $(document).ready(function()
     {
@@ -246,7 +268,7 @@ var Main;
 
         $("#main").on('click', function(e)
         {
-            $(this).focus();
+            //$(this).focus();
             if (e.target == this)
             {
                 selectElement(null);
@@ -468,6 +490,8 @@ var Main;
         }
 
         var treeDiv = $('<div>', { class: "treeDiv" });
+        treeDiv.attr('tabindex', '0');
+        
         treeDiv.on("click", function(e)
         {
             $(this).focus();
@@ -477,6 +501,37 @@ var Main;
                 Main.trees[id].plumbInstance.clearDragSelection();
             }
         });
+
+        treeDiv.on("keydown", function(e)
+        {
+            if ((e.keyCode || e.which) === 32)
+            {
+                if (!spaceDown)
+                {
+                    spaceDown = true;
+                    treeDiv.selectable('disable');
+                    treeDiv.addClass('dragging');
+                }
+                return false; // No scrolling by space bar
+            }
+        });
+
+        treeDiv.on("keyup", function(e)
+        {
+            if ((e.keyCode || e.which) === 32 && spaceDown)
+            {
+                spaceDown = false;
+                treeDiv.selectable('enable');
+                treeDiv.removeClass('dragging');
+            }
+        });
+
+        treeDiv.on("mouseenter mousemove", function(e)
+        {
+            if (Main.selectedElements.length === 0) $(this).focus();
+            // Focus div so it can receive keyboard events
+        });
+        
         treeDiv.selectable(
         {
             distance: 5,
@@ -484,6 +539,7 @@ var Main;
             appendTo: treeDiv
         });
         treeDiv.selectable('disable'); //box selection only useful in zoomed state
+        treeDiv.attachDragger();
 
         var defaultName = i18next.t('main:default_subject');
         var changeNameInput = $('<input type="text" class="subjectNameInput" maxlength="20">');

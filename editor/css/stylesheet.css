@@ -507,6 +507,10 @@ button img
   display: none;
 }
 
+.treeDiv.dragging {
+  cursor: move;
+}
+
 .w.treeContainer.zoom .treeDiv
 {
   display: block;
