@@ -255,6 +255,7 @@
 			<sequence>
 				<element name="default" type="string" minOccurs="0" maxOccurs="1"/>
 			</sequence>
+			<attribute name="rows" type="int" use="optional" default="1"></attribute>
 			<attribute name="maxLength" type="int" use="optional"></attribute>
 			<attribute name="autoComplete" type="boolean" use="optional"></attribute>
 		</complexType>

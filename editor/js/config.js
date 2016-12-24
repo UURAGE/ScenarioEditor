@@ -294,7 +294,7 @@ var Config;
         return parentXML.appendChild(document.createElementNS(parentXML.namespaceURI, name));
     }
 
-    function toXMLSimple(valueXML, value)
+    function toXMLSimple(valueXML, value, xmlNameSpace)
     {
         valueXML.textContent = value;
     }
@@ -304,12 +304,24 @@ var Config;
         'string':
         {
             name: 'string',
+            controlName: 'input',
             defaultValue: "",
             assignmentOperators: [Config.assignmentOperators.assign],
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
             loadType: function(typeXML)
             {
                 var type = this;
+
+                var rowsAttr = typeXML.attr('rows');
+                if (rowsAttr)
+                {
+                    var rows = Utils.parseDecimalIntWithDefault(rowsAttr);
+                    if (rows > 1)
+                    {
+                        type = $.extend({}, type, { controlName: 'textarea' });
+                    }
+                    type = $.extend({}, type, { rows: rows });
+                }
 
                 var maxLengthAttr = typeXML.attr('maxLength');
                 if (maxLengthAttr)
@@ -320,7 +332,12 @@ var Config;
                 var autoComplete = Utils.parseBool(typeXML.attr('autoComplete'));
                 if (autoComplete)
                 {
-                    type = $.extend({}, type, { autoComplete: autoComplete });
+                    var autoCompleteControl = function(containerEl, autoCompleteList)
+                    {
+                        containerEl.children(type.controlName).autocomplete({ autoFocus: true, source: autoCompleteList });
+                    };
+
+                    type = $.extend({}, type, { autoComplete: autoComplete, autoCompleteControl: autoCompleteControl });
                 }
 
                 var defaultEl = typeXML.children('default');
@@ -345,25 +362,30 @@ var Config;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                containerEl.append($('<input>', { id: htmlId, type: 'text', maxlength: this.maxLength }));
+                containerEl.append($('<' + this.controlName + '>', { id: htmlId, type: 'text', maxlength: this.maxLength, rows: this.rows }));
             },
             getFromDOM: function(containerEl)
             {
-                return containerEl.children('input').first().val();
+                return containerEl.children(this.controlName).first().val();
             },
             setInDOM: function(containerEl, value)
             {
-                containerEl.children('input').first().val(value);
+                containerEl.children(this.controlName).first().val(value);
             },
             fromXML: function(valueXML)
             {
                 return valueXML.textContent;
             },
-            toXML: toXMLSimple
+            toXML: function(valueXML, value, xmlNameSpace)
+            {
+                valueXML.textContent = value;
+                if (this.rows > 1) valueXML.setAttributeNS(xmlNameSpace, "xml:space", "preserve");
+            }
         },
         'integer':
         {
             name: 'integer',
+            controlName: 'input',
             defaultValue: 0,
             assignmentOperators: [Config.assignmentOperators.assign,             Config.assignmentOperators.addAssign,
                                   Config.assignmentOperators.subtractAssign],
@@ -415,11 +437,11 @@ var Config;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                containerEl.append($('<input>', { id: htmlId, type: 'number', value: this.minimum ? this.minimum : 0, min: this.minimum, max: this.maximum }));
+                containerEl.append($('<' + this.controlName + '>', { id: htmlId, type: 'number', value: this.minimum ? this.minimum : 0, min: this.minimum, max: this.maximum }));
             },
             getFromDOM: function(containerEl)
             {
-                var value = Utils.parseDecimalIntWithDefault(containerEl.children('input').first().val(), this.minimum ? this.minimum : 0);
+                var value = Utils.parseDecimalIntWithDefault(containerEl.children(this.controlName).first().val(), this.minimum ? this.minimum : 0);
                 if (this.minimum) value = Math.max(value, this.minimum);
                 if (this.maximum) value = Math.min(value, this.maximum);
                 return value;
@@ -437,6 +459,7 @@ var Config;
         'boolean':
         {
             name: 'boolean',
+            controlName: 'select',
             defaultValue: false,
             assignmentOperators: [Config.assignmentOperators.assign],
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
@@ -467,18 +490,18 @@ var Config;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                var booleanSelect = $('<select>', { id: htmlId });
+                var booleanSelect = $('<' + this.controlName + '>', { id: htmlId });
                 booleanSelect.append($('<option>', { value: String(false), text: i18next.t('config:types.boolean.false') }));
                 booleanSelect.append($('<option>', { value: String(true),  text: i18next.t('config:types.boolean.true') }));
                 containerEl.append(booleanSelect);
             },
             getFromDOM: function(containerEl)
             {
-                return Utils.parseBool(containerEl.children('select').first().val());
+                return Utils.parseBool(containerEl.children(this.controlName).first().val());
             },
             setInDOM: function(containerEl, value)
             {
-                containerEl.children('select').first().val(String(value));
+                containerEl.children(this.controlName).first().val(String(value));
             },
             fromXML: function(valueXML)
             {
@@ -489,6 +512,7 @@ var Config;
         'enumeration':
         {
             name: 'enumeration',
+            controlName: 'select',
             defaultValue: "",
             assignmentOperators: [Config.assignmentOperators.assign],
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
@@ -572,7 +596,7 @@ var Config;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                var selectEl = $('<select>', { id: htmlId });
+                var selectEl = $('<' + this.controlName + '>', { id: htmlId });
                 this.options.sequence.forEach(function(option)
                 {
                     selectEl.append($('<option>', option));
@@ -581,11 +605,11 @@ var Config;
             },
             getFromDOM: function(containerEl)
             {
-                return containerEl.children('select').first().val();
+                return containerEl.children(this.controlName).first().val();
             },
             setInDOM: function(containerEl, value)
             {
-                containerEl.children('select').first().val(value);
+                containerEl.children(this.controlName).first().val(value);
             },
             fromXML: function(valueXML)
             {

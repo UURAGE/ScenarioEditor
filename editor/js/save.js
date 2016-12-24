@@ -128,7 +128,7 @@ var Save;
             var typeContainerEl = addAndReturnElement("type", nameSpace, definitionEl);
             var typeEl = definition.type.insertType(typeContainerEl);
             var defaultEl = addAndReturnElement('default', nameSpace, typeEl);
-            definition.type.toXML(defaultEl, definition.type.defaultValue);
+            definition.type.toXML(defaultEl, definition.type.defaultValue, xmlNameSpace);
         };
 
         var parametersEl = addAndReturnElement("parameters", nameSpace, definitionsEl);
@@ -199,7 +199,7 @@ var Save;
             parameter = Metadata.metaObject.parameters.byId[parameterId];
             parameterValueEl = addAndReturnElement("parameterValue", nameSpace, userDefinedEl);
             parameterValueEl.setAttribute("idref", parameterId);
-            parameter.type.toXML(parameterValueEl, parameter.type.defaultValue);
+            parameter.type.toXML(parameterValueEl, parameter.type.defaultValue, xmlNameSpace);
         }
 
         // Save fixed parameter initial values
@@ -209,7 +209,7 @@ var Save;
             parameter = Config.configObject.parameters.byId[parameterId];
             parameterValueEl = addAndReturnElement("parameterValue", nameSpace, fixedEl);
             parameterValueEl.setAttribute("idref", parameterId);
-            parameter.type.toXML(parameterValueEl, parameter.type.defaultValue);
+            parameter.type.toXML(parameterValueEl, parameter.type.defaultValue, xmlNameSpace);
         }
         for (var characterId in Config.configObject.characters.byId)
         {
@@ -219,7 +219,7 @@ var Save;
                 parameterValueEl = addAndReturnElement("characterParameterValue", nameSpace, fixedEl);
                 parameterValueEl.setAttribute("idref", parameterId);
                 parameterValueEl.setAttribute("characteridref", characterId);
-                parameter.type.toXML(parameterValueEl, parameter.type.defaultValue);
+                parameter.type.toXML(parameterValueEl, parameter.type.defaultValue, xmlNameSpace);
             }
 
             for (parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
@@ -228,7 +228,7 @@ var Save;
                 parameterValueEl = addAndReturnElement("characterParameterValue", nameSpace, fixedEl);
                 parameterValueEl.setAttribute("idref", parameterId);
                 parameterValueEl.setAttribute("characteridref", characterId);
-                parameter.type.toXML(parameterValueEl, parameter.type.defaultValue);
+                parameter.type.toXML(parameterValueEl, parameter.type.defaultValue, xmlNameSpace);
             }
         }
     }
@@ -378,7 +378,7 @@ var Save;
             var pEffElement = addAndReturnElement("parameterEffect", nameSpace, userDefinedParameterEffectsEl);
             pEffElement.setAttribute("idref", pEff.idRef);
             pEffElement.setAttribute("operator", pEff.operator);
-            Metadata.metaObject.parameters.byId[pEff.idRef].type.toXML(pEffElement, pEff.value);
+            Metadata.metaObject.parameters.byId[pEff.idRef].type.toXML(pEffElement, pEff.value, xmlNameSpace);
         }
 
         var fixedParameterEffectsEl = addAndReturnElement("fixed", nameSpace, parameterEffectsEl);
@@ -390,7 +390,7 @@ var Save;
                 var pEffElement = addAndReturnElement("parameterEffect", nameSpace, fixedParameterEffectsEl);
                 pEffElement.setAttribute("idref", parameterEffect.idRef);
                 pEffElement.setAttribute("operator", parameterEffect.operator);
-                Config.configObject.parameters.byId[parameterId].type.toXML(pEffElement, parameterEffect.value);
+                Config.configObject.parameters.byId[parameterId].type.toXML(pEffElement, parameterEffect.value, xmlNameSpace);
             });
         }
         for (var characterId in Config.configObject.characters.byId)
@@ -406,11 +406,11 @@ var Save;
 
                     if (parameterId in Config.configObject.characters.parameters.byId)
                     {
-                        Config.configObject.characters.parameters.byId[parameterId].type.toXML(pEffElement, parameterEffect.value);
+                        Config.configObject.characters.parameters.byId[parameterId].type.toXML(pEffElement, parameterEffect.value, xmlNameSpace);
                     }
                     else
                     {
-                        Config.configObject.characters.byId[characterId].parameters.byId[parameterId].type.toXML(pEffElement, parameterEffect.value);
+                        Config.configObject.characters.byId[characterId].parameters.byId[parameterId].type.toXML(pEffElement, parameterEffect.value, xmlNameSpace);
                     }
                 });
             }
@@ -425,7 +425,7 @@ var Save;
         {
             var propertyValueEl = addAndReturnElement("propertyValue", nameSpace, propertyValuesEl);
             propertyValueEl.setAttribute("idref", propertyId);
-            Config.configObject.properties.byId[propertyId].type.toXML(propertyValueEl, propertyValues.characterIndependent[propertyId]);
+            Config.configObject.properties.byId[propertyId].type.toXML(propertyValueEl, propertyValues.characterIndependent[propertyId], xmlNameSpace);
         }
 
         for (var characterId in Config.configObject.characters.byId)
@@ -439,11 +439,11 @@ var Save;
                 var propertyValue = propertyValues.perCharacter[characterId][propertyId];
                 if (propertyId in Config.configObject.characters.properties.byId)
                 {
-                    Config.configObject.characters.properties.byId[propertyId].type.toXML(characterPropertyValueEl, propertyValue);
+                    Config.configObject.characters.properties.byId[propertyId].type.toXML(characterPropertyValueEl, propertyValue, xmlNameSpace);
                 }
                 else
                 {
-                    Config.configObject.characters.byId[characterId].properties.byId[propertyId].type.toXML(characterPropertyValueEl, propertyValue);
+                    Config.configObject.characters.byId[characterId].properties.byId[propertyId].type.toXML(characterPropertyValueEl, propertyValue, xmlNameSpace);
                 }
             }
         }
@@ -506,7 +506,7 @@ var Save;
 
             conditionEl.setAttribute("idref", precondition.idRef);
             conditionEl.setAttribute("operator", precondition.operator);
-            parameter.type.toXML(conditionEl, precondition.value);
+            parameter.type.toXML(conditionEl, precondition.value, xmlNameSpace);
             return conditionEl;
         }
 

@@ -1864,7 +1864,7 @@ var Main;
                     if (propertyItem.type.autoComplete)
                     {
                         if (!propertyItem.autoCompleteList) propertyItem.autoCompleteList = [];
-                        propertyData.children("input").autocomplete({ autoFocus: true, source: propertyItem.autoCompleteList });
+                        propertyItem.type.autoCompleteControl(propertyData, propertyItem.autoCompleteList);
                     }
 
                     propertyRow.append(propertyData);
