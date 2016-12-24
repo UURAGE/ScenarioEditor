@@ -249,7 +249,7 @@ var Metadata;
         var setPropertyInDOM = function(propertyValues, propertyContainerId, property)
         {
             if (property.scopes.statementScope !== "independent") return;
-            property.type.setInDOM($(propertyContainerId + '-' + property.id), propertyValues[property.id]);
+            property.type.setInDOM($(propertyContainerId + '-' + Utils.escapeSelector(property.id)), propertyValues[property.id]);
         };
         var propertyId, characterId, property;
         for (propertyId in Config.configObject.properties.byId)
@@ -262,7 +262,7 @@ var Metadata;
             for (characterId in Config.configObject.characters.byId)
             {
                 property = Config.configObject.characters.properties.byId[propertyId];
-                setPropertyInDOM(Metadata.metaObject.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + characterId + "-container", property);
+                setPropertyInDOM(Metadata.metaObject.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + Utils.escapeSelector(characterId) + "-container", property);
             }
         }
         for (characterId in Config.configObject.characters.byId)
@@ -270,7 +270,7 @@ var Metadata;
             for (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
             {
                 property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
-                setPropertyInDOM(Metadata.metaObject.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + characterId + "-container", property);
+                setPropertyInDOM(Metadata.metaObject.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + Utils.escapeSelector(characterId) + "-container", property);
             }
         }
     }

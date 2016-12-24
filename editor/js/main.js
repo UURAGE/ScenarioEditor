@@ -1152,10 +1152,10 @@ var Main;
         // Save fixed parameter effects.
         var getFixedParameterEffectFromDOMAndSetInNode = function(effectContainer, parameterDefinitions, fixedParameterEffects, classPrefix)
         {
-            var parameterIdRef = $(effectContainer).find('.' + classPrefix + '-effect-idref-select').val();
-            var controlContainer = $(effectContainer).find('.' + classPrefix + '-effect-control-container');
+            var parameterIdRef = $(effectContainer).find('.' + Utils.escapeSelector(classPrefix) + '-effect-idref-select').val();
+            var controlContainer = $(effectContainer).find('.' + Utils.escapeSelector(classPrefix) + '-effect-control-container');
             var parameterValue = parameterDefinitions[parameterIdRef].type.getFromDOM(controlContainer);
-            var parameterOperator = $(effectContainer).find('.' + classPrefix + '-effect-operator-select').val();
+            var parameterOperator = $(effectContainer).find('.' + Utils.escapeSelector(classPrefix) + '-effect-operator-select').val();
             var parameterEffect = {
                 idRef: parameterIdRef,
                 operator: parameterOperator,
@@ -1179,7 +1179,7 @@ var Main;
         {
             classCharacterPrefix = fixedCharacterParameterEffectsEl.attr('id') + '-' + characterId;
             parameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[characterId].parameters.byId);
-            fixedCharacterParameterEffectsEl.find('.' + classCharacterPrefix + '-effect-container').each(function()
+            fixedCharacterParameterEffectsEl.find('.' + Utils.escapeSelector(classCharacterPrefix) + '-effect-container').each(function()
             {
                 getFixedParameterEffectFromDOMAndSetInNode(this, parameterDefinitions, node.parameterEffects.fixed.perCharacter[characterId], classCharacterPrefix);
             });
@@ -1189,7 +1189,7 @@ var Main;
             var computerOwnParameterEffectsEl = $("#node-computer-own-parameter-effects");
             classCharacterPrefix = computerOwnParameterEffectsEl.attr('id') + '-' + node.characterIdRef;
             parameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[node.characterIdRef].parameters.byId);
-            computerOwnParameterEffectsEl.find('.' + classCharacterPrefix + '-effect-container').each(function()
+            computerOwnParameterEffectsEl.find('.' + Utils.escapeSelector(classCharacterPrefix) + '-effect-container').each(function()
             {
                 getFixedParameterEffectFromDOMAndSetInNode(this, parameterDefinitions, node.parameterEffects.fixed.perCharacter[node.characterIdRef], classCharacterPrefix);
             });
@@ -1206,7 +1206,7 @@ var Main;
         {
             if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) return;
             if (property.scopes.statementScope === 'per-computer-own' && (!characterId || characterId !== nodeCharacterIdRef)) return;
-            propertyValues[propertyId] = property.type.getFromDOM($('#' + idPrefix + "-container-" + property.id));
+            propertyValues[property.id] = property.type.getFromDOM($('#' + Utils.escapeSelector(idPrefix) + "-container-" + Utils.escapeSelector(property.id)));
 
             if (property.type.autoComplete && property.autoCompleteList.indexOf(propertyValues[property.id]) === -1)
             {
@@ -1623,7 +1623,7 @@ var Main;
                 };
 
                 // Clone the hidden select accumulated for each separate section and put it in the parameter effect
-                var idRefSelect = effectsContainer.parent().children('select.' + containerClassPrefix + '-idref-select.hidden').clone();
+                var idRefSelect = effectsContainer.parent().children('select.' + Utils.escapeSelector(containerClassPrefix) + '-idref-select.hidden').clone();
                 idRefSelect.removeClass(containerClassPrefix + '-idref-select');
                 idRefSelect.addClass(containerClassPrefix + '-effect-idref-select');
                 changeEffectType($(idRefSelect).val());
@@ -1693,8 +1693,8 @@ var Main;
                     }
                     else
                     {
-                        parameterIdRefSelect = container.children('select.' + classPrefix + '-idref-select.hidden');
-                        effectsContainer = container.children('.' + classPrefix + '-container');
+                        parameterIdRefSelect = container.children('select.' + Utils.escapeSelector(classPrefix) + '-idref-select.hidden');
+                        effectsContainer = container.children('.' + Utils.escapeSelector(classPrefix) + '-container');
                     }
                     var parameterIdRefOption = $('<option>', { value: parameterItem.id, text: parameterItem.name });
                     parameterIdRefSelect.append(parameterIdRefOption);
@@ -1810,9 +1810,9 @@ var Main;
                                 appendEffectContainerTo(effectsContainer, classCharacterPrefix, characterParameterDefinitions);
                                 var addedEffectContainer = effectsContainer.children().last();
 
-                                addedEffectContainer.find('.' + classCharacterPrefix + '-effect-idref-select').val(effect.idRef).trigger('change');
-                                addedEffectContainer.find('.' + classCharacterPrefix + '-effect-operator-select').val(effect.operator);
-                                characterParameterDefinitions[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + classCharacterPrefix + '-effect-control-container'), effect.value);
+                                addedEffectContainer.find('.' + Utils.escapeSelector(classCharacterPrefix) + '-effect-idref-select').val(effect.idRef).trigger('change');
+                                addedEffectContainer.find('.' + Utils.escapeSelector(classCharacterPrefix) + '-effect-operator-select').val(effect.operator);
+                                characterParameterDefinitions[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + Utils.escapeSelector(classCharacterPrefix) + '-effect-control-container'), effect.value);
                             });
                         }
                     }
@@ -1951,7 +1951,7 @@ var Main;
                     var computerOwnParameterEffectsDiv = $('<div>');
                     computerOwnParameterEffectsEl.append(computerOwnParameterEffectsDiv);
                     var anyCharacterParameterShown = false;
-                    var classCharacterPrefix = computerOwnParameterEffectsEl.attr('id') + '-' + node.characterIdRef;
+                    var classCharacterPrefix = computerOwnParameterEffectsEl.attr('id') + '-' + Utils.escapeSelector(node.characterIdRef);
                     var idRefToThisCharacterEffectsContainer = {};
                     // The definitions for each parameter need to be available for changing the select,
                     // it can either be a parameter for an individual character or for all the characters,

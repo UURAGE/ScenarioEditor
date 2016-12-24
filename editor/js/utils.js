@@ -12,6 +12,7 @@ var Utils;
         ensurePreventDefault: ensurePreventDefault,
         parseDecimalIntWithDefault: parseDecimalIntWithDefault,
         parseBool: parseBool,
+        escapeSelector: escapeSelector,
         escapeHTML: escapeHTML,
         unEscapeHTML: unEscapeHTML,
         showIfAndOnlyIf: showIfAndOnlyIf,
@@ -45,9 +46,15 @@ var Utils;
         return isNaN(value) ? defaultValue : value;
     }
 
-    function parseBool(string)
+    function parseBool(str)
     {
-        return string == "true";
+        return str == "true";
+    }
+
+    // Taken from https://learn.jquery.com/using-jquery-core/faq/how-do-i-select-an-element-by-an-id-that-has-characters-used-in-css-notation/
+    function escapeSelector(str)
+    {
+        return str.replace( /(:|\.|\[|\]|,|=)/g, "\\$1" );
     }
 
     function escapeHTML(str)
