@@ -12,8 +12,7 @@
                 '<option value="player">' + i18next.t('draft:letter.player') + '</option>' +
                 '<option value="computer">' + i18next.t('draft:letter.computer') + '</option>' +
                 '<option value="situation">' + i18next.t('draft:letter.situation') + '</option>' +
-                '</select>',
-            statement: '<textarea tabindex="1"></textarea>'
+                '</select>'
         },
         editing = null,
         editingCol = -1,
@@ -23,6 +22,7 @@
     {
         $('#draftScreen').html(Parts.getDraftScreenHTML());
 
+        propEditors.statement = '<textarea ' + 'maxlength=' + Config.configObject.settings.statement.type.maxLength + ' tabindex="1"></textarea>';
         itemProperties = $('#draftTable').data("properties").split(',');
         maxCols = itemProperties.length - 1;
 
