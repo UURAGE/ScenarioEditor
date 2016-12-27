@@ -380,10 +380,6 @@ var Load;
             top: yPos,
             left: xPos
         });
-
-        // fill the insides with text
-        var txtView = node.find('.statementText');
-        txtView.html(Utils.escapeHTML(text));
     }
 
     // Load all preconditions from a given precondition element tree.

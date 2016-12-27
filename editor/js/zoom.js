@@ -60,10 +60,18 @@ var Zoom;
             zoomTreeButton.text("[-]");
 
             jsPlumb.setSuspendDrawing(false);
-            tree.nodes.forEach(function(n)
+
+            // The tree is always kept up-to-date when zoomed and can't be changed when not zoomed,
+            // so the nodes of the tree only have to be updated when zooming in for the first time.
+            if (!tree.zoomedInBefore)
             {
-                Main.changeNodeText(n);
-            });
+                tree.nodes.forEach(function(n)
+                {
+                    Main.changeNodeText(n);
+                });
+
+                tree.zoomedInBefore = true;
+            }
         }
 
         Main.updateButtons();

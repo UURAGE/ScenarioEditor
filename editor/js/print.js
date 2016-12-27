@@ -49,11 +49,11 @@ var Print;
         {
             // Zoom in and out to create correct HTML for nodes and connections,
             // because jsPlumb does this dynamically when a tree is zoomed
-            Zoom.zoomIn(Main.trees[this.id]);
+            if (!Main.trees[this.id].zoomedInBefore) Zoom.zoomIn(Main.trees[this.id]);
             var treeDiv = $(this).find('.treeDiv')[0];
             var treeDivContentList = $(treeDiv).children();
             var name = $(this).find('.subjectName')[0].innerHTML;
-            Zoom.zoomOut();
+            if (!Main.trees[this.id].zoomedInBefore) Zoom.zoomOut();
 
             // Put the name, except the "[+]" or "[-]" before it, at the top of the page
             htmlList.push('<h1>' + name + '</h1>');
