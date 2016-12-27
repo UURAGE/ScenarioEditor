@@ -65,16 +65,22 @@ var Config;
     function loadSettings(settingsXML)
     {
         var settings = {};
-        settings.statement = {};
-        var statementSettingXML = settingsXML.children('statement');
-        if (statementSettingXML.length > 0)
+
+        var loadSettingWithType = function(settingXML)
         {
-            settings.statement.type = loadType(statementSettingXML.children('type').children());
-        }
-        else
-        {
-            settings.statement.type = Config.types.string;
-        }
+            if (settingXML.length > 0)
+            {
+                return { type: loadType(settingXML.children('type').children()) };
+            }
+            else
+            {
+                return { type: Config.types.string };
+            }
+        };
+
+        settings.statement = loadSettingWithType(settingsXML.children('statement'));
+        settings.description = loadSettingWithType(settingsXML.children('description'));
+
         settings.languages = {};
         settings.languages.sequence = [];
         settings.languages.byCode = {};
@@ -91,6 +97,7 @@ var Config;
                 settings.languages.sequence.push(language);
             });
         }
+
         return settings;
     }
 

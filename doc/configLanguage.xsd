@@ -23,6 +23,19 @@
 									</sequence>
 								</complexType>
 							</element>
+							<element name="description" minOccurs="0" maxOccurs="1">
+								<complexType>
+									<sequence>
+										<element name="type">
+											<complexType>
+												<sequence>
+													<element ref="tns:string"></element>
+												</sequence>
+											</complexType>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
 							<element name="languages" minOccurs="0" maxOccurs="1">
 								<complexType>
 									<sequence>
