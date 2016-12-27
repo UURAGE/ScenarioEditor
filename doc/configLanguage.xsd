@@ -271,6 +271,14 @@
 			<attribute name="rows" type="int" use="optional" default="1"></attribute>
 			<attribute name="maxLength" type="int" use="optional"></attribute>
 			<attribute name="autoComplete" type="boolean" use="optional"></attribute>
+			<attribute name="markdown" type="string" use="optional" default="gfm">
+				<annotation>
+					<documentation>
+						If present, the string is eligible for markdown rendering.
+						The value of the attribute is used to pick a flavor and can be empty.
+					</documentation>
+				</annotation>
+			</attribute>
 		</complexType>
 	</element>
 	<attributeGroup name="propertyScopes">

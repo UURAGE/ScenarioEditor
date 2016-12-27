@@ -347,6 +347,12 @@ var Config;
                     type = $.extend({}, type, { autoComplete: autoComplete, autoCompleteControl: autoCompleteControl });
                 }
 
+                if ($(typeXML)[0].hasAttribute('markdown'))
+                {
+                    var markdown = typeXML.attr('markdown');
+                    type = $.extend({}, type, { markdown: markdown ? markdown : "gfm" });
+                }
+
                 var defaultEl = typeXML.children('default');
                 if (defaultEl.length > 0)
                 {
