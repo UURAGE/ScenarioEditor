@@ -153,7 +153,7 @@ var Load;
     function generateGraph(xml)
     {
         var level = 0;
-        $(xml).find('interleave').each(function()
+        $(xml).children('sequence').children('interleave').each(function()
         {
             $(this).children('dialogue').each(function()
             {
