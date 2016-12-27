@@ -86,7 +86,11 @@ var Validator;
                             message: i18next.t('validator:subject_start_type_error',
                                 { subject: tree.subject, type: i18next.t('common:' + Main.nodes[startNodeID].type) }),
                             level: 'error',
-                            jumpToFunction: function() { Zoom.zoomIn(tree); }
+                            jumpToFunction: function()
+                            {
+                                Zoom.zoomIn(tree);
+                                Main.selectNode(startNodeID);
+                            }
                         });
                     }
                 });
@@ -161,7 +165,7 @@ var Validator;
                 {
                     message: i18next.t('validator:unnamed_subject'),
                     level: 'info',
-                    jumpToFunction: function() { Main.selectTree(tree.id); }
+                    jumpToFunction: function() { Main.selectElement(tree.id); }
                 });
             }
         });
@@ -252,13 +256,15 @@ var Validator;
     function show(errors)
     {
         var hasErrors = false;
+        var hasWarningsOrInfo = false;
         $.each(errors, function(index, value)
         {
             hasErrors = hasErrors || value.level === 'error';
+            hasWarningsOrInfo = hasWarningsOrInfo || value.level === 'warning' || value.level === 'info';
         });
 
         $('#validationReport').empty();
-        if (!hasErrors)
+        if (!hasErrors && !hasWarningsOrInfo)
         {
             $('#validationReport').append($('<p>').addClass('no-problems').text(i18next.t('validator:no_problems')));
         }
