@@ -762,92 +762,10 @@ var Main;
 
         parent.append(node);
 
-        var onStartEdit = function()
+        node.on('dblclick', function(e)
         {
-            node.off('dblclick');
-
-            var text = Main.nodes[id].text ? Main.nodes[id].text : "";
-
-            KeyControl.hotKeysActive = false;
-
-            // Make sure the text fits inside the node
-            // Retrieve the height before the div becomes invisible
-            var height = textDiv.height();
-            textDiv.hide();
-            inputDiv.show();
-
-            var txtArea = $('<textarea>',
-            {
-                class: "nodestatement",
-                maxlength: Config.configObject.settings.statement.type.maxLength,
-                text: Config.configObject.settings.statement.type.defaultValue
-            });
-
-            // Because textareas apparently don't act normally:
-            // Manual deselect for txtArea
-            txtArea.on("mousedown", function(event)
-            {
-                if (this.selectionStart !== this.selectionEnd)
-                {
-                    this.selectionStart = this.selectionEnd = -1;
-                }
-                event.stopPropagation();
-            });
-
-            var onExitEdit = function(e, cancel)
-            {
-                // Turn hotkeys on again (they are turned off while typing in the node)
-                KeyControl.hotKeysActive = true;
-
-                var text = txtArea.val();
-                inputDiv.empty();
-                inputDiv.hide();
-                textDiv.show();
-
-                if(!cancel)
-                {
-                    Main.nodes[id].text = text;
-                }
-
-                changeNodeText(id);
-
-                //Enable dragging for this component
-                plumbInstance.setDraggable(node, true);
-
-                node.on('dblclick', onStartEdit);
-            };
-
-            txtArea.on('focusout', onExitEdit);
-
-            txtArea.on('keydown', function(e)
-            {
-                if(e.ctrlKey && e.keyCode === 13) // enter
-                {
-                    onExitEdit(e, false);
-                }
-                if(e.keyCode === 27) // escape
-                {
-                    onExitEdit(e, true);
-                }
-            });
-
-            inputDiv.append(txtArea);
-
-            // Disable dragging for this component
-            plumbInstance.setDraggable(node, false);
-
-            // Make room for typing text in the node
-            node.height(height + 35);
-            if (node.width() < 128) node.width(128);
-
-            inputDiv.height("100%");
-
-            // Fill node with current node text
-            txtArea.val(text);
-            txtArea.focus();
-        };
-
-        node.on('dblclick', onStartEdit);
+             onStartEdit(id);
+        });
 
         Utils.cssPosition(node,
         {
@@ -916,6 +834,112 @@ var Main;
         });
 
         return node;
+    }
+
+    function onStartEdit(nodeID)
+    {
+        var node = Main.nodes[nodeID];
+        var nodeDiv = $('#' + node.id);
+        var inputDiv = nodeDiv.find('.statementInput');
+        var textDiv = nodeDiv.find('.statementText');
+
+        nodeDiv.off('dblclick');
+        node.editing = true;
+
+        var text = node.text ? node.text : "";
+
+        KeyControl.hotKeysActive = false;
+
+        // Make sure the text fits inside the node
+        // Retrieve the height before the div becomes invisible
+        var height = textDiv.height();
+        textDiv.hide();
+        inputDiv.show();
+
+        var txtArea = $('<textarea>',
+        {
+            class: "nodestatement",
+            maxlength: Config.configObject.settings.statement.type.maxLength,
+            text: Config.configObject.settings.statement.type.defaultValue
+        });
+
+        // Because textareas apparently don't act normally:
+        // Manual deselect for txtArea
+        txtArea.on("mousedown", function(event)
+        {
+            if (this.selectionStart !== this.selectionEnd)
+            {
+                this.selectionStart = this.selectionEnd = -1;
+            }
+            event.stopPropagation();
+        });
+
+
+
+        txtArea.on('focusout', function(e)
+        {
+            onExitEdit(node.id, false);
+        });
+
+        txtArea.on('keydown', function(e)
+        {
+            if(e.ctrlKey && e.keyCode === 13) // enter
+            {
+                onExitEdit(node.id, false);
+            }
+            if(e.keyCode === 27) // escape
+            {
+                onExitEdit(node.id, true);
+            }
+        });
+
+        inputDiv.append(txtArea);
+
+        // Disable dragging for this component
+        getPlumbInstanceByNodeID(node.id).setDraggable(nodeDiv, false);
+
+        // Make room for typing text in the node
+        nodeDiv.height(height + 35);
+        if (nodeDiv.width() < 128) nodeDiv.width(128);
+
+        inputDiv.height("100%");
+
+        // Fill node with current node text
+        txtArea.val(text);
+        txtArea.focus();
+    }
+
+    function onExitEdit(nodeID, cancel)
+    {
+        // Turn hotkeys on again (they are turned off while typing in the node)
+        KeyControl.hotKeysActive = true;
+
+        var node = Main.nodes[nodeID];
+        var nodeDiv = $('#' + node.id);
+        var inputDiv = nodeDiv.find('.statementInput');
+        var textDiv = nodeDiv.find('.statementText');
+        var textArea = nodeDiv.find('.nodestatement');
+
+        var text = textArea.val();
+        inputDiv.empty();
+        inputDiv.hide();
+        textDiv.show();
+
+        if(!cancel)
+        {
+            node.text = text;
+        }
+
+        changeNodeText(node.id);
+
+        //Enable dragging for this component
+        getPlumbInstanceByNodeID(node.id).setDraggable(nodeDiv, true);
+
+        nodeDiv.on('dblclick', function(e)
+        {
+            onStartEdit(node.id);
+        });
+        node.editing = false;
     }
 
     function getPlumbInstanceByNodeID(nodeID)
@@ -1256,6 +1280,9 @@ var Main;
 
         // Save comment.
         node.comment = $("textarea#comment").val();
+
+        // Exit the edit mode if editing
+        if (node.editing) onExitEdit(node.id, false);
 
         // Change the text of the node.
         changeNodeText(Main.selectedElement);
