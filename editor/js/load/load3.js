@@ -248,7 +248,6 @@ var Load3;
         Main.nodes[id] = {
             text: text,
             type: type,
-            characterIdRef: characterIdRef,
             preconditions: preconditions,
             parameterEffects: parameterEffects,
             propertyValues: propertyValues,
@@ -261,6 +260,8 @@ var Load3;
             id: id,
             parent: treeID
         };
+
+        if (type === Main.computerType) Main.nodes[id].characterIdRef = characterIdRef;
 
         // Set the position of the node.
         Utils.cssPosition(node, {
@@ -392,7 +393,6 @@ var Load3;
         Main.nodes[id] = {
             text: firstConversationNode.text,
             type: firstConversationNode.type,
-            characterIdRef: characterIdRef,
             parameterEffects: Config.getNewDefaultParameterEffects(characterIdRef),
             preconditions: preconditionsJS,
             propertyValues: Config.getNewDefaultPropertyValues(['independent']),
@@ -405,6 +405,8 @@ var Load3;
             id: id,
             parent: treeID
         };
+
+        if (firstConversationNode.type === Main.computerType) Main.nodes[id].characterIdRef = characterIdRef;
 
         // Set the position of the node.
         Utils.cssPosition(node, {
@@ -456,7 +458,6 @@ var Load3;
                 Main.nodes[id] = {
                     text: textNode.text,
                     type: textNode.type,
-                    characterIdRef: characterIdRef,
                     parameterEffects: Config.getNewDefaultParameterEffects(characterIdRef),
                     preconditions: {type: "alwaysTrue", preconditions: []},
                     propertyValues: Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef),
@@ -469,6 +470,8 @@ var Load3;
                     id: id,
                     parent: firstConversationNode.parent
                 };
+
+                if (textNode.type === Main.computerType) Main.nodes[id].characterIdRef = characterIdRef;
 
                 // Set the position of the node and offset it by a small amount to show underlying nodes
                 Utils.cssPosition(node, {

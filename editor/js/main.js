@@ -620,7 +620,6 @@ var Main;
         Main.nodes[id] = {
             text: text ? text : "",
             type: type,
-            characterIdRef: characterIdRef,
             parameterEffects: parameterEffects,
             preconditions:
             {
@@ -637,6 +636,8 @@ var Main;
             id: id,
             parent: container.attr("id")
         };
+
+        if (type === Main.computerType) Main.nodes[id].characterIdRef = characterIdRef;
 
         // Always select the node after the creation.
         selectElement(id);

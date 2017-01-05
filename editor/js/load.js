@@ -361,7 +361,6 @@ var Load;
         Main.nodes[id] = {
             text: text,
             type: type,
-            characterIdRef: characterIdRef,
             preconditions: preconditions,
             parameterEffects: parameterEffects,
             propertyValues: propertyValues,
@@ -374,6 +373,8 @@ var Load;
             id: id,
             parent: treeID
         };
+
+        if (type === Main.computerType) Main.nodes[id].characterIdRef = characterIdRef;
 
         // Set the position of the node.
         Utils.cssPosition(node, {
