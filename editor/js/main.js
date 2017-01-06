@@ -765,7 +765,7 @@ var Main;
 
         node.on('dblclick', function(e)
         {
-             onStartEdit(id);
+             startEditingNode(id);
         });
 
         Utils.cssPosition(node,
@@ -837,7 +837,7 @@ var Main;
         return node;
     }
 
-    function onStartEdit(nodeID)
+    function startEditingNode(nodeID)
     {
         var node = Main.nodes[nodeID];
         var nodeDiv = $('#' + node.id);
@@ -879,18 +879,18 @@ var Main;
 
         txtArea.on('focusout', function(e)
         {
-            onExitEdit(node.id, false);
+            stopEditingNode(node.id, false);
         });
 
         txtArea.on('keydown', function(e)
         {
             if(e.ctrlKey && e.keyCode === 13) // enter
             {
-                onExitEdit(node.id, false);
+                stopEditingNode(node.id, false);
             }
             if(e.keyCode === 27) // escape
             {
-                onExitEdit(node.id, true);
+                stopEditingNode(node.id, true);
             }
         });
 
@@ -910,12 +910,14 @@ var Main;
         txtArea.focus();
     }
 
-    function onExitEdit(nodeID, cancel)
+    function stopEditingNode(nodeID, cancel)
     {
+        var node = Main.nodes[nodeID];
+        if (!node.editing) return;
+
         // Turn hotkeys on again (they are turned off while typing in the node)
         KeyControl.hotKeysActive = true;
 
-        var node = Main.nodes[nodeID];
         var nodeDiv = $('#' + node.id);
         var inputDiv = nodeDiv.find('.statementInput');
         var textDiv = nodeDiv.find('.statementText');
@@ -926,10 +928,7 @@ var Main;
         inputDiv.hide();
         textDiv.show();
 
-        if(!cancel)
-        {
-            node.text = text;
-        }
+        if (!cancel) node.text = text;
 
         changeNodeText(node.id);
 
@@ -938,7 +937,7 @@ var Main;
 
         nodeDiv.on('dblclick', function(e)
         {
-            onStartEdit(node.id);
+            startEditingNode(node.id);
         });
         node.editing = false;
     }
@@ -1282,8 +1281,8 @@ var Main;
         // Save comment.
         node.comment = $("textarea#comment").val();
 
-        // Exit the edit mode if editing
-        if (node.editing) onExitEdit(node.id, false);
+        // Ensure the node is not being edited.
+        stopEditingNode(node.id, false);
 
         // Change the text of the node.
         changeNodeText(Main.selectedElement);
