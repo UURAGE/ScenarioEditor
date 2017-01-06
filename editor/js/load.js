@@ -19,9 +19,6 @@ var Load;
         {
             importDialog();
         });
-
-        // At the beginning no XML is loaded, so we need to define a metaObject
-        Metadata.reset();
     });
 
     function importDialog()

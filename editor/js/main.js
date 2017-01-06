@@ -322,6 +322,7 @@ var Main;
             }
         });
 
+        Metadata.reset();
     });
 
     $(window).bind('beforeunload', function()
