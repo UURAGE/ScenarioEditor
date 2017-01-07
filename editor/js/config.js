@@ -437,11 +437,11 @@ var Config;
             {
                 switch(type.name)
                 {
-                    case "string": return Utils.parseDecimalIntWithDefault(value, 0);
+                    case "string": return Utils.parseDecimalIntWithDefault(value, this.defaultValue);
                     case "integer": return value;
                     case "boolean": return Number(value);
-                    case "enumeration": return Utils.parseDecimalIntWithDefault(value, 0);
-                    default: return value;
+                    case "enumeration": return Utils.parseDecimalIntWithDefault(value, this.defaultValue);
+                    default: return Utils.parseDecimalIntWithDefault(value, this.defaultValue);
                 }
             },
             insertType: function(typeXML)
@@ -494,7 +494,7 @@ var Config;
                     case "integer": return Boolean(value);
                     case "boolean": return value;
                     case "enumeration": return Utils.parseBool(value.toLowerCase());
-                    default: return value;
+                    default: return Utils.parseBool(value);
                 }
             },
             insertType: function(typeXML)
