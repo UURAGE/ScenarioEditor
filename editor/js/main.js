@@ -406,10 +406,12 @@ var Main;
 
     function initialiseSidebar()
     {
-        if (localStorage.getItem('sidebarCollapsed') === 'true') {
+        if (Utils.parseBool(localStorage.getItem('sidebarCollapsed')))
+        {
             collapseSidebar(true);
         }
-        else if (localStorage.getItem('sidebarWidth')) {
+        else if (localStorage.getItem('sidebarWidth'))
+        {
             setSidebarWidth(localStorage.getItem('sidebarWidth'));
         }
 
@@ -417,16 +419,23 @@ var Main;
         var domSidebarGrip = $('#sidebar').find('.grip');
         var mouseX = 0;
 
-        $(domSidebarGrip).mousedown(function(event){
+        $(domSidebarGrip).mousedown(function(event)
+        {
             // Clear selection so browser doesn't try to drag selected items
             // Copied from: http://stackoverflow.com/a/3169849/1765330
-            if (window.getSelection) {
-              if (window.getSelection().empty) {  // Chrome
+            if (window.getSelection)
+            {
+              if (window.getSelection().empty)
+              {  // Chrome
                 window.getSelection().empty();
-              } else if (window.getSelection().removeAllRanges) {  // Firefox
+              }
+              else if (window.getSelection().removeAllRanges)
+              {  // Firefox
                 window.getSelection().removeAllRanges();
               }
-            } else if (document.selection) {  // IE?
+            }
+            else if (document.selection)
+            {  // IE?
               document.selection.empty();
             }
 
@@ -436,16 +445,19 @@ var Main;
             $('#sidebar').addClass('dragging');
         });
 
-        $(domSidebarGrip).dblclick(function(event){
+        $(domSidebarGrip).dblclick(function(event)
+        {
             collapseSidebar();
         });
 
-        $(window).mouseup(function(){
+        $(window).mouseup(function()
+        {
             mousehelddown = false;
             $('#sidebar').removeClass('dragging');
         });
 
-        $(document).on("mousemove", function(event) {
+        $(document).on("mousemove", function(event)
+        {
             if (mousehelddown)
             {
                 var width = $(window).width() - event.pageX + mouseX;
@@ -491,7 +503,7 @@ var Main;
 
         var treeDiv = $('<div>', { class: "treeDiv" });
         treeDiv.attr('tabindex', '0');
-        
+
         treeDiv.on("click", function(e)
         {
             $(this).focus();
@@ -531,7 +543,7 @@ var Main;
             if (Main.selectedElements.length === 0) $(this).focus();
             // Focus div so it can receive keyboard events
         });
-        
+
         treeDiv.selectable(
         {
             distance: 5,
@@ -1720,6 +1732,8 @@ var Main;
 
         tree.optional = $('#optionalCheckbox').prop('checked');
 
+        $(Main.trees[Main.selectedElement].dragDiv).toggleClass("optional", tree.optional);
+
         Main.trees[Main.selectedElement] = tree;
     }
 
@@ -2281,6 +2295,7 @@ var Main;
             sideBarSub.append($('<h1>', { text: currentName }));
 
             $("#optionalCheckbox").prop("checked", Main.trees[Main.selectedElement].optional);
+
         }
     }
 

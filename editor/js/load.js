@@ -179,6 +179,8 @@ var Load;
 
                 tree.optional = Utils.parseBool($(this).attr('optional'));
 
+                $(tree.dragDiv).toggleClass('optional', tree.optional);
+
                 tree.level = level;
 
                 tree.dragDiv.find('.subjectName').text(tree.subject); // set subject in HTML
