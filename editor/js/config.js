@@ -375,7 +375,9 @@ var Config;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                containerEl.append($('<' + this.controlName + '>', { id: htmlId, type: 'text', maxlength: this.maxLength, rows: this.rows }));
+                var control = $('<' + this.controlName + '>', { id: htmlId, type: 'text', maxlength: this.maxLength, rows: this.rows });
+                if (this.markdown) Utils.attachMarkdownTooltip(control);
+                containerEl.append(control);
             },
             getFromDOM: function(containerEl)
             {

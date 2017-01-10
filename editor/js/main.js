@@ -876,11 +876,12 @@ var Main;
             event.stopPropagation();
         });
 
-
-
         txtArea.on('focusout', function(e)
         {
-            stopEditingNode(node.id, false);
+            if (!txtArea.tooltip || txtArea.tooltip( "option", "disabled" ))
+            {
+                stopEditingNode(node.id, false);
+            }
         });
 
         txtArea.on('keydown', function(e)
@@ -909,6 +910,8 @@ var Main;
         // Fill node with current node text
         txtArea.val(text);
         txtArea.focus();
+
+        if (Config.configObject.settings.statement.type.markdown) Utils.attachMarkdownTooltip(txtArea);
     }
 
     function stopEditingNode(nodeID, cancel)

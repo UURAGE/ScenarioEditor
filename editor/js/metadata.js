@@ -32,6 +32,10 @@ var Metadata;
         var metaScreenHTML = Parts.getMetaScreenHTML();
         $("#metaScreen").html(metaScreenHTML);
 
+        var scenarioDescription = $("#scenarioDescription");
+        scenarioDescription.attr('maxlength', Config.configObject.settings.description.type.maxLength);
+        if (Config.configObject.settings.description.type.markdown) Utils.attachMarkdownTooltip(scenarioDescription);
+
         var parameterScreenHTML = Parts.getParameterScreenHTML();
         $("#parameterScreen").html(parameterScreenHTML);
 
@@ -164,7 +168,7 @@ var Metadata;
             name: "",
             version: 0,
             difficulty: "medium",
-            description: "",
+            description: Config.configObject.settings.description.type.defaultValue,
             authors: [],
             parameters: getNewDefaultParameters(),
             propertyValues: Config.getNewDefaultPropertyValues(['independent'])

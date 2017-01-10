@@ -16,7 +16,8 @@ var Utils;
         escapeHTML: escapeHTML,
         unEscapeHTML: unEscapeHTML,
         showIfAndOnlyIf: showIfAndOnlyIf,
-        cssPosition: cssPosition
+        cssPosition: cssPosition,
+        attachMarkdownTooltip: attachMarkdownTooltip
     };
 
     // Taken from stackoverflow
@@ -118,5 +119,28 @@ var Utils;
                'top': newPosition.top + 'px'
             });
         }
+    }
+
+    function attachMarkdownTooltip(elem)
+    {
+        elem.tooltip(
+        {
+            items: ":hover",
+            content: i18next.t('utils:markdown_tooltip'),
+            // Taken from: http://stackoverflow.com/a/15014759
+            close: function( event, ui )
+            {
+                ui.tooltip.hover(
+                    function ()
+                    {
+                        $(this).stop(true).fadeIn();
+                    },
+                    function ()
+                    {
+                        $(this).fadeOut(function(){ $(this).remove(); });
+                    }
+                );
+            }
+        });
     }
 })();

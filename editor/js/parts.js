@@ -182,7 +182,7 @@ var Parts;
                         '</tr>' +
                         '<tr id="scenarioDescription-container">' +
                             '<th><label for="scenarioDescription">'+i18next.t('parts:description')+':</label></th>' +
-                            '<td><textarea id="scenarioDescription" maxlength=' + Config.configObject.settings.description.type.maxLength +
+                            '<td><textarea id="scenarioDescription" ' +
                                 ' style="height: 200px; width: 100%; -moz-box-sizing: border-box; box-sizing: border-box">' +
                             '</textarea></td>' +
                         '</tr>' +

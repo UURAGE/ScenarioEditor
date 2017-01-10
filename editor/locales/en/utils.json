@@ -1,0 +1,3 @@
+{
+    "markdown_tooltip": "*<i>This will be italic text</i>*<br>**<b>This will be bold text</b>**<br>~~<s>This will be striked through</s>~~<br>Any URL (like <a href=\"http://google.com\">google.com</a>) will be automatically converted into a clickable link.<br>Custom text for the URL: [google](http://google.com)<br><br>More info: <a href=\"https://en.support.wordpress.com/markdown-quick-reference/\">https://en.support.wordpress.com/markdown-quick-reference/</a><br><br>Tutorial: <a href=\"http://www.markdowntutorial.com\">http://www.markdowntutorial.com</a>"
+}

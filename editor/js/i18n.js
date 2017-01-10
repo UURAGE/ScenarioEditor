@@ -31,6 +31,7 @@
             'parts',
             'print',
             'save',
+            'utils',
             'validator'
         ],
         interpolation:
