@@ -2112,7 +2112,7 @@ var Main;
                 }
             }
 
-            Utils.showIfAndOnlyIf($("#propertyValuesSection"), anyNodePropertyShown);
+            $("#propertyValuesSection").toggle(anyNodePropertyShown);
 
             // Show the per-computer-own parameter effects and property values
             if (node.type === Main.computerType)
@@ -2153,7 +2153,7 @@ var Main;
                             anyCharacterParameterShown = true;
                         }
                     });
-                    Utils.showIfAndOnlyIf(computerOwnParameterEffectsEl.parent(), anyCharacterParameterShown);
+                    computerOwnParameterEffectsEl.parent().toggle(anyCharacterParameterShown);
 
                     // Add the previously defined per-computer-own fixed parameter effects
                     for (parameterIdRef in node.parameterEffects.fixed.perCharacter[node.characterIdRef])
@@ -2194,7 +2194,7 @@ var Main;
                             anyPropertyShown = true;
                         }
                     });
-                    Utils.showIfAndOnlyIf(computerOwnPropertyValuesEl.parent(), anyPropertyShown);
+                    computerOwnPropertyValuesEl.parent().toggle(anyPropertyShown);
                 };
 
                 var characterSelection = $("#characterSelection");

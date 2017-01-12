@@ -15,7 +15,6 @@ var Utils;
         escapeSelector: escapeSelector,
         escapeHTML: escapeHTML,
         unEscapeHTML: unEscapeHTML,
-        showIfAndOnlyIf: showIfAndOnlyIf,
         cssPosition: cssPosition,
         attachMarkdownTooltip: attachMarkdownTooltip
     };
@@ -88,12 +87,6 @@ var Utils;
                 .replace(/&#39;/g, '\'') // '
                 .replace(/<br\/>/g, "\n"); // \n
         }
-    }
-
-    function showIfAndOnlyIf(elem, condition)
-    {
-        if (condition) elem.show();
-        else elem.hide();
     }
 
     // Gets or sets the "CSS position", which is defined as the combination of
