@@ -49,13 +49,26 @@ var Main;
     var ctrlDown = false, spaceDown = false,
         invalidateNodeClick = false;//a drag event also triggers a click event, use this flag to catch and stop these events
 
-        $.fn.attachDragger = function(){
+        $.fn.attachDragger = function()
+        {
             var attachment = false, lastPosition, position, difference;
-            $(this).on("mouseenter mousedown mouseup mousemove",function(e){
-                if( e.type == "mouseenter" ) lastPosition = [e.clientX, e.clientY];
-                if( e.type == "mousedown" ) attachment = true, lastPosition = [e.clientX, e.clientY];
-                if( e.type == "mouseup" ) attachment = false;
-                if( e.type == "mousemove" && attachment == true ){
+            $(this).on("mouseenter mousedown mouseup mousemove",function(e)
+            {
+                if( e.type == "mouseenter" )
+                {
+                    lastPosition = [e.clientX, e.clientY];
+                }
+                if( e.type == "mousedown" )
+                {
+                    attachment = true;
+                    lastPosition = [e.clientX, e.clientY];
+                }
+                if( e.type == "mouseup" )
+                {
+                    attachment = false;
+                }
+                if( e.type == "mousemove" && attachment)
+                {
                     if (spaceDown)
                     {
                         position = [e.clientX, e.clientY];
@@ -66,10 +79,11 @@ var Main;
                     }
                 }
             });
-            $(document).bind("mouseup", function(){
+            $(document).bind("mouseup", function()
+            {
                 attachment = false;
             });
-        }
+        };
 
     $(document).ready(function()
     {
@@ -1024,7 +1038,7 @@ var Main;
 
         txtArea.on('focusout', function(e)
         {
-            if (!txtArea.tooltip || txtArea.tooltip( "option", "disabled" ))
+            if (!txtArea.data('ui-tooltip') || txtArea.tooltip( "option", "disabled" ))
             {
                 stopEditingNode(node.id, false);
             }
