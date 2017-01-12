@@ -49,6 +49,7 @@ var Main;
     var ctrlDown = false, spaceDown = false,
         invalidateNodeClick = false;//a drag event also triggers a click event, use this flag to catch and stop these events
 
+        // Copied from: http://stackoverflow.com/a/22079985/1765330
         $.fn.attachDragger = function()
         {
             var attachment = false, lastPosition, position, difference;
@@ -530,7 +531,7 @@ var Main;
 
         treeDiv.on("keydown", function(e)
         {
-            if ((e.keyCode || e.which) === 32)
+            if ((e.keyCode || e.which) === 32 && !$(e.target).is('input, textarea'))
             {
                 if (!spaceDown)
                 {
@@ -544,7 +545,7 @@ var Main;
 
         treeDiv.on("keyup", function(e)
         {
-            if ((e.keyCode || e.which) === 32 && spaceDown)
+            if ((e.keyCode || e.which) === 32 && spaceDown && !$(e.target).is('input, textarea'))
             {
                 spaceDown = false;
                 treeDiv.selectable('enable');
