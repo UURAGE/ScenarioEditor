@@ -46,29 +46,29 @@ var Main;
         updateButtons: updateButtons
     };
 
-    var ctrlDown = false, spaceDown = false,
+    var ctrlDown = false, spaceDown = false, isSelecting = false, isPanning = false,
         invalidateNodeClick = false;//a drag event also triggers a click event, use this flag to catch and stop these events
 
         // Copied from: http://stackoverflow.com/a/22079985/1765330
         $.fn.attachDragger = function()
         {
-            var attachment = false, lastPosition, position, difference;
+            var lastPosition, position, difference;
             $(this).on("mouseenter mousedown mouseup mousemove",function(e)
             {
                 if( e.type == "mouseenter" )
                 {
                     lastPosition = [e.clientX, e.clientY];
                 }
-                if( e.type == "mousedown" )
+                if( e.type == "mousedown")
                 {
-                    attachment = true;
+                    isPanning = true;
                     lastPosition = [e.clientX, e.clientY];
                 }
-                if( e.type == "mouseup" )
+                if( e.type == "mouseup")
                 {
-                    attachment = false;
+                    isPanning = false;
                 }
-                if( e.type == "mousemove" && attachment)
+                if( e.type == "mousemove" && isPanning)
                 {
                     if (spaceDown)
                     {
@@ -78,11 +78,14 @@ var Main;
                         $(this).scrollTop( $(this).scrollTop() - difference[1] );
                         lastPosition = [e.clientX, e.clientY];
                     }
+                    else {
+                        isPanning = false;
+                    }
                 }
             });
             $(document).bind("mouseup", function()
             {
-                attachment = false;
+                isPanning = false;
             });
         };
 
@@ -373,6 +376,31 @@ var Main;
         }
     });
 
+    $(window).keydown(function(e) {
+        if ($(document.activeElement).filter('input,textarea').length == 0 &&
+        Zoom.isZoomed() && !isSelecting)
+        {
+            if (e.which == 32 && !spaceDown)
+            {
+                var zoomedTree = Zoom.getZoomed();
+                spaceDown = true;
+                zoomedTree.div.selectable('disable');
+                zoomedTree.div.addClass('dragging');
+            }
+        }
+    });
+
+    $(window).keyup(function(e) {
+        if (spaceDown)
+        {
+            var zoomedTree = Zoom.getZoomed();
+            spaceDown = false;
+            isPanning = false;
+            zoomedTree.div.selectable('enable');
+            zoomedTree.div.removeClass('dragging');
+        }
+    });
+
     function initialiseMenuBar()
     {
         var buttons = $(".dropdownButton");
@@ -517,7 +545,6 @@ var Main;
         }
 
         var treeDiv = $('<div>', { class: "treeDiv" });
-        treeDiv.attr('tabindex', '0');
 
         treeDiv.on("click", function(e)
         {
@@ -529,41 +556,19 @@ var Main;
             }
         });
 
-        treeDiv.on("keydown", function(e)
-        {
-            if ((e.keyCode || e.which) === 32 && !$(e.target).is('input, textarea'))
-            {
-                if (!spaceDown)
-                {
-                    spaceDown = true;
-                    treeDiv.selectable('disable');
-                    treeDiv.addClass('dragging');
-                }
-                return false; // No scrolling by space bar
-            }
-        });
-
-        treeDiv.on("keyup", function(e)
-        {
-            if ((e.keyCode || e.which) === 32 && spaceDown && !$(e.target).is('input, textarea'))
-            {
-                spaceDown = false;
-                treeDiv.selectable('enable');
-                treeDiv.removeClass('dragging');
-            }
-        });
-
-        treeDiv.on("mouseenter mousemove", function(e)
-        {
-            if (Main.selectedElements.length === 0) $(this).focus();
-            // Focus div so it can receive keyboard events
-        });
-
         treeDiv.selectable(
         {
             distance: 5,
             filter: ".w", // Only select the nodes.
-            appendTo: treeDiv
+            appendTo: treeDiv,
+            start: function( event, ui )
+            {
+                isSelecting = true;
+            },
+            stop: function( event, ui )
+            {
+                isSelecting = false;
+            }
         });
         treeDiv.selectable('disable'); //box selection only useful in zoomed state
         treeDiv.attachDragger();
