@@ -102,7 +102,7 @@ var Load;
             loadMetadata($(scenarioXML).attr('version'), $(scenarioXML).children('definitions').eq(0), $(scenarioXML).children('metadata').eq(0));
             jsPlumb.batch(function()
             {
-                generateGraph(xml);
+                generateGraph(scenarioXML);
             });
         }
         // Load versions 2 and 3
@@ -111,7 +111,7 @@ var Load;
             Load3.loadMetadata($(scenarioXML).children('metadata').eq(0));
             jsPlumb.batch(function()
             {
-                Load3.generateGraph(xml);
+                Load3.generateGraph(scenarioXML);
             });
         }
         // Load version 1
@@ -120,7 +120,7 @@ var Load;
             Load3.loadMetadata($(scenarioXML).children('metadata').eq(0));
             jsPlumb.batch(function()
             {
-                Load1.generateGraph(xml);
+                Load1.generateGraph(scenarioXML);
             });
         }
     }
