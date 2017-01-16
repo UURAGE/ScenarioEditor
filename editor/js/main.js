@@ -1097,8 +1097,11 @@ var Main;
         // Disable dragging for this component
         getPlumbInstanceByNodeID(node.id).setDraggable(nodeDiv, false);
 
+        // Calculate relative width
+        var width = Math.sqrt(text.length);
+        nodeDiv.width(width + "em");
         // Make room for typing text in the node
-        nodeDiv.height(height + 35);
+        nodeDiv.height(inputDiv.height() + 35);
         if (nodeDiv.width() < 128) nodeDiv.width(128);
 
         inputDiv.height("100%");
@@ -1700,9 +1703,12 @@ var Main;
         if (node.allowDialogueEndNode) appendNodePropertyImage("node_has_premature_end");
         if (node.endNode) appendNodePropertyImage("node_has_end");
 
+        var longNode = text.length > 140;
+        if (longNode) { nodeHTML.addClass("long"); } else { nodeHTML.removeClass("long"); }
         // add the text and imageDiv to the node itself
         // apply text changes
-        nodeHTML.width(width + "em");
+        if (!longNode) { nodeHTML.width(width + "em"); }
+        else { nodeHTML.width(150 + "px"); }
         var nodeTextDiv = nodeHTML.find('.statementText');
         nodeTextDiv.show();
         nodeTextDiv.html(text);
