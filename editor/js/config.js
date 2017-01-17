@@ -650,32 +650,30 @@ var Config;
 
     function getNewDefaultParameterEffects(characterIdRef)
     {
-        var parameterEffects = {};
-        parameterEffects.userDefined = [];
-        parameterEffects.fixed = {};
-        parameterEffects.fixed.characterIndependent = {};
+        var parameterEffects = { userDefined: [], fixed: {} };
+        parameterEffects.fixed.characterIndependent = { byId: {}, sequence: [] };
         var parameterId;
         for (parameterId in Config.configObject.parameters.byId)
         {
-            parameterEffects.fixed.characterIndependent[parameterId] = [];
+            parameterEffects.fixed.characterIndependent.byId[parameterId] = [];
         }
-        parameterEffects.fixed.perCharacter = {};
+        parameterEffects.fixed.perCharacter = { };
         for (var characterId in Config.configObject.characters.byId)
         {
-            parameterEffects.fixed.perCharacter[characterId] = {};
+            parameterEffects.fixed.perCharacter[characterId] = { byId: {}, sequence: [] };
 
             var statementScope;
             for (parameterId in Config.configObject.characters.parameters.byId)
             {
                 statementScope = Config.configObject.characters.parameters.byId[parameterId].scopes.statementScope;
                 if (statementScope === 'per-computer-own' && characterId !== characterIdRef) continue;
-                parameterEffects.fixed.perCharacter[characterId][parameterId] = [];
+                parameterEffects.fixed.perCharacter[characterId].byId[parameterId] = [];
             }
             for (parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
             {
                 statementScope = Config.configObject.characters.byId[characterId].parameters.byId[parameterId].scopes.statementScope;
                 if (statementScope === 'per-computer-own' && characterId !== characterIdRef) continue;
-                parameterEffects.fixed.perCharacter[characterId][parameterId] = [];
+                parameterEffects.fixed.perCharacter[characterId].byId[parameterId] = [];
             }
         }
         return parameterEffects;

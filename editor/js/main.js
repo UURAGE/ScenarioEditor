@@ -376,8 +376,9 @@ var Main;
         }
     });
 
-    $(window).keydown(function(e) {
-        if ($(document.activeElement).filter('input,textarea').length == 0 &&
+    $(window).keydown(function(e)
+    {
+        if ($(document.activeElement).filter('input,textarea').length === 0 &&
         Zoom.isZoomed() && !isSelecting)
         {
             if (e.which == 32 && !spaceDown)
@@ -1365,9 +1366,10 @@ var Main;
                 value: parameterValue
             };
 
-            if (parameterEffect.idRef in fixedParameterEffects)
+            if (parameterEffect.idRef in fixedParameterEffects.byId)
             {
-                fixedParameterEffects[parameterEffect.idRef].push(parameterEffect);
+                fixedParameterEffects.sequence.push(parameterEffect);
+                fixedParameterEffects.byId[parameterEffect.idRef].push(parameterEffect);
             }
         };
 
@@ -1918,23 +1920,19 @@ var Main;
             });
 
             // Add the character-independent effects that were previously defined
-            var parameterIdRef;
-            for (parameterIdRef in node.parameterEffects.fixed.characterIndependent)
+            node.parameterEffects.fixed.characterIndependent.sequence.forEach(function(effect)
             {
-                if (parameterIdRef in idRefToEffectsContainer)
+                if (effect.idRef in idRefToEffectsContainer)
                 {
-                    node.parameterEffects.fixed.characterIndependent[parameterIdRef].forEach(function(effect)
-                    {
-                        var effectsContainer = idRefToEffectsContainer[parameterIdRef];
-                        appendEffectContainerTo(effectsContainer, classPrefix, Config.configObject.parameters.byId);
-                        var addedEffectContainer = effectsContainer.children().last();
+                    var effectsContainer = idRefToEffectsContainer[effect.idRef];
+                    appendEffectContainerTo(effectsContainer, classPrefix, Config.configObject.parameters.byId);
+                    var addedEffectContainer = effectsContainer.children().last();
 
-                        addedEffectContainer.find('.' + classPrefix + '-effect-idref-select').val(effect.idRef).trigger('change');
-                        addedEffectContainer.find('.' + classPrefix + '-effect-operator-select').val(effect.operator);
-                        Config.configObject.parameters.byId[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + classPrefix + '-effect-control-container'), effect.value);
-                    });
+                    addedEffectContainer.find('.' + classPrefix + '-effect-idref-select').val(effect.idRef).trigger('change');
+                    addedEffectContainer.find('.' + classPrefix + '-effect-operator-select').val(effect.operator);
+                    Config.configObject.parameters.byId[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + classPrefix + '-effect-control-container'), effect.value);
                 }
-            }
+            });
 
             if (node.type !== Main.computerType || Config.configObject.characters.sequence.length > 1)
             {
@@ -2000,22 +1998,19 @@ var Main;
                     var classCharacterPrefix = characterClassPrefix + '-' + characterId;
                     var characterParameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[characterId].parameters.byId);
 
-                    for (parameterIdRef in node.parameterEffects.fixed.perCharacter[characterId])
+                    node.parameterEffects.fixed.perCharacter[characterId].sequence.forEach(function(effect)
                     {
-                        if (parameterIdRef in idRefToCharacterEffectsContainer[characterId])
+                        if (effect.idRef in idRefToCharacterEffectsContainer[characterId])
                         {
-                            node.parameterEffects.fixed.perCharacter[characterId][parameterIdRef].forEach(function(effect)
-                            {
-                                var effectsContainer = idRefToCharacterEffectsContainer[characterId][parameterIdRef];
-                                appendEffectContainerTo(effectsContainer, classCharacterPrefix, characterParameterDefinitions);
-                                var addedEffectContainer = effectsContainer.children().last();
+                            var effectsContainer = idRefToCharacterEffectsContainer[characterId][effect.idRef];
+                            appendEffectContainerTo(effectsContainer, classCharacterPrefix, characterParameterDefinitions);
+                            var addedEffectContainer = effectsContainer.children().last();
 
-                                addedEffectContainer.find('.' + Utils.escapeSelector(classCharacterPrefix) + '-effect-idref-select').val(effect.idRef).trigger('change');
-                                addedEffectContainer.find('.' + Utils.escapeSelector(classCharacterPrefix) + '-effect-operator-select').val(effect.operator);
-                                characterParameterDefinitions[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + Utils.escapeSelector(classCharacterPrefix) + '-effect-control-container'), effect.value);
-                            });
+                            addedEffectContainer.find('.' + Utils.escapeSelector(classCharacterPrefix) + '-effect-idref-select').val(effect.idRef).trigger('change');
+                            addedEffectContainer.find('.' + Utils.escapeSelector(classCharacterPrefix) + '-effect-operator-select').val(effect.operator);
+                            characterParameterDefinitions[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + Utils.escapeSelector(classCharacterPrefix) + '-effect-control-container'), effect.value);
                         }
-                    }
+                    });
                 }
             }
 
@@ -2176,22 +2171,19 @@ var Main;
                     computerOwnParameterEffectsEl.parent().toggle(anyCharacterParameterShown);
 
                     // Add the previously defined per-computer-own fixed parameter effects
-                    for (parameterIdRef in node.parameterEffects.fixed.perCharacter[node.characterIdRef])
+                    node.parameterEffects.fixed.perCharacter[node.characterIdRef].sequence.forEach(function(effect)
                     {
-                        if (acceptableScopes.indexOf(characterParameterDefinitions[parameterIdRef].scopes.statementScope) !== -1)
+                        if (acceptableScopes.indexOf(characterParameterDefinitions[effect.idRef].scopes.statementScope) !== -1)
                         {
-                            node.parameterEffects.fixed.perCharacter[node.characterIdRef][parameterIdRef].forEach(function(effect)
-                            {
-                                var effectsContainer = idRefToThisCharacterEffectsContainer[parameterIdRef];
-                                appendEffectContainerTo(effectsContainer, classCharacterPrefix, characterParameterDefinitions);
-                                var addedEffectContainer = effectsContainer.children().last();
+                            var effectsContainer = idRefToThisCharacterEffectsContainer[effect.idRef];
+                            appendEffectContainerTo(effectsContainer, classCharacterPrefix, characterParameterDefinitions);
+                            var addedEffectContainer = effectsContainer.children().last();
 
-                                addedEffectContainer.find('.' + classCharacterPrefix + '-effect-idref-select').val(effect.idRef).trigger('change');
-                                addedEffectContainer.find('.' + classCharacterPrefix + '-effect-operator-select').val(effect.operator);
-                                characterParameterDefinitions[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + classCharacterPrefix + '-effect-control-container'), effect.value);
-                            });
+                            addedEffectContainer.find('.' + classCharacterPrefix + '-effect-idref-select').val(effect.idRef).trigger('change');
+                            addedEffectContainer.find('.' + classCharacterPrefix + '-effect-operator-select').val(effect.operator);
+                            characterParameterDefinitions[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + classCharacterPrefix + '-effect-control-container'), effect.value);
                         }
-                    }
+                    });
 
                     var computerOwnPropertyValuesEl = $("#node-computer-own-property-values");
                     computerOwnPropertyValuesEl.children().remove();
@@ -2238,23 +2230,25 @@ var Main;
 
                             for (characterId in node.parameterEffects.fixed.perCharacter)
                             {
-                                for (var parameterId in node.parameterEffects.fixed.perCharacter[characterId])
+                                node.parameterEffects.fixed.perCharacter[characterId].sequence.forEach(function(effect)
                                 {
-                                    var parameter = Config.configObject.characters.parameters.byId[parameterId];
-                                    if (!parameter) parameter = Config.configObject.characters.byId[newCharacterIdRef].parameters.byId[parameterId];
+                                    var parameter = Config.configObject.characters.parameters.byId[effect.idRef];
+                                    if (!parameter) parameter = Config.configObject.characters.byId[newCharacterIdRef].parameters.byId[effect.idRef];
 
                                     if (parameter)
                                     {
                                         if (parameter.scopes.statementScope === 'per-computer-own')
                                         {
-                                            perCharacterParameterEffects[newCharacterIdRef][parameterId] = node.parameterEffects.fixed.perCharacter[characterId][parameterId];
+                                            perCharacterParameterEffects[newCharacterIdRef].sequence.push(effect);
+                                            perCharacterParameterEffects[newCharacterIdRef].byId[effect.idRef].push(effect);
                                         }
                                         else
                                         {
-                                            perCharacterParameterEffects[characterId][parameterId] = node.parameterEffects.fixed.perCharacter[characterId][parameterId];
+                                            perCharacterParameterEffects[characterId].sequence.push(effect);
+                                            perCharacterParameterEffects[characterId].byId[effect.idRef].push(effect);
                                         }
                                     }
-                                }
+                                });
                             }
                             node.parameterEffects.fixed.perCharacter = perCharacterParameterEffects;
 

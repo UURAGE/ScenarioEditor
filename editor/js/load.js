@@ -464,44 +464,51 @@ var Load;
         parameterEffectsXMLElement.children('fixed').children().each(function()
         {
             var parameterId = this.attributes.idref.value;
+            var effect;
             if (this.attributes.characteridref)
             {
                 var characterId = this.attributes.characteridref.value;
                 if (characterId in Config.configObject.characters.byId)
                 {
-                    if (parameterId in parameterEffects.fixed.perCharacter[characterId])
+                    if (parameterId in parameterEffects.fixed.perCharacter[characterId].byId)
                     {
                         if (parameterId in Config.configObject.characters.parameters.byId)
                         {
-                            parameterEffects.fixed.perCharacter[characterId][parameterId].push(
+                            effect =
                             {
                                 idRef: parameterId,
                                 operator: this.attributes.operator.value,
                                 value: Config.configObject.characters.parameters.byId[parameterId].type.fromXML(this)
-                            });
+                            };
+                            parameterEffects.fixed.perCharacter[characterId].sequence.push(effect);
+                            parameterEffects.fixed.perCharacter[characterId].byId[parameterId].push(effect);
                         }
                         else if (parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
                         {
-                            parameterEffects.fixed.perCharacter[characterId][parameterId].push(
+                            effect =
                             {
                                 idRef: parameterId,
                                 operator: this.attributes.operator.value,
                                 value: Config.configObject.characters.byId[characterId].parameters.byId[parameterId].type.fromXML(this)
-                            });
+                            };
+                            parameterEffects.fixed.perCharacter[characterId].sequence.push(effect);
+                            parameterEffects.fixed.perCharacter[characterId].byId[parameterId].push(effect);
                         }
                     }
                 }
             }
             else if (parameterId in Config.configObject.parameters.byId)
             {
-                if (parameterId in parameterEffects.fixed.characterIndependent)
+                if (parameterId in parameterEffects.fixed.characterIndependent.byId)
                 {
-                    parameterEffects.fixed.characterIndependent[parameterId].push(
+                    effect =
                     {
                         idRef: parameterId,
                         operator: this.attributes.operator.value,
                         value: Config.configObject.parameters.byId[parameterId].type.fromXML(this)
-                    });
+                    };
+                    parameterEffects.fixed.characterIndependent.sequence.push(effect);
+                    parameterEffects.fixed.characterIndependent.byId[parameterId].push(effect);
                 }
             }
         });

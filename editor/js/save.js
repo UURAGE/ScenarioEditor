@@ -382,38 +382,31 @@ var Save;
         }
 
         var fixedParameterEffectsEl = addAndReturnElement("fixed", nameSpace, parameterEffectsEl);
-        var parameterId;
-        for (parameterId in parameterEffects.fixed.characterIndependent)
+        parameterEffects.fixed.characterIndependent.sequence.forEach(function(parameterEffect)
         {
-            parameterEffects.fixed.characterIndependent[parameterId].forEach(function(parameterEffect)
-            {
-                var pEffElement = addAndReturnElement("parameterEffect", nameSpace, fixedParameterEffectsEl);
-                pEffElement.setAttribute("idref", parameterEffect.idRef);
-                pEffElement.setAttribute("operator", parameterEffect.operator);
-                Config.configObject.parameters.byId[parameterId].type.toXML(pEffElement, parameterEffect.value, xmlNameSpace);
-            });
-        }
+            var pEffElement = addAndReturnElement("parameterEffect", nameSpace, fixedParameterEffectsEl);
+            pEffElement.setAttribute("idref", parameterEffect.idRef);
+            pEffElement.setAttribute("operator", parameterEffect.operator);
+            Config.configObject.parameters.byId[parameterEffect.idRef].type.toXML(pEffElement, parameterEffect.value, xmlNameSpace);
+        });
         for (var characterId in Config.configObject.characters.byId)
         {
-            for (parameterId in parameterEffects.fixed.perCharacter[characterId])
+            parameterEffects.fixed.perCharacter[characterId].sequence.forEach(function(parameterEffect)
             {
-                parameterEffects.fixed.perCharacter[characterId][parameterId].forEach(function(parameterEffect)
-                {
-                    var pEffElement = addAndReturnElement("characterParameterEffect", nameSpace, fixedParameterEffectsEl);
-                    pEffElement.setAttribute("idref", parameterEffect.idRef);
-                    pEffElement.setAttribute("characteridref", characterId);
-                    pEffElement.setAttribute("operator", parameterEffect.operator);
+                var pEffElement = addAndReturnElement("characterParameterEffect", nameSpace, fixedParameterEffectsEl);
+                pEffElement.setAttribute("idref", parameterEffect.idRef);
+                pEffElement.setAttribute("characteridref", characterId);
+                pEffElement.setAttribute("operator", parameterEffect.operator);
 
-                    if (parameterId in Config.configObject.characters.parameters.byId)
-                    {
-                        Config.configObject.characters.parameters.byId[parameterId].type.toXML(pEffElement, parameterEffect.value, xmlNameSpace);
-                    }
-                    else
-                    {
-                        Config.configObject.characters.byId[characterId].parameters.byId[parameterId].type.toXML(pEffElement, parameterEffect.value, xmlNameSpace);
-                    }
-                });
-            }
+                if (parameterEffect.idRef in Config.configObject.characters.parameters.byId)
+                {
+                    Config.configObject.characters.parameters.byId[parameterEffect.idRef].type.toXML(pEffElement, parameterEffect.value, xmlNameSpace);
+                }
+                else
+                {
+                    Config.configObject.characters.byId[characterId].parameters.byId[parameterEffect.idRef].type.toXML(pEffElement, parameterEffect.value, xmlNameSpace);
+                }
+            });
         }
     }
 
