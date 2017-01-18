@@ -7,6 +7,7 @@
     i18next
     .use(i18nextBrowserLanguageDetector)
     .use(i18nextXHRBackend)
+    .use(i18nextLocalStorageCache)
     .use(i18nextSprintfPostProcessor)
     .init(
     {
@@ -137,6 +138,13 @@
                     window.console && console.log(e);
                 }
             }
+        },
+        cache:
+        {
+            enabled: true,
+            // prefix for stored languages
+            prefix: 'i18next_res_',
+            expirationTime: 24*60*60*1000
         }
     });
 })();

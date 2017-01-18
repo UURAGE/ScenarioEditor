@@ -12,6 +12,7 @@
         "i18next",
         "i18nextBrowserLanguageDetector",
         "i18nextXHRBackend",
+        "i18nextLocalStorageCache",
         "i18nextSprintfPostProcessor",
         "saveAs",
         "Utils",

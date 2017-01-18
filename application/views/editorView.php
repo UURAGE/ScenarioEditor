@@ -40,6 +40,7 @@
   $languageScripts = array(
       "js/lib/i18nextBrowserLanguageDetector.min.js",
       "js/lib/i18nextXHRBackend.min.js",
+      "js/lib/i18nextLocalStorageCache.min.js",
       "js/lib/i18nextSprintfPostProcessor.min.js",
       "js/lib/i18next.min.js",
       "js/i18n.js"
