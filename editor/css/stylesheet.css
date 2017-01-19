@@ -171,6 +171,7 @@ a[data-disabled]
 {
     margin-bottom: 20px;
     width: 100%;
+    table-layout: fixed;
 }
 
 #metaScreen th,
@@ -188,6 +189,24 @@ a[data-disabled]
 {
     text-align: left;
     vertical-align: top;
+}
+
+#metaScreen td input,
+#metaScreen td select,
+#propertyValuesSection td input,
+#propertyValuesSection td select,
+#characterSection td input
+#characterSection td select
+{
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#metaScreen tr,
+#propertyValuesSection tr,
+#characterSection tr
+{
+  border-bottom: 1px solid black;
 }
 
 #toolbar
