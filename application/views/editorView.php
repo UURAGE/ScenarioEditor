@@ -26,8 +26,9 @@
   <script>
   <?php
   echo 'var editor_url = "' . editor_url() . '";
-    var root_url = "' . root_url() . '";
-    var base_url = "' . base_url() . '";'
+        var root_url = "' . root_url() . '";
+        var base_url = "' . base_url() . '";
+        var environment = "' . ENVIRONMENT . '";'
   ;
   ?>
   </script>

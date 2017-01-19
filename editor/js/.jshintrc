@@ -7,6 +7,7 @@
     "-W079": true,
     "predef": [
         "editor_url",
+        "environment",
         "language",
         "jsPlumb",
         "i18next",
