@@ -14,6 +14,11 @@ var KeyControl;
         hotKeysActive  : hotKeysActive
     };
 
+    var ctrlNumberControl,
+        ctrlLetterControl,
+        numberControl,
+        letterControl;
+
     $(document).ready(function()
     {
         //activate the hotkeys
@@ -54,7 +59,7 @@ var KeyControl;
     });
 
     //All events for keyboard controls with normal letters.
-    var letterControl = {
+    letterControl = {
         Q: function()
         {
             if(Zoom.isZoomed())
@@ -112,7 +117,7 @@ var KeyControl;
     };
 
     //All events for keyboard controls with special characters.
-    var numberControl = {
+    numberControl = {
         13: function()
         {
             if(Main.selectedElements[0] in Main.trees)
@@ -191,7 +196,7 @@ var KeyControl;
     };
 
     //All events for keyboard controls with normal letters and ctrl pressed.
-    var ctrlLetterControl = {
+    ctrlLetterControl = {
         A: function()
         {
             selectAll();
@@ -223,7 +228,7 @@ var KeyControl;
     };
 
     //All events for keyboard controls with special characters and ctrl pressed.
-    var ctrlNumberControl = {
+    ctrlNumberControl = {
         38: function()
         {
             if(Main.selectedElements[0] in Main.nodes)

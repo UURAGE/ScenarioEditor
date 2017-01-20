@@ -182,10 +182,7 @@ var MiniMap;
 
         // Standard width/height for minimap container
         var width = 300;
-        var height = 300;
-
-        var widthFactor = width/realWidth;
-        var heightFactor = height/realHeight;
+        var widthFactor = width / realWidth;
 
         zoomFactor = widthFactor;
         // minimap gets taller than the allowed screenheight

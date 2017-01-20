@@ -71,7 +71,7 @@ var Save;
 
         var i = 0;
 
-        var makeTreeXML = function(id, tree)
+        var makeTreeXML = function(id, tree, interleave)
         {
             generateTreeXML(interleave, tree, nameSpace);
         };
@@ -95,7 +95,7 @@ var Save;
             }
 
             //for each tree at this level, make the xml
-            $.each(treeArray, makeTreeXML);
+            $.each(treeArray, function(i, tree) { makeTreeXML(i, tree, interleave); });
         }
         var s = new XMLSerializer();
         return s.serializeToString(doc);

@@ -73,7 +73,7 @@ var Main;
                     if (spaceDown)
                     {
                         position = [e.clientX, e.clientY];
-                        difference = [ (position[0]-lastPosition[0]), (position[1]-lastPosition[1]) ];
+                        difference = [ position[0]-lastPosition[0], position[1]-lastPosition[1] ];
                         $(this).scrollLeft( $(this).scrollLeft() - difference[0] );
                         $(this).scrollTop( $(this).scrollTop() - difference[1] );
                         lastPosition = [e.clientX, e.clientY];
@@ -1154,6 +1154,7 @@ var Main;
 
     function deleteAllSelected()
     {
+        var zoomedTree;
         // If there are node or tree elements selected
         if (Main.selectedElements.length > 0)
         {
@@ -1174,7 +1175,7 @@ var Main;
         // If there is a tree zoomed and if there are selected connections, delete them
         else if (Zoom.isZoomed())
         {
-            var zoomedTree = Zoom.getZoomed();
+            zoomedTree = Zoom.getZoomed();
             for (var connectionId in zoomedTree.selectedConnections)
             {
                 var c = zoomedTree.plumbInstance.getConnections(
@@ -1190,7 +1191,7 @@ var Main;
             }
         }
 
-        var zoomedTree = Zoom.getZoomed();
+        zoomedTree = Zoom.getZoomed();
         if (zoomedTree) zoomedTree.plumbInstance.repaintEverything();
         MiniMap.update(true);
     }
@@ -1846,6 +1847,7 @@ var Main;
             };
 
             // Shows the sections and add buttons when there are effects that can be added
+            var hStartLevel = 3;
             var showParameterItem = function(parameterDefinitions, acceptableScopes, parameterItem, hLevel, container, classPrefix, idRefToEffectsContainer)
             {
                 if (acceptableScopes.indexOf(parameterItem.scopes.statementScope) === -1) return false;
@@ -1911,7 +1913,6 @@ var Main;
             var fixedParameterEffectsEl = $("#fixed-parameter-effects");
             var classPrefix = fixedParameterEffectsEl.attr('id');
             fixedParameterEffectsEl.removeClass(classPrefix + '-possible');
-            var hStartLevel = 3;
             // Accumulator for mapping a parameter id to its effects container
             var idRefToEffectsContainer = {};
             Config.configObject.parameters.sequence.forEach(function(subItem)
@@ -2228,6 +2229,7 @@ var Main;
 
                             var perCharacterParameterEffects = Config.getNewDefaultParameterEffects(newCharacterIdRef).fixed.perCharacter;
 
+                            var characterId;
                             for (characterId in node.parameterEffects.fixed.perCharacter)
                             {
                                 node.parameterEffects.fixed.perCharacter[characterId].sequence.forEach(function(effect)
@@ -2256,7 +2258,6 @@ var Main;
                             // check for each per-character property value if it is per-computer-own and
                             // if the other character also has that property then store it in the new character property values
                             var perCharacterPropertyValues = Config.getNewDefaultPropertyValues(acceptableScopes, newCharacterIdRef).perCharacter;
-                            var characterId;
                             for (characterId in perCharacterPropertyValues)
                             {
                                 for (var propertyId in perCharacterPropertyValues[characterId])

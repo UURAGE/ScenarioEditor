@@ -6,17 +6,18 @@ var DragBox;
 {
     "use strict";
 
+    var dragging = false;
+
     DragBox =
     {
         startDragging : startDragging,
         showError : showError,
         isDroppable : isDroppable,
         cancel: cancel,
-        dragging: function(){return dragging;}//to prevent other code from modifying this value
+        dragging: function(){ return dragging; } // To prevent other code from modifying this value
     };
 
-    var dragging = false,
-        startPos = {},
+    var startPos = {},
         dragPos = {},
         dragSafezone = 25,
         stopHandler = null;

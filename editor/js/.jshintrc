@@ -1,21 +1,19 @@
 {
     "browser": true,
     "devel": true,
+    "latedef": "nofunc",
     "jquery": true,
+    "singleGroups": true,
     "undef": true,
     "unused": "vars",
     "-W079": true,
     "predef": [
-        "editor_url",
-        "environment",
-        "language",
         "jsPlumb",
         "i18next",
         "i18nextBrowserLanguageDetector",
         "i18nextXHRBackend",
         "i18nextLocalStorageCache",
         "i18nextSprintfPostProcessor",
-        "saveAs",
         "Utils",
         "Config",
         "ParameterValues",
@@ -36,5 +34,12 @@
         "Print",
         "Zoom",
         "Clipboard"
-    ]
+    ],
+    "globals": {
+        "root_url": false,
+        "base_url": false,
+        "editor_url": false,
+        "saveAs": false,
+        "environment": false
+    }
 }
