@@ -116,7 +116,7 @@ var Config;
                 name: name,
                 description: $(nodeXML).children('description').text(),
                 scopes: nodeScopes,
-                type: loadType($(nodeXML).children('type').children(), id)
+                type: loadType($(nodeXML).children('type').children(), id, nodeName)
             };
         }
         else if (nodeXML.nodeName === nodeName + "Section")
@@ -179,10 +179,10 @@ var Config;
         }
     }
 
-    function loadType(typeXML, id)
+    function loadType(typeXML, id, kind)
     {
         var typeName = typeXML[0].nodeName;
-        return Config.types[typeName].loadType(typeXML, id);
+        return Config.types[typeName].loadType(typeXML, id, kind);
     }
 
     function loadCharacterCollection(collectionXML)
@@ -312,6 +312,8 @@ var Config;
         {
             name: 'string',
             controlName: 'input',
+            controlType: 'text',
+            controlFirst: false,
             defaultValue: "",
             assignmentOperators: [Config.assignmentOperators.assign],
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
@@ -326,6 +328,7 @@ var Config;
                     if (rows > 1)
                     {
                         type = $.extend({}, type, { controlName: 'textarea' });
+                        delete type.controlType;
                     }
                     type = $.extend({}, type, { rows: rows });
                 }
@@ -367,7 +370,7 @@ var Config;
             },
             insertType: function(typeXML)
             {
-                return appendChild(typeXML, 'string');
+                return appendChild(typeXML, this.name);
             },
             castFrom: function(type, value)
             {
@@ -375,8 +378,18 @@ var Config;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                var control = $('<' + this.controlName + '>', { id: htmlId, type: 'text', maxlength: this.maxLength, rows: this.rows });
+                var control;
+                if (this.controlType)
+                {
+                    control = $('<' + this.controlName + '>', { id: htmlId, type: this.controlType, maxlength: this.maxLength, rows: this.rows });
+                }
+                else
+                {
+                    control = $('<' + this.controlName + '>', { id: htmlId, maxlength: this.maxLength, rows: this.rows });
+                }
+
                 if (this.markdown) Utils.attachMarkdownTooltip(control);
+
                 containerEl.append(control);
             },
             getFromDOM: function(containerEl)
@@ -401,6 +414,8 @@ var Config;
         {
             name: 'integer',
             controlName: 'input',
+            controlType: 'number',
+            controlFirst: false,
             defaultValue: 0,
             assignmentOperators: [Config.assignmentOperators.assign,             Config.assignmentOperators.addAssign,
                                   Config.assignmentOperators.subtractAssign],
@@ -439,20 +454,20 @@ var Config;
             {
                 switch(type.name)
                 {
-                    case "string": return Utils.parseDecimalIntWithDefault(value, this.defaultValue);
-                    case "integer": return value;
-                    case "boolean": return Number(value);
-                    case "enumeration": return Utils.parseDecimalIntWithDefault(value, this.defaultValue);
+                    case Config.types.string.name: return Utils.parseDecimalIntWithDefault(value, this.defaultValue);
+                    case Config.types.integer.name: return value;
+                    case Config.types.boolean.name: return Number(value);
+                    case Config.types.enumeration.name: return Utils.parseDecimalIntWithDefault(value, this.defaultValue);
                     default: return Utils.parseDecimalIntWithDefault(value, this.defaultValue);
                 }
             },
             insertType: function(typeXML)
             {
-                return appendChild(typeXML, 'integer');
+                return appendChild(typeXML, this.name);
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                containerEl.append($('<' + this.controlName + '>', { id: htmlId, type: 'number', value: this.minimum ? this.minimum : 0, min: this.minimum, max: this.maximum }));
+                containerEl.append($('<' + this.controlName + '>', { id: htmlId, type: this.controlType, value: this.minimum ? this.minimum : 0, min: this.minimum, max: this.maximum }));
             },
             getFromDOM: function(containerEl)
             {
@@ -463,7 +478,7 @@ var Config;
             },
             setInDOM: function(containerEl, value)
             {
-                containerEl.children('input').first().val(value);
+                containerEl.children(this.controlName).first().val(value);
             },
             fromXML: function(valueXML)
             {
@@ -474,15 +489,29 @@ var Config;
         'boolean':
         {
             name: 'boolean',
-            controlName: 'select',
+            controlName: 'input',
+            controlType: 'checkbox',
+            controlFirst: true,
             defaultValue: false,
             assignmentOperators: [Config.assignmentOperators.assign],
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
-            loadType: function(typeXML)
+            loadType: function(typeXML, id, kind)
             {
+                var type = this;
+
+                if (kind === 'parameter')
+                {
+                    type = $.extend({}, type, { controlName: 'select', controlFirst: false });
+                    delete type.controlType;
+                }
+
                 var defaultEl = typeXML.children('default');
-                if (defaultEl.length > 0) return $.extend({}, this, { defaultValue: Utils.parseBool(defaultEl[0].textContent) });
-                else                      return this;
+                if (defaultEl.length > 0)
+                {
+                    type = $.extend({}, type, { defaultValue: Utils.parseBool(defaultEl[0].textContent) });
+                }
+
+                return type;
             },
             loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
@@ -492,31 +521,53 @@ var Config;
             {
                 switch(type.name)
                 {
-                    case "string": return Utils.parseBool(value.toLowerCase());
-                    case "integer": return Boolean(value);
-                    case "boolean": return value;
-                    case "enumeration": return Utils.parseBool(value.toLowerCase());
+                    case Config.types.string.name: return Utils.parseBool(value.toLowerCase());
+                    case Config.types.integer.name: return Boolean(value);
+                    case Config.types.boolean.name: return value;
+                    case Config.types.enumeration.name: return Utils.parseBool(value.toLowerCase());
                     default: return Utils.parseBool(value);
                 }
             },
             insertType: function(typeXML)
             {
-                return appendChild(typeXML, 'boolean');
+                return appendChild(typeXML, this.name);
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                var booleanSelect = $('<' + this.controlName + '>', { id: htmlId });
-                booleanSelect.append($('<option>', { value: String(false), text: i18next.t('config:types.boolean.false') }));
-                booleanSelect.append($('<option>', { value: String(true),  text: i18next.t('config:types.boolean.true') }));
-                containerEl.append(booleanSelect);
+                var control;
+                if (this.controlType)
+                {
+                    control = $('<' + this.controlName + '>', { id: htmlId, type: this.controlType });
+                }
+                else
+                {
+                    control = $('<' + this.controlName + '>', { id: htmlId });
+                    control.append($('<option>', { value: String(false), text: i18next.t('config:types.boolean.false') }));
+                    control.append($('<option>', { value: String(true),  text: i18next.t('config:types.boolean.true') }));
+                }
+                containerEl.append(control);
             },
             getFromDOM: function(containerEl)
             {
-                return Utils.parseBool(containerEl.children(this.controlName).first().val());
+                if (this.controlType === 'checkbox')
+                {
+                    return containerEl.children(this.controlName).prop('checked');
+                }
+                else
+                {
+                    return Utils.parseBool(containerEl.children(this.controlName).first().val());
+                }
             },
             setInDOM: function(containerEl, value)
             {
-                containerEl.children(this.controlName).first().val(String(value));
+                if (this.controlType === 'checkbox')
+                {
+                    containerEl.children(this.controlName).first().prop('checked', value);
+                }
+                else
+                {
+                    containerEl.children(this.controlName).first().val(String(value));
+                }
             },
             fromXML: function(valueXML)
             {
@@ -528,6 +579,7 @@ var Config;
         {
             name: 'enumeration',
             controlName: 'select',
+            controlFirst: false,
             defaultValue: "",
             assignmentOperators: [Config.assignmentOperators.assign],
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
@@ -600,7 +652,7 @@ var Config;
             },
             insertType: function(typeXML)
             {
-                var enumerationXML = appendChild(typeXML, 'enumeration');
+                var enumerationXML = appendChild(typeXML, this.name);
                 var appendOptionChild = function(option)
                 {
                     var optionXML = appendChild(enumerationXML, 'option');
@@ -611,12 +663,12 @@ var Config;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                var selectEl = $('<' + this.controlName + '>', { id: htmlId });
+                var control = $('<' + this.controlName + '>', { id: htmlId });
                 this.options.sequence.forEach(function(option)
                 {
-                    selectEl.append($('<option>', option));
+                    control.append($('<option>', option));
                 });
-                containerEl.append(selectEl);
+                containerEl.append(control);
             },
             getFromDOM: function(containerEl)
             {

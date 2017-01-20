@@ -2050,7 +2050,7 @@ var Main;
 
                     var propertyHeader = $('<th>');
                     var controlHtmlId = idPrefix + '-' + propertyItem.id;
-                    propertyHeader.append($('<label>', { text: propertyItem.name + ':', 'for': controlHtmlId }));
+                    propertyHeader.append($('<label>', { text: propertyItem.name + (propertyItem.type.controlFirst ? '' : ':'), 'for': controlHtmlId }));
                     propertyRow.append(propertyHeader);
 
                     var propertyData = $('<td>', { id: idPrefix + '-container-' + propertyItem.id });
@@ -2063,7 +2063,14 @@ var Main;
                         propertyItem.type.autoCompleteControl(propertyData, propertyItem.autoCompleteList);
                     }
 
-                    propertyRow.append(propertyData);
+                    if (propertyItem.type.controlFirst)
+                    {
+                        propertyRow.prepend(propertyData);
+                    }
+                    else
+                    {
+                        propertyRow.append(propertyData);
+                    }
 
                     tableBody.append(propertyRow);
 

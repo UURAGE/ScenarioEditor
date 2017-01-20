@@ -315,7 +315,7 @@ var Load3;
                 if (migrationPropertyIdRef in propertyValues.characterIndependent)
                 {
                     type = Config.configObject.properties.byId[migrationPropertyIdRef].type;
-                    needsUnEscaping = type.name === 'string' || type.name === 'enumeration';
+                    needsUnEscaping = type.name === Config.types.string.name || Config.types.enumeration.name;
                     propertyValue = type.fromXML(valueXML[0]);
                     propertyValues.characterIndependent[migrationPropertyIdRef] = needsUnEscaping? Utils.unEscapeHTML(propertyValue) : propertyValue;
                 }
@@ -324,13 +324,13 @@ var Load3;
                     if (migrationPropertyIdRef in Config.configObject.characters.properties.byId)
                     {
                         type = Config.configObject.characters.properties.byId[migrationPropertyIdRef].type;
-                        needsUnEscaping = type.name === 'string' || type.name === 'enumeration';
+                        needsUnEscaping = type.name === Config.types.string.name || Config.types.enumeration.name;
                         propertyValue = type.fromXML(valueXML[0]);
                     }
                     else
                     {
                         type = Config.configObject.characters.byId[firstCharacterId].properties.byId[migrationPropertyIdRef].type;
-                        needsUnEscaping = type.name === 'string' || type.name === 'enumeration';
+                        needsUnEscaping = type.name === Config.types.string.name || Config.types.enumeration.name;
                         propertyValue = type.fromXML(valueXML[0]);
                     }
                     propertyValues.perCharacter[firstCharacterId][migrationPropertyIdRef] = needsUnEscaping ? Utils.unEscapeHTML(propertyValue) : propertyValue;

@@ -92,12 +92,19 @@ var Metadata;
 
                 var propertyHeader = $('<th>');
                 var controlHtmlId = idPrefix + '-' + propertyItem.id;
-                propertyHeader.append($('<label>', { text: propertyItem.name + ':', 'for': controlHtmlId }));
+                propertyHeader.append($('<label>', { text: propertyItem.name + (propertyItem.type.controlFirst ? '' : ':'), 'for': controlHtmlId }));
                 propertyRow.append(propertyHeader);
 
                 var propertyData = $('<td>', { id: idPrefix + '-container-' + propertyItem.id });
                 propertyItem.type.appendControlTo(propertyData, controlHtmlId);
-                propertyRow.append(propertyData);
+                if (propertyItem.type.controlFirst)
+                {
+                    propertyRow.prepend(propertyData);
+                }
+                else
+                {
+                    propertyRow.append(propertyData);
+                }
 
                 tableBody.append(propertyRow);
 
@@ -340,14 +347,14 @@ var Metadata;
             if(parameter.id === "t")
             {
                 addedDiv.addClass("isT");
-                typeSelect.val("integer");
+                typeSelect.val(Config.types.integer.name);
                 typeSelect.prop("disabled", "disabled");
                 addedDiv.find(".parameter-initial-value-container").remove();
             }
 
             addedDiv.find(".name").val(parameter.name);
 
-            if (parameter.type.name === "enumeration")
+            if (parameter.type.name === Config.types.enumeration.name)
             {
                 var enumerationValues = parameter.type.options.sequence.map(function(option) { return option.text; });
                 HtmlGenerator.appendEnumerationValueListTo(typeSelect.parent(), enumerationValues);

@@ -105,7 +105,7 @@ var HtmlGenerator;
                 // div.children().children().prop('disabled', true);
                 $(div).prop('id', 't');
                 div.find(".name").val(i18next.t('htmlGenerator:time'));
-                div.find(".parameter-type-select").val("integer");
+                div.find(".parameter-type-select").val(Config.types.integer.name);
                 div.find(".parameter-type-select").prop("disabled", "disabled");
                 div.find(".parameter-initial-value-container").remove();
                 Metadata.addTimeParameter(div);
@@ -142,7 +142,7 @@ var HtmlGenerator;
             var initialValueContainer = addedDiv.find(".parameter-initial-value-container");
             initialValueContainer.empty();
 
-            if (typeName === "enumeration")
+            if (typeName === Config.types.enumeration.name)
             {
                 // If this was an enumeration already, use the old button
                 if (!addedDiv.find(".enumeration-screen-button").length)
@@ -190,7 +190,7 @@ var HtmlGenerator;
         });
 
         // The default type for a user-defined parameter is integer
-        typeSelect.val("integer").trigger('change');
+        typeSelect.val(Config.types.integer.name).trigger('change');
 
         addedDiv.removeClass("changedTypeParameter");
 
