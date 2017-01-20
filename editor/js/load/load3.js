@@ -205,23 +205,10 @@ var Load3;
                 });
             }
 
-            if (Config.configObject.migration.intentProperty)
+            var intents = $(statement).children('intents');
+            if (intents.length > 0)
             {
-                var intents = $(statement).find('intents').children();
-                if (intents.length > 0)
-                {
-                    var intent = Utils.unEscapeHTML($(intents[0]).text());
-                    var intentPropertyIdRef = Config.configObject.migration.intentProperty.idRef;
-                    var firstCharacterId = Config.configObject.characters.sequence[0].id;
-                    if (intentPropertyIdRef in propertyValues.characterIndependent)
-                    {
-                        propertyValues.characterIndependent[intentPropertyIdRef] = intent;
-                    }
-                    else if (intentPropertyIdRef in propertyValues.perCharacter[firstCharacterId])
-                    {
-                        propertyValues.perCharacter[firstCharacterId][intentPropertyIdRef] = intent;
-                    }
-                }
+                migrateProperty(intents[0], 'intent', 'intentProperty', propertyValues);
             }
 
             targets = $(statement).find('nextComputerStatements').children();
@@ -306,6 +293,50 @@ var Load3;
             type: preconditionType,
             preconditions: preconditionsArray
         };
+    }
+
+    /*
+     * Migrates the child with the propertyId as the element name of the parentXML into the given migration property as a value.
+     * attributeName is an optional parameter, when set, it uses the attribute value of the given attribute as the property value.
+     */
+    function migrateProperty(parentXML, propertyId, migrationPropertyName, propertyValues, attributeName)
+    {
+        if (migrationPropertyName in Config.configObject.migration)
+        {
+            var valueXML = $(parentXML).children(propertyId);
+            if (valueXML.length > 0)
+            {
+                if (attributeName) valueXML.text(valueXML.attr(attributeName));
+                var propertyValue;
+                var type;
+                var needsUnEscaping;
+                var migrationPropertyIdRef = Config.configObject.migration[migrationPropertyName].idRef;
+                var firstCharacterId = Config.configObject.characters.sequence[0].id;
+                if (migrationPropertyIdRef in propertyValues.characterIndependent)
+                {
+                    type = Config.configObject.properties.byId[migrationPropertyIdRef].type;
+                    needsUnEscaping = type.name === 'string' || type.name === 'enumeration';
+                    propertyValue = type.fromXML(valueXML[0]);
+                    propertyValues.characterIndependent[migrationPropertyIdRef] = needsUnEscaping? Utils.unEscapeHTML(propertyValue) : propertyValue;
+                }
+                else if (migrationPropertyIdRef in propertyValues.perCharacter[firstCharacterId])
+                {
+                    if (migrationPropertyIdRef in Config.configObject.characters.properties.byId)
+                    {
+                        type = Config.configObject.characters.properties.byId[migrationPropertyIdRef].type;
+                        needsUnEscaping = type.name === 'string' || type.name === 'enumeration';
+                        propertyValue = type.fromXML(valueXML[0]);
+                    }
+                    else
+                    {
+                        type = Config.configObject.characters.byId[firstCharacterId].properties.byId[migrationPropertyIdRef].type;
+                        needsUnEscaping = type.name === 'string' || type.name === 'enumeration';
+                        propertyValue = type.fromXML(valueXML[0]);
+                    }
+                    propertyValues.perCharacter[firstCharacterId][migrationPropertyIdRef] = needsUnEscaping ? Utils.unEscapeHTML(propertyValue) : propertyValue;
+                }
+            }
+        }
     }
 
     function loadConversation(conversationXMLElement, conversations, treeID)
