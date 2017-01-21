@@ -208,7 +208,7 @@ var Load3;
             var intents = $(statement).children('intents');
             if (intents.length > 0)
             {
-                migrateProperty(intents[0], 'intent', 'intentProperty', propertyValues);
+                migrateProperty(intents[0], 'intent', 'intentProperty', propertyValues, true);
             }
 
             targets = $(statement).find('nextComputerStatements').children();
@@ -299,7 +299,7 @@ var Load3;
      * Migrates the child with the propertyId as the element name of the parentXML into the given migration property as a value.
      * attributeName is an optional parameter, when set, it uses the attribute value of the given attribute as the property value.
      */
-    function migrateProperty(parentXML, propertyId, migrationPropertyName, propertyValues, attributeName)
+    function migrateProperty(parentXML, propertyId, migrationPropertyName, propertyValues, needsUnEscaping, attributeName)
     {
         if (migrationPropertyName in Config.configObject.migration)
         {
@@ -309,13 +309,11 @@ var Load3;
                 if (attributeName) valueXML.text(valueXML.attr(attributeName));
                 var propertyValue;
                 var type;
-                var needsUnEscaping;
                 var migrationPropertyIdRef = Config.configObject.migration[migrationPropertyName].idRef;
                 var firstCharacterId = Config.configObject.characters.sequence[0].id;
                 if (migrationPropertyIdRef in propertyValues.characterIndependent)
                 {
                     type = Config.configObject.properties.byId[migrationPropertyIdRef].type;
-                    needsUnEscaping = type.name === Config.types.string.name || Config.types.enumeration.name;
                     propertyValue = type.fromXML(valueXML[0]);
                     propertyValues.characterIndependent[migrationPropertyIdRef] = needsUnEscaping? Utils.unEscapeHTML(propertyValue) : propertyValue;
                 }
@@ -324,13 +322,11 @@ var Load3;
                     if (migrationPropertyIdRef in Config.configObject.characters.properties.byId)
                     {
                         type = Config.configObject.characters.properties.byId[migrationPropertyIdRef].type;
-                        needsUnEscaping = type.name === Config.types.string.name || Config.types.enumeration.name;
                         propertyValue = type.fromXML(valueXML[0]);
                     }
                     else
                     {
                         type = Config.configObject.characters.byId[firstCharacterId].properties.byId[migrationPropertyIdRef].type;
-                        needsUnEscaping = type.name === Config.types.string.name || Config.types.enumeration.name;
                         propertyValue = type.fromXML(valueXML[0]);
                     }
                     propertyValues.perCharacter[firstCharacterId][migrationPropertyIdRef] = needsUnEscaping ? Utils.unEscapeHTML(propertyValue) : propertyValue;
