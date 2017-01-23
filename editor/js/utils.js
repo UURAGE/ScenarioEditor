@@ -16,6 +16,8 @@ var Utils;
         escapeHTML: escapeHTML,
         unEscapeHTML: unEscapeHTML,
         cssPosition: cssPosition,
+        appendChild: appendChild,
+        appendChildNS: appendChildNS,
         setPreserveSpace: setPreserveSpace,
         attachMarkdownTooltip: attachMarkdownTooltip
     };
@@ -113,6 +115,16 @@ var Utils;
                'top': newPosition.top + 'px'
             });
         }
+    }
+
+    function appendChild(parentXML, name)
+    {
+        return parentXML.appendChild(document.createElementNS(parentXML.namespaceURI, name));
+    }
+
+    function appendChildNS(parentXML, nameSpace, name)
+    {
+        return parentXML.appendChild(document.createElementNS(nameSpace, name));
     }
 
     function setPreserveSpace(elem)

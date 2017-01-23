@@ -297,11 +297,6 @@ var Config;
         }
     };
 
-    function appendChild(parentXML, name)
-    {
-        return parentXML.appendChild(document.createElementNS(parentXML.namespaceURI, name));
-    }
-
     function toXMLSimple(valueXML, value)
     {
         valueXML.textContent = value;
@@ -380,7 +375,7 @@ var Config;
             },
             insertType: function(typeXML)
             {
-                return appendChild(typeXML, this.name);
+                return Utils.appendChild(typeXML, this.name);
             },
             castFrom: function(type, value)
             {
@@ -473,7 +468,7 @@ var Config;
             },
             insertType: function(typeXML)
             {
-                return appendChild(typeXML, this.name);
+                return Utils.appendChild(typeXML, this.name);
             },
             appendControlTo: function(containerEl, htmlId)
             {
@@ -540,7 +535,7 @@ var Config;
             },
             insertType: function(typeXML)
             {
-                return appendChild(typeXML, this.name);
+                return Utils.appendChild(typeXML, this.name);
             },
             appendControlTo: function(containerEl, htmlId)
             {
@@ -662,10 +657,10 @@ var Config;
             },
             insertType: function(typeXML)
             {
-                var enumerationXML = appendChild(typeXML, this.name);
+                var enumerationXML = Utils.appendChild(typeXML, this.name);
                 var appendOptionChild = function(option)
                 {
-                    var optionXML = appendChild(enumerationXML, 'option');
+                    var optionXML = Utils.appendChild(enumerationXML, 'option');
                     this.toXML(optionXML, this.options.byValue ? option.value : option.text);
                 };
                 this.options.sequence.forEach(appendOptionChild.bind(this));
