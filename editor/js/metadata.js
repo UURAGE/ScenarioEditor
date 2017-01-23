@@ -59,6 +59,99 @@ var Metadata;
             if ($("#params").children().not(".removedParameter").length === 0)
                 $("#paramsTableHead").addClass("hidden");
         });
+    });
+
+    // Resets the metadata to the default
+    function reset()
+    {
+        Metadata.parameterCounter = 0;
+        Metadata.metaObject = {
+            name: "",
+            version: 0,
+            difficulty: "medium",
+            description: Config.configObject.settings.description.type.defaultValue,
+            authors: [],
+            parameters: getNewDefaultParameters(),
+            propertyValues: Config.getNewDefaultPropertyValues(['independent'])
+        };
+
+        if (Config.configObject.settings.languages.sequence.length > 0)
+        {
+            Metadata.metaObject.language = Config.configObject.settings.languages.sequence[0];
+        }
+    }
+
+    // This function returns an object suitable for user-defined parameter definitions
+    function getNewDefaultParameters()
+    {
+        var parameters = {};
+        parameters.byId = {};
+        parameters.sequence = [];
+        return parameters;
+    }
+
+    //Create the dialog to change the scenario description.
+    function metadataDialog()
+    {
+        Main.selectNode(null);
+
+        $("#meta-property-values, #character-tabs").empty();
+
+        $("#metaScreen").dialog(
+        {
+            title: i18next.t('metadata:properties_title'),
+            height: ParameterValues.heightMetaScreen,
+            width: ParameterValues.widthMetaScreen,
+            modal: true,
+            buttons: [
+            {
+                text: i18next.t('common:confirm'),
+                click: function()
+                {
+                    saveMetaObject();
+                }
+            },
+            {
+                text: i18next.t('common:cancel'),
+                click: function()
+                {
+                    $("#metaScreen").dialog('close');
+                }
+            }],
+            close: function()
+            {
+                $("#main").focus();
+            }
+        });
+
+        // Show the stored values for the metadata.
+        $("#scenarioName").val(Metadata.metaObject.name);
+        if (Metadata.metaObject.language) $("#scenarioLanguage").val(Metadata.metaObject.language.code).change();
+        $("#scenarioDifficulty").val(Metadata.metaObject.difficulty);
+        $("#scenarioDescription").val(Metadata.metaObject.description);
+
+        var authorsHeaderEl = $("#authors-header");
+        var authorsEl = $("#authors");
+        authorsEl.find("tr").not("tr:first").remove();
+        if (Metadata.metaObject.authors.length > 0)
+        {
+            authorsHeaderEl.show();
+            authorsEl.show();
+            Metadata.metaObject.authors.forEach(function(author)
+            {
+                var authorRow = $('<tr>');
+                authorRow.append($('<td>', { text: author.name }));
+                authorRow.append($('<td>', { text: author.email ? author.email : "" }));
+                authorRow.append($('<td>', { text: author.startDate }));
+                authorRow.append($('<td>', { text: author.endDate ? author.endDate : "" }));
+                authorsEl.append(authorRow);
+            });
+        }
+        else
+        {
+            authorsHeaderEl.hide();
+            authorsEl.hide();
+        }
 
         var anyPropertyShown = false;
         var hStartLevel = 3;
@@ -165,97 +258,6 @@ var Metadata;
             });
         }
         if (anyPropertyShown) characterPropertyValuesEl.show();
-    });
-
-    // Resets the metadata to the default
-    function reset()
-    {
-        Metadata.parameterCounter = 0;
-        Metadata.metaObject = {
-            name: "",
-            version: 0,
-            difficulty: "medium",
-            description: Config.configObject.settings.description.type.defaultValue,
-            authors: [],
-            parameters: getNewDefaultParameters(),
-            propertyValues: Config.getNewDefaultPropertyValues(['independent'])
-        };
-
-        if (Config.configObject.settings.languages.sequence.length > 0)
-        {
-            Metadata.metaObject.language = Config.configObject.settings.languages.sequence[0];
-        }
-    }
-
-    // This function returns an object suitable for user-defined parameter definitions
-    function getNewDefaultParameters()
-    {
-        var parameters = {};
-        parameters.byId = {};
-        parameters.sequence = [];
-        return parameters;
-    }
-
-    //Create the dialog to change the scenario description.
-    function metadataDialog()
-    {
-        Main.selectNode(null);
-
-        $("#metaScreen").dialog(
-        {
-            title: i18next.t('metadata:properties_title'),
-            height: ParameterValues.heightMetaScreen,
-            width: ParameterValues.widthMetaScreen,
-            modal: true,
-            buttons: [
-            {
-                text: i18next.t('common:confirm'),
-                click: function()
-                {
-                    saveMetaObject();
-                }
-            },
-            {
-                text: i18next.t('common:cancel'),
-                click: function()
-                {
-                    $("#metaScreen").dialog('close');
-                }
-            }],
-            close: function()
-            {
-                $("#main").focus();
-            }
-        });
-
-        // Show the stored values for the metadata.
-        $("#scenarioName").val(Metadata.metaObject.name);
-        if (Metadata.metaObject.language) $("#scenarioLanguage").val(Metadata.metaObject.language.code).change();
-        $("#scenarioDifficulty").val(Metadata.metaObject.difficulty);
-        $("#scenarioDescription").val(Metadata.metaObject.description);
-
-        var authorsHeaderEl = $("#authors-header");
-        var authorsEl = $("#authors");
-        authorsEl.find("tr").not("tr:first").remove();
-        if (Metadata.metaObject.authors.length > 0)
-        {
-            authorsHeaderEl.show();
-            authorsEl.show();
-            Metadata.metaObject.authors.forEach(function(author)
-            {
-                var authorRow = $('<tr>');
-                authorRow.append($('<td>', { text: author.name }));
-                authorRow.append($('<td>', { text: author.email ? author.email : "" }));
-                authorRow.append($('<td>', { text: author.startDate }));
-                authorRow.append($('<td>', { text: author.endDate ? author.endDate : "" }));
-                authorsEl.append(authorRow);
-            });
-        }
-        else
-        {
-            authorsHeaderEl.hide();
-            authorsEl.hide();
-        }
 
         var setPropertyInDOM = function(propertyValues, propertyContainerId, property)
         {
