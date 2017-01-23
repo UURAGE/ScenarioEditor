@@ -600,7 +600,7 @@ var Metadata;
         }
     }
 
-    function addOrExtendAuthor(name, email, startDate, endDate)
+    function addOrExtendAuthor(name, email, date, setEndDateToDate)
     {
         var found = false;
         Metadata.metaObject.authors.forEach(function(existingAuthor)
@@ -608,8 +608,7 @@ var Metadata;
             if (existingAuthor.name === name)
             {
                 if (email) existingAuthor.email = email;
-                if (startDate) existingAuthor.startDate = startDate;
-                if (endDate) existingAuthor.endDate = endDate;
+                if (setEndDateToDate) existingAuthor.endDate = date;
                 found = true;
             }
         });
@@ -619,8 +618,8 @@ var Metadata;
             var author = {};
             author.name = name;
             if (email) author.email = email;
-            author.startDate = startDate;
-            if (endDate) author.endDate = endDate;
+            author.startDate = date;
+            if (setEndDateToDate) author.endDate = date;
 
             Metadata.metaObject.authors.push(author);
         }
