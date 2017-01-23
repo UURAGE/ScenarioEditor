@@ -301,7 +301,7 @@ var Config;
         return parentXML.appendChild(document.createElementNS(parentXML.namespaceURI, name));
     }
 
-    function toXMLSimple(valueXML, value, xmlNameSpace)
+    function toXMLSimple(valueXML, value)
     {
         valueXML.textContent = value;
     }
@@ -404,10 +404,10 @@ var Config;
             {
                 return valueXML.textContent;
             },
-            toXML: function(valueXML, value, xmlNameSpace)
+            toXML: function(valueXML, value)
             {
                 valueXML.textContent = value;
-                if (this.rows > 1) valueXML.setAttributeNS(xmlNameSpace, "xml:space", "preserve");
+                if (this.rows > 1) Utils.setPreserveSpace(valueXML);
             }
         },
         'integer':

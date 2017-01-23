@@ -16,6 +16,7 @@ var Utils;
         escapeHTML: escapeHTML,
         unEscapeHTML: unEscapeHTML,
         cssPosition: cssPosition,
+        setPreserveSpace: setPreserveSpace,
         attachMarkdownTooltip: attachMarkdownTooltip
     };
 
@@ -112,6 +113,11 @@ var Utils;
                'top': newPosition.top + 'px'
             });
         }
+    }
+
+    function setPreserveSpace(elem)
+    {
+        elem.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve");
     }
 
     function attachMarkdownTooltip(elem)
