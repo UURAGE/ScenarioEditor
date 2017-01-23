@@ -181,25 +181,44 @@ var Metadata;
             }
             else
             {
-                var propertyRow = $('<tr>');
-
                 var propertyHeader = $('<th>');
                 var controlHtmlId = idPrefix + '-' + propertyItem.id;
-                propertyHeader.append($('<label>', { text: propertyItem.name + (propertyItem.type.controlFirst ? '' : ':'), 'for': controlHtmlId }));
-                propertyRow.append(propertyHeader);
+                var controlFirst = propertyItem.type.labelControlOrder === Config.labelControlOrders.singleLineContainerLabel ||
+                                   propertyItem.type.labelControlOrder === Config.labelControlOrders.twoLineContainerLabel;
+                propertyHeader.append($('<label>', { text: propertyItem.name + (controlFirst ? '' : ':'), 'for': controlHtmlId }));
 
                 var propertyData = $('<td>', { id: idPrefix + '-container-' + propertyItem.id });
                 propertyItem.type.appendControlTo(propertyData, controlHtmlId);
-                if (propertyItem.type.controlFirst)
-                {
-                    propertyRow.prepend(propertyData);
-                }
-                else
-                {
-                    propertyRow.append(propertyData);
-                }
 
+                var propertyRow = $('<tr>');
+                var additionalPropertyRow;
+                switch (propertyItem.type.labelControlOrder)
+                {
+                    case Config.labelControlOrders.singleLineLabelContainer:
+                        propertyRow.append(propertyHeader);
+                        propertyRow.append(propertyData);
+                        break;
+                    case Config.labelControlOrders.singleLineContainerLabel:
+                        propertyRow.append(propertyHeader);
+                        propertyRow.prepend(propertyData);
+                        break;
+                    case Config.labelControlOrders.container:
+                        propertyRow.append(propertyData);
+                        break;
+                    case Config.labelControlOrders.twoLineLabelContainer:
+                        propertyRow.append(propertyHeader);
+                        additionalPropertyRow = $('<tr>').append(propertyData);
+                        break;
+                    case Config.labelControlOrders.twoLineContainerLabel:
+                        additionalPropertyRow = propertyRow.append(propertyHeader);
+                        propertyRow = $('<tr>').append(propertyData);
+                        break;
+                    default:
+                        console.error("Not implemented");
+                        break;
+                }
                 tableBody.append(propertyRow);
+                if (additionalPropertyRow) tableBody.append(additionalPropertyRow);
 
                 anyPropertyShown = true;
             }

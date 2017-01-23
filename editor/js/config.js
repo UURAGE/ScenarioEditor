@@ -12,6 +12,7 @@ var Config;
         types: {},
         assignmentOperators: {},
         relationalOperators: {},
+        labelControlOrders: {},
         atLeastOneParameter: atLeastOneParameter,
         getNewDefaultParameterEffects: getNewDefaultParameterEffects,
         getNewDefaultPropertyValues: getNewDefaultPropertyValues
@@ -306,6 +307,15 @@ var Config;
         valueXML.textContent = value;
     }
 
+    Config.labelControlOrders =
+    {
+        'singleLineLabelContainer': 'singleLineLabelContainer',
+        'singleLineContainerLabel': 'singleLineContainerLabel',
+        'twoLineLabelContainer': 'twoLineLabelContainer',
+        'twoLineContainerLabel': 'twoLineContainerLabel',
+        'container': 'container'
+    };
+
     Config.types =
     {
         'string':
@@ -313,7 +323,7 @@ var Config;
             name: 'string',
             controlName: 'input',
             controlType: 'text',
-            controlFirst: false,
+            labelControlOrder: Config.labelControlOrders.singleLineLabelContainer,
             defaultValue: "",
             assignmentOperators: [Config.assignmentOperators.assign],
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
@@ -415,7 +425,7 @@ var Config;
             name: 'integer',
             controlName: 'input',
             controlType: 'number',
-            controlFirst: false,
+            labelControlOrder: Config.labelControlOrders.singleLineLabelContainer,
             defaultValue: 0,
             assignmentOperators: [Config.assignmentOperators.assign,             Config.assignmentOperators.addAssign,
                                   Config.assignmentOperators.subtractAssign],
@@ -491,7 +501,7 @@ var Config;
             name: 'boolean',
             controlName: 'input',
             controlType: 'checkbox',
-            controlFirst: true,
+            labelControlOrder: Config.labelControlOrders.singleLineContainerLabel,
             defaultValue: false,
             assignmentOperators: [Config.assignmentOperators.assign],
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
@@ -501,7 +511,7 @@ var Config;
 
                 if (kind === 'parameter')
                 {
-                    type = $.extend({}, type, { controlName: 'select', controlFirst: false });
+                    type = $.extend({}, type, { controlName: 'select', labelControlOrder: Config.labelControlOrders.singleLineLabelContainer });
                     delete type.controlType;
                 }
 
@@ -579,7 +589,7 @@ var Config;
         {
             name: 'enumeration',
             controlName: 'select',
-            controlFirst: false,
+            labelControlOrder: Config.labelControlOrders.singleLineLabelContainer,
             defaultValue: "",
             assignmentOperators: [Config.assignmentOperators.assign],
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
