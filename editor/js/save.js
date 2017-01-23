@@ -133,8 +133,11 @@ var Save;
 
             var typeContainerEl = addAndReturnElement("type", scenarioNameSpace, definitionEl);
             var typeEl = definition.type.insertType(typeContainerEl);
-            var defaultEl = addAndReturnElement('default', scenarioNameSpace, typeEl);
-            definition.type.toXML(defaultEl, definition.type.defaultValue);
+            if (definition.type.defaultValue !== undefined)
+            {
+                var defaultEl = addAndReturnElement('default', scenarioNameSpace, typeEl);
+                definition.type.toXML(defaultEl, definition.type.defaultValue);
+            }
         };
 
         var parametersEl = addAndReturnElement("parameters", scenarioNameSpace, definitionsEl);
