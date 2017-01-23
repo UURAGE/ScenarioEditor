@@ -25,6 +25,13 @@ var Save;
         var sortedTrees = sortTrees(Main.trees);
 
         var doc = document.implementation.createDocument(scenarioNameSpace, 'scenario', null);
+
+        for (var nameSpace in Config.additionalNameSpaces)
+        {
+            doc.documentElement.setAttributeNS('http://www.w3.org/2000/xmlns/',
+                'xmlns:' + Config.additionalNameSpaces[nameSpace], nameSpace);
+        }
+
         if (Main.unsavedChanges) Metadata.metaObject.version++;
         doc.documentElement.setAttribute("version", Metadata.metaObject.version);
         doc.documentElement.setAttribute("schemaVersion", schemaVersion);

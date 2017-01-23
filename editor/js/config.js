@@ -10,13 +10,17 @@ var Config;
     {
         configObject: {},
         types: {},
+        extensionTypes: {},
         assignmentOperators: {},
         relationalOperators: {},
         labelControlOrders: {},
+        additionalNameSpaces: {},
         atLeastOneParameter: atLeastOneParameter,
         getNewDefaultParameterEffects: getNewDefaultParameterEffects,
         getNewDefaultPropertyValues: getNewDefaultPropertyValues
     };
+
+    var configNameSpace = "http://uurage.github.io/ScenarioEditor/config/namespace";
 
     // The default scopes used when there is no statementScope attribute specified for the property in the config
     var defaultPropertyScopes = { statementScope: 'independent' };
@@ -182,8 +186,11 @@ var Config;
 
     function loadType(typeXML, id, kind)
     {
-        var typeName = typeXML[0].nodeName;
-        return Config.types[typeName].loadType(typeXML, id, kind);
+        var nameSpace = typeXML[0].namespaceURI;
+        var type = nameSpace === configNameSpace ?
+            Config.types[typeXML[0].localName] :
+            Config.extensionTypes[nameSpace][typeXML[0].localName];
+        return type.loadType(typeXML, id, kind);
     }
 
     function loadCharacterCollection(collectionXML)
