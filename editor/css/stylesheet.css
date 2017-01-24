@@ -249,6 +249,23 @@ button img
   font-size: 40px;
 }
 
+#enumeration-value-list li
+{
+  clear: both
+}
+
+#enumeration-value-list .enumeration-value,
+#enumeration-value-input
+{
+  float: left;
+}
+
+#enumeration-value-list .deleteParent,
+#add-enumeration-value-button
+{
+  float: right;
+}
+
 #toolbar button
 {
   margin: 1px;

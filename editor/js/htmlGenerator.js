@@ -259,7 +259,7 @@ var HtmlGenerator;
                 $(this).parent().remove(); enumerationValueInput.focus();
             });
 
-            var enumerationValueItem = $('<li>', { text: enumerationValue });
+            var enumerationValueItem = $('<li>').append($('<div>', { class: 'enumeration-value', text: enumerationValue }));
             enumerationValueItem.append(deleteParentButton);
             enumerationValueItem.insertBefore(enumerationValueInputItem);
 
