@@ -203,6 +203,7 @@ var Metadata;
                         propertyRow.prepend(propertyData);
                         break;
                     case Config.labelControlOrders.container:
+                        propertyData.prop('colspan', "2");
                         propertyRow.append(propertyData);
                         break;
                     case Config.labelControlOrders.twoLineLabelContainer:
