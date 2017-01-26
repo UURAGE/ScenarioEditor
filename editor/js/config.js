@@ -650,17 +650,15 @@ var Config;
                     var option = { text: $(valueItem).text() };
                     options.sequence.push(option);
                 });
-                var defaultValue = defaultValueContainer.length ? this.getFromDOM(defaultValueContainer) : options.sequence[0].text;
+                var defaultValue = options.sequence.length > 0 ? options.sequence[0].text : this.getFromDOM(defaultValueContainer);
                 return $.extend({ options: options }, this, { defaultValue: defaultValue });
             },
-            castFrom: function(type, text)
+            castFrom: function(type, value)
             {
-                // Only called for user-defined parameters
-                var castValue = this.options.sequence[0].text;
+                var castValue = this.defaultValue;
                 this.options.sequence.forEach(function(option)
                 {
-                    if (option.text === text)
-                        castValue = option.text;
+                    if (option.text === String(value)) castValue = option.text;
                 });
                 return castValue;
             },

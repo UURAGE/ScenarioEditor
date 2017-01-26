@@ -135,22 +135,32 @@ var HtmlGenerator;
         $("#params").append(parameterHTML);
         var addedDiv = $("#params").children().last();
 
-        var changeParameterType = function(typeName, userTypeChange)
+        var typeSelect = addedDiv.find('.parameter-type-select');
+
+        var previousTypeName = typeSelect.val();
+        var changeParameterType = function(newTypeName, userTypeChange)
         {
             addedDiv.addClass("changedTypeParameter");
 
-            var initialValueContainer = addedDiv.find(".parameter-initial-value-container");
-            initialValueContainer.empty();
+            var replaceInitialValueContainer = function()
+            {
+                var initialValueContainer = addedDiv.find(".parameter-initial-value-container");
+                var initialValue = Config.types[previousTypeName].getFromDOM(initialValueContainer);
+                initialValueContainer.empty();
+                var type = Config.types[newTypeName].loadTypeFromDOM(addedDiv, initialValueContainer);
+                type.appendControlTo(initialValueContainer);
+                type.setInDOM(initialValueContainer, type.castFrom(Config.types[previousTypeName], initialValue));
+                previousTypeName = newTypeName;
+            };
 
-            if (typeName === Config.types.enumeration.name)
+            if (newTypeName === Config.types.enumeration.name)
             {
                 // If this was an enumeration already, use the old button
                 if (!addedDiv.find(".enumeration-screen-button").length)
                 {
                     var enumerationScreenButton = $('<button>', { class: "enumeration-screen-button" });
                     enumerationScreenButton.attr('title', i18next.t('htmlGenerator:enumeration.button_alt'));
-                    var buttonIcon = $('<img>');
-                    buttonIcon.attr('src', editor_url + "png/others/list.png");
+                    var buttonIcon = $('<img>', { src: editor_url + "png/others/list.png" });
                     enumerationScreenButton.on('mouseover', function()
                     {
                         buttonIcon.attr('src', editor_url + "png/others/list_hover.png");
@@ -172,18 +182,18 @@ var HtmlGenerator;
                 {
                     enumerationDefinitionDialog(addedDiv);
                 }
+                else
+                {
+                    replaceInitialValueContainer();
+                }
             }
             else
             {
                 addedDiv.find(".enumeration-screen-button").remove();
                 addedDiv.find(".enumeration-value-list").remove();
+                replaceInitialValueContainer();
             }
-
-            var type = Config.types[typeName].loadTypeFromDOM(addedDiv, addedDiv.find(".parameter-initial-value-container"));
-            type.appendControlTo(initialValueContainer);
         };
-
-        var typeSelect = addedDiv.find('.parameter-type-select');
         typeSelect.on('change', function(e)
         {
             changeParameterType($(this).val(), e.originalEvent);

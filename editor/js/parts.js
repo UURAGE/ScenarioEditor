@@ -234,7 +234,7 @@ var Parts;
                 '<td>' +
                     '<input type="text" class="name" style="width:197px;" />' +
                 '</td>' +
-                '<td style="display:inline-block; white-space:nowrap" >' +
+                '<td white-space:nowrap" >' +
                     '<select class="parameter-type-select" >' +
                         typeOptions +
                     '</select>' +
