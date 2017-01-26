@@ -466,11 +466,11 @@ var Config;
             {
                 switch(type.name)
                 {
-                    case Config.types.string.name: return Utils.parseDecimalIntWithDefault(value, this.defaultValue);
+                    case Config.types.string.name: return Utils.parseDecimalIntWithDefault(value, 0);
                     case Config.types.integer.name: return value;
                     case Config.types.boolean.name: return Number(value);
-                    case Config.types.enumeration.name: return Utils.parseDecimalIntWithDefault(value, this.defaultValue);
-                    default: return Utils.parseDecimalIntWithDefault(value, this.defaultValue);
+                    case Config.types.enumeration.name: return Utils.parseDecimalIntWithDefault(value, 0);
+                    default: return Utils.parseDecimalIntWithDefault(value, 0);
                 }
             },
             insertType: function(typeXML)
@@ -479,15 +479,13 @@ var Config;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                var control = $('<' + this.controlName + '>', { id: htmlId, type: this.controlType, value: this.minimum ? this.minimum : 0, min: this.minimum, max: this.maximum });
+                var control = $('<' + this.controlName + '>', { id: htmlId, type: this.controlType, value: 0, min: this.minimum, max: this.maximum });
                 control.css('width', 50);
                 containerEl.append(control);
             },
             getFromDOM: function(containerEl)
             {
-                var value = Utils.parseDecimalIntWithDefault(containerEl.children(this.controlName).first().val(), this.minimum ? this.minimum : 0);
-                if (this.minimum) value = Math.max(value, this.minimum);
-                if (this.maximum) value = Math.min(value, this.maximum);
+                var value = Utils.parseDecimalIntWithDefault(containerEl.children(this.controlName).first().val(), 0);
                 return value;
             },
             setInDOM: function(containerEl, value)
@@ -655,7 +653,7 @@ var Config;
             },
             castFrom: function(type, value)
             {
-                var castValue = this.defaultValue;
+                var castValue = this.options.sequence[0].text;
                 this.options.sequence.forEach(function(option)
                 {
                     if (option.text === String(value)) castValue = option.text;
