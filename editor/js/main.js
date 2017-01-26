@@ -1653,14 +1653,15 @@ var Main;
         // fill div that can hold the images that visualize if the node has certain settings
         var imageDiv = nodeHTML.find('.imgDiv');
         imageDiv.empty();
-        if (node.comment !== "")
-            imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_comments.png'>");
-        if (node.jumpPoint)
-            imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_jump.png'>");
-        if (node.endNode)
-            imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_end.png'>");
-        if (node.initsNode)
-            imageDiv.append("<img src='"+editor_url+"png/node_properties/node_has_premature_end.png'>");
+        var appendNodePropertyImage = function(imgName)
+        {
+            imageDiv.append($('<img>', { src: editor_url + "png/node_properties/" + imgName + ".png" }));
+        };
+
+        if (node.comment) appendNodePropertyImage("node_has_comments");
+        if (node.jumpPoint) appendNodePropertyImage("node_has_jump");
+        if (node.initsNode) appendNodePropertyImage("node_has_premature_end");
+        if (node.endNode) appendNodePropertyImage("node_has_end");
 
         // add the text and imageDiv to the node itself
         // apply text changes
