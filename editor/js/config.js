@@ -479,7 +479,9 @@ var Config;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                containerEl.append($('<' + this.controlName + '>', { id: htmlId, type: this.controlType, value: this.minimum ? this.minimum : 0, min: this.minimum, max: this.maximum }));
+                var control = $('<' + this.controlName + '>', { id: htmlId, type: this.controlType, value: this.minimum ? this.minimum : 0, min: this.minimum, max: this.maximum });
+                control.css('width', 50);
+                containerEl.append(control);
             },
             getFromDOM: function(containerEl)
             {
