@@ -270,7 +270,7 @@ var Load;
             {
                 id: parameterId,
                 name: this.attributes.name.value,
-                type: Config.types[typeXML[0].nodeName].loadType(typeXML),
+                type: Config.types[typeXML[0].nodeName].loadType(typeXML, parameterId, 'parameter'),
                 description: $(this).children('description').text()
             };
             parameters.sequence.push(parameter);
