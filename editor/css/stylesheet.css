@@ -195,7 +195,8 @@ a[data-disabled]
 #metaScreen td select,
 #propertyValuesSection td input,
 #propertyValuesSection td select,
-#characterSection td input
+#propertyValuesSection td textarea,
+#characterSection td input,
 #characterSection td select
 {
   width: 100%;
