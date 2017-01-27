@@ -16,6 +16,8 @@ var Config;
         labelControlOrders: {},
         additionalNameSpaces: {},
         atLeastOneParameter: atLeastOneParameter,
+        findParameterById: findParameterById,
+        isCharacterParameter: isCharacterParameter,
         getNewDefaultParameterEffects: getNewDefaultParameterEffects,
         getNewDefaultPropertyValues: getNewDefaultPropertyValues
     };
@@ -722,6 +724,55 @@ var Config;
             }
         }
         return Config.configObject.parameters.sequence.length > 0 || Config.configObject.characters.parameters.sequence.length > 0 || atLeastOnePerCharacterParameter;
+    }
+
+    function findParameterById(parameterId, characterId)
+    {
+        var parameter;
+        if (!characterId && parameterId in Metadata.metaObject.parameters.byId)
+        {
+            parameter = Metadata.metaObject.parameters.byId[parameterId];
+        }
+        else if (!characterId && parameterId in Config.configObject.parameters.byId)
+        {
+            parameter = Config.configObject.parameters.byId[parameterId];
+        }
+        else if (parameterId in Config.configObject.characters.parameters.byId)
+        {
+            parameter = Config.configObject.characters.parameters.byId[parameterId];
+        }
+        else
+        {
+            if (characterId)
+            {
+                if (parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
+                {
+                    parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterId];
+                }
+            }
+            else
+            {
+                Config.configObject.characters.sequence.some(function(character)
+                {
+                    if (parameterId in Config.configObject.characters.byId[character.id].parameters.byId)
+                    {
+                        parameter = Config.configObject.characters.byId[character.id].parameters.byId[parameterId];
+                        return true;
+                    }
+                    return false;
+                });
+            }
+        }
+        return parameter;
+    }
+
+    function isCharacterParameter(parameterId)
+    {
+        return parameterId in Config.configObject.characters.parameters.byId ||
+        Config.configObject.characters.sequence.some(function(character)
+        {
+            return parameterId in Config.configObject.characters.byId[character.id].parameters.byId;
+        });
     }
 
     function getNewDefaultParameterEffects(characterIdRef)

@@ -380,32 +380,7 @@ var HtmlGenerator;
             }
             else
             {
-                var parameter;
-                if (currentPrecondition.characterIdRef)
-                {
-                    if (currentPrecondition.idRef in Config.configObject.characters.parameters.byId)
-                    {
-                        parameter = Config.configObject.characters.parameters.byId[currentPrecondition.idRef];
-                    }
-                    else
-                    {
-                        if (currentPrecondition.idRef in Config.configObject.characters.byId[currentPrecondition.characterIdRef].parameters.byId)
-                        {
-                            parameter = Config.configObject.characters.byId[currentPrecondition.characterIdRef].parameters.byId[currentPrecondition.idRef];
-                        }
-                    }
-                }
-                else
-                {
-                    if (currentPrecondition.idRef in Metadata.metaObject.parameters.byId)
-                    {
-                        parameter = Metadata.metaObject.parameters.byId[currentPrecondition.idRef];
-                    }
-                    else if (currentPrecondition.idRef in Config.configObject.parameters.byId)
-                    {
-                        parameter = Config.configObject.parameters.byId[currentPrecondition.idRef];
-                    }
-                }
+                var parameter = Config.findParameterById(currentPrecondition.idRef, currentPrecondition.characterIdRef);
 
                 addedDiv = addEmptyPrecondition(divToAddChildren);
                 addedDiv.find(".parameter-idref-select").val(currentPrecondition.idRef).trigger('change');
@@ -433,42 +408,31 @@ var HtmlGenerator;
         var testContainer = addedDiv.find(".precondition-test-container");
         var changeTestType = function(parameterIdRef)
         {
-            var parameter, characterIdRefSelect;
-            if (parameterIdRef in Metadata.metaObject.parameters.byId)
+            var parameter = Config.findParameterById(parameterIdRef);
+            var characterIdRefSelect;
+            if (Config.isCharacterParameter(parameterIdRef))
             {
-                parameter = Metadata.metaObject.parameters.byId[parameterIdRef];
-            }
-            else if (parameterIdRef in Config.configObject.parameters.byId)
-            {
-                parameter = Config.configObject.parameters.byId[parameterIdRef];
-            }
-            else if (parameterIdRef in Config.configObject.characters.parameters.byId)
-            {
-                parameter = Config.configObject.characters.parameters.byId[parameterIdRef];
-
-                characterIdRefSelect = $('<select>', { class: "character-idref-select" });
-                Config.configObject.characters.sequence.forEach(function(character)
-                {
-                    characterIdRefSelect.append($('<option>', { value: character.id, text: character.name ? character.name : character.id }));
-                });
-                testContainer.append(characterIdRefSelect);
-            }
-            else
-            {
-                // TODO: merge parameter selection with different id and same display name and type for two different characters
-                Config.configObject.characters.sequence.forEach(function(character)
+                var inIndividualCharacter = Config.configObject.characters.sequence.some(function(character)
                 {
                     if (parameterIdRef in Config.configObject.characters.byId[character.id].parameters.byId)
                     {
-                        parameter = Config.configObject.characters.byId[character.id].parameters.byId[parameterIdRef];
-
                         characterIdRefSelect = $('<select>', { class: "character-idref-select" });
                         characterIdRefSelect.append($('<option>', { value: character.id, text: character.name ? character.name : character.id }));
                         testContainer.append(characterIdRefSelect);
-
-                        return;
+                        return true;
                     }
+                    return false;
                 });
+
+                if (!inIndividualCharacter)
+                {
+                    characterIdRefSelect = $('<select>', { class: "character-idref-select" });
+                    Config.configObject.characters.sequence.forEach(function(character)
+                    {
+                        characterIdRefSelect.append($('<option>', { value: character.id, text: character.name ? character.name : character.id }));
+                    });
+                    testContainer.append(characterIdRefSelect);
+                }
             }
 
             var operatorSelect = $('<select>', { class: "precondition-operator-select" });

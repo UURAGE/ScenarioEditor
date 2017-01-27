@@ -466,32 +466,7 @@ var Save;
         var conditionEl;
         if (!("type" in precondition))
         {
-            var parameter;
-            if (precondition.characterIdRef)
-            {
-                if (precondition.idRef in Config.configObject.characters.parameters.byId)
-                {
-                    parameter = Config.configObject.characters.parameters.byId[precondition.idRef];
-                }
-                else
-                {
-                    if (precondition.idRef in Config.configObject.characters.byId[precondition.characterIdRef].parameters.byId)
-                    {
-                        parameter = Config.configObject.characters.byId[precondition.characterIdRef].parameters.byId[precondition.idRef];
-                    }
-                }
-            }
-            else
-            {
-                if (precondition.idRef in Metadata.metaObject.parameters.byId)
-                {
-                    parameter = Metadata.metaObject.parameters.byId[precondition.idRef];
-                }
-                else if (precondition.idRef in Config.configObject.parameters.byId)
-                {
-                    parameter = Config.configObject.parameters.byId[precondition.idRef];
-                }
-            }
+            var parameter = Config.findParameterById(precondition.idRef, precondition.characterIdRef);
 
             if (precondition.characterIdRef)
             {

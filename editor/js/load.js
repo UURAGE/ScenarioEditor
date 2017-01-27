@@ -400,32 +400,7 @@ var Load;
                     characterIdRef = preconditionChildren[i].attributes.characteridref.value;
                 }
 
-                var parameter;
-                if (characterIdRef)
-                {
-                    if (parameterIdRef in Config.configObject.characters.parameters.byId)
-                    {
-                        parameter = Config.configObject.characters.parameters.byId[parameterIdRef];
-                    }
-                    else
-                    {
-                        if (parameterIdRef in Config.configObject.characters.byId[characterIdRef].parameters.byId)
-                        {
-                            parameter = Config.configObject.characters.byId[characterIdRef].parameters.byId[parameterIdRef];
-                        }
-                    }
-                }
-                else
-                {
-                    if (parameterIdRef in Metadata.metaObject.parameters.byId)
-                    {
-                        parameter = Metadata.metaObject.parameters.byId[parameterIdRef];
-                    }
-                    else if (parameterIdRef in Config.configObject.parameters.byId)
-                    {
-                        parameter = Config.configObject.parameters.byId[parameterIdRef];
-                    }
-                }
+                var parameter = Config.findParameterById(parameterIdRef, characterIdRef);
 
                 if (parameter)
                 {
