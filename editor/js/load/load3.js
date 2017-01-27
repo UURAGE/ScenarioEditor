@@ -118,11 +118,16 @@ var Load3;
             }
 
             var defaultValue = this.hasAttribute('initialValue') ? Utils.parseDecimalIntWithDefault(this.attributes.initialValue.value, 0) : 0;
+
+            var minimum, maximum;
+            if (this.hasAttribute('minimumScore')) minimum = parseInt(this.getAttribute('minimumScore'));
+            if (this.hasAttribute('maximumScore')) maximum = parseInt(this.getAttribute('maximumScore'));
+
             parameters.byId[paramId] =
             {
                 id: paramId,
                 name: Utils.unEscapeHTML(this.attributes.name.value),
-                type: $.extend({}, Config.types.integer, { defaultValue: defaultValue }),
+                type: $.extend({}, Config.types.integer, { defaultValue: defaultValue, minimum: minimum, maximum: maximum }),
                 description: this.hasAttribute("parameterDescription") ? Utils.unEscapeHTML(this.attributes.parameterDescription.value) : ""
             };
             parameters.sequence.push(parameters.byId[paramId]);

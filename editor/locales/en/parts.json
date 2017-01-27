@@ -9,6 +9,8 @@
     "delete_group": "Delete group",
     "add_effect": "Add effect",
     "name": "Name",
+    "min": "Min",
+    "max": "Max",
     "type": "Type",
     "initial_value": "Initial value",
     "description": "Description",

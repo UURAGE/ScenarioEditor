@@ -386,6 +386,9 @@ var Metadata;
 
             parameter.type.setInDOM(addedDiv.find(".parameter-initial-value-container"), parameter.type.defaultValue);
 
+            if ('minimum' in parameter.type) parameter.type.setInDOM(addedDiv.find(".parameter-min-container"), parameter.type.minimum);
+            if ('maximum' in parameter.type) parameter.type.setInDOM(addedDiv.find(".parameter-max-container"), parameter.type.maximum);
+
             addedDiv.find(".description").val(parameter.description);
         });
         if ($("#params").children().length > 0)

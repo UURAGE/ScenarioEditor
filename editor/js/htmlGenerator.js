@@ -137,7 +137,7 @@ var HtmlGenerator;
 
         var typeSelect = addedDiv.find('.parameter-type-select');
 
-        var previousTypeName = typeSelect.val();
+        var previousTypeName;
         var changeParameterType = function(newTypeName, userTypeChange)
         {
             addedDiv.addClass("changedTypeParameter");
@@ -152,6 +152,27 @@ var HtmlGenerator;
                 type.setInDOM(initialValueContainer, type.castFrom(Config.types[previousTypeName], initialValue));
                 previousTypeName = newTypeName;
             };
+
+            var parameterMinContainer = addedDiv.find(".parameter-min-container");
+            var parameterMaxContainer = addedDiv.find(".parameter-max-container");
+            if (newTypeName === Config.types.integer.name)
+            {
+                if (!parameterMinContainer.children(Config.types.integer.controlName).length)
+                {
+                    Config.types[newTypeName].appendControlTo(parameterMinContainer);
+                    Config.types[newTypeName].setInDOM(parameterMinContainer, "");
+                }
+                if (!parameterMaxContainer.children(Config.types.integer.controlName).length)
+                {
+                    Config.types[newTypeName].appendControlTo(parameterMaxContainer);
+                    Config.types[newTypeName].setInDOM(parameterMaxContainer, "");
+                }
+            }
+            else
+            {
+                parameterMinContainer.empty();
+                parameterMaxContainer.empty();
+            }
 
             if (newTypeName === Config.types.enumeration.name)
             {
@@ -200,7 +221,9 @@ var HtmlGenerator;
         });
 
         // The default type for a user-defined parameter is integer
-        typeSelect.val(Config.types.integer.name).trigger('change');
+        typeSelect.val(Config.types.integer.name);
+        previousTypeName = typeSelect.val();
+        typeSelect.trigger('change');
 
         addedDiv.removeClass("changedTypeParameter");
 

@@ -271,7 +271,7 @@ var Load;
                 id: parameterId,
                 name: this.attributes.name.value,
                 type: Config.types[typeXML[0].nodeName].loadType(typeXML),
-                description:$(this).children('description').text()
+                description: $(this).children('description').text()
             };
             parameters.sequence.push(parameter);
             parameters.byId[parameter.id] = parameter;

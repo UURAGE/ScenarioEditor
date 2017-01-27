@@ -441,13 +441,13 @@ var Config;
                 var minimumAttr = typeXML.attr('minimum');
                 if (minimumAttr)
                 {
-                    type = $.extend({}, type, { minimum: Utils.parseDecimalIntWithDefault(minimumAttr) });
+                    type = $.extend({}, type, { minimum: parseInt(minimumAttr) });
                 }
 
                 var maximumAttr = typeXML.attr('maximum');
                 if (maximumAttr)
                 {
-                    type = $.extend({}, type, { maximum: Utils.parseDecimalIntWithDefault(maximumAttr) });
+                    type = $.extend({}, type, { maximum: parseInt(maximumAttr) });
                 }
 
                 var defaultEl = typeXML.children('default');
@@ -460,7 +460,12 @@ var Config;
             },
             loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
-                return $.extend({}, this, { defaultValue: this.getFromDOM(defaultValueContainer) });
+                var type = $.extend({}, this, { defaultValue: this.getFromDOM(defaultValueContainer) });
+                var minimum = parseInt(typeEl.find(".parameter-min-container").children(type.controlName).first().val());
+                if (!isNaN(minimum)) type.minimum = minimum;
+                var maximum = parseInt(typeEl.find(".parameter-max-container").children(type.controlName).first().val());
+                if (!isNaN(maximum)) type.maximum = maximum;
+                return type;
             },
             castFrom: function(type, value)
             {
@@ -475,7 +480,10 @@ var Config;
             },
             insertType: function(typeXML)
             {
-                return Utils.appendChild(typeXML, this.name);
+                var integerXML = Utils.appendChild(typeXML, this.name);
+                if ('minimum' in this) integerXML.setAttribute('minimum', this.minimum);
+                if ('maximum' in this) integerXML.setAttribute('maximum', this.maximum);
+                return integerXML;
             },
             appendControlTo: function(containerEl, htmlId)
             {

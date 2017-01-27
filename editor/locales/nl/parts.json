@@ -10,6 +10,8 @@
     "add_effect": "Effect toevoegen",
     "name": "Naam",
     "type": "Type",
+    "min": "Min",
+    "max": "Max",
     "initial_value": "Beginwaarde",
     "description": "Beschrijving",
     "add_time_title": "Parameter tijd +1 toevoegen aan elke knoop",

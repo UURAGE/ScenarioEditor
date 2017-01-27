@@ -120,6 +120,8 @@ var Parts;
                         '<tr>' +
                             '<th>'+i18next.t('parts:name')+'</th>' +
                             '<th>'+i18next.t('parts:type')+'</th>' +
+                            '<th>'+i18next.t('parts:min')+'</th>' +
+                            '<th>'+i18next.t('parts:max')+'</th>' +
                             '<th>'+i18next.t('parts:initial_value')+'</th>' +
                             '<th>'+i18next.t('parts:description')+'</th>' +
                         '</tr>' +
@@ -238,6 +240,12 @@ var Parts;
                     '<select class="parameter-type-select" >' +
                         typeOptions +
                     '</select>' +
+                '</td>' +
+                '<td>' +
+                    '<div style="display:inline" class="parameter-min-container"/>' +
+                '</td>' +
+                '<td>' +
+                    '<div style="display:inline" class="parameter-max-container"/>' +
                 '</td>' +
                 '<td>' +
                     '<div style="display:inline" class="parameter-initial-value-container"/>' +
