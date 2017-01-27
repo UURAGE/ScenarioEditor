@@ -147,7 +147,7 @@ var HtmlGenerator;
                 var initialValueContainer = addedDiv.find(".parameter-initial-value-container");
                 var initialValue = Config.types[previousTypeName].getFromDOM(initialValueContainer);
                 initialValueContainer.empty();
-                var type = Config.types[newTypeName].loadTypeFromDOM(addedDiv, initialValueContainer);
+                var type = Config.types[newTypeName].loadTypeFromDOM(addedDiv, initialValueContainer, 'parameter');
                 type.appendControlTo(initialValueContainer);
                 type.setInDOM(initialValueContainer, type.castFrom(Config.types[previousTypeName], initialValue));
                 previousTypeName = newTypeName;

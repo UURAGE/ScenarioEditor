@@ -22,7 +22,7 @@ var ObjectGenerator;
         if (!name) return null;
 
         var typeName = div.find(".parameter-type-select").val();
-        var type = Config.types[typeName].loadTypeFromDOM(div, div.find(".parameter-initial-value-container"));
+        var type = Config.types[typeName].loadTypeFromDOM(div, div.find(".parameter-initial-value-container"), 'parameter');
         // If it's an enumeration and there are no values defined, we can't define it either
         if (typeName === Config.types.enumeration.name && type.options.sequence.length === 0) return;
         return {

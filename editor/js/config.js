@@ -533,9 +533,15 @@ var Config;
 
                 return type;
             },
-            loadTypeFromDOM: function(typeEl, defaultValueContainer)
+            loadTypeFromDOM: function(typeEl, defaultValueContainer, kind)
             {
-                return $.extend({}, this, { defaultValue: this.getFromDOM(defaultValueContainer) });
+                var type = $.extend({}, this, { defaultValue: this.getFromDOM(defaultValueContainer) });
+                if (kind === 'parameter')
+                {
+                    type.controlName = 'select';
+                    delete type.controlType;
+                }
+                return type;
             },
             castFrom: function(type, value)
             {
