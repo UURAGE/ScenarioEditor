@@ -14,5 +14,9 @@
         "enumeration": {
             "translation": "Enumeratie"
         }
+    },
+    "unaryOperators": {
+        "minimal": "Minimaal",
+        "maximal": "Maximaal"
     }
 }

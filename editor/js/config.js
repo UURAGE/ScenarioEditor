@@ -13,6 +13,7 @@ var Config;
         extensionTypes: {},
         assignmentOperators: {},
         relationalOperators: {},
+        unaryOperators: {},
         labelControlOrders: {},
         additionalNameSpaces: {},
         atLeastOneParameter: atLeastOneParameter,
@@ -306,10 +307,19 @@ var Config;
         }
     };
 
-    function toXMLSimple(valueXML, value)
+    Config.unaryOperators =
     {
-        valueXML.textContent = value;
-    }
+        'atMinimum':
+        {
+            name: 'atMinimum',
+            uiName: i18next.t('config:minimal')
+        },
+        'atMaximum':
+        {
+            name: 'atMaximum',
+            uiName: i18next.t('config:maximal')
+        }
+    };
 
     Config.labelControlOrders =
     {
@@ -319,6 +329,11 @@ var Config;
         'twoLineContainerLabel': 'twoLineContainerLabel',
         'container': 'container'
     };
+
+    function toXMLSimple(valueXML, value)
+    {
+        valueXML.textContent = value;
+    }
 
     Config.types =
     {
@@ -331,6 +346,7 @@ var Config;
             defaultValue: "",
             assignmentOperators: [Config.assignmentOperators.assign],
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
+            unaryOperators: [],
             loadType: function(typeXML)
             {
                 var type = this;
@@ -436,6 +452,7 @@ var Config;
             relationalOperators: [Config.relationalOperators.equalTo,                Config.relationalOperators.notEqualTo,
                                   Config.relationalOperators.greaterThanEqualTo,     Config.relationalOperators.lessThanEqualTo,
                                   Config.relationalOperators.greaterThan,            Config.relationalOperators.lessThan],
+            unaryOperators: [Config.unaryOperators.atMinimum, Config.unaryOperators.atMaximum],
             loadType: function(typeXML)
             {
                 var type = this;
@@ -517,6 +534,7 @@ var Config;
             defaultValue: false,
             assignmentOperators: [Config.assignmentOperators.assign],
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
+            unaryOperators: [],
             loadType: function(typeXML, id, kind)
             {
                 var type = this;
@@ -611,6 +629,7 @@ var Config;
             defaultValue: "",
             assignmentOperators: [Config.assignmentOperators.assign],
             relationalOperators: [Config.relationalOperators.equalTo, Config.relationalOperators.notEqualTo],
+            unaryOperators: [],
             loadType: function(typeXML, id)
             {
                 var options = { sequence: [] };
