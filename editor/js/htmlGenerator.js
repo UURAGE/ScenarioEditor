@@ -108,7 +108,6 @@ var HtmlGenerator;
                 div.find(".parameter-type-select").val(Config.types.integer.name);
                 div.find(".parameter-type-select").prop("disabled", "disabled");
                 div.find(".parameter-initial-value-container").remove();
-                Metadata.addTimeParameter(div);
 
                 focusFirstTabindexedDescendant($("#params").children().last());
                 $("#paramsTableHead").removeClass("hidden");

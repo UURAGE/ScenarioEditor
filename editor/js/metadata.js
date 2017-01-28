@@ -17,8 +17,7 @@ var Metadata;
         parameterDialog: parameterDialog,
         atLeastOneUserDefinedParameter: atLeastOneUserDefinedParameter,
         metadataDialog: metadataDialog,
-        timePId : null,
-        addTimeParameter: addTimeParameter,
+        timePId: null,
         formatScenarioName: formatScenarioName,
         addOrExtendAuthor: addOrExtendAuthor
     };
@@ -312,9 +311,13 @@ var Metadata;
     {
         Main.selectNode(null);
 
-        if (Metadata.timePId !== null )
+        if (Metadata.timePId !== null)
         {
             $("#addTimeParameter").addClass("hidden");
+        }
+        else
+        {
+            $("#addTimeParameter").removeClass("hidden");
         }
 
         $("#parameterScreen").dialog(
@@ -366,12 +369,14 @@ var Metadata;
 
             var typeSelect = addedDiv.find(".parameter-type-select");
 
-            if(parameter.id === "t")
+            if (parameter.id === "t")
             {
                 addedDiv.addClass("isT");
                 typeSelect.val(Config.types.integer.name);
                 typeSelect.prop("disabled", "disabled");
                 addedDiv.find(".parameter-initial-value-container").remove();
+                addedDiv.find(".parameter-min-container").remove();
+                addedDiv.find(".parameter-max-container").remove();
             }
 
             addedDiv.find(".name").val(parameter.name);
@@ -522,17 +527,24 @@ var Metadata;
         // All new parameters.
         $(".newParameter").each(function()
         {
-            var id = 'p' + (Metadata.parameterCounter += 1).toString();
-            $(this).prop('id', id);
-            var newParameter = ObjectGenerator.parameterObject($(this));
+            if ($(this).prop('id') === 't')
+            {
+                addTimeParameter($(this));
+            }
+            else
+            {
+                var id = 'p' + (Metadata.parameterCounter += 1).toString();
+                $(this).prop('id', id);
+                var newParameter = ObjectGenerator.parameterObject($(this));
 
-            if (!newParameter) return;
+                if (!newParameter) return;
 
-            Metadata.metaObject.parameters.sequence.push(newParameter);
-            Metadata.metaObject.parameters.byId[newParameter.id] = newParameter;
+                Metadata.metaObject.parameters.sequence.push(newParameter);
+                Metadata.metaObject.parameters.byId[newParameter.id] = newParameter;
 
-            $(this).removeClass("newParameter").addClass("existingParameter");
-            $(this).removeClass("changedTypeParameter");
+                $(this).removeClass("newParameter").addClass("existingParameter");
+                $(this).removeClass("changedTypeParameter");
+            }
         });
     }
 
