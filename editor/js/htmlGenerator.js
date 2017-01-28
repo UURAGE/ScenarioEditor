@@ -137,7 +137,7 @@ var HtmlGenerator;
 
         var typeSelect = addedDiv.find('.parameter-type-select');
 
-        var previousTypeName;
+        var previousType;
         var changeParameterType = function(newTypeName, userTypeChange)
         {
             addedDiv.addClass("changedTypeParameter");
@@ -145,12 +145,13 @@ var HtmlGenerator;
             var replaceInitialValueContainer = function()
             {
                 var initialValueContainer = addedDiv.find(".parameter-initial-value-container");
-                var initialValue = Config.types[previousTypeName].getFromDOM(initialValueContainer);
+                var initialValue;
+                if (previousType) initialValue = previousType.getFromDOM(initialValueContainer);
                 initialValueContainer.empty();
                 var type = Config.types[newTypeName].loadTypeFromDOM(addedDiv, initialValueContainer, 'parameter');
                 type.appendControlTo(initialValueContainer);
-                type.setInDOM(initialValueContainer, type.castFrom(Config.types[previousTypeName], initialValue));
-                previousTypeName = newTypeName;
+                if (previousType) type.setInDOM(initialValueContainer, type.castFrom(previousType, initialValue));
+                previousType = type;
             };
 
             var parameterMinContainer = addedDiv.find(".parameter-min-container");
@@ -222,7 +223,6 @@ var HtmlGenerator;
 
         // The default type for a user-defined parameter is integer
         typeSelect.val(Config.types.integer.name);
-        previousTypeName = typeSelect.val();
         typeSelect.trigger('change');
 
         addedDiv.removeClass("changedTypeParameter");
