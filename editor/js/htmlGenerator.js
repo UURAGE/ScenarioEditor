@@ -417,6 +417,7 @@ var HtmlGenerator;
                     {
                         characterIdRefSelect = $('<select>', { class: "character-idref-select" });
                         characterIdRefSelect.append($('<option>', { value: character.id, text: character.name ? character.name : character.id }));
+                        if (Config.configObject.characters.sequence.length === 1) characterIdRefSelect.hide();
                         testContainer.append(characterIdRefSelect);
                         return true;
                     }
@@ -430,6 +431,7 @@ var HtmlGenerator;
                     {
                         characterIdRefSelect.append($('<option>', { value: character.id, text: character.name ? character.name : character.id }));
                     });
+                    if (Config.configObject.characters.sequence.length === 1) characterIdRefSelect.hide();
                     testContainer.append(characterIdRefSelect);
                 }
             }
