@@ -42,7 +42,7 @@ Suppose we would make an enumeration for size:
     <option>Medium</option>
     <option>Big</option>
     <default>Medium</default>
-  <enumeration>
+  </enumeration>
 </type>
 ```
 
