@@ -53,23 +53,23 @@ var Main;
         $.fn.attachDragger = function()
         {
             var lastPosition, position, difference;
-            $(this).on("mouseenter mousedown mouseup mousemove",function(e)
-            {
-                if( e.type == "mouseenter" )
+            $(this)
+                .on("mouseenter", function(e)
                 {
                     lastPosition = [e.clientX, e.clientY];
-                }
-                if( e.type == "mousedown")
+                })
+                .on("mousedown", function(e)
                 {
                     isPanning = true;
                     lastPosition = [e.clientX, e.clientY];
-                }
-                if( e.type == "mouseup")
+                })
+                .on("mouseup", function(e)
                 {
                     isPanning = false;
-                }
-                if( e.type == "mousemove" && isPanning)
+                })
+                .on("mousemove", function(e)
                 {
+                    if (!isPanning) return;
                     if (spaceDown)
                     {
                         position = [e.clientX, e.clientY];
@@ -78,12 +78,12 @@ var Main;
                         $(this).scrollTop( $(this).scrollTop() - difference[1] );
                         lastPosition = [e.clientX, e.clientY];
                     }
-                    else {
+                    else
+                    {
                         isPanning = false;
                     }
-                }
-            });
-            $(document).bind("mouseup", function()
+                });
+            $(document).on("mouseup", function()
             {
                 isPanning = false;
             });
@@ -286,7 +286,7 @@ var Main;
 
         $("#main").on('click', function(e)
         {
-            //$(this).focus();
+            $(this).focus();
             if (e.target == this)
             {
                 selectElement(null);
@@ -376,7 +376,7 @@ var Main;
         }
     });
 
-    $(window).keydown(function(e)
+    $(window).on('keydown', function(e)
     {
         if ($(document.activeElement).filter('input,textarea').length === 0 &&
         Zoom.isZoomed() && !isSelecting)
@@ -391,7 +391,7 @@ var Main;
         }
     });
 
-    $(window).keyup(function(e) {
+    $(window).on('keyup', function(e) {
         if (spaceDown)
         {
             var zoomedTree = Zoom.getZoomed();
