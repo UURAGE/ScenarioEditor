@@ -344,15 +344,6 @@ var Metadata;
             }],
             close: function()
             {
-                $(".removedParameter").removeClass("removedParameter");
-                $(".newParameter").remove();
-
-                if (atLeastOneUserDefinedParameter())
-                {
-                    // The table headers need to be visible in the metascreen the next time.
-                    $("#paramsTableHead").removeClass("hidden");
-                }
-
                 $("#main").focus();
             }
         });
@@ -398,6 +389,27 @@ var Metadata;
         });
         if ($("#params").children().length > 0)
             $("#paramsTableHead").removeClass("hidden");
+
+        $("#params").sortable({
+            handle: ".handle",
+            axis: "y",
+            forceHelperSize: true,
+            helper: function(e, helper)
+            {
+                $(helper).children().each(function()
+                {
+                    $(this).width($(this).width());
+                });
+                return helper;
+            },
+            beforeStop: function(e, ui)
+            {
+                $(ui.helper).children().each(function()
+                {
+                    $(this).width("");
+                });
+            }
+        });
 
         $("#scenarioDescription").val(Metadata.metaObject.description);
     }
@@ -546,6 +558,13 @@ var Metadata;
                 $(this).removeClass("changedTypeParameter");
             }
         });
+
+        // Save parameters in UI order.
+        Metadata.metaObject.parameters.sequence =
+            $(".existingParameter").map(function()
+            {
+                return Metadata.metaObject.parameters.byId[$(this).prop('id')];
+            }).get();
     }
 
     // Save all changes to the metaObject.

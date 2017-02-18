@@ -490,11 +490,11 @@ var HtmlGenerator;
     // Inserts all the parameters for the effects and preconditions.
     function insertParameters(div, parameters)
     {
-        for (var pId in parameters.byId)
+        var select = div.find(".parameter-idref-select");
+        parameters.sequence.forEach(function (parameter)
         {
-            div.find(".parameter-idref-select").append('<option value="' + pId + '">' +
-                Utils.escapeHTML(parameters.byId[pId].name) + '</option>');
-        }
+            select.append($('<option>', { value: parameter.id, text: parameter.name }));
+        });
     }
 
     // Focuses on the first descendant that has a non-negative tabindex.

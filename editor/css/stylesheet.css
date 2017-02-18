@@ -987,6 +987,11 @@ button img
   overflow-x: hidden;
 }
 
+tr.ui-sortable-helper
+{
+  display: table;
+}
+
 #content > #draftScreen
 {
   position: absolute;
@@ -1235,6 +1240,20 @@ input[type=checkbox][disabled]
   #scaledDiv *
   {
     opacity: 0.8;
+  }
+
+#params .handle
+{
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: grab;
+}
+
+  #params .ui-sortable-helper .handle
+  {
+    cursor: grabbing;
   }
 
 /* Parameters */

@@ -118,6 +118,7 @@ var Parts;
                 '<table>' +
                     '<thead id="paramsTableHead" class="hidden">' +
                         '<tr>' +
+                            '<th></th>' +
                             '<th>'+i18next.t('parts:name')+'</th>' +
                             '<th>'+i18next.t('parts:type')+'</th>' +
                             '<th>'+i18next.t('parts:min')+'</th>' +
@@ -233,6 +234,7 @@ var Parts;
         }
         return '' +
             '<tr class="newParameter">' +
+                '<td class="handle">↕</td>' +
                 '<td>' +
                     '<input type="text" class="name" style="width:197px;" />' +
                 '</td>' +
