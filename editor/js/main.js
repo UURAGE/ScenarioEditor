@@ -459,9 +459,21 @@ var Main;
             setSidebarWidth(localStorage.getItem('sidebarWidth'));
         }
 
-        var mousehelddown = false;
         var domSidebarGrip = $('#sidebar').find('.grip');
         var mouseX = 0;
+
+        var mouseMoveHandler = function(event)
+        {
+            var width = $(window).width() - event.pageX + mouseX;
+            setSidebarWidth(width);
+        };
+
+        var mouseUpHandler = function()
+        {
+            $(document).off("mousemove", mouseMoveHandler);
+            $(document).off("mouseup", mouseUpHandler);
+            $('#sidebar').removeClass('dragging');
+        };
 
         $(domSidebarGrip).mousedown(function(event)
         {
@@ -485,28 +497,14 @@ var Main;
 
             var parentOffset = $(this).offset();
             mouseX = (event.pageX - parentOffset.left) / 2;
-            mousehelddown = true;
+            $(document).on("mousemove", mouseMoveHandler);
+            $(document).on("mouseup", mouseUpHandler);
             $('#sidebar').addClass('dragging');
         });
 
         $(domSidebarGrip).dblclick(function(event)
         {
             collapseSidebar();
-        });
-
-        $(window).mouseup(function()
-        {
-            mousehelddown = false;
-            $('#sidebar').removeClass('dragging');
-        });
-
-        $(document).on("mousemove", function(event)
-        {
-            if (mousehelddown)
-            {
-                var width = $(window).width() - event.pageX + mouseX;
-                setSidebarWidth(width);
-            }
         });
     }
 
