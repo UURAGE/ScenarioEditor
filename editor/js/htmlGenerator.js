@@ -348,7 +348,7 @@ var HtmlGenerator;
             });
             effectDiv.append(operatorSelect);
 
-            var controlContainer = $('<div>', { class: "parameter-effect-value-container", style:"display:inline" });
+            var controlContainer = $('<span>', { class: "parameter-effect-value-container" });
             Metadata.metaObject.parameters.byId[pId].type.appendControlTo(controlContainer);
             effectDiv.append(controlContainer);
         };
@@ -443,7 +443,7 @@ var HtmlGenerator;
             });
             testContainer.append(operatorSelect);
 
-            var controlContainer = $('<div>', { class: "precondition-value-container", style:"display:inline" });
+            var controlContainer = $('<span>', { class: "precondition-value-container" });
             parameter.type.appendControlTo(controlContainer);
             testContainer.append(controlContainer);
         };

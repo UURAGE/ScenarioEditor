@@ -75,7 +75,7 @@ var Parts;
         return '' +
             '<div>' +
                 '<select class="parameter-idref-select"></select>' +
-                '<div class="parameter-effect-container" style="display:inline"/>' +
+                '<span class="parameter-effect-container"></span>' +
                 '<button type="button" class="deleteParent" title="'+i18next.t('common:delete')+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
             '</div>';
     }
@@ -244,13 +244,13 @@ var Parts;
                     '</select>' +
                 '</td>' +
                 '<td>' +
-                    '<div style="display:inline" class="parameter-min-container"/>' +
+                    '<span class="parameter-min-container"></span>' +
                 '</td>' +
                 '<td>' +
-                    '<div style="display:inline" class="parameter-max-container"/>' +
+                    '<span class="parameter-max-container"></span>' +
                 '</td>' +
                 '<td>' +
-                    '<div style="display:inline" class="parameter-initial-value-container"/>' +
+                    '<span class="parameter-initial-value-container"></span>' +
                 '</td>' +
                 '<td>' +
                     '<textarea class="description" style="height:1em;">' +
@@ -268,7 +268,7 @@ var Parts;
             '<div class="precondition">' +
                 '<select class="parameter-idref-select">' +
                 '</select>' +
-                '<div class="precondition-test-container" style="display:inline"/>' +
+                '<span class="precondition-test-container"></span>' +
                 '<button type="button" class="deleteParent" title="'+i18next.t('common:delete')+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
             '</div>';
     }

@@ -1807,7 +1807,7 @@ var Main;
             {
                 // This element contains the dynamically changing operator and control for possible values
                 // It is separate from the rest so that it can be emptied
-                var effectDiv = $('<div>', { style:"display:inline" });
+                var effectSubContainer = $('<span>');
 
                 // Dynamically changes the type of the effect according to the given parameter
                 var changeEffectType = function(pId)
@@ -1817,11 +1817,11 @@ var Main;
                     {
                         operatorSelect.append($('<option>', { value: op.name, text: op.uiName }));
                     });
-                    effectDiv.append(operatorSelect);
+                    effectSubContainer.append(operatorSelect);
 
-                    var controlContainer = $('<div>', { class: containerClassPrefix + "-effect-control-container", style:"display:inline" });
+                    var controlContainer = $('<span>', { class: containerClassPrefix + "-effect-control-container" });
                     parameterDefinitions[pId].type.appendControlTo(controlContainer);
-                    effectDiv.append(controlContainer);
+                    effectSubContainer.append(controlContainer);
                 };
 
                 // Clone the hidden select accumulated for each separate section and put it in the parameter effect
@@ -1831,7 +1831,7 @@ var Main;
                 changeEffectType($(idRefSelect).val());
                 idRefSelect.on('change', function()
                 {
-                    effectDiv.empty();
+                    effectSubContainer.empty();
                     changeEffectType($(this).val());
                 });
                 idRefSelect.removeClass('hidden');
@@ -1841,7 +1841,7 @@ var Main;
                 deleteButton.on('click', function() { $(this).parent().remove(); });
 
                 var effectContainer = $('<div>', { class: containerClassPrefix + "-effect-container" });
-                effectContainer.append(idRefSelect).append(effectDiv).append(deleteButton);
+                effectContainer.append(idRefSelect).append(effectSubContainer).append(deleteButton);
                 effectsContainer.append(effectContainer);
             };
 
