@@ -223,10 +223,10 @@
               ?>
             </div>
             <div id="miniwrap" style="display: none">
-              <label for="enableMinimap" style="margin-left: 30px" title="<?php sLang('edt_toggle_minimap'); ?>"><?php sLang("edt_minimap"); ?>:</label>
-              <input type="checkbox" id="enableMinimap" style="display:inline" checked title="<?php sLang('edt_toggle_minimap'); ?>"/>
-              <label for="simpleMinimap" style="margin-left: 10px" title="<?php sLang('edt_minimap_title');?>"><?php sLang("edt_simple"); ?>:</label>
-              <input type="checkbox" id="simpleMinimap" style="display:inline" title="<?php sLang("edt_minimap_title"); ?>"/>
+              <input type="checkbox" id="enableMinimap" style="display: inline; margin-left: 30px" checked title="<?php sLang('edt_toggle_minimap'); ?>"/>
+              <label for="enableMinimap" title="<?php sLang('edt_toggle_minimap'); ?>"><?php sLang("edt_minimap"); ?></label>
+              <input type="checkbox" id="simpleMinimap" style="display: inline; margin-left: 10px" title="<?php sLang("edt_minimap_title"); ?>"/>
+              <label for="simpleMinimap" title="<?php sLang('edt_minimap_title');?>"><?php sLang("edt_simple"); ?></label>
               <div id="minimap">
                   <div id="scaledDiv">
                     <h2 style="text-align:center; position:relative; top:100px;">[+]<?php sLang("edt_minimap"); ?></h2>
