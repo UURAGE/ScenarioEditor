@@ -1248,11 +1248,15 @@ input[type=checkbox][disabled]
   -ms-user-select: none;
   -webkit-user-select: none;
   user-select: none;
+  cursor: move;
+  cursor: -webkit-grab;
   cursor: grab;
 }
 
   #params .ui-sortable-helper .handle
   {
+    cursor: move;
+    cursor: -webkit-grabbing;
     cursor: grabbing;
   }
 
