@@ -73,7 +73,8 @@ var Parts;
     function getParameterEffectHTML()
     {
         return '' +
-            '<div>' +
+            '<div class="parameter-effect">' +
+                '<span class="handle">↕</span>' +
                 '<select class="parameter-idref-select"></select>' +
                 '<span class="parameter-effect-container"></span>' +
                 '<button type="button" class="deleteParent" title="'+i18next.t('common:delete')+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +

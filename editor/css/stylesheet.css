@@ -1242,7 +1242,7 @@ input[type=checkbox][disabled]
     opacity: 0.8;
   }
 
-#params .handle
+.handle
 {
   -moz-user-select: none;
   -ms-user-select: none;
@@ -1253,12 +1253,17 @@ input[type=checkbox][disabled]
   cursor: grab;
 }
 
-  #params .ui-sortable-helper .handle
-  {
-    cursor: move;
-    cursor: -webkit-grabbing;
-    cursor: grabbing;
-  }
+.ui-sortable-helper .handle
+{
+  cursor: move;
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+
+.parameter-effect .handle
+{
+  padding: 0 5px;
+}
 
 /* Parameters */
 #paramTabs > div > div > select

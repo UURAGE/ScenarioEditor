@@ -274,6 +274,12 @@ var Main;
             $("#main").focus();
         });
 
+        $("#userDefinedParameterEffects").sortable({
+            handle: ".handle",
+            axis: "y",
+            forceHelperSize: true
+        });
+
         $("#main").on('mouseenter', function()
         {
             $("#gridIndicator").show();
@@ -1840,8 +1846,9 @@ var Main;
                 var deleteButton = $(Parts.getDeleteParentButtonHTML());
                 deleteButton.on('click', function() { $(this).parent().remove(); });
 
-                var effectContainer = $('<div>', { class: containerClassPrefix + "-effect-container" });
-                effectContainer.append(idRefSelect).append(effectSubContainer).append(deleteButton);
+                var effectContainer = $('<div>', { class: "parameter-effect " + containerClassPrefix + "-effect-container" });
+                var handle = $('<span>', { class: "handle", text: "↕" });
+                effectContainer.append([handle, idRefSelect, effectSubContainer, deleteButton]);
                 effectsContainer.append(effectContainer);
             };
 
@@ -1885,6 +1892,11 @@ var Main;
                         container.append(parameterIdRefSelect);
 
                         effectsContainer = $('<div>', { class: classPrefix + "-container"});
+                        effectsContainer.sortable({
+                            handle: ".handle",
+                            axis: "y",
+                            forceHelperSize: true
+                        });
                         container.append(effectsContainer);
 
                         container.append(Parts.getAddParameterEffectButtonHTML());
