@@ -149,8 +149,8 @@ var MiniMap;
             realHeight = main[0].scrollHeight;
             viewportX = main.scrollLeft();
             viewportY = main.scrollTop();
-            viewportWidth = main.width();
-            viewportHeight = main.height();
+            viewportWidth = main[0].clientWidth;
+            viewportHeight = main[0].clientHeight;
         }
         else
         {
@@ -159,8 +159,8 @@ var MiniMap;
             realHeight = treeDiv[0].scrollHeight + $("#mainCell .subjectDiv")[0].scrollHeight;
             viewportX = treeDiv.scrollLeft();
             viewportY = treeDiv.scrollTop() + $("#mainCell .subjectDiv")[0].scrollHeight;
-            viewportWidth = treeDiv.width();
-            viewportHeight = treeDiv.height();
+            viewportWidth = treeDiv[0].clientWidth;
+            viewportHeight = treeDiv[0].clientHeight;
         }
 
         $("#scaledDiv").css("width", realWidth+"px");
