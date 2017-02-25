@@ -373,7 +373,7 @@ var Main;
         initialiseSidebar();
     });
 
-    $(window).bind('beforeunload', function()
+    $(window).on('beforeunload', function()
     {
         // confirmation for leaving the page
         if (Main.unsavedChanges)
@@ -2250,7 +2250,7 @@ var Main;
                 var characterSelection = $("#characterSelection");
                 if (characterSelection)
                 {
-                    characterSelection.unbind('change');
+                    characterSelection.off('change');
                     characterSelection.on('change', function(e)
                     {
                         if (Main.selectedElement)
