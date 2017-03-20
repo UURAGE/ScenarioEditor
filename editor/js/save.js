@@ -144,16 +144,14 @@ var Save;
 
         // Save user-defined parameters
         var userDefinedParametersEl = addAndReturnElement("userDefined", scenarioNameSpace, parametersEl);
-        var parameterId, parameter;
-        for (parameterId in Metadata.metaObject.parameters.byId)
+        Metadata.metaObject.parameters.sequence.forEach(function (parameter)
         {
-            parameter = Metadata.metaObject.parameters.byId[parameterId];
             addDefinitionElement(parameter, "parameter", userDefinedParametersEl);
-        }
+        });
 
         // Save fixed parameters
         var fixedParametersEl = addAndReturnElement("fixed", scenarioNameSpace, parametersEl);
-        var characterId;
+        var parameterId, parameter, characterId;
         for (parameterId in Config.configObject.parameters.byId)
         {
             parameter = Config.configObject.parameters.byId[parameterId];
