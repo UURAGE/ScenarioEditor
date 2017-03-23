@@ -36,6 +36,7 @@ var Save;
         doc.documentElement.setAttribute("version", Metadata.metaObject.version);
         doc.documentElement.setAttribute("schemaVersion", schemaVersion);
         doc.documentElement.setAttribute("configidref", Config.configObject.id);
+        if (Config.configObject.version !== undefined) doc.documentElement.setAttribute("configVersion", Config.configObject.version);
 
         // Save definitions
         generateDefinitionsXML(doc.documentElement);

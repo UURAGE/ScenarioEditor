@@ -49,6 +49,7 @@ var Config;
 
         var config = {};
         config.id = configXML.attr('id');
+        config.version = configXML.attr('version');
         config.settings = loadSettings(configXML.children('settings'));
         config.properties = loadCollection(configXML.children('properties'), 'property', 'toplevel', defaultPropertyScopes);
         config.parameters = loadCollection(configXML.children('parameters'), 'parameter', 'toplevel', defaultParameterScopes);
