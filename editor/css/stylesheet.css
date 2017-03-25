@@ -515,6 +515,14 @@ button img
       background-image: url('../png/others/optional_subject.png');
     }
 
+      .w.treeContainer.optional:not(.zoom) .subjectDiv
+      {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        padding-right: 40px;
+      }
+
   .w.treeContainer .subjectNameSpan
   {
     margin-left: 5px;
