@@ -207,18 +207,19 @@
           <div>
             <div id="languages">
               <?php
-              $languages = scandir(getcwd()."/application/language");
-              $lastElement = end($languages);
-              foreach($languages as $index=>$name)
+              $languages = scandir(getcwd() . '/application/language');
+              $isFirst = true;
+              foreach ($languages as $name)
               {
-                  if(ctype_alnum($name))
-                  {
-                      $flagUrl = flag_url($name);
-                      echo("<a href='".site_url()."/language/changeLanguage/".$name."'><img src='".$flagUrl."'></a>");
+                  if (!ctype_alnum($name)) continue;
 
-                      if ($name != $lastElement)
-                          echo(" | ");
-                  }
+                  if (!$isFirst) echo ' | ';
+
+                  echo '<a href="' . site_url() . '/language/changeLanguage/' . $name . '">';
+                  echo '<img src="' . flag_url($name) . '">';
+                  echo '</a>';
+
+                  $isFirst = false;
               }
               ?>
             </div>
