@@ -102,7 +102,7 @@
 				</element>
 			</sequence>
 			<attribute name="id" type="NCName" use="required"></attribute>
-			<attribute name="version" type="int" use="optional"></attribute>
+			<attribute name="version" type="token" use="optional"></attribute>
 		</complexType>
 		<key name="propertyID">
 			<selector xpath=".//tns:property" />
