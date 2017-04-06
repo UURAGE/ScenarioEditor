@@ -8,7 +8,7 @@ var Metadata;
 
     Metadata =
     {
-        metaObject: {},
+        container: {},
         reset: reset,
         dialog: dialog,
         formatScenarioName: formatScenarioName,
@@ -31,7 +31,7 @@ var Metadata;
     // Resets the metadata to the default
     function reset()
     {
-        Metadata.metaObject = {
+        Metadata.container = {
             name: "",
             version: 0,
             difficulty: "medium",
@@ -42,7 +42,7 @@ var Metadata;
 
         if (Config.configObject.settings.languages.sequence.length > 0)
         {
-            Metadata.metaObject.language = Config.configObject.settings.languages.sequence[0];
+            Metadata.container.language = Config.configObject.settings.languages.sequence[0];
         }
     }
 
@@ -62,7 +62,7 @@ var Metadata;
                 text: i18next.t('common:confirm'),
                 click: function()
                 {
-                    saveMetaObject();
+                    save();
                     $(this).dialog('close');
                 }
             },
@@ -80,19 +80,19 @@ var Metadata;
         });
 
         // Show the stored values for the metadata.
-        $("#scenarioName").val(Metadata.metaObject.name);
-        if (Metadata.metaObject.language) $("#scenarioLanguage").val(Metadata.metaObject.language.code).change();
-        $("#scenarioDifficulty").val(Metadata.metaObject.difficulty);
-        $("#scenarioDescription").val(Metadata.metaObject.description);
+        $("#scenarioName").val(Metadata.container.name);
+        if (Metadata.container.language) $("#scenarioLanguage").val(Metadata.container.language.code).change();
+        $("#scenarioDifficulty").val(Metadata.container.difficulty);
+        $("#scenarioDescription").val(Metadata.container.description);
 
         var authorsHeaderEl = $("#authors-header");
         var authorsEl = $("#authors");
         authorsEl.find("tr").not("tr:first").remove();
-        if (Metadata.metaObject.authors.length > 0)
+        if (Metadata.container.authors.length > 0)
         {
             authorsHeaderEl.show();
             authorsEl.show();
-            Metadata.metaObject.authors.forEach(function(author)
+            Metadata.container.authors.forEach(function(author)
             {
                 var authorRow = $('<tr>');
                 authorRow.append($('<td>', { text: author.name }));
@@ -243,14 +243,14 @@ var Metadata;
         for (propertyId in Config.configObject.properties.byId)
         {
             property = Config.configObject.properties.byId[propertyId];
-            setPropertyInDOM(Metadata.metaObject.propertyValues.characterIndependent, "#meta-property-values-container", property);
+            setPropertyInDOM(Metadata.container.propertyValues.characterIndependent, "#meta-property-values-container", property);
         }
         for (propertyId in Config.configObject.characters.properties.byId)
         {
             for (characterId in Config.configObject.characters.byId)
             {
                 property = Config.configObject.characters.properties.byId[propertyId];
-                setPropertyInDOM(Metadata.metaObject.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + Utils.escapeSelector(characterId) + "-container", property);
+                setPropertyInDOM(Metadata.container.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + Utils.escapeSelector(characterId) + "-container", property);
             }
         }
         for (characterId in Config.configObject.characters.byId)
@@ -258,13 +258,12 @@ var Metadata;
             for (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
             {
                 property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
-                setPropertyInDOM(Metadata.metaObject.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + Utils.escapeSelector(characterId) + "-container", property);
+                setPropertyInDOM(Metadata.container.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + Utils.escapeSelector(characterId) + "-container", property);
             }
         }
     }
 
-    // Save all changes to the metaObject.
-    function saveMetaObject()
+    function save()
     {
         Main.unsavedChanges = true;
 
@@ -272,19 +271,19 @@ var Metadata;
         Main.selectElement(null);
 
         // Save all values in the dialog to the metaObject
-        Metadata.metaObject.name = formatScenarioName($("#scenarioName").val());
-        $('#scenarioNameTab .scenarioName').text(Metadata.metaObject.name);
+        Metadata.container.name = formatScenarioName($("#scenarioName").val());
+        $('#scenarioNameTab .scenarioName').text(Metadata.container.name);
         var languageCode = $("#scenarioLanguage").val();
-        if (languageCode) Metadata.metaObject.language = Config.configObject.settings.languages.byCode[languageCode];
-        Metadata.metaObject.difficulty = $("#scenarioDifficulty").val();
-        Metadata.metaObject.description = $("#scenarioDescription").val();
+        if (languageCode) Metadata.container.language = Config.configObject.settings.languages.byCode[languageCode];
+        Metadata.container.difficulty = $("#scenarioDifficulty").val();
+        Metadata.container.description = $("#scenarioDescription").val();
 
         var propertyId, characterId, property;
         for (propertyId in Config.configObject.properties.byId)
         {
             property = Config.configObject.properties.byId[propertyId];
             if (property.scopes.statementScope !== "independent") continue;
-            Metadata.metaObject.propertyValues.characterIndependent[property.id] =
+            Metadata.container.propertyValues.characterIndependent[property.id] =
                 property.type.getFromDOM($("#meta-property-values-container-" + property.id));
         }
         for (propertyId in Config.configObject.characters.properties.byId)
@@ -293,7 +292,7 @@ var Metadata;
             {
                 property = Config.configObject.characters.properties.byId[propertyId];
                 if (property.scopes.statementScope !== "independent") continue;
-                Metadata.metaObject.propertyValues.perCharacter[characterId][property.id] =
+                Metadata.container.propertyValues.perCharacter[characterId][property.id] =
                     property.type.getFromDOM($("#meta-character-property-values-" + characterId + "-container-" + property.id));
             }
         }
@@ -303,7 +302,7 @@ var Metadata;
             {
                 property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
                 if (property.scopes.statementScope !== "independent") continue;
-                Metadata.metaObject.propertyValues.perCharacter[characterId][property.id] =
+                Metadata.container.propertyValues.perCharacter[characterId][property.id] =
                     property.type.getFromDOM($("#meta-character-property-values-" + characterId + "-container-" + property.id));
             }
         }
@@ -320,14 +319,14 @@ var Metadata;
         }
         else
         {
-            return Metadata.metaObject.name;
+            return Metadata.container.name;
         }
     }
 
     function addOrExtendAuthor(name, email, date, setEndDateToDate)
     {
         var found = false;
-        Metadata.metaObject.authors.forEach(function(existingAuthor)
+        Metadata.container.authors.forEach(function(existingAuthor)
         {
             if (existingAuthor.name === name)
             {
@@ -345,7 +344,7 @@ var Metadata;
             author.startDate = date;
             if (setEndDateToDate) author.endDate = date;
 
-            Metadata.metaObject.authors.push(author);
+            Metadata.container.authors.push(author);
         }
     }
 })();

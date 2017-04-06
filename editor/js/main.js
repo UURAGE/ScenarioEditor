@@ -127,8 +127,8 @@ var Main;
             if(!cancel)
             {
                 var inputName = Metadata.formatScenarioName(nameInput.val());
-                Metadata.metaObject.name = inputName;
-                $('#scenarioNameTab .scenarioName').text(Metadata.metaObject.name);
+                Metadata.container.name = inputName;
+                $('#scenarioNameTab .scenarioName').text(Metadata.container.name);
             }
 
             $(this).hide();
@@ -157,7 +157,7 @@ var Main;
 
             var nameInputSpan = $('#scenarioNameTab .scenarioNameInput');
             var nameInput = nameInputSpan.children('input');
-            nameInput.val(Metadata.metaObject.name);
+            nameInput.val(Metadata.container.name);
             nameInputSpan.show();
             nameInput.focus();
         });

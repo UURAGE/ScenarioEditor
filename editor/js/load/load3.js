@@ -99,10 +99,10 @@ var Load3;
     // Load the metadata of the scenario.
     function loadMetadata(metadata)
     {
-        var name = Utils.unEscapeHTML($(metadata).find('name').text());
-        $('#scenarioNameTab .scenarioName').text(name);
-        var description = Utils.unEscapeHTML($(metadata).find('description').text());
-        var difficulty = $(metadata).find('difficulty').text();
+        Metadata.container.name = Utils.unEscapeHTML($(metadata).find('name').text());
+        $('#scenarioNameTab .scenarioName').text(Metadata.container.name);
+        Metadata.container.description = Utils.unEscapeHTML($(metadata).find('description').text());
+        Metadata.container.difficulty = $(metadata).find('difficulty').text();
 
         var parameters = Parameters.container;
         $(metadata).find('parameters').children().each(function()
@@ -134,20 +134,6 @@ var Load3;
         });
 
         if ('t' in parameters.byId) Parameters.timeId = 't';
-
-        Metadata.metaObject = {
-            name: name,
-            version: 0,
-            difficulty: difficulty,
-            description: description,
-            authors: [],
-            propertyValues: Config.getNewDefaultPropertyValues(['independent'])
-        };
-
-        if (Config.configObject.settings.languages.sequence.length > 0)
-        {
-            Metadata.metaObject.language = Config.configObject.settings.languages.sequence[0];
-        }
     }
 
     // Load a statement.

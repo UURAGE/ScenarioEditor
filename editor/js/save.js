@@ -32,8 +32,8 @@ var Save;
                 'xmlns:' + Config.additionalNameSpaces[nameSpace], nameSpace);
         }
 
-        if (Main.unsavedChanges) Metadata.metaObject.version++;
-        doc.documentElement.setAttribute("version", Metadata.metaObject.version);
+        if (Main.unsavedChanges) Metadata.container.version++;
+        doc.documentElement.setAttribute("version", Metadata.container.version);
         doc.documentElement.setAttribute("schemaVersion", schemaVersion);
         doc.documentElement.setAttribute("configidref", Config.configObject.id);
         if (Config.configObject.version !== undefined) doc.documentElement.setAttribute("configVersion", Config.configObject.version);
@@ -43,20 +43,20 @@ var Save;
 
         // Save metadata
         var metadataEl = addAndReturnElement("metadata", scenarioNameSpace, doc.documentElement);
-        addAndReturnElement("name", scenarioNameSpace, metadataEl).textContent = Metadata.metaObject.name;
+        addAndReturnElement("name", scenarioNameSpace, metadataEl).textContent = Metadata.container.name;
         addAndReturnElement("date", scenarioNameSpace, metadataEl).textContent = new Date().toISOString();
-        if (Metadata.metaObject.language)
+        if (Metadata.container.language)
         {
             var languageEl = addAndReturnElement("language", scenarioNameSpace, metadataEl);
-            languageEl.setAttribute("code", Metadata.metaObject.language.code);
-            languageEl.textContent = Metadata.metaObject.language.name;
+            languageEl.setAttribute("code", Metadata.container.language.code);
+            languageEl.textContent = Metadata.container.language.name;
         }
-        addAndReturnElement("description", scenarioNameSpace, metadataEl, true).textContent = Metadata.metaObject.description;
+        addAndReturnElement("description", scenarioNameSpace, metadataEl, true).textContent = Metadata.container.description;
 
-        if (Metadata.metaObject.authors.length > 0)
+        if (Metadata.container.authors.length > 0)
         {
             var authorsEl = addAndReturnElement("authors", scenarioNameSpace, metadataEl);
-            Metadata.metaObject.authors.forEach(function(author)
+            Metadata.container.authors.forEach(function(author)
             {
                 var authorEl = addAndReturnElement("author", scenarioNameSpace, authorsEl);
                 authorEl.setAttribute("name", author.name);
@@ -66,13 +66,13 @@ var Save;
             });
         }
 
-        addAndReturnElement("difficulty", scenarioNameSpace, metadataEl).textContent = Metadata.metaObject.difficulty;
+        addAndReturnElement("difficulty", scenarioNameSpace, metadataEl).textContent = Metadata.container.difficulty;
 
         // Save parameter initial values
         generateInitialParameterValuesXML(metadataEl);
 
         // Save property values
-        generatePropertyValuesXML(metadataEl, Metadata.metaObject.propertyValues);
+        generatePropertyValuesXML(metadataEl, Metadata.container.propertyValues);
 
         var seqElement = addAndReturnElement("sequence", scenarioNameSpace, doc.documentElement);
 
@@ -264,7 +264,7 @@ var Save;
 
         var xml = generateXML();
         var blob = new Blob([xml], { type: 'text/xml' });
-        saveAs(blob, Metadata.metaObject.name + '.xml');
+        saveAs(blob, Metadata.container.name + '.xml');
     }
 
     function generateTreeXML(parentElement, tree)

@@ -224,11 +224,12 @@ var Load;
     // Load the metadata of the scenario.
     function loadMetadata(version, definitions, metadata)
     {
-        var name = $(metadata).children('name').text();
-        $('#scenarioNameTab .scenarioName').text(name);
-        var description = $(metadata).children('description').text();
+        Metadata.container.name = $(metadata).children('name').text();
+        $('#scenarioNameTab .scenarioName').text(Metadata.container.name);
+        Metadata.container.description = $(metadata).children('description').text();
 
-        var authors = [];
+        if (version) Metadata.container.version = version;
+
         $(metadata).children('authors').children().each(function()
         {
             var author = {};
@@ -236,22 +237,20 @@ var Load;
             if (this.attributes.email) author.email = this.attributes.email.value;
             author.startDate = this.attributes.startDate.value;
             if (this.attributes.endDate) author.endDate = this.attributes.endDate.value;
-            authors.push(author);
+            Metadata.container.authors.push(author);
         });
 
-        var language;
         var languageXML = $(metadata).children('language');
         if (languageXML.length > 0)
         {
             var languageCode = $(languageXML).attr('code');
             if (languageCode in Config.configObject.settings.languages.byCode)
             {
-                language = {};
-                language.code = languageCode;
-                language.name = $(languageXML).text();
+                Metadata.container.language = { code: languageCode, name: $(languageXML).text() };
             }
         }
-        var difficulty = $(metadata).children('difficulty').text();
+
+        Metadata.container.difficulty = $(metadata).children('difficulty').text();
 
         var parameters = Parameters.container;
         $(definitions).children('parameters').children('userDefined').children().each(function()
@@ -278,27 +277,9 @@ var Load;
             parameters.byId[parameter.id] = parameter;
         });
 
-        var propertyValues = loadPropertyValues($(metadata).children('propertyValues'), ['independent']);
-
         if ('t' in parameters.byId) Parameters.timeId = 't';
 
-        Metadata.metaObject = {
-            name: name,
-            version: version ? version : 0,
-            difficulty: difficulty,
-            description: description,
-            authors: authors,
-            propertyValues: propertyValues
-        };
-
-        if (language)
-        {
-            Metadata.metaObject.language = language;
-        }
-        else if (Config.configObject.settings.languages.sequence.length > 0)
-        {
-            Metadata.metaObject.language = Config.configObject.settings.languages.sequence[0];
-        }
+        Metadata.container.propertyValues = loadPropertyValues($(metadata).children('propertyValues'), ['independent']);
     }
 
     // Load a statement.
