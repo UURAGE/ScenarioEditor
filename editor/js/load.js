@@ -26,8 +26,8 @@ var Load;
         $("#importScreen").dialog(
         {
             title : i18next.t('load:import_title'),
-            height: ParameterValues.heightImportScreen,
-            width: ParameterValues.widthImportScreen,
+            height: Constants.heightImportScreen,
+            width: Constants.widthImportScreen,
             modal: true,
             buttons:
             [{
@@ -252,7 +252,7 @@ var Load;
         }
         var difficulty = $(metadata).children('difficulty').text();
 
-        var parameters = Metadata.getNewDefaultParameters();
+        var parameters = Parameters.getNewDefault();
         $(definitions).children('parameters').children('userDefined').children().each(function()
         {
             var parameterId = this.attributes.id.value;
@@ -261,8 +261,8 @@ var Load;
             if (parameterMatch !== null)
             {
                 var parameterNumber = parseInt(parameterMatch[1]);
-                if (parameterNumber > Metadata.parameterCounter)
-                    Metadata.parameterCounter = parameterNumber;
+                if (parameterNumber > Parameters.counter)
+                    Parameters.counter = parameterNumber;
             }
 
             var typeXML = $(this).children('type').children();

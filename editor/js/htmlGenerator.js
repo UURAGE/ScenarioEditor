@@ -44,7 +44,7 @@ var HtmlGenerator;
 
         $("#preconditionsDiv").on('click', ".addPrecondition", function()
         {
-            if (Metadata.atLeastOneUserDefinedParameter() || Config.atLeastOneParameter())
+            if (Parameters.atLeastOneUserDefined() || Config.atLeastOneParameter())
             {
                 var container = $(this).parent().children(".groupPreconditionDiv");
                 addEmptyPrecondition(container);
@@ -58,7 +58,7 @@ var HtmlGenerator;
         });
         $("#preconditionsDiv").on('click', ".addGroupPrecondition", function()
         {
-            if (Metadata.atLeastOneUserDefinedParameter() || Config.atLeastOneParameter())
+            if (Parameters.atLeastOneUserDefined() || Config.atLeastOneParameter())
             {
                 var container = $(this).parent().children(".groupPreconditionDiv");
                 addEmptyGroupPrecondition(container);
@@ -72,7 +72,7 @@ var HtmlGenerator;
 
         $("#addUserDefinedParameterEffect").on('click', function()
         {
-            if (Metadata.atLeastOneUserDefinedParameter())
+            if (Parameters.atLeastOneUserDefined())
             {
                 addEmptyUserDefinedParameterEffect();
                 focusFirstTabindexedDescendant($(".effect").last());
@@ -242,8 +242,8 @@ var HtmlGenerator;
         $("#enumerationScreen").dialog(
         {
             title: i18next.t('htmlGenerator:enumeration.title'),
-            height: ParameterValues.heightEnumerationScreen,
-            width: ParameterValues.widthEnumerationScreen,
+            height: Constants.heightEnumerationScreen,
+            width: Constants.widthEnumerationScreen,
             modal: true,
             buttons: [
             {

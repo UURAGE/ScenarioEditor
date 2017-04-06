@@ -39,7 +39,7 @@ var Validator;
                 message: i18next.t('validator:no_name'),
                 level: 'warning',
                 jumpToFunction: function() {
-                    Metadata.metadataDialog();
+                    Metadata.dialog();
                     $('#scenarioName').focus();
                 }
             });

@@ -1,7 +1,7 @@
 /* ©Copyright Utrecht University (Department of Information and Computing Sciences) */
 
 // In this file you can find most of the constants
-var ParameterValues;
+var Constants;
 
 (function()
 {
@@ -23,7 +23,7 @@ var ParameterValues;
     var heightParameterScreen = 768;
     var widthParameterScreen = 960;
 
-    ParameterValues =
+    Constants =
     {
         heightMetaScreen : heightMetaScreen,
         widthMetaScreen : widthMetaScreen,

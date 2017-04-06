@@ -104,7 +104,7 @@ var Load3;
         var description = Utils.unEscapeHTML($(metadata).find('description').text());
         var difficulty = $(metadata).find('difficulty').text();
 
-        var parameters = Metadata.getNewDefaultParameters();
+        var parameters = Parameters.getNewDefault();
         $(metadata).find('parameters').children().each(function()
         {
             var paramId = this.attributes.id.value;
@@ -113,8 +113,8 @@ var Load3;
             if (paramMatch !== null)
             {
                 var paramNumber = parseInt(paramMatch[1]);
-                if (paramNumber > Metadata.parameterCounter)
-                    Metadata.parameterCounter = paramNumber;
+                if (paramNumber > Parameters.counter)
+                    Parameters.counter = paramNumber;
             }
 
             var defaultValue = this.hasAttribute('initialValue') ? Utils.parseDecimalIntWithDefault(this.attributes.initialValue.value, 0) : 0;

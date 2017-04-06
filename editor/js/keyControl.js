@@ -95,11 +95,11 @@ var KeyControl;
         },
         B: function()
         {
-            Metadata.metadataDialog();
+            Metadata.dialog();
         },
         P: function()
         {
-            Metadata.parameterDialog();
+            Parameters.dialog();
         },
         I: function()
         {
