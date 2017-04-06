@@ -98,7 +98,7 @@ var HtmlGenerator;
             // if the timeParameterObject is empty, or if it is filled, but
             // the parameter in the dialog has been removed (in that case the
             // timeParameterObject has not been updated yet)
-            if (Metadata.timePId === null || isTimeRemoved === isTime)
+            if (Parameters.timeId === null || isTimeRemoved === isTime)
             {
                 $("#params").append(parameterHTML);
                 var div = $("#params").children().last();
@@ -335,21 +335,21 @@ var HtmlGenerator;
         $("#userDefinedParameterEffects").append(parameterEffectHTML);
         var addedDiv = $("#userDefinedParameterEffects").children().last();
 
-        insertParameters(addedDiv, Metadata.metaObject.parameters);
+        insertParameters(addedDiv, Parameters.container);
 
         var idRefSelect = addedDiv.find(".parameter-idref-select");
         var effectDiv = addedDiv.find(".parameter-effect-container");
         var changeEffectType = function(pId)
         {
             var operatorSelect = $('<select>', { class: "parameter-effect-operator-select" });
-            Metadata.metaObject.parameters.byId[pId].type.assignmentOperators.forEach(function(op)
+            Parameters.container.byId[pId].type.assignmentOperators.forEach(function(op)
             {
                 operatorSelect.append($('<option>', { value: op.name, text: op.uiName }));
             });
             effectDiv.append(operatorSelect);
 
             var controlContainer = $('<span>', { class: "parameter-effect-value-container" });
-            Metadata.metaObject.parameters.byId[pId].type.appendControlTo(controlContainer);
+            Parameters.container.byId[pId].type.appendControlTo(controlContainer);
             effectDiv.append(controlContainer);
         };
         changeEffectType(idRefSelect.val());
@@ -395,7 +395,7 @@ var HtmlGenerator;
         divToAdd.append(preconditionHTML);
         var addedDiv = $(divToAdd).children().last();
 
-        insertParameters(addedDiv, Metadata.metaObject.parameters);
+        insertParameters(addedDiv, Parameters.container);
         insertParameters(addedDiv, Config.configObject.parameters);
         insertParameters(addedDiv, Config.configObject.characters.parameters);
         for (var characterId in Config.configObject.characters.byId)

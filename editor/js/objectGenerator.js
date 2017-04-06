@@ -63,7 +63,7 @@ var ObjectGenerator;
         return {
             idRef: idRef,
             operator: div.find(".parameter-effect-operator-select").find("option:selected").val(),
-            value: Metadata.metaObject.parameters.byId[idRef].type.getFromDOM(div.find(".parameter-effect-value-container"))
+            value: Parameters.container.byId[idRef].type.getFromDOM(div.find(".parameter-effect-value-container"))
         };
     }
 

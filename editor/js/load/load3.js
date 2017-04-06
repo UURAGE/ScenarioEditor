@@ -104,7 +104,7 @@ var Load3;
         var description = Utils.unEscapeHTML($(metadata).find('description').text());
         var difficulty = $(metadata).find('difficulty').text();
 
-        var parameters = Parameters.getNewDefault();
+        var parameters = Parameters.container;
         $(metadata).find('parameters').children().each(function()
         {
             var paramId = this.attributes.id.value;
@@ -133,12 +133,7 @@ var Load3;
             parameters.sequence.push(parameters.byId[paramId]);
         });
 
-        var timePId = null;
-
-        if (parameters.hasOwnProperty('t'))
-            timePId = 't';
-
-        Metadata.timePId = timePId;
+        if ('t' in parameters.byId) Parameters.timeId = 't';
 
         Metadata.metaObject = {
             name: name,
@@ -146,8 +141,7 @@ var Load3;
             difficulty: difficulty,
             description: description,
             authors: [],
-            propertyValues: Config.getNewDefaultPropertyValues(['independent']),
-            parameters: parameters
+            propertyValues: Config.getNewDefaultPropertyValues(['independent'])
         };
 
         if (Config.configObject.settings.languages.sequence.length > 0)
@@ -279,7 +273,7 @@ var Load3;
         {
             if (preconditionChildren[i].nodeName == "condition")
             {
-                if (preconditionChildren[i].attributes.idref.value in Metadata.metaObject.parameters.byId)
+                if (preconditionChildren[i].attributes.idref.value in Parameters.container.byId)
                 {
                     preconditionsArray.push(
                     {

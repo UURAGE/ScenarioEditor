@@ -776,7 +776,7 @@ var Main;
 
         var parameterEffects = Config.getNewDefaultParameterEffects(characterIdRef);
 
-        if (Metadata.timePId && type === Main.playerType)
+        if (Parameters.timeId && type === Main.playerType)
         {
             var timeEffect = {
                 idRef: 't',
@@ -1802,7 +1802,7 @@ var Main;
                 addedDiv = HtmlGenerator.addEmptyUserDefinedParameterEffect();
                 addedDiv.find(".parameter-idref-select").val(parameter.idRef).trigger('change');
                 addedDiv.find(".parameter-effect-operator-select").val(parameter.operator);
-                Metadata.metaObject.parameters.byId[parameter.idRef].type.setInDOM(addedDiv.find(".parameter-effect-value-container"), parameter.value);
+                Parameters.container.byId[parameter.idRef].type.setInDOM(addedDiv.find(".parameter-effect-value-container"), parameter.value);
             }
 
             var scopes = ['per', 'per-' + node.type];

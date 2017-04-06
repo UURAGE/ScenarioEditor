@@ -144,6 +144,7 @@ var Load;
         Main.jsPlumbCounter = 0;
         Main.maxTreeNumber = 0;
         Metadata.reset();
+        Parameters.reset();
     }
 
     // Generates the entire graph, including the objects.
@@ -252,7 +253,7 @@ var Load;
         }
         var difficulty = $(metadata).children('difficulty').text();
 
-        var parameters = Parameters.getNewDefault();
+        var parameters = Parameters.container;
         $(definitions).children('parameters').children('userDefined').children().each(function()
         {
             var parameterId = this.attributes.id.value;
@@ -279,9 +280,7 @@ var Load;
 
         var propertyValues = loadPropertyValues($(metadata).children('propertyValues'), ['independent']);
 
-        var timePId = null;
-        if (parameters.hasOwnProperty('t'))
-            timePId = 't';
+        if ('t' in parameters.byId) Parameters.timeId = 't';
 
         Metadata.metaObject = {
             name: name,
@@ -289,9 +288,7 @@ var Load;
             difficulty: difficulty,
             description: description,
             authors: authors,
-            propertyValues: propertyValues,
-            parameters: parameters,
-            timePId: timePId
+            propertyValues: propertyValues
         };
 
         if (language)
@@ -441,7 +438,7 @@ var Load;
             {
                 idRef: this.attributes.idref.value,
                 operator: this.attributes.operator.value,
-                value: Metadata.metaObject.parameters.byId[this.attributes.idref.value].type.fromXML(this)
+                value: Parameters.container.byId[this.attributes.idref.value].type.fromXML(this)
             });
         });
         parameterEffectsXMLElement.children('fixed').children().each(function()

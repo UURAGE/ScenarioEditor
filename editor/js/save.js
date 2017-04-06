@@ -145,7 +145,7 @@ var Save;
 
         // Save user-defined parameters
         var userDefinedParametersEl = addAndReturnElement("userDefined", scenarioNameSpace, parametersEl);
-        Metadata.metaObject.parameters.sequence.forEach(function (parameter)
+        Parameters.container.sequence.forEach(function (parameter)
         {
             addDefinitionElement(parameter, "parameter", userDefinedParametersEl);
         });
@@ -202,9 +202,9 @@ var Save;
         // Save user-defined parameter initial values
         var userDefinedEl = addAndReturnElement("userDefined", scenarioNameSpace, initialParameterValuesEl);
         var parameterId, parameter, parameterValueEl;
-        for (parameterId in Metadata.metaObject.parameters.byId)
+        for (parameterId in Parameters.container.byId)
         {
-            parameter = Metadata.metaObject.parameters.byId[parameterId];
+            parameter = Parameters.container.byId[parameterId];
             parameterValueEl = addAndReturnElement("parameterValue", scenarioNameSpace, userDefinedEl);
             parameterValueEl.setAttribute("idref", parameterId);
             parameter.type.toXML(parameterValueEl, parameter.type.defaultValue);
@@ -386,7 +386,7 @@ var Save;
             var pEffElement = addAndReturnElement("parameterEffect", scenarioNameSpace, userDefinedParameterEffectsEl);
             pEffElement.setAttribute("idref", pEff.idRef);
             pEffElement.setAttribute("operator", pEff.operator);
-            Metadata.metaObject.parameters.byId[pEff.idRef].type.toXML(pEffElement, pEff.value);
+            Parameters.container.byId[pEff.idRef].type.toXML(pEffElement, pEff.value);
         }
 
         var fixedParameterEffectsEl = addAndReturnElement("fixed", scenarioNameSpace, parameterEffectsEl);

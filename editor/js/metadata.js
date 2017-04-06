@@ -11,7 +11,6 @@ var Metadata;
         metaObject: {},
         reset: reset,
         dialog: dialog,
-        timePId: null,
         formatScenarioName: formatScenarioName,
         addOrExtendAuthor: addOrExtendAuthor
     };
@@ -32,14 +31,12 @@ var Metadata;
     // Resets the metadata to the default
     function reset()
     {
-        Parameters.counter = 0;
         Metadata.metaObject = {
             name: "",
             version: 0,
             difficulty: "medium",
             description: Config.configObject.settings.description.type.defaultValue,
             authors: [],
-            parameters: Parameters.getNewDefault(),
             propertyValues: Config.getNewDefaultPropertyValues(['independent'])
         };
 
@@ -272,7 +269,6 @@ var Metadata;
     {
         Main.unsavedChanges = true;
 
-        // All parameters that should be removed.
         var previouslySelectedNode = Main.selectedElement;
         Main.selectNode(null);
 

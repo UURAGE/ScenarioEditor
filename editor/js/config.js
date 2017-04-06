@@ -750,9 +750,9 @@ var Config;
     function findParameterById(parameterId, characterId)
     {
         var parameter;
-        if (!characterId && parameterId in Metadata.metaObject.parameters.byId)
+        if (!characterId && parameterId in Parameters.container.byId)
         {
-            parameter = Metadata.metaObject.parameters.byId[parameterId];
+            parameter = Parameters.container.byId[parameterId];
         }
         else if (!characterId && parameterId in Config.configObject.parameters.byId)
         {

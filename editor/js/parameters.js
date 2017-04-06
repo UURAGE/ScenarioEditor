@@ -6,12 +6,14 @@ var Parameters;
 {
     "use strict";
 
-    var counter = 0;
+    var defaultContainer = { byId: {}, sequence: [] };
 
     Parameters =
     {
-        counter: counter,
-        getNewDefault: getNewDefault,
+        counter: 0,
+        timeId: null,
+        container: $.extend(true, {}, defaultContainer),
+        reset: reset,
         dialog: dialog,
         atLeastOneUserDefined: atLeastOneUserDefined
     };
@@ -44,20 +46,19 @@ var Parameters;
         });
     });
 
-    // Returns an object suitable for user-defined parameter definitions
-    function getNewDefault()
+    // Resets the parameters to the default
+    function reset()
     {
-        var parameters = {};
-        parameters.byId = {};
-        parameters.sequence = [];
-        return parameters;
+        Parameters.container = $.extend(true, {}, defaultContainer);
+        Parameters.counter = 0;
+        Parameters.timeId = null;
     }
 
     function dialog()
     {
         Main.selectNode(null);
 
-        if (Metadata.timePId !== null)
+        if (Parameters.timeId !== null)
         {
             $("#addTimeParameter").addClass("hidden");
         }
@@ -97,7 +98,7 @@ var Parameters;
         $("#params").empty();
         $("#paramsTableHead").addClass("hidden");
 
-        Metadata.metaObject.parameters.sequence.forEach(function(parameter)
+        Parameters.container.sequence.forEach(function(parameter)
         {
             var addedDiv = HtmlGenerator.addEmptyUserDefinedParameterDefinition();
             addedDiv.removeClass("newParameter").addClass("existingParameter");
@@ -156,8 +157,6 @@ var Parameters;
                 });
             }
         });
-
-        $("#scenarioDescription").val(Metadata.metaObject.description);
     }
 
     function save()
@@ -182,22 +181,22 @@ var Parameters;
                 removeAllPreconditionsWithParameter(id, node.preconditions);
             }
 
-            if (id === Metadata.timePId && Metadata.timePId !== null)
-                Metadata.timePId = null;
+            if (id === Parameters.timeId && Parameters.timeId !== null)
+                Parameters.timeId = null;
 
             // Remove the parameter from the html and the object.
             $(this).remove();
 
-            var removedParameter = Metadata.metaObject.parameters.byId[id];
-            var indexOfRemovedParameter = Metadata.metaObject.parameters.sequence.indexOf(removedParameter);
-            delete Metadata.metaObject.parameters.byId[id];
-            Metadata.metaObject.parameters.sequence.splice(indexOfRemovedParameter, 1);
+            var removedParameter = Parameters.container.byId[id];
+            var indexOfRemovedParameter = Parameters.container.sequence.indexOf(removedParameter);
+            delete Parameters.container.byId[id];
+            Parameters.container.sequence.splice(indexOfRemovedParameter, 1);
         });
 
         $(".existingParameter").each(function()
         {
             var newParameter = ObjectGenerator.parameterObject($(this));
-            var oldParameter = Metadata.metaObject.parameters.byId[newParameter.id];
+            var oldParameter = Parameters.container.byId[newParameter.id];
 
             // If an already existing parameter changed type, the effects on the nodes need to be adjusted accordingly
             if ($(this).hasClass("changedTypeParameter"))
@@ -242,7 +241,7 @@ var Parameters;
             $.extend(oldParameter, newParameter);
         });
 
-        // All new parameters.
+        // All new parameters
         $(".newParameter").each(function()
         {
             if ($(this).prop('id') === 't')
@@ -257,8 +256,8 @@ var Parameters;
 
                 if (!newParameter) return;
 
-                Metadata.metaObject.parameters.sequence.push(newParameter);
-                Metadata.metaObject.parameters.byId[newParameter.id] = newParameter;
+                Parameters.container.sequence.push(newParameter);
+                Parameters.container.byId[newParameter.id] = newParameter;
 
                 $(this).removeClass("newParameter").addClass("existingParameter");
                 $(this).removeClass("changedTypeParameter");
@@ -266,10 +265,10 @@ var Parameters;
         });
 
         // Save parameters in UI order.
-        Metadata.metaObject.parameters.sequence =
+        Parameters.container.sequence =
             $(".existingParameter").map(function()
             {
-                return Metadata.metaObject.parameters.byId[$(this).prop('id')];
+                return Parameters.container.byId[$(this).prop('id')];
             }).get();
     }
 
@@ -279,10 +278,10 @@ var Parameters;
 
         if (!newParameter) return;
 
-        Metadata.metaObject.parameters.sequence.push(newParameter);
-        Metadata.metaObject.parameters.byId[newParameter.id] = newParameter;
+        Parameters.container.sequence.push(newParameter);
+        Parameters.container.byId[newParameter.id] = newParameter;
 
-        Metadata.timePId = newParameter.id;
+        Parameters.timeId = newParameter.id;
 
         $(div).removeClass("newParameter").addClass("existingParameter").addClass('isT');
         $(div).removeClass("changedTypeParameter");
@@ -336,6 +335,6 @@ var Parameters;
 
     function atLeastOneUserDefined()
     {
-        return Metadata.metaObject.parameters.sequence.length > 0;
+        return Parameters.container.sequence.length > 0;
     }
 })();
