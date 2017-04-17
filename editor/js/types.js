@@ -13,7 +13,8 @@ var Types;
         assignmentOperators: {},
         relationalOperators: {},
         unaryOperators: {},
-        labelControlOrders: {}
+        labelControlOrders: {},
+        appendSelectTo: appendSelectTo
     };
 
     Types.assignmentOperators =
@@ -493,4 +494,62 @@ var Types;
             toXML: toXMLSimple
         }
     };
+
+    function appendSelectTo(containerEl, htmlClass, onChange)
+    {
+        var typeSelect = $('<select>', { class: htmlClass });
+        for (var typeName in Types.primitives)
+        {
+            typeSelect.append($('<option>', { value: typeName, text: i18next.t('types:primitives.' + typeName + '.translation') }));
+        }
+
+        typeSelect.on('change', onChange);
+
+        typeSelect.on('change', function(e)
+        {
+            var newTypeName = $(this).val();
+            var userTypeChange = e.originalEvent;
+
+            if (newTypeName === Types.primitives.enumeration.name)
+            {
+                // If this was an enumeration already, use the old button
+                if (!containerEl.find(".enumeration-screen-button").length)
+                {
+                    var enumerationScreenButton = $('<button>', { class: "enumeration-screen-button" });
+                    enumerationScreenButton.attr('title', i18next.t('htmlGenerator:enumeration.button_alt'));
+                    var buttonIcon = $('<img>', { src: editor_url + "png/others/list.png" });
+                    enumerationScreenButton.on('mouseover', function()
+                    {
+                        buttonIcon.attr('src', editor_url + "png/others/list_hover.png");
+                    });
+                    enumerationScreenButton.on('mouseout', function()
+                    {
+                        buttonIcon.attr('src', editor_url + "png/others/list.png");
+                    });
+                    buttonIcon.attr('alt', i18next.t('htmlGenerator:enumeration.button_alt'));
+                    enumerationScreenButton.append($('<div>').append(buttonIcon));
+                    enumerationScreenButton.on('click', function()
+                    {
+                        HtmlGenerator.enumerationDefinitionDialog(containerEl);
+                    });
+                    containerEl.find(".parameter-type-select").parent().append(enumerationScreenButton);
+                }
+
+                if (userTypeChange)
+                {
+                    HtmlGenerator.enumerationDefinitionDialog(containerEl);
+                }
+            }
+            else
+            {
+                containerEl.find(".enumeration-screen-button").remove();
+                containerEl.find(".enumeration-value-list").remove();
+            }
+        });
+
+        typeSelect.val(Types.primitives.integer.name);
+        typeSelect.trigger('change');
+
+        containerEl.append(typeSelect);
+    }
 })();

@@ -11,7 +11,8 @@ var HtmlGenerator;
         addEmptyUserDefinedParameterDefinition: addEmptyUserDefinedParameterDefinition,
         addEmptyUserDefinedParameterEffect: addEmptyUserDefinedParameterEffect,
         appendEnumerationValueListTo: appendEnumerationValueListTo,
-        insertPreconditions: insertPreconditions
+        insertPreconditions: insertPreconditions,
+        enumerationDefinitionDialog: enumerationDefinitionDialog
     };
 
     //Get all the raw HTLM from Parts.js
@@ -135,10 +136,14 @@ var HtmlGenerator;
         var addedDiv = $("#params").children().last();
 
         var typeSelect = addedDiv.find('.parameter-type-select');
+        var parent = typeSelect.parent();
+        typeSelect.remove();
 
         var previousType;
-        var changeParameterType = function(newTypeName, userTypeChange)
+        var onParameterTypeChange = function(e)
         {
+            var newTypeName = $(this).val();
+            var userTypeChange = e.originalEvent;
             addedDiv.addClass("changedTypeParameter");
 
             var replaceInitialValueContainer = function()
@@ -176,53 +181,18 @@ var HtmlGenerator;
 
             if (newTypeName === Types.primitives.enumeration.name)
             {
-                // If this was an enumeration already, use the old button
-                if (!addedDiv.find(".enumeration-screen-button").length)
-                {
-                    var enumerationScreenButton = $('<button>', { class: "enumeration-screen-button" });
-                    enumerationScreenButton.attr('title', i18next.t('htmlGenerator:enumeration.button_alt'));
-                    var buttonIcon = $('<img>', { src: editor_url + "png/others/list.png" });
-                    enumerationScreenButton.on('mouseover', function()
-                    {
-                        buttonIcon.attr('src', editor_url + "png/others/list_hover.png");
-                    });
-                    enumerationScreenButton.on('mouseout', function()
-                    {
-                        buttonIcon.attr('src', editor_url + "png/others/list.png");
-                    });
-                    buttonIcon.attr('alt', i18next.t('htmlGenerator:enumeration.button_alt'));
-                    enumerationScreenButton.append($('<div>').append(buttonIcon));
-                    enumerationScreenButton.on('click', function()
-                    {
-                        enumerationDefinitionDialog(addedDiv);
-                    });
-                    addedDiv.find(".parameter-type-select").parent().append(enumerationScreenButton);
-                }
-
-                if (userTypeChange)
-                {
-                    enumerationDefinitionDialog(addedDiv);
-                }
-                else
+                if (!userTypeChange)
                 {
                     replaceInitialValueContainer();
                 }
             }
             else
             {
-                addedDiv.find(".enumeration-screen-button").remove();
-                addedDiv.find(".enumeration-value-list").remove();
                 replaceInitialValueContainer();
             }
         };
-        typeSelect.on('change', function(e)
-        {
-            changeParameterType($(this).val(), e.originalEvent);
-        });
 
-        // The default type for a user-defined parameter is integer
-        typeSelect.val(Types.primitives.integer.name);
-        typeSelect.trigger('change');
+        Types.appendSelectTo(parent, 'parameter-type-select', onParameterTypeChange);
 
         addedDiv.removeClass("changedTypeParameter");
 
