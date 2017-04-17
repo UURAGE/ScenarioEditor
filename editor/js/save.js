@@ -12,7 +12,7 @@ var Save;
     };
 
     var scenarioNameSpace = "http://uudsl.github.io/scenario/namespace";
-    var schemaVersion = "4.4.0";
+    var schemaVersion = "4.6.0";
 
     $(document).ready(function()
     {
