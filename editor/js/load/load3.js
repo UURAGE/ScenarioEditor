@@ -150,7 +150,7 @@ var Load3;
         var characterIdRef;
         if (type === Main.computerType)
         {
-            characterIdRef = Config.configObject.characters.sequence[0].id;
+            characterIdRef = Config.container.characters.sequence[0].id;
         }
 
         var allowInterleaveNode = Utils.parseBool($(statement).attr('jumpPoint'));
@@ -286,7 +286,7 @@ var Load3;
      */
     function migrateProperty(parentXML, propertyId, migrationPropertyName, propertyValues, needsUnEscaping, attributeName)
     {
-        if (migrationPropertyName in Config.configObject.migration)
+        if (migrationPropertyName in Config.container.migration)
         {
             var valueXML = $(parentXML).children(propertyId);
             if (valueXML.length > 0)
@@ -294,24 +294,24 @@ var Load3;
                 if (attributeName) valueXML.text(valueXML.attr(attributeName));
                 var propertyValue;
                 var type;
-                var migrationPropertyIdRef = Config.configObject.migration[migrationPropertyName].idRef;
-                var firstCharacterId = Config.configObject.characters.sequence[0].id;
+                var migrationPropertyIdRef = Config.container.migration[migrationPropertyName].idRef;
+                var firstCharacterId = Config.container.characters.sequence[0].id;
                 if (migrationPropertyIdRef in propertyValues.characterIndependent)
                 {
-                    type = Config.configObject.properties.byId[migrationPropertyIdRef].type;
+                    type = Config.container.properties.byId[migrationPropertyIdRef].type;
                     propertyValue = type.fromXML(valueXML[0]);
                     propertyValues.characterIndependent[migrationPropertyIdRef] = needsUnEscaping? Utils.unEscapeHTML(propertyValue) : propertyValue;
                 }
                 else if (migrationPropertyIdRef in propertyValues.perCharacter[firstCharacterId])
                 {
-                    if (migrationPropertyIdRef in Config.configObject.characters.properties.byId)
+                    if (migrationPropertyIdRef in Config.container.characters.properties.byId)
                     {
-                        type = Config.configObject.characters.properties.byId[migrationPropertyIdRef].type;
+                        type = Config.container.characters.properties.byId[migrationPropertyIdRef].type;
                         propertyValue = type.fromXML(valueXML[0]);
                     }
                     else
                     {
-                        type = Config.configObject.characters.byId[firstCharacterId].properties.byId[migrationPropertyIdRef].type;
+                        type = Config.container.characters.byId[firstCharacterId].properties.byId[migrationPropertyIdRef].type;
                         propertyValue = type.fromXML(valueXML[0]);
                     }
                     propertyValues.perCharacter[firstCharacterId][migrationPropertyIdRef] = needsUnEscaping ? Utils.unEscapeHTML(propertyValue) : propertyValue;
@@ -400,7 +400,7 @@ var Load3;
         var characterIdRef;
         if (firstConversationNode.type === Main.computerType)
         {
-            characterIdRef = Config.configObject.characters.sequence[0].id;
+            characterIdRef = Config.container.characters.sequence[0].id;
         }
 
         var node = Main.createAndReturnNode(firstConversationNode.type, id, Main.trees[treeID].div, Main.trees[treeID].dragDiv.attr('id'));
@@ -465,7 +465,7 @@ var Load3;
                 var acceptableScopes = ['per', 'per-' + textNode.type];
                 if (textNode.type === Main.computerType)
                 {
-                    characterIdRef = Config.configObject.characters.sequence[0].id;
+                    characterIdRef = Config.container.characters.sequence[0].id;
                     acceptableScopes.push('per-' + textNode.type + '-own');
                 }
 

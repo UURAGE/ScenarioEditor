@@ -103,10 +103,10 @@ var Main;
 
         initialiseGrid();
 
-        if (Config.configObject.characters.sequence.length > 1)
+        if (Config.container.characters.sequence.length > 1)
         {
             var characterSelection = $("#characterSelection");
-            Config.configObject.characters.sequence.forEach(function (character)
+            Config.container.characters.sequence.forEach(function (character)
             {
                 characterSelection.append($("<option>", { value: character.id, text: character.name ? character.name : character.id }));
             });
@@ -764,13 +764,13 @@ var Main;
         var characterIdRef;
         if (type === Main.computerType)
         {
-            if (Config.configObject.characters.sequence.length > 1)
+            if (Config.container.characters.sequence.length > 1)
             {
                 characterIdRef = $("#characterSelection option:selected").val();
             }
             else
             {
-                characterIdRef = Config.configObject.characters.sequence[0].id;
+                characterIdRef = Config.container.characters.sequence[0].id;
             }
         }
 
@@ -1032,8 +1032,8 @@ var Main;
         var txtArea = $('<textarea>',
         {
             class: "nodestatement",
-            maxlength: Config.configObject.settings.statement.type.maxLength,
-            text: Config.configObject.settings.statement.type.defaultValue
+            maxlength: Config.container.settings.statement.type.maxLength,
+            text: Config.container.settings.statement.type.defaultValue
         });
 
         // Because textareas apparently don't act normally:
@@ -1082,7 +1082,7 @@ var Main;
         txtArea.val(text);
         txtArea.focus();
 
-        if (Config.configObject.settings.statement.type.markdown) Utils.attachMarkdownTooltip(txtArea);
+        if (Config.container.settings.statement.type.markdown) Utils.attachMarkdownTooltip(txtArea);
     }
 
     function stopEditingNode(nodeID, cancel)
@@ -1381,14 +1381,14 @@ var Main;
         var fixedParameterEffectsEl = $("#fixed-parameter-effects");
         fixedParameterEffectsEl.find('.' + fixedParameterEffectsEl.attr('id') + '-effect-container').each(function()
         {
-            getFixedParameterEffectFromDOMAndSetInNode(this, Config.configObject.parameters.byId, node.parameterEffects.fixed.characterIndependent, fixedParameterEffectsEl.attr('id'));
+            getFixedParameterEffectFromDOMAndSetInNode(this, Config.container.parameters.byId, node.parameterEffects.fixed.characterIndependent, fixedParameterEffectsEl.attr('id'));
         });
         var fixedCharacterParameterEffectsEl = $("#fixed-character-parameter-effects");
         var characterId, classCharacterPrefix, parameterDefinitions;
-        for (characterId in Config.configObject.characters.byId)
+        for (characterId in Config.container.characters.byId)
         {
             classCharacterPrefix = fixedCharacterParameterEffectsEl.attr('id') + '-' + characterId;
-            parameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[characterId].parameters.byId);
+            parameterDefinitions = $.extend({}, Config.container.characters.parameters.byId, Config.container.characters.byId[characterId].parameters.byId);
             fixedCharacterParameterEffectsEl.find('.' + Utils.escapeSelector(classCharacterPrefix) + '-effect-container').each(function()
             {
                 getFixedParameterEffectFromDOMAndSetInNode(this, parameterDefinitions, node.parameterEffects.fixed.perCharacter[characterId], classCharacterPrefix);
@@ -1398,7 +1398,7 @@ var Main;
         {
             var computerOwnParameterEffectsEl = $("#node-computer-own-parameter-effects");
             classCharacterPrefix = computerOwnParameterEffectsEl.attr('id') + '-' + node.characterIdRef;
-            parameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[node.characterIdRef].parameters.byId);
+            parameterDefinitions = $.extend({}, Config.container.characters.parameters.byId, Config.container.characters.byId[node.characterIdRef].parameters.byId);
             computerOwnParameterEffectsEl.find('.' + Utils.escapeSelector(classCharacterPrefix) + '-effect-container').each(function()
             {
                 getFixedParameterEffectFromDOMAndSetInNode(this, parameterDefinitions, node.parameterEffects.fixed.perCharacter[node.characterIdRef], classCharacterPrefix);
@@ -1425,23 +1425,23 @@ var Main;
         };
 
         var propertyId, property;
-        for (propertyId in Config.configObject.properties.byId)
+        for (propertyId in Config.container.properties.byId)
         {
-            getPropertyFromDOMAndSetInNode(Config.configObject.properties.byId[propertyId], node.propertyValues.characterIndependent, "node-property-values");
+            getPropertyFromDOMAndSetInNode(Config.container.properties.byId[propertyId], node.propertyValues.characterIndependent, "node-property-values");
         }
-        for (propertyId in Config.configObject.characters.properties.byId)
+        for (propertyId in Config.container.characters.properties.byId)
         {
-            for (characterId in Config.configObject.characters.byId)
+            for (characterId in Config.container.characters.byId)
             {
-                property = Config.configObject.characters.properties.byId[propertyId];
+                property = Config.container.characters.properties.byId[propertyId];
                 getPropertyFromDOMAndSetInNode(property, node.propertyValues.perCharacter[characterId], "node-character-property-values-" + characterId, node.characterIdRef, characterId);
             }
         }
-        for (characterId in Config.configObject.characters.byId)
+        for (characterId in Config.container.characters.byId)
         {
-            for (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
+            for (propertyId in Config.container.characters.byId[characterId].properties.byId)
             {
-                property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
+                property = Config.container.characters.byId[characterId].properties.byId[propertyId];
                 getPropertyFromDOMAndSetInNode(property, node.propertyValues.perCharacter[characterId], "node-character-property-values-" + characterId, node.characterIdRef, characterId);
             }
         }
@@ -1627,9 +1627,9 @@ var Main;
             case Main.computerType:
                 // for computerType node: just input text
                 // with characterId prefix when there are multiple characters
-                if (Config.configObject.characters.sequence.length > 1)
+                if (Config.container.characters.sequence.length > 1)
                 {
-                    var character = Config.configObject.characters.byId[node.characterIdRef];
+                    var character = Config.container.characters.byId[node.characterIdRef];
                     var characterPrefix = character.name ? Utils.escapeHTML(character.name) : character.id;
                     text += "<b>" + characterPrefix + ": </b>";
                 }
@@ -1926,9 +1926,9 @@ var Main;
             fixedParameterEffectsEl.removeClass(classPrefix + '-possible');
             // Accumulator for mapping a parameter id to its effects container
             var idRefToEffectsContainer = {};
-            Config.configObject.parameters.sequence.forEach(function(subItem)
+            Config.container.parameters.sequence.forEach(function(subItem)
             {
-                showParameterItem(Config.configObject.parameters.byId, scopes, subItem, hStartLevel, fixedParameterEffectsEl, classPrefix, idRefToEffectsContainer);
+                showParameterItem(Config.container.parameters.byId, scopes, subItem, hStartLevel, fixedParameterEffectsEl, classPrefix, idRefToEffectsContainer);
             });
 
             // Add the character-independent effects that were previously defined
@@ -1937,16 +1937,16 @@ var Main;
                 if (effect.idRef in idRefToEffectsContainer)
                 {
                     var effectsContainer = idRefToEffectsContainer[effect.idRef];
-                    appendEffectContainerTo(effectsContainer, classPrefix, Config.configObject.parameters.byId);
+                    appendEffectContainerTo(effectsContainer, classPrefix, Config.container.parameters.byId);
                     var addedEffectContainer = effectsContainer.children().last();
 
                     addedEffectContainer.find('.' + classPrefix + '-effect-idref-select').val(effect.idRef).trigger('change');
                     addedEffectContainer.find('.' + classPrefix + '-effect-operator-select').val(effect.operator);
-                    Config.configObject.parameters.byId[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + classPrefix + '-effect-control-container'), effect.value);
+                    Config.container.parameters.byId[effect.idRef].type.setInDOM(addedEffectContainer.find('.' + classPrefix + '-effect-control-container'), effect.value);
                 }
             });
 
-            if (node.type !== Main.computerType || Config.configObject.characters.sequence.length > 1)
+            if (node.type !== Main.computerType || Config.container.characters.sequence.length > 1)
             {
                 // Show the sections for all per-character fixed parameter effects
                 var fixedCharacterParameterEffectsEl = $("#fixed-character-parameter-effects");
@@ -1956,7 +1956,7 @@ var Main;
                 var anyCharacterParameterShown = false;
                 // Accumulator for mapping a character parameter id to its effects container
                 var idRefToCharacterEffectsContainer = {};
-                Config.configObject.characters.sequence.forEach(function(character)
+                Config.container.characters.sequence.forEach(function(character)
                 {
                     var characterHeader = $('<h' + hStartLevel +'>', { value: character.id, text: character.name ? character.name : character.id });
                     var characterDiv = $('<div>');
@@ -1969,9 +1969,9 @@ var Main;
                     // The definitions for each parameter need to be available for changing the select,
                     // it can either be a parameter for an individual character or for all the characters,
                     // so we need to merge the definitions into one object and pass it.
-                    var characterParameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[character.id].parameters.byId);
+                    var characterParameterDefinitions = $.extend({}, Config.container.characters.parameters.byId, Config.container.characters.byId[character.id].parameters.byId);
 
-                    Config.configObject.characters.parameters.sequence.forEach(function(parameterItem)
+                    Config.container.characters.parameters.sequence.forEach(function(parameterItem)
                     {
                         if (showParameterItem(characterParameterDefinitions, scopes, parameterItem, hStartLevel,
                                               characterDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[character.id]))
@@ -1980,7 +1980,7 @@ var Main;
                         }
                     });
 
-                    Config.configObject.characters.byId[character.id].parameters.sequence.forEach(function(parameterItem)
+                    Config.container.characters.byId[character.id].parameters.sequence.forEach(function(parameterItem)
                     {
                         if (showParameterItem(characterParameterDefinitions, scopes, parameterItem, hStartLevel,
                                               characterDiv, classCharacterPrefix, idRefToCharacterEffectsContainer[character.id]))
@@ -1992,7 +1992,7 @@ var Main;
 
                 if (anyCharacterParameterShown)
                 {
-                    if (Config.configObject.characters.sequence.length > 1)
+                    if (Config.container.characters.sequence.length > 1)
                     {
                         fixedCharacterParameterEffectsEl.prepend($('<h3>', { text: i18next.t('common:characters') }));
                         // Set the heightStyle to "content", because the content changes dynamically
@@ -2005,10 +2005,10 @@ var Main;
                 }
 
                 // Add the per-character effects that were previously defined
-                for (var characterId in Config.configObject.characters.byId)
+                for (var characterId in Config.container.characters.byId)
                 {
                     var classCharacterPrefix = characterClassPrefix + '-' + characterId;
-                    var characterParameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[characterId].parameters.byId);
+                    var characterParameterDefinitions = $.extend({}, Config.container.characters.parameters.byId, Config.container.characters.byId[characterId].parameters.byId);
 
                     node.parameterEffects.fixed.perCharacter[characterId].sequence.forEach(function(effect)
                     {
@@ -2110,7 +2110,7 @@ var Main;
             var nodePropertyValuesEl = $('#node-property-values');
             var nodePropertyValuesTable = $('<table>');
             var anyNodePropertyShown = false;
-            Config.configObject.properties.sequence.forEach(function (subItem)
+            Config.container.properties.sequence.forEach(function (subItem)
             {
                 if (showPropertyItem(node.propertyValues.characterIndependent, scopes, subItem, hStartLevel, nodePropertyValuesTable, nodePropertyValuesEl.attr('id')))
                 {
@@ -2120,12 +2120,12 @@ var Main;
             nodePropertyValuesEl.append(nodePropertyValuesTable);
 
             var nodeCharacterPropertyValuesEl = $('#node-character-property-values');
-            if (node.type !== Main.computerType || Config.configObject.characters.sequence.length > 1)
+            if (node.type !== Main.computerType || Config.container.characters.sequence.length > 1)
             {
                 var characterAccordion = $('<div>');
                 nodeCharacterPropertyValuesEl.append(characterAccordion);
                 var anyCharacterPropertyShown = false;
-                Config.configObject.characters.sequence.forEach(function(character)
+                Config.container.characters.sequence.forEach(function(character)
                 {
                     var characterHeader = $('<h' + hStartLevel +'>', { value: character.id, text: character.name ? character.name : character.id });
                     var characterTab = $('<table>');
@@ -2133,7 +2133,7 @@ var Main;
 
                     var containerIdPrefix = nodeCharacterPropertyValuesEl.attr('id') + '-' + character.id;
 
-                    Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
+                    Config.container.characters.properties.sequence.forEach(function(propertyItem)
                     {
                         if (showPropertyItem(node.propertyValues.perCharacter[character.id], scopes, propertyItem, hStartLevel, characterTab, containerIdPrefix))
                         {
@@ -2141,7 +2141,7 @@ var Main;
                         }
                     });
 
-                    Config.configObject.characters.byId[character.id].properties.sequence.forEach(function(propertyItem)
+                    Config.container.characters.byId[character.id].properties.sequence.forEach(function(propertyItem)
                     {
                         if (showPropertyItem(node.propertyValues.perCharacter[character.id], scopes, propertyItem, hStartLevel, characterTab, containerIdPrefix))
                         {
@@ -2153,7 +2153,7 @@ var Main;
                 if (anyCharacterPropertyShown)
                 {
                     anyNodePropertyShown = true;
-                    if (Config.configObject.characters.sequence.length > 1)
+                    if (Config.container.characters.sequence.length > 1)
                     {
                         nodeCharacterPropertyValuesEl.prepend($('<h3>', { text: i18next.t('common:characters') }));
                         characterAccordion.accordion({ active: false, collapsible: true, heightStyle: "content" });
@@ -2173,7 +2173,7 @@ var Main;
                 var updateSideBarCharacterSection = function()
                 {
                     var acceptableScopes = ['per-computer-own'];
-                    if (Config.configObject.characters.sequence.length === 1)
+                    if (Config.container.characters.sequence.length === 1)
                     {
                         acceptableScopes = acceptableScopes.concat(scopes);
                     }
@@ -2189,8 +2189,8 @@ var Main;
                     // The definitions for each parameter need to be available for changing the select,
                     // it can either be a parameter for an individual character or for all the characters,
                     // so we need to merge the definitions into one object and pass it.
-                    var characterParameterDefinitions = $.extend({}, Config.configObject.characters.parameters.byId, Config.configObject.characters.byId[node.characterIdRef].parameters.byId);
-                    Config.configObject.characters.parameters.sequence.forEach(function(parameterItem)
+                    var characterParameterDefinitions = $.extend({}, Config.container.characters.parameters.byId, Config.container.characters.byId[node.characterIdRef].parameters.byId);
+                    Config.container.characters.parameters.sequence.forEach(function(parameterItem)
                     {
                         if (showParameterItem(characterParameterDefinitions, acceptableScopes, parameterItem, hStartLevel,
                                               computerOwnParameterEffectsDiv, classCharacterPrefix, idRefToThisCharacterEffectsContainer))
@@ -2198,7 +2198,7 @@ var Main;
                             anyCharacterParameterShown = true;
                         }
                     });
-                    Config.configObject.characters.byId[node.characterIdRef].parameters.sequence.forEach(function(parameterItem)
+                    Config.container.characters.byId[node.characterIdRef].parameters.sequence.forEach(function(parameterItem)
                     {
                         if (showParameterItem(characterParameterDefinitions, acceptableScopes, parameterItem, hStartLevel,
                                               computerOwnParameterEffectsDiv, classCharacterPrefix, idRefToThisCharacterEffectsContainer))
@@ -2230,14 +2230,14 @@ var Main;
                     // The same id prefix as the other character property values, so they can be easily retrieved
                     var containerIdPrefix = nodeCharacterPropertyValuesEl.attr('id') + '-' + node.characterIdRef;
                     var anyPropertyShown = false;
-                    Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
+                    Config.container.characters.properties.sequence.forEach(function(propertyItem)
                     {
                         if (showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], acceptableScopes, propertyItem, hStartLevel + 1, computerOwnPropertyValuesTable, containerIdPrefix))
                         {
                             anyPropertyShown = true;
                         }
                     });
-                    Config.configObject.characters.byId[node.characterIdRef].properties.sequence.forEach(function(propertyItem)
+                    Config.container.characters.byId[node.characterIdRef].properties.sequence.forEach(function(propertyItem)
                     {
                         if (showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], acceptableScopes, propertyItem, hStartLevel + 1, computerOwnPropertyValuesTable, containerIdPrefix))
                         {
@@ -2271,8 +2271,8 @@ var Main;
                             {
                                 node.parameterEffects.fixed.perCharacter[characterId].sequence.forEach(function(effect)
                                 {
-                                    var parameter = Config.configObject.characters.parameters.byId[effect.idRef];
-                                    if (!parameter) parameter = Config.configObject.characters.byId[newCharacterIdRef].parameters.byId[effect.idRef];
+                                    var parameter = Config.container.characters.parameters.byId[effect.idRef];
+                                    if (!parameter) parameter = Config.container.characters.byId[newCharacterIdRef].parameters.byId[effect.idRef];
 
                                     if (parameter)
                                     {
@@ -2299,8 +2299,8 @@ var Main;
                             {
                                 for (var propertyId in perCharacterPropertyValues[characterId])
                                 {
-                                    var property = Config.configObject.characters.properties.byId[propertyId];
-                                    if (!property) property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
+                                    var property = Config.container.characters.properties.byId[propertyId];
+                                    if (!property) property = Config.container.characters.byId[characterId].properties.byId[propertyId];
 
                                     if (property.scopes.statementScope === 'per-computer-own')
                                     {

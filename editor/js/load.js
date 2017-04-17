@@ -94,7 +94,7 @@ var Load;
         // Load with the newest version of the schema
         if (schemaVersion)
         {
-            if (Config.configObject.id !== $(scenarioXML).attr('configidref'))
+            if (Config.container.id !== $(scenarioXML).attr('configidref'))
             {
                 alert("The config id does not match the config id referred to in the scenario");
             }
@@ -244,7 +244,7 @@ var Load;
         if (languageXML.length > 0)
         {
             var languageCode = $(languageXML).attr('code');
-            if (languageCode in Config.configObject.settings.languages.byCode)
+            if (languageCode in Config.container.settings.languages.byCode)
             {
                 Metadata.container.language = { code: languageCode, name: $(languageXML).text() };
             }
@@ -429,28 +429,28 @@ var Load;
             if (this.attributes.characteridref)
             {
                 var characterId = this.attributes.characteridref.value;
-                if (characterId in Config.configObject.characters.byId)
+                if (characterId in Config.container.characters.byId)
                 {
                     if (parameterId in parameterEffects.fixed.perCharacter[characterId].byId)
                     {
-                        if (parameterId in Config.configObject.characters.parameters.byId)
+                        if (parameterId in Config.container.characters.parameters.byId)
                         {
                             effect =
                             {
                                 idRef: parameterId,
                                 operator: this.attributes.operator.value,
-                                value: Config.configObject.characters.parameters.byId[parameterId].type.fromXML(this)
+                                value: Config.container.characters.parameters.byId[parameterId].type.fromXML(this)
                             };
                             parameterEffects.fixed.perCharacter[characterId].sequence.push(effect);
                             parameterEffects.fixed.perCharacter[characterId].byId[parameterId].push(effect);
                         }
-                        else if (parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
+                        else if (parameterId in Config.container.characters.byId[characterId].parameters.byId)
                         {
                             effect =
                             {
                                 idRef: parameterId,
                                 operator: this.attributes.operator.value,
-                                value: Config.configObject.characters.byId[characterId].parameters.byId[parameterId].type.fromXML(this)
+                                value: Config.container.characters.byId[characterId].parameters.byId[parameterId].type.fromXML(this)
                             };
                             parameterEffects.fixed.perCharacter[characterId].sequence.push(effect);
                             parameterEffects.fixed.perCharacter[characterId].byId[parameterId].push(effect);
@@ -458,7 +458,7 @@ var Load;
                     }
                 }
             }
-            else if (parameterId in Config.configObject.parameters.byId)
+            else if (parameterId in Config.container.parameters.byId)
             {
                 if (parameterId in parameterEffects.fixed.characterIndependent.byId)
                 {
@@ -466,7 +466,7 @@ var Load;
                     {
                         idRef: parameterId,
                         operator: this.attributes.operator.value,
-                        value: Config.configObject.parameters.byId[parameterId].type.fromXML(this)
+                        value: Config.container.parameters.byId[parameterId].type.fromXML(this)
                     };
                     parameterEffects.fixed.characterIndependent.sequence.push(effect);
                     parameterEffects.fixed.characterIndependent.byId[parameterId].push(effect);
@@ -487,23 +487,23 @@ var Load;
             if (this.attributes.characteridref)
             {
                 var characterId = this.attributes.characteridref.value;
-                if (characterId in Config.configObject.characters.byId)
+                if (characterId in Config.container.characters.byId)
                 {
                     storage = propertyValues.perCharacter[characterId];
-                    if (propertyId in Config.configObject.characters.properties.byId)
+                    if (propertyId in Config.container.characters.properties.byId)
                     {
-                        property = Config.configObject.characters.properties.byId[propertyId];
+                        property = Config.container.characters.properties.byId[propertyId];
                     }
-                    else if (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
+                    else if (propertyId in Config.container.characters.byId[characterId].properties.byId)
                     {
-                        property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
+                        property = Config.container.characters.byId[characterId].properties.byId[propertyId];
                     }
                 }
             }
-            else if (propertyId in Config.configObject.properties.byId)
+            else if (propertyId in Config.container.properties.byId)
             {
                 storage = propertyValues.characterIndependent;
-                property = Config.configObject.properties.byId[propertyId];
+                property = Config.container.properties.byId[propertyId];
             }
             if (property)
             {

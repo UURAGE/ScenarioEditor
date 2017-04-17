@@ -35,8 +35,8 @@ var Save;
         if (Main.unsavedChanges) Metadata.container.version++;
         doc.documentElement.setAttribute("version", Metadata.container.version);
         doc.documentElement.setAttribute("schemaVersion", schemaVersion);
-        doc.documentElement.setAttribute("configidref", Config.configObject.id);
-        if (Config.configObject.version !== undefined) doc.documentElement.setAttribute("configVersion", Config.configObject.version);
+        doc.documentElement.setAttribute("configidref", Config.container.id);
+        if (Config.container.version !== undefined) doc.documentElement.setAttribute("configVersion", Config.container.version);
 
         // Save definitions
         generateDefinitionsXML(doc.documentElement);
@@ -114,7 +114,7 @@ var Save;
 
         // Save characters
         var charactersEl = addAndReturnElement("characters", scenarioNameSpace, definitionsEl);
-        Config.configObject.characters.sequence.forEach(function(character)
+        Config.container.characters.sequence.forEach(function(character)
         {
             var characterEl = addAndReturnElement("character", scenarioNameSpace, charactersEl);
             characterEl.setAttribute("id", character.id);
@@ -153,21 +153,21 @@ var Save;
         // Save fixed parameters
         var fixedParametersEl = addAndReturnElement("fixed", scenarioNameSpace, parametersEl);
         var parameterId, parameter, characterId;
-        for (parameterId in Config.configObject.parameters.byId)
+        for (parameterId in Config.container.parameters.byId)
         {
-            parameter = Config.configObject.parameters.byId[parameterId];
+            parameter = Config.container.parameters.byId[parameterId];
             addDefinitionElement(parameter, "parameter", fixedParametersEl);
         }
-        for (parameterId in Config.configObject.characters.parameters.byId)
+        for (parameterId in Config.container.characters.parameters.byId)
         {
-            parameter = Config.configObject.characters.parameters.byId[parameterId];
+            parameter = Config.container.characters.parameters.byId[parameterId];
             addDefinitionElement(parameter, "parameter", fixedParametersEl);
         }
-        for (characterId in Config.configObject.characters.byId)
+        for (characterId in Config.container.characters.byId)
         {
-            for (parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
+            for (parameterId in Config.container.characters.byId[characterId].parameters.byId)
             {
-                parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterId];
+                parameter = Config.container.characters.byId[characterId].parameters.byId[parameterId];
                 addDefinitionElement(parameter, "parameter", fixedParametersEl);
             }
         }
@@ -175,21 +175,21 @@ var Save;
         // Save properties
         var propertyDefinitionsEl = addAndReturnElement("properties", scenarioNameSpace, definitionsEl);
         var propertyId, property;
-        for (propertyId in Config.configObject.properties.byId)
+        for (propertyId in Config.container.properties.byId)
         {
-            property = Config.configObject.properties.byId[propertyId];
+            property = Config.container.properties.byId[propertyId];
             addDefinitionElement(property, "property", propertyDefinitionsEl);
         }
-        for (propertyId in Config.configObject.characters.properties.byId)
+        for (propertyId in Config.container.characters.properties.byId)
         {
-            property = Config.configObject.characters.properties.byId[propertyId];
+            property = Config.container.characters.properties.byId[propertyId];
             addDefinitionElement(property, "property", propertyDefinitionsEl);
         }
-        for (characterId in Config.configObject.characters.byId)
+        for (characterId in Config.container.characters.byId)
         {
-            for (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
+            for (propertyId in Config.container.characters.byId[characterId].properties.byId)
             {
-                property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
+                property = Config.container.characters.byId[characterId].properties.byId[propertyId];
                 addDefinitionElement(property, "property", propertyDefinitionsEl);
             }
         }
@@ -212,27 +212,27 @@ var Save;
 
         // Save fixed parameter initial values
         var fixedEl = addAndReturnElement("fixed", scenarioNameSpace, initialParameterValuesEl);
-        for (parameterId in Config.configObject.parameters.byId)
+        for (parameterId in Config.container.parameters.byId)
         {
-            parameter = Config.configObject.parameters.byId[parameterId];
+            parameter = Config.container.parameters.byId[parameterId];
             parameterValueEl = addAndReturnElement("parameterValue", scenarioNameSpace, fixedEl);
             parameterValueEl.setAttribute("idref", parameterId);
             parameter.type.toXML(parameterValueEl, parameter.type.defaultValue);
         }
-        for (var characterId in Config.configObject.characters.byId)
+        for (var characterId in Config.container.characters.byId)
         {
-            for (parameterId in Config.configObject.characters.parameters.byId)
+            for (parameterId in Config.container.characters.parameters.byId)
             {
-                parameter = Config.configObject.characters.parameters.byId[parameterId];
+                parameter = Config.container.characters.parameters.byId[parameterId];
                 parameterValueEl = addAndReturnElement("characterParameterValue", scenarioNameSpace, fixedEl);
                 parameterValueEl.setAttribute("idref", parameterId);
                 parameterValueEl.setAttribute("characteridref", characterId);
                 parameter.type.toXML(parameterValueEl, parameter.type.defaultValue);
             }
 
-            for (parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
+            for (parameterId in Config.container.characters.byId[characterId].parameters.byId)
             {
-                parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterId];
+                parameter = Config.container.characters.byId[characterId].parameters.byId[parameterId];
                 parameterValueEl = addAndReturnElement("characterParameterValue", scenarioNameSpace, fixedEl);
                 parameterValueEl.setAttribute("idref", parameterId);
                 parameterValueEl.setAttribute("characteridref", characterId);
@@ -395,9 +395,9 @@ var Save;
             var pEffElement = addAndReturnElement("parameterEffect", scenarioNameSpace, fixedParameterEffectsEl);
             pEffElement.setAttribute("idref", parameterEffect.idRef);
             pEffElement.setAttribute("operator", parameterEffect.operator);
-            Config.configObject.parameters.byId[parameterEffect.idRef].type.toXML(pEffElement, parameterEffect.value);
+            Config.container.parameters.byId[parameterEffect.idRef].type.toXML(pEffElement, parameterEffect.value);
         });
-        for (var characterId in Config.configObject.characters.byId)
+        for (var characterId in Config.container.characters.byId)
         {
             parameterEffects.fixed.perCharacter[characterId].sequence.forEach(function(parameterEffect)
             {
@@ -406,13 +406,13 @@ var Save;
                 pEffElement.setAttribute("characteridref", characterId);
                 pEffElement.setAttribute("operator", parameterEffect.operator);
 
-                if (parameterEffect.idRef in Config.configObject.characters.parameters.byId)
+                if (parameterEffect.idRef in Config.container.characters.parameters.byId)
                 {
-                    Config.configObject.characters.parameters.byId[parameterEffect.idRef].type.toXML(pEffElement, parameterEffect.value);
+                    Config.container.characters.parameters.byId[parameterEffect.idRef].type.toXML(pEffElement, parameterEffect.value);
                 }
                 else
                 {
-                    Config.configObject.characters.byId[characterId].parameters.byId[parameterEffect.idRef].type.toXML(pEffElement, parameterEffect.value);
+                    Config.container.characters.byId[characterId].parameters.byId[parameterEffect.idRef].type.toXML(pEffElement, parameterEffect.value);
                 }
             });
         }
@@ -426,10 +426,10 @@ var Save;
         {
             var propertyValueEl = addAndReturnElement("propertyValue", scenarioNameSpace, propertyValuesEl);
             propertyValueEl.setAttribute("idref", propertyId);
-            Config.configObject.properties.byId[propertyId].type.toXML(propertyValueEl, propertyValues.characterIndependent[propertyId]);
+            Config.container.properties.byId[propertyId].type.toXML(propertyValueEl, propertyValues.characterIndependent[propertyId]);
         }
 
-        for (var characterId in Config.configObject.characters.byId)
+        for (var characterId in Config.container.characters.byId)
         {
             for (propertyId in propertyValues.perCharacter[characterId])
             {
@@ -438,13 +438,13 @@ var Save;
                 characterPropertyValueEl.setAttribute("idref", propertyId);
 
                 var propertyValue = propertyValues.perCharacter[characterId][propertyId];
-                if (propertyId in Config.configObject.characters.properties.byId)
+                if (propertyId in Config.container.characters.properties.byId)
                 {
-                    Config.configObject.characters.properties.byId[propertyId].type.toXML(characterPropertyValueEl, propertyValue);
+                    Config.container.characters.properties.byId[propertyId].type.toXML(characterPropertyValueEl, propertyValue);
                 }
                 else
                 {
-                    Config.configObject.characters.byId[characterId].properties.byId[propertyId].type.toXML(characterPropertyValueEl, propertyValue);
+                    Config.container.characters.byId[characterId].properties.byId[propertyId].type.toXML(characterPropertyValueEl, propertyValue);
                 }
             }
         }

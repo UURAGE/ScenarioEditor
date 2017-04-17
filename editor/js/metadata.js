@@ -24,8 +24,8 @@ var Metadata;
         $("#metaScreen").html(metaScreenHTML);
 
         var scenarioDescription = $("#scenarioDescription");
-        scenarioDescription.attr('maxlength', Config.configObject.settings.description.type.maxLength);
-        if (Config.configObject.settings.description.type.markdown) Utils.attachMarkdownTooltip(scenarioDescription);
+        scenarioDescription.attr('maxlength', Config.container.settings.description.type.maxLength);
+        if (Config.container.settings.description.type.markdown) Utils.attachMarkdownTooltip(scenarioDescription);
     });
 
     // Resets the metadata to the default
@@ -35,14 +35,14 @@ var Metadata;
             name: "",
             version: 0,
             difficulty: "medium",
-            description: Config.configObject.settings.description.type.defaultValue,
+            description: Config.container.settings.description.type.defaultValue,
             authors: [],
             propertyValues: Config.getNewDefaultPropertyValues(['independent'])
         };
 
-        if (Config.configObject.settings.languages.sequence.length > 0)
+        if (Config.container.settings.languages.sequence.length > 0)
         {
-            Metadata.container.language = Config.configObject.settings.languages.sequence[0];
+            Metadata.container.language = Config.container.settings.languages.sequence[0];
         }
     }
 
@@ -179,7 +179,7 @@ var Metadata;
                 anyPropertyShown = true;
             }
         };
-        Config.configObject.properties.sequence.forEach(function (propertyItem)
+        Config.container.properties.sequence.forEach(function (propertyItem)
         {
             showPropertyItem(propertyItem, hStartLevel, propertyValuesEl, propertyValuesEl.attr('id'));
         });
@@ -189,16 +189,16 @@ var Metadata;
 
         var characterPropertyValuesEl = $('#meta-character-property-values');
         var characterTabs = $("#character-tabs");
-        var characterList = Config.configObject.characters.sequence.length > 1 ? $('<ul>') : $('<div>');
+        var characterList = Config.container.characters.sequence.length > 1 ? $('<ul>') : $('<div>');
         characterTabs.append(characterList);
 
-        Config.configObject.characters.sequence.forEach(function (character)
+        Config.container.characters.sequence.forEach(function (character)
         {
             var characterTabId = characterPropertyValuesEl.attr('id') + '-' + character.id;
 
             var characterHeaderText = character.name ? character.name : character.id;
 
-            if (Config.configObject.characters.sequence.length > 1)
+            if (Config.container.characters.sequence.length > 1)
             {
                 // Make a character tab with a link to the div it contains
                 var li = $('<li>').append($('<a>', { href:'#' + characterTabId, value: character.id, text: characterHeaderText }));
@@ -213,18 +213,18 @@ var Metadata;
             var characterTab = $('<table>', { id: characterTabId });
             characterTabs.append(characterTab);
 
-            Config.configObject.characters.properties.sequence.forEach(function(propertyItem)
+            Config.container.characters.properties.sequence.forEach(function(propertyItem)
             {
                 showPropertyItem(propertyItem, hStartLevel, characterTab, characterTabId);
             });
 
-            Config.configObject.characters.byId[character.id].properties.sequence.forEach(function(propertyItem)
+            Config.container.characters.byId[character.id].properties.sequence.forEach(function(propertyItem)
             {
                 showPropertyItem(propertyItem, hStartLevel, characterTab, characterTabId);
             });
         });
 
-        if (Config.configObject.characters.sequence.length > 1)
+        if (Config.container.characters.sequence.length > 1)
         {
             characterTabs.tabs(
             {
@@ -240,24 +240,24 @@ var Metadata;
             property.type.setInDOM($(propertyContainerId + '-' + Utils.escapeSelector(property.id)), propertyValues[property.id]);
         };
         var propertyId, characterId, property;
-        for (propertyId in Config.configObject.properties.byId)
+        for (propertyId in Config.container.properties.byId)
         {
-            property = Config.configObject.properties.byId[propertyId];
+            property = Config.container.properties.byId[propertyId];
             setPropertyInDOM(Metadata.container.propertyValues.characterIndependent, "#meta-property-values-container", property);
         }
-        for (propertyId in Config.configObject.characters.properties.byId)
+        for (propertyId in Config.container.characters.properties.byId)
         {
-            for (characterId in Config.configObject.characters.byId)
+            for (characterId in Config.container.characters.byId)
             {
-                property = Config.configObject.characters.properties.byId[propertyId];
+                property = Config.container.characters.properties.byId[propertyId];
                 setPropertyInDOM(Metadata.container.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + Utils.escapeSelector(characterId) + "-container", property);
             }
         }
-        for (characterId in Config.configObject.characters.byId)
+        for (characterId in Config.container.characters.byId)
         {
-            for (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
+            for (propertyId in Config.container.characters.byId[characterId].properties.byId)
             {
-                property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
+                property = Config.container.characters.byId[characterId].properties.byId[propertyId];
                 setPropertyInDOM(Metadata.container.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + Utils.escapeSelector(characterId) + "-container", property);
             }
         }
@@ -274,33 +274,33 @@ var Metadata;
         Metadata.container.name = formatScenarioName($("#scenarioName").val());
         $('#scenarioNameTab .scenarioName').text(Metadata.container.name);
         var languageCode = $("#scenarioLanguage").val();
-        if (languageCode) Metadata.container.language = Config.configObject.settings.languages.byCode[languageCode];
+        if (languageCode) Metadata.container.language = Config.container.settings.languages.byCode[languageCode];
         Metadata.container.difficulty = $("#scenarioDifficulty").val();
         Metadata.container.description = $("#scenarioDescription").val();
 
         var propertyId, characterId, property;
-        for (propertyId in Config.configObject.properties.byId)
+        for (propertyId in Config.container.properties.byId)
         {
-            property = Config.configObject.properties.byId[propertyId];
+            property = Config.container.properties.byId[propertyId];
             if (property.scopes.statementScope !== "independent") continue;
             Metadata.container.propertyValues.characterIndependent[property.id] =
                 property.type.getFromDOM($("#meta-property-values-container-" + property.id));
         }
-        for (propertyId in Config.configObject.characters.properties.byId)
+        for (propertyId in Config.container.characters.properties.byId)
         {
-            for (characterId in Config.configObject.characters.byId)
+            for (characterId in Config.container.characters.byId)
             {
-                property = Config.configObject.characters.properties.byId[propertyId];
+                property = Config.container.characters.properties.byId[propertyId];
                 if (property.scopes.statementScope !== "independent") continue;
                 Metadata.container.propertyValues.perCharacter[characterId][property.id] =
                     property.type.getFromDOM($("#meta-character-property-values-" + characterId + "-container-" + property.id));
             }
         }
-        for (characterId in Config.configObject.characters.byId)
+        for (characterId in Config.container.characters.byId)
         {
-            for (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
+            for (propertyId in Config.container.characters.byId[characterId].properties.byId)
             {
-                property = Config.configObject.characters.byId[characterId].properties.byId[propertyId];
+                property = Config.container.characters.byId[characterId].properties.byId[propertyId];
                 if (property.scopes.statementScope !== "independent") continue;
                 Metadata.container.propertyValues.perCharacter[characterId][property.id] =
                     property.type.getFromDOM($("#meta-character-property-values-" + characterId + "-container-" + property.id));

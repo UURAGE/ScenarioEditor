@@ -22,7 +22,7 @@
     {
         $('#draftScreen').html(Parts.getDraftScreenHTML());
 
-        propEditors.statement = '<textarea ' + 'maxlength=' + Config.configObject.settings.statement.type.maxLength + ' tabindex="1"></textarea>';
+        propEditors.statement = '<textarea ' + 'maxlength=' + Config.container.settings.statement.type.maxLength + ' tabindex="1"></textarea>';
         itemProperties = $('#draftTable').data("properties").split(',');
         maxCols = itemProperties.length - 1;
 

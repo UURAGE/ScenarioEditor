@@ -8,7 +8,6 @@ var Config;
 
     Config =
     {
-        configObject: {},
         types: {},
         extensionTypes: {},
         assignmentOperators: {},
@@ -17,6 +16,7 @@ var Config;
         labelControlOrders: {},
         additionalNameSpaces: {},
         atLeastOneParameter: atLeastOneParameter,
+        container: {},
         findParameterById: findParameterById,
         isCharacterParameter: isCharacterParameter,
         getNewDefaultParameterEffects: getNewDefaultParameterEffects,
@@ -47,28 +47,25 @@ var Config;
             return;
         }
 
-        var config = {};
-        config.id = configXML.attr('id');
-        config.version = configXML.attr('version');
-        config.settings = loadSettings(configXML.children('settings'));
-        config.properties = loadCollection(configXML.children('properties'), 'property', 'toplevel', defaultPropertyScopes);
-        config.parameters = loadCollection(configXML.children('parameters'), 'parameter', 'toplevel', defaultParameterScopes);
+        Config.container.id = configXML.attr('id');
+        Config.container.version = configXML.attr('version');
+        Config.container.settings = loadSettings(configXML.children('settings'));
+        Config.container.properties = loadCollection(configXML.children('properties'), 'property', 'toplevel', defaultPropertyScopes);
+        Config.container.parameters = loadCollection(configXML.children('parameters'), 'parameter', 'toplevel', defaultParameterScopes);
 
         if (configXML.children('character').length === 1)
         {
-            config.characters = { parameters: $.extend({}, defaultParameterCollection), properties: $.extend({}, defaultPropertyCollection), byId: {} };
+            Config.container.characters = { parameters: $.extend({}, defaultParameterCollection), properties: $.extend({}, defaultPropertyCollection), byId: {} };
             var character = loadCharacterNode(configXML.children('character')[0]);
-            config.characters.byId[character.id] = character;
-            config.characters.sequence = [character];
+            Config.container.characters.byId[character.id] = character;
+            Config.container.characters.sequence = [character];
         }
         else
         {
-            config.characters = loadCharacterCollection(configXML.children('characters'));
+            Config.container.characters = loadCharacterCollection(configXML.children('characters'));
         }
 
-        config.migration = loadMigration(configXML.children('migration'), config.properties, config.parameters, config.characters);
-
-        Config.configObject = config;
+        Config.container.migration = loadMigration(configXML.children('migration'), Config.container.properties, Config.container.parameters, Config.container.characters);
     }
 
     function loadSettings(settingsXML)
@@ -736,15 +733,15 @@ var Config;
     function atLeastOneParameter()
     {
         var atLeastOnePerCharacterParameter;
-        for (var characterId in Config.configObject.characters.byId)
+        for (var characterId in Config.container.characters.byId)
         {
-            if (Config.configObject.characters.byId[characterId].parameters.sequence.length > 0)
+            if (Config.container.characters.byId[characterId].parameters.sequence.length > 0)
             {
                 atLeastOnePerCharacterParameter = true;
                 break;
             }
         }
-        return Config.configObject.parameters.sequence.length > 0 || Config.configObject.characters.parameters.sequence.length > 0 || atLeastOnePerCharacterParameter;
+        return Config.container.parameters.sequence.length > 0 || Config.container.characters.parameters.sequence.length > 0 || atLeastOnePerCharacterParameter;
     }
 
     function findParameterById(parameterId, characterId)
@@ -754,30 +751,30 @@ var Config;
         {
             parameter = Parameters.container.byId[parameterId];
         }
-        else if (!characterId && parameterId in Config.configObject.parameters.byId)
+        else if (!characterId && parameterId in Config.container.parameters.byId)
         {
-            parameter = Config.configObject.parameters.byId[parameterId];
+            parameter = Config.container.parameters.byId[parameterId];
         }
-        else if (parameterId in Config.configObject.characters.parameters.byId)
+        else if (parameterId in Config.container.characters.parameters.byId)
         {
-            parameter = Config.configObject.characters.parameters.byId[parameterId];
+            parameter = Config.container.characters.parameters.byId[parameterId];
         }
         else
         {
             if (characterId)
             {
-                if (parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
+                if (parameterId in Config.container.characters.byId[characterId].parameters.byId)
                 {
-                    parameter = Config.configObject.characters.byId[characterId].parameters.byId[parameterId];
+                    parameter = Config.container.characters.byId[characterId].parameters.byId[parameterId];
                 }
             }
             else
             {
-                Config.configObject.characters.sequence.some(function(character)
+                Config.container.characters.sequence.some(function(character)
                 {
-                    if (parameterId in Config.configObject.characters.byId[character.id].parameters.byId)
+                    if (parameterId in Config.container.characters.byId[character.id].parameters.byId)
                     {
-                        parameter = Config.configObject.characters.byId[character.id].parameters.byId[parameterId];
+                        parameter = Config.container.characters.byId[character.id].parameters.byId[parameterId];
                         return true;
                     }
                     return false;
@@ -789,10 +786,10 @@ var Config;
 
     function isCharacterParameter(parameterId)
     {
-        return parameterId in Config.configObject.characters.parameters.byId ||
-        Config.configObject.characters.sequence.some(function(character)
+        return parameterId in Config.container.characters.parameters.byId ||
+        Config.container.characters.sequence.some(function(character)
         {
-            return parameterId in Config.configObject.characters.byId[character.id].parameters.byId;
+            return parameterId in Config.container.characters.byId[character.id].parameters.byId;
         });
     }
 
@@ -801,25 +798,25 @@ var Config;
         var parameterEffects = { userDefined: [], fixed: {} };
         parameterEffects.fixed.characterIndependent = { byId: {}, sequence: [] };
         var parameterId;
-        for (parameterId in Config.configObject.parameters.byId)
+        for (parameterId in Config.container.parameters.byId)
         {
             parameterEffects.fixed.characterIndependent.byId[parameterId] = [];
         }
         parameterEffects.fixed.perCharacter = { };
-        for (var characterId in Config.configObject.characters.byId)
+        for (var characterId in Config.container.characters.byId)
         {
             parameterEffects.fixed.perCharacter[characterId] = { byId: {}, sequence: [] };
 
             var statementScope;
-            for (parameterId in Config.configObject.characters.parameters.byId)
+            for (parameterId in Config.container.characters.parameters.byId)
             {
-                statementScope = Config.configObject.characters.parameters.byId[parameterId].scopes.statementScope;
+                statementScope = Config.container.characters.parameters.byId[parameterId].scopes.statementScope;
                 if (statementScope === 'per-computer-own' && characterId !== characterIdRef) continue;
                 parameterEffects.fixed.perCharacter[characterId].byId[parameterId] = [];
             }
-            for (parameterId in Config.configObject.characters.byId[characterId].parameters.byId)
+            for (parameterId in Config.container.characters.byId[characterId].parameters.byId)
             {
-                statementScope = Config.configObject.characters.byId[characterId].parameters.byId[parameterId].scopes.statementScope;
+                statementScope = Config.container.characters.byId[characterId].parameters.byId[parameterId].scopes.statementScope;
                 if (statementScope === 'per-computer-own' && characterId !== characterIdRef) continue;
                 parameterEffects.fixed.perCharacter[characterId].byId[parameterId] = [];
             }
@@ -833,30 +830,30 @@ var Config;
         var propertyId;
 
         propertyValues.characterIndependent = {};
-        for (propertyId in Config.configObject.properties.byId)
+        for (propertyId in Config.container.properties.byId)
         {
-            if (acceptableStatementScopes.indexOf(Config.configObject.properties.byId[propertyId].scopes.statementScope) === -1) continue;
-            propertyValues.characterIndependent[propertyId] = Config.configObject.properties.byId[propertyId].type.defaultValue;
+            if (acceptableStatementScopes.indexOf(Config.container.properties.byId[propertyId].scopes.statementScope) === -1) continue;
+            propertyValues.characterIndependent[propertyId] = Config.container.properties.byId[propertyId].type.defaultValue;
         }
 
         propertyValues.perCharacter = {};
-        for (var characterId in Config.configObject.characters.byId)
+        for (var characterId in Config.container.characters.byId)
         {
             var statementScope;
             propertyValues.perCharacter[characterId] = {};
-            for (propertyId in Config.configObject.characters.properties.byId)
+            for (propertyId in Config.container.characters.properties.byId)
             {
-                statementScope = Config.configObject.characters.properties.byId[propertyId].scopes.statementScope;
+                statementScope = Config.container.characters.properties.byId[propertyId].scopes.statementScope;
                 if (acceptableStatementScopes.indexOf(statementScope) === -1) continue;
                 if (statementScope === 'per-computer-own' && characterId !== characterIdRef) continue;
-                propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.properties.byId[propertyId].type.defaultValue;
+                propertyValues.perCharacter[characterId][propertyId] = Config.container.characters.properties.byId[propertyId].type.defaultValue;
             }
-            for (propertyId in Config.configObject.characters.byId[characterId].properties.byId)
+            for (propertyId in Config.container.characters.byId[characterId].properties.byId)
             {
-                statementScope = Config.configObject.characters.byId[characterId].properties.byId[propertyId].scopes.statementScope;
+                statementScope = Config.container.characters.byId[characterId].properties.byId[propertyId].scopes.statementScope;
                 if (acceptableStatementScopes.indexOf(statementScope) === -1) continue;
                 if (statementScope === 'per-computer-own' && characterId !== characterIdRef) continue;
-                propertyValues.perCharacter[characterId][propertyId] = Config.configObject.characters.byId[characterId].properties.byId[propertyId].type.defaultValue;
+                propertyValues.perCharacter[characterId][propertyId] = Config.container.characters.byId[characterId].properties.byId[propertyId].type.defaultValue;
             }
         }
 

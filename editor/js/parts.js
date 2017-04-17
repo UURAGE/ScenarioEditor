@@ -153,10 +153,10 @@ var Parts;
     function getMetaScreenHTML()
     {
         var scenarioLanguageRow;
-        if (Config.configObject.settings.languages.sequence.length > 0)
+        if (Config.container.settings.languages.sequence.length > 0)
         {
             var scenarioLanguageSelect = $('<select>', { id: "scenarioLanguage" });
-            Config.configObject.settings.languages.sequence.forEach(function(language)
+            Config.container.settings.languages.sequence.forEach(function(language)
             {
                 scenarioLanguageSelect.append($('<option>', { value: language.code, text: language.name }));
             });

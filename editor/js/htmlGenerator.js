@@ -396,11 +396,11 @@ var HtmlGenerator;
         var addedDiv = $(divToAdd).children().last();
 
         insertParameters(addedDiv, Parameters.container);
-        insertParameters(addedDiv, Config.configObject.parameters);
-        insertParameters(addedDiv, Config.configObject.characters.parameters);
-        for (var characterId in Config.configObject.characters.byId)
+        insertParameters(addedDiv, Config.container.parameters);
+        insertParameters(addedDiv, Config.container.characters.parameters);
+        for (var characterId in Config.container.characters.byId)
         {
-            insertParameters(addedDiv, Config.configObject.characters.byId[characterId].parameters);
+            insertParameters(addedDiv, Config.container.characters.byId[characterId].parameters);
         }
 
         var idRefSelect = addedDiv.find(".parameter-idref-select");
@@ -411,13 +411,13 @@ var HtmlGenerator;
             var characterIdRefSelect;
             if (Config.isCharacterParameter(parameterIdRef))
             {
-                var inIndividualCharacter = Config.configObject.characters.sequence.some(function(character)
+                var inIndividualCharacter = Config.container.characters.sequence.some(function(character)
                 {
-                    if (parameterIdRef in Config.configObject.characters.byId[character.id].parameters.byId)
+                    if (parameterIdRef in Config.container.characters.byId[character.id].parameters.byId)
                     {
                         characterIdRefSelect = $('<select>', { class: "character-idref-select" });
                         characterIdRefSelect.append($('<option>', { value: character.id, text: character.name ? character.name : character.id }));
-                        if (Config.configObject.characters.sequence.length === 1) characterIdRefSelect.hide();
+                        if (Config.container.characters.sequence.length === 1) characterIdRefSelect.hide();
                         testContainer.append(characterIdRefSelect);
                         return true;
                     }
@@ -427,11 +427,11 @@ var HtmlGenerator;
                 if (!inIndividualCharacter)
                 {
                     characterIdRefSelect = $('<select>', { class: "character-idref-select" });
-                    Config.configObject.characters.sequence.forEach(function(character)
+                    Config.container.characters.sequence.forEach(function(character)
                     {
                         characterIdRefSelect.append($('<option>', { value: character.id, text: character.name ? character.name : character.id }));
                     });
-                    if (Config.configObject.characters.sequence.length === 1) characterIdRefSelect.hide();
+                    if (Config.container.characters.sequence.length === 1) characterIdRefSelect.hide();
                     testContainer.append(characterIdRefSelect);
                 }
             }
