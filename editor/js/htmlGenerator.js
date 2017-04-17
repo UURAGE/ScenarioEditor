@@ -340,10 +340,19 @@ var HtmlGenerator;
     function insertParameters(div, parameters)
     {
         var select = div.find(".parameter-idref-select");
-        parameters.sequence.forEach(function (parameter)
+
+        var appendParameter = function(parameterItem)
         {
-            select.append($('<option>', { value: parameter.id, text: parameter.name }));
-        });
+            if (parameterItem.kind && parameterItem.kind !== "parameter")
+            {
+                parameterItem.sequence.forEach(appendParameter);
+            }
+            else
+            {
+                select.append($('<option>', { value: parameterItem.id, text: parameterItem.name }));
+            }
+        };
+        parameters.sequence.forEach(appendParameter);
     }
 
     // Focuses on the first descendant that has a non-negative tabindex.
