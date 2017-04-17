@@ -229,9 +229,9 @@ var Parts;
     function getParameterDefinitionHTML()
     {
         var typeOptions = "";
-        for (var typeName in Config.types)
+        for (var typeName in Types.primitives)
         {
-            typeOptions += '<option value="' + typeName + '">' + i18next.t('config:types.' + typeName + '.translation') + '</option>';
+            typeOptions += '<option value="' + typeName + '">' + i18next.t('types:primitives.' + typeName + '.translation') + '</option>';
         }
         return '' +
             '<tr class="newParameter">' +

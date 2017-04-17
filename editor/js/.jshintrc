@@ -15,6 +15,7 @@
         "i18nextLocalStorageCache",
         "i18nextSprintfPostProcessor",
         "Utils",
+        "Types",
         "Config",
         "Constants",
         "DragBox",

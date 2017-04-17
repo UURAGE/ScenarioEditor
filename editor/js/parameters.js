@@ -108,7 +108,7 @@ var Parameters;
             if (parameter.id === "t")
             {
                 addedDiv.addClass("isT");
-                typeSelect.val(Config.types.integer.name);
+                typeSelect.val(Types.primitives.integer.name);
                 typeSelect.prop("disabled", "disabled");
                 addedDiv.find(".parameter-initial-value-container").remove();
                 addedDiv.find(".parameter-min-container").remove();
@@ -117,7 +117,7 @@ var Parameters;
 
             addedDiv.find(".name").val(parameter.name);
 
-            if (parameter.type.name === Config.types.enumeration.name)
+            if (parameter.type.name === Types.primitives.enumeration.name)
             {
                 var enumerationValues = parameter.type.options.sequence.map(function(option) { return option.text; });
                 HtmlGenerator.appendEnumerationValueListTo(typeSelect.parent(), enumerationValues);
@@ -208,7 +208,7 @@ var Parameters;
                     {
                         if (effect.idRef === oldParameter.id)
                         {
-                            var hasOperator = newParameter.type.assignmentOperators.indexOf(Config.assignmentOperators[effect.operator]) !== -1;
+                            var hasOperator = newParameter.type.assignmentOperators.indexOf(Types.assignmentOperators[effect.operator]) !== -1;
                             if (!hasOperator) effect.operator = newParameter.type.assignmentOperators[0].name;
 
                             effect.value = newParameter.type.castFrom(oldParameter.type, effect.value);
@@ -219,7 +219,7 @@ var Parameters;
                     {
                         if (!precondition.type && precondition.idRef === oldParameter.id)
                         {
-                            var hasRelationalOperator = newParameter.type.relationalOperators.indexOf(Config.relationalOperators[precondition.operator]) !== -1;
+                            var hasRelationalOperator = newParameter.type.relationalOperators.indexOf(Types.relationalOperators[precondition.operator]) !== -1;
                             if (!hasRelationalOperator) precondition.operator = newParameter.type.relationalOperators[0].name;
 
                             precondition.value = newParameter.type.castFrom(oldParameter.type, precondition.value);
@@ -293,7 +293,7 @@ var Parameters;
         var timeEffect =
         {
             idRef: newParameter.id,
-            type: Config.types.integer,
+            type: Types.primitives.integer,
             operator: "addAssign",
             value: 1
         };

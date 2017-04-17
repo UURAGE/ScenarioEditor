@@ -127,7 +127,7 @@ var Load3;
             {
                 id: paramId,
                 name: Utils.unEscapeHTML(this.attributes.name.value),
-                type: $.extend({}, Config.types.integer, { defaultValue: defaultValue, minimum: minimum, maximum: maximum }),
+                type: $.extend({}, Types.primitives.integer, { defaultValue: defaultValue, minimum: minimum, maximum: maximum }),
                 description: this.hasAttribute("parameterDescription") ? Utils.unEscapeHTML(this.attributes.parameterDescription.value) : ""
             };
             parameters.sequence.push(parameters.byId[paramId]);
@@ -185,7 +185,7 @@ var Load3;
                 parameterEffects.userDefined.push(
                 {
                     idRef: parameter.attributes.idref.value,
-                    operator: parameter.attributes.changeType.value == "delta" ? Config.assignmentOperators.addAssign.name : Config.assignmentOperators.assign.name,
+                    operator: parameter.attributes.changeType.value == "delta" ? Types.assignmentOperators.addAssign.name : Types.assignmentOperators.assign.name,
                     value: parseInt(parameter.attributes.value.value)
                 });
             }

@@ -22,7 +22,6 @@
         [
             'clipboard',
             'common',
-            'config',
             'configXML',
             'draft',
             'htmlGenerator',
@@ -32,6 +31,7 @@
             'parts',
             'print',
             'save',
+            'types',
             'utils',
             'validator'
         ],

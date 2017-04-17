@@ -105,7 +105,7 @@ var HtmlGenerator;
                 // div.children().children().prop('disabled', true);
                 $(div).prop('id', 't');
                 div.find(".name").val(i18next.t('htmlGenerator:time'));
-                div.find(".parameter-type-select").val(Config.types.integer.name);
+                div.find(".parameter-type-select").val(Types.primitives.integer.name);
                 div.find(".parameter-type-select").prop("disabled", "disabled");
                 div.find(".parameter-initial-value-container").remove();
 
@@ -147,7 +147,7 @@ var HtmlGenerator;
                 var initialValue;
                 if (previousType) initialValue = previousType.getFromDOM(initialValueContainer);
                 initialValueContainer.empty();
-                var type = Config.types[newTypeName].loadTypeFromDOM(addedDiv, initialValueContainer, 'parameter');
+                var type = Types.primitives[newTypeName].loadTypeFromDOM(addedDiv, initialValueContainer, 'parameter');
                 type.appendControlTo(initialValueContainer);
                 if (previousType) type.setInDOM(initialValueContainer, type.castFrom(previousType, initialValue));
                 previousType = type;
@@ -155,17 +155,17 @@ var HtmlGenerator;
 
             var parameterMinContainer = addedDiv.find(".parameter-min-container");
             var parameterMaxContainer = addedDiv.find(".parameter-max-container");
-            if (newTypeName === Config.types.integer.name)
+            if (newTypeName === Types.primitives.integer.name)
             {
-                if (!parameterMinContainer.children(Config.types.integer.controlName).length)
+                if (!parameterMinContainer.children(Types.primitives.integer.controlName).length)
                 {
-                    Config.types[newTypeName].appendControlTo(parameterMinContainer);
-                    Config.types[newTypeName].setInDOM(parameterMinContainer, "");
+                    Types.primitives[newTypeName].appendControlTo(parameterMinContainer);
+                    Types.primitives[newTypeName].setInDOM(parameterMinContainer, "");
                 }
-                if (!parameterMaxContainer.children(Config.types.integer.controlName).length)
+                if (!parameterMaxContainer.children(Types.primitives.integer.controlName).length)
                 {
-                    Config.types[newTypeName].appendControlTo(parameterMaxContainer);
-                    Config.types[newTypeName].setInDOM(parameterMaxContainer, "");
+                    Types.primitives[newTypeName].appendControlTo(parameterMaxContainer);
+                    Types.primitives[newTypeName].setInDOM(parameterMaxContainer, "");
                 }
             }
             else
@@ -174,7 +174,7 @@ var HtmlGenerator;
                 parameterMaxContainer.empty();
             }
 
-            if (newTypeName === Config.types.enumeration.name)
+            if (newTypeName === Types.primitives.enumeration.name)
             {
                 // If this was an enumeration already, use the old button
                 if (!addedDiv.find(".enumeration-screen-button").length)
@@ -221,7 +221,7 @@ var HtmlGenerator;
         });
 
         // The default type for a user-defined parameter is integer
-        typeSelect.val(Config.types.integer.name);
+        typeSelect.val(Types.primitives.integer.name);
         typeSelect.trigger('change');
 
         addedDiv.removeClass("changedTypeParameter");

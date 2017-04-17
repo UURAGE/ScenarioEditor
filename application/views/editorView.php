@@ -61,6 +61,7 @@
       "js/lib/colResizable-1.3.min.js",
       "js/lib/FileSaver.min.js",
       "js/utils.js",
+      "js/types.js",
       "js/config.js",
       "js/constants.js",
       "js/dragBox.js",

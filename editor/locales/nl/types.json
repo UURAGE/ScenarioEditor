@@ -1,5 +1,5 @@
 {
-    "types": {
+    "primitives": {
         "boolean": {
             "translation": "Boolean",
             "false": "Onwaar",

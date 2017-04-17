@@ -138,8 +138,8 @@ var Metadata;
             {
                 var propertyHeader = $('<th>');
                 var controlHtmlId = idPrefix + '-' + propertyItem.id;
-                var controlFirst = propertyItem.type.labelControlOrder === Config.labelControlOrders.singleLineContainerLabel ||
-                                   propertyItem.type.labelControlOrder === Config.labelControlOrders.twoLineContainerLabel;
+                var controlFirst = propertyItem.type.labelControlOrder === Types.labelControlOrders.singleLineContainerLabel ||
+                                   propertyItem.type.labelControlOrder === Types.labelControlOrders.twoLineContainerLabel;
                 propertyHeader.append($('<label>', { text: propertyItem.name + (controlFirst ? '' : ':'), 'for': controlHtmlId }));
 
                 var propertyData = $('<td>', { id: idPrefix + '-container-' + propertyItem.id });
@@ -149,23 +149,23 @@ var Metadata;
                 var additionalPropertyRow;
                 switch (propertyItem.type.labelControlOrder)
                 {
-                    case Config.labelControlOrders.singleLineLabelContainer:
+                    case Types.labelControlOrders.singleLineLabelContainer:
                         propertyRow.append(propertyHeader);
                         propertyRow.append(propertyData);
                         break;
-                    case Config.labelControlOrders.singleLineContainerLabel:
+                    case Types.labelControlOrders.singleLineContainerLabel:
                         propertyRow.append(propertyHeader);
                         propertyRow.prepend(propertyData);
                         break;
-                    case Config.labelControlOrders.container:
+                    case Types.labelControlOrders.container:
                         propertyData.prop('colspan', "2");
                         propertyRow.append(propertyData);
                         break;
-                    case Config.labelControlOrders.twoLineLabelContainer:
+                    case Types.labelControlOrders.twoLineLabelContainer:
                         propertyRow.append(propertyHeader);
                         additionalPropertyRow = $('<tr>').append(propertyData);
                         break;
-                    case Config.labelControlOrders.twoLineContainerLabel:
+                    case Types.labelControlOrders.twoLineContainerLabel:
                         additionalPropertyRow = propertyRow.append(propertyHeader);
                         propertyRow = $('<tr>').append(propertyData);
                         break;
