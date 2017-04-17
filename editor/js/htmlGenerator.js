@@ -380,6 +380,7 @@ var HtmlGenerator;
             else
             {
                 var parameter = Config.findParameterById(currentPrecondition.idRef, currentPrecondition.characterIdRef);
+                if (!parameter) parameter = Parameters.container.byId[currentPrecondition.idRef];
 
                 addedDiv = addEmptyPrecondition(divToAddChildren);
                 addedDiv.find(".parameter-idref-select").val(currentPrecondition.idRef).trigger('change');
@@ -408,6 +409,8 @@ var HtmlGenerator;
         var changeTestType = function(parameterIdRef)
         {
             var parameter = Config.findParameterById(parameterIdRef);
+            if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
+
             var characterIdRefSelect;
             if (Config.isCharacterParameter(parameterIdRef))
             {

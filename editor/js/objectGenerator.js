@@ -73,6 +73,7 @@ var ObjectGenerator;
         var characterIdRef = div.find(".character-idref-select").val();
 
         var parameter = Config.findParameterById(parameterIdRef, characterIdRef);
+        if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
 
         var precondition = {
             idRef: parameterIdRef,

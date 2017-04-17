@@ -747,11 +747,7 @@ var Config;
     function findParameterById(parameterId, characterId)
     {
         var parameter;
-        if (!characterId && parameterId in Parameters.container.byId)
-        {
-            parameter = Parameters.container.byId[parameterId];
-        }
-        else if (!characterId && parameterId in Config.container.parameters.byId)
+        if (!characterId && parameterId in Config.container.parameters.byId)
         {
             parameter = Config.container.parameters.byId[parameterId];
         }

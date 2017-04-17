@@ -387,6 +387,7 @@ var Load;
                 }
 
                 var parameter = Config.findParameterById(parameterIdRef, characterIdRef);
+                if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
 
                 if (parameter)
                 {

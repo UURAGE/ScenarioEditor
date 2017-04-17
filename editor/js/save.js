@@ -466,6 +466,7 @@ var Save;
         if (!("type" in precondition))
         {
             var parameter = Config.findParameterById(precondition.idRef, precondition.characterIdRef);
+            if (!parameter) parameter = Parameters.container.byId[precondition.idRef];
 
             if (precondition.characterIdRef)
             {
