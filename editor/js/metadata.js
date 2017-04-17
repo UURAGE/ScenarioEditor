@@ -53,7 +53,7 @@ var Metadata;
 
         $("#metaScreen").dialog(
         {
-            title: i18next.t('metadata:properties_title'),
+            title: i18next.t('metadata:title'),
             height: Constants.heightMetaScreen,
             width: Constants.widthMetaScreen,
             modal: true,

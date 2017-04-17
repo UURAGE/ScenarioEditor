@@ -29,6 +29,7 @@
             'load',
             'main',
             'metadata',
+            'parameters',
             'parts',
             'print',
             'save',

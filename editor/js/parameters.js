@@ -44,6 +44,38 @@ var Parameters;
             if ($("#params").children().not(".removedParameter").length === 0)
                 $("#paramsTableHead").addClass("hidden");
         });
+
+        $("#addParameter").on('click', function()
+        {
+            var addedDiv = addDefaultDefinition();
+            Utils.focusFirstTabindexedDescendant(addedDiv);
+            $("#paramsTableHead").removeClass("hidden");
+        });
+
+        $("#addTimeParameter").on('click', function()
+        {
+            var isTime = $("#params").find(".isT").length;
+            var isTimeRemoved = $("#params").find(".isT.removedParameter").length;
+
+            // if the timeParameterObject is empty, or if it is filled, but
+            // the parameter in the dialog has been removed (in that case the
+            // timeParameterObject has not been updated yet)
+            if (Parameters.timeId === null || isTimeRemoved === isTime)
+            {
+                $("#params").append(Parts.getParameterDefinitionHTML());
+                var div = $("#params").children().last();
+                // div.children().children().prop('disabled', true);
+                $(div).prop('id', 't');
+                div.find(".name").val(i18next.t('parameters:time'));
+                div.find(".parameter-type-select").val(Types.primitives.integer.name);
+                div.find(".parameter-type-select").prop("disabled", "disabled");
+                div.find(".parameter-initial-value-container").remove();
+
+                Utils.focusFirstTabindexedDescendant($("#params").children().last());
+                $("#paramsTableHead").removeClass("hidden");
+                $("#addTimeParameter").addClass("hidden");
+            }
+        });
     });
 
     // Resets the parameters to the default
@@ -67,7 +99,7 @@ var Parameters;
 
         $("#parameterScreen").dialog(
         {
-            title: i18next.t('metadata:parameters_title'),
+            title: i18next.t('parameters:title'),
             height: Constants.heightParameterScreen,
             width: Constants.widthParameterScreen,
             modal: true,
@@ -98,7 +130,7 @@ var Parameters;
 
         Parameters.container.sequence.forEach(function(parameter)
         {
-            var addedDiv = HtmlGenerator.addEmptyUserDefinedParameterDefinition();
+            var addedDiv = addDefaultDefinition();
             addedDiv.removeClass("newParameter").addClass("existingParameter");
 
             addedDiv.prop('id', parameter.id);
@@ -155,6 +187,73 @@ var Parameters;
                 });
             }
         });
+    }
+
+    function addDefaultDefinition()
+    {
+        $("#params").append(Parts.getParameterDefinitionHTML());
+        var addedDiv = $("#params").children().last();
+
+        var typeSelect = addedDiv.find('.parameter-type-select');
+        var parent = typeSelect.parent();
+        typeSelect.remove();
+
+        var previousType;
+        var onParameterTypeChange = function(newTypeName, userTypeChange)
+        {
+            addedDiv.addClass("changedTypeParameter");
+
+            var replaceInitialValueContainer = function()
+            {
+                var initialValueContainer = addedDiv.find(".parameter-initial-value-container");
+                var initialValue;
+                if (previousType) initialValue = previousType.getFromDOM(initialValueContainer);
+                initialValueContainer.empty();
+                var type = Types.primitives[newTypeName].loadTypeFromDOM(addedDiv, initialValueContainer, 'parameter');
+                type.appendControlTo(initialValueContainer);
+                if (previousType) type.setInDOM(initialValueContainer, type.castFrom(previousType, initialValue));
+                previousType = type;
+            };
+
+            var parameterMinContainer = addedDiv.find(".parameter-min-container");
+            var parameterMaxContainer = addedDiv.find(".parameter-max-container");
+            if (newTypeName === Types.primitives.integer.name)
+            {
+                if (!parameterMinContainer.children(Types.primitives.integer.controlName).length)
+                {
+                    Types.primitives[newTypeName].appendControlTo(parameterMinContainer);
+                    Types.primitives[newTypeName].setInDOM(parameterMinContainer, "");
+                }
+                if (!parameterMaxContainer.children(Types.primitives.integer.controlName).length)
+                {
+                    Types.primitives[newTypeName].appendControlTo(parameterMaxContainer);
+                    Types.primitives[newTypeName].setInDOM(parameterMaxContainer, "");
+                }
+            }
+            else
+            {
+                parameterMinContainer.empty();
+                parameterMaxContainer.empty();
+            }
+
+            if (newTypeName === Types.primitives.enumeration.name)
+            {
+                if (!userTypeChange)
+                {
+                    replaceInitialValueContainer();
+                }
+            }
+            else
+            {
+                replaceInitialValueContainer();
+            }
+        };
+
+        Types.appendSelectTo(parent, 'parameter-type-select', onParameterTypeChange);
+
+        addedDiv.removeClass("changedTypeParameter");
+
+        return addedDiv;
     }
 
     function save()

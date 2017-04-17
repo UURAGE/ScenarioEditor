@@ -8,13 +8,11 @@ var HtmlGenerator;
 
     HtmlGenerator =
     {
-        addEmptyUserDefinedParameterDefinition: addEmptyUserDefinedParameterDefinition,
         addEmptyUserDefinedParameterEffect: addEmptyUserDefinedParameterEffect,
         insertPreconditions: insertPreconditions
     };
 
     //Get all the raw HTLM from Parts.js
-    var parameterHTML = Parts.getParameterDefinitionHTML();
     var preconditionHTML = Parts.getPreconditionHTML();
     var groupPreconditionHTML = Parts.getGroupPreconditionHTML();
     var parameterEffectHTML = Parts.getParameterEffectHTML();
@@ -29,7 +27,7 @@ var HtmlGenerator;
                 var container = $(this).parent().children(".groupPreconditionDiv");
                 addEmptyPrecondition(container);
                 var addedDiv = container.children(".precondition").last();
-                focusFirstTabindexedDescendant(addedDiv);
+                Utils.focusFirstTabindexedDescendant(addedDiv);
             }
             else
             {
@@ -55,43 +53,11 @@ var HtmlGenerator;
             if (Parameters.atLeastOneUserDefined())
             {
                 addEmptyUserDefinedParameterEffect();
-                focusFirstTabindexedDescendant($(".effect").last());
+                Utils.focusFirstTabindexedDescendant($(".effect").last());
             }
             else
             {
                 alert(i18next.t('htmlGenerator:error.no_effect'));
-            }
-        });
-
-        $("#addParameter").on('click', function()
-        {
-            var addedDiv = addEmptyUserDefinedParameterDefinition();
-            focusFirstTabindexedDescendant(addedDiv);
-            $("#paramsTableHead").removeClass("hidden");
-        });
-
-        $("#addTimeParameter").on('click', function()
-        {
-            var isTime = $("#params").find(".isT").length;
-            var isTimeRemoved = $("#params").find(".isT.removedParameter").length;
-
-            // if the timeParameterObject is empty, or if it is filled, but
-            // the parameter in the dialog has been removed (in that case the
-            // timeParameterObject has not been updated yet)
-            if (Parameters.timeId === null || isTimeRemoved === isTime)
-            {
-                $("#params").append(parameterHTML);
-                var div = $("#params").children().last();
-                // div.children().children().prop('disabled', true);
-                $(div).prop('id', 't');
-                div.find(".name").val(i18next.t('htmlGenerator:time'));
-                div.find(".parameter-type-select").val(Types.primitives.integer.name);
-                div.find(".parameter-type-select").prop("disabled", "disabled");
-                div.find(".parameter-initial-value-container").remove();
-
-                focusFirstTabindexedDescendant($("#params").children().last());
-                $("#paramsTableHead").removeClass("hidden");
-                $("#addTimeParameter").addClass("hidden");
             }
         });
 
@@ -108,73 +74,6 @@ var HtmlGenerator;
             $(this).parent().remove();
         });
     });
-
-    function addEmptyUserDefinedParameterDefinition()
-    {
-        $("#params").append(parameterHTML);
-        var addedDiv = $("#params").children().last();
-
-        var typeSelect = addedDiv.find('.parameter-type-select');
-        var parent = typeSelect.parent();
-        typeSelect.remove();
-
-        var previousType;
-        var onParameterTypeChange = function(newTypeName, userTypeChange)
-        {
-            addedDiv.addClass("changedTypeParameter");
-
-            var replaceInitialValueContainer = function()
-            {
-                var initialValueContainer = addedDiv.find(".parameter-initial-value-container");
-                var initialValue;
-                if (previousType) initialValue = previousType.getFromDOM(initialValueContainer);
-                initialValueContainer.empty();
-                var type = Types.primitives[newTypeName].loadTypeFromDOM(addedDiv, initialValueContainer, 'parameter');
-                type.appendControlTo(initialValueContainer);
-                if (previousType) type.setInDOM(initialValueContainer, type.castFrom(previousType, initialValue));
-                previousType = type;
-            };
-
-            var parameterMinContainer = addedDiv.find(".parameter-min-container");
-            var parameterMaxContainer = addedDiv.find(".parameter-max-container");
-            if (newTypeName === Types.primitives.integer.name)
-            {
-                if (!parameterMinContainer.children(Types.primitives.integer.controlName).length)
-                {
-                    Types.primitives[newTypeName].appendControlTo(parameterMinContainer);
-                    Types.primitives[newTypeName].setInDOM(parameterMinContainer, "");
-                }
-                if (!parameterMaxContainer.children(Types.primitives.integer.controlName).length)
-                {
-                    Types.primitives[newTypeName].appendControlTo(parameterMaxContainer);
-                    Types.primitives[newTypeName].setInDOM(parameterMaxContainer, "");
-                }
-            }
-            else
-            {
-                parameterMinContainer.empty();
-                parameterMaxContainer.empty();
-            }
-
-            if (newTypeName === Types.primitives.enumeration.name)
-            {
-                if (!userTypeChange)
-                {
-                    replaceInitialValueContainer();
-                }
-            }
-            else
-            {
-                replaceInitialValueContainer();
-            }
-        };
-
-        Types.appendSelectTo(parent, 'parameter-type-select', onParameterTypeChange);
-
-        addedDiv.removeClass("changedTypeParameter");
-
-        return addedDiv;
-    }
 
     function addEmptyUserDefinedParameterEffect()
     {
@@ -355,19 +254,4 @@ var HtmlGenerator;
         parameters.sequence.forEach(appendParameter);
     }
 
-    // Focuses on the first descendant that has a non-negative tabindex.
-    // This includes elements that are focusable by default, like <input> and <select>.
-    function focusFirstTabindexedDescendant(element)
-    {
-        var descendants = $(element).find('*');
-        for (var i = 0; i < descendants.length; i++)
-        {
-            var toTest = $(descendants[i]);
-            if (toTest.prop('tabIndex') >= 0)
-            {
-                return toTest.focus();
-            }
-        }
-        return $();
-    }
 })();

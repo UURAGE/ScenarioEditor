@@ -18,6 +18,7 @@ var Utils;
         cssPosition: cssPosition,
         appendChild: appendChild,
         appendChildNS: appendChildNS,
+        focusFirstTabindexedDescendant: focusFirstTabindexedDescendant,
         setPreserveSpace: setPreserveSpace,
         attachMarkdownTooltip: attachMarkdownTooltip
     };
@@ -130,6 +131,22 @@ var Utils;
     function setPreserveSpace(elem)
     {
         elem.setAttributeNS("http://www.w3.org/XML/1998/namespace", "xml:space", "preserve");
+    }
+
+    // Focuses on the first descendant that has a non-negative tabindex.
+    // This includes elements that are focusable by default, like <input> and <select>.
+    function focusFirstTabindexedDescendant(element)
+    {
+        var descendants = $(element).find('*');
+        for (var i = 0; i < descendants.length; i++)
+        {
+            var toTest = $(descendants[i]);
+            if (toTest.prop('tabIndex') >= 0)
+            {
+                return toTest.focus();
+            }
+        }
+        return $();
     }
 
     function attachMarkdownTooltip(elem)
