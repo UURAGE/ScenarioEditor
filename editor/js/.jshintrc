@@ -31,7 +31,6 @@
         "Save",
         "Metadata",
         "HtmlGenerator",
-        "ObjectGenerator",
         "Validator",
         "KeyControl",
         "Print",

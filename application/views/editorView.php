@@ -77,7 +77,6 @@
       "js/parameters.js",
       "js/metadata.js",
       "js/htmlGenerator.js",
-      "js/objectGenerator.js",
       "js/validator.js",
       "js/keyControl.js",
       "js/reposition.js",

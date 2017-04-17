@@ -194,9 +194,27 @@ var Parameters;
             Parameters.container.sequence.splice(indexOfRemovedParameter, 1);
         });
 
+        var getParameterFromDOM = function(container)
+        {
+            var name = container.find(".name").val();
+            // If the name is empty, we cannot create a valid parameter object.
+            if (!name) return null;
+
+            var typeName = container.find(".parameter-type-select").val();
+            var type = Types.primitives[typeName].loadTypeFromDOM(container, container.find(".parameter-initial-value-container"), 'parameter');
+            // If it's an enumeration and there are no values defined, we can't define it either
+            if (typeName === Types.primitives.enumeration.name && type.options.sequence.length === 0) return;
+            return {
+                id: container.prop('id'),
+                name: name,
+                type: type,
+                description: container.find(".description").val()
+            };
+        };
+
         $(".existingParameter").each(function()
         {
-            var newParameter = ObjectGenerator.parameterObject($(this));
+            var newParameter = getParameterFromDOM($(this));
             var oldParameter = Parameters.container.byId[newParameter.id];
 
             // If an already existing parameter changed type, the effects on the nodes need to be adjusted accordingly
@@ -245,23 +263,46 @@ var Parameters;
         // All new parameters
         $(".newParameter").each(function()
         {
-            if ($(this).prop('id') === 't')
-            {
-                addTimeParameter($(this));
-            }
-            else
+            if ($(this).prop('id') !== 't')
             {
                 var id = 'p' + (Parameters.counter += 1).toString();
                 $(this).prop('id', id);
-                var newParameter = ObjectGenerator.parameterObject($(this));
+            }
 
-                if (!newParameter) return;
+            var newParameter = getParameterFromDOM($(this));
 
-                Parameters.container.sequence.push(newParameter);
-                Parameters.container.byId[newParameter.id] = newParameter;
+            if (!newParameter) return;
 
-                $(this).removeClass("newParameter").addClass("existingParameter");
-                $(this).removeClass("changedTypeParameter");
+            Parameters.container.sequence.push(newParameter);
+            Parameters.container.byId[newParameter.id] = newParameter;
+
+            $(this).removeClass("newParameter").addClass("existingParameter");
+            $(this).removeClass("changedTypeParameter");
+
+            if ($(this).prop('id') === 't')
+            {
+                 Parameters.timeId = newParameter.id;
+                 $(this).addClass('isT');
+
+                 var timeEffect =
+                {
+                    idRef: newParameter.id,
+                    type: Types.primitives.integer,
+                    operator: "addAssign",
+                    value: 1
+                };
+
+                for (var nodeId in Main.nodes)
+                {
+                    var node = Main.nodes[nodeId];
+                    if (node.type === Main.playerType)
+                    {
+                        if (node.parameterEffects.userDefined !== undefined && node.parameterEffects.userDefined !== null)
+                            node.parameterEffects.userDefined.push(timeEffect);
+                        else
+                            node.parameterEffects.userDefined = [timeEffect];
+                    }
+                }
             }
         });
 
@@ -274,41 +315,6 @@ var Parameters;
 
 
         Main.selectElement(previouslySelectedElement);
-    }
-
-    function addTimeParameter(div)
-    {
-        var newParameter = ObjectGenerator.parameterObject(div);
-
-        if (!newParameter) return;
-
-        Parameters.container.sequence.push(newParameter);
-        Parameters.container.byId[newParameter.id] = newParameter;
-
-        Parameters.timeId = newParameter.id;
-
-        $(div).removeClass("newParameter").addClass("existingParameter").addClass('isT');
-        $(div).removeClass("changedTypeParameter");
-
-        var timeEffect =
-        {
-            idRef: newParameter.id,
-            type: Types.primitives.integer,
-            operator: "addAssign",
-            value: 1
-        };
-
-        for (var nodeId in Main.nodes)
-        {
-            var node = Main.nodes[nodeId];
-            if (node.type === Main.playerType)
-            {
-                if (node.parameterEffects.userDefined !== undefined && node.parameterEffects.userDefined !== null)
-                    node.parameterEffects.userDefined.push(timeEffect);
-                else
-                    node.parameterEffects.userDefined = [timeEffect];
-            }
-        }
     }
 
     function removeAllPreconditionsWithParameter(paramIdToRemove, precondition)

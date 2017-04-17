@@ -1355,7 +1355,13 @@ var Main;
         // Save user-defined parameter effects.
         $("#userDefinedParameterEffects").children().each(function()
         {
-            node.parameterEffects.userDefined.push(ObjectGenerator.effectObject($(this)));
+            var idRef = $(this).find(".parameter-idref-select").find("option:selected").val();
+            node.parameterEffects.userDefined.push(
+            {
+                idRef: idRef,
+                operator: $(this).find(".parameter-effect-operator-select").find("option:selected").val(),
+                value: Parameters.container.byId[idRef].type.getFromDOM($(this).find(".parameter-effect-value-container"))
+            });
         });
 
         // Save fixed parameter effects.
@@ -1405,8 +1411,45 @@ var Main;
             });
         }
 
+        var getPreconditionsFromDOM = function(preconditionsContainer)
+        {
+            var preconditionObject = {};
+            // Save selected type of precondition
+            preconditionObject.type = preconditionsContainer.children(".groupPreconditionRadioDiv").find('input[type=radio]:checked').val();
+
+            // Save preconditions.
+            var preconditionsArray = [];
+
+            preconditionsContainer.children(".groupPreconditionDiv").children().each(function()
+            {
+                if ($(this).hasClass("groupprecondition"))
+                {
+                    preconditionsArray.push(getPreconditionsFromDOM($(this)));
+                }
+                else
+                {
+                    var parameterIdRef = $(this).find(".parameter-idref-select").val();
+                    var characterIdRef = $(this).find(".character-idref-select").val();
+
+                    var parameter = Config.findParameterById(parameterIdRef, characterIdRef);
+                    if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
+
+                    var precondition = {
+                        idRef: parameterIdRef,
+                        operator: $(this).find(".precondition-operator-select").val(),
+                        value: parameter.type.getFromDOM($(this).find(".precondition-value-container"))
+                    };
+
+                    if (characterIdRef) precondition.characterIdRef = characterIdRef;
+                    preconditionsArray.push(precondition);
+                }
+            });
+            preconditionObject.preconditions = preconditionsArray;
+            return preconditionObject;
+        };
+
         // Save preconditions.
-        node.preconditions = ObjectGenerator.preconditionObject($("#preconditionsDiv").children().first());
+        node.preconditions = getPreconditionsFromDOM($("#preconditionsDiv").children().first());
 
         // Save property values.
         var acceptableScopes = ['per', 'per-' + node.type];
