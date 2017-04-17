@@ -56,8 +56,6 @@ var Parameters;
 
     function dialog()
     {
-        Main.selectNode(null);
-
         if (Parameters.timeId !== null)
         {
             $("#addTimeParameter").addClass("hidden");
@@ -162,6 +160,9 @@ var Parameters;
     function save()
     {
         Main.unsavedChanges = true;
+
+        var previouslySelectedElement = Main.selectedElement;
+        Main.selectElement(null);
 
         $(".removedParameter").each(function()
         {
@@ -270,6 +271,9 @@ var Parameters;
             {
                 return Parameters.container.byId[$(this).prop('id')];
             }).get();
+
+
+        Main.selectElement(previouslySelectedElement);
     }
 
     function addTimeParameter(div)

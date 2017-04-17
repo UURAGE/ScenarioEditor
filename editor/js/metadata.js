@@ -49,8 +49,6 @@ var Metadata;
     //Create the dialog to change the scenario description.
     function dialog()
     {
-        Main.selectNode(null);
-
         $("#meta-property-values, #character-tabs").empty();
 
         $("#metaScreen").dialog(
@@ -65,13 +63,14 @@ var Metadata;
                 click: function()
                 {
                     saveMetaObject();
+                    $(this).dialog('close');
                 }
             },
             {
                 text: i18next.t('common:cancel'),
                 click: function()
                 {
-                    $("#metaScreen").dialog('close');
+                    $(this).dialog('close');
                 }
             }],
             close: function()
@@ -269,8 +268,8 @@ var Metadata;
     {
         Main.unsavedChanges = true;
 
-        var previouslySelectedNode = Main.selectedElement;
-        Main.selectNode(null);
+        var previouslySelectedElement = Main.selectedElement;
+        Main.selectElement(null);
 
         // Save all values in the dialog to the metaObject
         Metadata.metaObject.name = formatScenarioName($("#scenarioName").val());
@@ -309,8 +308,7 @@ var Metadata;
             }
         }
 
-        $("#metaScreen").dialog('close');
-        Main.selectNode(previouslySelectedNode);
+        Main.selectElement(previouslySelectedElement);
     }
 
     function formatScenarioName(scenarioName)
