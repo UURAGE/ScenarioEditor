@@ -556,12 +556,13 @@ var Config;
             },
             loadTypeFromDOM: function(typeEl, defaultValueContainer, kind)
             {
-                var type = $.extend({}, this, { defaultValue: this.getFromDOM(defaultValueContainer) });
+                var type = $.extend({}, this);
                 if (kind === 'parameter')
                 {
                     type.controlName = 'select';
                     delete type.controlType;
                 }
+                type.defaultValue = type.getFromDOM(defaultValueContainer);
                 return type;
             },
             castFrom: function(type, value)
