@@ -168,26 +168,7 @@ var Parameters;
         if ($("#params").children().length > 0)
             $("#paramsTableHead").removeClass("hidden");
 
-        $("#params").sortable({
-            handle: ".handle",
-            axis: "y",
-            forceHelperSize: true,
-            helper: function(e, helper)
-            {
-                $(helper).children().each(function()
-                {
-                    $(this).width($(this).width());
-                });
-                return helper;
-            },
-            beforeStop: function(e, ui)
-            {
-                $(ui.helper).children().each(function()
-                {
-                    $(this).width("");
-                });
-            }
-        });
+        Utils.makeSortable($("#params"));
     }
 
     function addDefaultDefinition()

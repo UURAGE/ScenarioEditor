@@ -26,6 +26,7 @@
             'configXML',
             'draft',
             'enumeration',
+            'evaluations',
             'load',
             'main',
             'metadata',

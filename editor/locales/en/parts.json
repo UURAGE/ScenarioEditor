@@ -1,12 +1,9 @@
 {
     "statement": "Statement",
     "add_effect": "Add effect",
-    "name": "Name",
     "min": "Min",
     "max": "Max",
-    "type": "Type",
     "initial_value": "Initial value",
-    "description": "Description",
     "add_time_title": "Add parameter time +1 to every node",
     "general": "General",
     "scenario_name": "Scenario name",

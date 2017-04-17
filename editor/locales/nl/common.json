@@ -10,5 +10,8 @@
     "add": "Toevoegen",
     "save": "Opslaan",
     "none": "(geen)",
-    "characters": "Karakters"
+    "characters": "Karakters",
+    "name": "Naam",
+    "type": "Type",
+    "description": "Beschrijving"
 }

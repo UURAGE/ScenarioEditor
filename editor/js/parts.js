@@ -87,12 +87,12 @@ var Parts;
                     '<thead id="paramsTableHead" class="hidden">' +
                         '<tr>' +
                             '<th></th>' +
-                            '<th>'+i18next.t('parts:name')+'</th>' +
-                            '<th>'+i18next.t('parts:type')+'</th>' +
+                            '<th>'+i18next.t('common:name')+'</th>' +
+                            '<th>'+i18next.t('common:type')+'</th>' +
                             '<th>'+i18next.t('parts:min')+'</th>' +
                             '<th>'+i18next.t('parts:max')+'</th>' +
                             '<th>'+i18next.t('parts:initial_value')+'</th>' +
-                            '<th>'+i18next.t('parts:description')+'</th>' +
+                            '<th>'+i18next.t('common:description')+'</th>' +
                         '</tr>' +
                     '</thead>' +
                     '<tbody id="params">' +
@@ -138,7 +138,7 @@ var Parts;
                             '</select></td>' +
                         '</tr>' +
                         '<tr id="scenarioDescription-container">' +
-                            '<th><label for="scenarioDescription">'+i18next.t('parts:description')+':</label></th>' +
+                            '<th><label for="scenarioDescription">'+i18next.t('common:description')+':</label></th>' +
                             '<td><textarea id="scenarioDescription" ' +
                                 ' style="height: 200px; width: 100%; -moz-box-sizing: border-box; box-sizing: border-box">' +
                             '</textarea></td>' +
@@ -149,7 +149,7 @@ var Parts;
                         '<tr><td colspan="2">' +
                             '<table id="authors">' +
                                 '<tr>' +
-                                    '<th><h4>'+i18next.t('parts:name')+'</h4></th>' +
+                                    '<th><h4>'+i18next.t('common:name')+'</h4></th>' +
                                     '<th><h4>'+i18next.t('parts:email')+'</h4></th>' +
                                     '<th><h4>'+i18next.t('parts:startDate')+'</h4></th>' +
                                     '<th><h4>'+i18next.t('parts:endDate')+'</h4></th>' +

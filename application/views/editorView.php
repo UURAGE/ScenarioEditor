@@ -75,6 +75,7 @@
       "js/save.js",
       "js/enumeration.js",
       "js/parameters.js",
+      "js/evaluations.js",
       "js/metadata.js",
       "js/condition.js",
       "js/validator.js",
@@ -136,6 +137,7 @@
                     <div id="scenarioDropdown" class="dropdownItems">
                       <button id="editMetadata" class="globalButton" title="<?php sLang('edt_properties_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_properties"); ?>...</div></button>
                       <button id="editParameters" class="globalButton" title="<?php sLang('edt_parameters_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_parameters"); ?>...</div></button>
+                      <button id="editEvaluations" class="globalButton" title="<?php sLang('edt_evaluations_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_evaluations"); ?>...</div></button>
                     </div>
                   </div>
                 </div>

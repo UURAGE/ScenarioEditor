@@ -10,5 +10,8 @@
     "add": "Add",
     "save": "Save",
     "none": "(none)",
-    "characters": "Characters"
+    "characters": "Characters",
+    "name": "Name",
+    "type": "Type",
+    "description": "Description"
 }

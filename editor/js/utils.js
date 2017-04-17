@@ -20,7 +20,8 @@ var Utils;
         appendChildNS: appendChildNS,
         focusFirstTabindexedDescendant: focusFirstTabindexedDescendant,
         setPreserveSpace: setPreserveSpace,
-        attachMarkdownTooltip: attachMarkdownTooltip
+        attachMarkdownTooltip: attachMarkdownTooltip,
+        makeSortable: makeSortable
     };
 
     // Taken from stackoverflow
@@ -157,5 +158,29 @@ var Utils;
             content: i18next.t('utils:markdown_tooltip')
         });
         elem.tooltip().off('mouseover mouseout');
+    }
+
+    function makeSortable(container)
+    {
+        container.sortable({
+            handle: ".handle",
+            axis: "y",
+            forceHelperSize: true,
+            helper: function(e, helper)
+            {
+                $(helper).children().each(function()
+                {
+                    $(this).width($(this).width());
+                });
+                return helper;
+            },
+            beforeStop: function(e, ui)
+            {
+                $(ui.helper).children().each(function()
+                {
+                    $(this).width("");
+                });
+            }
+        });
     }
 })();
