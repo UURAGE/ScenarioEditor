@@ -801,8 +801,8 @@ var Main;
             propertyValues:  Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef),
             comment: "",
             endNode: false,
-            initsNode: false,
-            jumpPoint: false,
+            allowDialogueEndNode: false,
+            allowInterleaveNode: false,
             visited: false,
             topologicalRank: 0,
             id: id,
@@ -1449,11 +1449,11 @@ var Main;
         // Save endNode.
         node.endNode = $("#endNodeCheckbox").prop("checked");
 
-        // Save initsNode.
-        node.initsNode = $("#initsNodeCheckbox").prop("checked");
+        // Save allowDialogueEndNode.
+        node.allowDialogueEndNode = $("#allowDialogueEndNodeCheckbox").prop("checked");
 
-        // Save jumpPoint.
-        node.jumpPoint = $("#jumpNodeCheckbox").prop("checked");
+        // Save allowInterleaveNode.
+        node.allowInterleaveNode = $("#allowInterleaveNodeCheckbox").prop("checked");
 
         // Save comment.
         node.comment = $("textarea#comment").val();
@@ -1663,8 +1663,8 @@ var Main;
         };
 
         if (node.comment) appendNodePropertyImage("node_has_comments");
-        if (node.jumpPoint) appendNodePropertyImage("node_has_jump");
-        if (node.initsNode) appendNodePropertyImage("node_has_premature_end");
+        if (node.allowInterleaveNode) appendNodePropertyImage("node_has_jump");
+        if (node.allowDialogueEndNode) appendNodePropertyImage("node_has_premature_end");
         if (node.endNode) appendNodePropertyImage("node_has_end");
 
         // add the text and imageDiv to the node itself
@@ -1681,17 +1681,17 @@ var Main;
         Main.trees[node.parent].plumbInstance.updateOffset({elId:nodeID, recalc:true});
         Main.trees[node.parent].plumbInstance.repaint(nodeID, null, 0);
 
-        // Add the jumpnode class to the node for a graphical indication
-        if (node.jumpPoint)
-            nodeHTML.addClass('jumpnode');
+        // Add the allowInterleaveNode class to the node for a graphical indication
+        if (node.allowInterleaveNode)
+            nodeHTML.addClass('allowInterleaveNode');
         else
-            nodeHTML.removeClass('jumpnode');
+            nodeHTML.removeClass('allowInterleaveNode');
 
-        // Add the endnode class to the node for a graphical indication
+        // Add the endNode class to the node for a graphical indication
         if(node.endNode)
-            nodeHTML.addClass("endnode");
+            nodeHTML.addClass("endNode");
         else
-            nodeHTML.removeClass("endnode");
+            nodeHTML.removeClass("endNode");
     }
 
     function deleteElement(elementID)
@@ -2329,8 +2329,8 @@ var Main;
             }
 
             $("#endNodeCheckbox").prop("checked", node.endNode);
-            $("#initsNodeCheckbox").prop("checked", node.initsNode);
-            $("#jumpNodeCheckbox").prop("checked", node.jumpPoint);
+            $("#allowDialogueEndNodeCheckbox").prop("checked", node.allowDialogueEndNode);
+            $("#allowInterleaveNodeCheckbox").prop("checked", node.allowInterleaveNode);
 
             $("textarea#comment").val(node.comment);
         }

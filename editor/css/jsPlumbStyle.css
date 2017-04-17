@@ -39,12 +39,12 @@
     border:3px solid #F37812;
 }
 
-.jumpnode
+.allowInterleaveNode
 {
 	border-bottom-color:#8B4A94   !important;
 	border-left-color:#8B4A94   !important;
 }
-.jumpnode:hover
+.allowInterleaveNode:hover
 {
 	background: #Bf5cd1; /* Old browsers */
 	background: -moz-linear-gradient(45deg, #ff3333 50%, #Bf5cd1  50%); /* FF3.6+ */
@@ -55,13 +55,13 @@
 	background: linear-gradient(-135deg, #ff3333 50%, #Bf5cd1  50%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3333', endColorstr='#Bf5cd1 ',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
-.endnode
+.endNode
 {
 	border-bottom-color:#212121   !important;
 	border-left-color:#212121   !important;
 }
 
-.endnode:hover
+.endNode:hover
 {
 	background: #212121; /* Old browsers */
 	background: -moz-linear-gradient(45deg, #ff3333 50%, #212121  50%); /* FF3.6+ */

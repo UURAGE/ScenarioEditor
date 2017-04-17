@@ -173,8 +173,8 @@ var Load3;
             characterIdRef = Config.configObject.characters.sequence[0].id;
         }
 
-        var jumpPoint = Utils.parseBool($(statement).attr('jumpPoint'));
-        var initsNode = Utils.parseBool($(statement).attr('inits'));
+        var allowInterleaveNode = Utils.parseBool($(statement).attr('jumpPoint'));
+        var allowDialogueEndNode = Utils.parseBool($(statement).attr('inits'));
         var endNode = Utils.parseBool($(statement).attr('possibleEnd'));
 
         var text = Utils.unEscapeHTML($(statement).find('text').text());
@@ -247,8 +247,8 @@ var Load3;
             propertyValues: propertyValues,
             comment: comment,
             endNode: endNode,
-            initsNode: initsNode,
-            jumpPoint: jumpPoint,
+            allowDialogueEndNode: allowDialogueEndNode,
+            allowInterleaveNode: allowInterleaveNode,
             visited: false,
             topologicalRank: 0,
             id: id,
@@ -432,8 +432,8 @@ var Load3;
             propertyValues: Config.getNewDefaultPropertyValues(['independent']),
             comment: comment,
             endNode: endNode,
-            initsNode: false,
-            jumpPoint: false,
+            allowDialogueEndNode: false,
+            allowInterleaveNode: false,
             visited: false,
             topologicalRank: 0,
             id: id,
@@ -497,8 +497,8 @@ var Load3;
                     propertyValues: Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef),
                     comment: "",
                     endNode: endNode,
-                    initsNode: false,
-                    jumpPoint: false,
+                    allowDialogueEndNode: false,
+                    allowInterleaveNode: false,
                     visited: false,
                     topologicalRank: 0,
                     id: id,

@@ -577,8 +577,8 @@ button img
 #properties.player > #headerComputer,
 #properties.player > #headerSituation,
 #properties.player > #treeSubject,
-#properties.player > #jumpNode,
-#properties.player > #initsNode,
+#properties.player > #allowInterleaveNode,
+#properties.player > #allowDialogueEndNode,
 #properties.player > #optionalSubject,
 #properties.player > #characterSection
 {
@@ -588,8 +588,8 @@ button img
 #properties.situation > #headerPlayer,
 #properties.situation > #headerComputer,
 #properties.situation > #treeSubject,
-#properties.situation > #jumpNode,
-#properties.situation > #initsNode,
+#properties.situation > #allowInterleaveNode,
+#properties.situation > #allowDialogueEndNode,
 #properties.situation > #optionalSubject,
 #properties.situation > #characterSection
 {
@@ -609,8 +609,8 @@ button img
 #properties.tree > #headerSituation,
 #properties.tree > #preconditionsSection,
 #properties.tree > #endNode,
-#properties.tree > #initsNode,
-#properties.tree > #jumpNode,
+#properties.tree > #allowDialogueEndNode,
+#properties.tree > #allowInterleaveNode,
 #properties.tree > #effectsSection,
 #properties.tree > #propertyValuesSection,
 #properties.tree > #characterSection,

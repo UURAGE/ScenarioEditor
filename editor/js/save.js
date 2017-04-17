@@ -304,8 +304,8 @@ var Save;
             if (node.type === Main.computerType)
             {
                 statementEl.setAttribute('characteridref', node.characterIdRef);
-                statementEl.setAttribute('jumpPoint', node.jumpPoint);
-                statementEl.setAttribute('inits', node.initsNode);
+                statementEl.setAttribute('allowInterleave', node.allowInterleaveNode);
+                statementEl.setAttribute('allowDialogueEnd', node.allowDialogueEndNode);
             }
             statementEl.setAttribute('end', node.endNode);
 

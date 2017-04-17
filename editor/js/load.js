@@ -316,8 +316,16 @@ var Load;
             id = "ext_" + id;
 
         var characterIdRef = $(statement).attr('characteridref');
-        var jumpPoint = Utils.parseBool($(statement).attr('jumpPoint'));
-        var initsNode = Utils.parseBool($(statement).attr('inits'));
+        var allowInterleaveNode = false;
+        var allowInterleaveVal = $(statement).attr('jumpPoint');
+        if (allowInterleaveVal !== undefined) allowInterleaveNode = Utils.parseBool(allowInterleaveVal);
+        allowInterleaveVal = $(statement).attr('allowInterleave');
+        if (allowInterleaveVal !== undefined) allowInterleaveNode = Utils.parseBool(allowInterleaveVal);
+        var allowDialogueEndNode = false;
+        var allowDialogueEndVal = $(statement).attr('inits');
+        if (allowDialogueEndVal !== undefined) allowDialogueEndNode = Utils.parseBool(allowDialogueEndVal);
+        allowDialogueEndVal = $(statement).attr('allowDialogueEnd');
+        if (allowDialogueEndVal !== undefined) allowDialogueEndNode = Utils.parseBool(allowDialogueEndVal);
         var endNode = Utils.parseBool($(statement).attr('end'));
 
         var text = $(statement).children('text').text();
@@ -365,8 +373,8 @@ var Load;
             propertyValues: propertyValues,
             comment: comment,
             endNode: endNode,
-            initsNode: initsNode,
-            jumpPoint: jumpPoint,
+            allowDialogueEndNode: allowDialogueEndNode,
+            allowInterleaveNode: allowInterleaveNode,
             visited: false,
             topologicalRank: 0,
             id: id,
