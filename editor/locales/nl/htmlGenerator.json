@@ -3,10 +3,5 @@
         "no_test": "Error: er zijn geen parameters. Dus er is niks waar deze knoop op kan testen.",
         "no_effect": "Error: er zijn geen parameters. Dus er is niks waar deze knoop effect op kan hebben."
     },
-    "time": "Tijd",
-    "enumeration": {
-        "screen_title": "Enumeratie",
-        "screen_button_alt": "Definieer enumeratie",
-        "no_values_defined": "Er zijn geen waarden gedefinieerd voor de enumeratie"
-    }
+    "time": "Tijd"
 }

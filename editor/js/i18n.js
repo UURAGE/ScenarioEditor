@@ -24,6 +24,7 @@
             'common',
             'configXML',
             'draft',
+            'enumeration',
             'htmlGenerator',
             'load',
             'main',

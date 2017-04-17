@@ -442,12 +442,20 @@ var Types;
             loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
                 var options = { sequence: [] };
-                typeEl.find(".enumeration-value-list").children().each(function(index, valueItem)
+                typeEl.find(".enumeration-values").children().each(function(index, valueItem)
                 {
                     var option = { text: $(valueItem).text() };
                     options.sequence.push(option);
                 });
-                var defaultValue = defaultValueContainer.length > 0 ? this.getFromDOM(defaultValueContainer) : options.sequence[0].text;
+                var defaultValue;
+                if (defaultValueContainer.length > 0)
+                {
+                    defaultValue = this.getFromDOM(defaultValueContainer);
+                }
+                else if (options.sequence.length > 0)
+                {
+                    defaultValue = options.sequence[0].text;
+                }
                 return $.extend({ options: options }, this, { defaultValue: defaultValue });
             },
             castFrom: function(type, value)
@@ -469,6 +477,17 @@ var Types;
                 };
                 this.options.sequence.forEach(appendOptionChild.bind(this));
                 return enumerationXML;
+            },
+            insertTypeIntoDOM: function(containerEl, values)
+            {
+                containerEl.find(".enumeration-values").remove();
+                var enumerationValues = $('<ul>', { class: "enumeration-values" });
+                values.forEach(function(value)
+                {
+                    enumerationValues.append($('<li>', { text: value }));
+                });
+                enumerationValues.hide();
+                containerEl.append(enumerationValues);
             },
             appendControlTo: function(containerEl, htmlId)
             {
@@ -503,47 +522,20 @@ var Types;
             typeSelect.append($('<option>', { value: typeName, text: i18next.t('types:primitives.' + typeName + '.translation') }));
         }
 
-        typeSelect.on('change', onChange);
-
         typeSelect.on('change', function(e)
         {
             var newTypeName = $(this).val();
             var userTypeChange = e.originalEvent;
 
+            onChange(newTypeName, userTypeChange);
+
             if (newTypeName === Types.primitives.enumeration.name)
             {
-                // If this was an enumeration already, use the old button
-                if (!containerEl.find(".enumeration-screen-button").length)
-                {
-                    var enumerationScreenButton = $('<button>', { class: "enumeration-screen-button" });
-                    enumerationScreenButton.attr('title', i18next.t('htmlGenerator:enumeration.button_alt'));
-                    var buttonIcon = $('<img>', { src: editor_url + "png/others/list.png" });
-                    enumerationScreenButton.on('mouseover', function()
-                    {
-                        buttonIcon.attr('src', editor_url + "png/others/list_hover.png");
-                    });
-                    enumerationScreenButton.on('mouseout', function()
-                    {
-                        buttonIcon.attr('src', editor_url + "png/others/list.png");
-                    });
-                    buttonIcon.attr('alt', i18next.t('htmlGenerator:enumeration.button_alt'));
-                    enumerationScreenButton.append($('<div>').append(buttonIcon));
-                    enumerationScreenButton.on('click', function()
-                    {
-                        HtmlGenerator.enumerationDefinitionDialog(containerEl);
-                    });
-                    containerEl.find(".parameter-type-select").parent().append(enumerationScreenButton);
-                }
-
-                if (userTypeChange)
-                {
-                    HtmlGenerator.enumerationDefinitionDialog(containerEl);
-                }
+                Enumeration.addDefinition(containerEl, userTypeChange, onChange);
             }
             else
             {
-                containerEl.find(".enumeration-screen-button").remove();
-                containerEl.find(".enumeration-value-list").remove();
+                Enumeration.removeDefinition(containerEl);
             }
         });
 

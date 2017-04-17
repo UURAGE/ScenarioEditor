@@ -10,9 +10,7 @@ var HtmlGenerator;
     {
         addEmptyUserDefinedParameterDefinition: addEmptyUserDefinedParameterDefinition,
         addEmptyUserDefinedParameterEffect: addEmptyUserDefinedParameterEffect,
-        appendEnumerationValueListTo: appendEnumerationValueListTo,
-        insertPreconditions: insertPreconditions,
-        enumerationDefinitionDialog: enumerationDefinitionDialog
+        insertPreconditions: insertPreconditions
     };
 
     //Get all the raw HTLM from Parts.js
@@ -24,25 +22,6 @@ var HtmlGenerator;
 
     $(document).ready(function()
     {
-        var enumerationScreenHTML = Parts.getEnumerationScreenHTML();
-        $("#enumerationScreen").html(enumerationScreenHTML);
-
-        // Set event handlers:
-        // Event handlers for adding HTML.
-
-        $("#add-enumeration-value-button").on('click', function()
-        {
-            addEnumerationValue($(this).parent(), $("#enumeration-value-input").val());
-        });
-
-        $("#enumeration-value-input").on('keydown', function(e)
-        {
-            if (e.which === 13) // ENTER
-            {
-                addEnumerationValue($(this).parent(), $(this).val());
-            }
-        });
-
         $("#preconditionsDiv").on('click', ".addPrecondition", function()
         {
             if (Parameters.atLeastOneUserDefined() || Config.atLeastOneParameter())
@@ -140,10 +119,8 @@ var HtmlGenerator;
         typeSelect.remove();
 
         var previousType;
-        var onParameterTypeChange = function(e)
+        var onParameterTypeChange = function(newTypeName, userTypeChange)
         {
-            var newTypeName = $(this).val();
-            var userTypeChange = e.originalEvent;
             addedDiv.addClass("changedTypeParameter");
 
             var replaceInitialValueContainer = function()
@@ -197,107 +174,6 @@ var HtmlGenerator;
         addedDiv.removeClass("changedTypeParameter");
 
         return addedDiv;
-    }
-
-    function enumerationDefinitionDialog(enumerationDiv)
-    {
-        var enumerationValueInput = $("#enumeration-value-input");
-        enumerationDiv.find(".enumeration-value-list").children().each(function()
-        {
-            addEnumerationValue(enumerationValueInput.parent(), $(this).text());
-        });
-
-        var alertUserNoEnumValuesDefined = function() { alert(i18next.t('htmlGenerator:enumeration.no_values_defined')); };
-
-        $("#enumerationScreen").dialog(
-        {
-            title: i18next.t('htmlGenerator:enumeration.title'),
-            height: Constants.heightEnumerationScreen,
-            width: Constants.widthEnumerationScreen,
-            modal: true,
-            buttons: [
-            {
-                text: i18next.t('common:confirm'),
-                click: function()
-                {
-                    var success = saveEnumerationDefinition(enumerationDiv);
-                    if (success) $(this).dialog('close');
-                    else         alertUserNoEnumValuesDefined();
-                }
-            },
-            {
-                text: i18next.t('common:cancel'),
-                click: function()
-                {
-                    $(this).dialog('close');
-                }
-            }],
-            beforeClose: function()
-            {
-                if (enumerationDiv.find(".enumeration-value-list").children().length === 0)
-                {
-                    alertUserNoEnumValuesDefined();
-                    return false;
-                }
-            },
-            close: function()
-            {
-                $("#enumeration-value-list").children().not(":last-child").each(function() { $(this).remove(); });
-                $("#enumeration-value-input").val("");
-            }
-        });
-    }
-
-    function addEnumerationValue(enumerationValueInputItem, enumerationValue)
-    {
-        // The value of an enumeration can not be the empty string
-        if (enumerationValue)
-        {
-            var enumerationValueInput = $("#enumeration-value-input");
-
-            var deleteParentButton = $(Parts.getDeleteParentButtonHTML());
-            deleteParentButton.on('click', function()
-            {
-                $(this).parent().remove(); enumerationValueInput.focus();
-            });
-
-            var enumerationValueItem = $('<li>').append($('<div>', { class: 'enumeration-value', text: enumerationValue }));
-            enumerationValueItem.append(deleteParentButton);
-            enumerationValueItem.insertBefore(enumerationValueInputItem);
-
-            enumerationValueInput.val("").focus();
-        }
-    }
-
-    function saveEnumerationDefinition(enumerationDiv)
-    {
-        var values = [];
-        // Last child is the input so don't include it
-        $("#enumeration-value-list").children().not(":last-child").each(function()
-        {
-            values.push($(this).text());
-        });
-
-        if (values.length === 0) return false;
-
-        var enumerationList = enumerationDiv.find(".enumeration-value-list");
-        if (enumerationList.length) enumerationList.remove();
-
-        var typeSelect = enumerationDiv.find(".parameter-type-select");
-        appendEnumerationValueListTo(typeSelect.parent(), values);
-        typeSelect.trigger('change');
-        return true;
-    }
-
-    function appendEnumerationValueListTo(el, values)
-    {
-        var enumerationValueList = $('<ul class="enumeration-value-list hidden">');
-        values.forEach(function(value)
-        {
-            enumerationValueList.append($('<li>', { text: value }));
-        });
-        el.append(enumerationValueList);
-        return el;
     }
 
     function addEmptyUserDefinedParameterEffect()

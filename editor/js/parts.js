@@ -13,7 +13,6 @@ var Parts;
         getParameterEffectHTML: getParameterEffectHTML,
         getAddParameterEffectButtonHTML: getAddParameterEffectButtonHTML,
         getDeleteParentButtonHTML: getDeleteParentButtonHTML,
-        getEnumerationScreenHTML: getEnumerationScreenHTML,
         getGroupPreconditionHTML: getGroupPreconditionHTML,
         getMetaScreenHTML: getMetaScreenHTML,
         getParameterScreenHTML: getParameterScreenHTML,
@@ -136,20 +135,6 @@ var Parts;
             '</div>';
     }
 
-    function getEnumerationScreenHTML()
-    {
-        return '' +
-            '<div>' +
-                '<label>' +i18next.t('parts:values')+'</label>' +
-                '<ul id="enumeration-value-list">' +
-                    '<li>' +
-                        '<input autofocus type="text" id="enumeration-value-input"/>' +
-                        '<button type="button" id="add-enumeration-value-button"><img src="' + editor_url + 'png/others/plus.png" title="'+i18next.t('common:add')+'"></button>' +
-                    '</li>' +
-                '</ul>' +
-            '</div>';
-    }
-
     function getMetaScreenHTML()
     {
         var scenarioLanguageRow;
@@ -239,7 +224,7 @@ var Parts;
                 '<td>' +
                     '<input type="text" class="name" style="width:197px;" />' +
                 '</td>' +
-                '<td white-space:nowrap" >' +
+                '<td>' +
                     '<select class="parameter-type-select" >' +
                         typeOptions +
                     '</select>' +

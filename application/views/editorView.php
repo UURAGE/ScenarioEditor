@@ -73,6 +73,7 @@
       "js/load/load1.js",
       "js/load/load3.js",
       "js/save.js",
+      "js/enumeration.js",
       "js/parameters.js",
       "js/metadata.js",
       "js/htmlGenerator.js",
@@ -344,7 +345,6 @@
   <div id="metaScreen" style="display: none"></div>
   <div id="importScreen" style="display: none"></div>
   <div id="parameterScreen" style="display: none"></div>
-  <div id="enumerationScreen" style="display: none"></div>
   <div id="dragBox" style="display: none"></div>
   <div class="lengthTest"></div>
 </body>
