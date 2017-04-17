@@ -685,7 +685,7 @@ var Config;
                     var option = { text: $(valueItem).text() };
                     options.sequence.push(option);
                 });
-                var defaultValue = options.sequence.length > 0 ? options.sequence[0].text : this.getFromDOM(defaultValueContainer);
+                var defaultValue = defaultValueContainer.length > 0 ? this.getFromDOM(defaultValueContainer) : options.sequence[0].text;
                 return $.extend({ options: options }, this, { defaultValue: defaultValue });
             },
             castFrom: function(type, value)
