@@ -12,11 +12,9 @@ var Parts;
         getDraftScreenHTML: getDraftScreenHTML,
         getAddParameterEffectButtonHTML: getAddParameterEffectButtonHTML,
         getDeleteParentButtonHTML: getDeleteParentButtonHTML,
-        getGroupPreconditionHTML: getGroupPreconditionHTML,
         getMetaScreenHTML: getMetaScreenHTML,
         getParameterScreenHTML: getParameterScreenHTML,
         getParameterDefinitionHTML: getParameterDefinitionHTML,
-        getPreconditionHTML: getPreconditionHTML,
         getImportScreenHTML: getImportScreenHTML
     };
 
@@ -79,24 +77,6 @@ var Parts;
             '<button title="' + i18next.t('common:add') + '">' +
                 '<img src="' + editor_url + 'png/others/plus.png" alt="+">' + ' ' + i18next.t('parts:add_effect') +
             '</button>';
-    }
-
-    function getGroupPreconditionHTML()
-    {
-        return '' +
-            '<div class="precondition groupprecondition empty">' +
-                '<div class="emptyLabel">'+i18next.t('parts:empty_group')+'</div>' +
-                '<div class="singleLabel hidden">'+i18next.t('parts:one_condition_group')+':</div>' +
-                '<div class="groupPreconditionRadioDiv">' +
-                    '<label><input type="radio" name="initialRadioName" value="and" checked="checked" />'+i18next.t('parts:all_true')+'</label>' +
-                    '<label><input type="radio" name="initialRadioName" value="or" />'+i18next.t('parts:one_true')+'</label>' +
-                '</div>' +
-                '<div class="groupPreconditionDiv"></div>' +
-                '<button class="addPrecondition"><img src="' + editor_url + 'png/others/plus.png" alt="+"> '+i18next.t('parts:add_condition')+'</button>' +
-                '<button class="addGroupPrecondition"><img src="' + editor_url + 'png/others/plus.png" alt="+"> '+i18next.t('parts:add_group')+'</button>' +
-                '' +
-                '<button type="button" class="deleteParent" title="'+i18next.t('common:delete')+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"> '+i18next.t('parts:delete_group')+'</button>' +
-            '</div>';
     }
 
     function getParameterScreenHTML()
@@ -234,16 +214,5 @@ var Parts;
                     '<button type="button" class="deleteParent" title="'+i18next.t('common:delete')+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
                 '</td>' +
             '</tr>';
-    }
-
-    function getPreconditionHTML()
-    {
-        return '' +
-            '<div class="precondition">' +
-                '<select class="parameter-idref-select">' +
-                '</select>' +
-                '<span class="precondition-test-container"></span>' +
-                '<button type="button" class="deleteParent" title="'+i18next.t('common:delete')+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
-            '</div>';
     }
 })();

@@ -814,7 +814,7 @@ var Main;
             preconditions:
             {
                 type: "alwaysTrue",
-                preconditions: []
+                subconditions: []
             },
             propertyValues:  Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef),
             comment: "",
@@ -2383,9 +2383,7 @@ var Main;
         parameterEffect.append(idRefSelect);
         var effectContainer = $('<span>', { class: "parameter-effect-container" });
         parameterEffect.append(effectContainer);
-        var deleteButton = $('<button>', { type: 'button', class: "deleteParent", title: i18next.t('common:delete') });
-        deleteButton.append($('<img>', { src: editor_url + "png/others/minus.png", alt: '-' }));
-        parameterEffect.append(deleteButton);
+        parameterEffect.append(Parts.getDeleteParentButtonHTML());
         $("#userDefinedParameterEffects").append(parameterEffect);
 
         Parameters.insertInto(idRefSelect);

@@ -12,20 +12,17 @@ var Condition;
         extract: extract
     };
 
-    //Get all the raw HTLM from Parts.js
-    var preconditionHTML = Parts.getPreconditionHTML();
-    var groupPreconditionHTML = Parts.getGroupPreconditionHTML();
     var radioButtonCounter = 0;
 
     $(document).ready(function()
     {
-        $("#preconditionsDiv").on('click', ".addPrecondition", function()
+        $("#preconditionsDiv").on('click', ".addCondition", function()
         {
             if (Parameters.atLeastOneUserDefined() || Config.atLeastOneParameter())
             {
-                var container = $(this).parent().children(".groupPreconditionDiv");
-                addEmptyPrecondition(container);
-                var addedDiv = container.children(".precondition").last();
+                var container = $(this).parent().children(".groupConditionDiv");
+                appendCondition(container);
+                var addedDiv = container.children(".condition").last();
                 Utils.focusFirstTabindexedDescendant(addedDiv);
             }
             else
@@ -33,68 +30,65 @@ var Condition;
                 alert(i18next.t('condition:error.no_test'));
             }
         });
-        $("#preconditionsDiv").on('click', ".addGroupPrecondition", function()
+        $("#preconditionsDiv").on('click', ".addGroupCondition", function()
         {
             if (Parameters.atLeastOneUserDefined() || Config.atLeastOneParameter())
             {
-                var container = $(this).parent().children(".groupPreconditionDiv");
-                addEmptyGroupPrecondition(container);
-                container.children(".precondition").last().find('button').first().focus();
+                var container = $(this).parent().children(".groupConditionDiv");
+                appendGroupCondition(container);
+                container.children(".condition").last().find('button').first().focus();
             }
             else
             {
                 alert(i18next.t('condition:error.no_test'));
             }
         });
-
-        // Event handlers for removing HTML.
-        $("#preconditionsDiv").on('click', '.deleteParent', function()
-        {
-            var containingGroupPrecondition = $(this).parent().parent().closest(".groupprecondition");
-            $(this).parent().remove();
-            updateGroupPreconditionCounter(containingGroupPrecondition);
-        });
     });
 
-    function insert(container, conditions)
+    function insert(container, condition)
     {
-        var addedDiv = addEmptyGroupPrecondition(container);
-        addedDiv.children(".groupPreconditionRadioDiv").find(
-            "input[value=" + conditions.type + "]").prop(
-            'checked', true);
-
-        var divToAddChildren = addedDiv.children(".groupPreconditionDiv");
-        for (var i = 0; i < conditions.preconditions.length; i++)
+        var conditionContainer = appendGroupCondition(container);
+        var subconditionsContainer = conditionContainer.children(".groupConditionDiv");
+        subconditionsContainer.find("input[value=" + condition.type + "]").prop('checked', true);
+        condition.subconditions.forEach(function(subcondition)
         {
-            var currentPrecondition = conditions.preconditions[i];
-            if ("type" in currentPrecondition)
+            if ("type" in subcondition)
             {
-                insert(divToAddChildren, currentPrecondition);
+                insert(subconditionsContainer, subcondition);
             }
             else
             {
-                var parameter = Config.findParameterById(currentPrecondition.idRef, currentPrecondition.characterIdRef);
-                if (!parameter) parameter = Parameters.container.byId[currentPrecondition.idRef];
+                var parameter = Config.findParameterById(subcondition.idRef, subcondition.characterIdRef);
+                if (!parameter) parameter = Parameters.container.byId[subcondition.idRef];
 
-                addedDiv = addEmptyPrecondition(divToAddChildren);
-                addedDiv.find(".parameter-idref-select").val(currentPrecondition.idRef).trigger('change');
-                addedDiv.find(".character-idref-select").val(currentPrecondition.characterIdRef);
-                addedDiv.find(".precondition-operator-select").val(currentPrecondition.operator);
-                parameter.type.setInDOM(addedDiv.find(".precondition-value-container"), currentPrecondition.value);
+                var subconditionContainer = appendCondition(subconditionsContainer);
+                subconditionContainer.find(".parameter-idref-select").val(subcondition.idRef).trigger('change');
+                subconditionContainer.find(".character-idref-select").val(subcondition.characterIdRef);
+                subconditionContainer.find(".condition-operator-select").val(subcondition.operator);
+                parameter.type.setInDOM(subconditionContainer.find(".condition-value-container"), subcondition.value);
             }
-        }
+        });
     }
 
-    function addEmptyPrecondition(divToAdd)
+    function appendCondition(container)
     {
-        divToAdd.append(preconditionHTML);
-        var addedDiv = $(divToAdd).children().last();
+        var condition = $('<div>', { class: "condition" });
+        container.append(condition);
+        var idRefSelect = $('<select>', { class: "parameter-idref-select" });
+        condition.append(idRefSelect);
+        var testContainer = $('<span>', { class: "condition-test-container" });
+        condition.append(testContainer);
+        var deleteButton = $(Parts.getDeleteParentButtonHTML());
+        deleteButton.on('click', function()
+        {
+            condition.remove();
+            updateGroupConditionCounter(container.closest(".groupcondition"));
+        });
+        condition.append(deleteButton);
 
-        var idRefSelect = addedDiv.find(".parameter-idref-select");
         Parameters.insertInto(idRefSelect);
         Config.insertParametersInto(idRefSelect);
 
-        var testContainer = addedDiv.find(".precondition-test-container");
         var changeTestType = function(parameterIdRef)
         {
             var parameter = Config.findParameterById(parameterIdRef);
@@ -128,14 +122,14 @@ var Condition;
                 }
             }
 
-            var operatorSelect = $('<select>', { class: "precondition-operator-select" });
+            var operatorSelect = $('<select>', { class: "condition-operator-select" });
             parameter.type.relationalOperators.forEach(function(relOp)
             {
                 operatorSelect.append($('<option>', { value: relOp.name, text: relOp.uiName }));
             });
             testContainer.append(operatorSelect);
 
-            var controlContainer = $('<span>', { class: "precondition-value-container" });
+            var controlContainer = $('<span>', { class: "condition-value-container" });
             parameter.type.appendControlTo(controlContainer);
             testContainer.append(controlContainer);
         };
@@ -146,26 +140,60 @@ var Condition;
             changeTestType($(this).val());
         });
 
-        updateGroupPreconditionCounter(divToAdd.closest(".groupprecondition"));
-        return addedDiv;
+        updateGroupConditionCounter(container.closest(".groupcondition"));
+        return condition;
     }
 
-    function addEmptyGroupPrecondition(divToAdd)
+    function appendGroupCondition(container)
     {
-        divToAdd.append(groupPreconditionHTML);
-        var addedDiv = $(divToAdd).children().last();
+        var groupCondition = $('<div>', { class: "condition groupcondition empty" });
+        groupCondition.append($('<div>', { class: "emptyLabel", text: i18next.t('condition:empty_group') }));
+        groupCondition.append($('<div>', { class: "singleLabel hidden", text: i18next.t('condition:one_condition_group') }));
+
+        var groupConditionRadio = $('<div>', { class: "groupConditionRadioDiv" });
+        var andLabel = $('<label>').append($('<input>', { type: 'radio', value: 'and', checked: 'checked' }));
+        andLabel.append(i18next.t('condition:all_true'));
+        var orLabel = $('<label>').append($('<input>', { type: 'radio', value: 'or' }));
+        orLabel.append(i18next.t('condition:one_true'));
+        groupConditionRadio.append(andLabel).append(orLabel);
         radioButtonCounter += 1;
-        addedDiv.children(".groupPreconditionRadioDiv").find("input").each(function()
+        groupConditionRadio.find("input").each(function()
         {
-            $(this).prop("name", "preconRadio" + radioButtonCounter);
+            $(this).prop("name", "conRadio" + radioButtonCounter);
         });
-        updateGroupPreconditionCounter(divToAdd.closest(".groupprecondition"));
-        return addedDiv;
+        updateGroupConditionCounter(container.closest(".groupcondition"));
+        groupCondition.append(groupConditionRadio);
+
+        groupCondition.append($('<div>', { class: "groupConditionDiv" }));
+        groupCondition.append(
+            $('<button>', { class: "addCondition"})
+                .append($('<img>', { src: editor_url + "png/others/plus.png", alt: '+' }))
+                .append(i18next.t('condition:add_condition')
+            )
+        );
+        groupCondition.append(
+            $('<button>', { class: "addGroupCondition"})
+                .append($('<img>', { src: editor_url + "png/others/plus.png", alt: '+' }))
+                .append(i18next.t('condition:add_group')
+            )
+        );
+        var deleteButton = $(Parts.getDeleteParentButtonHTML());
+        deleteButton.append(i18next.t('condition:delete_group'));
+        deleteButton.on('click', function()
+        {
+            groupCondition.remove();
+            updateGroupConditionCounter(container.closest(".groupcondition"));
+        });
+        groupCondition.append(deleteButton);
+
+        container.append(groupCondition);
+
+        return groupCondition;
     }
 
-    function updateGroupPreconditionCounter(div)
+    function updateGroupConditionCounter(div)
     {
-        var childCount = div.children(".groupPreconditionDiv").children().length;
+        var childCount = div.children(".groupConditionDiv").children().length;
         var states = {
             empty: childCount === 0,
             single: childCount === 1,
@@ -181,18 +209,18 @@ var Condition;
 
     function extract(container)
     {
-        var preconditionObject = {};
-        // Save selected type of precondition
-        preconditionObject.type = container.children(".groupPreconditionRadioDiv").find('input[type=radio]:checked').val();
+        var condition = {};
+        // Save selected type of condition
+        condition.type = container.children(".groupConditionRadioDiv").find('input[type=radio]:checked').val();
 
-        // Save preconditions.
-        var preconditionsArray = [];
+        // Save conditions.
+        var subconditions = [];
 
-        container.children(".groupPreconditionDiv").children().each(function()
+        container.children(".groupConditionDiv").children().each(function()
         {
-            if ($(this).hasClass("groupprecondition"))
+            if ($(this).hasClass("groupcondition"))
             {
-                preconditionsArray.push(extract($(this)));
+                subconditions.push(extract($(this)));
             }
             else
             {
@@ -202,17 +230,18 @@ var Condition;
                 var parameter = Config.findParameterById(parameterIdRef, characterIdRef);
                 if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
 
-                var precondition = {
+                var subcondition =
+                {
                     idRef: parameterIdRef,
-                    operator: $(this).find(".precondition-operator-select").val(),
-                    value: parameter.type.getFromDOM($(this).find(".precondition-value-container"))
+                    operator: $(this).find(".condition-operator-select").val(),
+                    value: parameter.type.getFromDOM($(this).find(".condition-value-container"))
                 };
 
-                if (characterIdRef) precondition.characterIdRef = characterIdRef;
-                preconditionsArray.push(precondition);
+                if (characterIdRef) subcondition.characterIdRef = characterIdRef;
+                subconditions.push(subcondition);
             }
         });
-        preconditionObject.preconditions = preconditionsArray;
-        return preconditionObject;
+        condition.subconditions = subconditions;
+        return condition;
     }
 })();

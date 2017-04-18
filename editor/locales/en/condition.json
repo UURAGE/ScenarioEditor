@@ -1,4 +1,11 @@
 {
+    "empty_group": "Empty group",
+    "one_condition_group": "Group with one condition",
+    "all_true": "all true",
+    "one_true": "at least one true",
+    "add_condition": "Add condition",
+    "add_group": "Add group",
+    "delete_group": "Delete group",
     "error": {
         "no_test": "Error: there are no parameters to test on."
     }

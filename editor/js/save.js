@@ -492,9 +492,9 @@ var Save;
         else
         {
             var typeEl = document.createElementNS(scenarioNameSpace,precondition.type);
-            for (var i = 0; i < precondition.preconditions.length; i++)
+            for (var i = 0; i < precondition.subconditions.length; i++)
             {
-                var conditionObj = precondition.preconditions[i];
+                var conditionObj = precondition.subconditions[i];
                 conditionEl = createAndReturnPreconditionXML(conditionObj);
                 if (conditionEl !== null)
                     typeEl.appendChild(conditionEl);

@@ -1,12 +1,5 @@
 {
     "statement": "Zin",
-    "empty_group": "Lege groep",
-    "one_condition_group": "Groep met één preconditie",
-    "all_true": "alles waar",
-    "one_true": "minstens één waar",
-    "add_condition": "Preconditie toevoegen",
-    "add_group": "Groep toevoegen",
-    "delete_group": "Groep verwijderen",
     "add_effect": "Effect toevoegen",
     "name": "Naam",
     "type": "Type",

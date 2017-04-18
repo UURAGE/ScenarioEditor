@@ -166,7 +166,7 @@ var Load3;
         var preconditionsXML = $(statement).find("preconditions");
         var preconditions;
         if (preconditionsXML.length === 0)
-            preconditions = { type: "alwaysTrue", preconditions: [] };
+            preconditions = { type: "alwaysTrue", subconditions: [] };
         else
             preconditions = loadPreconditions(preconditionsXML.children()[0]);
 
@@ -276,7 +276,7 @@ var Load3;
         }
         return {
             type: preconditionType,
-            preconditions: preconditionsArray
+            subconditions: preconditionsArray
         };
     }
 
@@ -373,7 +373,7 @@ var Load3;
         var preconditionsXML = $(conversationXMLElement).find("preconditions");
         var preconditionsJS;
         if (preconditionsXML.length === 0)
-            preconditionsJS = {type: "alwaysTrue", preconditions: []};
+            preconditionsJS = {type: "alwaysTrue", subconditions: []};
         else
             preconditionsJS = loadPreconditions(preconditionsXML.children()[0]);
 
@@ -473,7 +473,7 @@ var Load3;
                     text: textNode.text,
                     type: textNode.type,
                     parameterEffects: Config.getNewDefaultParameterEffects(characterIdRef),
-                    preconditions: {type: "alwaysTrue", preconditions: []},
+                    preconditions: {type: "alwaysTrue", subconditions: []},
                     propertyValues: Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef),
                     comment: "",
                     endNode: endNode,

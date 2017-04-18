@@ -1,4 +1,11 @@
 {
+    "empty_group": "Lege groep",
+    "one_condition_group": "Groep met één conditie",
+    "all_true": "alles waar",
+    "one_true": "minstens één waar",
+    "add_condition": "Conditie toevoegen",
+    "add_group": "Groep toevoegen",
+    "delete_group": "Groep verwijderen",
     "error": {
         "no_test": "Error: er zijn geen parameters. Dus er is niks waar deze knoop op kan testen."
     }

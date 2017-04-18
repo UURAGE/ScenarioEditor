@@ -649,7 +649,7 @@ button img
     margin-top: 5px;
   }
 
-.groupPreconditionDiv
+.groupConditionDiv
 {
   margin: 0;
   margin-left: 12px;
@@ -658,36 +658,36 @@ button img
   border-left: 2px solid white;
 }
 
-.precondition > button
+.condition > button
 {
   display: block;
 }
 
-.precondition > .precondition-test-container + button
+.condition > .condition-test-container + button
 {
   display: inline-block;
 }
 
-.precondition > .emptyLabel,
-.precondition > .singleLabel,
-.precondition > .multipleLabel
+.condition > .emptyLabel,
+.condition > .singleLabel,
+.condition > .multipleLabel
 {
   display: none;
 }
 
-.precondition.empty > .emptyLabel,
-.precondition.single > .singleLabel,
-.precondition.multiple > .multipleLabel
+.condition.empty > .emptyLabel,
+.condition.single > .singleLabel,
+.condition.multiple > .multipleLabel
 {
   display: block;
 }
 
-.groupPreconditionRadioDiv
+.groupConditionRadioDiv
 {
   display: none;
 }
 
-.precondition.multiple > .groupPreconditionRadioDiv
+.condition.multiple > .groupConditionRadioDiv
 {
   display: block;
 }
@@ -712,7 +712,7 @@ button img
   white-space: nowrap;
 }
 
-  #preconditionsSection > #preconditionsDiv > .precondition > .deleteParent
+  #preconditionsSection > #preconditionsDiv > .condition > .deleteParent
   {
     display: none;
   }

@@ -343,9 +343,9 @@ var Parameters;
                             precondition.value = newParameter.type.castFrom(oldParameter.type, precondition.value);
                         }
 
-                        if (precondition.type !== "alwaysTrue" && precondition.preconditions)
+                        if (precondition.type !== "alwaysTrue" && precondition.subconditions)
                         {
-                            precondition.preconditions.map(function(precondition)
+                            precondition.subconditions.map(function(precondition)
                             {
                                 changeTypeOfPreconditionParameter(precondition);
                             });
@@ -419,16 +419,16 @@ var Parameters;
 
     function removeAllPreconditionsWithParameter(paramIdToRemove, precondition)
     {
-        for (var i = 0; i < precondition.preconditions.length; i++)
+        for (var i = 0; i < precondition.subconditions.length; i++)
         {
-            var currentPrecondition = precondition.preconditions[i];
+            var currentPrecondition = precondition.subconditions[i];
             if ("type" in currentPrecondition)
             {
                 removeAllPreconditionsWithParameter(paramIdToRemove,
                     currentPrecondition);
-                if (currentPrecondition.preconditions.length === 0)
+                if (currentPrecondition.subconditions.length === 0)
                 {
-                    precondition.preconditions.splice(i, 1);
+                    precondition.subconditions.splice(i, 1);
                     i--;
                 }
             }
@@ -436,7 +436,7 @@ var Parameters;
             {
                 if (currentPrecondition.idRef === paramIdToRemove)
                 {
-                    precondition.preconditions.splice(i, 1);
+                    precondition.subconditions.splice(i, 1);
                     i--;
                 }
             }
