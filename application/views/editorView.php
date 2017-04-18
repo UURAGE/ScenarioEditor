@@ -76,7 +76,7 @@
       "js/enumeration.js",
       "js/parameters.js",
       "js/metadata.js",
-      "js/htmlGenerator.js",
+      "js/condition.js",
       "js/validator.js",
       "js/keyControl.js",
       "js/reposition.js",

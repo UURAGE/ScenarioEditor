@@ -15,7 +15,8 @@ var Parameters;
         container: $.extend(true, {}, defaultContainer),
         reset: reset,
         dialog: dialog,
-        atLeastOneUserDefined: atLeastOneUserDefined
+        atLeastOneUserDefined: atLeastOneUserDefined,
+        insertInto: insertInto
     };
 
     $(document).ready(function()
@@ -446,4 +447,13 @@ var Parameters;
     {
         return Parameters.container.sequence.length > 0;
     }
+
+    function insertInto(container)
+    {
+        Parameters.container.sequence.forEach(function(parameter)
+        {
+            container.append($('<option>', { value: parameter.id, text: parameter.name }));
+        });
+    }
+
 })();

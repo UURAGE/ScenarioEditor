@@ -10,7 +10,6 @@ var Parts;
     Parts =
     {
         getDraftScreenHTML: getDraftScreenHTML,
-        getParameterEffectHTML: getParameterEffectHTML,
         getAddParameterEffectButtonHTML: getAddParameterEffectButtonHTML,
         getDeleteParentButtonHTML: getDeleteParentButtonHTML,
         getGroupPreconditionHTML: getGroupPreconditionHTML,
@@ -67,17 +66,6 @@ var Parts;
                 '</tr>' +
             '</table>' +
             '<button id="addDraftItem" class="add">' + i18next.t('draft:add_item') + '</button>';
-    }
-
-    function getParameterEffectHTML()
-    {
-        return '' +
-            '<div class="parameter-effect">' +
-                '<span class="handle">↕</span>' +
-                '<select class="parameter-idref-select"></select>' +
-                '<span class="parameter-effect-container"></span>' +
-                '<button type="button" class="deleteParent" title="'+i18next.t('common:delete')+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>' +
-            '</div>';
     }
 
     function getDeleteParentButtonHTML()

@@ -6,5 +6,6 @@
     },
     "no_subject_open": "No subject open!",
     "pending_changes": "This scenario may contain unsaved changes. Are you sure you want to leave the page?",
-    "default_subject": "Subject name"
+    "default_subject": "Subject name",
+    "no_parameters_to_affect": "Error: there are no parameters to affect."
 }

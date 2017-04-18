@@ -12,6 +12,7 @@ var Config;
         atLeastOneParameter: atLeastOneParameter,
         container: {},
         findParameterById: findParameterById,
+        insertParametersInto: insertParametersInto,
         isCharacterParameter: isCharacterParameter,
         getNewDefaultParameterEffects: getNewDefaultParameterEffects,
         getNewDefaultPropertyValues: getNewDefaultPropertyValues
@@ -294,6 +295,27 @@ var Config;
             }
         }
         return parameter;
+    }
+
+    function insertParametersInto(container)
+    {
+        var appendParameter = function(parameterItem)
+        {
+            if (parameterItem.kind !== "parameter")
+            {
+                parameterItem.sequence.forEach(appendParameter);
+            }
+            else
+            {
+                container.append($('<option>', { value: parameterItem.id, text: parameterItem.name }));
+            }
+        };
+        Config.container.parameters.sequence.forEach(appendParameter);
+        Config.container.characters.parameters.sequence.forEach(appendParameter);
+        for (var characterId in Config.container.characters.byId)
+        {
+            Config.container.characters.byId[characterId].parameters.sequence.forEach(appendParameter);
+        }
     }
 
     function isCharacterParameter(parameterId)

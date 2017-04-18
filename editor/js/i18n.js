@@ -22,10 +22,10 @@
         [
             'clipboard',
             'common',
+            'condition',
             'configXML',
             'draft',
             'enumeration',
-            'htmlGenerator',
             'load',
             'main',
             'metadata',

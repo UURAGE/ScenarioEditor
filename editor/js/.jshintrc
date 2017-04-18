@@ -30,7 +30,7 @@
         "Load3",
         "Save",
         "Metadata",
-        "HtmlGenerator",
+        "Condition",
         "Validator",
         "KeyControl",
         "Print",

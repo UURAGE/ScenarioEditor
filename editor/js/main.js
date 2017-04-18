@@ -274,6 +274,24 @@ var Main;
             $("#main").focus();
         });
 
+        $("#addUserDefinedParameterEffect").on('click', function()
+        {
+            if (Parameters.atLeastOneUserDefined())
+            {
+                addEmptyUserDefinedParameterEffect();
+                Utils.focusFirstTabindexedDescendant($(".effect").last());
+            }
+            else
+            {
+                alert(i18next.t('main:no_parameters_to_affect'));
+            }
+        });
+
+        $("#userDefinedParameterEffects").on('click', '.deleteParent', function()
+        {
+            $(this).parent().remove();
+        });
+
         $("#userDefinedParameterEffects").sortable({
             handle: ".handle",
             axis: "y",
@@ -1411,45 +1429,8 @@ var Main;
             });
         }
 
-        var getPreconditionsFromDOM = function(preconditionsContainer)
-        {
-            var preconditionObject = {};
-            // Save selected type of precondition
-            preconditionObject.type = preconditionsContainer.children(".groupPreconditionRadioDiv").find('input[type=radio]:checked').val();
-
-            // Save preconditions.
-            var preconditionsArray = [];
-
-            preconditionsContainer.children(".groupPreconditionDiv").children().each(function()
-            {
-                if ($(this).hasClass("groupprecondition"))
-                {
-                    preconditionsArray.push(getPreconditionsFromDOM($(this)));
-                }
-                else
-                {
-                    var parameterIdRef = $(this).find(".parameter-idref-select").val();
-                    var characterIdRef = $(this).find(".character-idref-select").val();
-
-                    var parameter = Config.findParameterById(parameterIdRef, characterIdRef);
-                    if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
-
-                    var precondition = {
-                        idRef: parameterIdRef,
-                        operator: $(this).find(".precondition-operator-select").val(),
-                        value: parameter.type.getFromDOM($(this).find(".precondition-value-container"))
-                    };
-
-                    if (characterIdRef) precondition.characterIdRef = characterIdRef;
-                    preconditionsArray.push(precondition);
-                }
-            });
-            preconditionObject.preconditions = preconditionsArray;
-            return preconditionObject;
-        };
-
         // Save preconditions.
-        node.preconditions = getPreconditionsFromDOM($("#preconditionsDiv").children().first());
+        node.preconditions = Condition.extract($("#preconditionsDiv").children().first());
 
         // Save property values.
         var acceptableScopes = ['per', 'per-' + node.type];
@@ -1835,14 +1816,14 @@ var Main;
             $("#properties").attr("class", node.type);
 
             // Insert the preconditions in the sidebar
-            HtmlGenerator.insertPreconditions(node.preconditions, $("#preconditionsDiv"));
+            Condition.insert($("#preconditionsDiv"), node.preconditions);
 
             // Show user-defined parameters
             for (var k = 0; k < node.parameterEffects.userDefined.length; k++)
             {
                 var parameter = node.parameterEffects.userDefined[k];
 
-                addedDiv = HtmlGenerator.addEmptyUserDefinedParameterEffect();
+                addedDiv = addEmptyUserDefinedParameterEffect();
                 addedDiv.find(".parameter-idref-select").val(parameter.idRef).trigger('change');
                 addedDiv.find(".parameter-effect-operator-select").val(parameter.operator);
                 Parameters.container.byId[parameter.idRef].type.setInDOM(addedDiv.find(".parameter-effect-value-container"), parameter.value);
@@ -2392,6 +2373,43 @@ var Main;
             $("#optionalCheckbox").prop("checked", Main.trees[Main.selectedElement].optional);
 
         }
+    }
+
+    function addEmptyUserDefinedParameterEffect()
+    {
+        var parameterEffect = $('<div>', { class: "parameter-effect" });
+        parameterEffect.append($('<span>', { class: "handle", text: '↕' }));
+        var idRefSelect = $('<select>', { class: "parameter-idref-select" });
+        parameterEffect.append(idRefSelect);
+        var effectContainer = $('<span>', { class: "parameter-effect-container" });
+        parameterEffect.append(effectContainer);
+        var deleteButton = $('<button>', { type: 'button', class: "deleteParent", title: i18next.t('common:delete') });
+        deleteButton.append($('<img>', { src: editor_url + "png/others/minus.png", alt: '-' }));
+        parameterEffect.append(deleteButton);
+        $("#userDefinedParameterEffects").append(parameterEffect);
+
+        Parameters.insertInto(idRefSelect);
+        var changeEffectType = function(pId)
+        {
+            var operatorSelect = $('<select>', { class: "parameter-effect-operator-select" });
+            Parameters.container.byId[pId].type.assignmentOperators.forEach(function(op)
+            {
+                operatorSelect.append($('<option>', { value: op.name, text: op.uiName }));
+            });
+            effectContainer.append(operatorSelect);
+
+            var controlContainer = $('<span>', { class: "parameter-effect-value-container" });
+            Parameters.container.byId[pId].type.appendControlTo(controlContainer);
+            effectContainer.append(controlContainer);
+        };
+        changeEffectType(idRefSelect.val());
+        idRefSelect.on('change', function()
+        {
+            effectContainer.empty();
+            changeEffectType($(this).val());
+        });
+
+        return parameterEffect;
     }
 
     function makeConnection(sourceID, targetID, plumbInstance)

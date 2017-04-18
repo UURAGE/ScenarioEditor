@@ -1,6 +1,0 @@
-{
-    "error": {
-        "no_test": "Error: there are no parameters to test on.",
-        "no_effect": "Error: there are no parameters to affect"
-    }
-}

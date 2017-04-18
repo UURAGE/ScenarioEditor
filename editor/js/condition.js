@@ -1,21 +1,20 @@
 /* ©Copyright Utrecht University (Department of Information and Computing Sciences) */
 
-var HtmlGenerator;
+var Condition;
 
 (function()
 {
     "use strict";
 
-    HtmlGenerator =
+    Condition =
     {
-        addEmptyUserDefinedParameterEffect: addEmptyUserDefinedParameterEffect,
-        insertPreconditions: insertPreconditions
+        insert: insert,
+        extract: extract
     };
 
     //Get all the raw HTLM from Parts.js
     var preconditionHTML = Parts.getPreconditionHTML();
     var groupPreconditionHTML = Parts.getGroupPreconditionHTML();
-    var parameterEffectHTML = Parts.getParameterEffectHTML();
     var radioButtonCounter = 0;
 
     $(document).ready(function()
@@ -31,7 +30,7 @@ var HtmlGenerator;
             }
             else
             {
-                alert(i18next.t('htmlGenerator:error.no_test'));
+                alert(i18next.t('condition:error.no_test'));
             }
         });
         $("#preconditionsDiv").on('click', ".addGroupPrecondition", function()
@@ -44,20 +43,7 @@ var HtmlGenerator;
             }
             else
             {
-                alert(i18next.t('htmlGenerator:error.no_test'));
-            }
-        });
-
-        $("#addUserDefinedParameterEffect").on('click', function()
-        {
-            if (Parameters.atLeastOneUserDefined())
-            {
-                addEmptyUserDefinedParameterEffect();
-                Utils.focusFirstTabindexedDescendant($(".effect").last());
-            }
-            else
-            {
-                alert(i18next.t('htmlGenerator:error.no_effect'));
+                alert(i18next.t('condition:error.no_test'));
             }
         });
 
@@ -68,59 +54,22 @@ var HtmlGenerator;
             $(this).parent().remove();
             updateGroupPreconditionCounter(containingGroupPrecondition);
         });
-
-        $("#userDefinedParameterEffects").on('click', '.deleteParent', function()
-        {
-            $(this).parent().remove();
-        });
     });
 
-    function addEmptyUserDefinedParameterEffect()
+    function insert(container, conditions)
     {
-        $("#userDefinedParameterEffects").append(parameterEffectHTML);
-        var addedDiv = $("#userDefinedParameterEffects").children().last();
-
-        insertParameters(addedDiv, Parameters.container);
-
-        var idRefSelect = addedDiv.find(".parameter-idref-select");
-        var effectDiv = addedDiv.find(".parameter-effect-container");
-        var changeEffectType = function(pId)
-        {
-            var operatorSelect = $('<select>', { class: "parameter-effect-operator-select" });
-            Parameters.container.byId[pId].type.assignmentOperators.forEach(function(op)
-            {
-                operatorSelect.append($('<option>', { value: op.name, text: op.uiName }));
-            });
-            effectDiv.append(operatorSelect);
-
-            var controlContainer = $('<span>', { class: "parameter-effect-value-container" });
-            Parameters.container.byId[pId].type.appendControlTo(controlContainer);
-            effectDiv.append(controlContainer);
-        };
-        changeEffectType(idRefSelect.val());
-        idRefSelect.on('change', function()
-        {
-            effectDiv.empty();
-            changeEffectType($(this).val());
-        });
-
-        return addedDiv;
-    }
-
-    function insertPreconditions(precondition, divToAddTo)
-    {
-        var addedDiv = addEmptyGroupPrecondition(divToAddTo);
+        var addedDiv = addEmptyGroupPrecondition(container);
         addedDiv.children(".groupPreconditionRadioDiv").find(
-            "input[value=" + precondition.type + "]").prop(
+            "input[value=" + conditions.type + "]").prop(
             'checked', true);
 
         var divToAddChildren = addedDiv.children(".groupPreconditionDiv");
-        for (var i = 0; i < precondition.preconditions.length; i++)
+        for (var i = 0; i < conditions.preconditions.length; i++)
         {
-            var currentPrecondition = precondition.preconditions[i];
+            var currentPrecondition = conditions.preconditions[i];
             if ("type" in currentPrecondition)
             {
-                insertPreconditions(currentPrecondition, divToAddChildren);
+                insert(divToAddChildren, currentPrecondition);
             }
             else
             {
@@ -141,15 +90,10 @@ var HtmlGenerator;
         divToAdd.append(preconditionHTML);
         var addedDiv = $(divToAdd).children().last();
 
-        insertParameters(addedDiv, Parameters.container);
-        insertParameters(addedDiv, Config.container.parameters);
-        insertParameters(addedDiv, Config.container.characters.parameters);
-        for (var characterId in Config.container.characters.byId)
-        {
-            insertParameters(addedDiv, Config.container.characters.byId[characterId].parameters);
-        }
-
         var idRefSelect = addedDiv.find(".parameter-idref-select");
+        Parameters.insertInto(idRefSelect);
+        Config.insertParametersInto(idRefSelect);
+
         var testContainer = addedDiv.find(".precondition-test-container");
         var changeTestType = function(parameterIdRef)
         {
@@ -235,23 +179,40 @@ var HtmlGenerator;
                 div.removeClass(state);
     }
 
-    // Inserts all the parameters for the effects and preconditions.
-    function insertParameters(div, parameters)
+    function extract(container)
     {
-        var select = div.find(".parameter-idref-select");
+        var preconditionObject = {};
+        // Save selected type of precondition
+        preconditionObject.type = container.children(".groupPreconditionRadioDiv").find('input[type=radio]:checked').val();
 
-        var appendParameter = function(parameterItem)
+        // Save preconditions.
+        var preconditionsArray = [];
+
+        container.children(".groupPreconditionDiv").children().each(function()
         {
-            if (parameterItem.kind && parameterItem.kind !== "parameter")
+            if ($(this).hasClass("groupprecondition"))
             {
-                parameterItem.sequence.forEach(appendParameter);
+                preconditionsArray.push(extract($(this)));
             }
             else
             {
-                select.append($('<option>', { value: parameterItem.id, text: parameterItem.name }));
-            }
-        };
-        parameters.sequence.forEach(appendParameter);
-    }
+                var parameterIdRef = $(this).find(".parameter-idref-select").val();
+                var characterIdRef = $(this).find(".character-idref-select").val();
 
+                var parameter = Config.findParameterById(parameterIdRef, characterIdRef);
+                if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
+
+                var precondition = {
+                    idRef: parameterIdRef,
+                    operator: $(this).find(".precondition-operator-select").val(),
+                    value: parameter.type.getFromDOM($(this).find(".precondition-value-container"))
+                };
+
+                if (characterIdRef) precondition.characterIdRef = characterIdRef;
+                preconditionsArray.push(precondition);
+            }
+        });
+        preconditionObject.preconditions = preconditionsArray;
+        return preconditionObject;
+    }
 })();
