@@ -212,7 +212,7 @@ var Config;
 
         var id = nodeXML.getAttribute('id');
         var name = nodeXML.getAttribute('name');
-        if (!name && i18next.exists('configXML:character.' + id, true))
+        if (!name && i18next.exists('configXML:character.' + id))
         {
             name = i18next.t('configXML:character.' + id);
         }
