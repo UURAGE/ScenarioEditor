@@ -103,7 +103,7 @@ $autoload['helper'] = array('url', 'form', 'filepath', 'language', 'formatted_la
 | config files.  Otherwise, leave it blank.
 |
 */
-$autoload['config'] = array('languageConfig');
+$autoload['config'] = array('language');
 
 /*
 | -------------------------------------------------------------------
