@@ -45,6 +45,7 @@ var Enumeration;
 
     function removeDefinition(containerEl)
     {
+        containerEl.find(".enumeration-values").remove();
         containerEl.find(".enumeration-dialog-button").remove();
     }
 
