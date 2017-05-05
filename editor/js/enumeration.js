@@ -70,7 +70,7 @@ var Enumeration;
         });
         valuesContainer.append($('<li>').append(valueInput).append(valueAddButton));
 
-        var type = Types.primitives.enumeration.loadTypeFromDOM(containerEl, $());
+        var type = Types.primitives.enumeration.loadTypeFromDOM(containerEl);
         type.options.sequence.forEach(function(option)
         {
             appendValue(valuesContainer, valueInput, option.text);
@@ -139,16 +139,22 @@ var Enumeration;
 
     function save(containerEl, valuesContainer, onSave)
     {
-        var values = [];
+        var values = $('<ul>', { class: "enumeration-values" });
+        var atLeastOneValue = false;
         // Last child is the input so don't include it
         valuesContainer.children().not(":last-child").each(function()
         {
-            values.push($(this).text());
+            values.append($('<li>', { text: $(this).text() }));
+            atLeastOneValue = true;
         });
 
-        if (values.length === 0) return false;
+        if (!atLeastOneValue) return false;
 
-        Types.primitives.enumeration.insertTypeIntoDOM(containerEl, values);
+        var typeContainer = $('<span>');
+        typeContainer.append(values);
+
+        var type = Types.primitives.enumeration.loadTypeFromDOM(typeContainer);
+        type.insertTypeIntoDOM(containerEl);
         onSave(Types.primitives.enumeration.name);
 
         return true;

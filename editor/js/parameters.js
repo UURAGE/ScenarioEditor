@@ -152,8 +152,7 @@ var Parameters;
 
             if (parameter.type.name === Types.primitives.enumeration.name)
             {
-                var enumerationValues = parameter.type.options.sequence.map(function(option) { return option.text; });
-                Types.primitives.enumeration.insertTypeIntoDOM(typeSelect.parent(), enumerationValues);
+                parameter.type.insertTypeIntoDOM(typeSelect.parent());
             }
             typeSelect.val(parameter.type.name).trigger('change');
             addedDiv.removeClass("changedTypeParameter");

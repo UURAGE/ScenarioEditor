@@ -159,7 +159,12 @@ var Types;
             },
             loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
-                return $.extend({}, this, { defaultValue: this.getFromDOM(defaultValueContainer) });
+                var type = $.extend({}, this);
+                if (defaultValueContainer)
+                {
+                    type.defaultValue = type.getFromDOM(defaultValueContainer);
+                }
+                return type;
             },
             insertType: function(typeXML)
             {
@@ -242,11 +247,21 @@ var Types;
             },
             loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
-                var type = $.extend({}, this, { defaultValue: this.getFromDOM(defaultValueContainer) });
+                var type = $.extend({}, this);
                 var minimum = parseInt(typeEl.find(".parameter-min-container").children(type.controlName).first().val());
-                if (!isNaN(minimum)) type.minimum = minimum;
+                if (!isNaN(minimum))
+                {
+                    type.minimum = minimum;
+                }
                 var maximum = parseInt(typeEl.find(".parameter-max-container").children(type.controlName).first().val());
-                if (!isNaN(maximum)) type.maximum = maximum;
+                if (!isNaN(maximum))
+                {
+                    type.maximum = maximum;
+                }
+                if (defaultValueContainer)
+                {
+                    type.defaultValue = type.getFromDOM(defaultValueContainer);
+                }
                 return type;
             },
             castFrom: function(type, value)
@@ -324,7 +339,10 @@ var Types;
                     type.controlName = 'select';
                     delete type.controlType;
                 }
-                type.defaultValue = type.getFromDOM(defaultValueContainer);
+                if (defaultValueContainer)
+                {
+                    type.defaultValue = type.getFromDOM(defaultValueContainer);
+                }
                 return type;
             },
             castFrom: function(type, value)
@@ -448,7 +466,7 @@ var Types;
                     options.sequence.push(option);
                 });
                 var defaultValue;
-                if (defaultValueContainer.length > 0)
+                if (defaultValueContainer)
                 {
                     defaultValue = this.getFromDOM(defaultValueContainer);
                 }
@@ -478,13 +496,13 @@ var Types;
                 this.options.sequence.forEach(appendOptionChild.bind(this));
                 return enumerationXML;
             },
-            insertTypeIntoDOM: function(containerEl, values)
+            insertTypeIntoDOM: function(containerEl)
             {
                 containerEl.find(".enumeration-values").remove();
                 var enumerationValues = $('<ul>', { class: "enumeration-values" });
-                values.forEach(function(value)
+                this.options.sequence.forEach(function(option)
                 {
-                    enumerationValues.append($('<li>', { text: value }));
+                    enumerationValues.append($('<li>', { text: option.text }));
                 });
                 enumerationValues.hide();
                 containerEl.append(enumerationValues);
