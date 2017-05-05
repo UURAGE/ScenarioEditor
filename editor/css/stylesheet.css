@@ -231,7 +231,8 @@ button img
 #general button,
 #sidebar button,
 #parameterScreen button,
-#enumerationScreen button
+#evaluationsScreen button,
+.enumeration-values-container button
 {
   border: 0;
   background: none;

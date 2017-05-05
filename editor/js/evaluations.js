@@ -29,7 +29,7 @@ var Evaluations;
 
     function dialog()
     {
-        var evaluationsDialog = $('<div>');
+        var evaluationsDialog = $('<div>', { id: "evaluationsScreen" });
 
         var evaluationsTableHead = $('<thead>')
             .append($('<th>')) // For the sortable handle
