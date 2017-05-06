@@ -70,12 +70,13 @@ var Enumeration;
         });
         valuesContainer.append($('<li>').append(valueInput).append(valueAddButton));
 
-        Types.primitives.enumeration.loadTypeFromDOM(containerEl, $()).options.sequence.forEach(function(option)
+        var type = Types.primitives.enumeration.loadTypeFromDOM(containerEl, $());
+        type.options.sequence.forEach(function(option)
         {
             appendValue(valuesContainer, valueInput, option.text);
         });
 
-        var alertNoEnumValuesDefined = function() { alert(i18next.t('enumeration:no_values_defined')); };
+        var hasValues = type.options.sequence.length > 0;
 
         enumerationDialog.dialog(
         {
@@ -88,9 +89,8 @@ var Enumeration;
                 text: i18next.t('common:confirm'),
                 click: function()
                 {
-                    var success = save(containerEl, valuesContainer, onSave);
-                    if (success) $(this).dialog('close');
-                    else         alertNoEnumValuesDefined();
+                    hasValues = save(containerEl, valuesContainer, onSave);
+                    $(this).dialog('close');
                 }
             },
             {
@@ -102,9 +102,10 @@ var Enumeration;
             }],
             beforeClose: function()
             {
-                if (valuesContainer.children().not(":last-child").length === 0)
+                if (!hasValues)
                 {
-                    alertNoEnumValuesDefined();
+                    alert(i18next.t('enumeration:no_values_defined'));
+                    hasValues = type.options.sequence.length > 0;
                     return false;
                 }
             },
