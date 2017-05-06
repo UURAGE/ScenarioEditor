@@ -13,5 +13,8 @@
     "characters": "Karakters",
     "name": "Naam",
     "type": "Type",
-    "description": "Beschrijving"
+    "description": "Beschrijving",
+    "expression": "Expressie",
+    "reference": "Referentie",
+    "literal": "Waarde"
 }

@@ -110,6 +110,10 @@ var Types;
             assignmentOperators: [Types.assignmentOperators.assign],
             relationalOperators: [Types.relationalOperators.equalTo, Types.relationalOperators.notEqualTo],
             unaryOperators: [],
+            equals: function(otherType)
+            {
+                return this.name === otherType.name;
+            },
             loadType: function(typeXML)
             {
                 var type = this;
@@ -221,6 +225,10 @@ var Types;
                                   Types.relationalOperators.greaterThanEqualTo,     Types.relationalOperators.lessThanEqualTo,
                                   Types.relationalOperators.greaterThan,            Types.relationalOperators.lessThan],
             unaryOperators: [Types.unaryOperators.atMinimum, Types.unaryOperators.atMaximum],
+            equals: function(otherType)
+            {
+                return this.name === otherType.name;
+            },
             loadType: function(typeXML)
             {
                 var type = this;
@@ -313,6 +321,10 @@ var Types;
             assignmentOperators: [Types.assignmentOperators.assign],
             relationalOperators: [Types.relationalOperators.equalTo, Types.relationalOperators.notEqualTo],
             unaryOperators: [],
+            equals: function(otherType)
+            {
+                return this.name === otherType.name;
+            },
             loadType: function(typeXML, id, kind)
             {
                 var type = this;
@@ -331,18 +343,16 @@ var Types;
 
                 return type;
             },
-            loadTypeFromDOM: function(typeEl, defaultValueContainer, kind)
+            loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
-                var type = $.extend({}, this);
-                if (kind === 'parameter')
-                {
-                    type.controlName = 'select';
-                    delete type.controlType;
-                }
+                var type = $.extend({}, this, { controlName: 'select' });
+                delete type.controlType;
+
                 if (defaultValueContainer)
                 {
                     type.defaultValue = type.getFromDOM(defaultValueContainer);
                 }
+
                 return type;
             },
             castFrom: function(type, value)
@@ -412,6 +422,36 @@ var Types;
             assignmentOperators: [Types.assignmentOperators.assign],
             relationalOperators: [Types.relationalOperators.equalTo, Types.relationalOperators.notEqualTo],
             unaryOperators: [],
+            equals: function(otherType)
+            {
+                var equal = true;
+                if (this.name === otherType.name && this.options.sequence.length === otherType.options.sequence.length)
+                {
+                    if (this.options.byValue && otherType.options.byValue)
+                    {
+                        this.options.sequence.forEach(function(option, index)
+                        {
+                            equal = equal && option.value === otherType.options.sequence[index].value;
+                        });
+                    }
+                    else if (!this.options.byValue && !otherType.options.byValue)
+                    {
+                        this.options.sequence.forEach(function(option, index)
+                        {
+                            equal = equal && option.text === otherType.options.sequence[index].text;
+                        });
+                    }
+                    else
+                    {
+                        equal = false;
+                    }
+                }
+                else
+                {
+                    equal = false;
+                }
+                return equal;
+            },
             loadType: function(typeXML, id)
             {
                 var options = { sequence: [] };

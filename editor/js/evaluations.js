@@ -35,7 +35,8 @@ var Evaluations;
             .append($('<th>')) // For the sortable handle
             .append($('<th>', { text: i18next.t('common:name') }))
             .append($('<th>', { text: i18next.t('common:type') }))
-            .append($('<th>', { text: i18next.t('common:description') }));
+            .append($('<th>', { text: i18next.t('common:description') }))
+            .append($('<th>', { text: i18next.t('common:expression') }));
         var evaluationsContainer = $('<tbody>').appendTo($('<table>').append(evaluationsTableHead).appendTo(evaluationsDialog));
 
         var addButton = $('<button>', { type: 'button' }).append($('<img>', { src: editor_url + "png/others/plus.png", title: i18next.t('common:add') }));
@@ -48,9 +49,41 @@ var Evaluations;
 
             evaluationContainer.append($('<td>').append($('<input>', { type: 'text', class: 'evaluation-name' })));
 
-            Types.appendSelectTo($('<td>').appendTo(evaluationContainer), 'evaluation-type', function() { });
+            var typeContainer = $('<td>');
+            var expressionContainer = $('<td>');
 
-            evaluationContainer.append($('<td>').append($('<textarea>', { class: 'evaluation-description' })));
+            var previousType;
+            var onEvaluationTypeChange = function(newTypeName, userTypeChange)
+            {
+                var changeType = function()
+                {
+                    var newType = Types.primitives[newTypeName].loadTypeFromDOM(typeContainer);
+                    if (newType.name === Types.primitives.string.name)
+                    {
+                        newType = $.extend(newType, { controlName: 'textarea', rows: 4, markdown: "gfm" });
+                    }
+                    Expression.onTypeChange(expressionContainer, 'evaluation-expression', previousType, newType, userTypeChange);
+                    previousType = newType;
+                };
+                if (newTypeName === Types.primitives.enumeration.name)
+                {
+                    if (!userTypeChange)
+                    {
+                        changeType();
+                    }
+                }
+                else
+                {
+                    changeType();
+                }
+            };
+            Types.appendSelectTo(typeContainer.appendTo(evaluationContainer), 'evaluation-type', onEvaluationTypeChange);
+
+            var evaluationDescription = $('<textarea>', { class: 'evaluation-description' });
+            Utils.attachMarkdownTooltip(evaluationDescription);
+            evaluationContainer.append($('<td>').append(evaluationDescription));
+
+            evaluationContainer.append(expressionContainer);
 
             var deleteButton = $(Parts.getDeleteParentButtonHTML());
             deleteButton.on('click', function()
@@ -62,7 +95,8 @@ var Evaluations;
                     evaluationsTableHead.hide();
                 }
             });
-            evaluationContainer.append(deleteButton);
+            evaluationContainer.append($('<td>').append(deleteButton));
+
             return evaluationContainer;
         };
         addButton.on('click', function()
@@ -76,7 +110,7 @@ var Evaluations;
         {
             title: i18next.t('evaluations:title'),
             height: 768,
-            width: 960,
+            width: 1024,
             modal: true,
             buttons: [
             {
@@ -127,6 +161,8 @@ var Evaluations;
             typeSelect.val(evaluation.type.name).trigger('change');
 
             evaluationContainer.find(".evaluation-description").val(evaluation.description);
+
+            Expression.setInDOM(evaluationContainer.find(".evaluation-expression"), evaluation.type, evaluation.expression);
         });
 
         Utils.makeSortable(evaluationsContainer);
@@ -158,13 +194,19 @@ var Evaluations;
 
             var typeName = container.find(".evaluation-type").val();
             var type = Types.primitives[typeName].loadTypeFromDOM(container);
+            if (type.name === Types.primitives.string.name)
+            {
+                type = $.extend(type, { controlName: 'textarea', rows: 4, markdown: "gfm" });
+            }
             // If it's an enumeration and there are no values defined, we can't define it either
             if (typeName === Types.primitives.enumeration.name && type.options.sequence.length === 0) return;
+
             return {
                 id: container.prop('id'),
                 name: name,
                 type: type,
-                description: container.find(".evaluation-description").val()
+                description: container.find(".evaluation-description").val(),
+                expression: Expression.getFromDOM(container.find('.evaluation-expression'), type)
             };
         };
         evaluationsContainer.find(".existed").each(function()

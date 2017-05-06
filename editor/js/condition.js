@@ -95,32 +95,11 @@ var Condition;
             var parameter = Config.findParameterById(parameterIdRef);
             if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
 
-            var characterIdRefSelect;
             if (Config.isCharacterParameter(parameterIdRef))
             {
-                var inIndividualCharacter = Config.container.characters.sequence.some(function(character)
-                {
-                    if (parameterIdRef in Config.container.characters.byId[character.id].parameters.byId)
-                    {
-                        characterIdRefSelect = $('<select>', { class: "character-idref-select" });
-                        characterIdRefSelect.append($('<option>', { value: character.id, text: character.name ? character.name : character.id }));
-                        if (Config.container.characters.sequence.length === 1) characterIdRefSelect.hide();
-                        testContainer.append(characterIdRefSelect);
-                        return true;
-                    }
-                    return false;
-                });
-
-                if (!inIndividualCharacter)
-                {
-                    characterIdRefSelect = $('<select>', { class: "character-idref-select" });
-                    Config.container.characters.sequence.forEach(function(character)
-                    {
-                        characterIdRefSelect.append($('<option>', { value: character.id, text: character.name ? character.name : character.id }));
-                    });
-                    if (Config.container.characters.sequence.length === 1) characterIdRefSelect.hide();
-                    testContainer.append(characterIdRefSelect);
-                }
+                var characterIdRefSelect = $('<select>', { class: "character-idref-select" });
+                Config.insertCharactersInto(characterIdRefSelect, parameterIdRef);
+                testContainer.append(characterIdRefSelect);
             }
 
             var operatorSelect = $('<select>', { class: "condition-operator-select" });

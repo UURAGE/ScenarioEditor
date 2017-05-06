@@ -13,5 +13,8 @@
     "characters": "Characters",
     "name": "Name",
     "type": "Type",
-    "description": "Description"
+    "description": "Description",
+    "expression": "Expression",
+    "reference": "Reference",
+    "literal": "Literal"
 }

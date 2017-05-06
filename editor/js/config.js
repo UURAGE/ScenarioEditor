@@ -13,6 +13,8 @@ var Config;
         container: {},
         findParameterById: findParameterById,
         insertParametersInto: insertParametersInto,
+        insertCharactersInto: insertCharactersInto,
+        hasParameterWithType: hasParameterWithType,
         isCharacterParameter: isCharacterParameter,
         getNewDefaultParameterEffects: getNewDefaultParameterEffects,
         getNewDefaultPropertyValues: getNewDefaultPropertyValues
@@ -297,7 +299,8 @@ var Config;
         return parameter;
     }
 
-    function insertParametersInto(container)
+    // If the type is given, only inserts parameters with the same type
+    function insertParametersInto(idRefSelect, type)
     {
         var appendParameter = function(parameterItem)
         {
@@ -305,9 +308,9 @@ var Config;
             {
                 parameterItem.sequence.forEach(appendParameter);
             }
-            else
+            else if (!type || parameterItem.type.equals(type))
             {
-                container.append($('<option>', { value: parameterItem.id, text: parameterItem.name }));
+                idRefSelect.append($('<option>', { value: parameterItem.id, text: parameterItem.name }));
             }
         };
         Config.container.parameters.sequence.forEach(appendParameter);
@@ -316,6 +319,52 @@ var Config;
         {
             Config.container.characters.byId[characterId].parameters.sequence.forEach(appendParameter);
         }
+    }
+
+    function insertCharactersInto(characterIdRefSelect, parameterIdRef)
+    {
+        var inIndividualCharacter = Config.container.characters.sequence.some(function(character)
+        {
+            if (parameterIdRef in Config.container.characters.byId[character.id].parameters.byId)
+            {
+                characterIdRefSelect.append($('<option>', { value: character.id, text: character.name ? character.name : character.id }));
+                return true;
+            }
+            return false;
+        });
+
+        if (!inIndividualCharacter)
+        {
+            Config.container.characters.sequence.forEach(function(character)
+            {
+                characterIdRefSelect.append($('<option>', { value: character.id, text: character.name ? character.name : character.id }));
+            });
+        }
+
+        if (Config.container.characters.sequence.length === 1) characterIdRefSelect.hide();
+    }
+
+    function hasParameterWithType(type)
+    {
+        var hasType = false;
+        var checkHasType = function(parameterItem)
+        {
+            if (parameterItem.kind !== "parameter")
+            {
+                return parameterItem.sequence.some(checkHasType);
+            }
+            else if (parameterItem.type.equals(type))
+            {
+                return true;
+            }
+        };
+        hasType = hasType || Config.container.parameters.sequence.some(checkHasType);
+        hasType = hasType || Config.container.characters.parameters.sequence.forEach(checkHasType);
+        for (var characterId in Config.container.characters.byId)
+        {
+            hasType = hasType || Config.container.characters.byId[characterId].parameters.sequence.forEach(checkHasType);
+        }
+        return hasType;
     }
 
     function isCharacterParameter(parameterId)

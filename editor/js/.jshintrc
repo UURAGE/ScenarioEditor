@@ -31,6 +31,8 @@
         "Save",
         "Metadata",
         "Condition",
+        "Expression",
+        "Evaluations",
         "Validator",
         "KeyControl",
         "Print",

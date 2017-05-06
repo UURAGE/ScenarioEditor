@@ -78,6 +78,7 @@
       "js/evaluations.js",
       "js/metadata.js",
       "js/condition.js",
+      "js/expression.js",
       "js/validator.js",
       "js/keyControl.js",
       "js/reposition.js",

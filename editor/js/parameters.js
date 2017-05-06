@@ -16,7 +16,8 @@ var Parameters;
         reset: reset,
         dialog: dialog,
         atLeastOneUserDefined: atLeastOneUserDefined,
-        insertInto: insertInto
+        insertInto: insertInto,
+        hasWithType: hasWithType
     };
 
     $(document).ready(function()
@@ -190,7 +191,7 @@ var Parameters;
                 var initialValue;
                 if (previousType) initialValue = previousType.getFromDOM(initialValueContainer);
                 initialValueContainer.empty();
-                var type = Types.primitives[newTypeName].loadTypeFromDOM(addedDiv, initialValueContainer, 'parameter');
+                var type = Types.primitives[newTypeName].loadTypeFromDOM(addedDiv, initialValueContainer);
                 type.appendControlTo(initialValueContainer);
                 if (previousType) type.setInDOM(initialValueContainer, type.castFrom(previousType, initialValue));
                 previousType = type;
@@ -281,7 +282,7 @@ var Parameters;
             if (!name && !exists) return null;
 
             var typeName = container.find(".parameter-type-select").val();
-            var type = Types.primitives[typeName].loadTypeFromDOM(container, container.find(".parameter-initial-value-container"), 'parameter');
+            var type = Types.primitives[typeName].loadTypeFromDOM(container, container.find(".parameter-initial-value-container"));
             // If it's an enumeration and there are no values defined, we can't define it either
             if (typeName === Types.primitives.enumeration.name && type.options.sequence.length === 0) return;
             return {
@@ -433,12 +434,21 @@ var Parameters;
         return Parameters.container.sequence.length > 0;
     }
 
-    function insertInto(container)
+    // If the type is given, only inserts parameters with the same type
+    function insertInto(container, type)
     {
         Parameters.container.sequence.forEach(function(parameter)
         {
-            container.append($('<option>', { value: parameter.id, text: parameter.name }));
+            if (!type || parameter.type.equals(type))
+            {
+                container.append($('<option>', { value: parameter.id, text: parameter.name }));
+            }
         });
+    }
+
+    function hasWithType(type)
+    {
+        return Parameters.container.sequence.some(function(parameter) { return parameter.type.equals(type); });
     }
 
 })();

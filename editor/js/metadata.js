@@ -81,7 +81,7 @@ var Metadata;
 
         // Show the stored values for the metadata.
         $("#scenarioName").val(Metadata.container.name);
-        if (Metadata.container.language) $("#scenarioLanguage").val(Metadata.container.language.code).change();
+        if (Metadata.container.language) $("#scenarioLanguage").val(Metadata.container.language.code).trigger('change');
         $("#scenarioDifficulty").val(Metadata.container.difficulty);
         $("#scenarioDescription").val(Metadata.container.description);
 
