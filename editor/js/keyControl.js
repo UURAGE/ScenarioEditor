@@ -101,6 +101,10 @@ var KeyControl;
         {
             Parameters.dialog();
         },
+        X: function()
+        {
+            Evaluations.dialog();
+        },
         I: function()
         {
             Load.importDialog();

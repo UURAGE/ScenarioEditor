@@ -41,6 +41,9 @@ var Save;
         // Save definitions
         generateDefinitionsXML(doc.documentElement);
 
+        // Save evaluations
+        generateEvaluationsXML(doc.documentElement);
+
         // Save metadata
         var metadataEl = addAndReturnElement("metadata", scenarioNameSpace, doc.documentElement);
         addAndReturnElement("name", scenarioNameSpace, metadataEl).textContent = Metadata.container.name;
@@ -238,6 +241,26 @@ var Save;
                 parameterValueEl.setAttribute("characteridref", characterId);
                 parameter.type.toXML(parameterValueEl, parameter.type.defaultValue);
             }
+        }
+    }
+
+    function generateEvaluationsXML(parentElement)
+    {
+        var evaluationsEl = addAndReturnElement("typedExpressions", scenarioNameSpace, parentElement);
+        for (var evaluationId in Evaluations.container.byId)
+        {
+            var evaluation = Evaluations.container.byId[evaluationId];
+            var evaluationEl = addAndReturnElement("typedExpression", scenarioNameSpace, evaluationsEl);
+            evaluationEl.setAttribute("id", evaluationId);
+            evaluationEl.setAttribute("name", evaluation.name);
+            if (evaluation.description)
+            {
+                addAndReturnElement("description", scenarioNameSpace, evaluationEl, true).textContent = evaluation.description;
+            }
+            var typeContainerEl = addAndReturnElement("type", scenarioNameSpace, evaluationEl);
+            evaluation.type.insertType(typeContainerEl);
+            var expressionEl = addAndReturnElement("expression", scenarioNameSpace, evaluationEl);
+            evaluation.expression.kind.toXML(expressionEl, evaluation.type, evaluation.expression[evaluation.expression.kind.name]);
         }
     }
 

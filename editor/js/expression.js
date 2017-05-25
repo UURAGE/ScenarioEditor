@@ -6,18 +6,107 @@ var Expression;
 {
     "use strict";
 
-    Expression =
-    {
-        appendControlsTo: appendControlsTo,
-        onTypeChange: onTypeChange
-    };
-
     var kinds =
     {
-        reference: 'reference',
-        literal: 'literal'
+        reference:
+        {
+            name: 'reference',
+            appendControlTo: function(container, type)
+            {
+                var parameterSelect = $('<select>', { class: "parameter-idref" });
+                Parameters.insertInto(parameterSelect, type);
+                Config.insertParametersInto(parameterSelect, type);
+                parameterSelect.on('change', function()
+                {
+                    container.children('.character-idref').remove();
+                    var parameterIdRef = $(this).val();
+                    if (Config.isCharacterParameter(parameterIdRef))
+                    {
+                        var characterIdRefSelect = $('<select>', { class: "character-idref" });
+                        Config.insertCharactersInto(characterIdRefSelect, parameterIdRef);
+                        container.append(characterIdRefSelect);
+                    }
+                });
+                parameterSelect.trigger('change');
+                container.append(parameterSelect);
+            },
+            getFromDOM: function(container, type)
+            {
+                var reference = {};
+                reference.parameterIdRef = container.children('.parameter-idref').val();
+                if (Config.isCharacterParameter(reference.parameterIdRef))
+                {
+                    reference.characterIdRef = container.children('.character-idref').val();
+                }
+                return reference;
+            },
+            setInDOM: function(container, type, reference)
+            {
+                container.children('.parameter-idref').val(reference.parameterIdRef).trigger('change');
+                if (Config.isCharacterParameter(reference.parameterIdRef))
+                {
+                     container.children('.character-idref').val(reference.characterIdRef).trigger('change');
+                }
+            },
+            fromXML: function(referenceXML, type)
+            {
+                var reference = {};
+                if (referenceXML.hasAttribute("characteridref"))
+                {
+                    reference.characterIdRef = referenceXML.attributes.characteridref.value;
+                }
+                reference.parameterIdRef = referenceXML.attributes.idref.value;
+                return reference;
+            },
+            toXML: function(expressionXML, type, reference)
+            {
+                var referenceXML;
+                if (reference.characterIdRef)
+                {
+                    referenceXML = Utils.appendChild(expressionXML, "characterParameterReference");
+                    referenceXML.setAttribute("characteridref", reference.characterIdRef);
+                }
+                else
+                {
+                    referenceXML = Utils.appendChild(expressionXML, "parameterReference");
+                }
+                referenceXML.setAttribute("idref", reference.parameterIdRef);
+            }
+        },
+        literal:
+        {
+            name: 'literal',
+            appendControlTo: function(container, type)
+            {
+                type.appendControlTo(container);
+            },
+            getFromDOM: function(container, type)
+            {
+                return type.getFromDOM(container);
+            },
+            setInDOM: function(container, type, literal)
+            {
+                type.setInDOM(container, literal);
+            },
+            fromXML: function(literalXML, type)
+            {
+                return type.fromXML(literalXML);
+            },
+            toXML: function(expressionXML, type, literal)
+            {
+                var literalXML = Utils.appendChild(expressionXML, "literal");
+                type.toXML(literalXML, literal);
+            }
+        }
+    };
+
+    Expression =
+    {
+        kinds: kinds,
+        appendControlsTo: appendControlsTo,
         setInDOM: setInDOM,
         getFromDOM: getFromDOM,
+        onTypeChange: onTypeChange
     };
 
     function appendControlsTo(container, htmlClass, type)
@@ -25,44 +114,16 @@ var Expression;
         var expressionKindContainer = $('<span>', { class: htmlClass });
 
         var expressionSelect = $('<select>', { class: "expression-kind" });
-        expressionSelect.append($('<option>', { value: kinds.literal, text: i18next.t('common:' + kinds.literal)}));
+        expressionSelect.append($('<option>', { value: kinds.literal.name, text: i18next.t('common:' + kinds.literal.name)}));
         if (Parameters.hasWithType(type) || Config.hasParameterWithType(type))
         {
-            expressionSelect.append($('<option>', { value: kinds.reference, text: i18next.t('common:' + kinds.reference)}));
+            expressionSelect.append($('<option>', { value: kinds.reference.name, text: i18next.t('common:' + kinds.reference.name)}));
         }
         expressionSelect.on('change', function()
         {
             expressionKindContainer.children('.expression').remove();
             var expressionContainer = $('<span>', { class: "expression" });
-            var kind = $(this).val();
-            switch (kind)
-            {
-                case kinds.reference:
-                {
-                    var parameterSelect = $('<select>', { class: "parameter-idref" });
-                    Parameters.insertInto(parameterSelect, type);
-                    Config.insertParametersInto(parameterSelect, type);
-                    parameterSelect.on('change', function()
-                    {
-                        expressionContainer.children('.character-idref').remove();
-                        var parameterIdRef = $(this).val();
-                        if (Config.isCharacterParameter(parameterIdRef))
-                        {
-                            var characterIdRefSelect = $('<select>', { class: "character-idref" });
-                            Config.insertCharactersInto(characterIdRefSelect, parameterIdRef);
-                            expressionContainer.append(characterIdRefSelect);
-                        }
-                    });
-                    parameterSelect.trigger('change');
-                    expressionContainer.append(parameterSelect);
-                    break;
-                }
-                case kinds.literal:
-                {
-                    type.appendControlTo(expressionContainer);
-                    break;
-                }
-            }
+            kinds[$(this).val()].appendControlTo(expressionContainer, type);
             expressionKindContainer.append(expressionContainer);
         });
         expressionKindContainer.append(expressionSelect);
@@ -73,56 +134,17 @@ var Expression;
 
     function setInDOM(container, type, expression)
     {
-        container.children('.expression-kind').val(expression.kind).trigger('change');
+        container.children('.expression-kind').val(expression.kind.name).trigger('change');
         var expressionContainer = container.children('.expression');
-        switch (expression.kind)
-        {
-            case kinds.reference:
-            {
-                expressionContainer.children('.parameter-idref').val(expression.expression.parameterIdRef).trigger('change');
-                if (Config.isCharacterParameter(expression.expression.parameterIdRef))
-                {
-                     expressionContainer.children('.character-idref').val(expression.expression.characterIdRef).trigger('change');
-                }
-                break;
-            }
-            case kinds.literal:
-            {
-                type.setInDOM(expressionContainer, expression.expression);
-                break;
-            }
-            default:
-                console.error("No case for expression kind: " + expression.kind);
-                break;
-        }
+        expression.kind.setInDOM(expressionContainer, type, expression[expression.kind.name]);
     }
 
     function getFromDOM(container, type)
     {
         var expression = {};
-        expression.kind = container.children('.expression-kind').val();
+        expression.kind = kinds[container.children('.expression-kind').val()];
         var expressionContainer = container.children('.expression');
-        switch (expression.kind)
-        {
-            case kinds.reference:
-            {
-                expression.expression = {};
-                expression.expression.parameterIdRef = expressionContainer.children('.parameter-idref').val();
-                if (Config.isCharacterParameter(expression.expression.parameterIdRef))
-                {
-                    expression.expression.characterIdRef = expressionContainer.children('.character-idref').val();
-                }
-                break;
-            }
-            case kinds.literal:
-            {
-                expression.expression = type.getFromDOM(expressionContainer);
-                break;
-            }
-            default:
-                console.error("No case for expression kind: " + expression.kind);
-                break;
-        }
+        expression[expression.kind.name] = expression.kind.getFromDOM(expressionContainer, type);
         return expression;
     }
 

@@ -98,7 +98,7 @@ var Load;
             {
                 alert("The config id does not match the config id referred to in the scenario");
             }
-
+            loadEvaluations($(scenarioXML).children('typedExpressions').eq(0));
             loadMetadata($(scenarioXML).attr('version'), $(scenarioXML).children('definitions').eq(0), $(scenarioXML).children('metadata').eq(0));
             jsPlumb.batch(function()
             {
@@ -145,6 +145,7 @@ var Load;
         Main.maxTreeNumber = 0;
         Metadata.reset();
         Parameters.reset();
+        Evaluations.reset();
     }
 
     // Generates the entire graph, including the objects.
@@ -221,6 +222,50 @@ var Load;
         });
     }
 
+    function loadEvaluations(evaluationsXML)
+    {
+        $(evaluationsXML).children().each(function()
+        {
+            var evaluationId = this.attributes.id.value;
+            var evaluationMatch = evaluationId.match(/^evaluation-(\d+)$/);
+            if (evaluationMatch !== null)
+            {
+                var evaluationCounter = parseInt(evaluationMatch[1]);
+                if (evaluationCounter >= Evaluations.counter)
+                {
+                    Evaluations.counter = evaluationCounter + 1;
+                }
+            }
+
+            var typeXML = $(this).children('type').children();
+            var type = Types.primitives[typeXML[0].nodeName].loadType(typeXML);
+
+            var expressionXML = $(this).children('expression').children();
+            var kind;
+            if (!(expressionXML[0].nodeName in Expression.kinds))
+            {
+                kind = Expression.kinds.reference;
+            }
+            else
+            {
+                kind = Expression.kinds[expressionXML[0].nodeName];
+            }
+            var expression = { kind: kind };
+            expression[kind.name] = kind.fromXML(expressionXML[0], type);
+
+            var evaluation =
+            {
+                id: evaluationId,
+                name: this.attributes.name.value,
+                description: $(this).children('description').text(),
+                type: type,
+                expression: expression
+            };
+            Evaluations.container.sequence.push(evaluation);
+            Evaluations.container.byId[evaluation.id] = evaluation;
+        });
+    }
+
     // Load the metadata of the scenario.
     function loadMetadata(version, definitions, metadata)
     {
@@ -270,7 +315,7 @@ var Load;
             {
                 id: parameterId,
                 name: this.attributes.name.value,
-                type: Types.primitives[typeXML[0].nodeName].loadType(typeXML, parameterId, 'parameter'),
+                type: Types.primitives[typeXML[0].nodeName].loadType(typeXML, parameterId),
                 description: $(this).children('description').text()
             };
             parameters.sequence.push(parameter);

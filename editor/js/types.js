@@ -329,7 +329,7 @@ var Types;
             {
                 var type = this;
 
-                if (kind === 'parameter')
+                if (kind !== 'property')
                 {
                     type = $.extend({}, type, { controlName: 'select', labelControlOrder: Types.labelControlOrders.singleLineLabelContainer });
                     delete type.controlType;
