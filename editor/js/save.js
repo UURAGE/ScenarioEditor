@@ -247,11 +247,10 @@ var Save;
     function generateEvaluationsXML(parentElement)
     {
         var evaluationsEl = addAndReturnElement("typedExpressions", scenarioNameSpace, parentElement);
-        for (var evaluationId in Evaluations.container.byId)
+        Evaluations.container.sequence.forEach(function(evaluation)
         {
-            var evaluation = Evaluations.container.byId[evaluationId];
             var evaluationEl = addAndReturnElement("typedExpression", scenarioNameSpace, evaluationsEl);
-            evaluationEl.setAttribute("id", evaluationId);
+            evaluationEl.setAttribute("id", evaluation.id);
             evaluationEl.setAttribute("name", evaluation.name);
             if (evaluation.description)
             {
@@ -261,7 +260,7 @@ var Save;
             evaluation.type.insertType(typeContainerEl);
             var expressionEl = addAndReturnElement("expression", scenarioNameSpace, evaluationEl);
             Expression.toXML(expressionEl, evaluation.type, evaluation.expression);
-        }
+        });
     }
 
     // Offers the XML of the current scenario for download
