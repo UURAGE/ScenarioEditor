@@ -18,6 +18,7 @@
     "kinds": {
         "literal": "Waarde",
         "reference": "Referentie",
-        "sum": "Som"
+        "sum": "Som",
+        "scale": "Schaal"
     }
 }

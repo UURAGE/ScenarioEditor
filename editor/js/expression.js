@@ -207,6 +207,101 @@ var Expression;
                     sumExpression.kind.onParameterTypeChange(parameter, type, sumExpression);
                 });
             }
+        },
+        scale:
+        {
+            name: 'scale',
+            appendControlTo: function(container, type)
+            {
+                var expressionContainer = $('<span>', { class: "scale-expression" });
+                Expression.appendControlsTo(expressionContainer, type);
+                container.append(expressionContainer);
+
+                var scaleOperatorSelect = $('<select>', { class: "scale-operator"});
+                scaleOperatorSelect.append($('<option>', { value: 'scalar', text: '*' }));
+                scaleOperatorSelect.append($('<option>', { value: 'divisor', text: '/' }));
+                container.append(scaleOperatorSelect);
+
+                var scaleValueContainer = $('<span>', { class: "scale-value" });
+                type.appendControlTo(scaleValueContainer);
+                container.append(scaleValueContainer);
+            },
+            getFromDOM: function(container, type)
+            {
+                return {
+                    expression: Expression.getFromDOM(container.children('.scale-expression'), type),
+                    operator: container.children('.scale-operator').val(),
+                    value: type.getFromDOM(container.children('.scale-value'))
+                };
+            },
+            setInDOM: function(container, type, scale)
+            {
+                Expression.setInDOM(container.children('.scale-expression'), type, scale.expression);
+                container.children('.scale-operator').val(scale.operator).trigger('change');
+                type.setInDOM(container.children('.scale-value'), scale.value);
+            },
+            fromXML: function(scaleXML, type)
+            {
+                var scale;
+                var expression = Expression.fromXML($(scaleXML).children()[0], type);
+                if (scaleXML.hasAttribute('divisor'))
+                {
+                    scale = {
+                        expression: expression,
+                        operator: 'divisor',
+                        value: parseInt(scaleXML.attributes.divisor.value)
+                    };
+                }
+
+                var scalar = parseInt(scaleXML.attributes.scalar.value);
+                if (scalar !== 1)
+                {
+                    if (scale)
+                    {
+                        expression = {
+                            kind: this,
+                            scale: scale
+                        };
+                    }
+                    scale = {
+                        expression: expression,
+                        operator: 'scalar',
+                        value: scalar
+                    };
+                }
+
+                return scale;
+            },
+            toXML: function(expressionXML, type, scale)
+            {
+                var scaleXML = Utils.appendChild(expressionXML, this.name);
+                if (scale.operator !== 'scalar')
+                {
+                    scaleXML.setAttribute('scalar', 1);
+                }
+                scaleXML.setAttribute(scale.operator, scale.value);
+                Expression.toXML(scaleXML, type, scale.expression);
+            },
+            isAvailableFor: function(type)
+            {
+                return type.name === Types.primitives.integer.name;
+            },
+            onTypeChange: function(previousType, newType, expression)
+            {
+                if (this.isAvailableFor(newType))
+                {
+                    expression.scale.expression.kind.onTypeChange(previousType, newType, expression.scale.expression);
+                    newType.castFrom(previousType, expression.scale.value);
+                }
+                else
+                {
+                    replaceExpressionWithDefaultLiteral(expression, newType);
+                }
+            },
+            onParameterTypeChange: function(parameter, type, expression)
+            {
+                expression.scale.expression.kind.onParameterTypeChange(parameter, type, expression.scale.expression);
+            }
         }
     };
 

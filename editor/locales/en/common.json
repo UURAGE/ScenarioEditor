@@ -18,6 +18,7 @@
     "kinds": {
         "literal": "Literal",
         "reference": "Reference",
-        "sum": "Sum"
+        "sum": "Sum",
+        "scale": "Scale"
     }
 }
