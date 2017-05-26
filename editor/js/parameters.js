@@ -340,6 +340,8 @@ var Parameters;
                     changeTypeOfPreconditionParameter(Main.nodes[nodeID].preconditions);
                 }
 
+                Evaluations.onParameterTypeChange(newParameter);
+
                 $(this).removeClass("changedTypeParameter");
             }
 

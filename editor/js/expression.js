@@ -71,6 +71,16 @@ var Expression;
                     referenceXML = Utils.appendChild(expressionXML, "parameterReference");
                 }
                 referenceXML.setAttribute("idref", reference.parameterIdRef);
+            },
+            onParameterTypeChange: function(parameter, type, expression)
+            {
+                if (expression.reference.parameterIdRef === parameter.id && !parameter.type.equals(type))
+                {
+                    delete expression.kind;
+                    delete expression.reference;
+                    expression.kind = kinds.literal;
+                    expression.literal = type.defaultValue;
+                }
             }
         },
         literal:
@@ -96,7 +106,8 @@ var Expression;
             {
                 var literalXML = Utils.appendChild(expressionXML, "literal");
                 type.toXML(literalXML, literal);
-            }
+            },
+            onParameterTypeChange: function(){}
         }
     };
 

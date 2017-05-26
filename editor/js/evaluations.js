@@ -13,7 +13,8 @@ var Evaluations;
         counter: 0,
         container: $.extend(true, {}, defaultEvaluations),
         reset: reset,
-        dialog: dialog
+        dialog: dialog,
+        onParameterTypeChange: onParameterTypeChange
     };
 
     $(document).ready(function()
@@ -239,6 +240,14 @@ var Evaluations;
             }).get();
 
         Main.selectElement(previouslySelectedElement);
+    }
+
+    function onParameterTypeChange(parameter)
+    {
+        Evaluations.container.sequence.forEach(function(evaluation)
+        {
+            evaluation.expression.kind.onParameterTypeChange(parameter, evaluation.type, evaluation.expression);
+        });
     }
 
 })();
