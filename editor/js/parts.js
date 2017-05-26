@@ -89,6 +89,7 @@ var Parts;
                             '<th></th>' +
                             '<th>'+i18next.t('common:name')+'</th>' +
                             '<th>'+i18next.t('common:type')+'</th>' +
+                            '<th>'+i18next.t('parts:evaluated')+'</th>' +
                             '<th>'+i18next.t('parts:min')+'</th>' +
                             '<th>'+i18next.t('parts:max')+'</th>' +
                             '<th>'+i18next.t('parts:initial_value')+'</th>' +
@@ -196,6 +197,9 @@ var Parts;
                     '<select class="parameter-type-select" >' +
                         typeOptions +
                     '</select>' +
+                '</td>' +
+                '<td>' +
+                    '<input type="checkbox" class="parameter-evaluated"></input>' +
                 '</td>' +
                 '<td>' +
                     '<span class="parameter-min-container"></span>' +

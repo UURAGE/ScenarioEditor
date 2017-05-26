@@ -21,5 +21,6 @@
     "authors": "Auteurs",
     "email": "Email",
     "startDate": "Begindatum",
-    "endDate":  "Einddatum"
+    "endDate":  "Einddatum",
+    "evaluated": "Geëvalueerd"
 }

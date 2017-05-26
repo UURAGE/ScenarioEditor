@@ -300,11 +300,17 @@ var Load;
                     Parameters.counter = parameterNumber;
             }
 
+            var evaluated = Evaluations.container.sequence.some(function(evaluation)
+            {
+                return evaluation.id === 'evaluation-' + parameterId;
+            });
+
             var typeXML = $(this).children('type').children();
             var parameter =
             {
                 id: parameterId,
                 name: this.attributes.name.value,
+                evaluated: evaluated,
                 type: Types.primitives[typeXML[0].nodeName].loadType(typeXML, parameterId),
                 description: $(this).children('description').text()
             };

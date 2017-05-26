@@ -158,6 +158,8 @@ var Parameters;
             typeSelect.val(parameter.type.name).trigger('change');
             addedDiv.removeClass("changedTypeParameter");
 
+            addedDiv.find(".parameter-evaluated").prop('checked', parameter.evaluated);
+
             parameter.type.setInDOM(addedDiv.find(".parameter-initial-value-container"), parameter.type.defaultValue);
 
             if ('minimum' in parameter.type) parameter.type.setInDOM(addedDiv.find(".parameter-min-container"), parameter.type.minimum);
@@ -288,6 +290,7 @@ var Parameters;
             return {
                 id: container.prop('id'),
                 name: name,
+                evaluated: container.find(".parameter-evaluated").prop('checked'),
                 type: type,
                 description: container.find(".description").val()
             };
@@ -345,6 +348,16 @@ var Parameters;
                 $(this).removeClass("changedTypeParameter");
             }
 
+            if (oldParameter.evaluated && !newParameter.evaluated || !oldParameter.evaluated && newParameter.evaluated)
+            {
+                Evaluations.onParameterEvaluatedChange(newParameter);
+            }
+
+            if (newParameter.evaluated)
+            {
+                Evaluations.onEvaluatedParameterChange(newParameter);
+            }
+
             $.extend(oldParameter, newParameter);
         });
 
@@ -391,6 +404,11 @@ var Parameters;
                             node.parameterEffects.userDefined = [timeEffect];
                     }
                 }
+            }
+
+            if (newParameter.evaluated)
+            {
+                Evaluations.onParameterEvaluatedChange(newParameter);
             }
         });
 
