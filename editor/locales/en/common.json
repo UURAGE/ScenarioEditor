@@ -15,6 +15,9 @@
     "type": "Type",
     "description": "Description",
     "expression": "Expression",
-    "reference": "Reference",
-    "literal": "Literal"
+    "kinds": {
+        "literal": "Literal",
+        "reference": "Reference",
+        "sum": "Sum"
+    }
 }

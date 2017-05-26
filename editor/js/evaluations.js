@@ -40,7 +40,7 @@ var Evaluations;
             .append($('<th>', { text: i18next.t('common:expression') }));
         var evaluationsContainer = $('<tbody>').appendTo($('<table>').append(evaluationsTableHead).appendTo(evaluationsDialog));
 
-        var addButton = $('<button>', { type: 'button' }).append($('<img>', { src: editor_url + "png/others/plus.png", title: i18next.t('common:add') }));
+        var addButton = $('<button>', { type: 'button', title: i18next.t('common:add') }).append($('<img>', { src: editor_url + "png/others/plus.png" }));
         var appendNewEvaluationContainer = function()
         {
             var evaluationContainer = $('<tr>').appendTo(evaluationsContainer);

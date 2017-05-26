@@ -8,6 +8,40 @@ var Expression;
 
     var kinds =
     {
+        literal:
+        {
+            name: 'literal',
+            appendControlTo: function(container, type)
+            {
+                type.appendControlTo(container);
+            },
+            getFromDOM: function(container, type)
+            {
+                return type.getFromDOM(container);
+            },
+            setInDOM: function(container, type, literal)
+            {
+                type.setInDOM(container, literal);
+            },
+            fromXML: function(literalXML, type)
+            {
+                return type.fromXML(literalXML);
+            },
+            toXML: function(expressionXML, type, literal)
+            {
+                var literalXML = Utils.appendChild(expressionXML, this.name);
+                type.toXML(literalXML, literal);
+            },
+            isAvailableFor: function(type)
+            {
+                return true;
+            },
+            onTypeChange: function(previousType, newType, expression)
+            {
+                expression.literal = newType.castFrom(previousType, expression.literal);
+            },
+            onParameterTypeChange: function(){}
+        },
         reference:
         {
             name: 'reference',
@@ -72,53 +106,107 @@ var Expression;
                 }
                 referenceXML.setAttribute("idref", reference.parameterIdRef);
             },
+            isAvailableFor: function(type)
+            {
+                return Parameters.hasWithType(type) || Config.hasParameterWithType(type);
+            },
             onTypeChange: function(previousType, newType, expression)
             {
-                delete expression.kind;
-                delete expression.reference;
-                expression.kind = kinds.literal;
-                expression.literal = newType.defaultValue;
+                replaceExpressionWithDefaultLiteral(expression, newType);
             },
             onParameterTypeChange: function(parameter, type, expression)
             {
                 if (expression.reference.parameterIdRef === parameter.id && !parameter.type.equals(type))
                 {
-                    delete expression.kind;
-                    delete expression.reference;
-                    expression.kind = kinds.literal;
-                    expression.literal = type.defaultValue;
+                    replaceExpressionWithDefaultLiteral(expression, type);
                 }
             }
         },
-        literal:
+        sum:
         {
-            name: 'literal',
+            name: 'sum',
             appendControlTo: function(container, type)
             {
-                type.appendControlTo(container);
+                var sumExpressionsContainer = $('<ul>');
+                var addButton = $('<button>', { type: 'button', class: "add-sum-expression", title: i18next.t('common:add') }).append($('<img>', { src: editor_url + "png/others/plus.png" }));
+                addButton.on('click', function()
+                {
+                    var sumExpressionAndDeleteButtonContainer = $('<li>');
+
+                    var sumExpressionContainer = $('<span>', { class: "sum-expression" });
+                    Expression.appendControlsTo(sumExpressionContainer, type);
+                    sumExpressionAndDeleteButtonContainer.append(sumExpressionContainer);
+
+                    var deleteButton = $(Parts.getDeleteParentButtonHTML());
+                    deleteButton.on('click', function()
+                    {
+                        sumExpressionAndDeleteButtonContainer.remove();
+                    });
+                    sumExpressionAndDeleteButtonContainer.append(deleteButton);
+
+                    sumExpressionsContainer.append(sumExpressionAndDeleteButtonContainer);
+                });
+                container.append(sumExpressionsContainer);
+
+                container.append(addButton);
             },
             getFromDOM: function(container, type)
             {
-                return type.getFromDOM(container);
+                return container.children('ul').children('li').map(function()
+                {
+                    return Expression.getFromDOM($(this).children('.sum-expression'), type);
+                }).get();
             },
-            setInDOM: function(container, type, literal)
+            setInDOM: function(container, type, sum)
             {
-                type.setInDOM(container, literal);
+                var addButton = container.children('.add-sum-expression');
+                sum.forEach(function(expression)
+                {
+                    addButton.trigger('click');
+                    var sumExpressionContainer = container.children('ul').children('li').last().children('.sum-expression');
+                    Expression.setInDOM(sumExpressionContainer, type, expression);
+                });
             },
-            fromXML: function(literalXML, type)
+            fromXML: function(sumXML, type)
             {
-                return type.fromXML(literalXML);
+                return $(sumXML).children().map(function()
+                {
+                    return Expression.fromXML(this, type);
+                }).get();
             },
-            toXML: function(expressionXML, type, literal)
+            toXML: function(expressionXML, type, sum)
             {
-                var literalXML = Utils.appendChild(expressionXML, "literal");
-                type.toXML(literalXML, literal);
+                var sumXML = Utils.appendChild(expressionXML, this.name);
+                sum.forEach(function(expression)
+                {
+                    Expression.toXML(sumXML, type, expression);
+                });
+            },
+            isAvailableFor: function(type)
+            {
+                return type.name === Types.primitives.integer.name;
             },
             onTypeChange: function(previousType, newType, expression)
             {
-                expression.literal = newType.castFrom(previousType, expression.literal);
+                if (this.isAvailableFor(newType))
+                {
+                    expression.sum.forEach(function(sumExpression)
+                    {
+                        sumExpression.kind.onTypeChange(previousType, newType, sumExpression);
+                    });
+                }
+                else
+                {
+                    replaceExpressionWithDefaultLiteral(expression, newType);
+                }
             },
-            onParameterTypeChange: function(){}
+            onParameterTypeChange: function(parameter, type, expression)
+            {
+                expression.sum.forEach(function(sumExpression)
+                {
+                    sumExpression.kind.onParameterTypeChange(parameter, type, sumExpression);
+                });
+            }
         }
     };
 
@@ -126,18 +214,22 @@ var Expression;
     {
         kinds: kinds,
         appendControlsTo: appendControlsTo,
-        setInDOM: setInDOM,
         getFromDOM: getFromDOM,
+        setInDOM: setInDOM,
+        fromXML: fromXML,
+        toXML: toXML,
         onTypeChange: onTypeChange
     };
 
     function appendControlsTo(container, type)
     {
         var expressionSelect = $('<select>', { class: "expression-kind" });
-        expressionSelect.append($('<option>', { value: kinds.literal.name, text: i18next.t('common:' + kinds.literal.name)}));
-        if (Parameters.hasWithType(type) || Config.hasParameterWithType(type))
+        for (var kindName in kinds)
         {
-            expressionSelect.append($('<option>', { value: kinds.reference.name, text: i18next.t('common:' + kinds.reference.name)}));
+            if (kinds[kindName].isAvailableFor(type))
+            {
+                expressionSelect.append($('<option>', { value: kindName, text: i18next.t('common:kinds.' + kindName)}));
+            }
         }
         expressionSelect.on('change', function()
         {
@@ -166,6 +258,27 @@ var Expression;
         return expression;
     }
 
+    function fromXML(expressionXML, type)
+    {
+        var kind;
+        if (!(expressionXML.nodeName in kinds))
+        {
+            kind = kinds.reference;
+        }
+        else
+        {
+            kind = kinds[expressionXML.nodeName];
+        }
+        var expression = { kind: kind };
+        expression[kind.name] = kind.fromXML(expressionXML, type);
+        return expression;
+    }
+
+    function toXML(expressionXML, type, expression)
+    {
+        expression.kind.toXML(expressionXML, type, expression[expression.kind.name]);
+    }
+
     function onTypeChange(container, previousType, newType, userTypeChange)
     {
         if (previousType)
@@ -181,6 +294,14 @@ var Expression;
             container.empty();
             appendControlsTo(container, newType);
         }
+    }
+
+    function replaceExpressionWithDefaultLiteral(expression, type)
+    {
+        delete expression[expression.kind.name];
+        delete expression.kind;
+        expression.kind = kinds.literal;
+        expression.literal = type.defaultValue;
     }
 
 })();

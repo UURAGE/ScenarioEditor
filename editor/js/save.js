@@ -260,7 +260,7 @@ var Save;
             var typeContainerEl = addAndReturnElement("type", scenarioNameSpace, evaluationEl);
             evaluation.type.insertType(typeContainerEl);
             var expressionEl = addAndReturnElement("expression", scenarioNameSpace, evaluationEl);
-            evaluation.expression.kind.toXML(expressionEl, evaluation.type, evaluation.expression[evaluation.expression.kind.name]);
+            Expression.toXML(expressionEl, evaluation.type, evaluation.expression);
         }
     }
 

@@ -15,6 +15,9 @@
     "type": "Type",
     "description": "Beschrijving",
     "expression": "Expressie",
-    "reference": "Referentie",
-    "literal": "Waarde"
+    "kinds": {
+        "literal": "Waarde",
+        "reference": "Referentie",
+        "sum": "Som"
+    }
 }

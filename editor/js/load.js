@@ -241,17 +241,7 @@ var Load;
             var type = Types.primitives[typeXML[0].nodeName].loadType(typeXML);
 
             var expressionXML = $(this).children('expression').children();
-            var kind;
-            if (!(expressionXML[0].nodeName in Expression.kinds))
-            {
-                kind = Expression.kinds.reference;
-            }
-            else
-            {
-                kind = Expression.kinds[expressionXML[0].nodeName];
-            }
-            var expression = { kind: kind };
-            expression[kind.name] = kind.fromXML(expressionXML[0], type);
+            var expression = Expression.fromXML(expressionXML[0], type);
 
             var evaluation =
             {
