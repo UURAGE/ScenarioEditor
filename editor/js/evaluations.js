@@ -51,7 +51,7 @@ var Evaluations;
             evaluationContainer.append($('<td>').append($('<input>', { type: 'text', class: 'evaluation-name' })));
 
             var typeContainer = $('<td>');
-            var expressionContainer = $('<td>');
+            var expressionKindContainer = $('<span>', { class: 'evaluation-expression' });
 
             var previousType;
             var onEvaluationTypeChange = function(newTypeName, userTypeChange)
@@ -63,7 +63,8 @@ var Evaluations;
                     {
                         newType = $.extend(newType, { controlName: 'textarea', rows: 4, markdown: "gfm" });
                     }
-                    Expression.onTypeChange(expressionContainer, 'evaluation-expression', previousType, newType, userTypeChange);
+
+                    Expression.onTypeChange(expressionKindContainer, previousType, newType, userTypeChange);
                     previousType = newType;
                 };
                 if (newTypeName === Types.primitives.enumeration.name)
@@ -84,6 +85,8 @@ var Evaluations;
             Utils.attachMarkdownTooltip(evaluationDescription);
             evaluationContainer.append($('<td>').append(evaluationDescription));
 
+            var expressionContainer = $('<td>');
+            expressionContainer.append(expressionKindContainer);
             evaluationContainer.append(expressionContainer);
 
             var deleteButton = $(Parts.getDeleteParentButtonHTML());

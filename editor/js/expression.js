@@ -72,6 +72,13 @@ var Expression;
                 }
                 referenceXML.setAttribute("idref", reference.parameterIdRef);
             },
+            onTypeChange: function(previousType, newType, expression)
+            {
+                delete expression.kind;
+                delete expression.reference;
+                expression.kind = kinds.literal;
+                expression.literal = newType.defaultValue;
+            },
             onParameterTypeChange: function(parameter, type, expression)
             {
                 if (expression.reference.parameterIdRef === parameter.id && !parameter.type.equals(type))
@@ -107,6 +114,10 @@ var Expression;
                 var literalXML = Utils.appendChild(expressionXML, "literal");
                 type.toXML(literalXML, literal);
             },
+            onTypeChange: function(previousType, newType, expression)
+            {
+                expression.literal = newType.castFrom(previousType, expression.literal);
+            },
             onParameterTypeChange: function(){}
         }
     };
@@ -120,10 +131,8 @@ var Expression;
         onTypeChange: onTypeChange
     };
 
-    function appendControlsTo(container, htmlClass, type)
+    function appendControlsTo(container, type)
     {
-        var expressionKindContainer = $('<span>', { class: htmlClass });
-
         var expressionSelect = $('<select>', { class: "expression-kind" });
         expressionSelect.append($('<option>', { value: kinds.literal.name, text: i18next.t('common:' + kinds.literal.name)}));
         if (Parameters.hasWithType(type) || Config.hasParameterWithType(type))
@@ -132,15 +141,13 @@ var Expression;
         }
         expressionSelect.on('change', function()
         {
-            expressionKindContainer.children('.expression').remove();
+            container.children('.expression').remove();
             var expressionContainer = $('<span>', { class: "expression" });
             kinds[$(this).val()].appendControlTo(expressionContainer, type);
-            expressionKindContainer.append(expressionContainer);
+            container.append(expressionContainer);
         });
-        expressionKindContainer.append(expressionSelect);
+        container.append(expressionSelect);
         expressionSelect.trigger('change');
-
-        container.append(expressionKindContainer);
     }
 
     function setInDOM(container, type, expression)
@@ -159,10 +166,21 @@ var Expression;
         return expression;
     }
 
-    function onTypeChange(container, htmlClass, previousType, newType, userTypeChange)
+    function onTypeChange(container, previousType, newType, userTypeChange)
     {
-        container.empty();
-        appendControlsTo(container, htmlClass, newType);
+        if (previousType)
+        {
+            var expression = getFromDOM(container, previousType);
+            expression.kind.onTypeChange(previousType, newType, expression);
+            container.empty();
+            appendControlsTo(container, newType);
+            setInDOM(container, newType, expression);
+        }
+        else
+        {
+            container.empty();
+            appendControlsTo(container, newType);
+        }
     }
 
 })();
