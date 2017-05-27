@@ -49,7 +49,8 @@ var Condition;
     {
         var conditionContainer = appendGroupCondition(container);
         var subconditionsContainer = conditionContainer.children(".groupConditionDiv");
-        subconditionsContainer.find("input[value=" + condition.type + "]").prop('checked', true);
+        var conditionTypeContainer = conditionContainer.children(".groupConditionRadioDiv");
+        conditionTypeContainer.find("input[value=" + condition.type + "]").prop('checked', true);
         condition.subconditions.forEach(function(subcondition)
         {
             if ("type" in subcondition)
