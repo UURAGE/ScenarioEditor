@@ -20,5 +20,7 @@
         "reference": "Referentie",
         "sum": "Som",
         "scale": "Schaal"
-    }
+    },
+    "as_percentage": "als percentage",
+    "as_value": "als waarde"
 }

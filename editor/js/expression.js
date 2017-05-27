@@ -60,9 +60,21 @@ var Expression;
                         Config.insertCharactersInto(characterIdRefSelect, parameterIdRef);
                         container.append(characterIdRefSelect);
                     }
+
+                    container.children('.reference-calculate').remove();
+                    var parameter = Config.findParameterById(parameterIdRef);
+                    if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
+                    if (parameter.type.name === Types.primitives.integer.name &&
+                        'maximum' in parameter.type && 'minimum' in parameter.type)
+                    {
+                        var calculateSelect = $('<select>', { class: "reference-calculate" });
+                        calculateSelect.append($('<option>', { value: 'value', text: i18next.t('common:as_value') }));
+                        calculateSelect.append($('<option>', { value: 'percentage', text: i18next.t('common:as_percentage') }));
+                        container.append(calculateSelect);
+                    }
                 });
-                parameterSelect.trigger('change');
                 container.append(parameterSelect);
+                parameterSelect.trigger('change');
             },
             getFromDOM: function(container, type)
             {
@@ -71,6 +83,11 @@ var Expression;
                 if (Config.isCharacterParameter(reference.parameterIdRef))
                 {
                     reference.characterIdRef = container.children('.character-idref').val();
+                }
+                var calculateSelect = container.children('.reference-calculate');
+                if (calculateSelect.length > 0)
+                {
+                    reference.calculate = calculateSelect.val();
                 }
                 return reference;
             },
@@ -81,6 +98,11 @@ var Expression;
                 {
                      container.children('.character-idref').val(reference.characterIdRef).trigger('change');
                 }
+                var calculateSelect = container.children('.reference-calculate');
+                if (reference.calculate && calculateSelect.length > 0)
+                {
+                    calculateSelect.val(reference.calculate);
+                }
             },
             fromXML: function(referenceXML, type)
             {
@@ -90,6 +112,10 @@ var Expression;
                     reference.characterIdRef = referenceXML.attributes.characteridref.value;
                 }
                 reference.parameterIdRef = referenceXML.attributes.idref.value;
+                if (referenceXML.hasAttribute("calculate"))
+                {
+                    reference.calculate = referenceXML.attributes.calculate.value;
+                }
                 return reference;
             },
             toXML: function(expressionXML, type, reference)
@@ -103,6 +129,10 @@ var Expression;
                 else
                 {
                     referenceXML = Utils.appendChild(expressionXML, "parameterReference");
+                }
+                if (reference.calculate)
+                {
+                    referenceXML.setAttribute("calculate", reference.calculate);
                 }
                 referenceXML.setAttribute("idref", reference.parameterIdRef);
             },
@@ -119,6 +149,11 @@ var Expression;
                 if (expression.reference.parameterIdRef === parameter.id && !parameter.type.equals(type))
                 {
                     replaceExpressionWithDefaultLiteral(expression, type);
+                }
+
+                if ('calculate' in expression.reference && (!('maximum' in parameter.type) || !('minimum' in parameter.type)))
+                {
+                    delete expression.reference.calculate;
                 }
             }
         },

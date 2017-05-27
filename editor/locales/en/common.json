@@ -20,5 +20,7 @@
         "reference": "Reference",
         "sum": "Sum",
         "scale": "Scale"
-    }
+    },
+    "as_percentage": "as percentage",
+    "as_value": "as value"
 }

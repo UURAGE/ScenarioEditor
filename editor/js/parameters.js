@@ -347,6 +347,12 @@ var Parameters;
 
                 $(this).removeClass("changedTypeParameter");
             }
+            // Special case for triggering a type change for a reference calculation update
+            else if (oldParameter.type.name === Types.primitives.integer.name && newParameter.type.name === Types.primitives.integer.name &&
+               (oldParameter.type.minimum !== newParameter.type.minimum || oldParameter.type.maximum !== newParameter.type.maximum))
+            {
+                Evaluations.onParameterTypeChange(newParameter);
+            }
 
             if (oldParameter.evaluated && !newParameter.evaluated || !oldParameter.evaluated && newParameter.evaluated)
             {
