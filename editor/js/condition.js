@@ -182,39 +182,43 @@ var Condition;
 
     function extract(container)
     {
-        var condition = {};
-        // Save selected type of condition
-        condition.type = container.children(".groupConditionRadioDiv").find('input[type=radio]:checked').val();
-
-        // Save conditions.
-        var subconditions = [];
-
-        container.children(".groupConditionDiv").children().each(function()
+        var extractCondition = function(conditionContainer)
         {
-            if ($(this).hasClass("groupcondition"))
-            {
-                subconditions.push(extract($(this)));
-            }
-            else
-            {
-                var parameterIdRef = $(this).find(".parameter-idref-select").val();
-                var characterIdRef = $(this).find(".character-idref-select").val();
+            var condition = {};
+            // Save selected type of condition
+            condition.type = conditionContainer.children(".groupConditionRadioDiv").find('input[type=radio]:checked').val();
 
-                var parameter = Config.findParameterById(parameterIdRef, characterIdRef);
-                if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
+            // Save conditions.
+            var subconditions = [];
 
-                var subcondition =
+            conditionContainer.children(".groupConditionDiv").children().each(function()
+            {
+                if ($(this).hasClass("groupcondition"))
                 {
-                    idRef: parameterIdRef,
-                    operator: $(this).find(".condition-operator-select").val(),
-                    value: parameter.type.getFromDOM($(this).find(".condition-value-container"))
-                };
+                    subconditions.push(extractCondition($(this)));
+                }
+                else
+                {
+                    var parameterIdRef = $(this).find(".parameter-idref-select").val();
+                    var characterIdRef = $(this).find(".character-idref-select").val();
 
-                if (characterIdRef) subcondition.characterIdRef = characterIdRef;
-                subconditions.push(subcondition);
-            }
-        });
-        condition.subconditions = subconditions;
-        return condition;
+                    var parameter = Config.findParameterById(parameterIdRef, characterIdRef);
+                    if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
+
+                    var subcondition =
+                    {
+                        idRef: parameterIdRef,
+                        operator: $(this).find(".condition-operator-select").val(),
+                        value: parameter.type.getFromDOM($(this).find(".condition-value-container"))
+                    };
+
+                    if (characterIdRef) subcondition.characterIdRef = characterIdRef;
+                    subconditions.push(subcondition);
+                }
+            });
+            condition.subconditions = subconditions;
+            return condition;
+        };
+        return extractCondition(container.children('.condition'));
     }
 })();

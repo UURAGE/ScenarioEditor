@@ -1434,7 +1434,7 @@ var Main;
         }
 
         // Save preconditions.
-        node.preconditions = Condition.extract($("#preconditionsDiv").children().first());
+        node.preconditions = Condition.extract($("#preconditionsDiv"));
 
         // Save property values.
         var acceptableScopes = ['per', 'per-' + node.type];
