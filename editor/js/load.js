@@ -98,8 +98,9 @@ var Load;
             {
                 alert("The config id does not match the config id referred to in the scenario");
             }
+            loadDefinitions($(scenarioXML).children('definitions').eq(0));
             loadEvaluations($(scenarioXML).children('typedExpressions').eq(0));
-            loadMetadata($(scenarioXML).attr('version'), $(scenarioXML).children('definitions').eq(0), $(scenarioXML).children('metadata').eq(0));
+            loadMetadata($(scenarioXML).attr('version'), $(scenarioXML).children('metadata').eq(0));
             jsPlumb.batch(function()
             {
                 generateGraph(scenarioXML);
@@ -222,6 +223,35 @@ var Load;
         });
     }
 
+    function loadDefinitions(definitions)
+    {
+        $(definitions).children('parameters').children('userDefined').children().each(function()
+        {
+            var parameterId = this.attributes.id.value;
+
+            var parameterMatch = parameterId.match(/^p(\d+)$/);
+            if (parameterMatch !== null)
+            {
+                var parameterNumber = parseInt(parameterMatch[1]);
+                if (parameterNumber > Parameters.counter)
+                    Parameters.counter = parameterNumber;
+            }
+
+            var typeXML = $(this).children('type').children();
+            var parameter =
+            {
+                id: parameterId,
+                name: this.attributes.name.value,
+                type: Types.primitives[typeXML[0].nodeName].loadType(typeXML, parameterId),
+                description: $(this).children('description').text()
+            };
+            Parameters.container.sequence.push(parameter);
+            Parameters.container.byId[parameter.id] = parameter;
+        });
+
+        if ('t' in Parameters.container.byId) Parameters.timeId = 't';
+    }
+
     function loadEvaluations(evaluationsXML)
     {
         $(evaluationsXML).children().each(function()
@@ -234,6 +264,14 @@ var Load;
                 if (evaluationCounter >= Evaluations.counter)
                 {
                     Evaluations.counter = evaluationCounter + 1;
+                }
+            }
+
+            for (var parameterId in Parameters.container.byId)
+            {
+                if (evaluationId === 'evaluation-' + parameterId)
+                {
+                    Parameters.container.byId[parameterId].evaluated = true;
                 }
             }
 
@@ -257,7 +295,7 @@ var Load;
     }
 
     // Load the metadata of the scenario.
-    function loadMetadata(version, definitions, metadata)
+    function loadMetadata(version, metadata)
     {
         Metadata.container.name = $(metadata).children('name').text();
         $('#scenarioNameTab .scenarioName').text(Metadata.container.name);
@@ -286,39 +324,6 @@ var Load;
         }
 
         Metadata.container.difficulty = $(metadata).children('difficulty').text();
-
-        var parameters = Parameters.container;
-        $(definitions).children('parameters').children('userDefined').children().each(function()
-        {
-            var parameterId = this.attributes.id.value;
-
-            var parameterMatch = parameterId.match(/^p(\d+)$/);
-            if (parameterMatch !== null)
-            {
-                var parameterNumber = parseInt(parameterMatch[1]);
-                if (parameterNumber > Parameters.counter)
-                    Parameters.counter = parameterNumber;
-            }
-
-            var evaluated = Evaluations.container.sequence.some(function(evaluation)
-            {
-                return evaluation.id === 'evaluation-' + parameterId;
-            });
-
-            var typeXML = $(this).children('type').children();
-            var parameter =
-            {
-                id: parameterId,
-                name: this.attributes.name.value,
-                evaluated: evaluated,
-                type: Types.primitives[typeXML[0].nodeName].loadType(typeXML, parameterId),
-                description: $(this).children('description').text()
-            };
-            parameters.sequence.push(parameter);
-            parameters.byId[parameter.id] = parameter;
-        });
-
-        if ('t' in parameters.byId) Parameters.timeId = 't';
 
         Metadata.container.propertyValues = loadPropertyValues($(metadata).children('propertyValues'), ['independent']);
     }
