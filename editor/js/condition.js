@@ -14,30 +14,43 @@ var Condition;
 
     var radioButtonCounter = 0;
 
-    function insert(container, condition)
+    function insert(rootContainer, rootCondition)
     {
-        var conditionContainer = appendGroupCondition(container);
-        var subconditionsContainer = conditionContainer.children(".groupConditionDiv");
-        var conditionTypeContainer = conditionContainer.children(".groupConditionRadioDiv");
-        conditionTypeContainer.find("input[value=" + condition.type + "]").prop('checked', true);
-        condition.subconditions.forEach(function(subcondition)
+        var insertCondition = function(container, condition, isRoot)
         {
-            if ("type" in subcondition)
-            {
-                insert(subconditionsContainer, subcondition);
-            }
-            else
-            {
-                var parameter = Config.findParameterById(subcondition.idRef, subcondition.characterIdRef);
-                if (!parameter) parameter = Parameters.container.byId[subcondition.idRef];
+            var conditionContainer = appendGroupCondition(container);
 
-                var subconditionContainer = appendCondition(subconditionsContainer);
-                subconditionContainer.find(".parameter-idref-select").val(subcondition.idRef).trigger('change');
-                subconditionContainer.find(".character-idref-select").val(subcondition.characterIdRef);
-                subconditionContainer.find(".condition-operator-select").val(subcondition.operator);
-                parameter.type.setInDOM(subconditionContainer.find(".condition-value-container"), subcondition.value);
+            if (isRoot)
+            {
+                conditionContainer.children('.deleteParent').remove();
             }
-        });
+
+            if (condition)
+            {
+                var subconditionsContainer = conditionContainer.children(".groupConditionDiv");
+                var conditionTypeContainer = conditionContainer.children(".groupConditionRadioDiv");
+                conditionTypeContainer.find("input[value=" + condition.type + "]").prop('checked', true);
+                condition.subconditions.forEach(function(subcondition)
+                {
+                    if ("type" in subcondition)
+                    {
+                        insertCondition(subconditionsContainer, subcondition, false);
+                    }
+                    else
+                    {
+                        var parameter = Config.findParameterById(subcondition.idRef, subcondition.characterIdRef);
+                        if (!parameter) parameter = Parameters.container.byId[subcondition.idRef];
+
+                        var subconditionContainer = appendCondition(subconditionsContainer);
+                        subconditionContainer.find(".parameter-idref-select").val(subcondition.idRef).trigger('change');
+                        subconditionContainer.find(".character-idref-select").val(subcondition.characterIdRef);
+                        subconditionContainer.find(".condition-operator-select").val(subcondition.operator);
+                        parameter.type.setInDOM(subconditionContainer.find(".condition-value-container"), subcondition.value);
+                    }
+                });
+            }
+        };
+        insertCondition(rootContainer, rootCondition, true);
     }
 
     function appendCondition(container)

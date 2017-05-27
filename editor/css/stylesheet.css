@@ -713,11 +713,6 @@ button img
   white-space: nowrap;
 }
 
-  #preconditionsSection > #preconditionsDiv > .condition > .deleteParent
-  {
-    display: none;
-  }
-
 #scenarioNameTab
 {
   display: inline-block;
