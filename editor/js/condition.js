@@ -14,37 +14,6 @@ var Condition;
 
     var radioButtonCounter = 0;
 
-    $(document).ready(function()
-    {
-        $("#preconditionsDiv").on('click', ".addCondition", function()
-        {
-            if (Parameters.atLeastOneUserDefined() || Config.atLeastOneParameter())
-            {
-                var container = $(this).parent().children(".groupConditionDiv");
-                appendCondition(container);
-                var addedDiv = container.children(".condition").last();
-                Utils.focusFirstTabindexedDescendant(addedDiv);
-            }
-            else
-            {
-                alert(i18next.t('condition:error.no_test'));
-            }
-        });
-        $("#preconditionsDiv").on('click', ".addGroupCondition", function()
-        {
-            if (Parameters.atLeastOneUserDefined() || Config.atLeastOneParameter())
-            {
-                var container = $(this).parent().children(".groupConditionDiv");
-                appendGroupCondition(container);
-                container.children(".condition").last().find('button').first().focus();
-            }
-            else
-            {
-                alert(i18next.t('condition:error.no_test'));
-            }
-        });
-    });
-
     function insert(container, condition)
     {
         var conditionContainer = appendGroupCondition(container);
@@ -144,19 +113,43 @@ var Condition;
         updateGroupConditionCounter(container.closest(".groupcondition"));
         groupCondition.append(groupConditionRadio);
 
-        groupCondition.append($('<div>', { class: "groupConditionDiv" }));
-        groupCondition.append(
-            $('<button>', { class: "addCondition"})
-                .append($('<img>', { src: editor_url + "png/others/plus.png", alt: '+' }))
-                .append(i18next.t('condition:add_condition')
-            )
-        );
-        groupCondition.append(
-            $('<button>', { class: "addGroupCondition"})
-                .append($('<img>', { src: editor_url + "png/others/plus.png", alt: '+' }))
-                .append(i18next.t('condition:add_group')
-            )
-        );
+        var subconditionsContainer = $('<div>', { class: "groupConditionDiv" });
+        groupCondition.append(subconditionsContainer);
+
+        var addConditionButton = $('<button>', { class: "addCondition"})
+            .append($('<img>', { src: editor_url + "png/others/plus.png", alt: '+' }))
+            .append(i18next.t('condition:add_condition'));
+        addConditionButton.on('click', function()
+        {
+            if (Parameters.atLeastOneUserDefined() || Config.atLeastOneParameter())
+            {
+                var condition = appendCondition(subconditionsContainer);
+                Utils.focusFirstTabindexedDescendant(condition);
+            }
+            else
+            {
+                alert(i18next.t('condition:error.no_test'));
+            }
+        });
+        groupCondition.append(addConditionButton);
+
+        var addGroupConditionButton = $('<button>', { class: "addGroupCondition"})
+            .append($('<img>', { src: editor_url + "png/others/plus.png", alt: '+' }))
+            .append(i18next.t('condition:add_group'));
+        addGroupConditionButton.on('click', function()
+        {
+            if (Parameters.atLeastOneUserDefined() || Config.atLeastOneParameter())
+            {
+                appendGroupCondition(subconditionsContainer);
+                addConditionButton.focus();
+            }
+            else
+            {
+                alert(i18next.t('condition:error.no_test'));
+            }
+        });
+        groupCondition.append(addGroupConditionButton);
+
         var deleteButton = $(Parts.getDeleteParentButtonHTML());
         deleteButton.append(i18next.t('condition:delete_group'));
         deleteButton.on('click', function()
