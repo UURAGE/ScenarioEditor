@@ -179,7 +179,7 @@ var Evaluations;
                 typeSelect.prop('disabled', true);
                 evaluationContainer.find('.enumeration-dialog-button').remove();
                 descriptionTextArea.prop('disabled', true);
-                expressionContainer.find('button, checkbox, input, select, textarea').prop('disabled', true);
+                expressionContainer.find('button, checkbox, input, select, textarea').not('.reference-calculate').prop('disabled', true);
 
                 evaluationContainer.find(".deleteParent").remove();
             }
