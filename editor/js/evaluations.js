@@ -261,18 +261,18 @@ var Evaluations;
         Main.selectElement(previouslySelectedElement);
     }
 
-    function onParameterTypeChange(parameter)
+    function onParameterTypeChange(oldParameter, newParameter)
     {
-        var evaluationId = 'evaluation-' + parameter.id;
+        var evaluationId = 'evaluation-' + oldParameter.id;
         Evaluations.container.sequence.forEach(function(evaluation)
         {
             if (evaluation.id === evaluationId)
             {
-                evaluation.type = parameter.type;
+                evaluation.type = newParameter.type;
             }
             else
             {
-                evaluation.expression.kind.onParameterTypeChange(parameter, evaluation.type, evaluation.expression);
+                evaluation.expression.kind.onParameterTypeChange(oldParameter, newParameter, evaluation.type, evaluation.expression);
             }
         });
     }

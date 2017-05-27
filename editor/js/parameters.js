@@ -325,7 +325,7 @@ var Parameters;
                     Condition.onParameterTypeChange(oldParameter, newParameter, Main.nodes[nodeID].preconditions);
                 }
 
-                Evaluations.onParameterTypeChange(newParameter);
+                Evaluations.onParameterTypeChange(oldParameter, newParameter);
 
                 $(this).removeClass("changedTypeParameter");
             }
@@ -333,7 +333,7 @@ var Parameters;
             else if (oldParameter.type.name === Types.primitives.integer.name && newParameter.type.name === Types.primitives.integer.name &&
                (oldParameter.type.minimum !== newParameter.type.minimum || oldParameter.type.maximum !== newParameter.type.maximum))
             {
-                Evaluations.onParameterTypeChange(newParameter);
+                Evaluations.onParameterTypeChange(oldParameter, newParameter);
             }
 
             if (oldParameter.evaluated && !newParameter.evaluated || !oldParameter.evaluated && newParameter.evaluated)

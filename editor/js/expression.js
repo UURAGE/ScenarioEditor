@@ -144,16 +144,16 @@ var Expression;
             {
                 replaceExpressionWithDefaultLiteral(expression, newType);
             },
-            onParameterTypeChange: function(parameter, type, expression)
+            onParameterTypeChange: function(oldParameter, newParameter, type, expression)
             {
-                if (expression.reference.parameterIdRef === parameter.id && !parameter.type.equals(type))
-                {
-                    replaceExpressionWithDefaultLiteral(expression, type);
-                }
-
-                if ('calculate' in expression.reference && (!('maximum' in parameter.type) || !('minimum' in parameter.type)))
+                if ('calculate' in expression.reference && (!('maximum' in newParameter.type) || !('minimum' in newParameter.type)))
                 {
                     delete expression.reference.calculate;
+                }
+
+                if (expression.reference.parameterIdRef === oldParameter.id && !newParameter.type.equals(type))
+                {
+                    replaceExpressionWithDefaultLiteral(expression, type);
                 }
             }
         },
@@ -194,9 +194,9 @@ var Expression;
             },
             setInDOM: function(container, type, sum)
             {
-                var addButton = container.children('.add-sum-expression');
                 sum.forEach(function(expression)
                 {
+                    var addButton = container.children('.add-sum-expression');
                     addButton.trigger('click');
                     var sumExpressionContainer = container.children('ul').children('li').last().children('.sum-expression');
                     Expression.setInDOM(sumExpressionContainer, type, expression);
@@ -235,11 +235,11 @@ var Expression;
                     replaceExpressionWithDefaultLiteral(expression, newType);
                 }
             },
-            onParameterTypeChange: function(parameter, type, expression)
+            onParameterTypeChange: function(oldParameter, newParameter, type, expression)
             {
                 expression.sum.forEach(function(sumExpression)
                 {
-                    sumExpression.kind.onParameterTypeChange(parameter, type, sumExpression);
+                    sumExpression.kind.onParameterTypeChange(oldParameter, newParameter, type, sumExpression);
                 });
             }
         },
@@ -333,9 +333,121 @@ var Expression;
                     replaceExpressionWithDefaultLiteral(expression, newType);
                 }
             },
-            onParameterTypeChange: function(parameter, type, expression)
+            onParameterTypeChange: function(oldParameter, newParameter, type, expression)
             {
-                expression.scale.expression.kind.onParameterTypeChange(parameter, type, expression.scale.expression);
+                expression.scale.expression.kind.onParameterTypeChange(oldParameter, newParameter, type, expression.scale.expression);
+            }
+        },
+        choose:
+        {
+            name: 'choose',
+            appendControlTo: function(container, type)
+            {
+                var whensContainer = $('<ul>');
+                var addButton = $('<button>', { type: 'button', class: "add-when", title: i18next.t('common:add') }).append($('<img>', { src: editor_url + "png/others/plus.png" }));
+                addButton.on('click', function()
+                {
+                    var whenAndDeleteButtonContainer = $('<li>');
+
+                    var whenContainer = $('<span>', { class: "when", text: i18next.t('common:when') + ' ' });
+                    Condition.appendControlsTo(whenContainer);
+                    Expression.appendControlsTo(whenContainer, type);
+                    whenAndDeleteButtonContainer.append(whenContainer);
+
+                    var deleteButton = $(Parts.getDeleteParentButtonHTML());
+                    deleteButton.on('click', function()
+                    {
+                        whenAndDeleteButtonContainer.remove();
+                    });
+                    whenAndDeleteButtonContainer.append(deleteButton);
+
+                    whensContainer.append(whenAndDeleteButtonContainer);
+                });
+                container.append(whensContainer);
+
+                container.append(addButton);
+
+                var otherwiseContainer = $('<div>', { class: "otherwise", text: i18next.t('common:otherwise') + ' ' });
+                Expression.appendControlsTo(otherwiseContainer, type);
+                container.append(otherwiseContainer);
+            },
+            getFromDOM: function(container, type)
+            {
+                return {
+                    whens: container.children('ul').children('li').map(function()
+                    {
+                        var whenContainer = $(this).children('.when');
+                        return {
+                            condition: Condition.getFromDOM(whenContainer),
+                            expression: Expression.getFromDOM(whenContainer, type)
+                        };
+                    }).get(),
+                    otherwise: Expression.getFromDOM(container.children('.otherwise'), type)
+                };
+            },
+            setInDOM: function(container, type, choose)
+            {
+                choose.whens.forEach(function(when)
+                {
+                    var addButton = container.children('.add-when');
+                    addButton.trigger('click');
+                    var whenContainer = container.children('ul').children('li').last().children('.when');
+                    Condition.setInDOM(whenContainer, when.condition);
+                    Expression.setInDOM(whenContainer, type, when.expression);
+                });
+                Expression.setInDOM(container.children('.otherwise'), type, choose.otherwise);
+            },
+            fromXML: function(chooseXML, type)
+            {
+                return {
+                    whens: $(chooseXML).children('when').map(function()
+                    {
+                        return {
+                            condition: Condition.fromXML($(this).children('condition').children()[0]),
+                            expression: Expression.fromXML($(this).children('expression').children()[0], type)
+                        };
+                    }).get(),
+                    otherwise: Expression.fromXML($(chooseXML).children('otherwise').children()[0], type)
+                };
+            },
+            toXML: function(expressionXML, type, choose)
+            {
+                var chooseXML = Utils.appendChild(expressionXML, this.name);
+
+                choose.whens.forEach(function(when)
+                {
+                    var whenXML = Utils.appendChild(chooseXML, 'when');
+
+                    var conditionXML = Utils.appendChild(whenXML, 'condition');
+                    Condition.toXML(conditionXML, when.condition);
+
+                    var expressionXML = Utils.appendChild(whenXML, 'expression');
+                    Expression.toXML(expressionXML, type, when.expression);
+                });
+
+                var otherwiseXML = Utils.appendChild(chooseXML, 'otherwise');
+                Expression.toXML(otherwiseXML, type, choose.otherwise);
+            },
+            isAvailableFor: function(type)
+            {
+                return true;
+            },
+            onTypeChange: function(previousType, newType, expression)
+            {
+                expression.choose.whens.forEach(function(when)
+                {
+                    when.expression.kind.onTypeChange(previousType, newType, when.expression);
+                });
+                expression.choose.otherwise.kind.onTypeChange(previousType, newType, expression.choose.otherwise);
+            },
+            onParameterTypeChange: function(oldParameter, newParameter, type, expression)
+            {
+                expression.choose.whens.forEach(function(when)
+                {
+                    Condition.onParameterTypeChange(oldParameter, newParameter, when.condition);
+                    when.expression.kind.onParameterTypeChange(oldParameter, newParameter, type, when.expression);
+                });
+                expression.choose.otherwise.kind.onParameterTypeChange(oldParameter, newParameter, type, expression.choose.otherwise);
             }
         }
     };

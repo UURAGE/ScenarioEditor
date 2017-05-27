@@ -19,8 +19,11 @@
         "literal": "Literal",
         "reference": "Reference",
         "sum": "Sum",
-        "scale": "Scale"
+        "scale": "Scale",
+        "choose": "Choose"
     },
     "as_percentage": "as percentage",
-    "as_value": "as value"
+    "as_value": "as value",
+    "when": "When",
+    "otherwise": "Otherwise"
 }

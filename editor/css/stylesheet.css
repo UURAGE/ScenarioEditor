@@ -659,6 +659,11 @@ button img
   border-left: 2px solid white;
 }
 
+.when .groupConditionDiv
+{
+  border-left: 2px solid cornflowerblue;
+}
+
 .condition > button
 {
   display: block;
