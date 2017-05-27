@@ -347,11 +347,10 @@ var Save;
                 addAndReturnElement("comment", scenarioNameSpace, editingDataEl, true).textContent = node.comment;
 
             // Save the preconditions
-            var preconditionsInXML = createAndReturnPreconditionXML(node.preconditions);
-            if (preconditionsInXML !== null)
+            if (node.preconditions.subconditions.length > 0)
             {
                 var preconditionsEl = addAndReturnElement("preconditions", scenarioNameSpace, statementEl);
-                preconditionsEl.appendChild(preconditionsInXML);
+                Condition.toXML(preconditionsEl, node.preconditions);
             }
 
             // Save the parameter effects
@@ -479,55 +478,6 @@ var Save;
         if (preserveSpaces) Utils.setPreserveSpace(elToAdd);
         xmlElement.appendChild(elToAdd);
         return elToAdd;
-    }
-
-    // Creates an XML element for the precondition
-    function createAndReturnPreconditionXML(precondition)
-    {
-        var conditionEl;
-        if (!("type" in precondition))
-        {
-            var parameter = Config.findParameterById(precondition.idRef, precondition.characterIdRef);
-            if (!parameter) parameter = Parameters.container.byId[precondition.idRef];
-
-            if (precondition.characterIdRef)
-            {
-                conditionEl = document.createElementNS(scenarioNameSpace, "characterCondition");
-                conditionEl.setAttribute("characteridref", precondition.characterIdRef);
-            }
-            else
-            {
-                conditionEl = document.createElementNS(scenarioNameSpace, "condition");
-            }
-
-            conditionEl.setAttribute("idref", precondition.idRef);
-            conditionEl.setAttribute("operator", precondition.operator);
-            parameter.type.toXML(conditionEl, precondition.value);
-            return conditionEl;
-        }
-
-        if (precondition.type == "alwaysTrue")
-        {
-            // Return null to signal that no preconditions should be added
-            return null;
-        }
-        else
-        {
-            var typeEl = document.createElementNS(scenarioNameSpace,precondition.type);
-            for (var i = 0; i < precondition.subconditions.length; i++)
-            {
-                var conditionObj = precondition.subconditions[i];
-                conditionEl = createAndReturnPreconditionXML(conditionObj);
-                if (conditionEl !== null)
-                    typeEl.appendChild(conditionEl);
-            }
-
-            // If there aren't any child preconditions, this element is illegal
-            if (typeEl.childNodes.length === 0)
-                return null;
-            else
-                return typeEl;
-        }
     }
 
     //trees is now an object with individual trees as properties

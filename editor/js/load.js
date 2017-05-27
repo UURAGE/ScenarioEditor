@@ -361,7 +361,7 @@ var Load;
         if (preconditionsXML.length === 0)
             preconditions = {type: "alwaysTrue", subconditions: []};
         else
-            preconditions = loadPreconditions(preconditionsXML.children()[0]);
+            preconditions = Condition.fromXML(preconditionsXML.children()[0]);
 
         var parameterEffects = loadParameterEffects($(statement).children('parameterEffects'), characterIdRef);
 
@@ -407,49 +407,6 @@ var Load;
             top: yPos,
             left: xPos
         });
-    }
-
-    // Load all preconditions from a given precondition element tree.
-    function loadPreconditions(preconditionXMLElement)
-    {
-        var preconditionType = preconditionXMLElement.nodeName;
-        var preconditionsArray = [];
-
-        var preconditionChildren = $(preconditionXMLElement).children();
-        for (var i = 0; i < preconditionChildren.length; i++)
-        {
-            if (preconditionChildren[i].nodeName == "condition" || preconditionChildren[i].nodeName == "characterCondition")
-            {
-                var parameterIdRef = preconditionChildren[i].attributes.idref.value;
-                var characterIdRef;
-                if (preconditionChildren[i].nodeName == "characterCondition" && preconditionChildren[i].attributes.characteridref)
-                {
-                    characterIdRef = preconditionChildren[i].attributes.characteridref.value;
-                }
-
-                var parameter = Config.findParameterById(parameterIdRef, characterIdRef);
-                if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
-
-                if (parameter)
-                {
-                    var precondition = {
-                        idRef: parameterIdRef,
-                        operator: preconditionChildren[i].attributes.operator.value,
-                        value: parameter.type.fromXML(preconditionChildren[i])
-                    };
-                    if (characterIdRef) precondition.characterIdRef = characterIdRef;
-                    preconditionsArray.push(precondition);
-                }
-            }
-            else
-            {
-                preconditionsArray.push(loadPreconditions(preconditionChildren[i]));
-            }
-        }
-        return {
-            type: preconditionType,
-            subconditions: preconditionsArray
-        };
     }
 
     function loadParameterEffects(parameterEffectsXMLElement, characterIdRef)

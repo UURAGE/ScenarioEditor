@@ -322,25 +322,7 @@ var Parameters;
                         }
                     });
 
-                    var changeTypeOfPreconditionParameter = function(precondition)
-                    {
-                        if (!precondition.type && precondition.idRef === oldParameter.id)
-                        {
-                            var hasRelationalOperator = newParameter.type.relationalOperators.indexOf(Types.relationalOperators[precondition.operator]) !== -1;
-                            if (!hasRelationalOperator) precondition.operator = newParameter.type.relationalOperators[0].name;
-
-                            precondition.value = newParameter.type.castFrom(oldParameter.type, precondition.value);
-                        }
-
-                        if (precondition.type !== "alwaysTrue" && precondition.subconditions)
-                        {
-                            precondition.subconditions.map(function(precondition)
-                            {
-                                changeTypeOfPreconditionParameter(precondition);
-                            });
-                        }
-                    };
-                    changeTypeOfPreconditionParameter(Main.nodes[nodeID].preconditions);
+                    Condition.onParameterTypeChange(oldParameter, newParameter, Main.nodes[nodeID].preconditions);
                 }
 
                 Evaluations.onParameterTypeChange(newParameter);

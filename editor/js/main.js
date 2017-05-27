@@ -1434,7 +1434,7 @@ var Main;
         }
 
         // Save preconditions.
-        node.preconditions = Condition.extract($("#preconditionsDiv"));
+        node.preconditions = Condition.getFromDOM($("#preconditionsDiv"));
 
         // Save property values.
         var acceptableScopes = ['per', 'per-' + node.type];
@@ -1820,7 +1820,9 @@ var Main;
             $("#properties").attr("class", node.type);
 
             // Insert the preconditions in the sidebar
-            Condition.insert($("#preconditionsDiv"), node.preconditions);
+            var preconditionsContainer = $("#preconditionsDiv");
+            Condition.appendControlsTo(preconditionsContainer);
+            Condition.setInDOM(preconditionsContainer, node.preconditions);
 
             // Show user-defined parameters
             for (var k = 0; k < node.parameterEffects.userDefined.length; k++)
