@@ -294,11 +294,11 @@ var Parameters;
             Parameters.container.sequence.splice(indexOfRemovedParameter, 1);
         });
 
-        var getParameterFromDOM = function(container)
+        var getParameterFromDOM = function(container, exists)
         {
             var name = container.find(".name").val();
             // If the name is empty, we cannot create a valid parameter object.
-            if (!name) return null;
+            if (!name && !exists) return null;
 
             var typeName = container.find(".parameter-type-select").val();
             var type = Types.primitives[typeName].loadTypeFromDOM(container, container.find(".parameter-initial-value-container"), 'parameter');
@@ -314,8 +314,13 @@ var Parameters;
 
         $(".existingParameter").each(function()
         {
-            var newParameter = getParameterFromDOM($(this));
+            var newParameter = getParameterFromDOM($(this), true);
             var oldParameter = Parameters.container.byId[newParameter.id];
+
+            if (!newParameter.name)
+            {
+                newParameter.name = oldParameter.name;
+            }
 
             // If an already existing parameter changed type, the effects on the nodes need to be adjusted accordingly
             if ($(this).hasClass("changedTypeParameter"))
