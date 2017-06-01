@@ -278,7 +278,6 @@
                 </div>
                 <div class="collapsable">
                   <div>
-                    <h3>User-defined</h3>
                     <div id="userDefinedParameterEffects" class="section"></div>
                     <button id="addUserDefinedParameterEffect" title="<?php sLang('edt_add');?>"><img src="<?php echo editor_url("png/others/plus.png");?>" alt=""> <?php sLang('edt_add_effect');?></button>
                   </div>
