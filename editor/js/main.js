@@ -2269,11 +2269,13 @@ var Main;
                         }
                     });
                     computerOwnPropertyValuesEl.parent().toggle(anyPropertyShown);
+
+                    $("#characterSection").toggle(anyCharacterParameterShown || anyPropertyShown || Config.container.characters.sequence.length > 1);
                 };
 
-                var characterSelection = $("#characterSelection");
-                if (characterSelection)
+                if (Config.container.characters.sequence.length > 1)
                 {
+                    var characterSelection = $("#characterSelection");
                     characterSelection.off('change');
                     characterSelection.on('change', function(e)
                     {
