@@ -274,7 +274,7 @@ var Condition;
 
         var addConditionButton = $('<button>', { class: "addCondition"})
             .append($('<img>', { src: editor_url + "png/others/plus.png", alt: '+' }))
-            .append(i18next.t('condition:add_condition'));
+            .append(' ' + i18next.t('condition:add_condition'));
         addConditionButton.on('click', function()
         {
             if (Parameters.atLeastOneUserDefined() || Config.atLeastOneParameter())
@@ -291,7 +291,7 @@ var Condition;
 
         var addGroupConditionButton = $('<button>', { class: "addGroupCondition"})
             .append($('<img>', { src: editor_url + "png/others/plus.png", alt: '+' }))
-            .append(i18next.t('condition:add_group'));
+            .append(' ' + i18next.t('condition:add_group'));
         addGroupConditionButton.on('click', function()
         {
             if (Parameters.atLeastOneUserDefined() || Config.atLeastOneParameter())
