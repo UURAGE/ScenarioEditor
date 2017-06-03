@@ -808,7 +808,7 @@ var Main;
         if (type === Main.computerType) acceptableScopes.push('per-computer-own');
 
         Main.nodes[id] = {
-            text: text ? text : "",
+            text: text !== undefined ? text : Config.container.settings.statement.type.defaultValue,
             type: type,
             parameterEffects: parameterEffects,
             preconditions:
@@ -1051,7 +1051,7 @@ var Main;
         {
             class: "nodestatement",
             maxlength: Config.container.settings.statement.type.maxLength,
-            text: Config.container.settings.statement.type.defaultValue
+            text: text
         });
 
         // Because textareas apparently don't act normally:
@@ -1096,8 +1096,6 @@ var Main;
 
         inputDiv.height("100%");
 
-        // Fill node with current node text
-        txtArea.val(text);
         txtArea.focus();
 
         if (Config.container.settings.statement.type.markdown) Utils.attachMarkdownTooltip(txtArea);
