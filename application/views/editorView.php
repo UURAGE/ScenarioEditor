@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="-1">
-  <link rel="icon" type="image/png" href="<?php echo editor_url("png/small_logo.png");?>">
+  <link rel="icon" type="image/x-icon" href="<?php echo editor_url("favicon.ico");?>">
 
   <?php
   $language = $this->session->userdata('language');
