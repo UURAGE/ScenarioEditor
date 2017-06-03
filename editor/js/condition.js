@@ -350,7 +350,7 @@ var Condition;
         var subconditionsContainer = $('<div>', { class: "groupConditionDiv" });
         groupCondition.append(subconditionsContainer);
 
-        var addConditionButton = $('<button>', { class: "addCondition"})
+        var addConditionButton = $('<button>')
             .append($('<img>', { src: editor_url + "png/others/plus.png", alt: '+' }))
             .append(' ' + i18next.t('condition:add_condition'));
         addConditionButton.on('click', function()
@@ -367,7 +367,7 @@ var Condition;
         });
         groupCondition.append(addConditionButton);
 
-        var addGroupConditionButton = $('<button>', { class: "addGroupCondition"})
+        var addGroupConditionButton = $('<button>')
             .append($('<img>', { src: editor_url + "png/others/plus.png", alt: '+' }))
             .append(' ' + i18next.t('condition:add_group'));
         addGroupConditionButton.on('click', function()
