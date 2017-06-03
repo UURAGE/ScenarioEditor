@@ -35,6 +35,14 @@ textarea
   resize: none;
 }
 
+.description
+{
+  height: 200px;
+  width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 .statementText
 {
   max-width: 93%;
@@ -165,7 +173,7 @@ a[data-disabled]
   height: 100%;
 }
 
-#metaScreen table,
+#metadata table,
 #propertyValuesSection table,
 #characterSection table
 {
@@ -174,7 +182,7 @@ a[data-disabled]
     table-layout: fixed;
 }
 
-#metaScreen th,
+#metadata th,
 #propertyValuesSection th,
 #characterSection th
 {
@@ -183,7 +191,7 @@ a[data-disabled]
     vertical-align: top;
 }
 
-#metaScreen td,
+#metadata td,
 #propertyValuesSection td,
 #characterSection td
 {
@@ -192,8 +200,8 @@ a[data-disabled]
     word-wrap: break-word;
 }
 
-#metaScreen td input,
-#metaScreen td select,
+#metadata td input,
+#metadata td select,
 #propertyValuesSection td input,
 #propertyValuesSection td select,
 #propertyValuesSection td textarea,
@@ -204,7 +212,7 @@ a[data-disabled]
   box-sizing: border-box;
 }
 
-#metaScreen tr,
+#metadata tr,
 #propertyValuesSection tr,
 #characterSection tr
 {
@@ -228,10 +236,9 @@ button img
 
 #toolbar button,
 #properties button,
-#general button,
 #sidebar button,
-#parameterScreen button,
-#evaluationsScreen button,
+#parameters button,
+#evaluations button,
 .enumeration-values-container button
 {
   border: 0;

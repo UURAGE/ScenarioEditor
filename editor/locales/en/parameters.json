@@ -1,4 +1,5 @@
 {
     "title": "Parameters",
-    "time": "Time"
+    "time": "Time",
+    "add_time_title": "Add parameter time +1 to every node"
 }

@@ -22,63 +22,7 @@ var Parameters;
 
     $(document).ready(function()
     {
-         var parameterScreenHTML = Parts.getParameterScreenHTML();
-        $("#parameterScreen").html(parameterScreenHTML);
         $("#editParameters").on('click', dialog);
-
-        $("#params").on("focus", ".description", function()
-        {
-            $(this).animate({ height: "10em" }, 500);
-        });
-        $("#params").on("focusout", ".description", function()
-        {
-            $(this).animate({height:"1em"}, 500);
-        });
-        $("#params").on('click', '.deleteParent', function()
-        {
-            var tr = $(this).closest('tr');
-            tr.addClass("removedParameter");
-            if(tr[0].id === "t" && tr.not(".removedParameter"))
-            {
-                // for time parameter: make visible when Time-parameter has been removed
-                $("#addTimeParameter").removeClass("hidden");
-            }
-            if ($("#params").children().not(".removedParameter").length === 0)
-                $("#paramsTableHead").addClass("hidden");
-        });
-
-        $("#addParameter").on('click', function()
-        {
-            var addedDiv = addDefaultDefinition();
-            Utils.focusFirstTabindexedDescendant(addedDiv);
-            $("#paramsTableHead").removeClass("hidden");
-        });
-
-        $("#addTimeParameter").on('click', function()
-        {
-            var isTime = $("#params").find(".isT").length;
-            var isTimeRemoved = $("#params").find(".isT.removedParameter").length;
-
-            // if the timeParameterObject is empty, or if it is filled, but
-            // the parameter in the dialog has been removed (in that case the
-            // timeParameterObject has not been updated yet)
-            if (Parameters.timeId === null || isTimeRemoved === isTime)
-            {
-                $("#params").append(Parts.getParameterDefinitionHTML());
-                var div = $("#params").children().last();
-                // div.children().children().prop('disabled', true);
-                $(div).prop('id', 't');
-                div.find(".name").val(i18next.t('parameters:time'));
-                div.find(".parameter-type-select").val(Types.primitives.integer.name);
-                div.find(".parameter-type-select").prop("disabled", "disabled");
-                div.find(".parameter-evaluated").remove();
-                div.find(".parameter-initial-value-container").remove();
-
-                Utils.focusFirstTabindexedDescendant($("#params").children().last());
-                $("#paramsTableHead").removeClass("hidden");
-                $("#addTimeParameter").addClass("hidden");
-            }
-        });
     });
 
     // Resets the parameters to the default
@@ -91,16 +35,86 @@ var Parameters;
 
     function dialog()
     {
+        var parametersDialog = $('<div>', { id: "parameters" });
+
+        var parametersTableHead = $('<thead>')
+            .append($('<th>')) // For the sortable handle
+            .append($('<th>', { text: i18next.t('common:name') }))
+            .append($('<th>', { text: i18next.t('common:type') }))
+            .append($('<th>', { text: i18next.t('common:evaluated') }))
+            .append($('<th>', { text: i18next.t('common:min') }))
+            .append($('<th>', { text: i18next.t('common:max') }))
+            .append($('<th>', { text: i18next.t('common:initial_value') }))
+            .append($('<th>', { text: i18next.t('common:description') }));
+        var parametersContainer = $('<tbody>').appendTo($('<table>').append(parametersTableHead).appendTo(parametersDialog));
+
+        var addParameterButton = $('<button>', { type: 'button', title: i18next.t('common:add') }).append($('<img>', { src: editor_url + "png/others/plus.png" }));
+        addParameterButton.on('click', function()
+        {
+            var parameterContainer = addDefaultDefinition(parametersContainer);
+            Utils.focusFirstTabindexedDescendant(parameterContainer);
+            parametersTableHead.show();
+        });
+        parametersDialog.append(addParameterButton);
+
+        var addTimeParameterButton = $('<button>', { type: 'button', title: i18next.t('parameters:add_time_title') }).append($('<img>', { src: editor_url + "png/others/stopwatch.png" }));
+        addTimeParameterButton.on('click', function()
+        {
+            var isTime = parametersContainer.find(".isT").length;
+            var isTimeRemoved = parametersContainer.find(".isT.removedParameter").length;
+
+            // if the timeId is empty, or if it is filled, but
+            // the parameter in the dialog has been removed (in that case the
+            // timeId has not been updated yet)
+            if (Parameters.timeId === null || isTimeRemoved === isTime)
+            {
+                var parameterContainer = $(Parts.getParameterDefinitionHTML());
+                parameterContainer.prop('id', 't');
+                parameterContainer.find(".name").val(i18next.t('parameters:time'));
+                parameterContainer.find(".parameter-type-select").val(Types.primitives.integer.name);
+                parameterContainer.find(".parameter-type-select").prop("disabled", "disabled");
+                parameterContainer.find(".parameter-evaluated").remove();
+                parameterContainer.find(".parameter-initial-value-container").remove();
+                parametersContainer.append(parameterContainer);
+
+                Utils.focusFirstTabindexedDescendant(parametersContainer.children().last());
+                addTimeParameterButton.hide();
+                parametersTableHead.show();
+            }
+        });
+        parametersDialog.append(addTimeParameterButton);
+
+        parametersContainer.on("focus", ".description", function()
+        {
+            $(this).animate({ height: "10em" }, 500);
+        });
+        parametersContainer.on("focusout", ".description", function()
+        {
+            $(this).animate({height:"1em"}, 500);
+        });
+        parametersContainer.on('click', '.deleteParent', function()
+        {
+            var tr = $(this).closest('tr');
+            tr.addClass("removedParameter");
+            if(tr[0].id === "t" && tr.not(".removedParameter"))
+            {
+                // for time parameter: make visible when Time-parameter has been removed
+                addTimeParameterButton.show();
+            }
+            if (parametersContainer.children().not(".removedParameter").length === 0)
+                parametersTableHead.hide();
+        });
+
         if (Parameters.timeId !== null)
         {
-            $("#addTimeParameter").addClass("hidden");
+            addTimeParameterButton.hide();
         }
         else
         {
-            $("#addTimeParameter").removeClass("hidden");
+            addTimeParameterButton.show();
         }
 
-        $("#parameterScreen").dialog(
+        parametersDialog.dialog(
         {
             title: i18next.t('parameters:title'),
             height: Constants.heightParameterScreen,
@@ -125,84 +139,81 @@ var Parameters;
             close: function()
             {
                 $("#main").focus();
+                parametersDialog.remove();
             }
         });
 
-        $("#params").empty();
-        $("#paramsTableHead").addClass("hidden");
+        parametersTableHead.toggle(Parameters.container.sequence.length > 0);
 
         Parameters.container.sequence.forEach(function(parameter)
         {
-            var addedDiv = addDefaultDefinition();
-            addedDiv.removeClass("newParameter").addClass("existingParameter");
+            var parameterContainer = addDefaultDefinition(parametersContainer);
+            parameterContainer.removeClass("newParameter").addClass("existingParameter");
 
-            addedDiv.prop('id', parameter.id);
+            parameterContainer.prop('id', parameter.id);
 
-            var typeSelect = addedDiv.find(".parameter-type-select");
+            var typeSelect = parameterContainer.find(".parameter-type-select");
 
             if (parameter.id === "t")
             {
-                addedDiv.addClass("isT");
+                parameterContainer.addClass("isT");
                 typeSelect.val(Types.primitives.integer.name);
                 typeSelect.prop("disabled", "disabled");
-                addedDiv.find(".parameter-evaluated").remove();
-                addedDiv.find(".parameter-initial-value-container").remove();
-                addedDiv.find(".parameter-min-container").remove();
-                addedDiv.find(".parameter-max-container").remove();
+                parameterContainer.find(".parameter-evaluated").remove();
+                parameterContainer.find(".parameter-initial-value-container").remove();
+                parameterContainer.find(".parameter-min-container").remove();
+                parameterContainer.find(".parameter-max-container").remove();
             }
 
-            addedDiv.find(".name").val(parameter.name);
+            parameterContainer.find(".name").val(parameter.name);
 
             if (parameter.type.name === Types.primitives.enumeration.name)
             {
                 parameter.type.insertTypeIntoDOM(typeSelect.parent());
             }
             typeSelect.val(parameter.type.name).trigger('change');
-            addedDiv.removeClass("changedTypeParameter");
+            parameterContainer.removeClass("changedTypeParameter");
 
-            addedDiv.find(".parameter-evaluated").prop('checked', parameter.evaluated);
+            parameterContainer.find(".parameter-evaluated").prop('checked', parameter.evaluated);
 
-            parameter.type.setInDOM(addedDiv.find(".parameter-initial-value-container"), parameter.type.defaultValue);
+            parameter.type.setInDOM(parameterContainer.find(".parameter-initial-value-container"), parameter.type.defaultValue);
 
-            if ('minimum' in parameter.type) parameter.type.setInDOM(addedDiv.find(".parameter-min-container"), parameter.type.minimum);
-            if ('maximum' in parameter.type) parameter.type.setInDOM(addedDiv.find(".parameter-max-container"), parameter.type.maximum);
+            if ('minimum' in parameter.type) parameter.type.setInDOM(parameterContainer.find(".parameter-min-container"), parameter.type.minimum);
+            if ('maximum' in parameter.type) parameter.type.setInDOM(parameterContainer.find(".parameter-max-container"), parameter.type.maximum);
 
-            addedDiv.find(".description").val(parameter.description);
+            parameterContainer.find(".description").val(parameter.description);
         });
-        if ($("#params").children().length > 0)
-            $("#paramsTableHead").removeClass("hidden");
 
-        Utils.makeSortable($("#params"));
+        Utils.makeSortable(parametersContainer);
     }
 
-    function addDefaultDefinition()
+    function addDefaultDefinition(parametersContainer)
     {
-        $("#params").append(Parts.getParameterDefinitionHTML());
-        var addedDiv = $("#params").children().last();
+        var parameterContainer = $(Parts.getParameterDefinitionHTML());
 
-        var typeSelect = addedDiv.find('.parameter-type-select');
+        var typeSelect = parameterContainer.find('.parameter-type-select');
         var parent = typeSelect.parent();
         typeSelect.remove();
 
         var previousType;
         var handleParameterTypeChange = function(newTypeName, userTypeChange)
         {
-            addedDiv.addClass("changedTypeParameter");
+            parameterContainer.addClass("changedTypeParameter");
 
             var replaceInitialValueContainer = function()
             {
-                var initialValueContainer = addedDiv.find(".parameter-initial-value-container");
+                var initialValueContainer = parameterContainer.find(".parameter-initial-value-container");
                 var initialValue;
                 if (previousType) initialValue = previousType.getFromDOM(initialValueContainer);
                 initialValueContainer.empty();
-                var type = Types.primitives[newTypeName].loadTypeFromDOM(addedDiv, initialValueContainer);
+                var type = Types.primitives[newTypeName].loadTypeFromDOM(parameterContainer, initialValueContainer);
                 type.appendControlTo(initialValueContainer);
                 if (previousType) type.setInDOM(initialValueContainer, type.castFrom(previousType, initialValue));
                 previousType = type;
             };
 
-            var parameterMinContainer = addedDiv.find(".parameter-min-container");
-            var parameterMaxContainer = addedDiv.find(".parameter-max-container");
+            var parameterMinContainer = parameterContainer.find(".parameter-min-container");
+            var parameterMaxContainer = parameterContainer.find(".parameter-max-container");
             if (newTypeName === Types.primitives.integer.name)
             {
                 if (!parameterMinContainer.children(Types.primitives.integer.controlName).length)
@@ -237,9 +248,11 @@ var Parameters;
 
         Types.appendSelectTo(parent, 'parameter-type-select', handleParameterTypeChange);
 
-        addedDiv.removeClass("changedTypeParameter");
+        parameterContainer.removeClass("changedTypeParameter");
 
-        return addedDiv;
+        parametersContainer.append(parameterContainer);
+
+        return parameterContainer;
     }
 
     function save()

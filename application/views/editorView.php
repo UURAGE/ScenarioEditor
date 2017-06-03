@@ -343,9 +343,6 @@
       </div>
     </div>
   </div>
-  <div id="metaScreen" style="display: none"></div>
-  <div id="importScreen" style="display: none"></div>
-  <div id="parameterScreen" style="display: none"></div>
   <div id="dragBox" style="display: none"></div>
   <div class="lengthTest"></div>
 </body>

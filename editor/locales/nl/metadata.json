@@ -1,3 +1,18 @@
 {
-    "title": "Eigenschappen"
+    "title": "Eigenschappen",
+    "general": "Algemeen",
+    "scenario_name": "Naam scenario",
+    "difficulty": {
+        "translation": "Moeilijkheidsgraad",
+        "very_easy": "Zeer makkelijk",
+        "easy": "Makkelijk",
+        "medium": "Gemiddeld",
+        "hard": "Moeilijk",
+        "very_hard": "Zeer moeilijk"
+    },
+    "language": "Taal",
+    "authors": "Auteurs",
+    "email": "Email",
+    "start_date": "Begindatum",
+    "end_date":  "Einddatum"
 }

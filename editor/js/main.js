@@ -386,8 +386,6 @@ var Main;
             }
         });
 
-        Metadata.reset();
-
         initialiseSidebar();
     });
 

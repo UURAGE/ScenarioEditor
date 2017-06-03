@@ -1,5 +1,6 @@
 {
     "import_title": "Import",
     "import": "Import",
-    "invalid_xml": "Invalid XML"
+    "invalid_xml": "Invalid XML",
+    "file_to_import": "File to import"
 }

@@ -25,5 +25,9 @@
     "as_percentage": "as percentage",
     "as_value": "as value",
     "when": "When",
-    "otherwise": "Otherwise"
+    "otherwise": "Otherwise",
+    "min": "Min",
+    "max": "Max",
+    "initial_value": "Initial value",
+    "evaluated": "Evaluated"
 }

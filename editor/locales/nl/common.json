@@ -25,5 +25,9 @@
     "as_percentage": "als percentage",
     "as_value": "als waarde",
     "when": "Als",
-    "otherwise": "Anders"
+    "otherwise": "Anders",
+    "min": "Min",
+    "max": "Max",
+    "initial_value": "Beginwaarde",
+    "evaluated": "Geëvalueerd"
 }

@@ -17,21 +17,15 @@ var Metadata;
 
     $(document).ready(function()
     {
-        // Event handlers.
         $("#editMetadata").on('click', dialog);
-
-        var metaScreenHTML = Parts.getMetaScreenHTML();
-        $("#metaScreen").html(metaScreenHTML);
-
-        var scenarioDescription = $("#scenarioDescription");
-        scenarioDescription.attr('maxlength', Config.container.settings.description.type.maxLength);
-        if (Config.container.settings.description.type.markdown) Utils.attachMarkdownTooltip(scenarioDescription);
+        reset();
     });
 
     // Resets the metadata to the default
     function reset()
     {
-        Metadata.container = {
+        Metadata.container =
+        {
             name: "",
             version: 0,
             difficulty: "medium",
@@ -46,12 +40,66 @@ var Metadata;
         }
     }
 
-    //Create the dialog to change the scenario description.
     function dialog()
     {
-        $("#meta-property-values, #character-tabs").empty();
+        var metadataDialog = $('<div>', { id: "metadata" });
 
-        $("#metaScreen").dialog(
+        var metadataContainer = $('<table>');
+
+        var generalHeader = $('<thead>').append($('<th>', { colspan: 2 }).append($('<h3>', { text: i18next.t('metadata:general') })));
+        metadataContainer.append(generalHeader);
+
+        var generalContainer = $('<tbody>');
+        generalContainer.append($('<tr>')
+            .append($('<th>').append($('<label>', { for: "scenarioName", text: i18next.t('metadata:scenario_name') })))
+            .append($('<td>').append($('<input>', { type: 'text', id: "scenarioName" }))));
+        if (Config.container.settings.languages.sequence.length > 0)
+        {
+            var scenarioLanguageSelect = $('<select>', { id: "scenarioLanguage" });
+            Config.container.settings.languages.sequence.forEach(function(language)
+            {
+                scenarioLanguageSelect.append($('<option>', { value: language.code, text: language.name }));
+            });
+            var scenarioLanguageContainer = $('<tr>');
+            scenarioLanguageContainer.append($('<th>').append($('<label>', { for: "scenarioLanguage", text: i18next.t('metadata:language') + ':' })));
+            scenarioLanguageContainer.append($('<td>').append(scenarioLanguageSelect));
+            generalContainer.append(scenarioLanguageContainer);
+        }
+        generalContainer.append($('<tr>')
+            .append($('<th>').append($('<label>', { for: "scenarioDifficulty", text: i18next.t('metadata:difficulty.translation') })))
+            .append($('<td>').append($('<select>', { id: "scenarioDifficulty" } )
+                .append($('<option>', { value: "very_easy", text: i18next.t('metadata:difficulty.very_easy') }))
+                .append($('<option>', { value: "easy", text: i18next.t('metadata:difficulty.easy') }))
+                .append($('<option>', { value: "medium", text: i18next.t('metadata:difficulty.medium') }))
+                .append($('<option>', { value: "difficult", text: i18next.t('metadata:difficulty.hard') }))
+                .append($('<option>', { value: "very_difficult", text: i18next.t('metadata:difficulty.very_hard') })))));
+        var scenarioDescription = $('<textarea>', { id: "scenarioDescription", class: "description" } );
+        scenarioDescription.attr('maxlength', Config.container.settings.description.type.maxLength);
+        if (Config.container.settings.description.type.markdown) Utils.attachMarkdownTooltip(scenarioDescription);
+        generalContainer.append($('<tr>')
+            .append($('<th>').append($('<label>', { for: "scenarioDescription", text: i18next.t('common:description') })))
+            .append($('<td>').append(scenarioDescription)));
+        metadataContainer.append(generalContainer);
+
+        var authorsHeader = $('<thead>').append($('<th>').append($('<h3>', { text: i18next.t('metadata:authors') })));
+        metadataContainer.append(authorsHeader);
+
+        var authorsContainer = $('<table>').append($('<tr>')
+            .append($('<th>')).append($('<h4>', { text: i18next.t('common:name') }))
+            .append($('<th>')).append($('<h4>', { text: i18next.t('metadata:email') }))
+            .append($('<th>')).append($('<h4>', { text: i18next.t('metadata:start_date') }))
+            .append($('<th>')).append($('<h4>', { text: i18next.t('metadata:end_date') })));
+        metadataContainer.append($('<tbody>').append($('<tr>').append($('<td>', { colspan: 2 }).append(authorsContainer))));
+
+        metadataContainer.append($('<thead>'));
+        metadataContainer.append($('<tbody>', { id: "meta-property-values" }));
+
+        metadataContainer.append($('<thead>').append($('<th>', { colspan: 2 }).append($('<h3>', { text: i18next.t('common:characters') }))));
+        metadataContainer.append($('<tbody>', { id: "meta-character-property-values" }).append($('<tr>').append($('<td>', { colspan: 2 , id: "character-tabs" }))));
+
+        metadataDialog.append(metadataContainer);
+
+        metadataDialog.dialog(
         {
             title: i18next.t('metadata:title'),
             height: Constants.heightMetaScreen,
@@ -76,6 +124,7 @@ var Metadata;
             close: function()
             {
                 $("#main").focus();
+                metadataDialog.remove();
             }
         });
 
@@ -83,29 +132,27 @@ var Metadata;
         $("#scenarioName").val(Metadata.container.name);
         if (Metadata.container.language) $("#scenarioLanguage").val(Metadata.container.language.code).trigger('change');
         $("#scenarioDifficulty").val(Metadata.container.difficulty);
-        $("#scenarioDescription").val(Metadata.container.description);
+        scenarioDescription.val(Metadata.container.description);
 
-        var authorsHeaderEl = $("#authors-header");
-        var authorsEl = $("#authors");
-        authorsEl.find("tr").not("tr:first").remove();
+        authorsContainer.find("tr").not("tr:first").remove();
         if (Metadata.container.authors.length > 0)
         {
-            authorsHeaderEl.show();
-            authorsEl.show();
+            authorsHeader.show();
+            authorsContainer.show();
             Metadata.container.authors.forEach(function(author)
             {
-                var authorRow = $('<tr>');
-                authorRow.append($('<td>', { text: author.name }));
-                authorRow.append($('<td>', { text: author.email ? author.email : "" }));
-                authorRow.append($('<td>', { text: author.startDate }));
-                authorRow.append($('<td>', { text: author.endDate ? author.endDate : "" }));
-                authorsEl.append(authorRow);
+                var authorContainer = $('<tr>');
+                authorContainer.append($('<td>', { text: author.name }));
+                authorContainer.append($('<td>', { text: author.email ? author.email : "" }));
+                authorContainer.append($('<td>', { text: author.startDate }));
+                authorContainer.append($('<td>', { text: author.endDate ? author.endDate : "" }));
+                authorsContainer.append(authorContainer);
             });
         }
         else
         {
-            authorsHeaderEl.hide();
-            authorsEl.hide();
+            authorsHeader.hide();
+            authorsContainer.hide();
         }
 
         var anyPropertyShown = false;
@@ -183,7 +230,7 @@ var Metadata;
         {
             showPropertyItem(propertyItem, hStartLevel, propertyValuesEl, propertyValuesEl.attr('id'));
         });
-        if (anyPropertyShown) propertyValuesEl.show();
+        propertyValuesEl.toggle(anyPropertyShown);
 
         anyPropertyShown = false;
 
@@ -232,7 +279,7 @@ var Metadata;
                 collapsible: true
             });
         }
-        if (anyPropertyShown) characterPropertyValuesEl.show();
+        characterPropertyValuesEl.toggle(anyPropertyShown);
 
         var setPropertyInDOM = function(propertyValues, propertyContainerId, property)
         {

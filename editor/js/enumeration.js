@@ -111,8 +111,7 @@ var Enumeration;
             },
             close: function()
             {
-                valuesContainer.children().not(":last-child").each(function() { $(this).remove(); });
-                valueInput.val("");
+                enumerationDialog.remove();
             }
         });
     }

@@ -1,3 +1,18 @@
 {
-    "title": "Properties"
+    "title": "Properties",
+    "general": "General",
+    "scenario_name": "Scenario name",
+    "difficulty": {
+        "translation": "Difficulty",
+        "very_easy": "Very easy",
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Hard",
+        "very_hard": "Very hard"
+    },
+    "language": "Language",
+    "authors": "Authors",
+    "email": "Email",
+    "start_date": "Start date",
+    "end_date":  "End date"
 }

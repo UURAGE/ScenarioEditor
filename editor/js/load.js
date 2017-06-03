@@ -14,16 +14,18 @@ var Load;
 
     $(document).ready(function()
     {
-        $("#importScreen").html(Parts.getImportScreenHTML());
-        $("#importScenario").on('click', function()
-        {
-            importDialog();
-        });
+        $("#importScenario").on('click', importDialog);
     });
 
     function importDialog()
     {
-        $("#importScreen").dialog(
+        var importContainer = $('<input>', { type: 'file', accept: '.txt,.xml', multiple: false });
+        var importDialog = $('<div>')
+            .append($('<form>', { action: "", method: "post", enctype: "multipart/form-data" })
+                .append($('<label>', { text: i18next.t('load:file_to_import') + ": " })
+                .append(importContainer)));
+
+        importDialog.dialog(
         {
             title : i18next.t('load:import_title'),
             height: Constants.heightImportScreen,
@@ -34,30 +36,31 @@ var Load;
                 text: i18next.t('load:import'),
                 click: function()
                 {
-                    importScenario();
-                    $("#importScreen").dialog('close');
+                    importScenario(importContainer);
+                    $(this).dialog('close');
                 }
             },
             {
                 text: i18next.t('common:close'),
                 click: function()
                 {
-                    $("#importScreen").dialog('close');
+                    $(this).dialog('close');
                 }
             }],
             close: function()
             {
                 $("#main").focus();
+                importDialog.remove();
             }
         });
     }
 
     // Creates a graph and metadata from xml file provided by user
-    function importScenario()
+    function importScenario(importContainer)
     {
-        var input = document.getElementById("import").files;
+        var files = importContainer.prop('files');
 
-        if (input.length < 1)
+        if (files.length < 1)
             return;
 
         var reader = new FileReader();
@@ -78,7 +81,7 @@ var Load;
             loadScenario(xml);
         };
 
-        reader.readAsText(input[0]);
+        reader.readAsText(files[0]);
     }
 
     function loadScenario(xml)

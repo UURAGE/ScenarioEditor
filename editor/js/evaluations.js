@@ -6,12 +6,12 @@ var Evaluations;
 {
     "use strict";
 
-    var defaultEvaluations = { byId: {}, sequence: [] };
+    var defaultContainer = { byId: {}, sequence: [] };
 
     Evaluations =
     {
         counter: 0,
-        container: $.extend(true, {}, defaultEvaluations),
+        container: $.extend(true, {}, defaultContainer),
         reset: reset,
         dialog: dialog,
         handleParameterTypeChange: handleParameterTypeChange,
@@ -27,13 +27,13 @@ var Evaluations;
 
     function reset()
     {
-        Evaluations.container = $.extend(true, {}, defaultEvaluations);
+        Evaluations.container = $.extend(true, {}, defaultContainer);
         Evaluations.counter = 0;
     }
 
     function dialog()
     {
-        var evaluationsDialog = $('<div>', { id: "evaluationsScreen" });
+        var evaluationsDialog = $('<div>', { id: "evaluations" });
 
         var evaluationsTableHead = $('<thead>')
             .append($('<th>')) // For the sortable handle
@@ -139,17 +139,11 @@ var Evaluations;
             close: function()
             {
                 $("#main").focus();
+                evaluationsDialog.remove();
             }
         });
 
-        if (Evaluations.container.sequence.length > 0)
-        {
-            evaluationsTableHead.show();
-        }
-        else
-        {
-            evaluationsTableHead.hide();
-        }
+        evaluationsTableHead.toggle(Evaluations.container.sequence.length > 0);
 
         Evaluations.container.sequence.forEach(function(evaluation)
         {

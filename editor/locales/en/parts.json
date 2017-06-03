@@ -1,26 +1,4 @@
 {
     "statement": "Statement",
-    "add_effect": "Add effect",
-    "min": "Min",
-    "max": "Max",
-    "initial_value": "Initial value",
-    "add_time_title": "Add parameter time +1 to every node",
-    "general": "General",
-    "scenario_name": "Scenario name",
-    "difficulty": {
-        "translation": "Difficulty",
-        "very_easy": "Very easy",
-        "easy": "Easy",
-        "medium": "Medium",
-        "hard": "Hard",
-        "very_hard": "Very hard"
-    },
-    "language": "Language",
-    "change_type": "Default change type",
-    "file_to_import": "File to import",
-    "authors": "Authors",
-    "email": "Email",
-    "startDate": "Start date",
-    "endDate":  "End date",
-    "evaluated": "Evaluated"
+    "add_effect": "Add effect"
 }

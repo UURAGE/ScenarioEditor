@@ -1,26 +1,4 @@
 {
     "statement": "Zin",
-    "add_effect": "Effect toevoegen",
-    "min": "Min",
-    "max": "Max",
-    "initial_value": "Beginwaarde",
-    "add_time_title": "Parameter tijd +1 toevoegen aan elke knoop",
-    "general": "Algemeen",
-    "scenario_name": "Naam scenario",
-    "difficulty": {
-        "translation": "Moeilijkheidsgraad",
-        "very_easy": "Zeer makkelijk",
-        "easy": "Makkelijk",
-        "medium": "Gemiddeld",
-        "hard": "Moeilijk",
-        "very_hard": "Zeer moeilijk"
-    },
-    "language": "Taal",
-    "change_type": "Standaard verander type",
-    "file_to_import": "Bestand om te importeren",
-    "authors": "Auteurs",
-    "email": "Email",
-    "startDate": "Begindatum",
-    "endDate":  "Einddatum",
-    "evaluated": "Geëvalueerd"
+    "add_effect": "Effect toevoegen"
 }
