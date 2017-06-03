@@ -55,8 +55,7 @@ var Enumeration;
 
         var valuesContainer = $('<ul>', { class: "enumeration-values-container" }).appendTo(enumerationDialog);
         var valueInput = $('<input>', { autofocus: true, type: 'text' });
-        var valueAddButton = $('<button>', { type: 'button' })
-            .append($('<img>', { src: editor_url + "png/others/plus.png", title: i18next.t('common:add') }));
+        var valueAddButton = Parts.addButton();
         valueAddButton.on('click', function()
         {
             appendValue(valuesContainer, valueInput, valueInput.val());
@@ -121,7 +120,7 @@ var Enumeration;
         // The value of an enumeration can not be the empty string
         if (value)
         {
-            var deleteParentButton = $(Parts.getDeleteParentButtonHTML());
+            var deleteParentButton = Parts.deleteButton();
             deleteParentButton.on('click', function()
             {
                 $(this).parent().remove();

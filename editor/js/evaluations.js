@@ -43,7 +43,7 @@ var Evaluations;
             .append($('<th>', { text: i18next.t('common:expression') }));
         var evaluationsContainer = $('<tbody>').appendTo($('<table>').append(evaluationsTableHead).appendTo(evaluationsDialog));
 
-        var addButton = $('<button>', { type: 'button', title: i18next.t('common:add') }).append($('<img>', { src: editor_url + "png/others/plus.png" }));
+        var addButton = Parts.addButton();
         var appendNewEvaluationContainer = function()
         {
             var evaluationContainer = $('<tr>').appendTo(evaluationsContainer);
@@ -93,7 +93,7 @@ var Evaluations;
             expressionContainer.append(expressionKindContainer);
             evaluationContainer.append(expressionContainer);
 
-            var deleteButton = $(Parts.getDeleteParentButtonHTML());
+            var deleteButton = Parts.deleteButton();
             deleteButton.on('click', function()
             {
                 evaluationContainer.addClass("removed");
@@ -177,7 +177,7 @@ var Evaluations;
                 descriptionTextArea.prop('disabled', true);
                 expressionContainer.find('button, checkbox, input, select, textarea').not('.reference-calculate').prop('disabled', true);
 
-                evaluationContainer.find(".deleteParent").remove();
+                evaluationContainer.find(".delete").remove();
             }
         });
 

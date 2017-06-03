@@ -246,7 +246,7 @@ var Condition;
         var conditionContainer = appendGroupCondition(container, allowReferenceConditions);
         if (isRoot)
         {
-            conditionContainer.children('.deleteParent').remove();
+            conditionContainer.children('.delete').remove();
         }
         return conditionContainer;
     }
@@ -259,7 +259,7 @@ var Condition;
         condition.append(idRefSelect);
         var testContainer = $('<span>', { class: "condition-test-container" });
         condition.append(testContainer);
-        var deleteButton = $(Parts.getDeleteParentButtonHTML());
+        var deleteButton = Parts.deleteButton();
         deleteButton.on('click', function()
         {
             condition.remove();
@@ -350,9 +350,7 @@ var Condition;
         var subconditionsContainer = $('<div>', { class: "groupConditionDiv" });
         groupCondition.append(subconditionsContainer);
 
-        var addConditionButton = $('<button>')
-            .append($('<img>', { src: editor_url + "png/others/plus.png", alt: '+' }))
-            .append(' ' + i18next.t('condition:add_condition'));
+        var addConditionButton = Parts.addButton(i18next.t('condition:add_condition'));
         addConditionButton.on('click', function()
         {
             if (Parameters.atLeastOneUserDefined() || Config.atLeastOneParameter())
@@ -367,9 +365,7 @@ var Condition;
         });
         groupCondition.append(addConditionButton);
 
-        var addGroupConditionButton = $('<button>')
-            .append($('<img>', { src: editor_url + "png/others/plus.png", alt: '+' }))
-            .append(' ' + i18next.t('condition:add_group'));
+        var addGroupConditionButton = Parts.addButton(i18next.t('condition:add_group'));
         addGroupConditionButton.on('click', function()
         {
             if (Parameters.atLeastOneUserDefined() || Config.atLeastOneParameter())
@@ -384,7 +380,7 @@ var Condition;
         });
         groupCondition.append(addGroupConditionButton);
 
-        var deleteButton = $(Parts.getDeleteParentButtonHTML());
+        var deleteButton = Parts.deleteButton();
         deleteButton.append(i18next.t('condition:delete_group'));
         deleteButton.on('click', function()
         {

@@ -9,20 +9,20 @@ var Parts;
     //Raw HTML that needs to be exported.
     Parts =
     {
-        getAddParameterEffectButtonHTML: getAddParameterEffectButtonHTML,
-        getDeleteParentButtonHTML: getDeleteParentButtonHTML
+        addButton: addButton,
+        deleteButton: deleteButton,
     };
 
-    function getDeleteParentButtonHTML()
+    function deleteButton()
     {
-        return '' + '<button type="button" class="deleteParent" title="'+i18next.t('common:delete')+'"><img src="' + editor_url + 'png/others/minus.png" alt="-"></button>';
+        return $('<button>', { type: "button", class: "delete", title: i18next.t('common:delete') })
+            .append($('<img>', { src: editor_url + "png/others/minus.png", alt: "-" }));
     }
 
-    function getAddParameterEffectButtonHTML()
+    function addButton(text, className)
     {
-        return '' +
-            '<button title="' + i18next.t('common:add') + '">' +
-                '<img src="' + editor_url + 'png/others/plus.png" alt="+">' + ' ' + i18next.t('parts:add_effect') +
-            '</button>';
+        return $('<button>', { type: "button", class: className, title: i18next.t('common:add') })
+            .append($('<img>', { src: editor_url + "png/others/plus.png", alt: '+' }))
+            .append(text ? ' ' + text : "");
     }
 })();

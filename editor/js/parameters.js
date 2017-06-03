@@ -48,7 +48,7 @@ var Parameters;
             .append($('<th>', { text: i18next.t('common:description') }));
         var parametersContainer = $('<tbody>').appendTo($('<table>').append(parametersTableHead).appendTo(parametersDialog));
 
-        var addParameterButton = $('<button>', { type: 'button', title: i18next.t('common:add') }).append($('<img>', { src: editor_url + "png/others/plus.png" }));
+        var addParameterButton = Parts.addButton();
         addParameterButton.on('click', function()
         {
             var parameterContainer = addDefaultDefinition(parametersContainer);
@@ -85,7 +85,7 @@ var Parameters;
         {
             $(this).animate({height:"1em"}, 500);
         });
-        parametersContainer.on('click', '.deleteParent', function()
+        parametersContainer.on('click', '.delete', function()
         {
             var tr = $(this).closest('tr');
             tr.addClass("removedParameter");
@@ -193,7 +193,7 @@ var Parameters;
             .append($('<td>').append(maxContainer))
             .append($('<td>').append(initialValueContainer))
             .append($('<td>').append($('<textarea>', { class: "parameter-description", style: "height:1em;" })))
-            .append(Parts.getDeleteParentButtonHTML());
+            .append(Parts.deleteButton());
 
         var previousType;
         var handleParameterTypeChange = function(newTypeName, userTypeChange)

@@ -171,7 +171,7 @@ var Expression;
             appendControlTo: function(container, type)
             {
                 var sumExpressionsContainer = $('<ul>');
-                var addButton = $('<button>', { type: 'button', class: "add-sum-expression", title: i18next.t('common:add') }).append($('<img>', { src: editor_url + "png/others/plus.png" }));
+                var addButton = Parts.addButton("", "add-sum-expression");
                 addButton.on('click', function()
                 {
                     var sumExpressionAndDeleteButtonContainer = $('<li>');
@@ -180,7 +180,7 @@ var Expression;
                     Expression.appendControlsTo(sumExpressionContainer, type);
                     sumExpressionAndDeleteButtonContainer.append(sumExpressionContainer);
 
-                    var deleteButton = $(Parts.getDeleteParentButtonHTML());
+                    var deleteButton = Parts.deleteButton();
                     deleteButton.on('click', function()
                     {
                         sumExpressionAndDeleteButtonContainer.remove();
@@ -363,7 +363,7 @@ var Expression;
             appendControlTo: function(container, type)
             {
                 var whensContainer = $('<ul>');
-                var addButton = $('<button>', { type: 'button', class: "add-when", title: i18next.t('common:add') }).append($('<img>', { src: editor_url + "png/others/plus.png" }));
+                var addButton = Parts.addButton("", "add-when");
                 addButton.on('click', function()
                 {
                     var whenAndDeleteButtonContainer = $('<li>');
@@ -373,7 +373,7 @@ var Expression;
                     Expression.appendControlsTo(whenContainer, type);
                     whenAndDeleteButtonContainer.append(whenContainer);
 
-                    var deleteButton = $(Parts.getDeleteParentButtonHTML());
+                    var deleteButton = Parts.deleteButton();
                     deleteButton.on('click', function()
                     {
                         whenAndDeleteButtonContainer.remove();

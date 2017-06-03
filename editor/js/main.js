@@ -287,7 +287,7 @@ var Main;
             }
         });
 
-        $("#userDefinedParameterEffects").on('click', '.deleteParent', function()
+        $("#userDefinedParameterEffects").on('click', '.delete', function()
         {
             $(this).parent().remove();
         });
@@ -1867,7 +1867,7 @@ var Main;
                 idRefSelect.removeClass('hidden');
 
                 // This button deletes the effect (container)
-                var deleteButton = $(Parts.getDeleteParentButtonHTML());
+                var deleteButton = Parts.deleteButton();
                 deleteButton.on('click', function() { $(this).parent().remove(); });
 
                 var effectContainer = $('<div>', { class: "parameter-effect " + containerClassPrefix + "-effect-container" });
@@ -1923,7 +1923,7 @@ var Main;
                         });
                         container.append(effectsContainer);
 
-                        container.append(Parts.getAddParameterEffectButtonHTML());
+                        container.append(Parts.addButton(i18next.t('main:add_effect')));
                         var addEffectButton = container.children().last();
                         addEffectButton.on('click', function()
                         {
@@ -2385,7 +2385,7 @@ var Main;
         parameterEffect.append(idRefSelect);
         var effectContainer = $('<span>', { class: "parameter-effect-container" });
         parameterEffect.append(effectContainer);
-        parameterEffect.append(Parts.getDeleteParentButtonHTML());
+        parameterEffect.append(Parts.deleteButton());
         $("#userDefinedParameterEffects").append(parameterEffect);
 
         Parameters.insertInto(idRefSelect);
