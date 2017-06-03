@@ -15,6 +15,7 @@ var Evaluations;
         reset: reset,
         dialog: dialog,
         handleParameterTypeChange: handleParameterTypeChange,
+        handleParameterRemoval: handleParameterRemoval,
         handleParameterEvaluatedChange: handleParameterEvaluatedChange,
         handleEvaluatedParameterChange: handleEvaluatedParameterChange
     };
@@ -276,6 +277,25 @@ var Evaluations;
                 evaluation.expression.kind.handleParameterTypeChange(oldParameter, newParameter, evaluation.type, evaluation.expression);
             }
         });
+    }
+
+    function handleParameterRemoval(parameterId)
+    {
+        var evaluationId = 'evaluation-' + parameterId;
+        for (var i = 0; i < Evaluations.container.sequence.length; i++)
+        {
+            var evaluation = Evaluations.container.sequence[i];
+            if (evaluation.id === evaluationId)
+            {
+                delete Evaluations.container.byId[evaluationId];
+                Evaluations.container.sequence.splice(i, 1);
+                i--;
+            }
+            else
+            {
+                evaluation.expression.kind.handleParameterRemoval(parameterId, evaluation.type, evaluation.expression);
+            }
+        }
     }
 
     function handleParameterEvaluatedChange(parameter)

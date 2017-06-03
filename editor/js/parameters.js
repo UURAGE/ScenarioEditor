@@ -264,8 +264,10 @@ var Parameters;
                         node.parameterEffects.userDefined.splice(i, 1);
                     }
                 }
-                removeAllPreconditionsWithParameter(id, node.preconditions);
+                Condition.handleParameterRemoval(id, node.preconditions);
             }
+
+            Evaluations.handleParameterRemoval(id);
 
             if (id === Parameters.timeId && Parameters.timeId !== null)
                 Parameters.timeId = null;
@@ -411,32 +413,6 @@ var Parameters;
 
 
         Main.selectElement(previouslySelectedElement);
-    }
-
-    function removeAllPreconditionsWithParameter(paramIdToRemove, precondition)
-    {
-        for (var i = 0; i < precondition.subconditions.length; i++)
-        {
-            var currentPrecondition = precondition.subconditions[i];
-            if ("type" in currentPrecondition)
-            {
-                removeAllPreconditionsWithParameter(paramIdToRemove,
-                    currentPrecondition);
-                if (currentPrecondition.subconditions.length === 0)
-                {
-                    precondition.subconditions.splice(i, 1);
-                    i--;
-                }
-            }
-            else
-            {
-                if (currentPrecondition.idRef === paramIdToRemove)
-                {
-                    precondition.subconditions.splice(i, 1);
-                    i--;
-                }
-            }
-        }
     }
 
     function atLeastOneUserDefined()

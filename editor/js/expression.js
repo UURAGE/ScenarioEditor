@@ -40,7 +40,8 @@ var Expression;
             {
                 expression.literal = newType.castFrom(previousType, expression.literal);
             },
-            handleParameterTypeChange: function(){}
+            handleParameterTypeChange: function(){},
+            handleParameterRemoval: function(){}
         },
         reference:
         {
@@ -155,6 +156,13 @@ var Expression;
                 {
                     replaceExpressionWithDefaultLiteral(expression, type);
                 }
+            },
+            handleParameterRemoval: function(parameterId, type, expression)
+            {
+                if (expression.reference.parameterIdRef === parameterId)
+                {
+                    replaceExpressionWithDefaultLiteral(expression, type);
+                }
             }
         },
         sum:
@@ -240,6 +248,13 @@ var Expression;
                 expression.sum.forEach(function(sumExpression)
                 {
                     sumExpression.kind.handleParameterTypeChange(oldParameter, newParameter, type, sumExpression);
+                });
+            },
+            handleParameterRemoval: function(parameterId, type, expression)
+            {
+                expression.sum.forEach(function(sumExpression)
+                {
+                    sumExpression.kind.handleParameterRemoval(parameterId, type, sumExpression);
                 });
             }
         },
@@ -336,6 +351,10 @@ var Expression;
             handleParameterTypeChange: function(oldParameter, newParameter, type, expression)
             {
                 expression.scale.expression.kind.handleParameterTypeChange(oldParameter, newParameter, type, expression.scale.expression);
+            },
+            handleParameterRemoval: function(parameterId, type, expression)
+            {
+                expression.scale.expression.kind.handleParameterRemoval(parameterId, type, expression.scale.expression);
             }
         },
         choose:
@@ -448,6 +467,15 @@ var Expression;
                     when.expression.kind.handleParameterTypeChange(oldParameter, newParameter, type, when.expression);
                 });
                 expression.choose.otherwise.kind.handleParameterTypeChange(oldParameter, newParameter, type, expression.choose.otherwise);
+            },
+            handleParameterRemoval: function(parameterId, type, expression)
+            {
+                expression.choose.whens.forEach(function(when)
+                {
+                    Condition.handleParameterRemoval(parameterId, when.condition);
+                    when.expression.kind.handleParameterRemoval(parameterId, type, when.expression);
+                });
+                expression.choose.otherwise.kind.handleParameterRemoval(parameterId, type, expression.choose.otherwise);
             }
         }
     };

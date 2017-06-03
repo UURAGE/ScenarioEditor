@@ -13,7 +13,8 @@ var Condition;
         setInDOM: setInDOM,
         fromXML: fromXML,
         toXML: toXML,
-        handleParameterTypeChange: handleParameterTypeChange
+        handleParameterTypeChange: handleParameterTypeChange,
+        handleParameterRemoval: handleParameterRemoval
     };
 
     var radioButtonCounter = 0;
@@ -183,6 +184,31 @@ var Condition;
             {
                 handleParameterTypeChange(oldParameter, newParameter, subcondition);
             });
+        }
+    }
+
+    function handleParameterRemoval(parameterId, condition)
+    {
+        for (var i = 0; i < condition.subconditions.length; i++)
+        {
+            var subcondition = condition.subconditions[i];
+            if ("type" in subcondition)
+            {
+                handleParameterRemoval(parameterId, subcondition);
+                if (subcondition.subconditions.length === 0)
+                {
+                    condition.subconditions.splice(i, 1);
+                    i--;
+                }
+            }
+            else
+            {
+                if (subcondition.idRef === parameterId)
+                {
+                    condition.subconditions.splice(i, 1);
+                    i--;
+                }
+            }
         }
     }
 
