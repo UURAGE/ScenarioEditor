@@ -833,7 +833,9 @@ var Main;
         selectElement(id);
 
         if (triggerEdit && Zoom.isZoomed())
-            node.trigger("dblclick");
+        {
+            startEditingNode(id);
+        }
         return Main.nodes[id];
     }
 
@@ -842,7 +844,7 @@ var Main;
     {
         selectElement(null);
         // create a node of the right type
-        var node = addNewNode(nodeType, true);
+        var node = addNewNode(nodeType);
 
         // node is undefined if there is no zoomed .TreeContainer
         if (node === undefined) return;
@@ -877,29 +879,31 @@ var Main;
             var m2T = clamp(posT,upperBound, underBound-50);
             nodeT = m2T-upperBound+treeDiv.scrollTop();
         }
-        $('#'+node.id).css({top:nodeT,left:nodeL, width:"128px"});
+        $('#'+node.id).css({ top: nodeT, left: nodeL, width: "128px" });
 
-        Main.trees[node.parent].plumbInstance.updateOffset({elId:node.id, recalc:true});
+        Main.trees[node.parent].plumbInstance.updateOffset({ elId: node.id, recalc: true });
         Main.trees[node.parent].plumbInstance.repaint(node.id, null, 0);
+
+        startEditingNode(node.id);
     }
 
     function createChildNode(event)
     {
         // Check if a parent node is selected
-        if(Main.selectedElement !== null && Main.selectedElement in Main.nodes)
+        if (Main.selectedElement !== null && Main.selectedElement in Main.nodes)
         {
             var parent = Main.nodes[Main.selectedElement];
             var node;
             switch(parent.type)
             {
                 case Main.playerType:
-                    node = addNewNode(Main.computerType, true);
+                    node = addNewNode(Main.computerType);
                     break;
                 case Main.computerType:
-                    node = addNewNode(Main.playerType, true);
+                    node = addNewNode(Main.playerType);
                     break;
                 case Main.situationType:
-                    node = addNewNode(Main.playerType, true);
+                    node = addNewNode(Main.playerType);
                     break;
             }
 
@@ -924,6 +928,8 @@ var Main;
             });
 
             Zoom.getZoomed().plumbInstance.revalidate(node.id, 0);
+
+            startEditingNode(node.id);
         }
     }
 

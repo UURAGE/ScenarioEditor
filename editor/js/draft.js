@@ -194,7 +194,7 @@
             }
             DragBox.startDragging(e, text, function(pos)
             {
-                var node = itemToNode(tr, true);
+                var node = itemToNode(tr);
                 $('#' + node.id).offset(pos);
                 return true;
             });
