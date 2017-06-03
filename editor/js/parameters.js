@@ -68,14 +68,7 @@ var Parameters;
             // timeId has not been updated yet)
             if (Parameters.timeId === null || isTimeRemoved === isTime)
             {
-                var parameterContainer = $(Parts.getParameterDefinitionHTML());
-                parameterContainer.prop('id', 't');
-                parameterContainer.find(".name").val(i18next.t('parameters:time'));
-                parameterContainer.find(".parameter-type-select").val(Types.primitives.integer.name);
-                parameterContainer.find(".parameter-type-select").prop("disabled", "disabled");
-                parameterContainer.find(".parameter-evaluated").remove();
-                parameterContainer.find(".parameter-initial-value-container").remove();
-                parametersContainer.append(parameterContainer);
+                addTimeParameterDefinition(parametersContainer);
 
                 Utils.focusFirstTabindexedDescendant(parametersContainer.children().last());
                 addTimeParameterButton.hide();
@@ -84,11 +77,11 @@ var Parameters;
         });
         parametersDialog.append(addTimeParameterButton);
 
-        parametersContainer.on("focus", ".description", function()
+        parametersContainer.on("focus", ".parameter-description", function()
         {
             $(this).animate({ height: "10em" }, 500);
         });
-        parametersContainer.on("focusout", ".description", function()
+        parametersContainer.on("focusout", ".parameter-description", function()
         {
             $(this).animate({height:"1em"}, 500);
         });
@@ -147,23 +140,21 @@ var Parameters;
 
         Parameters.container.sequence.forEach(function(parameter)
         {
-            var parameterContainer = addDefaultDefinition(parametersContainer);
+            var parameterContainer;
+            if (parameter.id === "t")
+            {
+                parameterContainer = addTimeParameterDefinition(parametersContainer);
+            }
+            else
+            {
+                parameterContainer = addDefaultDefinition(parametersContainer);
+            }
+
             parameterContainer.removeClass("newParameter").addClass("existingParameter");
 
             parameterContainer.prop('id', parameter.id);
 
             var typeSelect = parameterContainer.find(".parameter-type-select");
-
-            if (parameter.id === "t")
-            {
-                parameterContainer.addClass("isT");
-                typeSelect.val(Types.primitives.integer.name);
-                typeSelect.prop("disabled", "disabled");
-                parameterContainer.find(".parameter-evaluated").remove();
-                parameterContainer.find(".parameter-initial-value-container").remove();
-                parameterContainer.find(".parameter-min-container").remove();
-                parameterContainer.find(".parameter-max-container").remove();
-            }
 
             parameterContainer.find(".name").val(parameter.name);
 
@@ -181,7 +172,7 @@ var Parameters;
             if ('minimum' in parameter.type) parameter.type.setInDOM(parameterContainer.find(".parameter-min-container"), parameter.type.minimum);
             if ('maximum' in parameter.type) parameter.type.setInDOM(parameterContainer.find(".parameter-max-container"), parameter.type.maximum);
 
-            parameterContainer.find(".description").val(parameter.description);
+            parameterContainer.find(".parameter-description").val(parameter.description);
         });
 
         Utils.makeSortable(parametersContainer);
@@ -189,11 +180,20 @@ var Parameters;
 
     function addDefaultDefinition(parametersContainer)
     {
-        var parameterContainer = $(Parts.getParameterDefinitionHTML());
-
-        var typeSelect = parameterContainer.find('.parameter-type-select');
-        var parent = typeSelect.parent();
-        typeSelect.remove();
+        var typeSelectContainer = $('<td>');
+        var minContainer = $('<span>', { class: "parameter-min-container" });
+        var maxContainer = $('<span>', { class: "parameter-max-container" });
+        var initialValueContainer = $('<span>', { class: "parameter-initial-value-container" });
+        var parameterContainer = $('<tr>', { class: "newParameter" })
+            .append($('<td>', { class: "handle", text: "↕" }))
+            .append($('<td>').append($('<input>', { type: 'text', class: "name", style: "width: 197px;" })))
+            .append(typeSelectContainer)
+            .append($('<td>').append($('<input>', { type: 'checkbox', class: "parameter-evaluated"  })))
+            .append($('<td>').append(minContainer))
+            .append($('<td>').append(maxContainer))
+            .append($('<td>').append(initialValueContainer))
+            .append($('<td>').append($('<textarea>', { class: "parameter-description", style: "height:1em;" })))
+            .append(Parts.getDeleteParentButtonHTML());
 
         var previousType;
         var handleParameterTypeChange = function(newTypeName, userTypeChange)
@@ -202,7 +202,6 @@ var Parameters;
 
             var replaceInitialValueContainer = function()
             {
-                var initialValueContainer = parameterContainer.find(".parameter-initial-value-container");
                 var initialValue;
                 if (previousType) initialValue = previousType.getFromDOM(initialValueContainer);
                 initialValueContainer.empty();
@@ -212,25 +211,23 @@ var Parameters;
                 previousType = type;
             };
 
-            var parameterMinContainer = parameterContainer.find(".parameter-min-container");
-            var parameterMaxContainer = parameterContainer.find(".parameter-max-container");
             if (newTypeName === Types.primitives.integer.name)
             {
-                if (!parameterMinContainer.children(Types.primitives.integer.controlName).length)
+                if (!minContainer.children(Types.primitives.integer.controlName).length)
                 {
-                    Types.primitives[newTypeName].appendControlTo(parameterMinContainer);
-                    Types.primitives[newTypeName].setInDOM(parameterMinContainer, "");
+                    Types.primitives[newTypeName].appendControlTo(minContainer);
+                    Types.primitives[newTypeName].setInDOM(minContainer, "");
                 }
-                if (!parameterMaxContainer.children(Types.primitives.integer.controlName).length)
+                if (!maxContainer.children(Types.primitives.integer.controlName).length)
                 {
-                    Types.primitives[newTypeName].appendControlTo(parameterMaxContainer);
-                    Types.primitives[newTypeName].setInDOM(parameterMaxContainer, "");
+                    Types.primitives[newTypeName].appendControlTo(maxContainer);
+                    Types.primitives[newTypeName].setInDOM(maxContainer, "");
                 }
             }
             else
             {
-                parameterMinContainer.empty();
-                parameterMaxContainer.empty();
+                minContainer.empty();
+                maxContainer.empty();
             }
 
             if (newTypeName === Types.primitives.enumeration.name)
@@ -246,12 +243,27 @@ var Parameters;
             }
         };
 
-        Types.appendSelectTo(parent, 'parameter-type-select', handleParameterTypeChange);
+        Types.appendSelectTo(typeSelectContainer, 'parameter-type-select', handleParameterTypeChange);
 
         parameterContainer.removeClass("changedTypeParameter");
 
         parametersContainer.append(parameterContainer);
 
+        return parameterContainer;
+    }
+
+    function addTimeParameterDefinition(parametersContainer)
+    {
+        var parameterContainer = addDefaultDefinition(parametersContainer);
+        parameterContainer.prop('id', 't');
+        parameterContainer.find(".name").val(i18next.t('parameters:time'));
+        parameterContainer.find(".parameter-type-select").val(Types.primitives.integer.name);
+        parameterContainer.find(".parameter-type-select").prop("disabled", "disabled");
+        parameterContainer.find(".parameter-evaluated").remove();
+        parameterContainer.find(".parameter-initial-value-container").remove();
+        parameterContainer.find(".parameter-min-container").remove();
+        parameterContainer.find(".parameter-max-container").remove();
+        parametersContainer.append(parameterContainer);
         return parameterContainer;
     }
 
@@ -312,7 +324,7 @@ var Parameters;
                 name: name,
                 evaluated: container.find(".parameter-evaluated").prop('checked'),
                 type: type,
-                description: container.find(".description").val()
+                description: container.find(".parameter-description").val()
             };
         };
 
