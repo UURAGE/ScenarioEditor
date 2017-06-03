@@ -153,22 +153,9 @@ var Utils;
     {
         elem.tooltip(
         {
-            items: ":hover",
-            content: i18next.t('utils:markdown_tooltip'),
-            // Taken from: http://stackoverflow.com/a/15014759
-            close: function( event, ui )
-            {
-                ui.tooltip.hover(
-                    function ()
-                    {
-                        $(this).stop(true).fadeIn();
-                    },
-                    function ()
-                    {
-                        $(this).fadeOut(function(){ $(this).remove(); });
-                    }
-                );
-            }
+            items: ":focus",
+            content: i18next.t('utils:markdown_tooltip')
         });
+        elem.tooltip().off('mouseover mouseout');
     }
 })();

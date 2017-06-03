@@ -1091,6 +1091,8 @@ var Main;
             }
         });
 
+        if (Config.container.settings.statement.type.markdown) Utils.attachMarkdownTooltip(txtArea);
+
         inputDiv.append(txtArea);
 
         // Disable dragging for this component
@@ -1103,8 +1105,6 @@ var Main;
         inputDiv.height("100%");
 
         txtArea.focus();
-
-        if (Config.container.settings.statement.type.markdown) Utils.attachMarkdownTooltip(txtArea);
     }
 
     function stopEditingNode(nodeID, cancel)
