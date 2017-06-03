@@ -83,6 +83,7 @@ var Config;
 
         settings.statement = loadSettingWithType(settingsXML.children('statement'));
         settings.description = loadSettingWithType(settingsXML.children('description'));
+        settings.evaluationDescription = loadSettingWithType(settingsXML.children('evaluationDescription'));
 
         settings.languages = {};
         settings.languages.sequence = [];

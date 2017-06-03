@@ -84,7 +84,8 @@ var Evaluations;
             Types.appendSelectTo(typeContainer.appendTo(evaluationContainer), 'evaluation-type', onEvaluationTypeChange);
 
             var evaluationDescription = $('<textarea>', { class: 'evaluation-description' });
-            Utils.attachMarkdownTooltip(evaluationDescription);
+            evaluationDescription.attr('maxlength', Config.container.settings.evaluationDescription.type.maxLength);
+            if (Config.container.settings.evaluationDescription.type.markdown) Utils.attachMarkdownTooltip(evaluationDescription);
             evaluationContainer.append($('<td>').append(evaluationDescription));
 
             var expressionContainer = $('<td>');
