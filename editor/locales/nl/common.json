@@ -29,5 +29,6 @@
     "min": "Min",
     "max": "Max",
     "initial_value": "Beginwaarde",
-    "evaluated": "Geëvalueerd"
+    "evaluated": "Geëvalueerd",
+    "statement": "Uitspraak"
 }

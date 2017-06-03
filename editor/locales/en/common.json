@@ -29,5 +29,6 @@
     "min": "Min",
     "max": "Max",
     "initial_value": "Initial value",
-    "evaluated": "Evaluated"
+    "evaluated": "Evaluated",
+    "statement": "Statement"
 }
