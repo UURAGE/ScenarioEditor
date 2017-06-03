@@ -185,7 +185,7 @@ var Parameters;
         typeSelect.remove();
 
         var previousType;
-        var onParameterTypeChange = function(newTypeName, userTypeChange)
+        var handleParameterTypeChange = function(newTypeName, userTypeChange)
         {
             addedDiv.addClass("changedTypeParameter");
 
@@ -235,7 +235,7 @@ var Parameters;
             }
         };
 
-        Types.appendSelectTo(parent, 'parameter-type-select', onParameterTypeChange);
+        Types.appendSelectTo(parent, 'parameter-type-select', handleParameterTypeChange);
 
         addedDiv.removeClass("changedTypeParameter");
 
@@ -324,10 +324,10 @@ var Parameters;
                         }
                     });
 
-                    Condition.onParameterTypeChange(oldParameter, newParameter, Main.nodes[nodeID].preconditions);
+                    Condition.handleParameterTypeChange(oldParameter, newParameter, Main.nodes[nodeID].preconditions);
                 }
 
-                Evaluations.onParameterTypeChange(oldParameter, newParameter);
+                Evaluations.handleParameterTypeChange(oldParameter, newParameter);
 
                 $(this).removeClass("changedTypeParameter");
             }
@@ -335,17 +335,17 @@ var Parameters;
             else if (oldParameter.type.name === Types.primitives.integer.name && newParameter.type.name === Types.primitives.integer.name &&
                (oldParameter.type.minimum !== newParameter.type.minimum || oldParameter.type.maximum !== newParameter.type.maximum))
             {
-                Evaluations.onParameterTypeChange(oldParameter, newParameter);
+                Evaluations.handleParameterTypeChange(oldParameter, newParameter);
             }
 
             if (oldParameter.evaluated && !newParameter.evaluated || !oldParameter.evaluated && newParameter.evaluated)
             {
-                Evaluations.onParameterEvaluatedChange(newParameter);
+                Evaluations.handleParameterEvaluatedChange(newParameter);
             }
 
             if (newParameter.evaluated)
             {
-                Evaluations.onEvaluatedParameterChange(newParameter);
+                Evaluations.handleEvaluatedParameterChange(newParameter);
             }
 
             $.extend(oldParameter, newParameter);
@@ -398,7 +398,7 @@ var Parameters;
 
             if (newParameter.evaluated)
             {
-                Evaluations.onParameterEvaluatedChange(newParameter);
+                Evaluations.handleParameterEvaluatedChange(newParameter);
             }
         });
 

@@ -572,7 +572,7 @@ var Types;
         }
     };
 
-    function appendSelectTo(containerEl, htmlClass, onChange)
+    function appendSelectTo(containerEl, htmlClass, handleChange)
     {
         var typeSelect = $('<select>', { class: htmlClass });
         for (var typeName in Types.primitives)
@@ -585,11 +585,11 @@ var Types;
             var newTypeName = $(this).val();
             var userTypeChange = e.originalEvent;
 
-            onChange(newTypeName, userTypeChange);
+            handleChange(newTypeName, userTypeChange);
 
             if (newTypeName === Types.primitives.enumeration.name)
             {
-                Enumeration.addDefinition(containerEl, userTypeChange, onChange);
+                Enumeration.addDefinition(containerEl, userTypeChange, handleChange);
             }
             else
             {

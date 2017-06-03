@@ -12,7 +12,7 @@ var Enumeration;
         removeDefinition: removeDefinition
     };
 
-    function addDefinition(containerEl, openDialogImmediately, onSave)
+    function addDefinition(containerEl, openDialogImmediately, handleSave)
     {
         // If this was an enumeration already, use the old button
         if (containerEl.find(".enumeration-dialog-button").length === 0)
@@ -32,14 +32,14 @@ var Enumeration;
             enumerationScreenButton.append(buttonIcon);
             enumerationScreenButton.on('click', function()
             {
-                dialog(containerEl, onSave);
+                dialog(containerEl, handleSave);
             });
             containerEl.append(enumerationScreenButton);
         }
 
         if (openDialogImmediately)
         {
-            dialog(containerEl, onSave);
+            dialog(containerEl, handleSave);
         }
     }
 
@@ -49,7 +49,7 @@ var Enumeration;
         containerEl.find(".enumeration-dialog-button").remove();
     }
 
-    function dialog(containerEl, onSave)
+    function dialog(containerEl, handleSave)
     {
         var enumerationDialog = $('<div>').append($('<div>', { text: i18next.t('enumeration:values') }));
 
@@ -89,7 +89,7 @@ var Enumeration;
                 text: i18next.t('common:confirm'),
                 click: function()
                 {
-                    hasValues = save(containerEl, valuesContainer, onSave);
+                    hasValues = save(containerEl, valuesContainer, handleSave);
                     $(this).dialog('close');
                 }
             },
@@ -137,7 +137,7 @@ var Enumeration;
         }
     }
 
-    function save(containerEl, valuesContainer, onSave)
+    function save(containerEl, valuesContainer, handleSave)
     {
         var values = $('<ul>', { class: "enumeration-values" });
         var atLeastOneValue = false;
@@ -155,7 +155,7 @@ var Enumeration;
 
         var type = Types.primitives.enumeration.loadTypeFromDOM(typeContainer);
         type.insertTypeIntoDOM(containerEl);
-        onSave(Types.primitives.enumeration.name);
+        handleSave(Types.primitives.enumeration.name);
 
         return true;
     }

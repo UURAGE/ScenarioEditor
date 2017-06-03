@@ -14,9 +14,9 @@ var Evaluations;
         container: $.extend(true, {}, defaultEvaluations),
         reset: reset,
         dialog: dialog,
-        onParameterTypeChange: onParameterTypeChange,
-        onParameterEvaluatedChange: onParameterEvaluatedChange,
-        onEvaluatedParameterChange: onEvaluatedParameterChange
+        handleParameterTypeChange: handleParameterTypeChange,
+        handleParameterEvaluatedChange: handleParameterEvaluatedChange,
+        handleEvaluatedParameterChange: handleEvaluatedParameterChange
     };
 
     $(document).ready(function()
@@ -56,7 +56,7 @@ var Evaluations;
             var expressionKindContainer = $('<span>', { class: 'evaluation-expression' });
 
             var previousType;
-            var onEvaluationTypeChange = function(newTypeName, userTypeChange)
+            var handleEvaluationTypeChange = function(newTypeName, userTypeChange)
             {
                 var changeType = function()
                 {
@@ -66,7 +66,7 @@ var Evaluations;
                         newType = $.extend(newType, { controlName: 'textarea', rows: 4, markdown: "gfm" });
                     }
 
-                    Expression.onTypeChange(expressionKindContainer, previousType, newType, userTypeChange);
+                    Expression.handleTypeChange(expressionKindContainer, previousType, newType, userTypeChange);
                     previousType = newType;
                 };
                 if (newTypeName === Types.primitives.enumeration.name)
@@ -81,7 +81,7 @@ var Evaluations;
                     changeType();
                 }
             };
-            Types.appendSelectTo(typeContainer.appendTo(evaluationContainer), 'evaluation-type', onEvaluationTypeChange);
+            Types.appendSelectTo(typeContainer.appendTo(evaluationContainer), 'evaluation-type', handleEvaluationTypeChange);
 
             var evaluationDescription = $('<textarea>', { class: 'evaluation-description' });
             evaluationDescription.attr('maxlength', Config.container.settings.evaluationDescription.type.maxLength);
@@ -262,7 +262,7 @@ var Evaluations;
         Main.selectElement(previouslySelectedElement);
     }
 
-    function onParameterTypeChange(oldParameter, newParameter)
+    function handleParameterTypeChange(oldParameter, newParameter)
     {
         var evaluationId = 'evaluation-' + oldParameter.id;
         Evaluations.container.sequence.forEach(function(evaluation)
@@ -273,12 +273,12 @@ var Evaluations;
             }
             else
             {
-                evaluation.expression.kind.onParameterTypeChange(oldParameter, newParameter, evaluation.type, evaluation.expression);
+                evaluation.expression.kind.handleParameterTypeChange(oldParameter, newParameter, evaluation.type, evaluation.expression);
             }
         });
     }
 
-    function onParameterEvaluatedChange(parameter)
+    function handleParameterEvaluatedChange(parameter)
     {
         var evaluationId = 'evaluation-' + parameter.id;
         var evaluation;
@@ -303,7 +303,7 @@ var Evaluations;
         }
     }
 
-    function onEvaluatedParameterChange(parameter)
+    function handleEvaluatedParameterChange(parameter)
     {
         var evaluationId = 'evaluation-' + parameter.id;
         var evaluation = Evaluations.container.byId[evaluationId];

@@ -13,7 +13,7 @@ var Condition;
         setInDOM: setInDOM,
         fromXML: fromXML,
         toXML: toXML,
-        onParameterTypeChange: onParameterTypeChange
+        handleParameterTypeChange: handleParameterTypeChange
     };
 
     var radioButtonCounter = 0;
@@ -167,7 +167,7 @@ var Condition;
         }
     }
 
-    function onParameterTypeChange(oldParameter, newParameter, condition)
+    function handleParameterTypeChange(oldParameter, newParameter, condition)
     {
         if (!condition.type && condition.idRef === oldParameter.id)
         {
@@ -181,7 +181,7 @@ var Condition;
         {
             condition.subconditions.forEach(function(subcondition)
             {
-                onParameterTypeChange(oldParameter, newParameter, subcondition);
+                handleParameterTypeChange(oldParameter, newParameter, subcondition);
             });
         }
     }

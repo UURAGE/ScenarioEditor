@@ -36,11 +36,11 @@ var Expression;
             {
                 return true;
             },
-            onTypeChange: function(previousType, newType, expression)
+            handleTypeChange: function(previousType, newType, expression)
             {
                 expression.literal = newType.castFrom(previousType, expression.literal);
             },
-            onParameterTypeChange: function(){}
+            handleParameterTypeChange: function(){}
         },
         reference:
         {
@@ -140,11 +140,11 @@ var Expression;
             {
                 return Parameters.hasWithType(type) || Config.hasParameterWithType(type);
             },
-            onTypeChange: function(previousType, newType, expression)
+            handleTypeChange: function(previousType, newType, expression)
             {
                 replaceExpressionWithDefaultLiteral(expression, newType);
             },
-            onParameterTypeChange: function(oldParameter, newParameter, type, expression)
+            handleParameterTypeChange: function(oldParameter, newParameter, type, expression)
             {
                 if ('calculate' in expression.reference && (!('maximum' in newParameter.type) || !('minimum' in newParameter.type)))
                 {
@@ -221,13 +221,13 @@ var Expression;
             {
                 return type.name === Types.primitives.integer.name;
             },
-            onTypeChange: function(previousType, newType, expression)
+            handleTypeChange: function(previousType, newType, expression)
             {
                 if (this.isAvailableFor(newType))
                 {
                     expression.sum.forEach(function(sumExpression)
                     {
-                        sumExpression.kind.onTypeChange(previousType, newType, sumExpression);
+                        sumExpression.kind.handleTypeChange(previousType, newType, sumExpression);
                     });
                 }
                 else
@@ -235,11 +235,11 @@ var Expression;
                     replaceExpressionWithDefaultLiteral(expression, newType);
                 }
             },
-            onParameterTypeChange: function(oldParameter, newParameter, type, expression)
+            handleParameterTypeChange: function(oldParameter, newParameter, type, expression)
             {
                 expression.sum.forEach(function(sumExpression)
                 {
-                    sumExpression.kind.onParameterTypeChange(oldParameter, newParameter, type, sumExpression);
+                    sumExpression.kind.handleParameterTypeChange(oldParameter, newParameter, type, sumExpression);
                 });
             }
         },
@@ -321,11 +321,11 @@ var Expression;
             {
                 return type.name === Types.primitives.integer.name;
             },
-            onTypeChange: function(previousType, newType, expression)
+            handleTypeChange: function(previousType, newType, expression)
             {
                 if (this.isAvailableFor(newType))
                 {
-                    expression.scale.expression.kind.onTypeChange(previousType, newType, expression.scale.expression);
+                    expression.scale.expression.kind.handleTypeChange(previousType, newType, expression.scale.expression);
                     newType.castFrom(previousType, expression.scale.value);
                 }
                 else
@@ -333,9 +333,9 @@ var Expression;
                     replaceExpressionWithDefaultLiteral(expression, newType);
                 }
             },
-            onParameterTypeChange: function(oldParameter, newParameter, type, expression)
+            handleParameterTypeChange: function(oldParameter, newParameter, type, expression)
             {
-                expression.scale.expression.kind.onParameterTypeChange(oldParameter, newParameter, type, expression.scale.expression);
+                expression.scale.expression.kind.handleParameterTypeChange(oldParameter, newParameter, type, expression.scale.expression);
             }
         },
         choose:
@@ -432,22 +432,22 @@ var Expression;
             {
                 return true;
             },
-            onTypeChange: function(previousType, newType, expression)
+            handleTypeChange: function(previousType, newType, expression)
             {
                 expression.choose.whens.forEach(function(when)
                 {
-                    when.expression.kind.onTypeChange(previousType, newType, when.expression);
+                    when.expression.kind.handleTypeChange(previousType, newType, when.expression);
                 });
-                expression.choose.otherwise.kind.onTypeChange(previousType, newType, expression.choose.otherwise);
+                expression.choose.otherwise.kind.handleTypeChange(previousType, newType, expression.choose.otherwise);
             },
-            onParameterTypeChange: function(oldParameter, newParameter, type, expression)
+            handleParameterTypeChange: function(oldParameter, newParameter, type, expression)
             {
                 expression.choose.whens.forEach(function(when)
                 {
-                    Condition.onParameterTypeChange(oldParameter, newParameter, when.condition);
-                    when.expression.kind.onParameterTypeChange(oldParameter, newParameter, type, when.expression);
+                    Condition.handleParameterTypeChange(oldParameter, newParameter, when.condition);
+                    when.expression.kind.handleParameterTypeChange(oldParameter, newParameter, type, when.expression);
                 });
-                expression.choose.otherwise.kind.onParameterTypeChange(oldParameter, newParameter, type, expression.choose.otherwise);
+                expression.choose.otherwise.kind.handleParameterTypeChange(oldParameter, newParameter, type, expression.choose.otherwise);
             }
         }
     };
@@ -460,7 +460,7 @@ var Expression;
         setInDOM: setInDOM,
         fromXML: fromXML,
         toXML: toXML,
-        onTypeChange: onTypeChange
+        handleTypeChange: handleTypeChange
     };
 
     function appendControlsTo(container, type)
@@ -521,12 +521,12 @@ var Expression;
         expression.kind.toXML(expressionXML, type, expression[expression.kind.name]);
     }
 
-    function onTypeChange(container, previousType, newType, userTypeChange)
+    function handleTypeChange(container, previousType, newType, userTypeChange)
     {
         if (previousType)
         {
             var expression = getFromDOM(container, previousType);
-            expression.kind.onTypeChange(previousType, newType, expression);
+            expression.kind.handleTypeChange(previousType, newType, expression);
             container.empty();
             appendControlsTo(container, newType);
             setInDOM(container, newType, expression);
