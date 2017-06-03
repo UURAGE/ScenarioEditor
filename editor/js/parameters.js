@@ -71,6 +71,7 @@ var Parameters;
                 div.find(".name").val(i18next.t('parameters:time'));
                 div.find(".parameter-type-select").val(Types.primitives.integer.name);
                 div.find(".parameter-type-select").prop("disabled", "disabled");
+                div.find(".parameter-evaluated").remove();
                 div.find(".parameter-initial-value-container").remove();
 
                 Utils.focusFirstTabindexedDescendant($("#params").children().last());
@@ -144,6 +145,7 @@ var Parameters;
                 addedDiv.addClass("isT");
                 typeSelect.val(Types.primitives.integer.name);
                 typeSelect.prop("disabled", "disabled");
+                addedDiv.find(".parameter-evaluated").remove();
                 addedDiv.find(".parameter-initial-value-container").remove();
                 addedDiv.find(".parameter-min-container").remove();
                 addedDiv.find(".parameter-max-container").remove();
