@@ -150,6 +150,9 @@
                         top : Math.max(pos.top + ydif, min)
                     };
                     $('#' + node.id).offset(nodePos);
+
+                    Main.trees[node.parent].plumbInstance.updateOffset({ elId: node.id, recalc: true });
+                    Main.trees[node.parent].plumbInstance.repaint(node.id, null, 0);
                 });
                 return true;
             });
