@@ -264,7 +264,10 @@ var Parameters;
                         node.parameterEffects.userDefined.splice(i, 1);
                     }
                 }
-                Condition.handleParameterRemoval(id, node.preconditions);
+                if (node.preconditions)
+                {
+                    node.preconditions = Condition.handleParameterRemoval(id, node.preconditions);
+                }
             }
 
             Evaluations.handleParameterRemoval(id);
@@ -326,7 +329,10 @@ var Parameters;
                         }
                     });
 
-                    Condition.handleParameterTypeChange(oldParameter, newParameter, Main.nodes[nodeID].preconditions);
+                    if (Main.nodes[nodeID].preconditions)
+                    {
+                        Condition.handleParameterTypeChange(oldParameter, newParameter, Main.nodes[nodeID].preconditions);
+                    }
                 }
 
                 Evaluations.handleParameterTypeChange(oldParameter, newParameter);

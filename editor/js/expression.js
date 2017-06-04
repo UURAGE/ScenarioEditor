@@ -392,17 +392,27 @@ var Expression;
             },
             getFromDOM: function(container, type)
             {
-                return {
-                    whens: container.children('ul').children('li').map(function()
-                    {
-                        var whenContainer = $(this).children('.when');
-                        return {
-                            condition: Condition.getFromDOM(whenContainer),
-                            expression: Expression.getFromDOM(whenContainer, type)
-                        };
-                    }).get(),
+                var choose =
+                {
+                    whens: [],
                     otherwise: Expression.getFromDOM(container.children('.otherwise'), type)
                 };
+
+                container.children('ul').children('li').each(function()
+                {
+                    var whenContainer = $(this).children('.when');
+                    var condition = Condition.getFromDOM(whenContainer);
+                    if (condition)
+                    {
+                        choose.whens.push(
+                        {
+                            condition: condition,
+                            expression: Expression.getFromDOM(whenContainer, type)
+                        });
+                    }
+                });
+
+                return choose;
             },
             setInDOM: function(container, type, choose)
             {
@@ -470,11 +480,17 @@ var Expression;
             },
             handleParameterRemoval: function(parameterId, type, expression)
             {
-                expression.choose.whens.forEach(function(when)
+                for (var i = 0; i < expression.choose.whens.length; i++)
                 {
-                    Condition.handleParameterRemoval(parameterId, when.condition);
+                    var when = expression.choose.whens[i];
+                    when.condition = Condition.handleParameterRemoval(parameterId, when.condition);
                     when.expression.kind.handleParameterRemoval(parameterId, type, when.expression);
-                });
+                    if (!when.condition)
+                    {
+                        expression.choose.whens.splice(i, 1);
+                        i--;
+                    }
+                }
                 expression.choose.otherwise.kind.handleParameterRemoval(parameterId, type, expression.choose.otherwise);
             }
         }

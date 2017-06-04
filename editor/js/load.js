@@ -364,7 +364,7 @@ var Load;
         var preconditionsXML = $(statement).children("preconditions");
         var preconditions;
         if (preconditionsXML.length === 0)
-            preconditions = {type: "alwaysTrue", subconditions: []};
+            preconditions = null;
         else
             preconditions = Condition.fromXML(preconditionsXML.children()[0]);
 

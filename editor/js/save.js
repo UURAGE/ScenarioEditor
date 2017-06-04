@@ -347,7 +347,7 @@ var Save;
                 addAndReturnElement("comment", scenarioNameSpace, editingDataEl, true).textContent = node.comment;
 
             // Save the preconditions
-            if (node.preconditions.subconditions.length > 0)
+            if (node.preconditions)
             {
                 var preconditionsEl = addAndReturnElement("preconditions", scenarioNameSpace, statementEl);
                 Condition.toXML(preconditionsEl, node.preconditions);

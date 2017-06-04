@@ -24,22 +24,21 @@ var Condition;
         appendGroupConditionControlsTo(container, allowReferenceConditions, true);
     }
 
+    // May return null if container contains no conditions
     function getFromDOM(container)
     {
         var getConditionFromDOM = function(conditionContainer)
         {
-            var condition = {};
-            // Save selected type of condition
-            condition.type = conditionContainer.children(".groupConditionRadioDiv").find('input[type=radio]:checked').val();
+            var type = conditionContainer.children(".groupConditionRadioDiv").find('input[type=radio]:checked').val();
 
-            // Save conditions.
             var subconditions = [];
-
             conditionContainer.children(".groupConditionDiv").children().each(function()
             {
+                var subcondition;
                 if ($(this).hasClass("groupcondition"))
                 {
-                    subconditions.push(getConditionFromDOM($(this)));
+                    subcondition = getConditionFromDOM($(this));
+                    if (subcondition) subconditions.push(subcondition);
                 }
                 else
                 {
@@ -49,7 +48,7 @@ var Condition;
                     var parameter = Config.findParameterById(parameterIdRef, characterIdRef);
                     if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
 
-                    var subcondition = {};
+                    subcondition = {};
                     subcondition.idRef = parameterIdRef;
                     subcondition.operator = $(this).find(".condition-operator-select").val();
                     if (subcondition.operator in Types.relationalOperators)
@@ -61,8 +60,18 @@ var Condition;
                     subconditions.push(subcondition);
                 }
             });
-            condition.subconditions = subconditions;
-            return condition;
+
+            if (subconditions.length > 0)
+            {
+                return {
+                    type: type,
+                    subconditions: subconditions
+                };
+            }
+            else
+            {
+                return null;
+            }
         };
         return getConditionFromDOM(container.children('.condition'));
     }
@@ -145,7 +154,15 @@ var Condition;
 
     function toXML(parentXML, condition)
     {
-        if (!("type" in condition))
+        if ("type" in condition)
+        {
+            var typeXML = Utils.appendChild(parentXML, condition.type);
+            condition.subconditions.forEach(function(subcondition)
+            {
+                toXML(typeXML, subcondition);
+            });
+        }
+        else
         {
             var parameter = Config.findParameterById(condition.idRef, condition.characterIdRef);
             if (!parameter) parameter = Parameters.container.byId[condition.idRef];
@@ -168,19 +185,18 @@ var Condition;
             if (!isReferenceCondition) parameter.type.toXML(conditionXML, condition.value);
             return conditionXML;
         }
-        else if (condition.type !== "alwaysTrue" && condition.subconditions.length > 0)
-        {
-            var typeXML = Utils.appendChild(parentXML, condition.type);
-            condition.subconditions.forEach(function(subcondition)
-            {
-                toXML(typeXML, subcondition);
-            });
-        }
     }
 
     function handleParameterTypeChange(oldParameter, newParameter, condition)
     {
-        if (!condition.type && condition.idRef === oldParameter.id)
+        if ("type" in condition)
+        {
+            condition.subconditions.forEach(function(subcondition)
+            {
+                handleParameterTypeChange(oldParameter, newParameter, subcondition);
+            });
+        }
+        else if (condition.idRef === oldParameter.id)
         {
             var hasRelationalOperator = newParameter.type.relationalOperators.indexOf(Types.relationalOperators[condition.operator]) !== -1;
             var hasUnaryOperator = newParameter.type.unaryOperators.indexOf(Types.unaryOperators[condition.operator]) !== -1;
@@ -191,16 +207,9 @@ var Condition;
 
             condition.value = newParameter.type.castFrom(oldParameter.type, condition.value);
         }
-
-        if (condition.type !== "alwaysTrue" && condition.subconditions)
-        {
-            condition.subconditions.forEach(function(subcondition)
-            {
-                handleParameterTypeChange(oldParameter, newParameter, subcondition);
-            });
-        }
     }
 
+    // Returns the condition object or null if there are no conditions left
     function handleParameterRemoval(parameterId, condition)
     {
         for (var i = 0; i < condition.subconditions.length; i++)
@@ -208,21 +217,27 @@ var Condition;
             var subcondition = condition.subconditions[i];
             if ("type" in subcondition)
             {
-                handleParameterRemoval(parameterId, subcondition);
-                if (subcondition.subconditions.length === 0)
+                subcondition = handleParameterRemoval(parameterId, subcondition);
+                if (!subcondition)
                 {
                     condition.subconditions.splice(i, 1);
                     i--;
                 }
             }
-            else
+            else if (subcondition.idRef === parameterId)
             {
-                if (subcondition.idRef === parameterId)
-                {
-                    condition.subconditions.splice(i, 1);
-                    i--;
-                }
+                condition.subconditions.splice(i, 1);
+                i--;
             }
+        }
+
+        if (condition.subconditions.length > 0)
+        {
+            return condition;
+        }
+        else
+        {
+            return null;
         }
     }
 
@@ -393,10 +408,12 @@ var Condition;
         };
 
         for (var state in states)
+        {
             if (states[state])
                 div.addClass(state);
             else
                 div.removeClass(state);
+        }
     }
 
 })();

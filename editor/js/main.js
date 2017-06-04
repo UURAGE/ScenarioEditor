@@ -811,11 +811,7 @@ var Main;
             text: text !== undefined ? text : Config.container.settings.statement.type.defaultValue,
             type: type,
             parameterEffects: parameterEffects,
-            preconditions:
-            {
-                type: "alwaysTrue",
-                subconditions: []
-            },
+            preconditions: null,
             propertyValues:  Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef),
             comment: "",
             endNode: false,
@@ -1822,7 +1818,7 @@ var Main;
             // Insert the preconditions in the sidebar
             var preconditionsContainer = $("#preconditionsDiv");
             Condition.appendControlsTo(preconditionsContainer);
-            Condition.setInDOM(preconditionsContainer, node.preconditions);
+            if (node.preconditions) Condition.setInDOM(preconditionsContainer, node.preconditions);
 
             // Show user-defined parameters
             for (var k = 0; k < node.parameterEffects.userDefined.length; k++)
