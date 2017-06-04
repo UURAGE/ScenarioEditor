@@ -82,7 +82,7 @@ var Evaluations;
                     changeType();
                 }
             };
-            Types.appendSelectTo(typeContainer.appendTo(evaluationContainer), 'evaluation-type', handleEvaluationTypeChange);
+            Types.appendControlsTo(typeContainer.appendTo(evaluationContainer), 'evaluation-type', handleEvaluationTypeChange);
 
             var evaluationDescription = $('<textarea>', { class: 'evaluation-description' });
             evaluationDescription.attr('maxlength', Config.container.settings.evaluationDescription.type.maxLength);
@@ -152,16 +152,11 @@ var Evaluations;
 
             evaluationContainer.prop('id', evaluation.id);
 
-            var typeSelect = evaluationContainer.find(".evaluation-type");
 
             var nameInput = evaluationContainer.find(".evaluation-name");
             nameInput.val(evaluation.name);
 
-            if (evaluation.type.name === Types.primitives.enumeration.name)
-            {
-                evaluation.type.insertTypeIntoDOM(typeSelect.parent());
-            }
-            typeSelect.val(evaluation.type.name).trigger('change');
+            Types.insertIntoDOM(evaluationContainer, 'evaluation-type', evaluation.type);
 
             var descriptionTextArea = evaluationContainer.find(".evaluation-description");
             descriptionTextArea.val(evaluation.description);
@@ -172,8 +167,8 @@ var Evaluations;
             if (evaluation.id.match(/^evaluation-p(\d+)$/))
             {
                 nameInput.prop('disabled', true);
-                typeSelect.prop('disabled', true);
-                evaluationContainer.find('.enumeration-dialog-button').remove();
+                evaluationContainer.find(".evaluation-type").prop('disabled', true);
+                evaluationContainer.find('.define-type').remove();
                 descriptionTextArea.prop('disabled', true);
                 expressionContainer.find('button, checkbox, input, select, textarea').not('.reference-calculate').prop('disabled', true);
 

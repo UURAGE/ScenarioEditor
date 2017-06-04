@@ -73,7 +73,6 @@
       "js/load/load1.js",
       "js/load/load3.js",
       "js/save.js",
-      "js/enumeration.js",
       "js/parameters.js",
       "js/evaluations.js",
       "js/metadata.js",

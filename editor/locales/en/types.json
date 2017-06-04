@@ -12,7 +12,13 @@
             "translation": "String"
         },
         "enumeration": {
-            "translation": "Enumeration"
+            "translation": "Enumeration",
+            "definition": {
+                "title": "Enumeration",
+                "define": "Define enumeration",
+                "no_values": "There are no values defined for the enumeration",
+                "values": "Values"
+            }
         }
     },
     "unaryOperators": {

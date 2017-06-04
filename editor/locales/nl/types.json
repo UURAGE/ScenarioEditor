@@ -12,7 +12,13 @@
             "translation": "String"
         },
         "enumeration": {
-            "translation": "Enumeratie"
+            "translation": "Enumeratie",
+            "definition": {
+                "title": "Enumeratie",
+                "define": "Definieer enumeratie",
+                "no_values": "Er zijn geen waarden gedefinieerd voor de enumeratie",
+                "values": "Waarden"
+            }
         }
     },
     "unaryOperators": {

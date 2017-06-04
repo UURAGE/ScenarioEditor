@@ -14,7 +14,8 @@ var Types;
         relationalOperators: {},
         unaryOperators: {},
         labelControlOrders: {},
-        appendSelectTo: appendSelectTo
+        appendControlsTo: appendControlsTo,
+        insertIntoDOM: insertIntoDOM
     };
 
     Types.assignmentOperators =
@@ -174,6 +175,7 @@ var Types;
             {
                 return Utils.appendChild(typeXML, this.name);
             },
+            insertTypeIntoDOM: function(containerEl) {},
             castFrom: function(type, value)
             {
                 return String(value);
@@ -290,6 +292,7 @@ var Types;
                 if ('maximum' in this) integerXML.setAttribute('maximum', this.maximum);
                 return integerXML;
             },
+            insertTypeIntoDOM: function(containerEl) {},
             appendControlTo: function(containerEl, htmlId)
             {
                 var control = $('<' + this.controlName + '>', { id: htmlId, type: this.controlType, value: 0 });
@@ -452,6 +455,45 @@ var Types;
                 }
                 return equal;
             },
+            appendTypeControlsTo: function(typeEl)
+            {
+                typeEl.append($('<div>', { text: i18next.t('types:primitives.enumeration.definition.values') }));
+                var valuesContainer = $('<ul>', { class: "enumeration-values-container" }).appendTo(typeEl);
+                var valueInput = $('<input>', { autofocus: true, type: 'text' });
+                var appendValue = function(value)
+                {
+                    // The value of an enumeration can not be the empty string
+                    if (value)
+                    {
+                        var deleteButton = Parts.deleteButton();
+                        deleteButton.on('click', function()
+                        {
+                            $(this).parent().remove();
+                            valueInput.focus();
+                        });
+
+                        var valueItem = $('<li>').append($('<span>', { text: value }));
+                        valueItem.append(deleteButton);
+                        valueItem.insertBefore(valuesContainer.children().last());
+
+                        valueInput.val("").focus();
+                    }
+                };
+                var valueAddButton = $('<button>', { type: 'button', class: "add-enumeration-value" })
+                    .append($('<img>', { src: editor_url + "png/others/plus.png", title: i18next.t('common:add') }));
+                valueAddButton.on('click', function()
+                {
+                    appendValue(valueInput.val());
+                });
+                valueInput.on('keydown', function(e)
+                {
+                    if (e.which === 13) // ENTER
+                    {
+                        appendValue(valueInput.val());
+                    }
+                });
+                valuesContainer.append($('<li>').append(valueInput).append(valueAddButton));
+            },
             loadType: function(typeXML, id)
             {
                 var options = { sequence: [] };
@@ -500,9 +542,9 @@ var Types;
             loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
                 var options = { sequence: [] };
-                typeEl.find(".enumeration-values").children().each(function(index, valueItem)
+                typeEl.find(".enumeration-values-container").children().not(":last-child").each(function(index, valueItem)
                 {
-                    var option = { text: $(valueItem).text() };
+                    var option = { text: $(valueItem).children('span').text() };
                     options.sequence.push(option);
                 });
                 var defaultValue;
@@ -538,14 +580,13 @@ var Types;
             },
             insertTypeIntoDOM: function(containerEl)
             {
-                containerEl.find(".enumeration-values").remove();
-                var enumerationValues = $('<ul>', { class: "enumeration-values" });
+                var valuesContainer = containerEl.find(".enumeration-values-container");
+                var addValueButton = valuesContainer.find(".add-enumeration-value");
                 this.options.sequence.forEach(function(option)
                 {
-                    enumerationValues.append($('<li>', { text: option.text }));
+                    valuesContainer.children().last().children('input').val(option.text);
+                    addValueButton.trigger('click');
                 });
-                enumerationValues.hide();
-                containerEl.append(enumerationValues);
             },
             appendControlTo: function(containerEl, htmlId)
             {
@@ -572,7 +613,7 @@ var Types;
         }
     };
 
-    function appendSelectTo(containerEl, htmlClass, handleChange)
+    function appendControlsTo(containerEl, htmlClass, handleChange)
     {
         var typeSelect = $('<select>', { class: htmlClass });
         for (var typeName in Types.primitives)
@@ -580,26 +621,140 @@ var Types;
             typeSelect.append($('<option>', { value: typeName, text: i18next.t('types:primitives.' + typeName + '.translation') }));
         }
 
+        var typeDefinitionContainer = $('<div>');
+        var previousTypeName;
         typeSelect.on('change', function(e)
         {
             var newTypeName = $(this).val();
             var userTypeChange = e.originalEvent;
 
-            handleChange(newTypeName, userTypeChange);
-
-            if (newTypeName === Types.primitives.enumeration.name)
+            // If this was an enumeration already, use the old button
+            var definitionButton = containerEl.find(".define-type");
+            if (Types.primitives[newTypeName].appendTypeControlsTo)
             {
-                Enumeration.addDefinition(containerEl, userTypeChange, handleChange);
+                if (definitionButton.length === 0)
+                {
+                    var enumerationScreenButton = $('<button>', { class: "define-type" });
+                    enumerationScreenButton.attr('title', i18next.t('types:primitives.' + newTypeName + '.definition.define'));
+                    var buttonIcon = $('<img>', { src: editor_url + "png/others/list.png" });
+                    enumerationScreenButton.on('mouseover', function()
+                    {
+                        buttonIcon.attr('src', editor_url + "png/others/list_hover.png");
+                    });
+                    enumerationScreenButton.on('mouseout', function()
+                    {
+                        buttonIcon.attr('src', editor_url + "png/others/list.png");
+                    });
+                    buttonIcon.attr('alt', i18next.t('types:primitives.' + newTypeName + '.definition.define'));
+                    enumerationScreenButton.append(buttonIcon);
+                    enumerationScreenButton.on('click', function()
+                    {
+                        dialog(typeDefinitionContainer, newTypeName, handleChange);
+                    });
+                    containerEl.append(enumerationScreenButton);
+                }
+
+                if (previousTypeName !== newTypeName)
+                {
+                    typeDefinitionContainer.empty();
+                    Types.primitives[newTypeName].appendTypeControlsTo(typeDefinitionContainer);
+                }
+
+                var type = Types.primitives[typeName].loadTypeFromDOM(typeDefinitionContainer);
+                if (userTypeChange && newTypeName === Types.primitives.enumeration.name)
+                {
+                    dialog(typeDefinitionContainer, newTypeName, handleChange);
+                }
+                else if (newTypeName !== Types.primitives.enumeration.name || type.options.sequence.length > 0)
+                {
+                    handleChange(newTypeName);
+                }
             }
             else
             {
-                Enumeration.removeDefinition(containerEl);
+                typeDefinitionContainer.hide();
+                definitionButton.remove();
+                handleChange(newTypeName);
             }
+            previousTypeName = newTypeName;
         });
 
         typeSelect.val(Types.primitives.integer.name);
         typeSelect.trigger('change');
 
         containerEl.append(typeSelect);
+        containerEl.append(typeDefinitionContainer);
     }
+
+    function insertIntoDOM(containerEl, htmlClass, type)
+    {
+        var typeSelect = containerEl.find("." + htmlClass);
+        typeSelect.val(type.name).trigger('change');
+        if (type.insertTypeIntoDOM)
+        {
+            type.insertTypeIntoDOM(typeSelect.parent());
+            typeSelect.trigger('change');
+        }
+    }
+
+    function dialog(containerEl, typeName, handleChange)
+    {
+        var type = Types.primitives[typeName].loadTypeFromDOM(containerEl);
+        var confirmedAndValid = false;
+        containerEl.dialog(
+        {
+            title: i18next.t('types:primitives.' + typeName + '.definition.title'),
+            height: Constants.heightEnumerationScreen,
+            width: Constants.widthEnumerationScreen,
+            modal: true,
+            buttons: [
+            {
+                text: i18next.t('common:confirm'),
+                click: function()
+                {
+                    type = Types.primitives[typeName].loadTypeFromDOM(containerEl);
+                    if (typeName !== Types.primitives.enumeration.name || type.options.sequence.length > 0)
+                    {
+                        confirmedAndValid = true;
+                    }
+                    $(this).dialog('close');
+                }
+            },
+            {
+                text: i18next.t('common:cancel'),
+                click: function()
+                {
+                    $(this).dialog('close');
+                }
+            }],
+            beforeClose: function()
+            {
+                if (typeName === Types.primitives.enumeration.name && type.options.sequence.length === 0)
+                {
+                    alert(i18next.t('types:primitives.enumeration.definition.no_values'));
+                    return false;
+                }
+            },
+            close: function()
+            {
+                $(this).dialog('destroy');
+
+                if (confirmedAndValid)
+                {
+                    handleChange(typeName);
+                }
+                else
+                {
+                    // Restore the original type in the DOM
+                    containerEl.empty();
+                    type.appendTypeControlsTo(containerEl);
+                    type.insertTypeIntoDOM(containerEl);
+                }
+
+                containerEl.hide();
+            }
+        });
+    }
+
+
 })();

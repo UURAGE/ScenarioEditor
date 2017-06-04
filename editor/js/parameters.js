@@ -154,15 +154,10 @@ var Parameters;
 
             parameterContainer.prop('id', parameter.id);
 
-            var typeSelect = parameterContainer.find(".parameter-type-select");
-
             parameterContainer.find(".name").val(parameter.name);
 
-            if (parameter.type.name === Types.primitives.enumeration.name)
-            {
-                parameter.type.insertTypeIntoDOM(typeSelect.parent());
-            }
-            typeSelect.val(parameter.type.name).trigger('change');
+            Types.insertIntoDOM(parameterContainer, 'parameter-type-select', parameter.type);
+
             parameterContainer.removeClass("changedTypeParameter");
 
             parameterContainer.find(".parameter-evaluated").prop('checked', parameter.evaluated).trigger('change');
@@ -216,7 +211,7 @@ var Parameters;
             .append(Parts.deleteButton());
 
         var previousType;
-        var handleParameterTypeChange = function(newTypeName, userTypeChange)
+        var handleParameterTypeChange = function(newTypeName)
         {
             parameterContainer.addClass("changedTypeParameter");
 
@@ -250,20 +245,10 @@ var Parameters;
                 maxContainer.empty();
             }
 
-            if (newTypeName === Types.primitives.enumeration.name)
-            {
-                if (!userTypeChange)
-                {
-                    replaceInitialValueContainer();
-                }
-            }
-            else
-            {
-                replaceInitialValueContainer();
-            }
+            replaceInitialValueContainer();
         };
 
-        Types.appendSelectTo(typeSelectContainer, 'parameter-type-select', handleParameterTypeChange);
+        Types.appendControlsTo(typeSelectContainer, 'parameter-type-select', handleParameterTypeChange);
 
         parameterContainer.removeClass("changedTypeParameter");
 

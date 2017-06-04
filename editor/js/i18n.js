@@ -25,7 +25,6 @@
             'condition',
             'configXML',
             'draft',
-            'enumeration',
             'evaluations',
             'load',
             'main',
