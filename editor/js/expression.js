@@ -369,7 +369,7 @@ var Expression;
                     var whenAndDeleteButtonContainer = $('<li>');
 
                     var whenContainer = $('<span>', { class: "when", text: i18next.t('common:when') + ' ' });
-                    Condition.appendControlsTo(whenContainer);
+                    Condition.appendControlsTo(whenContainer, true);
                     Expression.appendControlsTo(whenContainer, type);
                     whenAndDeleteButtonContainer.append(whenContainer);
 
@@ -411,7 +411,7 @@ var Expression;
                     var addButton = container.children('.add-when');
                     addButton.trigger('click');
                     var whenContainer = container.children('ul').children('li').last().children('.when');
-                    Condition.setInDOM(whenContainer, when.condition);
+                    Condition.setInDOM(whenContainer, when.condition, true);
                     Expression.setInDOM(whenContainer, type, when.expression);
                 });
                 Expression.setInDOM(container.children('.otherwise'), type, choose.otherwise);
