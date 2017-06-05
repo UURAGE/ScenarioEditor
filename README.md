@@ -1,3 +1,5 @@
+<img src="https://cdn.rawgit.com/UURAGE/ScenarioEditor/master/logo.svg" width="50%"/>
+
 # Scenario Editor
 
 [![](https://badge.fury.io/gh/UURAGE%2FScenarioEditor.svg)](https://github.com/UURAGE/ScenarioEditor/releases/latest)
