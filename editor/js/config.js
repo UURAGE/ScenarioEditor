@@ -60,7 +60,7 @@ var Config;
             Config.container.characters = loadCharacterCollection(configXML.children('characters'));
         }
 
-        Config.container.migration = loadMigration(configXML.children('migration'), Config.container.properties, Config.container.parameters, Config.container.characters);
+        Config.container.migration = loadMigration(configXML.children('migration'));
     }
 
     function loadSettings(settingsXML)
@@ -233,7 +233,7 @@ var Config;
         return collection;
     }
 
-    function loadMigration(migrationXML, properties, parameters, characters)
+    function loadMigration(migrationXML)
     {
         var migration = {};
         if (migrationXML.length > 0)
