@@ -231,6 +231,26 @@ var Types;
             {
                 return this.name === otherType.name;
             },
+            appendTypeControlsTo: function(typeEl)
+            {
+                var minContainer = $('<span>', { class: "min-container" });
+                var maxContainer = $('<span>', { class: "max-container" });
+
+                if (!minContainer.children(Types.primitives.integer.controlName).length)
+                {
+                    this.appendControlTo(minContainer);
+                    this.setInDOM(minContainer, "");
+                }
+
+                if (!maxContainer.children(Types.primitives.integer.controlName).length)
+                {
+                    this.appendControlTo(maxContainer);
+                    this.setInDOM(maxContainer, "");
+                }
+
+                typeEl.append($('<div>', { text: i18next.t('common:minimum') + ": " }).append(minContainer));
+                typeEl.append($('<div>', { text: i18next.t('common:maximum') + ": " }).append(maxContainer));
+            },
             loadType: function(typeXML)
             {
                 var type = this;
@@ -258,12 +278,12 @@ var Types;
             loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
                 var type = $.extend({}, this);
-                var minimum = parseInt(typeEl.find(".parameter-min-container").children(type.controlName).first().val());
+                var minimum = parseInt(typeEl.find(".min-container").children(type.controlName).first().val());
                 if (!isNaN(minimum))
                 {
                     type.minimum = minimum;
                 }
-                var maximum = parseInt(typeEl.find(".parameter-max-container").children(type.controlName).first().val());
+                var maximum = parseInt(typeEl.find(".max-container").children(type.controlName).first().val());
                 if (!isNaN(maximum))
                 {
                     type.maximum = maximum;
@@ -292,7 +312,11 @@ var Types;
                 if ('maximum' in this) integerXML.setAttribute('maximum', this.maximum);
                 return integerXML;
             },
-            insertTypeIntoDOM: function(containerEl) {},
+            insertTypeIntoDOM: function(typeEl)
+            {
+                if ('minimum' in this) this.setInDOM(typeEl.find(".min-container"), this.minimum);
+                if ('maximum' in this) this.setInDOM(typeEl.find(".max-container"), this.maximum);
+            },
             appendControlTo: function(containerEl, htmlId)
             {
                 var control = $('<' + this.controlName + '>', { id: htmlId, type: this.controlType, value: 0 });
@@ -578,9 +602,9 @@ var Types;
                 this.options.sequence.forEach(appendOptionChild.bind(this));
                 return enumerationXML;
             },
-            insertTypeIntoDOM: function(containerEl)
+            insertTypeIntoDOM: function(typeEl)
             {
-                var valuesContainer = containerEl.find(".enumeration-values-container");
+                var valuesContainer = typeEl.find(".enumeration-values-container");
                 var addValueButton = valuesContainer.find(".add-enumeration-value");
                 this.options.sequence.forEach(function(option)
                 {
@@ -628,45 +652,45 @@ var Types;
             var newTypeName = $(this).val();
             var userTypeChange = e.originalEvent;
 
-            // If this was an enumeration already, use the old button
             var definitionButton = containerEl.find(".define-type");
             if (Types.primitives[newTypeName].appendTypeControlsTo)
             {
-                if (definitionButton.length === 0)
+                if (previousTypeName !== newTypeName)
                 {
-                    var enumerationScreenButton = $('<button>', { class: "define-type" });
-                    enumerationScreenButton.attr('title', i18next.t('types:primitives.' + newTypeName + '.definition.define'));
+                    typeDefinitionContainer.empty();
+                    definitionButton.remove();
+
+                    definitionButton = $('<button>', { class: "define-type" });
+                    definitionButton.attr('title', i18next.t('types:primitives.' + newTypeName + '.definition.define'));
                     var buttonIcon = $('<img>', { src: editor_url + "png/others/list.png" });
-                    enumerationScreenButton.on('mouseover', function()
+                    definitionButton.on('mouseover', function()
                     {
                         buttonIcon.attr('src', editor_url + "png/others/list_hover.png");
                     });
-                    enumerationScreenButton.on('mouseout', function()
+                    definitionButton.on('mouseout', function()
                     {
                         buttonIcon.attr('src', editor_url + "png/others/list.png");
                     });
                     buttonIcon.attr('alt', i18next.t('types:primitives.' + newTypeName + '.definition.define'));
-                    enumerationScreenButton.append(buttonIcon);
-                    enumerationScreenButton.on('click', function()
+                    definitionButton.append(buttonIcon);
+                    definitionButton.on('click', function()
                     {
                         dialog(typeDefinitionContainer, newTypeName, handleChange);
                     });
-                    containerEl.append(enumerationScreenButton);
-                }
+                    containerEl.append(definitionButton);
 
-                if (previousTypeName !== newTypeName)
-                {
-                    typeDefinitionContainer.empty();
                     Types.primitives[newTypeName].appendTypeControlsTo(typeDefinitionContainer);
                 }
 
-                var type = Types.primitives[typeName].loadTypeFromDOM(typeDefinitionContainer);
+                var type = Types.primitives[newTypeName].loadTypeFromDOM(typeDefinitionContainer);
                 if (userTypeChange && newTypeName === Types.primitives.enumeration.name)
                 {
+                    typeDefinitionContainer.show();
                     dialog(typeDefinitionContainer, newTypeName, handleChange);
                 }
                 else if (newTypeName !== Types.primitives.enumeration.name || type.options.sequence.length > 0)
                 {
+                    typeDefinitionContainer.hide();
                     handleChange(newTypeName);
                 }
             }
@@ -676,13 +700,14 @@ var Types;
                 definitionButton.remove();
                 handleChange(newTypeName);
             }
+
             previousTypeName = newTypeName;
         });
 
+        containerEl.append(typeSelect);
         typeSelect.val(Types.primitives.integer.name);
         typeSelect.trigger('change');
 
-        containerEl.append(typeSelect);
         containerEl.append(typeDefinitionContainer);
     }
 
@@ -699,24 +724,33 @@ var Types;
 
     function dialog(containerEl, typeName, handleChange)
     {
-        var type = Types.primitives[typeName].loadTypeFromDOM(containerEl);
-        var confirmedAndValid = false;
+        var previousType = Types.primitives[typeName].loadTypeFromDOM(containerEl);
+        var hasValues;
+        if (typeName === Types.primitives.enumeration.name)
+        {
+            hasValues = previousType.options.sequence.length > 0;
+        }
+
+        var confirmed = false;
         containerEl.dialog(
         {
             title: i18next.t('types:primitives.' + typeName + '.definition.title'),
-            height: Constants.heightEnumerationScreen,
-            width: Constants.widthEnumerationScreen,
+            height: 'auto',
+            width: 'auto',
             modal: true,
             buttons: [
             {
                 text: i18next.t('common:confirm'),
                 click: function()
                 {
-                    type = Types.primitives[typeName].loadTypeFromDOM(containerEl);
-                    if (typeName !== Types.primitives.enumeration.name || type.options.sequence.length > 0)
+                    if (typeName === Types.primitives.enumeration.name)
                     {
-                        confirmedAndValid = true;
+                        var type = Types.primitives[typeName].loadTypeFromDOM(containerEl);
+                        hasValues = type.options.sequence.length > 0;
                     }
+
+                    confirmed = true;
+
                     $(this).dialog('close');
                 }
             },
@@ -724,14 +758,19 @@ var Types;
                 text: i18next.t('common:cancel'),
                 click: function()
                 {
+                    confirmed = false;
+
                     $(this).dialog('close');
                 }
             }],
             beforeClose: function()
             {
-                if (typeName === Types.primitives.enumeration.name && type.options.sequence.length === 0)
+                if (typeName === Types.primitives.enumeration.name && !hasValues)
                 {
+                    confirmed = false;
+
                     alert(i18next.t('types:primitives.enumeration.definition.no_values'));
+                    hasValues = previousType.options.sequence.length > 0;
                     return false;
                 }
             },
@@ -739,7 +778,7 @@ var Types;
             {
                 $(this).dialog('destroy');
 
-                if (confirmedAndValid)
+                if (confirmed)
                 {
                     handleChange(typeName);
                 }
@@ -747,8 +786,8 @@ var Types;
                 {
                     // Restore the original type in the DOM
                     containerEl.empty();
-                    type.appendTypeControlsTo(containerEl);
-                    type.insertTypeIntoDOM(containerEl);
+                    previousType.appendTypeControlsTo(containerEl);
+                    previousType.insertTypeIntoDOM(containerEl);
                 }
 
                 containerEl.hide();

@@ -6,7 +6,11 @@
             "true": "Waar"
         },
         "integer": {
-            "translation": "Integer"
+            "translation": "Integer",
+            "definition": {
+                "title": "Integer",
+                "define": "Definieer integer"
+            }
         },
         "string": {
             "translation": "String"

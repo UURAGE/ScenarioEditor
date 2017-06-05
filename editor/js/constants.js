@@ -15,13 +15,9 @@ var Constants;
     var heightImportScreen = 500;
     var widthImportScreen =  500;
 
-    // Values for the enumeration dialog
-    var heightEnumerationScreen = 360;
-    var widthEnumerationScreen = 360;
-
     // Values for the parameter dialog
     var heightParameterScreen = 768;
-    var widthParameterScreen = 960;
+    var widthParameterScreen = 1024;
 
     Constants =
     {
@@ -29,8 +25,6 @@ var Constants;
         widthMetaScreen : widthMetaScreen,
         heightImportScreen : heightImportScreen,
         widthImportScreen : widthImportScreen,
-        heightEnumerationScreen : heightEnumerationScreen,
-        widthEnumerationScreen : widthEnumerationScreen,
         heightParameterScreen : heightParameterScreen,
         widthParameterScreen : widthParameterScreen
     };

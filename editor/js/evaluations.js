@@ -57,30 +57,16 @@ var Evaluations;
             var expressionKindContainer = $('<span>', { class: 'evaluation-expression' });
 
             var previousType;
-            var handleEvaluationTypeChange = function(newTypeName, userTypeChange)
+            var handleEvaluationTypeChange = function(newTypeName)
             {
-                var changeType = function()
+                var newType = Types.primitives[newTypeName].loadTypeFromDOM(typeContainer);
+                if (newType.name === Types.primitives.string.name)
                 {
-                    var newType = Types.primitives[newTypeName].loadTypeFromDOM(typeContainer);
-                    if (newType.name === Types.primitives.string.name)
-                    {
-                        newType = $.extend(newType, { controlName: 'textarea', rows: 4, markdown: "gfm" });
-                    }
+                    newType = $.extend(newType, { controlName: 'textarea', rows: 4, markdown: "gfm" });
+                }
 
-                    Expression.handleTypeChange(expressionKindContainer, previousType, newType, userTypeChange);
-                    previousType = newType;
-                };
-                if (newTypeName === Types.primitives.enumeration.name)
-                {
-                    if (!userTypeChange)
-                    {
-                        changeType();
-                    }
-                }
-                else
-                {
-                    changeType();
-                }
+                Expression.handleTypeChange(expressionKindContainer, previousType, newType);
+                previousType = newType;
             };
             Types.appendControlsTo(typeContainer.appendTo(evaluationContainer), 'evaluation-type', handleEvaluationTypeChange);
 

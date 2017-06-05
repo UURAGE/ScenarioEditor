@@ -26,8 +26,8 @@
     "as_value": "als waarde",
     "when": "Als",
     "otherwise": "Anders",
-    "min": "Min",
-    "max": "Max",
+    "minimum": "Minimum",
+    "maximum": "Maximum",
     "initial_value": "Beginwaarde",
     "evaluated": "Geëvalueerd",
     "statement": "Uitspraak"

@@ -565,7 +565,7 @@ var Expression;
         expression.kind.toXML(expressionXML, type, expression[expression.kind.name]);
     }
 
-    function handleTypeChange(container, previousType, newType, userTypeChange)
+    function handleTypeChange(container, previousType, newType)
     {
         if (previousType)
         {

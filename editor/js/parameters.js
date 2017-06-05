@@ -42,8 +42,6 @@ var Parameters;
             .append($('<th>', { text: i18next.t('common:name') }))
             .append($('<th>', { text: i18next.t('common:type') }))
             .append($('<th>', { text: i18next.t('common:evaluated') }))
-            .append($('<th>', { text: i18next.t('common:min') }))
-            .append($('<th>', { text: i18next.t('common:max') }))
             .append($('<th>', { text: i18next.t('common:initial_value') }))
             .append($('<th>', { text: i18next.t('common:description') }));
         var parametersContainer = $('<tbody>').appendTo($('<table>').append(parametersTableHead).appendTo(parametersDialog));
@@ -164,9 +162,6 @@ var Parameters;
 
             parameter.type.setInDOM(parameterContainer.find(".parameter-initial-value-container"), parameter.type.defaultValue);
 
-            if ('minimum' in parameter.type) parameter.type.setInDOM(parameterContainer.find(".parameter-min-container"), parameter.type.minimum);
-            if ('maximum' in parameter.type) parameter.type.setInDOM(parameterContainer.find(".parameter-max-container"), parameter.type.maximum);
-
             parameterContainer.find(".parameter-description").val(parameter.description);
         });
 
@@ -176,9 +171,6 @@ var Parameters;
     function addDefaultDefinition(parametersContainer)
     {
         var typeSelectContainer = $('<td>');
-
-        var minContainer = $('<span>', { class: "parameter-min-container" });
-        var maxContainer = $('<span>', { class: "parameter-max-container" });
 
         var initialValueContainer = $('<span>', { class: "parameter-initial-value-container" });
 
@@ -204,8 +196,6 @@ var Parameters;
             .append($('<td>').append($('<input>', { type: 'text', class: "name", style: "width: 197px;" })))
             .append(typeSelectContainer)
             .append($('<td>').append(evaluated))
-            .append($('<td>').append(minContainer))
-            .append($('<td>').append(maxContainer))
             .append($('<td>').append(initialValueContainer))
             .append($('<td>').append(description))
             .append(Parts.deleteButton());
@@ -215,37 +205,13 @@ var Parameters;
         {
             parameterContainer.addClass("changedTypeParameter");
 
-            var replaceInitialValueContainer = function()
-            {
-                var initialValue;
-                if (previousType) initialValue = previousType.getFromDOM(initialValueContainer);
-                initialValueContainer.empty();
-                var type = Types.primitives[newTypeName].loadTypeFromDOM(parameterContainer, initialValueContainer);
-                type.appendControlTo(initialValueContainer);
-                if (previousType) type.setInDOM(initialValueContainer, type.castFrom(previousType, initialValue));
-                previousType = type;
-            };
-
-            if (newTypeName === Types.primitives.integer.name)
-            {
-                if (!minContainer.children(Types.primitives.integer.controlName).length)
-                {
-                    Types.primitives[newTypeName].appendControlTo(minContainer);
-                    Types.primitives[newTypeName].setInDOM(minContainer, "");
-                }
-                if (!maxContainer.children(Types.primitives.integer.controlName).length)
-                {
-                    Types.primitives[newTypeName].appendControlTo(maxContainer);
-                    Types.primitives[newTypeName].setInDOM(maxContainer, "");
-                }
-            }
-            else
-            {
-                minContainer.empty();
-                maxContainer.empty();
-            }
-
-            replaceInitialValueContainer();
+            var initialValue;
+            if (previousType) initialValue = previousType.getFromDOM(initialValueContainer);
+            initialValueContainer.empty();
+            var type = Types.primitives[newTypeName].loadTypeFromDOM(parameterContainer, initialValueContainer);
+            type.appendControlTo(initialValueContainer);
+            if (previousType) type.setInDOM(initialValueContainer, type.castFrom(previousType, initialValue));
+            previousType = type;
         };
 
         Types.appendControlsTo(typeSelectContainer, 'parameter-type-select', handleParameterTypeChange);
@@ -266,8 +232,6 @@ var Parameters;
         parameterContainer.find(".parameter-type-select").prop("disabled", "disabled");
         parameterContainer.find(".parameter-evaluated").remove();
         parameterContainer.find(".parameter-initial-value-container").remove();
-        parameterContainer.find(".parameter-min-container").remove();
-        parameterContainer.find(".parameter-max-container").remove();
         parametersContainer.append(parameterContainer);
         return parameterContainer;
     }

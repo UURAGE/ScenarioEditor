@@ -26,8 +26,8 @@
     "as_value": "as value",
     "when": "When",
     "otherwise": "Otherwise",
-    "min": "Min",
-    "max": "Max",
+    "minimum": "Minimum",
+    "maximum": "Maximum",
     "initial_value": "Initial value",
     "evaluated": "Evaluated",
     "statement": "Statement"
