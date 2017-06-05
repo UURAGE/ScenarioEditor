@@ -165,7 +165,7 @@ var Parameters;
             typeSelect.val(parameter.type.name).trigger('change');
             parameterContainer.removeClass("changedTypeParameter");
 
-            parameterContainer.find(".parameter-evaluated").prop('checked', parameter.evaluated);
+            parameterContainer.find(".parameter-evaluated").prop('checked', parameter.evaluated).trigger('change');
 
             parameter.type.setInDOM(parameterContainer.find(".parameter-initial-value-container"), parameter.type.defaultValue);
 
@@ -181,18 +181,38 @@ var Parameters;
     function addDefaultDefinition(parametersContainer)
     {
         var typeSelectContainer = $('<td>');
+
         var minContainer = $('<span>', { class: "parameter-min-container" });
         var maxContainer = $('<span>', { class: "parameter-max-container" });
+
         var initialValueContainer = $('<span>', { class: "parameter-initial-value-container" });
+
+        var description = $('<textarea>', { class: "parameter-description", style: "height:1em;" });
+
+        var evaluated = $('<input>', { type: 'checkbox', class: "parameter-evaluated"  });
+        evaluated.on('change', function()
+        {
+            if ($(this).prop('checked'))
+            {
+                description.attr('maxlength', Config.container.settings.evaluationDescription.type.maxLength);
+                if (Config.container.settings.evaluationDescription.type.markdown) Utils.attachMarkdownTooltip(description);
+            }
+            else
+            {
+                description.removeAttr('maxlength');
+                if (description.data('ui-tooltip')) description.tooltip('destroy');
+            }
+        });
+
         var parameterContainer = $('<tr>', { class: "newParameter" })
             .append($('<td>', { class: "handle", text: "↕" }))
             .append($('<td>').append($('<input>', { type: 'text', class: "name", style: "width: 197px;" })))
             .append(typeSelectContainer)
-            .append($('<td>').append($('<input>', { type: 'checkbox', class: "parameter-evaluated"  })))
+            .append($('<td>').append(evaluated))
             .append($('<td>').append(minContainer))
             .append($('<td>').append(maxContainer))
             .append($('<td>').append(initialValueContainer))
-            .append($('<td>').append($('<textarea>', { class: "parameter-description", style: "height:1em;" })))
+            .append($('<td>').append(description))
             .append(Parts.deleteButton());
 
         var previousType;
