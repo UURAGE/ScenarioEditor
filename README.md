@@ -1,5 +1,7 @@
 # Scenario Editor
 
+[![](https://badge.fury.io/gh/UURAGE%2FScenarioEditor.svg)](https://github.com/UURAGE/ScenarioEditor/releases/latest)
+
 The UURAGE Scenario Editor is a web application component for editing communication scenarios.
 
 ## Prerequisites
