@@ -115,18 +115,18 @@
 	background-color:lightgreen;
 }
 
-.aLabel {
+.color-label {
 	-webkit-transition:background-color 0.15s ease-in, color 0.15s ease-in;
 	-moz-transition:background-color 0.15s ease-in, color 0.15s ease-in;
 	transition:background-color 0.15s ease-in, color 0.15s ease-in;
 }
 
-.aLabel.jsplumb-hover, .jsplumb-source-hover, .jsplumb-target-hover {
+.color-label.jsplumb-hover, .jsplumb-source-hover, .jsplumb-target-hover {
 	background-color:#1e8151;
 	color:white;
 }
 
-.aLabel {
+.color-label {
 	background-color:white;
 	opacity:0.8;
 	padding:0.3em;

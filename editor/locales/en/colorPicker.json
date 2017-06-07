@@ -1,0 +1,27 @@
+{
+    "key_title": "Color picker key",
+    "color": "Color",
+    "entry": "Entry",
+    "colors": {
+        "darkslategray": "Dark slate gray",
+        "lightslategray": "Light slate gray",
+        "silver": "Silver",
+        "whitesmoke": "White smoke",
+        "firebrick": "Fire brick",
+        "chocolate": "Chocolate",
+        "goldenrod": "Goldenrod",
+        "limegreen": "Lime green",
+        "seagreen": "Sea green",
+        "royalblue": "Royal blue",
+        "darkslateblue": "Dark slate blue",
+        "indigo": "Indigo",
+        "coral": "Coral",
+        "orange": "Orange",
+        "gold": "Gold",
+        "greenyellow": "Green yellow",
+        "turquoise": "Turquoise",
+        "dodgerblue": "Dodger blue",
+        "slateblue": "Slate blue",
+        "palevioletred": "Pale violet red"
+    }
+}

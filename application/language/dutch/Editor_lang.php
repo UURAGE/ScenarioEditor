@@ -25,6 +25,7 @@ $lang["edt_computer"] = "Computer";
 $lang["edt_character"] = "Karakter";
 $lang["edt_child"] = "Kind";
 $lang["edt_parents"] = "Ouders";
+$lang["edt_toggle_colors"] = "Kleuren";
 $lang["edt_arrange"] = "Ordenen";
 $lang["edt_arrange_title"] = "Orden huidig onderwerp";
 $lang["edt_validate"] = "Valideren";

@@ -1214,16 +1214,20 @@ var Main;
             {
                 for (var connectionId in zoomedTree.selectedConnections)
                 {
-                    var c = zoomedTree.plumbInstance.getConnections(
+                    var cs = zoomedTree.plumbInstance.getConnections(
                     {
                         source: zoomedTree.selectedConnections[connectionId].source,
                         target: zoomedTree.selectedConnections[connectionId].target
                     });
-                    delete zoomedTree.selectedConnections[connectionId];
 
-                    // Pick the first element in the array, because connections are unique
-                    // and detach it
-                    zoomedTree.plumbInstance.detach(c[0]);
+                    if (cs.length > 0)
+                    {
+                        // Pick the first element in the array, because connections are unique
+                        // and detach it
+                        zoomedTree.plumbInstance.detach(cs[0]);
+                    }
+
+                    delete zoomedTree.selectedConnections[connectionId];
                 }
             });
         }
@@ -1315,11 +1319,14 @@ var Main;
         });
 
         // Connection could just have been removed so we need to check if it still exists
-        if(cs.length > 0)
+        if (cs.length > 0)
         {
-            // Pick the first element in the array, because connections are unique
-            // and give the original color back to the connection
-            cs[0].setPaintStyle({strokeStyle:"#5c96bc"});
+            var colorName = cs[0].getParameter("color");
+            if (!colorName || !ColorPicker.areColorsEnabled())
+            {
+                colorName = "#5c96bc";
+            }
+            cs[0].setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: colorName, outlineColor: "transparent" }));
         }
 
         delete selectedConnections[connectionId];

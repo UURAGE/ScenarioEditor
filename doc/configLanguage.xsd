@@ -70,6 +70,19 @@
 									</sequence>
 								</complexType>
 							</element>
+							<element name="colourKeyEntry" minOccurs="0" maxOccurs="1">
+								<complexType>
+									<sequence>
+										<element name="type">
+											<complexType>
+												<sequence>
+													<element ref="tns:string"></element>
+												</sequence>
+											</complexType>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
 						</sequence>
 					</complexType>
 				</element>

@@ -8,7 +8,9 @@ var PlumbGenerator;
 
     PlumbGenerator =
     {
-        genJsPlumbInstance : genJsPlumbInstance
+        genJsPlumbInstance : genJsPlumbInstance,
+        defaultPaintStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 2 },
+        defaultHoverPaintStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "#1e8151", outlineWidth: 1 }
     };
 
     // Expects an element returned from a jquery selector
@@ -22,15 +24,15 @@ var PlumbGenerator;
         {
             Endpoint : ["Dot", {radius:2}],
             Anchor: [ "Perimeter", { shape: "Rectangle", anchorCount: 150 } ],
-            HoverPaintStyle : {strokeStyle:"#1e8151", lineWidth:2 },
-            Connector: ["StateMachine", { proximityLimit: 120 }],
-            PaintStyle : {strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4},
+            HoverPaintStyle : PlumbGenerator.defaultHoverPaintStyle,
+            Connector: [ "StateMachine", { proximityLimit: 120 } ],
+            PaintStyle : PlumbGenerator.defaultPaintStyle,
             ConnectionOverlays : [
                 [ "Arrow", {
-                    location:1,
-                    id:"arrow",
-                    length:14,
-                    foldback:0.8
+                    location: 1,
+                    id: "arrow",
+                    length: 14,
+                    foldback: 0.8
                 } ]
             ]
         });
@@ -38,10 +40,30 @@ var PlumbGenerator;
         // On dblclick, the connection will be deleted
         instance.bind("dblclick", instance.detach);
 
+        // On mouseover, show the color key entry
+        instance.bind("mouseover",function(connection, e)
+        {
+            if (ColorPicker.areColorsEnabled())
+            {
+                var colorName = connection.getParameter("color");
+                if (colorName in ColorPicker.key.byColor)
+                {
+                    // This uses the innerHTML property, so escape the HTML!
+                    connection.addOverlay([ "Label", { id: "color-label", label: Utils.escapeHTML(ColorPicker.key.byColor[colorName].entry), cssClass: "color-label" }]);
+                }
+            }
+        });
+
+        // On mouseout, hide the color key entry
+        instance.bind("mouseout", function(connection, e)
+        {
+            connection.removeOverlay("color-label");
+        });
+
         // On click, select the connection
         instance.bind("click",function(c, e)
         {
-            if(!c) return;
+            if (!c || e.which !== 1) return;
 
             // There are other elements (nodes or trees) selected, so deselect those elements
             if (Main.selectedElements.length > 0) Main.selectElement(null);
@@ -73,10 +95,22 @@ var PlumbGenerator;
                 }
 
                 selectedConnections[c.id] = { source: c.sourceId, target: c.targetId };
-
-                // Change the color of the connection
-                c.setPaintStyle({strokeStyle:"darkgoldenrod"});
+                var colorName = c.getParameter("color");
+                if (!colorName || !ColorPicker.areColorsEnabled())
+                {
+                    c.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: "goldenrod" }));
+                }
+                else
+                {
+                    c.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: colorName, outlineColor: colorName }));
+                }
             }
+        });
+
+        instance.bind("contextmenu", function(connection, e)
+        {
+            ColorPicker.showFor(connection);
+            e.preventDefault();
         });
 
         instance.bind("beforeDrop", function(info)

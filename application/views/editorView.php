@@ -81,7 +81,8 @@
       "js/print.js",
       "js/draft.js",
       "js/zoom.js",
-      "js/clipboard.js"
+      "js/clipboard.js",
+      "js/colorPicker.js"
   );
   foreach($scripts as $script)
   {
@@ -169,6 +170,9 @@
                     </button>
                     <button id="allParents" class="nodeButton">
                       <div><img src="<?php echo editor_url("png/main_buttons/parents.png");?>" alt=""><?php sLang("edt_parents"); ?></div>
+                    </button>
+                    <button id="toggleColors" class="subjectButton">
+                      <div><img src="<?php echo editor_url("png/main_buttons/toggle_colors.png");?>" alt=""><?php sLang("edt_toggle_colors"); ?></div>
                     </button>
                   </div>
                 </div>

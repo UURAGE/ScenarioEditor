@@ -1428,3 +1428,25 @@ input[type=checkbox][disabled]
 textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
   display: block;
 }
+
+#colorPicker {
+  z-index: 51;
+}
+
+.segment:hover {
+  opacity: 0.75;
+}
+
+.color {
+  border-style: outset;
+}
+
+#colorPicker .edit, #colorPicker .close {
+  pointer-events: all;
+  opacity: 0.6;
+}
+
+#colorPicker .edit:hover, #colorPicker .close:hover {
+  opacity: 1;
+  cursor: pointer;
+}

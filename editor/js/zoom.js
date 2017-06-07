@@ -74,6 +74,15 @@ var Zoom;
 
                     tree.zoomedInBefore = true;
                 }
+
+                if (ColorPicker.areColorsEnabled())
+                {
+                    ColorPicker.applyColors();
+                }
+                else
+                {
+                    ColorPicker.removeColors();
+                }
             });
         }
 

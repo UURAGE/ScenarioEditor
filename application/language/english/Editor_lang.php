@@ -25,6 +25,7 @@ $lang["edt_computer"] = "Computer";
 $lang["edt_character"] = "Character";
 $lang["edt_child"] = "Child";
 $lang["edt_parents"] = "Parents";
+$lang["edt_toggle_colors"] = "Colors";
 $lang["edt_arrange"] = "Arrange";
 $lang["edt_arrange_title"] = "Automatically arrange nodes for a better overview";
 $lang["edt_validate"] = "Validate";

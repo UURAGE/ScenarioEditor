@@ -20,6 +20,7 @@
         ns:
         [
             'clipboard',
+            'colorPicker',
             'common',
             'condition',
             'configXML',

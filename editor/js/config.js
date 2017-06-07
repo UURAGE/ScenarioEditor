@@ -102,6 +102,8 @@ var Config;
             });
         }
 
+        settings.colorKeyEntry = loadSettingWithType(settingsXML.children('colourKeyEntry'));
+
         return settings;
     }
 

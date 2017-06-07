@@ -1,0 +1,27 @@
+{
+    "key_title": "Kleurkiezer legenda",
+    "color": "Kleur",
+    "entry": "Attribuut",
+    "colors": {
+        "darkslategray": "Donkerleigrijs",
+        "lightslategray": "Lichtleigrijs",
+        "silver": "Zilver",
+        "whitesmoke": "Rookwit",
+        "firebrick": "Vuursteen",
+        "chocolate": "Chocoladebruin",
+        "goldenrod": "Guldenroede",
+        "limegreen": "Limoengroen",
+        "seagreen": "Zeegroen",
+        "royalblue": "Koningsblauw",
+        "darkslateblue": "Donkerleiblauw",
+        "indigo": "Indigo",
+        "coral": "Koraal",
+        "orange": "Oranje",
+        "gold": "Goud",
+        "greenyellow": "Groengeel",
+        "turquoise": "Turquoise",
+        "dodgerblue": "Dodgerblauw",
+        "slateblue": "Leiblauw",
+        "palevioletred": "Bleekvioletrood"
+    }
+}

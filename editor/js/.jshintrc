@@ -37,7 +37,8 @@
         "KeyControl",
         "Print",
         "Zoom",
-        "Clipboard"
+        "Clipboard",
+        "ColorPicker"
     ],
     "globals": {
         "root_url": false,

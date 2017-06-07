@@ -31,5 +31,6 @@
     "maximum": "Maximum",
     "initial_value": "Initial value",
     "evaluated": "Evaluated",
-    "statement": "Statement"
+    "statement": "Statement",
+    "edit": "Edit"
 }
