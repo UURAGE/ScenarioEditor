@@ -268,6 +268,15 @@
                   </div>
                 </div>
               </div>
+              <div id="propertyValuesSection" class="sidebarSection">
+                <div class="sub-header clickable">
+                  <h2 title="<?php sLang('edt_property_values_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/properties.png");?>" alt=""><?php sLang('edt_property_values');?></h2>
+                </div>
+                <div class="collapsable">
+                  <div id="node-property-values" class="section"></div>
+                  <div id="node-character-property-values" class="section"></div>
+                </div>
+              </div>
               <div id="preconditionsSection" class="sidebarSection withMarginTop">
                 <div class="sub-header clickable">
                   <h2 title="<?php sLang('edt_preconditions_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/preconditions.png");?>" alt=""><?php sLang('edt_preconditions');?></h2>
@@ -285,15 +294,6 @@
                   </div>
                   <div id="fixed-parameter-effects" class="section"></div>
                   <div id="fixed-character-parameter-effects" class="section"></div>
-                </div>
-              </div>
-              <div id="propertyValuesSection" class="sidebarSection">
-                <div class="sub-header clickable">
-                  <h2 title="<?php sLang('edt_property_values_title');?>"><span class="clicktag">[+]</span> <img src="<?php echo editor_url("png/sidebar_headers/properties.png");?>" alt=""><?php sLang('edt_property_values');?></h2>
-                </div>
-                <div class="collapsable">
-                  <div id="node-property-values" class="section"></div>
-                  <div id="node-character-property-values" class="section"></div>
                 </div>
               </div>
               <div id="commentSection" class="sidebarSection">
