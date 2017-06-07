@@ -22,8 +22,8 @@
         "scale": "Schaal",
         "choose": "Selectie"
     },
-    "as_percentage": "als percentage",
-    "as_value": "als waarde",
+    "as_percentage": "%",
+    "as_value": "#",
     "when": "Als",
     "otherwise": "Anders",
     "minimum": "Minimum",

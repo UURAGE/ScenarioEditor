@@ -22,8 +22,8 @@
         "scale": "Scale",
         "choose": "Choose"
     },
-    "as_percentage": "as percentage",
-    "as_value": "as value",
+    "as_percentage": "%",
+    "as_value": "#",
     "when": "When",
     "otherwise": "Otherwise",
     "minimum": "Minimum",
