@@ -1303,3 +1303,27 @@ input[type=checkbox][disabled]
 {
     font-size: 10pt;
 }
+
+/* Evaluations */
+
+.evaluation-expression,
+.scale-expression,
+.expression {
+  box-sizing: border-box;
+  margin: 3x;
+  margin-right: 1px;
+  padding: 3px;
+  padding-right: 1px;
+  background: rgba(242, 212, 61, 0.2);
+  border: 1px solid rgba(166, 124, 65, 0.25);
+  border-radius: 3px;
+}
+
+.evaluation-expression {
+  display: block;
+}
+
+.scale-expression,
+.expression {
+  display: inline-block;
+}
