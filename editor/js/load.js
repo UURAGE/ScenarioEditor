@@ -36,7 +36,10 @@ var Load;
                 text: i18next.t('load:import'),
                 click: function()
                 {
-                    importScenario(importContainer);
+                    if (!Main.unsavedChanges || confirm(i18next.t('load:import_warning')))
+                    {
+                        importScenario(importContainer);
+                    }
                     $(this).dialog('close');
                 }
             },
@@ -127,6 +130,8 @@ var Load;
                 Load1.generateGraph(scenarioXML);
             });
         }
+
+        Main.unsavedChanges = false;
     }
 
     function prepareRebuild()

@@ -2,5 +2,6 @@
     "import_title": "Import",
     "import": "Import",
     "invalid_xml": "Invalid XML",
-    "file_to_import": "File to import"
+    "file_to_import": "File to import",
+    "import_warning": "You are about to import another scenario, are you sure?"
 }

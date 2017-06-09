@@ -2,5 +2,6 @@
     "import_title": "Importeren",
     "import": "Importeren",
     "invalid_xml": "Ongeldige XML",
-    "file_to_import": "Bestand om te importeren"
+    "file_to_import": "Bestand om te importeren",
+    "import_warning": "Je gaat een nieuw scenario importeren, weet je dat zeker?"
 }
