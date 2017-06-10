@@ -675,7 +675,7 @@ var Types;
                     definitionButton.append(buttonIcon);
                     definitionButton.on('click', function()
                     {
-                        dialog(typeDefinitionContainer, newTypeName, handleChange);
+                        dialog(typeDefinitionContainer, typeSelect, previousTypeName, newTypeName, handleChange, false);
                     });
                     containerEl.append(definitionButton);
 
@@ -686,7 +686,7 @@ var Types;
                 if (userTypeChange && newTypeName === Types.primitives.enumeration.name)
                 {
                     typeDefinitionContainer.show();
-                    dialog(typeDefinitionContainer, newTypeName, handleChange);
+                    dialog(typeDefinitionContainer, typeSelect, previousTypeName, newTypeName, handleChange, true);
                 }
                 else if (newTypeName !== Types.primitives.enumeration.name || type.options.sequence.length > 0)
                 {
@@ -722,19 +722,19 @@ var Types;
         }
     }
 
-    function dialog(containerEl, typeName, handleChange)
+    function dialog(containerEl, typeSelect, previousTypeName, newTypeName, handleChange, isFirstTimeForEnumeration)
     {
-        var previousType = Types.primitives[typeName].loadTypeFromDOM(containerEl);
+        var currentType = Types.primitives[newTypeName].loadTypeFromDOM(containerEl);
         var hasValues;
-        if (typeName === Types.primitives.enumeration.name)
+        if (newTypeName === Types.primitives.enumeration.name)
         {
-            hasValues = previousType.options.sequence.length > 0;
+            hasValues = currentType.options.sequence.length > 0;
         }
 
         var confirmed = false;
         containerEl.dialog(
         {
-            title: i18next.t('types:primitives.' + typeName + '.definition.title'),
+            title: i18next.t('types:primitives.' + newTypeName + '.definition.title'),
             height: 'auto',
             width: 'auto',
             modal: true,
@@ -743,10 +743,10 @@ var Types;
                 text: i18next.t('common:confirm'),
                 click: function()
                 {
-                    if (typeName === Types.primitives.enumeration.name)
+                    if (newTypeName === Types.primitives.enumeration.name)
                     {
-                        var type = Types.primitives[typeName].loadTypeFromDOM(containerEl);
-                        hasValues = type.options.sequence.length > 0;
+                        var newType = Types.primitives[newTypeName].loadTypeFromDOM(containerEl);
+                        hasValues = newType.options.sequence.length > 0;
                     }
 
                     confirmed = true;
@@ -765,12 +765,12 @@ var Types;
             }],
             beforeClose: function()
             {
-                if (typeName === Types.primitives.enumeration.name && !hasValues)
+                if (confirmed && newTypeName === Types.primitives.enumeration.name && !hasValues)
                 {
                     confirmed = false;
 
                     alert(i18next.t('types:primitives.enumeration.definition.no_values'));
-                    hasValues = previousType.options.sequence.length > 0;
+                    hasValues = currentType.options.sequence.length > 0;
                     return false;
                 }
             },
@@ -778,16 +778,20 @@ var Types;
             {
                 $(this).dialog('destroy');
 
-                if (confirmed)
+                if (!confirmed && previousTypeName && isFirstTimeForEnumeration)
                 {
-                    handleChange(typeName);
+                    typeSelect.val(previousTypeName).trigger('change');
+                }
+                else if (confirmed)
+                {
+                    handleChange(newTypeName);
                 }
                 else
                 {
                     // Restore the original type in the DOM
                     containerEl.empty();
-                    previousType.appendTypeControlsTo(containerEl);
-                    previousType.insertTypeIntoDOM(containerEl);
+                    currentType.appendTypeControlsTo(containerEl);
+                    currentType.insertTypeIntoDOM(containerEl);
                 }
 
                 containerEl.hide();
