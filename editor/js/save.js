@@ -274,19 +274,29 @@ var Save;
             hasErrors = hasErrors || value.level === 'error';
         });
 
+        var consideredExport = function()
+        {
+            Main.applyChanges();
+
+            var xml = generateXML();
+            var blob = new Blob([xml], { type: 'text/xml' });
+            saveAs(blob, Metadata.container.name + '.xml');
+        };
+
         if (hasErrors)
         {
-            if (!window.confirm(i18next.t('save:error.export')))
+            Utils.confirmDialog(i18next.t('save:error.export')).done(function(confirmed)
             {
-                return false;
-            }
+                if (confirmed)
+                {
+                    consideredExport();
+                }
+            });
         }
-
-        Main.applyChanges();
-
-        var xml = generateXML();
-        var blob = new Blob([xml], { type: 'text/xml' });
-        saveAs(blob, Metadata.container.name + '.xml');
+        else
+        {
+            consideredExport();
+        }
     }
 
     function generateTreeXML(parentElement, tree)

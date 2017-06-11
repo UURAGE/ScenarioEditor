@@ -36,9 +36,19 @@ var Load;
                 text: i18next.t('load:import'),
                 click: function()
                 {
-                    if (!Main.unsavedChanges || confirm(i18next.t('load:import_warning')))
+                    if (!Main.unsavedChanges)
                     {
                         importScenario(importContainer);
+                    }
+                    else
+                    {
+                        Utils.confirmDialog(i18next.t('load:import_warning')).done(function(confirmed)
+                        {
+                            if (confirmed)
+                            {
+                                importScenario(importContainer);
+                            }
+                        });
                     }
                     $(this).dialog('close');
                 }

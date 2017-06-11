@@ -116,10 +116,13 @@ var Parameters;
                 text: i18next.t('common:confirm'),
                 click: function()
                 {
-                    if (save(parametersContainer))
+                    save(parametersContainer).done(function(saved)
                     {
-                        $(this).dialog('close');
-                    }
+                        if (saved)
+                        {
+                            $(this).dialog('close');
+                        }
+                    }.bind(this));
                 }
             },
             {
@@ -240,6 +243,183 @@ var Parameters;
 
     function save(parametersContainer)
     {
+        var deferredSave = $.Deferred();
+
+        var consideredSave = function()
+        {
+            Main.unsavedChanges = true;
+
+            var previouslySelectedElement = Main.selectedElement;
+            Main.selectElement(null);
+
+            parametersContainer.find(".removedParameter").each(function()
+            {
+                var id = $(this).prop('id');
+
+                // Remove the preconditions and effects for every node with this parameter.
+                for (var nodeID in Main.nodes)
+                {
+                    var node = Main.nodes[nodeID];
+                    for (var i = 0; i < node.parameterEffects.userDefined.length; i++)
+                    {
+                        if (node.parameterEffects.userDefined[i].idRef === id)
+                        {
+                            node.parameterEffects.userDefined.splice(i, 1);
+                        }
+                    }
+                    if (node.preconditions)
+                    {
+                        node.preconditions = Condition.handleParameterRemoval(id, node.preconditions);
+                    }
+                }
+
+                Evaluations.handleParameterRemoval(id);
+
+                if (id === Parameters.timeId && Parameters.timeId !== null)
+                    Parameters.timeId = null;
+
+                // Remove the parameter from the html and the object.
+                $(this).remove();
+
+                var removedParameter = Parameters.container.byId[id];
+                var indexOfRemovedParameter = Parameters.container.sequence.indexOf(removedParameter);
+                delete Parameters.container.byId[id];
+                Parameters.container.sequence.splice(indexOfRemovedParameter, 1);
+            });
+
+            var getParameterFromDOM = function(container)
+            {
+                var typeName = container.find(".parameter-type-select").val();
+                var type = Types.primitives[typeName].loadTypeFromDOM(container, container.find(".parameter-initial-value-container"));
+
+                return {
+                    id: container.prop('id'),
+                    name: container.find(".name").val(),
+                    evaluated: container.find(".parameter-evaluated").prop('checked'),
+                    type: type,
+                    description: container.find(".parameter-description").val()
+                };
+            };
+
+            parametersContainer.find(".existingParameter").each(function()
+            {
+                var newParameter = getParameterFromDOM($(this));
+                var oldParameter = Parameters.container.byId[newParameter.id];
+
+                if (!newParameter.name)
+                {
+                    newParameter.name = oldParameter.name;
+                }
+
+                // If an already existing parameter changed type, the effects on the nodes need to be adjusted accordingly
+                if ($(this).hasClass("changedTypeParameter"))
+                {
+                    for (var nodeID in Main.nodes)
+                    {
+                        Main.nodes[nodeID].parameterEffects.userDefined.forEach(function(effect)
+                        {
+                            if (effect.idRef === oldParameter.id)
+                            {
+                                var hasOperator = newParameter.type.assignmentOperators.indexOf(Types.assignmentOperators[effect.operator]) !== -1;
+                                if (!hasOperator) effect.operator = newParameter.type.assignmentOperators[0].name;
+
+                                effect.value = newParameter.type.castFrom(oldParameter.type, effect.value);
+                            }
+                        });
+
+                        if (Main.nodes[nodeID].preconditions)
+                        {
+                            Condition.handleParameterTypeChange(oldParameter, newParameter, Main.nodes[nodeID].preconditions);
+                        }
+                    }
+
+                    Evaluations.handleParameterTypeChange(oldParameter, newParameter);
+
+                    $(this).removeClass("changedTypeParameter");
+                }
+                // Special case for triggering a type change for a reference calculation update
+                else if (oldParameter.type.name === Types.primitives.integer.name && newParameter.type.name === Types.primitives.integer.name &&
+                (oldParameter.type.minimum !== newParameter.type.minimum || oldParameter.type.maximum !== newParameter.type.maximum))
+                {
+                    Evaluations.handleParameterTypeChange(oldParameter, newParameter);
+                }
+
+                if (oldParameter.evaluated && !newParameter.evaluated || !oldParameter.evaluated && newParameter.evaluated)
+                {
+                    Evaluations.handleParameterEvaluatedChange(newParameter);
+                }
+
+                if (newParameter.evaluated)
+                {
+                    Evaluations.handleEvaluatedParameterChange(newParameter);
+                }
+
+                $.extend(oldParameter, newParameter);
+            });
+
+            // All new parameters
+            parametersContainer.find(".newParameter").each(function()
+            {
+                if ($(this).prop('id') !== 't')
+                {
+                    var id = 'p' + (Parameters.counter += 1).toString();
+                    $(this).prop('id', id);
+                }
+
+                var newParameter = getParameterFromDOM($(this));
+
+                if (!newParameter.name) return;
+
+                Parameters.container.byId[newParameter.id] = newParameter;
+
+                $(this).removeClass("newParameter").addClass("existingParameter");
+                $(this).removeClass("changedTypeParameter");
+
+                if ($(this).prop('id') === 't')
+                {
+                    Parameters.timeId = newParameter.id;
+                    $(this).addClass('isT');
+
+                    var timeEffect =
+                    {
+                        idRef: newParameter.id,
+                        type: Types.primitives.integer,
+                        operator: "addAssign",
+                        value: 1
+                    };
+
+                    for (var nodeId in Main.nodes)
+                    {
+                        var node = Main.nodes[nodeId];
+                        if (node.type === Main.playerType)
+                        {
+                            if (node.parameterEffects.userDefined !== undefined && node.parameterEffects.userDefined !== null)
+                                node.parameterEffects.userDefined.push(timeEffect);
+                            else
+                                node.parameterEffects.userDefined = [timeEffect];
+                        }
+                    }
+                }
+
+                if (newParameter.evaluated)
+                {
+                    Evaluations.handleParameterEvaluatedChange(newParameter);
+                }
+            });
+
+            // Save parameters in UI order.
+            Parameters.container.sequence =
+                parametersContainer.find(".existingParameter").map(function()
+                {
+                    return Parameters.container.byId[$(this).prop('id')];
+                }).get();
+
+
+            Main.selectElement(previouslySelectedElement);
+
+            return deferredSave.resolve(true);
+        };
+
         var noNameCounter = 0;
         parametersContainer.find(".newParameter").not(".removedParameter").each(function()
         {
@@ -249,182 +429,24 @@ var Parameters;
             }
         });
 
-        if (noNameCounter > 0 && !confirm(i18next.t('parameters:missing_name_warning')))
+        if (noNameCounter > 0)
         {
-            return false;
+            return Utils.confirmDialog(i18next.t('parameters:missing_name_warning')).done(function(confirmed)
+            {
+                if (confirmed)
+                {
+                    return consideredSave();
+                }
+                else
+                {
+                    return deferredSave.resolve(false);
+                }
+            });
         }
-
-        Main.unsavedChanges = true;
-
-        var previouslySelectedElement = Main.selectedElement;
-        Main.selectElement(null);
-
-        parametersContainer.find(".removedParameter").each(function()
+        else
         {
-            var id = $(this).prop('id');
-
-            // Remove the preconditions and effects for every node with this parameter.
-            for (var nodeID in Main.nodes)
-            {
-                var node = Main.nodes[nodeID];
-                for (var i = 0; i < node.parameterEffects.userDefined.length; i++)
-                {
-                    if (node.parameterEffects.userDefined[i].idRef === id)
-                    {
-                        node.parameterEffects.userDefined.splice(i, 1);
-                    }
-                }
-                if (node.preconditions)
-                {
-                    node.preconditions = Condition.handleParameterRemoval(id, node.preconditions);
-                }
-            }
-
-            Evaluations.handleParameterRemoval(id);
-
-            if (id === Parameters.timeId && Parameters.timeId !== null)
-                Parameters.timeId = null;
-
-            // Remove the parameter from the html and the object.
-            $(this).remove();
-
-            var removedParameter = Parameters.container.byId[id];
-            var indexOfRemovedParameter = Parameters.container.sequence.indexOf(removedParameter);
-            delete Parameters.container.byId[id];
-            Parameters.container.sequence.splice(indexOfRemovedParameter, 1);
-        });
-
-        var getParameterFromDOM = function(container)
-        {
-            var typeName = container.find(".parameter-type-select").val();
-            var type = Types.primitives[typeName].loadTypeFromDOM(container, container.find(".parameter-initial-value-container"));
-
-            return {
-                id: container.prop('id'),
-                name: container.find(".name").val(),
-                evaluated: container.find(".parameter-evaluated").prop('checked'),
-                type: type,
-                description: container.find(".parameter-description").val()
-            };
-        };
-
-        parametersContainer.find(".existingParameter").each(function()
-        {
-            var newParameter = getParameterFromDOM($(this));
-            var oldParameter = Parameters.container.byId[newParameter.id];
-
-            if (!newParameter.name)
-            {
-                newParameter.name = oldParameter.name;
-            }
-
-            // If an already existing parameter changed type, the effects on the nodes need to be adjusted accordingly
-            if ($(this).hasClass("changedTypeParameter"))
-            {
-                for (var nodeID in Main.nodes)
-                {
-                    Main.nodes[nodeID].parameterEffects.userDefined.forEach(function(effect)
-                    {
-                        if (effect.idRef === oldParameter.id)
-                        {
-                            var hasOperator = newParameter.type.assignmentOperators.indexOf(Types.assignmentOperators[effect.operator]) !== -1;
-                            if (!hasOperator) effect.operator = newParameter.type.assignmentOperators[0].name;
-
-                            effect.value = newParameter.type.castFrom(oldParameter.type, effect.value);
-                        }
-                    });
-
-                    if (Main.nodes[nodeID].preconditions)
-                    {
-                        Condition.handleParameterTypeChange(oldParameter, newParameter, Main.nodes[nodeID].preconditions);
-                    }
-                }
-
-                Evaluations.handleParameterTypeChange(oldParameter, newParameter);
-
-                $(this).removeClass("changedTypeParameter");
-            }
-            // Special case for triggering a type change for a reference calculation update
-            else if (oldParameter.type.name === Types.primitives.integer.name && newParameter.type.name === Types.primitives.integer.name &&
-               (oldParameter.type.minimum !== newParameter.type.minimum || oldParameter.type.maximum !== newParameter.type.maximum))
-            {
-                Evaluations.handleParameterTypeChange(oldParameter, newParameter);
-            }
-
-            if (oldParameter.evaluated && !newParameter.evaluated || !oldParameter.evaluated && newParameter.evaluated)
-            {
-                Evaluations.handleParameterEvaluatedChange(newParameter);
-            }
-
-            if (newParameter.evaluated)
-            {
-                Evaluations.handleEvaluatedParameterChange(newParameter);
-            }
-
-            $.extend(oldParameter, newParameter);
-        });
-
-        // All new parameters
-        parametersContainer.find(".newParameter").each(function()
-        {
-            if ($(this).prop('id') !== 't')
-            {
-                var id = 'p' + (Parameters.counter += 1).toString();
-                $(this).prop('id', id);
-            }
-
-            var newParameter = getParameterFromDOM($(this));
-
-            if (!newParameter.name) return;
-
-            Parameters.container.byId[newParameter.id] = newParameter;
-
-            $(this).removeClass("newParameter").addClass("existingParameter");
-            $(this).removeClass("changedTypeParameter");
-
-            if ($(this).prop('id') === 't')
-            {
-                 Parameters.timeId = newParameter.id;
-                 $(this).addClass('isT');
-
-                 var timeEffect =
-                {
-                    idRef: newParameter.id,
-                    type: Types.primitives.integer,
-                    operator: "addAssign",
-                    value: 1
-                };
-
-                for (var nodeId in Main.nodes)
-                {
-                    var node = Main.nodes[nodeId];
-                    if (node.type === Main.playerType)
-                    {
-                        if (node.parameterEffects.userDefined !== undefined && node.parameterEffects.userDefined !== null)
-                            node.parameterEffects.userDefined.push(timeEffect);
-                        else
-                            node.parameterEffects.userDefined = [timeEffect];
-                    }
-                }
-            }
-
-            if (newParameter.evaluated)
-            {
-                Evaluations.handleParameterEvaluatedChange(newParameter);
-            }
-        });
-
-        // Save parameters in UI order.
-        Parameters.container.sequence =
-            parametersContainer.find(".existingParameter").map(function()
-            {
-                return Parameters.container.byId[$(this).prop('id')];
-            }).get();
-
-
-        Main.selectElement(previouslySelectedElement);
-
-        return true;
+            return consideredSave();
+        }
     }
 
     function atLeastOneUserDefined()

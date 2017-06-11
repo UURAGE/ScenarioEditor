@@ -111,10 +111,13 @@ var Evaluations;
                 text: i18next.t('common:confirm'),
                 click: function()
                 {
-                    if (save(evaluationsContainer))
+                    save(evaluationsContainer).done(function(saved)
                     {
-                        $(this).dialog('close');
-                    }
+                        if (saved)
+                        {
+                            $(this).dialog('close');
+                        }
+                    }.bind(this));
                 }
             },
             {
@@ -169,6 +172,82 @@ var Evaluations;
 
     function save(evaluationsContainer)
     {
+        var deferredSave = $.Deferred();
+
+        var consideredSave = function()
+        {
+            Main.unsavedChanges = true;
+
+            var previouslySelectedElement = Main.selectedElement;
+            Main.selectElement(null);
+
+            evaluationsContainer.find(".removed").each(function()
+            {
+                var id = $(this).prop('id');
+                $(this).remove();
+
+                var removedEvaluation = Evaluations.container.byId[id];
+                var indexOfRemovedEvaluation = Evaluations.container.sequence.indexOf(removedEvaluation);
+                delete Evaluations.container.byId[id];
+                Evaluations.container.sequence.splice(indexOfRemovedEvaluation, 1);
+            });
+
+            var getEvaluationFromDOM = function(container)
+            {
+                var typeName = container.find(".evaluation-type").val();
+                var type = Types.primitives[typeName].loadTypeFromDOM(container);
+                if (type.name === Types.primitives.string.name)
+                {
+                    type = $.extend(type, { controlName: 'textarea', rows: 4, markdown: "gfm" });
+                }
+
+                return {
+                    id: container.prop('id'),
+                    name: container.find(".evaluation-name").val(),
+                    type: type,
+                    description: container.find(".evaluation-description").val(),
+                    expression: Expression.getFromDOM(container.find('.evaluation-expression'), type)
+                };
+            };
+            evaluationsContainer.find(".existed").each(function()
+            {
+                var newEvaluation = getEvaluationFromDOM($(this));
+                var oldEvaluation = Evaluations.container.byId[newEvaluation.id];
+
+                if (!newEvaluation.name)
+                {
+                    newEvaluation.name = oldEvaluation.name;
+                }
+
+                $.extend(oldEvaluation, newEvaluation);
+            });
+            evaluationsContainer.find(".added").each(function()
+            {
+                var id = 'evaluation-' + Evaluations.counter.toString();
+                Evaluations.counter++;
+                $(this).prop('id', id);
+
+                var newEvaluation = getEvaluationFromDOM($(this));
+
+                if (newEvaluation.name)
+                {
+                    Evaluations.container.byId[newEvaluation.id] = newEvaluation;
+
+                    $(this).removeClass("added").addClass("existed");
+                }
+            });
+
+            Evaluations.container.sequence =
+                evaluationsContainer.find(".existed").map(function()
+                {
+                    return Evaluations.container.byId[$(this).prop('id')];
+                }).get();
+
+            Main.selectElement(previouslySelectedElement);
+
+            return deferredSave.resolve(true);
+        };
+
         var noNameCounter = 0;
         evaluationsContainer.find(".added").not(".removed").each(function()
         {
@@ -178,81 +257,24 @@ var Evaluations;
             }
         });
 
-        if (noNameCounter > 0 && !confirm(i18next.t('evaluations:missing_name_warning')))
+        if (noNameCounter > 0)
         {
-            return false;
+            return Utils.confirmDialog(i18next.t('evaluations:missing_name_warning')).done(function(confirmed)
+            {
+                if (confirmed)
+                {
+                    return consideredSave();
+                }
+                else
+                {
+                    return deferredSave.resolve(false);
+                }
+            });
         }
-
-        Main.unsavedChanges = true;
-
-        var previouslySelectedElement = Main.selectedElement;
-        Main.selectElement(null);
-
-        evaluationsContainer.find(".removed").each(function()
+        else
         {
-            var id = $(this).prop('id');
-            $(this).remove();
-
-            var removedEvaluation = Evaluations.container.byId[id];
-            var indexOfRemovedEvaluation = Evaluations.container.sequence.indexOf(removedEvaluation);
-            delete Evaluations.container.byId[id];
-            Evaluations.container.sequence.splice(indexOfRemovedEvaluation, 1);
-        });
-
-        var getEvaluationFromDOM = function(container)
-        {
-            var typeName = container.find(".evaluation-type").val();
-            var type = Types.primitives[typeName].loadTypeFromDOM(container);
-            if (type.name === Types.primitives.string.name)
-            {
-                type = $.extend(type, { controlName: 'textarea', rows: 4, markdown: "gfm" });
-            }
-
-            return {
-                id: container.prop('id'),
-                name: container.find(".evaluation-name").val(),
-                type: type,
-                description: container.find(".evaluation-description").val(),
-                expression: Expression.getFromDOM(container.find('.evaluation-expression'), type)
-            };
-        };
-        evaluationsContainer.find(".existed").each(function()
-        {
-            var newEvaluation = getEvaluationFromDOM($(this));
-            var oldEvaluation = Evaluations.container.byId[newEvaluation.id];
-
-            if (!newEvaluation.name)
-            {
-                newEvaluation.name = oldEvaluation.name;
-            }
-
-            $.extend(oldEvaluation, newEvaluation);
-        });
-        evaluationsContainer.find(".added").each(function()
-        {
-            var id = 'evaluation-' + Evaluations.counter.toString();
-            Evaluations.counter++;
-            $(this).prop('id', id);
-
-            var newEvaluation = getEvaluationFromDOM($(this));
-
-            if (newEvaluation.name)
-            {
-                Evaluations.container.byId[newEvaluation.id] = newEvaluation;
-
-                $(this).removeClass("added").addClass("existed");
-            }
-        });
-
-        Evaluations.container.sequence =
-            evaluationsContainer.find(".existed").map(function()
-            {
-                return Evaluations.container.byId[$(this).prop('id')];
-            }).get();
-
-        Main.selectElement(previouslySelectedElement);
-
-        return true;
+            return consideredSave();
+        }
     }
 
     function handleParameterTypeChange(oldParameter, newParameter)

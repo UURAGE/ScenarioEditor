@@ -470,13 +470,14 @@
     // Clear the table and remove all items
     function clearTable()
     {
-        if (!confirm(i18next.t('draft:delete_all_confirm')))
+        Utils.confirmDialog(i18next.t('draft:delete_all_confirm')).done(function(confirmed)
         {
-            return;
-        }
-
-        $('#draftTable tr.draftItem').remove();
-        createDraftItem();
+            if (confirmed)
+            {
+                $('#draftTable tr.draftItem').remove();
+                createDraftItem();
+            }
+        });
     }
 
     function saveOnBlur(input)

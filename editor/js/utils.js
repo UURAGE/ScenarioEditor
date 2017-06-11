@@ -21,7 +21,8 @@ var Utils;
         focusFirstTabindexedDescendant: focusFirstTabindexedDescendant,
         setPreserveSpace: setPreserveSpace,
         attachMarkdownTooltip: attachMarkdownTooltip,
-        makeSortable: makeSortable
+        makeSortable: makeSortable,
+        confirmDialog: confirmDialog
     };
 
     // Taken from stackoverflow
@@ -183,4 +184,39 @@ var Utils;
             }
         });
     }
+
+    function confirmDialog(content)
+    {
+        var deferredConfirmation = $.Deferred();
+        var container = $('<div>');
+        container.append(content).dialog(
+        {
+            height: 'auto',
+            width: 400,
+            modal: true,
+            buttons: [
+            {
+                text: i18next.t('common:confirm'),
+                click: function()
+                {
+                    deferredConfirmation.resolve(true);
+                    $(this).dialog('close');
+                }
+            },
+            {
+                text: i18next.t('common:cancel'),
+                click: function()
+                {
+                    deferredConfirmation.resolve(false);
+                    $(this).dialog('close');
+                }
+            }],
+            close: function()
+            {
+                container.remove();
+            }
+        });
+        return deferredConfirmation;
+    }
+
 })();
