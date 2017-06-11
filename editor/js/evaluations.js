@@ -245,36 +245,76 @@ var Evaluations;
 
             Main.selectElement(previouslySelectedElement);
 
-            return deferredSave.resolve(true);
+            deferredSave.resolve(true);
         };
 
-        var noNameCounter = 0;
-        evaluationsContainer.find(".added").not(".removed").each(function()
+        var confirmEvaluationsWithoutNameRemoval = function()
         {
-            if (!$(this).find(".evaluation-name").val())
+            var noNameCounter = 0;
+            evaluationsContainer.find(".added").not(".removed").each(function()
             {
-                noNameCounter++;
+                if (!$(this).find(".evaluation-name").val())
+                {
+                    noNameCounter++;
+                }
+            });
+            if (noNameCounter > 0)
+            {
+                return Utils.confirmDialog(i18next.t('evaluations:missing_name_warning'));
+            }
+            else
+            {
+                return $.Deferred().resolve(true);
+            }
+        };
+
+        var confirmRemovedEvaluationsRemoval = function()
+        {
+            var removedExistingEvaluations = [];
+            evaluationsContainer.find(".removed").not(".added").each(function()
+            {
+                removedExistingEvaluations.push(Evaluations.container.byId[$(this).prop('id')]);
+            });
+            if (removedExistingEvaluations.length > 0)
+            {
+                var content = $('<div>', { text: i18next.t('evaluations:removal_warning', { count: removedExistingEvaluations.length }) });
+                var removedEvaluationList = $('<ul>');
+                removedExistingEvaluations.forEach(function(existingEvaluation)
+                {
+                    removedEvaluationList.append($('<li>', { text: existingEvaluation.name }));
+                });
+                content.append(removedEvaluationList);
+                return Utils.confirmDialog(content);
+            }
+            else
+            {
+                return $.Deferred().resolve(true);
+            }
+        };
+
+        confirmEvaluationsWithoutNameRemoval().done(function(confirmed)
+        {
+            if (confirmed)
+            {
+                return confirmRemovedEvaluationsRemoval().done(function(confirmed)
+                {
+                    if (confirmed)
+                    {
+                        consideredSave();
+                    }
+                    else
+                    {
+                        deferredSave.resolve(false);
+                    }
+                });
+            }
+            else
+            {
+                deferredSave.resolve(false);
             }
         });
 
-        if (noNameCounter > 0)
-        {
-            return Utils.confirmDialog(i18next.t('evaluations:missing_name_warning')).done(function(confirmed)
-            {
-                if (confirmed)
-                {
-                    return consideredSave();
-                }
-                else
-                {
-                    return deferredSave.resolve(false);
-                }
-            });
-        }
-        else
-        {
-            return consideredSave();
-        }
+        return deferredSave;
     }
 
     function handleParameterTypeChange(oldParameter, newParameter)

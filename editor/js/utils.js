@@ -192,6 +192,7 @@ var Utils;
         container.append(content).dialog(
         {
             height: 'auto',
+            maxHeight: 768,
             width: 400,
             modal: true,
             buttons: [

@@ -417,36 +417,76 @@ var Parameters;
 
             Main.selectElement(previouslySelectedElement);
 
-            return deferredSave.resolve(true);
+            deferredSave.resolve(true);
         };
 
-        var noNameCounter = 0;
-        parametersContainer.find(".newParameter").not(".removedParameter").each(function()
+        var confirmParametersWithoutNameRemoval = function()
         {
-            if (!$(this).find(".name").val())
+            var noNameCounter = 0;
+            parametersContainer.find(".newParameter").not(".removedParameter").each(function()
             {
-                noNameCounter++;
+                if (!$(this).find(".name").val())
+                {
+                    noNameCounter++;
+                }
+            });
+            if (noNameCounter > 0)
+            {
+                return Utils.confirmDialog(i18next.t('parameters:missing_name_warning'));
+            }
+            else
+            {
+                return $.Deferred().resolve(true);
+            }
+        };
+
+        var confirmRemovedParametersRemoval = function()
+        {
+            var removedExistingParameters = [];
+            parametersContainer.find(".removedParameter").not(".newParameter").each(function()
+            {
+                removedExistingParameters.push(Parameters.container.byId[$(this).prop('id')]);
+            });
+            if (removedExistingParameters.length > 0)
+            {
+                var content = $('<div>', { text: i18next.t('parameters:removal_warning', { count: removedExistingParameters.length }) });
+                var removedParameterList = $('<ul>');
+                removedExistingParameters.forEach(function(existingParameter)
+                {
+                    removedParameterList.append($('<li>', { text: existingParameter.name }));
+                });
+                content.append(removedParameterList);
+                return Utils.confirmDialog(content);
+            }
+            else
+            {
+                return $.Deferred().resolve(true);
+            }
+        };
+
+        confirmParametersWithoutNameRemoval().done(function(confirmed)
+        {
+            if (confirmed)
+            {
+                return confirmRemovedParametersRemoval().done(function(confirmed)
+                {
+                    if (confirmed)
+                    {
+                        consideredSave();
+                    }
+                    else
+                    {
+                        deferredSave.resolve(false);
+                    }
+                });
+            }
+            else
+            {
+                deferredSave.resolve(false);
             }
         });
 
-        if (noNameCounter > 0)
-        {
-            return Utils.confirmDialog(i18next.t('parameters:missing_name_warning')).done(function(confirmed)
-            {
-                if (confirmed)
-                {
-                    return consideredSave();
-                }
-                else
-                {
-                    return deferredSave.resolve(false);
-                }
-            });
-        }
-        else
-        {
-            return consideredSave();
-        }
+        return deferredSave;
     }
 
     function atLeastOneUserDefined()
