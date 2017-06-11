@@ -1,3 +1,4 @@
 {
-    "title": "Evaluations"
+    "title": "Evaluations",
+    "missing_name_warning": "Some evaluations will not be saved, because an evaluation needs a name. Are you sure you want to continue?"
 }

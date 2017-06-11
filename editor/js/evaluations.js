@@ -111,8 +111,10 @@ var Evaluations;
                 text: i18next.t('common:confirm'),
                 click: function()
                 {
-                    save(evaluationsContainer);
-                    $(this).dialog('close');
+                    if (save(evaluationsContainer))
+                    {
+                        $(this).dialog('close');
+                    }
                 }
             },
             {
@@ -167,6 +169,20 @@ var Evaluations;
 
     function save(evaluationsContainer)
     {
+        var noNameCounter = 0;
+        evaluationsContainer.find(".added").not(".removed").each(function()
+        {
+            if (!$(this).find(".evaluation-name").val())
+            {
+                noNameCounter++;
+            }
+        });
+
+        if (noNameCounter > 0 && !confirm(i18next.t('evaluations:missing_name_warning')))
+        {
+            return false;
+        }
+
         Main.unsavedChanges = true;
 
         var previouslySelectedElement = Main.selectedElement;
@@ -185,22 +201,16 @@ var Evaluations;
 
         var getEvaluationFromDOM = function(container)
         {
-            var name = container.find(".evaluation-name").val();
-            // If the name is empty, a valid evaluation cannot be created
-            if (!name) return null;
-
             var typeName = container.find(".evaluation-type").val();
             var type = Types.primitives[typeName].loadTypeFromDOM(container);
             if (type.name === Types.primitives.string.name)
             {
                 type = $.extend(type, { controlName: 'textarea', rows: 4, markdown: "gfm" });
             }
-            // If it's an enumeration and there are no values defined, we can't define it either
-            if (typeName === Types.primitives.enumeration.name && type.options.sequence.length === 0) return;
 
             return {
                 id: container.prop('id'),
-                name: name,
+                name: container.find(".evaluation-name").val(),
                 type: type,
                 description: container.find(".evaluation-description").val(),
                 expression: Expression.getFromDOM(container.find('.evaluation-expression'), type)
@@ -209,8 +219,13 @@ var Evaluations;
         evaluationsContainer.find(".existed").each(function()
         {
             var newEvaluation = getEvaluationFromDOM($(this));
-            if (!newEvaluation) return;
             var oldEvaluation = Evaluations.container.byId[newEvaluation.id];
+
+            if (!newEvaluation.name)
+            {
+                newEvaluation.name = oldEvaluation.name;
+            }
+
             $.extend(oldEvaluation, newEvaluation);
         });
         evaluationsContainer.find(".added").each(function()
@@ -221,12 +236,12 @@ var Evaluations;
 
             var newEvaluation = getEvaluationFromDOM($(this));
 
-            if (!newEvaluation) return;
+            if (newEvaluation.name)
+            {
+                Evaluations.container.byId[newEvaluation.id] = newEvaluation;
 
-            Evaluations.container.sequence.push(newEvaluation);
-            Evaluations.container.byId[newEvaluation.id] = newEvaluation;
-
-            $(this).removeClass("added").addClass("existed");
+                $(this).removeClass("added").addClass("existed");
+            }
         });
 
         Evaluations.container.sequence =
@@ -236,6 +251,8 @@ var Evaluations;
             }).get();
 
         Main.selectElement(previouslySelectedElement);
+
+        return true;
     }
 
     function handleParameterTypeChange(oldParameter, newParameter)

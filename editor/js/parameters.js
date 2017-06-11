@@ -116,8 +116,10 @@ var Parameters;
                 text: i18next.t('common:confirm'),
                 click: function()
                 {
-                    save();
-                    $(this).dialog('close');
+                    if (save(parametersContainer))
+                    {
+                        $(this).dialog('close');
+                    }
                 }
             },
             {
@@ -236,14 +238,28 @@ var Parameters;
         return parameterContainer;
     }
 
-    function save()
+    function save(parametersContainer)
     {
+        var noNameCounter = 0;
+        parametersContainer.find(".newParameter").not(".removedParameter").each(function()
+        {
+            if (!$(this).find(".name").val())
+            {
+                noNameCounter++;
+            }
+        });
+
+        if (noNameCounter > 0 && !confirm(i18next.t('parameters:missing_name_warning')))
+        {
+            return false;
+        }
+
         Main.unsavedChanges = true;
 
         var previouslySelectedElement = Main.selectedElement;
         Main.selectElement(null);
 
-        $(".removedParameter").each(function()
+        parametersContainer.find(".removedParameter").each(function()
         {
             var id = $(this).prop('id');
 
@@ -278,28 +294,23 @@ var Parameters;
             Parameters.container.sequence.splice(indexOfRemovedParameter, 1);
         });
 
-        var getParameterFromDOM = function(container, exists)
+        var getParameterFromDOM = function(container)
         {
-            var name = container.find(".name").val();
-            // If the name is empty, we cannot create a valid parameter object.
-            if (!name && !exists) return null;
-
             var typeName = container.find(".parameter-type-select").val();
             var type = Types.primitives[typeName].loadTypeFromDOM(container, container.find(".parameter-initial-value-container"));
-            // If it's an enumeration and there are no values defined, we can't define it either
-            if (typeName === Types.primitives.enumeration.name && type.options.sequence.length === 0) return;
+
             return {
                 id: container.prop('id'),
-                name: name,
+                name: container.find(".name").val(),
                 evaluated: container.find(".parameter-evaluated").prop('checked'),
                 type: type,
                 description: container.find(".parameter-description").val()
             };
         };
 
-        $(".existingParameter").each(function()
+        parametersContainer.find(".existingParameter").each(function()
         {
-            var newParameter = getParameterFromDOM($(this), true);
+            var newParameter = getParameterFromDOM($(this));
             var oldParameter = Parameters.container.byId[newParameter.id];
 
             if (!newParameter.name)
@@ -354,7 +365,7 @@ var Parameters;
         });
 
         // All new parameters
-        $(".newParameter").each(function()
+        parametersContainer.find(".newParameter").each(function()
         {
             if ($(this).prop('id') !== 't')
             {
@@ -364,9 +375,8 @@ var Parameters;
 
             var newParameter = getParameterFromDOM($(this));
 
-            if (!newParameter) return;
+            if (!newParameter.name) return;
 
-            Parameters.container.sequence.push(newParameter);
             Parameters.container.byId[newParameter.id] = newParameter;
 
             $(this).removeClass("newParameter").addClass("existingParameter");
@@ -406,13 +416,15 @@ var Parameters;
 
         // Save parameters in UI order.
         Parameters.container.sequence =
-            $(".existingParameter").map(function()
+            parametersContainer.find(".existingParameter").map(function()
             {
                 return Parameters.container.byId[$(this).prop('id')];
             }).get();
 
 
         Main.selectElement(previouslySelectedElement);
+
+        return true;
     }
 
     function atLeastOneUserDefined()

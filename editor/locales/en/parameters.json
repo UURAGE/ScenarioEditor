@@ -1,5 +1,6 @@
 {
     "title": "Parameters",
     "time": "Time",
-    "add_time_title": "Add parameter time +1 to every node"
+    "add_time_title": "Add parameter time +1 to every node",
+    "missing_name_warning": "Some parameters will not be saved, because a parameter needs a name. Are you sure you want to continue?"
 }
