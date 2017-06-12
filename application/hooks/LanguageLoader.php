@@ -70,7 +70,7 @@ class LanguageLoader
             $this->CI->session->set_userdata('language', $language);
         }
 
-        $this->CI->lang->load('editor', $language);
+        $this->CI->lang->load('Editor', $language);
         $this->CI->lang->load('button', $language);
     }
 }
