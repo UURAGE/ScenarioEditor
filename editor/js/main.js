@@ -43,6 +43,8 @@ var Main;
         selectElements: selectElements,
         selectElement: selectElement,
         selectNode: selectNode,
+        startEditingNode: startEditingNode,
+        stopEditingNode: stopEditingNode,
         updateButtons: updateButtons
     };
 
@@ -1119,9 +1121,11 @@ var Main;
         inputDiv.hide();
         textDiv.show();
 
-        if (!cancel) node.text = text;
-
-        changeNodeText(node.id);
+        if (!cancel)
+        {
+            node.text = text;
+            changeNodeText(node.id);
+        }
 
         //Enable dragging for this component
         getPlumbInstanceByNodeID(node.id).setDraggable(nodeDiv, true);
