@@ -28,24 +28,24 @@ var KeyControl;
         $("#main").on('keydown', function(e)
         {
             // check if hotkeys are active
-            if(KeyControl.hotKeysActive)
+            if (KeyControl.hotKeysActive)
             {
                 var ch = String.fromCharCode(e.keyCode);
                 //Check if the ctrl key is pressed
-                if(e.ctrlKey && !e.shiftKey)
+                if (e.ctrlKey && !e.shiftKey)
                 {
-                    if(e.keyCode in ctrlNumberControl)
+                    if (e.keyCode in ctrlNumberControl)
                     {
                         Utils.ensurePreventDefault(this, e, ctrlNumberControl[e.keyCode]);
                     }
-                    else if(ch in ctrlLetterControl)
+                    else if (ch in ctrlLetterControl)
                     {
                         Utils.ensurePreventDefault(this, e, ctrlLetterControl[ch]);
                     }
 
                     $("#main").focus();
                 }
-                else if(!e.ctrlKey && !e.shiftKey && e.keyCode in numberControl)
+                else if (!e.ctrlKey && !e.shiftKey && e.keyCode in numberControl)
                 {
                     Utils.ensurePreventDefault(this, e, numberControl[e.keyCode]);
                     $("#main").focus();
@@ -62,28 +62,38 @@ var KeyControl;
     letterControl = {
         Q: function()
         {
-            if(Zoom.isZoomed())
+            if (Zoom.isZoomed())
+            {
                 Main.addNewNode(Main.playerType, true);
+            }
         },
         W: function()
         {
-            if(Zoom.isZoomed())
+            if (Zoom.isZoomed())
+            {
                 Main.addNewNode(Main.computerType, true);
+            }
         },
         E: function()
         {
-            if(Zoom.isZoomed())
+            if (Zoom.isZoomed())
+            {
                 Main.addNewNode(Main.situationType, true);
+            }
         },
         R: function()
         {
-            if(Zoom.isZoomed())
+            if (Zoom.isZoomed())
+            {
                 Main.createChildNode();
+            }
         },
         T: function()
         {
-            if(!Zoom.isZoomed())
+            if (!Zoom.isZoomed())
+            {
                 Main.addNewTree();
+            }
         },
         A: function()
         {
@@ -124,8 +134,10 @@ var KeyControl;
     numberControl = {
         13: function()
         {
-            if(Main.selectedElements[0] in Main.trees)
+            if (Main.selectedElements[0] in Main.trees)
+            {
                 Zoom.toggleZoom(Main.trees[Main.selectedElements[0]]);
+            }
 
             Main.selectElement(null);
         },
@@ -135,9 +147,11 @@ var KeyControl;
         },
         38: function()
         {
-            if(Main.selectedElements[0] in Main.nodes)
+            if (Main.selectedElements[0] in Main.nodes)
+            {
                 selectParent();
-            else if(Main.selectedElements[0] in Main.trees)
+            }
+            else if (Main.selectedElements[0] in Main.trees)
             {
                 var selectedTree = Main.trees[Main.selectedElements[0]];
                 var upPredicate = function(tree)
@@ -150,9 +164,11 @@ var KeyControl;
         },
         40: function()
         {
-            if(Main.selectedElements[0] in Main.nodes)
+            if (Main.selectedElements[0] in Main.nodes)
+            {
                 selectChild();
-            else if(Main.selectedElements[0] in Main.trees)
+            }
+            else if (Main.selectedElements[0] in Main.trees)
             {
                 var selectedTree = Main.trees[Main.selectedElements[0]];
                 var downPredicate = function(tree)
@@ -165,9 +181,11 @@ var KeyControl;
         },
         39: function()
         {
-            if(Main.selectedElements[0] in Main.nodes)
+            if (Main.selectedElements[0] in Main.nodes)
+            {
                 selectRightBrother();
-            else if(Main.selectedElements[0] in Main.trees)
+            }
+            else if (Main.selectedElements[0] in Main.trees)
             {
                 var selectedTree = Main.trees[Main.selectedElements[0]];
                 var rightPredicate = function(tree)
@@ -180,9 +198,11 @@ var KeyControl;
         },
         37: function()
         {
-            if(Main.selectedElements[0] in Main.nodes)
+            if (Main.selectedElements[0] in Main.nodes)
+            {
                 selectLeftBrother();
-            else if(Main.selectedElements[0] in Main.trees)
+            }
+            else if (Main.selectedElements[0] in Main.trees)
             {
                 var selectedTree = Main.trees[Main.selectedElements[0]];
                 var leftPredicate = function(tree)
@@ -235,37 +255,55 @@ var KeyControl;
     ctrlNumberControl = {
         38: function()
         {
-            if(Main.selectedElements[0] in Main.nodes)
+            if (Main.selectedElements[0] in Main.nodes)
+            {
                 moveNodeUp();
-            else if(Main.selectedElements[0] in Main.trees)
+            }
+            else if (Main.selectedElements[0] in Main.trees)
+            {
                 moveTree(function(x){return x;}, function(y){return y-1;});//arrow(lambda) functions would be nice here when support is sorted out
+            }
         },
         40: function()
         {
-            if(Main.selectedElements[0] in Main.nodes)
+            if (Main.selectedElements[0] in Main.nodes)
+            {
                 moveNodeDown();
-            else if(Main.selectedElements[0] in Main.trees)
+            }
+            else if (Main.selectedElements[0] in Main.trees)
+            {
                 moveTree(function(x){return x;}, function(y){return y+1;});
+            }
         },
         39: function()
         {
-            if(Main.selectedElements[0] in Main.nodes)
+            if (Main.selectedElements[0] in Main.nodes)
+            {
                 moveNodeRight();
-            else if(Main.selectedElements[0] in Main.trees)
+            }
+            else if (Main.selectedElements[0] in Main.trees)
+            {
                 moveTree(function(x){return x+1;}, function(y){return y;});
+            }
         },
         37: function()
         {
-            if(Main.selectedElements[0] in Main.nodes)
+            if (Main.selectedElements[0] in Main.nodes)
+            {
                 moveNodeLeft();
-            else if(Main.selectedElements[0] in Main.trees)
+            }
+            else if (Main.selectedElements[0] in Main.trees)
+            {
                 moveTree(function(x){return x-1;}, function(y){return y;});
+            }
         },
         13: function()
         {
             var selectedTree = Zoom.getZoomed();
-            if(Main.selectedElements[0] === undefined && selectedTree !== null)
+            if (Main.selectedElements[0] === undefined && selectedTree !== null)
+            {
                 Zoom.toggleZoom(selectedTree);
+            }
             Main.selectElement(selectedTree.id);
         }
     };
@@ -274,8 +312,13 @@ var KeyControl;
     function ctrlClickOnElement(node)
     {
         if (Main.selectedElements.indexOf(node) !== -1)
+        {
             deselectElement(node);
-        else selectExtraElement(node);
+        }
+        else
+        {
+            selectExtraElement(node);
+        }
     }
 
     // Multiselect an extra element
@@ -406,7 +449,9 @@ var KeyControl;
             outOfLeftBound = newLeft < leftBound - 1;
 
             if (outOfLeftBound)
+            {
                 break;
+            }
         }
 
         // If none of the nodes will move out of the canvas, move and repaint them
@@ -453,7 +498,7 @@ var KeyControl;
             newGridY = modifyY(tree.topPos);
 
             //new position is within bounds
-            if(newGridX >= 0 && newGridY >= 0)
+            if (newGridX >= 0 && newGridY >= 0)
             {
                 //check if the new position is blocked by an unselected tree
                 //selected trees may occupy the space since they will move anyway
@@ -461,7 +506,9 @@ var KeyControl;
                 allClear = allClear && checkUnselectedGridAvailable(newGridX, newGridY);
 
                 if(!allClear)
+                {
                     break;
+                }
             }
             else
             {
@@ -470,7 +517,7 @@ var KeyControl;
             }
         }
 
-        if(allClear)
+        if (allClear)
         {
             for (var j = 0; j < Main.selectedElements.length; j++)
             {
@@ -498,14 +545,16 @@ var KeyControl;
 
         $.each(Main.trees, function(id, tree)
         {
-            if(id === originID)
+            if (id === originID)
+            {
                 return;
+            }
             else
             {
-                if(offsetPredicate(tree))
+                if (offsetPredicate(tree))
                 {
                     var distance = Math.sqrt(Math.pow(tree.topPos-originTree.topPos, 2) + Math.pow(tree.leftPos-originTree.leftPos, 2));
-                    if(distance < minDistance)
+                    if (distance < minDistance)
                     {
                         minDistance = distance;
                         selectID = id;
@@ -514,8 +563,10 @@ var KeyControl;
             }
         });
 
-        if(selectID !== "")
+        if (selectID !== "")
+        {
             Main.selectElement(selectID);
+        }
     }
 
     function checkUnselectedGridAvailable(gridX, gridY)
@@ -524,8 +575,7 @@ var KeyControl;
 
         $.each(Main.trees, function(id, tree)
         {
-            if(Main.selectedElements.indexOf(id) !== -1)
-                return;
+            if (Main.selectedElements.indexOf(id) !== -1) return;
 
             available = available && !(tree.leftPos === gridX && tree.topPos === gridY);
         });
@@ -567,7 +617,9 @@ var KeyControl;
             }
         }
         if (top !== -Infinity)
+        {
             Main.selectElement(closestNode);
+        }
     }
 
     //Select the highest child from the current selected node.
@@ -592,7 +644,9 @@ var KeyControl;
             }
         }
         if (top !== Infinity)
+        {
             Main.selectElement(closestNode);
+        }
     }
 
     //Select the closest brother on the right from the current selected node.
@@ -630,7 +684,9 @@ var KeyControl;
             }
         }
         if (left !== Infinity)
+        {
             Main.selectElement(closestNode);
+        }
     }
 
     //Select the closest brother on the left from the current selected node.
@@ -671,6 +727,8 @@ var KeyControl;
         }
 
         if (right !== -Infinity)
+        {
             Main.selectElement(closestNode);
+        }
     }
 })();
