@@ -83,9 +83,9 @@ var KeyControl;
         },
         R: function()
         {
-            if (Zoom.isZoomed())
+            if (Zoom.isZoomed() && Main.selectedElement)
             {
-                Main.createChildNode();
+                Main.createChildNode(Main.selectedElement);
             }
         },
         T: function()

@@ -254,7 +254,7 @@ var Main;
         });
         $("#newChildNode").on('click', function(e)
         {
-            createChildNode();
+            createChildNode(Main.selectedElement);
         });
         $("#deleteNode").on('click', function()
         {
@@ -883,12 +883,11 @@ var Main;
         startEditingNode(node.id);
     }
 
-    function createChildNode(event)
+    function createChildNode(parentNodeID)
     {
-        // Check if a parent node is selected
-        if (Main.selectedElement !== null && Main.selectedElement in Main.nodes)
+        if (parentNodeID in Main.nodes)
         {
-            var parent = Main.nodes[Main.selectedElement];
+            var parent = Main.nodes[parentNodeID];
             var node;
             switch(parent.type)
             {
@@ -926,6 +925,11 @@ var Main;
             Zoom.getZoomed().plumbInstance.revalidate(node.id, 0);
 
             startEditingNode(node.id);
+            return node;
+        }
+        else
+        {
+            return null;
         }
     }
 
