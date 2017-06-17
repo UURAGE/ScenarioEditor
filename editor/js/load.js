@@ -275,19 +275,20 @@ var Load;
         $(evaluationsXML).children().each(function()
         {
             var evaluationId = this.attributes.id.value;
-            var evaluationMatch = evaluationId.match(/^evaluation-(\d+)$/);
+            var evaluationIdPrefix = Evaluations.getIdPrefix();
+            var evaluationMatch = evaluationId.match('^' + Utils.escapeRegex(evaluationIdPrefix) + 'e(\\d+)$');
             if (evaluationMatch !== null)
             {
                 var evaluationCounter = parseInt(evaluationMatch[1]);
-                if (evaluationCounter >= Evaluations.counter)
+                if (evaluationCounter > Evaluations.counter)
                 {
-                    Evaluations.counter = evaluationCounter + 1;
+                    Evaluations.counter = evaluationCounter;
                 }
             }
 
             for (var parameterId in Parameters.container.byId)
             {
-                if (evaluationId === 'evaluation-' + parameterId)
+                if (evaluationId === Evaluations.getParameterIdPrefix() + parameterId)
                 {
                     Parameters.container.byId[parameterId].evaluated = true;
                 }

@@ -14,6 +14,8 @@ var Evaluations;
         container: $.extend(true, {}, defaultContainer),
         reset: reset,
         dialog: dialog,
+        getIdPrefix: getIdPrefix,
+        getParameterIdPrefix: getParameterIdPrefix,
         handleParameterTypeChange: handleParameterTypeChange,
         handleParameterRemoval: handleParameterRemoval,
         handleParameterEvaluatedChange: handleParameterEvaluatedChange,
@@ -143,7 +145,6 @@ var Evaluations;
 
             evaluationContainer.prop('id', evaluation.id);
 
-
             var nameInput = evaluationContainer.find(".evaluation-name");
             nameInput.val(evaluation.name);
 
@@ -155,15 +156,18 @@ var Evaluations;
             var expressionContainer = evaluationContainer.find(".evaluation-expression");
             Expression.setInDOM(expressionContainer, evaluation.type, evaluation.expression);
 
-            if (evaluation.id.match(/^evaluation-p(\d+)$/))
+            for (var parameterId in Parameters.container.byId)
             {
-                nameInput.prop('disabled', true);
-                evaluationContainer.find(".evaluation-type").prop('disabled', true);
-                evaluationContainer.find('.define-type').remove();
-                descriptionTextArea.prop('disabled', true);
-                expressionContainer.find('button, checkbox, input, select, textarea').not('.reference-calculate').prop('disabled', true);
+                if (evaluation.id === Evaluations.getParameterIdPrefix() + parameterId)
+                {
+                    nameInput.prop('disabled', true);
+                    evaluationContainer.find(".evaluation-type").prop('disabled', true);
+                    evaluationContainer.find('.define-type').remove();
+                    descriptionTextArea.prop('disabled', true);
+                    expressionContainer.find('button, checkbox, input, select, textarea').not('.reference-calculate').prop('disabled', true);
 
-                evaluationContainer.find(".delete").remove();
+                    evaluationContainer.find(".delete").remove();
+                }
             }
         });
 
@@ -224,7 +228,7 @@ var Evaluations;
             evaluationsContainer.find(".added").each(function()
             {
                 Evaluations.counter++;
-                var id = 'evaluation-' + Evaluations.counter.toString();
+                var id = Evaluations.getIdPrefix() + 'e' + Evaluations.counter.toString();
                 $(this).prop('id', id);
 
                 var newEvaluation = getEvaluationFromDOM($(this));
@@ -317,12 +321,22 @@ var Evaluations;
         return deferredSave;
     }
 
+    function getIdPrefix()
+    {
+        return 'evaluation.';
+    }
+
+    function getParameterIdPrefix()
+    {
+        return getIdPrefix() + 'parameter.';
+    }
+
     function handleParameterTypeChange(oldParameter, newParameter)
     {
-        var evaluationId = 'evaluation-' + oldParameter.id;
+        var evaluatedParameterId = Evaluations.getParameterIdPrefix() + oldParameter.id;
         Evaluations.container.sequence.forEach(function(evaluation)
         {
-            if (evaluation.id === evaluationId)
+            if (evaluation.id === evaluatedParameterId)
             {
                 evaluation.type = newParameter.type;
             }
@@ -335,13 +349,13 @@ var Evaluations;
 
     function handleParameterRemoval(parameterId)
     {
-        var evaluationId = 'evaluation-' + parameterId;
+        var evaluatedParameterId = Evaluations.getParameterIdPrefix() + parameterId;
         for (var i = 0; i < Evaluations.container.sequence.length; i++)
         {
             var evaluation = Evaluations.container.sequence[i];
-            if (evaluation.id === evaluationId)
+            if (evaluation.id === evaluatedParameterId)
             {
-                delete Evaluations.container.byId[evaluationId];
+                delete Evaluations.container.byId[evaluatedParameterId];
                 Evaluations.container.sequence.splice(i, 1);
                 i--;
             }
@@ -354,33 +368,33 @@ var Evaluations;
 
     function handleParameterEvaluatedChange(parameter)
     {
-        var evaluationId = 'evaluation-' + parameter.id;
+        var evaluatedParameterId = Evaluations.getParameterIdPrefix() + parameter.id;
         var evaluation;
         if (parameter.evaluated)
         {
             evaluation = {
-                id: evaluationId,
+                id: evaluatedParameterId,
                 name: parameter.name,
                 type: parameter.type,
                 description: parameter.description,
                 expression: { kind: Expression.kinds.reference, reference: { parameterIdRef: parameter.id } }
             };
             Evaluations.container.sequence.push(evaluation);
-            Evaluations.container.byId[evaluationId] = evaluation;
+            Evaluations.container.byId[evaluatedParameterId] = evaluation;
         }
         else
         {
-            evaluation = Evaluations.container.byId[evaluationId];
+            evaluation = Evaluations.container.byId[evaluatedParameterId];
             var index = Evaluations.container.sequence.indexOf(evaluation);
-            delete Evaluations.container.byId[evaluationId];
+            delete Evaluations.container.byId[evaluatedParameterId];
             Evaluations.container.sequence.splice(index, 1);
         }
     }
 
     function handleEvaluatedParameterChange(parameter)
     {
-        var evaluationId = 'evaluation-' + parameter.id;
-        var evaluation = Evaluations.container.byId[evaluationId];
+        var evaluatedParameterId = Evaluations.getParameterIdPrefix() + parameter.id;
+        var evaluation = Evaluations.container.byId[evaluatedParameterId];
         evaluation.name = parameter.name;
         evaluation.description = parameter.description;
     }
