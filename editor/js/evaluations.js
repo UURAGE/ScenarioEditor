@@ -223,8 +223,8 @@ var Evaluations;
             });
             evaluationsContainer.find(".added").each(function()
             {
-                var id = 'evaluation-' + Evaluations.counter.toString();
                 Evaluations.counter++;
+                var id = 'evaluation-' + Evaluations.counter.toString();
                 $(this).prop('id', id);
 
                 var newEvaluation = getEvaluationFromDOM($(this));
