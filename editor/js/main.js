@@ -1646,7 +1646,7 @@ var Main;
     }
 
     // Change the text of the node.
-    function changeNodeText(nodeID)
+    function changeNodeText(nodeID, doNotRepaint)
     {
         var node = Main.nodes[nodeID];
 
@@ -1708,8 +1708,11 @@ var Main;
         var h = nodeTextDiv[0].clientHeight;
         nodeHTML.height(h);
 
-        Main.trees[node.parent].plumbInstance.updateOffset({elId:nodeID, recalc:true});
-        Main.trees[node.parent].plumbInstance.repaint(nodeID, null, 0);
+        if (!doNotRepaint)
+        {
+            Main.trees[node.parent].plumbInstance.updateOffset({elId:nodeID, recalc:true});
+            Main.trees[node.parent].plumbInstance.repaint(nodeID, null, 0);
+        }
 
         // Add the allowInterleaveNode class to the node for a graphical indication
         if (node.allowInterleaveNode)
