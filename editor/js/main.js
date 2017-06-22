@@ -22,6 +22,8 @@ var Main;
         maxTreeNumber: 0,
         gridX: gridX,
         gridY: gridY,
+        // The mouse position relative to the html document
+        mousePosition: { x: 0, y: 0 },
         unsavedChanges: false,
         //Functions
         addNewNode: addNewNode,
@@ -104,6 +106,12 @@ var Main;
         initialiseMenuBar();
 
         initialiseGrid();
+
+        document.addEventListener('mousemove', function(e)
+        {
+            Main.mousePosition.x = e.pageX;
+            Main.mousePosition.y = e.pageY;
+        }, false);
 
         if (Config.container.characters.sequence.length > 1)
         {
