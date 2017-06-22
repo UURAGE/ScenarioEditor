@@ -124,7 +124,7 @@ var Clipboard;
             }
             else if (Zoom.isZoomed() && !copiedTrees)
             {
-                var newNode = pasteNode(copiedElement);
+                var newNode = pasteNode(copiedElement, { left: 0, top: 0 });
                 Main.selectElement(newNode.id);
             }
         }
@@ -158,7 +158,8 @@ var Clipboard;
                 var idMappings = {};
                 $.each(copiedElements, function(index, node)
                 {
-                    newNode = pasteNode(node);
+                    var offset = { left: node.position.left - copiedElements[0].position.left, top: node.position.top - copiedElements[0].position.top };
+                    newNode = pasteNode(node, offset);
                     idMappings[node.id] = newNode.id;
                 });
 
@@ -195,7 +196,7 @@ var Clipboard;
         }
     }
 
-    function pasteNode(copiedNode, tree)
+    function pasteNode(copiedNode, offset, tree, doNotPosition)
     {
         if (!tree) tree = Zoom.getZoomed();
         if (!tree) return;
@@ -210,16 +211,11 @@ var Clipboard;
 
         Main.nodes[node.id] = node;
 
-        // set nodeposition relatively to the positions off the original node(s)
-        var left = copiedNode.position.left + 50;
-        var top = copiedNode.position.top + 50;
-
-        //Set position
-        Utils.cssPosition(nodeElem,
+        if (!doNotPosition)
         {
-            "top": top,
-            "left": left
-        });
+            // Set position to the mouse position
+            Utils.cssPosition(nodeElem, Main.clampPositionToCanvas({ left: Main.mousePosition.x + offset.left, top: Main.mousePosition.y + offset.top }));
+        }
 
         Main.changeNodeText(node.id);
 
@@ -246,7 +242,7 @@ var Clipboard;
             if (!node) //due to deleting from arrays in js leaving values undefined
                 return true; //$.each version of continue
 
-            var newNode = pasteNode(node, newTree);
+            var newNode = pasteNode(node, { left: 0, top: 0 }, newTree, true);
 
             idMappings[node.id] = newNode.id; //needed to also copy over jsplumb connectors.
 

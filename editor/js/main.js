@@ -30,6 +30,7 @@ var Main;
         addNewTree: addNewTree,
         applyChanges: applyChanges,
         changeNodeText: changeNodeText,
+        clampPositionToCanvas: clampPositionToCanvas,
         createChildNode: createChildNode,
         createEmptyTree: createEmptyTree,
         createAndReturnNode: createAndReturnNode,
@@ -853,37 +854,7 @@ var Main;
         // node is undefined if there is no zoomed .TreeContainer
         if (node === undefined) return;
 
-        // the canvas is open; get the canvas div
-        var treeDiv = Zoom.getZoomed().div;
-        // calculate canvas boundaries
-        var leftBound = treeDiv.offset().left;
-        var rightBound = leftBound + treeDiv.width();
-        var upperBound = treeDiv.offset().top;
-        var underBound = upperBound + treeDiv.height();
-        // get mouseposition
-        var posL = pos.left;
-        var posT = pos.top;
-        // check mouse inbetween boundaries
-        var nodeL = posL-leftBound+treeDiv.scrollLeft();
-        var nodeT = posT-upperBound+treeDiv.scrollTop();
-
-        if (!(leftBound < posL && posL < rightBound && upperBound < posT && posT < underBound) )
-        {
-            // clamp funtion
-            var clamp = function(val, min, max){
-                if(val <= min)
-                    return min;
-                else if(max <= val)
-                    return max;
-                else return val;
-            };
-            // clamp within boundaries
-            var m2L = clamp(posL,leftBound, rightBound-75);
-            nodeL = m2L-leftBound+treeDiv.scrollLeft();
-            var m2T = clamp(posT,upperBound, underBound-50);
-            nodeT = m2T-upperBound+treeDiv.scrollTop();
-        }
-        $('#'+node.id).css({ top: nodeT, left: nodeL, width: "128px" });
+        $('#'+node.id).css($.extend(Main.clampPositionToCanvas(pos), { width: "128px" }));
 
         Main.trees[node.parent].plumbInstance.updateOffset({ elId: node.id, recalc: true });
         Main.trees[node.parent].plumbInstance.repaint(node.id, null, 0);
@@ -2552,6 +2523,22 @@ var Main;
         {
             e.stopPropagation();
         });
+    }
+
+    function clampPositionToCanvas(position)
+    {
+        // the canvas is open; get the canvas div
+        var treeDiv = Zoom.getZoomed().div;
+
+        // calculate canvas boundaries
+        var leftBound = treeDiv.offset().left;
+        var upperBound = treeDiv.offset().top;
+
+        // clamp within boundaries
+        return {
+            left: Math.max(position.left, leftBound) - leftBound + treeDiv.scrollLeft(),
+            top: Math.max(position.top, upperBound) - upperBound + treeDiv.scrollTop()
+        };
     }
 
 })();
