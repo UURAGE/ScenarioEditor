@@ -20,7 +20,8 @@
         "reference": "Reference",
         "sum": "Sum",
         "scale": "Scale",
-        "choose": "Choose"
+        "choose": "Choose",
+        "score": "Score"
     },
     "as_percentage": "%",
     "as_value": "#",

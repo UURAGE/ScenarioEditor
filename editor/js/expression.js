@@ -493,6 +493,162 @@ var Expression;
                 }
                 expression.choose.otherwise.kind.handleParameterRemoval(parameterId, type, expression.choose.otherwise);
             }
+        },
+        score:
+        {
+            name: 'score',
+            appendControlTo: function(container, type)
+            {
+                var scoreItemsContainer = $('<ul>');
+                var addButton = Parts.addButton("", "add-score-item");
+                addButton.on('click', function()
+                {
+                    var scoreItemAndDeleteButtonContainer = $('<li>');
+
+                    var referenceContainer = $('<span>', { class: "score-reference" });
+                    kinds.reference.appendControlTo(referenceContainer, type);
+                    scoreItemAndDeleteButtonContainer.append(referenceContainer);
+
+                    var weightContainer = $('<span>', { class: "score-weight" });
+                    Types.primitives.integer.appendControlTo(weightContainer);
+                    scoreItemAndDeleteButtonContainer.append(weightContainer);
+
+                    var deleteButton = Parts.deleteButton();
+                    deleteButton.on('click', function()
+                    {
+                        scoreItemAndDeleteButtonContainer.remove();
+                    });
+                    scoreItemAndDeleteButtonContainer.append(deleteButton);
+
+                    scoreItemsContainer.append(scoreItemAndDeleteButtonContainer);
+                });
+                container.append(scoreItemsContainer);
+
+                container.append(addButton);
+            },
+            getFromDOM: function(container, type)
+            {
+                return container.children('ul').children('li').map(function()
+                {
+                    return {
+                        reference: kinds.reference.getFromDOM($(this).children('.score-reference'), type),
+                        weight: Types.primitives.integer.getFromDOM($(this).children('.score-weight'))
+                    };
+                }).get();
+            },
+            setInDOM: function(container, type, score)
+            {
+                score.forEach(function(scoreItem)
+                {
+                    var addButton = container.children('.add-score-item');
+                    addButton.trigger('click');
+                    var scoreItemContainer = container.children('ul').children('li').last();
+                    kinds.reference.setInDOM(scoreItemContainer.children('.score-reference'), type, scoreItem.reference);
+                    Types.primitives.integer.setInDOM(scoreItemContainer.children('.score-weight'), scoreItem.weight);
+                });
+            },
+            adopt: function(expression)
+            {
+                if (!(expression.kind.name === kinds.scale.name &&
+                    expression.scale.operator === 'divisor' &&
+                    expression.scale.expression.kind.name === kinds.sum.name)) return null;
+                var score = [];
+                var divisor = 0;
+                expression.scale.expression.sum.forEach(function(itemExpression)
+                {
+                    if (!(divisor !== null &&
+                        itemExpression.kind.name === kinds.scale.name &&
+                        itemExpression.scale.operator === 'scalar' &&
+                        itemExpression.scale.expression.kind.name === kinds.reference.name))
+                    {
+                        divisor = null;
+                        return;
+                    }
+                    score.push(
+                    {
+                        reference: itemExpression.scale.expression.reference,
+                        weight: itemExpression.scale.value
+                    });
+                    divisor += itemExpression.scale.value;
+                });
+                if (divisor !== expression.scale.value) return null;
+                return {
+                    kind: this,
+                    score: score
+                };
+            },
+            fromXML: function(scoreXML, type)
+            {
+                return null;
+            },
+            toXML: function(expressionXML, type, score)
+            {
+                var itemExpressions = [];
+                var divisor = 0;
+                score.forEach(function(scoreItem)
+                {
+                    itemExpressions.push(
+                    {
+                        kind: kinds.scale,
+                        scale:
+                        {
+                            expression:
+                            {
+                                kind: kinds.reference,
+                                reference: scoreItem.reference
+                            },
+                            operator: 'scalar',
+                            value: scoreItem.weight
+                        }
+                    });
+                    divisor += scoreItem.weight;
+                });
+                var sumExpression =
+                {
+                    kind: kinds.scale,
+                    scale:
+                    {
+                        expression:
+                        {
+                            kind: kinds.sum,
+                            sum: itemExpressions
+                        },
+                        operator: 'divisor',
+                        value: divisor
+                    }
+                };
+                Expression.toXML(expressionXML, type, sumExpression);
+            },
+            isAvailableFor: function(type)
+            {
+                return type.name === Types.primitives.integer.name &&
+                    (Parameters.hasWithType(type) || Config.hasParameterWithType(type));
+            },
+            handleTypeChange: function(previousType, newType, expression)
+            {
+                if (!this.isAvailableFor(newType))
+                {
+                    replaceExpressionWithDefaultLiteral(expression, newType);
+                }
+            },
+            handleParameterTypeChange: function(oldParameter, newParameter, type, expression)
+            {
+                if (newParameter.type.name !== Types.primitives.integer.name)
+                {
+                    this.handleParameterRemoval(newParameter.id, type, expression);
+                }
+            },
+            handleParameterRemoval: function(parameterId, type, expression)
+            {
+                expression.score = expression.score.filter(function(scoreItem)
+                {
+                    return scoreItem.reference.parameterIdRef !== parameterId;
+                });
+                if (expression.score.length === 0)
+                {
+                    replaceExpressionWithDefaultLiteral(expression, type);
+                }
+            }
         }
     };
 
@@ -557,6 +713,18 @@ var Expression;
         }
         var expression = { kind: kind };
         expression[kind.name] = kind.fromXML(expressionXML, type);
+
+        for (var kindName in kinds)
+        {
+            if (!kinds[kindName].adopt) continue;
+            var newExpression = kinds[kindName].adopt(expression);
+            if (newExpression !== null)
+            {
+                expression = newExpression;
+                break;
+            }
+        }
+
         return expression;
     }
 

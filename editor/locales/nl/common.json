@@ -20,7 +20,8 @@
         "reference": "Referentie",
         "sum": "Som",
         "scale": "Schaal",
-        "choose": "Selectie"
+        "choose": "Selectie",
+        "score": "Score"
     },
     "as_percentage": "%",
     "as_value": "#",
