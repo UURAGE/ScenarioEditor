@@ -61,12 +61,16 @@ var Condition;
                 }
             });
 
-            if (subconditions.length > 0)
+            if (subconditions.length > 1)
             {
                 return {
                     type: type,
                     subconditions: subconditions
                 };
+            }
+            else if (subconditions.length === 1)
+            {
+                return subconditions[0];
             }
             else
             {
@@ -78,78 +82,87 @@ var Condition;
 
     function setInDOM(container, rootCondition, allowReferenceConditions)
     {
-        var setConditionInDOM = function(conditionContainer, condition)
+        var setConditionInDOM = function(parentContainer, condition, isRoot)
         {
-            var subconditionsContainer = conditionContainer.children(".groupConditionDiv");
-            var conditionTypeContainer = conditionContainer.children(".groupConditionRadioDiv");
-            conditionTypeContainer.find("input[value=" + condition.type + "]").prop('checked', true);
-            condition.subconditions.forEach(function(subcondition)
+            if ("type" in condition)
             {
-                if ("type" in subcondition)
+                var groupConditionContainer;
+                if (!isRoot)
                 {
-                    setConditionInDOM(appendGroupConditionControlsTo(subconditionsContainer, allowReferenceConditions, false), subcondition);
+                    groupConditionContainer = appendGroupConditionControlsTo(parentContainer, allowReferenceConditions, false);
                 }
                 else
                 {
-                    var parameter = Config.findParameterById(subcondition.idRef, subcondition.characterIdRef);
-                    if (!parameter) parameter = Parameters.container.byId[subcondition.idRef];
-
-                    var subconditionContainer = appendCondition(subconditionsContainer, allowReferenceConditions);
-                    subconditionContainer.find(".parameter-idref-select").val(subcondition.idRef).trigger('change');
-                    subconditionContainer.find(".character-idref-select").val(subcondition.characterIdRef);
-                    subconditionContainer.find(".condition-operator-select").val(subcondition.operator).trigger('change');
-                    if (subcondition.operator in Types.relationalOperators)
-                    {
-                        parameter.type.setInDOM(subconditionContainer.find(".condition-value-container"), subcondition.value);
-                    }
+                    groupConditionContainer = parentContainer;
                 }
-            });
+                groupConditionContainer.children(".groupConditionRadioDiv").find("input[value=" + condition.type + "]").prop('checked', true);
+                condition.subconditions.forEach(function(subcondition)
+                {
+                    setConditionInDOM(groupConditionContainer.children(".groupConditionDiv"), subcondition, false);
+                });
+            }
+            else
+            {
+                if (isRoot)
+                {
+                    parentContainer = parentContainer.children(".groupConditionDiv");
+                }
+                var parameter = Config.findParameterById(condition.idRef, condition.characterIdRef);
+                if (!parameter) parameter = Parameters.container.byId[condition.idRef];
+
+                var conditionContainer = appendCondition(parentContainer, allowReferenceConditions);
+                conditionContainer.find(".parameter-idref-select").val(condition.idRef).trigger('change');
+                conditionContainer.find(".character-idref-select").val(condition.characterIdRef);
+                conditionContainer.find(".condition-operator-select").val(condition.operator).trigger('change');
+                if (condition.operator in Types.relationalOperators)
+                {
+                    parameter.type.setInDOM(conditionContainer.find(".condition-value-container"), condition.value);
+                }
+            }
         };
-        setConditionInDOM(container.children('.condition'), rootCondition);
+        setConditionInDOM(container.children('.condition'), rootCondition, true);
     }
 
     function fromXML(conditionXML)
     {
-        var type = conditionXML.nodeName;
-        var subconditions = [];
-        $(conditionXML).children().each(function()
+        if (conditionXML.nodeName == "condition" || conditionXML.nodeName == "characterCondition" ||
+            conditionXML.nodeName == "referenceCondition" || conditionXML.nodeName == "characterReferenceCondition")
         {
-            if (this.nodeName == "condition" || this.nodeName == "characterCondition" ||
-                this.nodeName == "referenceCondition" || this.nodeName == "characterReferenceCondition")
+            var parameterIdRef = conditionXML.attributes.idref.value;
+            var characterIdRef;
+            if (conditionXML.nodeName == "characterCondition" || conditionXML.nodeName == "characterReferenceCondition")
             {
-                var parameterIdRef = this.attributes.idref.value;
-                var characterIdRef;
-                if (this.nodeName == "characterCondition" || this.nodeName == "characterReferenceCondition")
-                {
-                    characterIdRef = this.attributes.characteridref.value;
-                }
-
-                var parameter = Config.findParameterById(parameterIdRef, characterIdRef);
-                if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
-
-                if (parameter)
-                {
-                    var condition = {
-                        idRef: parameterIdRef,
-                        operator: this.attributes.operator.value
-                    };
-                    if (this.nodeName == "condition" || this.nodeName == "characterCondition")
-                    {
-                        condition.value = parameter.type.fromXML(this);
-                    }
-                    if (characterIdRef) condition.characterIdRef = characterIdRef;
-                    subconditions.push(condition);
-                }
+                characterIdRef = conditionXML.attributes.characteridref.value;
             }
-            else
+
+            var parameter = Config.findParameterById(parameterIdRef, characterIdRef);
+            if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
+
+            if (parameter)
             {
-                subconditions.push(fromXML(this));
+                var condition = {
+                    idRef: parameterIdRef,
+                    operator: conditionXML.attributes.operator.value
+                };
+                if (conditionXML.nodeName == "condition" || conditionXML.nodeName == "characterCondition")
+                {
+                    condition.value = parameter.type.fromXML(conditionXML);
+                }
+                if (characterIdRef) condition.characterIdRef = characterIdRef;
+                return condition;
             }
-        });
-        return {
-            type: type,
-            subconditions: subconditions
-        };
+            return null;
+        }
+        else
+        {
+            return {
+                type: conditionXML.nodeName,
+                subconditions: $(conditionXML).children().map(function()
+                {
+                    return fromXML(this);
+                }).get()
+            };
+        }
     }
 
     function toXML(parentXML, condition)
