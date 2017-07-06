@@ -357,7 +357,6 @@ var Condition;
         {
             $(this).prop("name", "conRadio" + radioButtonCounter);
         });
-        updateGroupConditionCounter(container.closest(".groupcondition"));
         groupCondition.append(groupConditionRadio);
 
         var subconditionsContainer = $('<div>', { class: "groupConditionDiv" });
@@ -403,6 +402,8 @@ var Condition;
         groupCondition.append(deleteButton);
 
         container.append(groupCondition);
+
+        updateGroupConditionCounter(container.closest(".groupcondition"));
 
         return groupCondition;
     }
