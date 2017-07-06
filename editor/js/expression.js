@@ -304,7 +304,7 @@ var Expression;
                 }
 
                 var scalar = parseInt(scaleXML.attributes.scalar.value);
-                if (scalar !== 1)
+                if (!scale || scalar !== 1)
                 {
                     if (scale)
                     {
