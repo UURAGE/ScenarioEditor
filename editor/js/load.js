@@ -296,6 +296,10 @@ var Load;
 
             var typeXML = $(this).children('type').children();
             var type = Types.primitives[typeXML[0].nodeName].loadType(typeXML);
+            if (type.name === Types.primitives.string.name)
+            {
+                type = $.extend({}, type, { controlName: 'textarea', rows: 4, markdown: "gfm" });
+            }
 
             var expressionXML = $(this).children('expression').children();
             var expression = Expression.fromXML(expressionXML[0], type);
