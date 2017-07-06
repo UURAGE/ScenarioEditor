@@ -503,8 +503,7 @@ var Types;
                         valueInput.val("").focus();
                     }
                 };
-                var valueAddButton = $('<button>', { type: 'button', class: "add-enumeration-value" })
-                    .append($('<img>', { src: editor_url + "png/others/plus.png", title: i18next.t('common:add') }));
+                var valueAddButton = Parts.addButton("", "add-enumeration-value");
                 valueAddButton.on('click', function()
                 {
                     appendValue(valueInput.val());
