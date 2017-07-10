@@ -85,10 +85,10 @@ var Metadata;
         metadataContainer.append(authorsHeader);
 
         var authorsContainer = $('<table>').append($('<tr>')
-            .append($('<th>')).append($('<h4>', { text: i18next.t('common:name') }))
-            .append($('<th>')).append($('<h4>', { text: i18next.t('metadata:email') }))
-            .append($('<th>')).append($('<h4>', { text: i18next.t('metadata:start_date') }))
-            .append($('<th>')).append($('<h4>', { text: i18next.t('metadata:end_date') })));
+            .append($('<th>').append($('<h4>', { text: i18next.t('common:name') })))
+            .append($('<th>').append($('<h4>', { text: i18next.t('metadata:email') })))
+            .append($('<th>').append($('<h4>', { text: i18next.t('metadata:start_date') })))
+            .append($('<th>').append($('<h4>', { text: i18next.t('metadata:end_date') }))));
         metadataContainer.append($('<tbody>').append($('<tr>').append($('<td>', { colspan: 2 }).append(authorsContainer))));
 
         metadataContainer.append($('<thead>'));
