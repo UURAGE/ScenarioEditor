@@ -72,6 +72,8 @@ var Expression;
                         calculateSelect.append($('<option>', { value: 'value', text: i18next.t('common:as_value') }));
                         calculateSelect.append($('<option>', { value: 'percentage', text: i18next.t('common:as_percentage') }));
                         container.append(calculateSelect);
+                        $(this).attr('title', i18next.t('common:minimum') + ': ' + parameter.type.minimum + ', ' +
+                            i18next.t('common:maximum') + ': ' + parameter.type.maximum);
                     }
                 });
                 container.append(parameterSelect);
