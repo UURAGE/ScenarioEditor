@@ -64,21 +64,21 @@ var KeyControl;
         {
             if (Zoom.isZoomed())
             {
-                Main.addNewNode(Main.playerType, true);
+                Main.placeNewNode(Main.playerType, { left: Main.mousePosition.x, top: Main.mousePosition.y });
             }
         },
         W: function()
         {
             if (Zoom.isZoomed())
             {
-                Main.addNewNode(Main.computerType, true);
+                Main.placeNewNode(Main.computerType, { left: Main.mousePosition.x, top: Main.mousePosition.y });
             }
         },
         E: function()
         {
             if (Zoom.isZoomed())
             {
-                Main.addNewNode(Main.situationType, true);
+                Main.placeNewNode(Main.situationType, { left: Main.mousePosition.x, top: Main.mousePosition.y });
             }
         },
         R: function()
