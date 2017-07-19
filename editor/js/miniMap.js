@@ -125,8 +125,8 @@ var MiniMap;
         }
         else
         {
-            $("#mainCell .treeContainer.zoom > .treeDiv").scrollLeft(minimapSelectorX);
-            $("#mainCell .treeContainer.zoom > .treeDiv").scrollTop(minimapSelectorY);
+            $("#mainCell .treeContainer.zoom .treeDiv").scrollLeft(minimapSelectorX);
+            $("#mainCell .treeContainer.zoom .treeDiv").scrollTop(minimapSelectorY);
         }
 
         update(false);
@@ -202,8 +202,8 @@ var MiniMap;
         {
             $("#scaledDiv .treeContainer.zoom").css("left", 0 + "px");
             $("#scaledDiv .treeContainer.zoom").css("top", 0 + "px");
-            $("#scaledDiv .treeContainer.zoom > .treeDiv").css("height", realHeight + "px");
-            $("#scaledDiv .treeContainer.zoom > .treeDiv").css("width", realWidth + "px");
+            $("#scaledDiv .treeContainer.zoom .treeDiv").css("height", realHeight + "px");
+            $("#scaledDiv .treeContainer.zoom .treeDiv").css("width", realWidth + "px");
         }
 
         $("#scaledDiv").css({
