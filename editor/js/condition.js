@@ -225,32 +225,46 @@ var Condition;
     // Returns the condition object or null if there are no conditions left
     function handleParameterRemoval(parameterId, condition)
     {
-        for (var i = 0; i < condition.subconditions.length; i++)
+        if ("type" in condition)
         {
-            var subcondition = condition.subconditions[i];
-            if ("type" in subcondition)
+            for (var i = 0; i < condition.subconditions.length; i++)
             {
+                var subcondition = condition.subconditions[i];
                 subcondition = handleParameterRemoval(parameterId, subcondition);
-                if (!subcondition)
+                if (subcondition)
+                {
+                    condition.subconditions[i] = subcondition;
+                }
+                else
                 {
                     condition.subconditions.splice(i, 1);
                     i--;
                 }
             }
-            else if (subcondition.idRef === parameterId)
-            {
-                condition.subconditions.splice(i, 1);
-                i--;
-            }
-        }
 
-        if (condition.subconditions.length > 0)
-        {
-            return condition;
+            if (condition.subconditions.length > 1)
+            {
+                return condition;
+            }
+            else if (condition.subconditions.length === 1)
+            {
+                return condition.subconditions[0];
+            }
+            else
+            {
+                return null;
+            }
         }
         else
         {
-            return null;
+            if (condition.idRef === parameterId)
+            {
+                return null;
+            }
+            else
+            {
+                return condition;
+            }
         }
     }
 
