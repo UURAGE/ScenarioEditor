@@ -513,6 +513,7 @@ var Expression;
 
                     var weightContainer = $('<span>', { class: "score-weight" });
                     Types.primitives.integer.appendControlTo(weightContainer);
+                    Types.primitives.integer.setInDOM(weightContainer, 1);
                     scoreItemAndDeleteButtonContainer.append(weightContainer);
 
                     var deleteButton = Parts.deleteButton();
