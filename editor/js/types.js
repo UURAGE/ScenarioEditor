@@ -661,15 +661,7 @@ var Types;
 
                     definitionButton = $('<button>', { class: "define-type" });
                     definitionButton.attr('title', i18next.t('types:primitives.' + newTypeName + '.definition.define'));
-                    var buttonIcon = $('<img>', { src: editor_url + "png/others/list.png" });
-                    definitionButton.on('mouseover', function()
-                    {
-                        buttonIcon.attr('src', editor_url + "png/others/list_hover.png");
-                    });
-                    definitionButton.on('mouseout', function()
-                    {
-                        buttonIcon.attr('src', editor_url + "png/others/list.png");
-                    });
+                    var buttonIcon = $('<img>', { src: editor_url + (newTypeName === Types.primitives.enumeration.name ? "png/others/list.png" : "svg/icon_cog.svg") });
                     buttonIcon.attr('alt', i18next.t('types:primitives.' + newTypeName + '.definition.define'));
                     definitionButton.append(buttonIcon);
                     definitionButton.on('click', function()
