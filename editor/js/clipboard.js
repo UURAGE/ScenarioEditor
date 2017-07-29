@@ -156,40 +156,43 @@ var Clipboard;
             {
                 //Needed to save jsPlumb connections
                 var idMappings = {};
-                $.each(copiedElements, function(index, node)
-                {
-                    var offset = { left: node.position.left - copiedElements[0].position.left, top: node.position.top - copiedElements[0].position.top };
-                    newNode = pasteNode(node, offset);
-                    idMappings[node.id] = newNode.id;
-                });
-
                 var plumbInstance = Zoom.getZoomed().plumbInstance;
-                //Copy jsPlumb connections
-                $.each(copiedElements, function(index, node)
+                plumbInstance.batch(function()
                 {
-                    if (!node) //due to deleting from arrays in js leaving values undefined
-                        return true;
-
-                    var connections = node.connections;
-
-                    $.each(connections, function(index,
-                        connection)
+                    $.each(copiedElements, function(index, node)
                     {
-                        var target = idMappings[
-                            connection.targetId]; //map original target to copied target
-                        if (!target)
+                        var offset = { left: node.position.left - copiedElements[0].position.left, top: node.position.top - copiedElements[0].position.top };
+                        newNode = pasteNode(node, offset);
+                        idMappings[node.id] = newNode.id;
+                    });
+
+                    // Paste jsPlumb connections
+                    $.each(copiedElements, function(index, node)
+                    {
+                        if (!node) //due to deleting from arrays in js leaving values undefined
                             return true;
-                        var source = idMappings[
-                            connection.sourceId]; //map original source to copied source
-                        if (!source)
-                            return true;
-                        plumbInstance.connect(
+
+                        var connections = node.connections;
+
+                        $.each(connections, function(index, connection)
                         {
-                            "source": source,
-                            "target": target
+                            var target = idMappings[
+                                connection.targetId]; //map original target to copied target
+                            if (!target)
+                                return true;
+                            var source = idMappings[
+                                connection.sourceId]; //map original source to copied source
+                            if (!source)
+                                return true;
+                            plumbInstance.connect(
+                            {
+                                "source": source,
+                                "target": target
+                            });
                         });
                     });
                 });
+
                 // select all nodes just copied
                 Main.selectElements($.map(idMappings, function (newId) { return newId; }));
             }
@@ -237,36 +240,39 @@ var Clipboard;
         treeDiv.find(".subjectName").text(newTree.subject);
         treeDiv.find(".subjectNameInput").val(newTree.subject);
 
-        $.each(toCopy.nodes, function(index, node)
+        newTree.plumbInstance.batch(function()
         {
-            if (!node) //due to deleting from arrays in js leaving values undefined
-                return true; //$.each version of continue
-
-            var newNode = pasteNode(node, { left: 0, top: 0 }, newTree, true);
-
-            idMappings[node.id] = newNode.id; //needed to also copy over jsplumb connectors.
-
-            var newNodeDiv = $("#" + newNode.id);
-
-            Utils.cssPosition(newNodeDiv, node.position);
-        });
-
-        //all nodes have been created. now copy connectors
-        $.each(toCopy.nodes, function(index, node)
-        {
-            if (!node) //due to deleting from arrays in js leaving values undefined
-                return true;
-
-            var connections = node.connections;
-
-            $.each(connections, function(index, connection)
+            $.each(toCopy.nodes, function(index, node)
             {
-                var target = idMappings[connection.targetId]; //map original target to copied target
-                var source = idMappings[connection.sourceId]; //map original source to copied source
-                newTree.plumbInstance.connect(
+                if (!node) //due to deleting from arrays in js leaving values undefined
+                    return true; //$.each version of continue
+
+                var newNode = pasteNode(node, { left: 0, top: 0 }, newTree, true);
+
+                idMappings[node.id] = newNode.id; //needed to also copy over jsplumb connectors.
+
+                var newNodeDiv = $("#" + newNode.id);
+
+                Utils.cssPosition(newNodeDiv, node.position);
+            });
+
+            //all nodes have been created. now copy connectors
+            $.each(toCopy.nodes, function(index, node)
+            {
+                if (!node) //due to deleting from arrays in js leaving values undefined
+                    return true;
+
+                var connections = node.connections;
+
+                $.each(connections, function(index, connection)
                 {
-                    "source": source,
-                    "target": target
+                    var target = idMappings[connection.targetId]; //map original target to copied target
+                    var source = idMappings[connection.sourceId]; //map original source to copied source
+                    newTree.plumbInstance.connect(
+                    {
+                        "source": source,
+                        "target": target
+                    });
                 });
             });
         });
