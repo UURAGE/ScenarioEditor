@@ -42,15 +42,15 @@ if (!function_exists('editor_url')) {
 
 if(!function_exists('flag_url')) {
     /**
-    * Get the url to the flag of a corrsesponding language
+    * Get the url to the flag of a corresponding language
     * @param string $language
     * @return string
     */
     function flag_url($language)
     {
-        $codes = config_item("languageCodes");
+        $flags = config_item("languageFlags");
 
-        return editor_url('png/flags/'.$codes[$language].".png");
+        return editor_url('png/flags/'.$flags[$language].".png");
     }
 }
 

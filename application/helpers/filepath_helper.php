@@ -25,9 +25,9 @@ if(!function_exists('flag_path'))
     */
     function flag_path($language)
     {
-        $codes = config_item("languageCodes");
+        $flags = config_item("languageFlags");
 
-        return game_path('images/flags/'.$codes[$language].".png");
+        return game_path('images/flags/'.$flags[$language].".png");
     }
 }
 
