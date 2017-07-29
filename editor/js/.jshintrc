@@ -8,11 +8,12 @@
     "unused": "vars",
     "-W079": true,
     "predef": [
-        "jsPlumb",
         "i18next",
         "i18nextXHRBackend",
         "i18nextLocalStorageCache",
         "i18nextSprintfPostProcessor",
+        "jsPlumb",
+        "saveAs",
         "Utils",
         "Types",
         "Config",
@@ -42,7 +43,6 @@
         "root_url": false,
         "base_url": false,
         "editor_url": false,
-        "saveAs": false,
         "environment": false,
         "languageCode": false
     }
