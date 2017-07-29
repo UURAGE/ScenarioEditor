@@ -1,5 +1,5 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/* ©Copyright Utrecht University (Department of Information and Computing Sciences) */
+/* © Utrecht University (Department of Information and Computing Sciences) */
 
 class SettingFixer
 {
@@ -22,7 +22,7 @@ class SettingFixer
             ini_set('session.save_path', substr($save_path, $bad_prefix_length));
         }
     }
-    
+
     /*
      * Sets the default time zone when used with PHP 5 to avoid the
      * "time zone setting missing" warning.

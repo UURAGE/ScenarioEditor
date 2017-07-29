@@ -1,4 +1,4 @@
-/* ©Copyright Utrecht University (Department of Information and Computing Sciences) */
+/* © Utrecht University (Department of Information and Computing Sciences) */
 
 // In this file you can find most of the constants
 var Constants;

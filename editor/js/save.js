@@ -1,4 +1,4 @@
-/* ©Copyright Utrecht University (Department of Information and Computing Sciences) */
+/* © Utrecht University (Department of Information and Computing Sciences) */
 
 var Save;
 

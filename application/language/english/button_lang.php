@@ -1,5 +1,5 @@
 <?php
-/* ©Copyright Utrecht University (Department of Information and Computing Sciences) */
+/* © Utrecht University (Department of Information and Computing Sciences) */
 $lang["btn_cancel"] = "Cancel";
 $lang["btn_delete"] = "Delete";
 $lang["btn_create"] = "Create";
