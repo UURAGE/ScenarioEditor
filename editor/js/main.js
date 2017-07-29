@@ -1165,8 +1165,13 @@ var Main;
         // If there are node or tree elements selected
         if (Main.selectedElements.length > 0)
         {
-            // Suspend the jsplumb instance that handles the tree containers
-            jsPlumb.batch(function()
+            var jsPlumbInstance = jsPlumb;
+            if (!(Main.selectedElements[0] in Main.trees))
+            {
+                jsPlumbInstance = getPlumbInstanceByNodeID(Main.selectedElements[0]);
+            }
+
+            jsPlumbInstance.batch(function()
             {
                 for (var i = 0; i < Main.selectedElements.length; i++)
                 {
@@ -1176,30 +1181,32 @@ var Main;
                 {
                     deleteElement(Main.selectedElement);
                 }
-                Main.selectedElements = [];
-            }, true);
+            });
+
+            Main.selectedElements = [];
         }
         // If there is a tree zoomed and if there are selected connections, delete them
         else if (Zoom.isZoomed())
         {
             zoomedTree = Zoom.getZoomed();
-            for (var connectionId in zoomedTree.selectedConnections)
+            zoomedTree.plumbInstance.batch(function()
             {
-                var c = zoomedTree.plumbInstance.getConnections(
+                for (var connectionId in zoomedTree.selectedConnections)
                 {
-                    source: zoomedTree.selectedConnections[connectionId].source,
-                    target: zoomedTree.selectedConnections[connectionId].target
-                });
-                delete zoomedTree.selectedConnections[connectionId];
+                    var c = zoomedTree.plumbInstance.getConnections(
+                    {
+                        source: zoomedTree.selectedConnections[connectionId].source,
+                        target: zoomedTree.selectedConnections[connectionId].target
+                    });
+                    delete zoomedTree.selectedConnections[connectionId];
 
-                // Pick the first element in the array, because connections are unique
-                // and detach it
-                zoomedTree.plumbInstance.detach(c[0]);
-            }
+                    // Pick the first element in the array, because connections are unique
+                    // and detach it
+                    zoomedTree.plumbInstance.detach(c[0]);
+                }
+            });
         }
 
-        zoomedTree = Zoom.getZoomed();
-        if (zoomedTree) zoomedTree.plumbInstance.repaintEverything();
         MiniMap.update(true);
     }
 
@@ -1718,10 +1725,13 @@ var Main;
 
     function deleteTree(treeID)
     {
-        Main.trees[treeID].nodes.forEach(function(nodeID)
+        Main.trees[treeID].plumbInstance.batch(function()
         {
-            deleteNode(nodeID);
-        });
+            Main.trees[treeID].nodes.forEach(function(nodeID)
+            {
+                deleteNode(nodeID);
+            });
+        }, true);
 
         if (treeID === Main.selectedElement)
             selectElement(null);
