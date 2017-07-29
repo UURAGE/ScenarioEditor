@@ -5,7 +5,6 @@
     "use strict";
 
     i18next
-    .use(i18nextBrowserLanguageDetector)
     .use(i18nextXHRBackend)
     .use(i18nextLocalStorageCache)
     .use(i18nextSprintfPostProcessor)
@@ -15,6 +14,7 @@
         // is actually initAsync and language loading should be synchronous, so its false
         initImmediate: false,
         whitelist: ['en', 'nl'],
+        lng: languageCode,
         fallbackLng: 'en',
         // no region suffix distinction
         load: 'languageOnly',
@@ -46,20 +46,6 @@
                 // if(value instanceof Date) return moment(value).format(format);
                 return value;
             }
-        },
-        detection:
-        {
-            // order and from where user language should be detected
-            order: ['localStorage', 'navigator', 'htmlTag'],
-
-            // keys or params to lookup language from
-            lookupLocalStorage: 'i18nextLanguage',
-
-            // cache user language on
-            caches: ['localStorage'],
-
-            // optional htmlTag with lang attribute, the default is:
-            htmlTag: document.documentElement
         },
         backend:
         {

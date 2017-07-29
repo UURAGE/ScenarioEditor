@@ -28,18 +28,16 @@
   echo 'var editor_url = "' . editor_url() . '";
         var root_url = "' . root_url() . '";
         var base_url = "' . base_url() . '";
-        var environment = "' . ENVIRONMENT . '";'
+        var environment = "' . ENVIRONMENT . '";
+        var languageCode = "' . $this->config->item('languageCodes')[$language] . '";'
   ;
   ?>
   </script>
 
   <?php
 
-  echo "<script> localStorage.setItem('i18nextLanguage','" . $this->config->item('languageCodes')[$language] . "');</script>";
-
   //load language related scripts first since all others depend on them
   $languageScripts = array(
-      "js/lib/i18nextBrowserLanguageDetector.min.js",
       "js/lib/i18nextXHRBackend.min.js",
       "js/lib/i18nextLocalStorageCache.min.js",
       "js/lib/i18nextSprintfPostProcessor.min.js",
