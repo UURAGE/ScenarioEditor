@@ -62,32 +62,35 @@ var Load3;
 
                 tree.dragDiv.css('border-color', '');
 
-                $(this).children().each(function()
-                { // parse the tree in the container
-                    switch (this.nodeName)
-                    {
-                        case "computerStatement":
-                            loadStatement(this, Main.computerType, connections, treeID);
-                            break;
-                        case "playerStatement":
-                            loadStatement(this, Main.playerType, connections, treeID);
-                            break;
-                        case "conversation":
-                            loadConversation(this, conversations, treeID);
-                            break;
-                    }
-                });
-
-                // Makes the connections between the nodes.
-                $.each(connections, function(sourceId, targets)
+                plumbInstance.batch(function()
                 {
-                    for (var i = 0; i < targets.length; i++)
-                        plumbInstance.connect(
+                    $(this).children().each(function()
+                    { // parse the tree in the container
+                        switch (this.nodeName)
                         {
-                            source: sourceId,
-                            target: targets[i]
-                        });
-                });
+                            case "computerStatement":
+                                loadStatement(this, Main.computerType, connections, treeID);
+                                break;
+                            case "playerStatement":
+                                loadStatement(this, Main.playerType, connections, treeID);
+                                break;
+                            case "conversation":
+                                loadConversation(this, conversations, treeID);
+                                break;
+                        }
+                    });
+
+                    // Makes the connections between the nodes.
+                    $.each(connections, function(sourceId, targets)
+                    {
+                        for (var i = 0; i < targets.length; i++)
+                            plumbInstance.connect(
+                            {
+                                source: sourceId,
+                                target: targets[i]
+                            });
+                    });
+                }.bind(this), true);
             });
 
             level++;
@@ -501,26 +504,28 @@ var Load3;
             }
 
             var plumbInstance = Main.getPlumbInstanceByNodeID(firstConversationNodeId);
-
-            // Connect each conversation node sequentially
-            for (var source in singleConnections)
+            plumbInstance.batch(function()
             {
-                plumbInstance.connect(
+                // Connect each conversation node sequentially
+                for (var source in singleConnections)
                 {
-                    source: source,
-                    target: singleConnections[source]
-                });
-            }
+                    plumbInstance.connect(
+                    {
+                        source: source,
+                        target: singleConnections[source]
+                    });
+                }
 
-            // Connect last node to the original conversation's targets
-            conversations[firstConversationNodeId].connections.forEach(function(target)
-            {
-                plumbInstance.connect(
+                // Connect last node to the original conversation's targets
+                conversations[firstConversationNodeId].connections.forEach(function(target)
                 {
-                    source: lastConversationNodeId,
-                    target: target
+                    plumbInstance.connect(
+                    {
+                        source: lastConversationNodeId,
+                        target: target
+                    });
                 });
-            });
+            }, true);
         }
     }
 

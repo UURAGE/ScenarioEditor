@@ -209,32 +209,35 @@ var Load;
 
                 tree.dragDiv.css('border-color', '');
 
-                $(this).children('statements').children().each(function()
-                { // parse the tree in the container
-                    switch (this.nodeName)
-                    {
-                        case "computerStatement":
-                            loadStatement(this, Main.computerType, connections, treeID);
-                            break;
-                        case "playerStatement":
-                            loadStatement(this, Main.playerType, connections, treeID);
-                            break;
-                        case "situationStatement":
-                            loadStatement(this, Main.situationType, connections, treeID);
-                            break;
-                    }
-                });
-
-                // Makes the connections between the nodes.
-                $.each(connections, function(sourceId, targets)
+                plumbInstance.batch(function()
                 {
-                    for (var i = 0; i < targets.length; i++)
-                        plumbInstance.connect(
+                    $(this).children('statements').children().each(function()
+                    {
+                        switch (this.nodeName)
                         {
-                            source: sourceId,
-                            target: targets[i]
-                        });
-                });
+                            case "computerStatement":
+                                loadStatement(this, Main.computerType, connections, treeID);
+                                break;
+                            case "playerStatement":
+                                loadStatement(this, Main.playerType, connections, treeID);
+                                break;
+                            case "situationStatement":
+                                loadStatement(this, Main.situationType, connections, treeID);
+                                break;
+                        }
+                    });
+
+                    // Makes the connections between the nodes.
+                    $.each(connections, function(sourceId, targets)
+                    {
+                        for (var i = 0; i < targets.length; i++)
+                            plumbInstance.connect(
+                            {
+                                source: sourceId,
+                                target: targets[i]
+                            });
+                    });
+                }.bind(this), true);
             });
 
             level++;
