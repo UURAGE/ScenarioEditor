@@ -224,6 +224,29 @@ a[data-disabled]
   background-color: #d6d6d6;
 }
 
+#logo {
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  top: 0;
+  padding: 8px;
+  box-sizing: border-box;
+  background: #662D91;
+  transition: 0.5s background ease-out;
+}
+
+#logo:hover {
+  transition: 0.1s background ease-in-out;
+  background: #a345e5;
+}
+
+#logo img {
+  fill: white;
+  width: 16px;
+  height: 16px;
+  transition: 0.5s top ease-out;
+}
+
 button img
 {
   vertical-align: middle;
@@ -912,7 +935,7 @@ button img
 
 #toolbar .dropdown button, #toolbar .dropdown div
 {
-  width: 130px;
+  width: 110px;
   /*padding: 2px 5px;*/
 }
 

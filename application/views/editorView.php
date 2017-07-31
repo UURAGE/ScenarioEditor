@@ -108,7 +108,8 @@
               <button id="manual" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/manual.png");?>" alt=""><?php sLang("edt_manual"); ?></div></button>
               -->
               <div id="menus">
-                <div class="buttonGroup dropdown" id="file">
+                <div id="logo"><img src="<?php echo editor_url("svg/logo.svg") ?>" alt="Editor Logo"/></div>
+                <div class="buttonGroup dropdown" style="left: 32px;" id="file">
                   <!-- File -->
                   <div class="small-buttons">
                     <button id="fileButton" class="globalButton dropdownButton"><div><?php sLang("edt_file"); ?>...</div></button>
@@ -128,7 +129,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="buttonGroup dropdown" style="left:132px;" id="scenario">
+                <div class="buttonGroup dropdown" style="left:144px;" id="scenario">
                 <!-- Scenario -->
                   <div class="small-buttons">
                     <button id="scenarioButton" class="globalButton dropdownButton"><div><?php sLang("edt_scenario"); ?>...</div></button>
