@@ -232,7 +232,7 @@
         });
 
         // Keydown events
-        $(document).keydown(function(e)
+        $('#draftTable').keydown(function(e)
         {
             var tr = editing,
                 col = editingCol;
