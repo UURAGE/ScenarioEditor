@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/* © Utrecht University (Department of Information and Computing Sciences) */
+/* © Utrecht University and DialogueTrainer */
 
 /**
  * Editor page and functions.

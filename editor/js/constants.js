@@ -1,4 +1,4 @@
-/* © Utrecht University (Department of Information and Computing Sciences) */
+/* © Utrecht University and DialogueTrainer */
 
 // In this file you can find most of the constants
 var Constants;

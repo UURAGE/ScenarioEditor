@@ -1,5 +1,5 @@
 <?php
-/* © Utrecht University (Department of Information and Computing Sciences) */
+/* © Utrecht University and DialogueTrainer */
 $lang["btn_cancel"] = "Cancel";
 $lang["btn_delete"] = "Delete";
 $lang["btn_create"] = "Create";
