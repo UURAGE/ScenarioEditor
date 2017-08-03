@@ -138,8 +138,6 @@ var KeyControl;
             {
                 Zoom.toggleZoom(Main.trees[Main.selectedElements[0]]);
             }
-
-            Main.selectElement(null);
         },
         46: function()
         {
@@ -303,8 +301,8 @@ var KeyControl;
             if (Main.selectedElements[0] === undefined && selectedTree !== null)
             {
                 Zoom.toggleZoom(selectedTree);
+                Main.selectElement(selectedTree.id);
             }
-            Main.selectElement(selectedTree.id);
         }
     };
 
