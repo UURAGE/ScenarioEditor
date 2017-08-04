@@ -1063,10 +1063,15 @@ var Main;
             if(e.ctrlKey && e.keyCode === 13) // enter
             {
                 stopEditingNode(node.id, false);
+                e.stopPropagation();
+                $("#main").focus();
+
             }
             if(e.keyCode === 27) // escape
             {
                 stopEditingNode(node.id, true);
+                e.stopPropagation();
+                $("#main").focus();
             }
         });
 
