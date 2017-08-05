@@ -6,7 +6,6 @@ var Parts;
 {
     "use strict";
 
-    //Raw HTML that needs to be exported.
     Parts =
     {
         addButton: addButton,
