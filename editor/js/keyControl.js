@@ -134,7 +134,11 @@ var KeyControl;
     numberControl = {
         13: function()
         {
-            if (Main.selectedElements[0] in Main.trees)
+            if (Main.selectedElements[0] in Main.nodes)
+            {
+                Main.startEditingNode(Main.selectedElements[0]);
+            }
+            else if (Main.selectedElements[0] in Main.trees)
             {
                 Zoom.toggleZoom(Main.trees[Main.selectedElements[0]]);
             }

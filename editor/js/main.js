@@ -1015,6 +1015,8 @@ var Main;
     function startEditingNode(nodeID)
     {
         var node = Main.nodes[nodeID];
+        if (node.editing) return;
+
         var nodeDiv = $('#' + node.id);
         var inputDiv = nodeDiv.find('.statementInput');
         var textDiv = nodeDiv.find('.statementText');
