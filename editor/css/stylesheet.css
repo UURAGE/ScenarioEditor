@@ -1431,6 +1431,14 @@ textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
 
 #colorPicker {
   z-index: 51;
+  animation: pop-in 0.20s ease-in-out 0s;
+}
+
+@-webkit-keyframes pop-in {
+  0% { transform: translate(-50%, -50%) scale(0.75); opacity: 0; }
+  50% { opacity: 1; }
+  75% { transform: translate(-50%, -50%) scale(1.025); }
+  100% { transform: translate(-50%, -50%) scale(1); }
 }
 
 .segment:hover {
