@@ -12,6 +12,7 @@
  *   (https://github.com/jquery/jquery-ui/blob/1.11.4/ui/selectable.js)
  * Patch 1: fix helper position when using appendTo
  * Patch 2: do not start when mouseStart event is on scrollbar
+ * Patch 3: fix helper origin position when scrolling
  */
 
 (function( factory ) {
@@ -101,8 +102,6 @@ var selectable = $.widget("ui.selectable", base, {
 		var that = this,
 			options = this.options;
 
-		this.opos = [ event.pageX, event.pageY ];
-
 		if (this.options.disabled) {
 			return;
 		}
@@ -132,6 +131,8 @@ var selectable = $.widget("ui.selectable", base, {
 			"width": 0,
 			"height": 0
 		});
+
+		this.opos = [ helperLeft, helperTop ];
 
 		if (options.autoRefresh) {
 			this.refresh();
@@ -192,15 +193,15 @@ var selectable = $.widget("ui.selectable", base, {
 			options = this.options,
 			x1 = this.opos[0],
 			y1 = this.opos[1],
-			x2 = event.pageX,
-			y2 = event.pageY,
 			appendToOffset = $(options.appendTo).offset(),
 			leftDelta = options.appendTo ? appendToOffset.left - $(options.appendTo).scrollLeft() : 0,
-			topDelta = options.appendTo ? appendToOffset.top - $(options.appendTo).scrollTop() : 0
+			topDelta = options.appendTo ? appendToOffset.top - $(options.appendTo).scrollTop() : 0,
+			x2 = event.pageX - leftDelta,
+			y2 = event.pageY - topDelta
 
 		if (x1 > x2) { tmp = x2; x2 = x1; x1 = tmp; }
 		if (y1 > y2) { tmp = y2; y2 = y1; y1 = tmp; }
-		this.helper.css({ left: x1 - leftDelta, top: y1 - topDelta, width: x2 - x1, height: y2 - y1 });
+		this.helper.css({ left: x1, top: y1, width: x2 - x1, height: y2 - y1 });
 
 		this.selectees.each(function() {
 			var selectee = $.data(this, "selectable-item"),
