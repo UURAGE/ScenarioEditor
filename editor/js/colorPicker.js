@@ -270,9 +270,9 @@ var ColorPicker;
                         border.setAttribute("cx", offset);
                         border.setAttribute("cy", offset);
                         border.setAttribute("r", radius - ringPadding / 2);
-                        border.setAttribute("stroke", "white");
+                        border.setAttribute("stroke", "#fafafa");
                         border.setAttribute("stroke-width", ringPadding);
-                        border.setAttribute("fill", "white");
+                        border.setAttribute("fill", "#fafafa");
                     };
 
                     var picker = $('<div>', { id: "colorPicker" });
