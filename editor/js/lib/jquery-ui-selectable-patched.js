@@ -13,6 +13,7 @@
  * Patch 1: fix helper position when using appendTo
  * Patch 2: do not start when mouseStart event is on scrollbar
  * Patch 3: fix helper origin position when scrolling
+ * Patch 4: fix selectee position when using appendTo and scrolling
  */
 
 (function( factory ) {
@@ -65,14 +66,17 @@ var selectable = $.widget("ui.selectable", base, {
 			selectees.addClass("ui-selectee");
 			selectees.each(function() {
 				var $this = $(this),
-					pos = $this.offset();
+					pos = $this.offset(),
+					appendToOffset = $(that.options.appendTo).offset(),
+					leftDelta = that.options.appendTo ? appendToOffset.left - $(that.options.appendTo).scrollLeft() : 0,
+					topDelta = that.options.appendTo ? appendToOffset.top - $(that.options.appendTo).scrollTop() : 0;
 				$.data(this, "selectable-item", {
 					element: this,
 					$element: $this,
-					left: pos.left,
-					top: pos.top,
-					right: pos.left + $this.outerWidth(),
-					bottom: pos.top + $this.outerHeight(),
+					left: pos.left - leftDelta,
+					top: pos.top - topDelta,
+					right: pos.left - leftDelta + $this.outerWidth(),
+					bottom: pos.top - topDelta + $this.outerHeight(),
 					startselected: false,
 					selected: $this.hasClass("ui-selected"),
 					selecting: $this.hasClass("ui-selecting"),
@@ -197,7 +201,7 @@ var selectable = $.widget("ui.selectable", base, {
 			leftDelta = options.appendTo ? appendToOffset.left - $(options.appendTo).scrollLeft() : 0,
 			topDelta = options.appendTo ? appendToOffset.top - $(options.appendTo).scrollTop() : 0,
 			x2 = event.pageX - leftDelta,
-			y2 = event.pageY - topDelta
+			y2 = event.pageY - topDelta;
 
 		if (x1 > x2) { tmp = x2; x2 = x1; x1 = tmp; }
 		if (y1 > y2) { tmp = y2; y2 = y1; y1 = tmp; }
