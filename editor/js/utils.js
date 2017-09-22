@@ -158,14 +158,32 @@ var Utils;
         return $();
     }
 
+    // Attaches a tooltip to an element, only works when the element has a parent
     function attachMarkdownTooltip(elem)
     {
-        elem.tooltip(
+        var tooltipIcon = $('<span>', { class: "markdown-tooltip" });
+        tooltipIcon.append($('<img>', { src: editor_url + "svg/icon_markdown.svg" }));
+        tooltipIcon.tooltip(
         {
-            items: ":focus",
-            content: i18next.t('utils:markdown_tooltip')
+            items: ":hover",
+            content: i18next.t('utils:markdown_tooltip'),
+            // Taken from: http://stackoverflow.com/a/15014759
+            close: function(event, ui)
+            {
+                ui.tooltip.hover(
+                    function ()
+                    {
+                        $(this).stop(true).fadeIn();
+                    },
+                    function ()
+                    {
+                        $(this).fadeOut(function(){ $(this).remove(); });
+                    }
+                );
+            }
+
         });
-        elem.tooltip().off('mouseover mouseout');
+        tooltipIcon.insertAfter(elem);
     }
 
     function makeSortable(container)

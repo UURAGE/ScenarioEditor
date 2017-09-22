@@ -192,9 +192,9 @@ var Types;
                     control = $('<' + this.controlName + '>', { id: htmlId, maxlength: this.maxLength, rows: this.rows });
                 }
 
-                if (this.markdown) Utils.attachMarkdownTooltip(control);
-
                 containerEl.append(control);
+
+                if (this.markdown) Utils.attachMarkdownTooltip(control);
             },
             getFromDOM: function(containerEl)
             {

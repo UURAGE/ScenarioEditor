@@ -1360,3 +1360,20 @@ input[type=checkbox][disabled]
   opacity: 0.6;
   cursor: pointer;
 }
+
+.markdown-tooltip {
+  position: absolute;
+  left: 60%;
+  top: 88%;
+  display: none;
+}
+
+.markdown-tooltip img
+{
+  width: 20px;
+  height: 20px;
+}
+
+textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
+  display: inline;
+}

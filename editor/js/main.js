@@ -1090,9 +1090,9 @@ var Main;
             }
         });
 
-        if (Config.container.settings.statement.type.markdown) Utils.attachMarkdownTooltip(txtArea);
 
         inputDiv.append(txtArea);
+        if (Config.container.settings.statement.type.markdown) Utils.attachMarkdownTooltip(txtArea);
 
         // Disable dragging for this component
         getPlumbInstanceByNodeID(node.id).setDraggable(nodeDiv, false);

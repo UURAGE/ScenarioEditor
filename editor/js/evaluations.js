@@ -74,8 +74,8 @@ var Evaluations;
 
             var evaluationDescription = $('<textarea>', { class: 'evaluation-description' });
             evaluationDescription.attr('maxlength', Config.container.settings.evaluationDescription.type.maxLength);
-            if (Config.container.settings.evaluationDescription.type.markdown) Utils.attachMarkdownTooltip(evaluationDescription);
             evaluationContainer.append($('<td>').append(evaluationDescription));
+            if (Config.container.settings.evaluationDescription.type.markdown) Utils.attachMarkdownTooltip(evaluationDescription);
 
             var expressionContainer = $('<td>');
             expressionContainer.append(expressionKindContainer);

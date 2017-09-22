@@ -75,10 +75,10 @@ var Metadata;
                 .append($('<option>', { value: "very_difficult", text: i18next.t('metadata:difficulty.very_hard') })))));
         var scenarioDescription = $('<textarea>', { id: "scenarioDescription", class: "description" } );
         scenarioDescription.attr('maxlength', Config.container.settings.description.type.maxLength);
-        if (Config.container.settings.description.type.markdown) Utils.attachMarkdownTooltip(scenarioDescription);
         generalContainer.append($('<tr>')
-            .append($('<th>').append($('<label>', { for: "scenarioDescription", text: i18next.t('common:description') })))
-            .append($('<td>').append(scenarioDescription)));
+        .append($('<th>').append($('<label>', { for: "scenarioDescription", text: i18next.t('common:description') })))
+        .append($('<td>').append(scenarioDescription)));
+        if (Config.container.settings.description.type.markdown) Utils.attachMarkdownTooltip(scenarioDescription);
         metadataContainer.append(generalContainer);
 
         var authorsHeader = $('<thead>').append($('<th>').append($('<h3>', { text: i18next.t('metadata:authors') })));
