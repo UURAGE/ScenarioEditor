@@ -143,8 +143,37 @@ var ColorPicker;
         {
             var entryDataRow = $('<tr>').appendTo(keyBody);
             entryDataRow.append($('<td>', { class: "handle", text: "↕" }));
+
             var enabler = $('<input>', { type: 'checkbox' });
             enabler.prop("checked", color.enabled);
+            enabler.on('change', function()
+            {
+                var confirmButton = keyContainer.parent().find(".confirmColors");
+                if (!enabler.prop("checked"))
+                {
+                    var someColorEnabled = keyBody.children().map(function()
+                    {
+                        return $(this).find('.enable').children('input').prop("checked");
+                    }).get().some(function(enabled) { return enabled; });
+
+                    if (!someColorEnabled)
+                    {
+                        // Disable the confirmation button to restrict disabling all colors
+                        confirmButton.prop("disabled", true);
+                        confirmButton.addClass("ui-state-disabled");
+                    }
+                    else
+                    {
+                        confirmButton.prop("disabled", false);
+                        confirmButton.removeClass("ui-state-disabled");
+                    }
+                }
+                else
+                {
+                    confirmButton.prop("disabled", false);
+                    confirmButton.removeClass("ui-state-disabled");
+                }
+            });
             entryDataRow.append($('<td>', { class: "enable" }).append(enabler));
 
             entryDataRow.append($('<td>',
@@ -172,6 +201,7 @@ var ColorPicker;
             modal: true,
             buttons:
             [{
+                class: "confirmColors",
                 text: i18next.t('common:confirm'),
                 click: function()
                 {
