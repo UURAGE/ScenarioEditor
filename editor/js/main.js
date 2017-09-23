@@ -936,6 +936,10 @@ var Main;
 
         node.append($('<div>', { class:'imgDiv' }));
 
+        // Expands node container using overflow when moving a node closer to the bounds of the container
+        var scrollOffset = 50;
+        node.append($('<div>', { class: "expander", css: { position: 'absolute', right: -scrollOffset, bottom: -scrollOffset, width: 1, height: 1 } }));
+
         parent.append(node);
 
         node.on('dblclick', function(e)
@@ -975,6 +979,8 @@ var Main;
             {
                 // TODO: delete if jsPlumb katavorio supports scrolling into view
                 params.el.scrollIntoView(false);
+                parent.scrollLeft(parent.scrollLeft() + scrollOffset);
+                parent.scrollTop(parent.scrollTop() + scrollOffset);
             }
 
             //we do not set invalidateNodeClick in a stop handler since it fires before the click handler
