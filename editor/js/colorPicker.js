@@ -9,11 +9,17 @@ var ColorPicker;
     ColorPicker =
     {
         key: {},
+        keyFromXML: keyFromXML,
+        keyToXML: keyToXML,
+        colorFromXML: colorFromXML,
+        colorToXML: colorToXML,
         showFor: showFor,
         areColorsEnabled: areColorsEnabled,
         applyColors: applyColors,
         removeColors: removeColors
     };
+
+    var colorAnnotationId = "colour.c1";
 
     var colors =
     [
@@ -35,8 +41,7 @@ var ColorPicker;
         },
         {
             name: "firebrick",
-            enabled: true,
-            entry: "Bad"
+            enabled: true
         },
         {
             name: "chocolate",
@@ -48,8 +53,7 @@ var ColorPicker;
         },
         {
             name: "limegreen",
-            enabled: true,
-            entry: "Good"
+            enabled: true
         },
         {
             name: "seagreen",
@@ -89,8 +93,7 @@ var ColorPicker;
         },
         {
             name: "dodgerblue",
-            enabled: true,
-            entry: "Alternative"
+            enabled: true
         },
         {
             name: "slateblue",
@@ -126,6 +129,62 @@ var ColorPicker;
                 color.entry = Config.container.settings.colorKeyEntry.type.defaultValue;
             }
         });
+    }
+
+    function keyFromXML(containerXML)
+    {
+        resetKey();
+
+        ColorPicker.key.sequence.forEach(function(color) { color.enabled = false; });
+
+        var annotationXML = containerXML.children("annotation[id=" + Utils.escapeSelector(colorAnnotationId) + "]").eq(0);
+        var colorEnumeration = Types.primitives.enumeration.loadType(annotationXML.children('type').eq(0).children('enumeration').eq(0));
+        colorEnumeration.options.sequence.forEach(function(option)
+        {
+            if (option.value in ColorPicker.key.byColor)
+            {
+                ColorPicker.key.byColor[option.value].enabled = true;
+                ColorPicker.key.byColor[option.value].entry = option.text;
+            }
+        });
+    }
+
+    function keyToXML(containerXML)
+    {
+        var annotationXML = Utils.appendChild(containerXML, "annotation");
+        annotationXML.setAttribute('id', colorAnnotationId);
+        annotationXML.setAttribute('name', "");
+        var enabledColors = ColorPicker.key.sequence.filter(function(color)
+        {
+            return color.enabled;
+        });
+        var options =
+        {
+            byValue: enabledColors.reduce(function(byValue, color)
+            {
+                byValue[color.name] = { value: color.name, text: ColorPicker.key.byColor[color.name].entry };
+                return byValue;
+            }, {}),
+            sequence: enabledColors.map(function(color) { return { value: color.name, text: color.entry }; })
+        };
+        var colorEnumeration = $.extend({}, Types.primitives.enumeration, { options: options });
+        colorEnumeration.insertType(Utils.appendChild(annotationXML, "type"), true);
+    }
+
+    function colorFromXML(containerXML)
+    {
+        var annotationValueXML = containerXML.children("annotationValue[idref=" + Utils.escapeSelector(colorAnnotationId) + "]").eq(0);
+        if (annotationValueXML.length > 0)
+        {
+            return annotationValueXML.text();
+        }
+    }
+
+    function colorToXML(containerXML, colorName)
+    {
+        var annotationValueXML = Utils.appendChild(containerXML, "annotationValue");
+        annotationValueXML.setAttribute('idref', colorAnnotationId);
+        Types.primitives.enumeration.toXML(annotationValueXML, colorName);
     }
 
     function keyDialog()
@@ -290,7 +349,7 @@ var ColorPicker;
                         segment.setAttribute("fill", color.name);
                         segment.setAttribute("data-color", color.name);
                         var title = Utils.appendChild(segment, "title");
-                        $(title).text(i18next.t('colorPicker:colors.' + color.name) + ": " + color.entry);
+                        $(title).text(i18next.t('colorPicker:colors.' + color.name) + (color.entry ? ": " + color.entry : ""));
                     };
 
                     var appendBorderTo = function(ring, offset, radius)

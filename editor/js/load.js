@@ -230,12 +230,16 @@ var Load;
                     // Makes the connections between the nodes.
                     $.each(connections, function(sourceId, targets)
                     {
-                        for (var i = 0; i < targets.length; i++)
-                            plumbInstance.connect(
+                        targets.forEach(function(target)
+                        {
+                            var connection = plumbInstance.connect(
                             {
                                 source: sourceId,
-                                target: targets[i]
+                                target: target.id
                             });
+                            connection.setParameter('color', target.colorName);
+                        });
+
                     });
                 }.bind(this), true);
             });
@@ -271,6 +275,12 @@ var Load;
         });
 
         if ('t' in Parameters.container.byId) Parameters.timeId = 't';
+
+        var annotations = $(definitions).children('annotations');
+        if (annotations.length > 0)
+        {
+            ColorPicker.keyFromXML(annotations.eq(0));
+        }
     }
 
     function loadEvaluations(evaluationsXML)
@@ -410,7 +420,14 @@ var Load;
                 var targetID = targets[m].attributes.idref.value.replace(/\./g, '_');
                 if (!/^edit_\d+$/.test(targetID))
                     targetID = 'ext_' + targetID;
-                connections[id].push(targetID);
+                var connection = { id: targetID };
+
+                var annotationValues = $(targets[m]).children('annotationValues');
+                if (annotationValues.length > 0)
+                {
+                    connection.colorName = ColorPicker.colorFromXML(annotationValues.eq(0));
+                }
+                connections[id].push(connection);
             }
         }
 

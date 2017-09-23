@@ -524,13 +524,18 @@ var Types;
                 {
                     var value = $(optionXML).attr('value');
                     var text = optionXML.textContent;
-                    if (!text)
+                    if (!text && id)
                     {
                         text = i18next.t('configXML:' + ['type', this.name, id, value].join('.'));
-                        if (!options.byValue) options.byValue = {};
                     }
+
+                    if (value && !options.byValue)
+                    {
+                        options.byValue = {};
+                    }
+
                     var option = { text: text };
-                    if (options.byValue)
+                    if (value)
                     {
                         option.value = value;
                         options.byValue[option.value] = option;
@@ -590,13 +595,21 @@ var Types;
                 });
                 return castValue;
             },
-            insertType: function(typeXML)
+            insertType: function(typeXML, detailed)
             {
                 var enumerationXML = Utils.appendChild(typeXML, this.name);
                 var appendOptionChild = function(option)
                 {
                     var optionXML = Utils.appendChild(enumerationXML, 'option');
-                    this.toXML(optionXML, this.options.byValue ? option.value : option.text);
+                    if (this.options.byValue && detailed)
+                    {
+                        optionXML.setAttribute('value', option.value);
+                        this.toXML(optionXML, option.text);
+                    }
+                    else
+                    {
+                        this.toXML(optionXML, this.options.byValue ? option.value : option.text);
+                    }
                 };
                 this.options.sequence.forEach(appendOptionChild.bind(this));
                 return enumerationXML;

@@ -196,6 +196,9 @@ var Save;
                 addDefinitionElement(property, "property", propertyDefinitionsEl);
             }
         }
+
+        var annotationsEl = Utils.appendChild(definitionsEl, "annotations");
+        ColorPicker.keyToXML(annotationsEl);
     }
 
     function generateInitialParameterValuesXML(parentElement)
@@ -313,9 +316,9 @@ var Save;
         addAndReturnElement('y', scenarioNameSpace, positionElement).textContent = tree.topPos;
 
         var startsElement = addAndReturnElement('starts', scenarioNameSpace, treeElement);
-        sortNodeIDs(Main.getStartNodeIDs(tree)).forEach(function(startNodeID)
+        sortIdentifiables(Main.getStartNodeIDs(tree).map(function(startNodeID) { return { id: startNodeID }; })).forEach(function(startNode)
         {
-            addAndReturnElement("start", scenarioNameSpace, startsElement).setAttribute("idref", startNodeID.replace(/^ext_/, '').replace(/_/g, '.'));
+            addAndReturnElement("start", scenarioNameSpace, startsElement).setAttribute("idref", startNode.id.replace(/^ext_/, '').replace(/_/g, '.'));
         });
 
         var statementsElement = addAndReturnElement('statements', scenarioNameSpace, treeElement);
@@ -375,34 +378,43 @@ var Save;
                 source: node.id
             });
 
-            var targetNodeIDs = connections.map(function(connection) { return connection.targetId; });
-            sortNodeIDs(targetNodeIDs);
+            var targetNodes = connections.map(function(connection)
+            {
+                return { id: connection.targetId, colorName: connection.getParameter('color') };
+            });
+            sortIdentifiables(targetNodes);
 
             // Save the responses
             var responseElName = 'response';
             var responsesEl = addAndReturnElement(responseElName + "s", scenarioNameSpace, statementEl);
-            targetNodeIDs.forEach(function(targetNodeID)
+            targetNodes.forEach(function(targetNode)
             {
                 var responseEl = addAndReturnElement(responseElName, scenarioNameSpace, responsesEl);
-                responseEl.setAttribute('idref', targetNodeID.replace(/^ext_/, '').replace(/_/g, '.'));
+                responseEl.setAttribute('idref', targetNode.id.replace(/^ext_/, '').replace(/_/g, '.'));
+
+                if (targetNode.colorName)
+                {
+                    var annotationValuesEl = Utils.appendChild(responseEl, "annotationValues");
+                    ColorPicker.colorToXML(annotationValuesEl, targetNode.colorName);
+                }
             });
         });
     }
 
-    // Sorts nodes on the axis with the largest span and based on the position on that axis
-    function sortNodeIDs(nodeIDs)
+    // Sorts based on the axis with the largest span and based on the position on that axis
+    function sortIdentifiables(identifiables)
     {
         // Calculate the spans between the nodes on the X and Y axes
-        var xPositions = nodeIDs.map(function(nodeID) { return Utils.cssPosition($("#" + nodeID)).left; });
-        var yPositions = nodeIDs.map(function(nodeID) { return Utils.cssPosition($("#" + nodeID)).top;  });
+        var xPositions = identifiables.map(function(identifiable) { return Utils.cssPosition($("#" + identifiable.id)).left; });
+        var yPositions = identifiables.map(function(identifiable) { return Utils.cssPosition($("#" + identifiable.id)).top;  });
         var spanX = Math.max.apply(null, xPositions) - Math.min.apply(null, xPositions);
         var spanY = Math.max.apply(null, yPositions) - Math.min.apply(null, yPositions);
         var sortProperty = spanX > spanY ? 'left' : 'top';
 
-        // Sort the nodeIDs based on the largest span between the nodes
-        return nodeIDs.sort(function(a, b)
+        // Sort the identifiables based on the largest span between the identifiables and their position
+        return identifiables.sort(function(a, b)
         {
-            return Utils.cssPosition($("#" + a))[sortProperty] - Utils.cssPosition($("#" + b))[sortProperty];
+            return Utils.cssPosition($("#" + a.id))[sortProperty] - Utils.cssPosition($("#" + b.id))[sortProperty];
         });
     }
 

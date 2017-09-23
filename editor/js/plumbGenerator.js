@@ -46,7 +46,7 @@ var PlumbGenerator;
             if (ColorPicker.areColorsEnabled())
             {
                 var colorName = connection.getParameter("color");
-                if (colorName in ColorPicker.key.byColor)
+                if (colorName in ColorPicker.key.byColor && ColorPicker.key.byColor[colorName].entry)
                 {
                     // This uses the innerHTML property, so escape the HTML!
                     connection.addOverlay([ "Label", { id: "color-label", label: Utils.escapeHTML(ColorPicker.key.byColor[colorName].entry), cssClass: "color-label" }]);
