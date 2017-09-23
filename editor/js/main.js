@@ -969,7 +969,14 @@ var Main;
                     if(Main.selectedElement !== id)
                         selectElement(id);
                 }
+            },
+
+            drag: function(params)
+            {
+                // TODO: delete if jsPlumb katavorio supports scrolling into view
+                params.el.scrollIntoView(false);
             }
+
             //we do not set invalidateNodeClick in a stop handler since it fires before the click handler
         });
 
