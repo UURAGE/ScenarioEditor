@@ -1041,9 +1041,6 @@ var Main;
 
         KeyControl.hotKeysActive = false;
 
-        // Make sure the text fits inside the node
-        // Retrieve the height before the div becomes invisible
-        var height = textDiv.height();
         textDiv.hide();
         inputDiv.show();
 
@@ -1105,7 +1102,7 @@ var Main;
         if (nodeDiv.width() < 128) nodeDiv.width(128);
         // Don't show overflow ellipsis while editing
         nodeDiv.removeClass("long");
-        
+
         inputDiv.height("100%");
 
         txtArea.focus();
@@ -1706,11 +1703,17 @@ var Main;
         if (node.endNode) appendNodePropertyImage("node_has_end");
 
         var longNode = text.length > 140;
-        if (longNode) { nodeHTML.addClass("long"); } else { nodeHTML.removeClass("long"); }
-        // add the text and imageDiv to the node itself
-        // apply text changes
-        if (!longNode) { nodeHTML.width(width + "em"); }
-        else { nodeHTML.width(150 + "px"); }
+        if (longNode)
+        {
+            nodeHTML.addClass("long");
+            nodeHTML.width(150 + "px");
+        }
+        else
+        {
+            nodeHTML.removeClass("long");
+            nodeHTML.width(width + "em");
+        }
+
         var nodeTextDiv = nodeHTML.find('.statementText');
         nodeTextDiv.show();
         nodeTextDiv.html(text);
