@@ -1103,7 +1103,9 @@ var Main;
         // Make room for typing text in the node
         nodeDiv.height(inputDiv.height() + 35);
         if (nodeDiv.width() < 128) nodeDiv.width(128);
-
+        // Don't show overflow ellipsis while editing
+        nodeDiv.removeClass("long");
+        
         inputDiv.height("100%");
 
         txtArea.focus();
