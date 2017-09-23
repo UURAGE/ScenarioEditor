@@ -1436,7 +1436,7 @@ textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
   filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.5));
 }
 
-@-webkit-keyframes pop-in {
+@keyframes pop-in {
   0% { transform: translate(-50%, -50%) scale(0.75); opacity: 0; }
   50% { opacity: 1; }
   75% { transform: translate(-50%, -50%) scale(1.025); }
