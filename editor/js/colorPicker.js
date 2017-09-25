@@ -264,25 +264,75 @@ var ColorPicker;
                 text: i18next.t('common:confirm'),
                 click: function()
                 {
-                    ColorPicker.key.sequence = keyBody.children().map(function()
+                    var justDisabledColors = {};
+                    var newColorKeySequence = keyBody.children().map(function()
                     {
-                        var colorContainer = $(this).find('.color');
-                        var enableContainer = $(this).find('.enable');
-                        var entryContainer = $(this).find('.entry');
+                        var name = $(this).find('.color').data("color");
+                        var enabled = $(this).find('.enable').children('input').prop("checked");
+                        if (!enabled && enabled !== ColorPicker.key.byColor[name].enabled)
+                        {
+                            justDisabledColors[name] = 0;
+                        }
                         return {
-                            name: colorContainer.data("color"),
-                            enabled: enableContainer.children('input').prop("checked"),
-                            entry: Config.container.settings.colorKeyEntry.type.getFromDOM(entryContainer)
+                            name: name,
+                            enabled: enabled,
+                            entry: Config.container.settings.colorKeyEntry.type.getFromDOM($(this).find('.entry'))
                         };
                     }).get();
 
-                    ColorPicker.key.byColor = ColorPicker.key.sequence.reduce(function(byColor, color)
+                    var changedConnections = [].concat.apply([], Object.keys(Main.trees).map(function(treeID)
                     {
-                        byColor[color.name] = color;
-                        return byColor;
-                    }, {});
+                        return Main.trees[treeID].plumbInstance.getAllConnections();
+                    }))
+                    .filter(function(connection)
+                    {
+                        return connection.getParameter('color') in justDisabledColors;
+                    });
 
-                    $(this).dialog('close');
+                    var consideredSaveColorKey = function()
+                    {
+                        ColorPicker.key.sequence = newColorKeySequence;
+                        ColorPicker.key.byColor = newColorKeySequence.reduce(function(byColor, color)
+                        {
+                            byColor[color.name] = color;
+                            return byColor;
+                        }, {});
+
+                        changedConnections.forEach(function(connection)
+                        {
+                            connection.setParameter('color', null);
+                            removeColor(connection);
+                        });
+
+                        keyContainer.dialog('close');
+                    };
+
+                    changedConnections.forEach(function(connection)
+                    {
+                        justDisabledColors[connection.getParameter('color')]++;
+                    });
+
+                    if (changedConnections.length > 0)
+                    {
+                        var warningContainer = $('<div>');
+                        warningContainer.append($('<div>', { text: i18next.t('colorPicker:disable_colors_warning') }));
+                        warningContainer.append($('<br>'));
+                        for (var colorName in justDisabledColors)
+                        {
+                            warningContainer.append($('<div>', { text: i18next.t('colorPicker:colors.' + colorName) + ": " + justDisabledColors[colorName] + "x" }));
+                        }
+                        Utils.confirmDialog(warningContainer).done(function(confirmed)
+                        {
+                            if (confirmed)
+                            {
+                                consideredSaveColorKey();
+                            }
+                        });
+                    }
+                    else
+                    {
+                        consideredSaveColorKey();
+                    }
                 }
             },
             {
@@ -432,15 +482,7 @@ var ColorPicker;
                             connection.setParameter("color", colorName);
                             if (ColorPicker.areColorsEnabled())
                             {
-                                if (connection.id in Zoom.getZoomed().selectedConnections)
-                                {
-                                    connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: colorName, outlineColor: colorName }));
-                                }
-                                else
-                                {
-                                    connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: colorName, outlineColor: "transparent" }));
-                                }
-                                connection.setHoverPaintStyle($.extend({}, PlumbGenerator.defaultHoverPaintStyle, { strokeStyle: colorName, outlineColor: colorName }));
+                                applyColor(connection, Zoom.getZoomed());
                             }
                             connection.removeOverlay("color-picker");
                             e.stopPropagation();
@@ -515,25 +557,43 @@ var ColorPicker;
         $("#main").focus();
     }
 
+    function applyColor(connection, dialogue)
+    {
+        var colorName = connection.getParameter("color");
+        if (colorName)
+        {
+            if (dialogue && connection.id in dialogue.selectedConnections)
+            {
+                connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: colorName, outlineColor: colorName }));
+            }
+            else
+            {
+                connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: colorName, outlineColor: "transparent" }));
+            }
+            connection.setHoverPaintStyle($.extend({}, PlumbGenerator.defaultHoverPaintStyle, { strokeStyle: colorName, outlineColor: colorName }));
+        }
+    }
+
     function applyColors()
     {
         var dialogue = Zoom.getZoomed();
         dialogue.plumbInstance.getAllConnections().forEach(function(connection)
         {
-            var colorName = connection.getParameter("color");
-            if (colorName)
-            {
-                if (connection.id in dialogue.selectedConnections)
-                {
-                    connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: colorName, outlineColor: colorName }));
-                }
-                else
-                {
-                    connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: colorName, outlineColor: "transparent" }));
-                }
-                connection.setHoverPaintStyle($.extend({}, PlumbGenerator.defaultHoverPaintStyle, { strokeStyle: colorName, outlineColor: colorName }));
-            }
+            applyColor(connection, dialogue);
         });
+    }
+
+    function removeColor(connection, dialogue)
+    {
+        if (dialogue && connection.id in dialogue.selectedConnections)
+        {
+            connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: "goldenrod" }));
+        }
+        else
+        {
+            connection.setPaintStyle(PlumbGenerator.defaultPaintStyle);
+        }
+        connection.setHoverPaintStyle(PlumbGenerator.defaultHoverPaintStyle);
     }
 
     function removeColors()
@@ -541,15 +601,7 @@ var ColorPicker;
         var dialogue = Zoom.getZoomed();
         dialogue.plumbInstance.getAllConnections().forEach(function(connection)
         {
-            if (connection.id in dialogue.selectedConnections)
-            {
-                connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: "goldenrod" }));
-            }
-            else
-            {
-                connection.setPaintStyle(PlumbGenerator.defaultPaintStyle);
-            }
-            connection.setHoverPaintStyle(PlumbGenerator.defaultHoverPaintStyle);
+            removeColor(connection, dialogue);
         });
     }
 

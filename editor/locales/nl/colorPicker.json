@@ -23,5 +23,6 @@
         "dodgerblue": "Dodgerblauw",
         "slateblue": "Leiblauw",
         "palevioletred": "Bleekvioletrood"
-    }
+    },
+    "disable_colors_warning": "Een of meer kleuren zullen worden gedeactiveerd"
 }

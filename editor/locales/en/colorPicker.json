@@ -23,5 +23,6 @@
         "dodgerblue": "Dodger blue",
         "slateblue": "Slate blue",
         "palevioletred": "Pale violet red"
-    }
+    },
+    "disable_colors_warning": "You are about to disable one or more colors"
 }
