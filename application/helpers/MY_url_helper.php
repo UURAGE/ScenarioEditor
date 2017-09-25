@@ -14,19 +14,6 @@ if (!function_exists('root_url')) {
     }
 }
 
-if (!function_exists('editor_js_lang_url')) {
-
-  /**
-   * Gives directory where javascript language resources are.
-   * @param string $string
-   * @return string
-   */
-  function editor_js_lang_url($string='')
-    {
-       return base_url() . "editor/lang/" . $string;
-    }
-}
-
 if (!function_exists('editor_url')) {
 
   /**
