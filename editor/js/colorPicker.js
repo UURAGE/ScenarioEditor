@@ -254,9 +254,9 @@ var ColorPicker;
 
         keyContainer.dialog(
         {
-            title : i18next.t('colorPicker:key_title'),
-            height: 'auto',
-            width: 'auto',
+            title: i18next.t('colorPicker:key_title'),
+            height: 800,
+            width: Config.container.settings.colorKeyEntry.type.rows ? 360 : 320,
             modal: true,
             buttons:
             [{
