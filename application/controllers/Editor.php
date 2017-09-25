@@ -15,5 +15,26 @@ class Editor extends CI_Controller
     {
         $this->load->view('/editorView');
     }
+
+    public function GetLocales()
+    {
+        $languages = explode(" ", $this->input->get("lng"));
+        $namespaces = explode(" ", $this->input->get("ns"));
+        $locales = [];
+        foreach ($languages as $language)
+        {
+            foreach ($namespaces as $namespace)
+            {
+                $localeResourcePath = editor_path("locales/" . basename($language) . "/" . basename($namespace) . ".json");
+                if (file_exists($localeResourcePath))
+                {
+                    $locales[$language][$namespace] = json_decode(file_get_contents($localeResourcePath), true);
+                }
+            }
+        }
+
+        $this->output->set_cache_header($_SERVER['REQUEST_TIME'], time() + 7200);
+        return $this->output->set_content_type('application/json')->set_status_header(200)->set_output(json_encode($locales));
+    }
 }
 ?>

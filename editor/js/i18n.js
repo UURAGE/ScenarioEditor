@@ -6,7 +6,6 @@
 
     i18next
     .use(i18nextXHRBackend)
-    .use(i18nextLocalStorageCache)
     .use(i18nextSprintfPostProcessor)
     .init(
     {
@@ -53,14 +52,11 @@
             // returning a path:
             // function(lngs, namespaces) { return customPath; }
             // the returned path will interpolate lng, ns if provided like giving a static path
-            loadPath: editor_url + 'locales/{{lng}}/{{ns}}.json',
-
-            // path to post missing resources
-            addPath: editor_url + 'locales/add/{{lng}}/{{ns}}',
+            loadPath: base_url + 'editor/getlocales?lng={{lng}}&ns={{ns}}',
 
             // your backend server supports multiloading
             // /locales/resources.json?lng=de+en&ns=ns1+ns2
-            allowMultiLoading: false,
+            allowMultiLoading: true,
 
             // parse data after it has been fetched
             // here it removes the letter a from the json (bad idea)
@@ -125,13 +121,6 @@
                     window.console && console.log(e);
                 }
             }
-        },
-        cache:
-        {
-            enabled: environment !== 'development',
-            // prefix for stored languages
-            prefix: 'i18next_res_',
-            expirationTime: 24*60*60*1000
         }
     });
 })();
