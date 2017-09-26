@@ -39,6 +39,10 @@
     border:3px solid #F37812;
 }
 
+.w.editing {
+	z-index: 5;
+}
+
 .allowInterleaveNode
 {
 	border-bottom-color:#8B4A94   !important;

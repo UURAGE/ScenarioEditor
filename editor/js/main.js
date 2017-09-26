@@ -1035,6 +1035,7 @@ var Main;
         var textDiv = nodeDiv.find('.statementText');
 
         nodeDiv.off('dblclick');
+        nodeDiv.addClass("editing");
         node.editing = true;
 
         var text = node.text ? node.text : "";
@@ -1136,6 +1137,7 @@ var Main;
         {
             startEditingNode(node.id);
         });
+        nodeDiv.removeClass("editing");
         node.editing = false;
     }
 
