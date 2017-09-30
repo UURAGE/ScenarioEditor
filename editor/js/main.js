@@ -303,11 +303,7 @@ var Main;
             $(this).parent().remove();
         });
 
-        $("#userDefinedParameterEffects").sortable({
-            handle: ".handle",
-            axis: "y",
-            forceHelperSize: true
-        });
+        Utils.makeSortable($("#userDefinedParameterEffects"));
 
         $("#main").on('mouseenter', function()
         {
@@ -1953,11 +1949,7 @@ var Main;
                         container.append(parameterIdRefSelect);
 
                         effectsContainer = $('<div>', { class: classPrefix + "-container"});
-                        effectsContainer.sortable({
-                            handle: ".handle",
-                            axis: "y",
-                            forceHelperSize: true
-                        });
+                        Utils.makeSortable(effectsContainer);
                         container.append(effectsContainer);
 
                         container.append(Parts.addButton(i18next.t('main:add_effect')));

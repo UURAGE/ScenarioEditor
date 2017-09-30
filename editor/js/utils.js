@@ -192,6 +192,16 @@ var Utils;
             handle: ".handle",
             axis: "y",
             forceHelperSize: true,
+            containment: container,
+            start: function(e, ui)
+            {
+                // Taken from: https://stackoverflow.com/a/36554073
+                // Makes the containment area larger so that the element can be sorted into the top and bottom
+                var sort = $(this).sortable('instance');
+                ui.placeholder.height(ui.helper.height());
+                sort.containment[3] += ui.helper.height() * 1.5 - sort.offset.click.top;
+                sort.containment[1] -= sort.offset.click.top;
+            },
             helper: function(e, helper)
             {
                 $(helper).children().each(function()
