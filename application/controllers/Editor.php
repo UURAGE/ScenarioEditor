@@ -33,7 +33,7 @@ class Editor extends CI_Controller
             }
         }
 
-        $this->output->set_cache_header($_SERVER['REQUEST_TIME'], time() + 7200);
+        $this->output->set_cache_header($_SERVER['REQUEST_TIME'], time() + (ENVIRONMENT === 'production' ? 7200 : 0));
         return $this->output->set_content_type('application/json')->set_status_header(200)->set_output(json_encode($locales));
     }
 }
