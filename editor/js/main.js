@@ -925,6 +925,7 @@ var Main;
         node.append( $('<div>', { class: "ep" }));
 
         var inputDiv =  $('<div>', { class: "statementInput" });
+        inputDiv.hide();
         node.append(inputDiv);
 
         var textDiv = $('<div>', { class:"statementText" });
