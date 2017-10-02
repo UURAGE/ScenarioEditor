@@ -975,9 +975,24 @@ var Main;
             drag: function(params)
             {
                 // TODO: delete if jsPlumb katavorio supports scrolling into view
-                params.el.scrollIntoView(false);
-                parent.scrollLeft(parent.scrollLeft() + scrollOffset);
-                parent.scrollTop(parent.scrollTop() + scrollOffset);
+                var epsilon = 5;
+                var position = Utils.cssPosition(node);
+                if (position.left + node.outerWidth() + scrollOffset + epsilon > parent.width() + parent.scrollLeft())
+                {
+                    parent.scrollLeft(position.left + node.outerWidth() + scrollOffset - parent.width());
+                }
+                else if (position.left - scrollOffset < parent.scrollLeft())
+                {
+                    parent.scrollLeft(Math.max(position.left - scrollOffset, 0));
+                }
+                if (position.top + node.outerHeight() + scrollOffset + epsilon > parent.height() + parent.scrollTop())
+                {
+                    parent.scrollTop(position.top + node.outerHeight() + scrollOffset - parent.height());
+                }
+                else if (position.top - scrollOffset < parent.scrollTop())
+                {
+                    parent.scrollTop(Math.max(position.top - scrollOffset, 0));
+                }
             }
 
             //we do not set invalidateNodeClick in a stop handler since it fires before the click handler
