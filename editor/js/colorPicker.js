@@ -110,6 +110,7 @@ var ColorPicker;
         resetKey();
 
         $("#toggleColors").on('click', toggleColors);
+        $("#toggleColors").addClass("enabled");
     });
 
     function resetKey()
