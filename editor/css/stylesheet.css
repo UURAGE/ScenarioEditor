@@ -371,9 +371,18 @@ button img
   #toolbar .small-buttons button
   {
     display: block;
-    width: 120px;
     height: 23px;
     text-align: left;
+  }
+
+  #toolbar #file .small-buttons button
+  {
+    width: 110px;
+  }
+
+  #toolbar #scenario .small-buttons button
+  {
+    width: 130px;
   }
 
   #toolbar .small-buttons img
@@ -461,7 +470,6 @@ button img
 {
   margin: 5px 0;
   padding: 0;
-  width: 125px;
   height: 3px;
   background-color: #ecf0f1;
 }
@@ -815,7 +823,7 @@ button img
   background-color: rgba(255, 255, 255, 0.5);
   color: rgba(0, 0, 0, 0.5);
   font-size: 20px;*/
-  margin-left: 265px;
+  margin-left: 280px;
   /*padding: 5px 40%;*/
   width: calc(100% - 300px);
 }
@@ -981,7 +989,7 @@ button img
 
 #toolbar .dropdown button, #toolbar .dropdown div
 {
-  width: 110px;
+  width: 100%;
   /*padding: 2px 5px;*/
 }
 
