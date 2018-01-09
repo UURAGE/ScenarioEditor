@@ -482,6 +482,7 @@ button img
   color: #666;
   position: relative;
   min-width: 5px; /* Grip */
+  overflow-y: hidden; /* Prevents Edge overflow bug */
 }
 
   #sidebar > div
