@@ -223,7 +223,6 @@ a[data-disabled]
 #propertyValuesSection table,
 #characterSection table
 {
-    margin-bottom: 20px;
     width: 100%;
     table-layout: fixed;
 }
@@ -235,6 +234,7 @@ a[data-disabled]
     font-weight: normal;
     text-align: left;
     vertical-align: top;
+    width: 30%;
 }
 
 #metadata td,
