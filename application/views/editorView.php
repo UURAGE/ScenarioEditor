@@ -15,7 +15,7 @@
   $styles = array(
       "css/stylesheet.css",
       "css/jsPlumbStyle.css",
-      "jQueryUI/css/jquery-ui-1.11.4.css",
+      "css/vendor/jquery-ui/jquery-ui.min.css",
   );
   foreach ($styles as $style)
   {   //filemtime appends last edited time, to fix using cached files
@@ -52,7 +52,7 @@
   //non language related scripts
   $scripts = array(
       "js/lib/jquery-3.3.1.min.js",
-      "js/lib/jquery-ui-1.11.4.min.js",
+      "js/lib/jquery-ui.min.js",
       "js/lib/jquery-ui-selectable-patched.js",
       "js/lib/jsplumb.min.js",
       "js/lib/FileSaver.min.js",
