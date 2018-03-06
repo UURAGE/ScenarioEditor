@@ -94,7 +94,7 @@ var Print;
                         }
                         // The outerHTML for SVG is not supported in IE and ME, because the HTMLElement is an SVGSVGElement
                         // http://stackoverflow.com/questions/12865025/convert-svgsvgelement-to-string
-                        else if (!outerHTML && treeDivContentList[i].className.baseVal === 'jsplumb-connector')
+                        else if (!outerHTML && treeDivContentList[i].className.baseVal === 'jtk-connector')
                         {
                             var svgHTML = (new XMLSerializer()).serializeToString(treeDivContentList[i]);
                             htmlList.push(svgHTML);

@@ -121,7 +121,7 @@
 	transition:background-color 0.15s ease-in, color 0.15s ease-in;
 }
 
-.color-label.jsplumb-hover, .jsplumb-source-hover, .jsplumb-target-hover {
+.color-label.jtk-hover, .jtk-source-hover, .jtk-target-hover {
 	background-color:#1e8151;
 	color:white;
 }
@@ -153,7 +153,7 @@
 	box-shadow: 0px 0px 6px black;
 }
 
-.jsplumb-endpoint {
+.jtk-endpoint {
 	z-index:3;
 }
 

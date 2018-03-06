@@ -54,7 +54,7 @@
       "js/lib/jquery-2.2.4.min.js",
       "js/lib/jquery-ui-1.11.4.min.js",
       "js/lib/jquery-ui-selectable-patched.js",
-      "js/lib/jsPlumb-2.0.7.js",
+      "js/lib/jsplumb.min.js",
       "js/lib/FileSaver.min.js",
       "js/utils.js",
       "js/types.js",

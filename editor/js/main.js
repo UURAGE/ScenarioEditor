@@ -1234,9 +1234,8 @@ var Main;
 
                     if (cs.length > 0)
                     {
-                        // Pick the first element in the array, because connections are unique
-                        // and detach it
-                        zoomedTree.plumbInstance.detach(cs[0]);
+                        // Pick the first element in the array, because connections are unique and delete it
+                        zoomedTree.plumbInstance.deleteConnection(cs[0]);
                     }
 
                     delete zoomedTree.selectedConnections[connectionId];
@@ -1338,7 +1337,7 @@ var Main;
             {
                 colorName = "#5c96bc";
             }
-            cs[0].setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: colorName, outlineColor: "transparent" }));
+            cs[0].setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: colorName, outlineStroke: "transparent" }));
         }
 
         delete selectedConnections[connectionId];

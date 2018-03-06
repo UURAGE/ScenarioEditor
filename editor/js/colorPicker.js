@@ -565,13 +565,13 @@ var ColorPicker;
         {
             if (dialogue && connection.id in dialogue.selectedConnections)
             {
-                connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: colorName, outlineColor: colorName }));
+                connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: colorName, outlineStroke: colorName }));
             }
             else
             {
-                connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: colorName, outlineColor: "transparent" }));
+                connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: colorName, outlineStroke: "transparent" }));
             }
-            connection.setHoverPaintStyle($.extend({}, PlumbGenerator.defaultHoverPaintStyle, { strokeStyle: colorName, outlineColor: colorName }));
+            connection.setHoverPaintStyle($.extend({}, PlumbGenerator.defaultHoverPaintStyle, { stroke: colorName, outlineStroke: colorName }));
         }
     }
 
@@ -588,7 +588,7 @@ var ColorPicker;
     {
         if (dialogue && connection.id in dialogue.selectedConnections)
         {
-            connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: "goldenrod" }));
+            connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: "goldenrod" }));
         }
         else
         {

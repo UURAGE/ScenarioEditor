@@ -9,8 +9,8 @@ var PlumbGenerator;
     PlumbGenerator =
     {
         genJsPlumbInstance : genJsPlumbInstance,
-        defaultPaintStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 2 },
-        defaultHoverPaintStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "#1e8151", outlineWidth: 1 }
+        defaultPaintStyle: { stroke: "#5c96bc", strokeWidth: 2, outlineStroke: "transparent", outlineWidth: 2 },
+        defaultHoverPaintStyle: { stroke: "#5c96bc", strokeWidth: 2, outlineStroke: "#1e8151", outlineWidth: 1 }
     };
 
     // Expects an element returned from a jquery selector
@@ -38,7 +38,7 @@ var PlumbGenerator;
         });
 
         // On dblclick, the connection will be deleted
-        instance.bind("dblclick", instance.detach);
+        instance.bind("dblclick", instance.deleteConnection);
 
         // On mouseover, show the color key entry
         instance.bind("mouseover",function(connection, e)
@@ -98,11 +98,11 @@ var PlumbGenerator;
                 var colorName = c.getParameter("color");
                 if (!colorName || !ColorPicker.areColorsEnabled())
                 {
-                    c.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: "goldenrod" }));
+                    c.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: "goldenrod" }));
                 }
                 else
                 {
-                    c.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { strokeStyle: colorName, outlineColor: colorName }));
+                    c.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: colorName, outlineStroke: colorName }));
                 }
             }
         });
