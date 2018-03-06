@@ -205,12 +205,28 @@ var Evaluations;
                     type = $.extend(type, { controlName: 'textarea', rows: 4, markdown: "gfm" });
                 }
 
+                var evaluationId = container.prop('id');
+                var expression = Expression.getFromDOM(container.find('.evaluation-expression'), type);
+                if (type.name === Types.primitives.integer.name &&
+                    evaluationId.indexOf(getParameterIdPrefix()) === 0)
+                {
+                    if (expression.reference.calculate === 'percentage')
+                    {
+                        type.minimum = 0;
+                        type.maximum = 100;
+                    }
+                    else
+                    {
+                        type = Parameters.container.byId[evaluationId.substring(Evaluations.getParameterIdPrefix().length)].type;
+                    }
+                }
+
                 return {
-                    id: container.prop('id'),
+                    id: evaluationId,
                     name: container.find(".evaluation-name").val(),
                     type: type,
                     description: container.find(".evaluation-description").val(),
-                    expression: Expression.getFromDOM(container.find('.evaluation-expression'), type)
+                    expression: expression
                 };
             };
             evaluationsContainer.find(".existed").each(function()
@@ -339,6 +355,12 @@ var Evaluations;
             if (evaluation.id === evaluatedParameterId)
             {
                 evaluation.type = newParameter.type;
+
+                if (evaluation.type.name === Types.primitives.integer.name && evaluation.expression.reference.calculate === 'percentage')
+                {
+                    evaluation.type.minimum = 0;
+                    evaluation.type.maximum = 100;
+                }
             }
             else
             {
