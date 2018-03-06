@@ -21,12 +21,14 @@ button
   text-align: center;
   font-size: 2em;
   cursor: pointer;
+  margin-top: -3px;
+  margin-left: 2px;
 }
 
   .zoomTreeButton:hover
   {
-    background-color: yellow;
-    color: black;
+    transition: transform .15s;
+    transform: scale(1.2);
   }
 
 textarea
@@ -151,15 +153,13 @@ a[data-disabled]
   position: absolute;
   width: 250px;
   height: 50px;
+  border-radius: 1px !important;
 }
 
 #gridIndicator
 {
   display: none;
-  -moz-border-radius: 0.5em;
-  -webkit-border-radius: 0.5em;
-  border-radius: 0.5em;
-  background-color: blue;
+  background-color: #9c5dc4;
   opacity: 0.2;
   pointer-events: none;
   /*start invisible, main.js will show on mouse enter of #main*/
@@ -265,11 +265,6 @@ a[data-disabled]
   border-bottom: 1px solid black;
 }
 
-#toolbar
-{
-  background-color: #d6d6d6;
-}
-
 #logo {
   width: 32px;
   height: 32px;
@@ -300,7 +295,8 @@ button img
 
 .enabled
 {
-  background-color: Highlight !important;
+  background-color: #a345e5 !important;
+  color: #fff;
 }
 
 #toolbar button,
@@ -371,7 +367,7 @@ button img
   #toolbar .small-buttons button
   {
     display: block;
-    height: 23px;
+    height: 26px;
     text-align: left;
   }
 
@@ -431,7 +427,7 @@ button img
 
 #toolbar button:hover, #toolbar .dropped
 {
-  background-color: #2ecc71;
+  background-color: #a345e5;
   color: #fff;
   cursor: pointer;
 }
@@ -478,8 +474,8 @@ button img
 {
   width: 475px;
   height: 100%;
-  background-color: #bdc3c7;
-  color: #666;
+  background-color: #e9e9e9;
+  color: #555;
   position: relative;
   min-width: 5px; /* Grip */
   overflow-y: hidden; /* Prevents Edge overflow bug */
@@ -561,8 +557,6 @@ button img
 .w.treeContainer
 {
   overflow: hidden;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   padding: 0;
   border-color: #000000;
@@ -571,6 +565,7 @@ button img
   background-size: 20px 20px;
   background-repeat: no-repeat;
   background-position: center right 15px;
+  box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.3);
 }
 
   .w.treeContainer.zoom
@@ -808,8 +803,8 @@ button img
   display: inline-block;
   margin: 0;
   padding: 5px 0;
-  background-color: #ecf0f1;
-  color: #888;
+  background-color: #e9e9e9;
+  color: #666;
   text-align: center;
   font-size: 1.3em;
   /*-moz-border-radius-topleft: 12px;
@@ -936,13 +931,13 @@ button img
 {
   display: inline-block;
   overflow: hidden;
-  margin: 5px 1px;
+  margin: 5px 0px;
   padding: 0;
   height: 78px;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
-  background-color: #ecf0f1;
+  background-color: white;
   vertical-align: top;
   -ms-word-wrap: break-word;
   word-wrap: break-word;
@@ -954,7 +949,7 @@ button img
     float: left;
     width: 100%;
     height: 7px;
-    background-color: #8C9194;
+    background-color: #662D91;
     content: "";
   }
 
@@ -962,7 +957,7 @@ button img
 {
   margin: 0;
   padding: 0;
-  background-color: #bdc3c7;
+  background-color: #e9e9e9;
   -webkit-user-select: none;  /* Chrome all / Safari all */
   -moz-user-select: none;     /* Firefox all */
   -ms-user-select: none;      /* IE 10+ */
@@ -973,14 +968,14 @@ button img
   {
     position: absolute;
     top: 0;
+    margin-top: 0px;
     z-index: 51;
-    margin: 3px;
     width: auto;
     height: auto;
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
     border-radius: 0;
-    background-color: #bdc3c7;
+    background-color: white;
   }
 
 .dropdown::after
@@ -1004,7 +999,7 @@ button img
 
 .buttonGroup:hover::after
 {
-  background-color: #27ae60;
+  background-color: #a345e5;
 }
 
 #tabDock
@@ -1291,6 +1286,8 @@ input[type=checkbox][disabled]
   margin: 10px;
   padding: 0;
   background-color: white;
+  width: 296px;
+  height: 296px;
   /*float:right;*/
   /*margin-left:auto;
   margin-right:auto;*/
@@ -1309,7 +1306,7 @@ input[type=checkbox][disabled]
   width: 296px;
   height: 296px;
   box-sizing: border-box;
-  border: 2px solid #27ae60;
+  border: 2px solid #662D91;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
