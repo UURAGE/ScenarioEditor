@@ -353,7 +353,7 @@ var ColorPicker;
 
     function showFor(connection)
     {
-        if ($("#colorPicker").length > 0) return;
+        if ($("#colorPicker").length > 0 || !ColorPicker.areColorsEnabled()) return;
 
         connection.addOverlay(
         [
