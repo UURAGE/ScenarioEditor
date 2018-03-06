@@ -56,12 +56,6 @@
 
         styleTableSpacing();
 
-        // Resizability for the table columns
-        $('#draftTable').colResizable(
-        {
-            liveDrag: true
-        });
-
         // Resizability for the whole panel
         $('#draftScreen').resizable(
         {
