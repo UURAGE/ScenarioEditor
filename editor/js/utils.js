@@ -13,7 +13,6 @@ var Utils;
         parseDecimalIntWithDefault: parseDecimalIntWithDefault,
         parseBool: parseBool,
         escapeRegex: escapeRegex,
-        escapeSelector: escapeSelector,
         escapeHTML: escapeHTML,
         unEscapeHTML: unEscapeHTML,
         cssPosition: cssPosition,
@@ -62,12 +61,6 @@ var Utils;
     function escapeRegex(str)
     {
         return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-    }
-
-    // Taken from https://learn.jquery.com/using-jquery-core/faq/how-do-i-select-an-element-by-an-id-that-has-characters-used-in-css-notation/
-    function escapeSelector(str)
-    {
-        return str.replace( /(:|\.|\[|\]|,|=)/g, "\\$1" );
     }
 
     function escapeHTML(str)

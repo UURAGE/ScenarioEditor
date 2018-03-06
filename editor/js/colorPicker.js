@@ -138,7 +138,7 @@ var ColorPicker;
 
         ColorPicker.key.sequence.forEach(function(color) { color.enabled = false; });
 
-        var annotationXML = containerXML.children("annotation[id=" + Utils.escapeSelector(colorAnnotationId) + "]").eq(0);
+        var annotationXML = containerXML.children("annotation[id=" + $.escapeSelector(colorAnnotationId) + "]").eq(0);
         var colorEnumeration = Types.primitives.enumeration.loadType(annotationXML.children('type').eq(0).children('enumeration').eq(0));
         colorEnumeration.options.sequence.forEach(function(option)
         {
@@ -174,7 +174,7 @@ var ColorPicker;
 
     function colorFromXML(containerXML)
     {
-        var annotationValueXML = containerXML.children("annotationValue[idref=" + Utils.escapeSelector(colorAnnotationId) + "]").eq(0);
+        var annotationValueXML = containerXML.children("annotationValue[idref=" + $.escapeSelector(colorAnnotationId) + "]").eq(0);
         if (annotationValueXML.length > 0)
         {
             return annotationValueXML.text();

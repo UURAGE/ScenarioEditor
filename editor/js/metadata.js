@@ -284,7 +284,7 @@ var Metadata;
         var setPropertyInDOM = function(propertyValues, propertyContainerId, property)
         {
             if (property.scopes.statementScope !== "independent") return;
-            property.type.setInDOM($(propertyContainerId + '-' + Utils.escapeSelector(property.id)), propertyValues[property.id]);
+            property.type.setInDOM($(propertyContainerId + '-' + $.escapeSelector(property.id)), propertyValues[property.id]);
         };
         var propertyId, characterId, property;
         for (propertyId in Config.container.properties.byId)
@@ -297,7 +297,7 @@ var Metadata;
             for (characterId in Config.container.characters.byId)
             {
                 property = Config.container.characters.properties.byId[propertyId];
-                setPropertyInDOM(Metadata.container.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + Utils.escapeSelector(characterId) + "-container", property);
+                setPropertyInDOM(Metadata.container.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + $.escapeSelector(characterId) + "-container", property);
             }
         }
         for (characterId in Config.container.characters.byId)
@@ -305,7 +305,7 @@ var Metadata;
             for (propertyId in Config.container.characters.byId[characterId].properties.byId)
             {
                 property = Config.container.characters.byId[characterId].properties.byId[propertyId];
-                setPropertyInDOM(Metadata.container.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + Utils.escapeSelector(characterId) + "-container", property);
+                setPropertyInDOM(Metadata.container.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + $.escapeSelector(characterId) + "-container", property);
             }
         }
     }
