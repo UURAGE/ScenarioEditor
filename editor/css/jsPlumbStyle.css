@@ -117,28 +117,28 @@
 	background-color:#F79923;
 }
 
-.w.computer.w.selected, .w.computer.ui-selected {
-	background-color:#ff3333cc;
+.w.computer.selected, .w.computer.ui-selected {
+	background-color:rgba(255, 51, 51, 0.8);
 }
 
-.w.player.w.selected, .w.player.ui-selected {
-	background-color:#3366ffcc;
+.w.player.selected, .w.player.ui-selected {
+	background-color:rgba(51, 102, 255, 0.8);
 }
 
-.w.situation.w.selected, .w.situation.ui-selected {
-	background-color:#F79923cc;
+.w.situation.selected, .w.situation.ui-selected {
+	background-color:rgba(247, 153, 35, 0.8);
 }
 
 .w.computer.parentSelected {
-	background-color:#ff333350;
+	background-color:rgba(255, 51, 51, 0.31);
 }
 
 .w.player.parentSelected {
-	background-color:#3366ff50;
+	background-color:rgba(51, 102, 255, 0.31);
 }
 
 .w.situation.parentSelected {
-	background-color:#F7992350;
+	background-color:rgba(247, 153, 35, 0.31);
 }
 
 #clone{
