@@ -572,7 +572,7 @@ var Main;
             Main.unsavedChanges = true;
         }
 
-        var treeDiv = $('<div>', { class: "treeDiv" });
+        var treeDiv = $('<div>', { class: "treeDiv noSelect" });
 
         treeDiv.on("click", function(e)
         {

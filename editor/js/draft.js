@@ -31,7 +31,7 @@
                     .append($('<col>', { span: 1, style: "width: 10%;" }))
                     .append($('<col>', { span: 1, style: "width: 12.5%" })))
                 .append($('<tr>'))
-                    .append($('<th>', { class: "dragHandle", id: "draftDragAll", title: i18next.t('draft:drag_all'), text: "[[::]]" }))
+                    .append($('<th>', { class: "dragHandle noSelect", id: "draftDragAll", title: i18next.t('draft:drag_all'), text: "[[::]]" }))
                     .append($('<th>',
                         {
                             class: "col0",
@@ -416,7 +416,7 @@
             {
                 var i, p, e,
                     html = '<tr class="draftItem">';
-                html += '<td class="dragHandle">::::::</td>';
+                html += '<td class="dragHandle noSelect">::::::</td>';
 
                 for (i = 0; i < itemProperties.length; i += 1)
                 {

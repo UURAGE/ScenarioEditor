@@ -98,7 +98,7 @@
       <div id="wrapLeft">
         <div id="content">
           <div>
-            <div id="toolbar">
+            <div id="toolbar" class="noSelect">
               <div id="scenarioNameTab">
                 <?php sLang("edt_scenario"); ?>:
                 <span class="scenarioName"></span>
@@ -207,7 +207,7 @@
       </div>
       <!-- Sidebar -->
       <div id="sidebar">
-        <div class="grip"></div>
+        <div class="grip noSelect"></div>
         <div>
           <div>
             <div id="languages">
