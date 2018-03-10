@@ -1307,9 +1307,9 @@ input[type=checkbox][disabled]
   height: 296px;
   box-sizing: border-box;
   border: 2px solid #662D91;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
+  -moz-border-radius: 1px;
+  -webkit-border-radius: 1px;
+  border-radius: 1px;
 }
 
 #scaledDiv
