@@ -356,6 +356,8 @@ var Evaluations;
             {
                 evaluation.type = $.extend({}, newParameter.type);
 
+                evaluation.expression.kind.handleParameterTypeChange(oldParameter, newParameter, evaluation.type, evaluation.expression);
+
                 if (evaluation.type.name === Types.primitives.integer.name && evaluation.expression.reference.calculate === 'percentage')
                 {
                     evaluation.type.minimum = 0;
