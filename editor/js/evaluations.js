@@ -217,7 +217,7 @@ var Evaluations;
                     }
                     else
                     {
-                        type = Parameters.container.byId[evaluationId.substring(Evaluations.getParameterIdPrefix().length)].type;
+                        type = $.extend({}, Parameters.container.byId[evaluationId.substring(Evaluations.getParameterIdPrefix().length)].type);
                     }
                 }
 
@@ -354,7 +354,7 @@ var Evaluations;
         {
             if (evaluation.id === evaluatedParameterId)
             {
-                evaluation.type = newParameter.type;
+                evaluation.type = $.extend({}, newParameter.type);
 
                 if (evaluation.type.name === Types.primitives.integer.name && evaluation.expression.reference.calculate === 'percentage')
                 {
@@ -397,7 +397,7 @@ var Evaluations;
             evaluation = {
                 id: evaluatedParameterId,
                 name: parameter.name,
-                type: parameter.type,
+                type: $.extend({}, parameter.type),
                 description: parameter.description,
                 expression: { kind: Expression.kinds.reference, reference: { parameterIdRef: parameter.id } }
             };
