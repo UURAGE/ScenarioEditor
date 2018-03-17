@@ -230,6 +230,9 @@ var Clipboard;
         newTree.subject = i18next.t('clipboard:copy_of', { postProcess: 'sprintf', sprintf: [toCopy.subject]});
         newTree.optional = toCopy.optional;
 
+        newTree.leftScroll = toCopy.leftScroll;
+        newTree.topScroll = toCopy.topScroll;
+
         var treeDiv = $("#" + newTree.id);
         treeDiv.find(".subjectName").text(newTree.subject);
         treeDiv.find(".subjectNameInput").val(newTree.subject);
