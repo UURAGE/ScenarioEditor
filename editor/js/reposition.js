@@ -28,13 +28,17 @@
                 repositionNodes(optimizedOrder);
             }, true);
 
-            // Redraw all connections.
-            // Note that we set doNotRepaintEverything to true in batch and instead revalidate each node separately.
-            // Using an automatic or manual repaintEverything causes various issues, such as connection dragging
-            // drawing connections at old positions.
             tree.nodes.forEach(function(nodeID)
             {
+                // Note that we set doNotRepaintEverything to true in batch and instead revalidate each node separately.
+                // Using an automatic or manual repaintEverything causes various issues, such as connection dragging
+                // drawing connections at old positions.
                 tree.plumbInstance.revalidate(nodeID);
+
+                // Delete the properties from node that were used
+                delete Main.nodes[nodeID].topologicalChildren;
+                delete Main.nodes[nodeID].topologicalOrderingVisited;
+                delete Main.nodes[nodeID].topologicalParent;
             });
         });
     });
