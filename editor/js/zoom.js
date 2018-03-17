@@ -69,7 +69,7 @@ var Zoom;
                 {
                     tree.nodes.forEach(function(n)
                     {
-                        Main.changeNodeText(n, true);
+                        Main.changeNodeText(n);
                     });
 
                     tree.zoomedInBefore = true;

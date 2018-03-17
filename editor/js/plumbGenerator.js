@@ -121,11 +121,8 @@ var PlumbGenerator;
         instance.bind("beforeDrop", function(info)
         {
             Main.makeConnection(info.sourceId,info.targetId, instance);
-            instance.updateOffset({elId:info.sourceId, recalc:true});
-            instance.repaint(info.sourceId, null, 0);
-
-            instance.updateOffset({elId:info.targetId, recalc:true});
-            instance.repaint(info.targetId, null, 0);
+            instance.revalidate(info.sourceId);
+            instance.revalidate(info.targetId);
         });
 
         instance.bind("connection", function(info)

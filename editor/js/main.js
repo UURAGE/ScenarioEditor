@@ -761,7 +761,7 @@ var Main;
     }
 
     // Add a new node with the given type.
-    function addNewNode(type, triggerEdit, text)
+    function addNewNode(type, text)
     {
         var container = $(".selected.treeContainer");
 
@@ -831,10 +831,6 @@ var Main;
         // Always select the node after the creation.
         selectElement(id);
 
-        if (triggerEdit && Zoom.isZoomed())
-        {
-            startEditingNode(id);
-        }
         return Main.nodes[id];
     }
 
@@ -850,8 +846,7 @@ var Main;
 
         $('#'+node.id).css($.extend(Main.clampPositionToCanvas(pos), { width: "128px" }));
 
-        Main.trees[node.parent].plumbInstance.updateOffset({ elId: node.id, recalc: true });
-        Main.trees[node.parent].plumbInstance.repaint(node.id, null, 0);
+        Main.trees[node.parent].plumbInstance.revalidate(node.id);
 
         startEditingNode(node.id);
     }
@@ -895,7 +890,7 @@ var Main;
                 "left": parentPosition.left
             });
 
-            Zoom.getZoomed().plumbInstance.revalidate(node.id, 0);
+            Zoom.getZoomed().plumbInstance.revalidate(node.id);
 
             startEditingNode(node.id);
             return node;
@@ -1111,7 +1106,8 @@ var Main;
         if (Config.container.settings.statement.type.markdown) Utils.attachMarkdownTooltip(txtArea);
 
         // Disable dragging for this component
-        getPlumbInstanceByNodeID(node.id).setDraggable(nodeDiv, false);
+        var plumbInstance = getPlumbInstanceByNodeID(node.id);
+        plumbInstance.setDraggable(nodeDiv, false);
 
         // Calculate relative width
         var width = Math.sqrt(text.length);
@@ -1123,6 +1119,8 @@ var Main;
         nodeDiv.removeClass("long");
 
         inputDiv.height("100%");
+
+        plumbInstance.revalidate(node.id);
 
         txtArea.focus();
     }
@@ -1677,7 +1675,7 @@ var Main;
     }
 
     // Change the text of the node.
-    function changeNodeText(nodeID, doNotRepaint)
+    function changeNodeText(nodeID)
     {
         var node = Main.nodes[nodeID];
 
@@ -1748,12 +1746,6 @@ var Main;
         var h = nodeTextDiv[0].clientHeight;
         nodeHTML.height(h);
 
-        if (!doNotRepaint)
-        {
-            Main.trees[node.parent].plumbInstance.updateOffset({elId:nodeID, recalc:true});
-            Main.trees[node.parent].plumbInstance.repaint(nodeID, null, 0);
-        }
-
         // Add the allowInterleaveNode class to the node for a graphical indication
         if (node.allowInterleaveNode)
             nodeHTML.addClass('allowInterleaveNode');
@@ -1765,6 +1757,8 @@ var Main;
             nodeHTML.addClass("endNode");
         else
             nodeHTML.removeClass("endNode");
+
+        Main.trees[node.parent].plumbInstance.revalidate(node.id);
     }
 
     function deleteElement(elementID)

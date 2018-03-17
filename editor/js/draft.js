@@ -173,8 +173,7 @@
                     };
                     $('#' + node.id).offset(nodePos);
 
-                    Main.trees[node.parent].plumbInstance.updateOffset({ elId: node.id, recalc: true });
-                    Main.trees[node.parent].plumbInstance.repaint(node.id, null, 0);
+                    Main.trees[node.parent].plumbInstance.revalidate(node.id);
                 });
                 return true;
             });
@@ -221,6 +220,7 @@
             {
                 var node = itemToNode(tr);
                 $('#' + node.id).offset(pos);
+                Main.trees[node.parent].plumbInstance.revalidate(node.id);
                 return true;
             });
         });
@@ -254,7 +254,7 @@
                         else
                         {
                             // Makes node of current item
-                            itemToNode(tr, true);
+                            itemToNode(tr);
                         }
                     }
                     else if (!e.shiftKey)
@@ -500,12 +500,12 @@
         }
     }
 
-    function itemToNode(tr, triggerEdit)
+    function itemToNode(tr)
     {
         if (isItemEmpty(tr)) return;
 
         var props = tr.data('item').properties,
-            node = Main.addNewNode(props.type, triggerEdit, props.statement);
+            node = Main.addNewNode(props.type, props.statement);
 
         if (node === null)
         {
@@ -514,7 +514,7 @@
             return;
         }
 
-        if (!triggerEdit) Main.changeNodeText(node.id);
+        Main.changeNodeText(node.id);
 
         removeItem(tr);
         return node;
@@ -527,7 +527,7 @@
         {
             if (!isItemEmpty($(this)))
             {
-                nodes.push(itemToNode($(this), false));
+                nodes.push(itemToNode($(this)));
             }
         });
         return nodes;

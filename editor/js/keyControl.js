@@ -413,7 +413,7 @@ var KeyControl;
                     top: $("#" + Main.selectedElements[j]).offset().top - 5
                 });
 
-                plumbInstance.revalidate(Main.selectedElements[j], 0);
+                plumbInstance.revalidate(Main.selectedElements[j]);
             }
         }
     }
@@ -431,7 +431,7 @@ var KeyControl;
                     .top + 5
             });
 
-            plumbInstance.revalidate(Main.selectedElements[i], 0);
+            plumbInstance.revalidate(Main.selectedElements[i]);
         }
     }
 
@@ -466,7 +466,7 @@ var KeyControl;
                     left: $("#" + Main.selectedElements[j]).offset().left - 5
                 });
 
-                plumbInstance.revalidate(Main.selectedElements[j], 0);
+                plumbInstance.revalidate(Main.selectedElements[j]);
             }
         }
     }
@@ -480,11 +480,10 @@ var KeyControl;
         {
             $("#" + Main.selectedElements[i]).offset(
             {
-                left: $("#" + Main.selectedElements[i]).offset()
-                    .left + 5
+                left: $("#" + Main.selectedElements[i]).offset().left + 5
             });
 
-            plumbInstance.revalidate(Main.selectedElements[i], 0);
+            plumbInstance.revalidate(Main.selectedElements[i]);
         }
     }
 
