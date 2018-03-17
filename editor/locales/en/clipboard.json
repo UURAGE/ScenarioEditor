@@ -1,3 +1,7 @@
 {
-    "copy_of": "Copy of %s"
+    "copy_of": "Copy of %s",
+    "copy": "cut",
+    "cut": "copy",
+    "paste": "paste",
+    "hint": "Please use CTRL+{{key}} or CMD+{{key}} to $t(clipboard:{{action}}) content."
 }

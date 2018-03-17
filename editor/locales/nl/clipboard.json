@@ -1,3 +1,7 @@
 {
-    "copy_of": "Kopie %s"
+    "copy_of": "Kopie %s",
+    "copy": "kopiëren",
+    "cut": "knippen",
+    "paste": "plakken",
+    "hint": "Gebruik CTRL+{{key}} of CMD+{{key}} om content te $t(clipboard:{{action}})."
 }

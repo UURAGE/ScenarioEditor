@@ -309,6 +309,7 @@
             $('#draftScreen').show();
             $('#validationReport').hide();
             $('#tabDock').show();
+            $("#main").focus();
         });
     });
 

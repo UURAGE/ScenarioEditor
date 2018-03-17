@@ -41,6 +41,8 @@
                     delete Main.nodes[nodeID].topologicalParent;
                 });
             });
+
+            $("#main").focus();
         });
     });
 

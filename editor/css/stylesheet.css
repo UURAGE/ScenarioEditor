@@ -462,6 +462,11 @@ button img
   background-color: #ecf0f1;
 }
 
+#toolbar #clipboard button
+{
+  cursor: help;
+}
+
 #sidebar
 {
   width: 475px;

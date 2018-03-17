@@ -1,84 +1,171 @@
 /* © Utrecht University and DialogueTrainer */
 
-var Clipboard;
-
 (function()
 {
     "use strict";
 
-    Clipboard =
-    {
-        copyElement: copyElement,
-        cutElement: cutElement,
-        pasteElement: pasteElement
-    };
-
-    var copiedElement = null,
-        copiedElements = [],
-        copiedTrees = false;
-
     $(document).ready(function()
     {
-        $("#copyNode").on('click', function()
+        var isIEClipboard = window.clipboardData && window.clipboardData.getData;
+
+        var handleClipboardEvent = function(e, clipboard, action)
         {
-            copyElement();
+            var isEditingInCanvas = function()
+            {
+                var inModal = $(document.body).children(".ui-widget-overlay.ui-front").length > 0;
+                return !inModal && ($("#main").closest(document.activeElement).length > 0 || document.activeElement === null);
+            };
+
+            var handlers =
+            {
+                copy: copy,
+                cut: cut,
+                paste: paste
+            };
+
+            var clipboardFormat = isIEClipboard ? clipboardFormat = 'Text' : 'text/plain';
+
+            if (isEditingInCanvas() && handlers[action](clipboard, clipboardFormat))
+            {
+                e.preventDefault();
+            }
+        };
+
+        var actionsByKey = { C: 'copy', X: 'cut', V: 'paste' };
+
+        $(document).on('keydown', function(e)
+        {
+            if (isIEClipboard)
+            {
+                var key = String.fromCharCode(e.keyCode);
+                if (e.ctrlKey && key in actionsByKey)
+                {
+                    handleClipboardEvent(e, window.clipboardData, actionsByKey[key]);
+                }
+            }
         });
-        $("#cutNode").on('click', function ()
+
+        Object.keys(actionsByKey).map(function(key)
         {
-            cutElement();
-        });
-        $("#pasteNode").on('click', function()
-        {
-            pasteElement();
+            var action = actionsByKey[key];
+            $(document).on(action, function(e)
+            {
+                handleClipboardEvent(e, e.originalEvent.clipboardData, action);
+            });
+
+            // Show hint for the clipboard buttons
+            $('#' + action).tooltip({ items: '#' + action, content: i18next.t('clipboard:hint', { key: key, action: action }) });
+            $('#' + action).on('click', function()
+            {
+                $("#main").focus();
+            });
         });
     });
 
+    function copy(clipboard, format)
+    {
+        var dataAsText = JSON.stringify($.extend(copyElement(), { target: 'scenario', configIdRef: Config.container.id }));
+        clipboard.setData(format, dataAsText);
+        return true;
+    }
+
+    function cut(clipboard, format)
+    {
+        copy(clipboard, format);
+
+        Main.deleteAllSelected();
+
+        return true;
+    }
+
+    function paste(clipboard, format)
+    {
+        var zoomedTree = Zoom.getZoomed();
+        var offset = zoomedTree ? zoomedTree.div.offset() : $("#main").offset();
+        var width = $("#main").width();
+        var height = $("#main").height();
+        var isWithinEditingCanvas =
+            Main.mousePosition.x >= offset.left &&
+            Main.mousePosition.y >= offset.top &&
+            Main.mousePosition.x < offset.left + width &&
+            Main.mousePosition.y < offset.top + height;
+
+        if (isWithinEditingCanvas)
+        {
+            try
+            {
+                var data = JSON.parse(clipboard.getData(format));
+                if (data && data.target === 'scenario' && data.configIdRef && data.type && data.content)
+                {
+                    if (data.configIdRef !== Config.container.id)
+                    {
+                        alert("The config id of the pasted content does not match the config id referred to in the scenario");
+                    }
+                    return pasteElement(data.type, data.content);
+                }
+            }
+            catch(_)
+            {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
     function copyElement()
     {
-        //Check if we're saving tree(s) or node(s)
-        copiedTrees = !Zoom.isZoomed();
-
-        //Save element(s) in memory
-        if (Main.selectedElement !== null && Main.selectedElement !==
-            undefined)
+        if (Main.selectedElement !== null)
         {
-            if (copiedTrees)
+            if (!Zoom.isZoomed())
             {
-                copiedElement = copyTree(Main.selectedElement);
+                return { type: 'dialogue', content: copyTree(Main.selectedElement) };
             }
             else
             {
-                copiedElement = copyNode(Main.selectedElement);
+                return { type: 'node', content: copyNode(Main.selectedElement) };
             }
-            copiedElements = null;
         }
-        else if (Main.selectedElements !== null && Main.selectedElements !==
-            undefined)
+        else if (Main.selectedElements !== null)
         {
-            copiedElements = [];
-            if (copiedTrees)
+            if (!Zoom.isZoomed())
             {
-                $.each(Main.selectedElements, function(index, treeId)
-                {
-                    copiedElements.push(copyTree(treeId));
-                });
+                return {
+                    type: 'dialogue',
+                    content: Main.selectedElements.map(function(treeID)
+                    {
+                        return copyTree(treeID);
+                    })
+                };
             }
             else
             {
-                $.each(Main.selectedElements, function(index, nodeId)
-                {
-                    copiedElements.push(copyNode(nodeId));
-                });
+                return {
+                    type: 'node',
+                    content: Main.selectedElements.map(function(nodeID)
+                    {
+                        return copyNode(nodeID);
+                    })
+                };
             }
-            copiedElement = null;
         }
     }
 
     function copyTree(treeId)
     {
+        var tree = Main.trees[treeId];
         //Save tree data
-        var toCopy = Utils.clone(Main.trees[treeId]),
-        nodes = [];
+        var toCopy = Utils.clone(
+        {
+            subject: tree.subject,
+            level: tree.level,
+            optional: tree.optional,
+            leftPos: tree.leftPos,
+            leftScroll: tree.leftScroll,
+            topPos: tree.topPos,
+            topScroll: tree.topScroll
+        });
+        var nodes = [];
         //Save all node data in tree
         $.each(Main.trees[treeId].nodes, function(index, nodeId)
         {
@@ -108,44 +195,40 @@ var Clipboard;
         return toCopy;
     }
 
-    function cutElement()
-    {
-        copyElement();
-        Main.deleteAllSelected();
-    }
-
-    function pasteElement()
+    function pasteElement(type, content)
     {
         var indicatorPos = Main.getGridIndicatorPosition();
-        if (copiedElement !== null && copiedElement !== undefined)
+        if (!Array.isArray(content))
         {
-            if (copiedTrees && !Zoom.isZoomed())
+            if (type === 'dialogue' && !Zoom.isZoomed())
             {
-                var newTree = pasteTree(copiedElement, indicatorPos.left, indicatorPos.top);
+                var newTree = pasteTree(content, indicatorPos.left, indicatorPos.top);
                 Main.selectElement(newTree.id);
+                return true;
             }
-            else if (Zoom.isZoomed() && !copiedTrees)
+            else if (type === 'node' && Zoom.isZoomed())
             {
-                var newNode = pasteNode(copiedElement, { left: 0, top: 0 });
+                var newNode = pasteNode(content, { left: 0, top: 0 });
                 Main.selectElement(newNode.id);
+                return true;
             }
         }
-        else if (copiedElements !== null && copiedElements !== undefined)
+        else
         {
-            if (copiedTrees && !Zoom.isZoomed())
+            if (type === 'dialogue' && !Zoom.isZoomed())
             {
                 // In grid positions
                 var minX = Number.MAX_VALUE;
                 var minY = Number.MAX_VALUE;
 
-                $.each(copiedElements, function(index, tree)
+                $.each(content, function(index, tree)
                 {
                     if (tree.leftPos < minX) minX = tree.leftPos;
                     if (tree.topPos < minY) minY = tree.topPos;
                 });
 
                 // Paste trees relative to top left of smallest bounding box
-                var pastedTreeIds = $.map(copiedElements, function(tree, index)
+                var pastedTreeIds = $.map(content, function(tree, index)
                 {
                     var leftPos = tree.leftPos - minX + indicatorPos.left;
                     var topPos = tree.topPos - minY + indicatorPos.top;
@@ -153,23 +236,25 @@ var Clipboard;
                 });
 
                 Main.selectElements(pastedTreeIds);
+
+                return true;
             }
-            else if (Zoom.isZoomed() && !copiedTrees)
+            else if (type === 'node' && Zoom.isZoomed())
             {
                 //Needed to save jsPlumb connections
                 var idMappings = {};
                 var plumbInstance = Zoom.getZoomed().plumbInstance;
                 plumbInstance.batch(function()
                 {
-                    $.each(copiedElements, function(index, node)
+                    $.each(content, function(index, node)
                     {
-                        var offset = { left: node.position.left - copiedElements[0].position.left, top: node.position.top - copiedElements[0].position.top };
+                        var offset = { left: node.position.left - content[0].position.left, top: node.position.top - content[0].position.top };
                         newNode = pasteNode(node, offset);
                         idMappings[node.id] = newNode.id;
                     });
 
                     // Paste jsPlumb connections
-                    $.each(copiedElements, function(index, node)
+                    $.each(content, function(index, node)
                     {
                         if (!node) //due to deleting from arrays in js leaving values undefined
                             return true;
@@ -205,8 +290,11 @@ var Clipboard;
 
                 // select all nodes just copied
                 Main.selectElements($.map(idMappings, function (newId) { return newId; }));
+
+                return true;
             }
         }
+        return false;
     }
 
     function pasteNode(copiedNode, offset, tree, doNotPosition)
@@ -237,9 +325,7 @@ var Clipboard;
 
     function pasteTree(toCopy, leftPos, topPos)
     {
-        var idMappings = {}; //record wich original node id was copied to which id
-        //idmappings[originalID] = copyID
-        //all other information like dom elements and position should not be copied
+        var idMappings = {};
 
         var newTree = Main.createEmptyTree(null, leftPos, topPos);
 

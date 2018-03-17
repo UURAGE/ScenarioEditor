@@ -264,9 +264,11 @@ var Main;
         {
             createChildNode(Main.selectedElement);
         });
-        $("#deleteNode").on('click', function()
+        $("#delete").on('click', function()
         {
             deleteAllSelected();
+
+            $("#main").focus();
         });
         $("#allParents").on('click', function()
         {

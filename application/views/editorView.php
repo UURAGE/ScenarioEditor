@@ -150,15 +150,15 @@
                     <button id="newSituationNode" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/situation.png");?>" alt=""><?php sLang("edt_situation"); ?></div></button>
                     <button id="newChildNode" class="nodeButton"><div><img src="<?php echo editor_url("png/main_buttons/child.png");?>" alt=""><?php sLang("edt_child"); ?></div></button>
                     <button id="toggleDraftScreen" class="subjectButton"><div><img src="<?php echo editor_url("png/main_buttons/draft.png");?>" alt=""><?php sLang("edt_note_pad"); ?></div></button>
+                    <button id="delete" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/trashbin.png");?>" alt=""><?php sLang("btn_delete"); ?></div></button>
                   </div>
                 </div>
                 <div class="buttonGroup" id="clipboard">
                   <!-- Clipboard -->
                   <div class="big-buttons">
-                    <button id="copyNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/copy.png");?>" alt=""><?php sLang("edt_copy"); ?></div></button>
-                    <button id="cutNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/cut.png");?>" alt=""><?php sLang("edt_cut"); ?></div></button>
-                    <button id="pasteNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/paste_placeholder.png");?>" alt=""><?php sLang("edt_paste"); ?></div></button>
-                    <button id="deleteNode" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/trashbin.png");?>" alt=""><?php sLang("btn_delete"); ?></div></button>
+                    <button id="copy" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/copy.png");?>" alt=""><?php sLang("edt_copy"); ?></div></button>
+                    <button id="cut" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/cut.png");?>" alt=""><?php sLang("edt_cut"); ?></div></button>
+                    <button id="paste" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/paste_placeholder.png");?>" alt=""><?php sLang("edt_paste"); ?></div></button>
                   </div>
                 </div>
                 <div class="buttonGroup" id="view">

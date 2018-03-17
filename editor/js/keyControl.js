@@ -227,18 +227,6 @@ var KeyControl;
         {
             selectAll();
         },
-        C: function()
-        {
-            Clipboard.copyElement();
-        },
-        X: function()
-        {
-            Clipboard.cutElement();
-        },
-        V: function()
-        {
-            Clipboard.pasteElement();
-        },
         S: function()
         {
             Save.exportScenario();
