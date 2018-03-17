@@ -763,8 +763,6 @@ var Main;
     // Add a new node with the given type.
     function addNewNode(type, triggerEdit, text)
     {
-        Main.unsavedChanges = true;
-
         var container = $(".selected.treeContainer");
 
         if (container.length === 0)
@@ -915,6 +913,7 @@ var Main;
         {
             Main.jsPlumbCounter++;
             id = "edit_" + Main.jsPlumbCounter;
+            Main.unsavedChanges = true;
         }
 
         Main.trees[parentID].nodes.push(id);
@@ -960,15 +959,22 @@ var Main;
             start: function(event)
             {
                 invalidateNodeClick = true;
-                if(Main.selectedElement === null)
+
+                Main.unsavedChanges = true;
+
+                if (Main.selectedElement === null)
                 {
-                    if(Main.selectedElements.indexOf(id) === -1)
+                    if (Main.selectedElements.indexOf(id) === -1)
+                    {
                         selectElement(id);
+                    }
                 }
                 else
                 {
-                    if(Main.selectedElement !== id)
+                    if (Main.selectedElement !== id)
+                    {
                         selectElement(id);
+                    }
                 }
             },
 

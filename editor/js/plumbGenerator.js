@@ -38,7 +38,12 @@ var PlumbGenerator;
         });
 
         // On dblclick, the connection will be deleted
-        instance.bind("dblclick", instance.deleteConnection);
+        instance.bind("dblclick", function(connection, originalEvent)
+        {
+            Main.unsavedChanges = true;
+
+            instance.deleteConnection(connection, originalEvent);
+        });
 
         // On mouseover, show the color key entry
         instance.bind("mouseover",function(connection, e)
@@ -125,6 +130,8 @@ var PlumbGenerator;
 
         instance.bind("connection", function(info)
         {
+            Main.unsavedChanges = true;
+
             if($("#" + info.targetId).hasClass("parentSelected") ||
                $("#" + info.targetId).hasClass("selected"))
             {
