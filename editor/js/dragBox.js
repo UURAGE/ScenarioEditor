@@ -51,17 +51,15 @@ var DragBox;
         updateDraggerPosition(e);
     }
 
-    function handleStop(e)
+    function handleStop()
     {
-        var pos = { left: e.pageX, top: e.pageY };
-
         // Whether this drop is cancelled or not,
         // stop handling the mouseup event
         $(document).off('mouseup', handleStop);
 
         // Allow the stop handler to cancel the drop
         // (i.e. force the user to keep dragging)
-        if (isDroppable() && stopHandler(pos))
+        if (isDroppable() && stopHandler())
         {
             stopDragging();
         }

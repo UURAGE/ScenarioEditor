@@ -30,7 +30,7 @@ var Main;
         addNewTree: addNewTree,
         applyChanges: applyChanges,
         changeNodeText: changeNodeText,
-        clampPositionToCanvas: clampPositionToCanvas,
+        mousePositionToDialoguePosition: mousePositionToDialoguePosition,
         createChildNode: createChildNode,
         createEmptyTree: createEmptyTree,
         createAndReturnNode: createAndReturnNode,
@@ -42,7 +42,6 @@ var Main;
         getStartNodeIDs: getStartNodeIDs,
         highlightParents: highlightParents,
         makeConnection: makeConnection,
-        placeNewNode: placeNewNode,
         selectElements: selectElements,
         selectElement: selectElement,
         selectNode: selectNode,
@@ -199,7 +198,7 @@ var Main;
 
             Zoom.zoomOut();
 
-            DragBox.startDragging(e, text, function(pos)
+            DragBox.startDragging(e, text, function()
             {
                 return addNewTree();
             });
@@ -217,9 +216,9 @@ var Main;
                 return;
             }
 
-            DragBox.startDragging(e, text, function(pos)
+            DragBox.startDragging(e, text, function()
             {
-                placeNewNode(Main.computerType, pos);
+                addNewNode(Main.computerType, "", Main.mousePositionToDialoguePosition(Main.mousePosition), true);
                 return true;
             });
         });
@@ -236,9 +235,9 @@ var Main;
                 return;
             }
 
-            DragBox.startDragging(e, text, function(pos)
+            DragBox.startDragging(e, text, function()
             {
-                placeNewNode(Main.playerType, pos);
+                addNewNode(Main.playerType, "", Main.mousePositionToDialoguePosition(Main.mousePosition), true);
                 return true;
             });
         });
@@ -255,9 +254,9 @@ var Main;
                 return;
             }
 
-            DragBox.startDragging(e, text, function(pos)
+            DragBox.startDragging(e, text, function()
             {
-                placeNewNode(Main.situationType, pos);
+                addNewNode(Main.situationType, "", Main.mousePositionToDialoguePosition(Main.mousePosition), true);
                 return true;
             });
         });
@@ -760,25 +759,20 @@ var Main;
         return tree;
     }
 
-    // Add a new node with the given type.
-    function addNewNode(type, text)
+    // Creates a new node and places it on the specified position, which is relative to the parent
+    function addNewNode(type, text, position, shouldSelectAndStartEditing)
     {
-        var container = $(".selected.treeContainer");
+        selectElement(null);
 
-        if (container.length === 0)
+        // Create a node of the right type
+        var tree = Zoom.getZoomed();
+
+        if (tree === null)
         {
-            var zoomedTree = Zoom.getZoomed();
-            if (zoomedTree) container = zoomedTree.dragDiv;
+            return null;
         }
 
-        if (container.length === 0)
-        {
-            return null; //no selected or zoomed in tree container
-        }
-
-        var node = createAndReturnNode(type, null, container.find('.treeDiv'), container.attr('id'));
-
-        container.focus();
+        var node = createAndReturnNode(type, null, tree.div, tree.id);
 
         var id = node.attr('id');
 
@@ -799,7 +793,8 @@ var Main;
 
         if (Parameters.timeId && type === Main.playerType)
         {
-            var timeEffect = {
+            var timeEffect =
+            {
                 idRef: 't',
                 operator: "addAssign",
                 value: 1
@@ -823,32 +818,32 @@ var Main;
             visited: false,
             topologicalRank: 0,
             id: id,
-            parent: container.attr("id")
+            parent: tree.id
         };
 
         if (type === Main.computerType) Main.nodes[id].characterIdRef = characterIdRef;
 
-        // Always select the node after the creation.
-        selectElement(id);
+        if (position)
+        {
+            Utils.cssPosition(node, position);
+
+            if (!text && !shouldSelectAndStartEditing)
+            {
+                tree.plumbInstance.revalidate(id);
+            }
+        }
+
+        if (shouldSelectAndStartEditing)
+        {
+            selectElement(id);
+            startEditingNode(id);
+        }
+        else if (text)
+        {
+            changeNodeText(id);
+        }
 
         return Main.nodes[id];
-    }
-
-    // Creates a new node and places it on the specified position (within canvas bounds)
-    function placeNewNode(nodeType, pos)
-    {
-        selectElement(null);
-        // create a node of the right type
-        var node = addNewNode(nodeType);
-
-        // node is undefined if there is no zoomed .TreeContainer
-        if (node === undefined) return;
-
-        $('#'+node.id).css($.extend(Main.clampPositionToCanvas(pos), { width: "128px" }));
-
-        Main.trees[node.parent].plumbInstance.revalidate(node.id);
-
-        startEditingNode(node.id);
     }
 
     function createChildNode(parentNodeID)
@@ -856,23 +851,30 @@ var Main;
         if (parentNodeID in Main.nodes)
         {
             var parent = Main.nodes[parentNodeID];
+
+            var parentDiv = $('#' + parentNodeID);
+            var parentPosition = Utils.cssPosition(parentDiv);
+            var position =
+            {
+                top: parentPosition.top + parentDiv.height() + 55,
+                left: parentPosition.left
+            };
             var node;
             switch(parent.type)
             {
                 case Main.playerType:
-                    node = addNewNode(Main.computerType);
+                    node = addNewNode(Main.computerType, "", position, true);
                     break;
                 case Main.computerType:
-                    node = addNewNode(Main.playerType);
+                    node = addNewNode(Main.playerType, "", position, true);
                     break;
                 case Main.situationType:
-                    node = addNewNode(Main.playerType);
+                    node = addNewNode(Main.playerType, "", position, true);
                     break;
             }
 
             // If there are errors (cycles, invalid pairs, existing connections)
             // regarding the connection to be created, delete the new node and cancel.
-
             var connection = makeConnection(parent.id, node.id, Zoom.getZoomed().plumbInstance);
 
             if (!connection)
@@ -881,18 +883,6 @@ var Main;
                 return;
             }
 
-            // Reposition the new node
-            var nodeDiv = $('#'+node.id);
-            var parentDiv = $('#'+parent.id);
-            var parentPosition = Utils.cssPosition(parentDiv);
-            Utils.cssPosition(nodeDiv, {
-                "top": parentPosition.top + parentDiv.height() + 55,
-                "left": parentPosition.left
-            });
-
-            Zoom.getZoomed().plumbInstance.revalidate(node.id);
-
-            startEditingNode(node.id);
             return node;
         }
         else
@@ -2579,7 +2569,7 @@ var Main;
         });
     }
 
-    function clampPositionToCanvas(position)
+    function mousePositionToDialoguePosition(mousePos)
     {
         // the canvas is open; get the canvas div
         var treeDiv = Zoom.getZoomed().div;
@@ -2588,10 +2578,9 @@ var Main;
         var leftBound = treeDiv.offset().left;
         var upperBound = treeDiv.offset().top;
 
-        // clamp within boundaries
         return {
-            left: Math.max(position.left, leftBound) - leftBound + treeDiv.scrollLeft(),
-            top: Math.max(position.top, upperBound) - upperBound + treeDiv.scrollTop()
+            left: Math.max(mousePos.x, leftBound) - leftBound + treeDiv.scrollLeft(),
+            top: Math.max(mousePos.y, upperBound) - upperBound + treeDiv.scrollTop()
         };
     }
 

@@ -217,7 +217,7 @@ var Clipboard;
         if (!doNotPosition)
         {
             // Set position to the mouse position
-            Utils.cssPosition(nodeElem, Main.clampPositionToCanvas({ left: Main.mousePosition.x + offset.left, top: Main.mousePosition.y + offset.top }));
+            Utils.cssPosition(nodeElem, Main.mousePositionToDialoguePosition({ x: Main.mousePosition.x + offset.left, y: Main.mousePosition.y + offset.top }));
         }
 
         Main.changeNodeText(node.id);

@@ -159,22 +159,9 @@
             if (editing) editing.find(':input:focus').trigger("blur");
 
             var text = i18next.t('draft:all_items');
-            DragBox.startDragging(e, text, function(pos)
+            DragBox.startDragging(e, text, function()
             {
-                var nodes = allItemsToNodes(),
-                    main = $('#main').offset(),
-                    min = main.top + 51;
-                nodes.forEach( function(node)
-                {
-                    var xdif = -75 + 150 * Math.random(), ydif = -75 + 150 * Math.random();
-                    var nodePos = {
-                        left : Math.max(0,pos.left + xdif),
-                        top : Math.max(pos.top + ydif, min)
-                    };
-                    $('#' + node.id).offset(nodePos);
-
-                    Main.trees[node.parent].plumbInstance.revalidate(node.id);
-                });
+                allItemsToNodes(Main.mousePositionToDialoguePosition(Main.mousePosition));
                 return true;
             });
         });
@@ -216,11 +203,9 @@
             {
                 tr.find('td').removeClass("disabled");
             }
-            DragBox.startDragging(e, text, function(pos)
+            DragBox.startDragging(e, text, function()
             {
-                var node = itemToNode(tr);
-                $('#' + node.id).offset(pos);
-                Main.trees[node.parent].plumbInstance.revalidate(node.id);
+                itemToNode(tr, Main.mousePositionToDialoguePosition(Main.mousePosition));
                 return true;
             });
         });
@@ -500,12 +485,12 @@
         }
     }
 
-    function itemToNode(tr)
+    function itemToNode(tr, position)
     {
         if (isItemEmpty(tr)) return;
 
         var props = tr.data('item').properties,
-            node = Main.addNewNode(props.type, props.statement);
+            node = Main.addNewNode(props.type, props.statement, position);
 
         if (node === null)
         {
@@ -514,24 +499,31 @@
             return;
         }
 
-        Main.changeNodeText(node.id);
-
         removeItem(tr);
-        return node;
     }
 
-    function allItemsToNodes()
+    function allItemsToNodes(position)
     {
-        var nodes = [];
         $('#draftTable .draftItem').each(function()
         {
             if (!isItemEmpty($(this)))
             {
-                nodes.push(itemToNode($(this)));
+                if (position)
+                {
+                    var deltaX = -75 + 150 * Math.random(), deltaY = -75 + 150 * Math.random();
+                    itemToNode($(this),
+                    {
+                        left: position.left + deltaX, top: position.top + deltaY
+                    });
+                }
+                else
+                {
+                    itemToNode($(this));
+                }
             }
         });
-        return nodes;
     }
+
     function allIsEmpty()
     {
         var allEmpty = true;
