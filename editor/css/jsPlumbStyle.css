@@ -6,7 +6,6 @@
 	border: 1px solid black;
 	z-index:4;
 	border-radius:0.5em;
-	box-shadow: 2px 2px 19px #e0e0e0;
 	opacity:0.8;
 	filter:alpha(opacity=80);
 	cursor:move;
