@@ -210,8 +210,8 @@ var Clipboard;
 
         if (!doNotPosition)
         {
-            // Set position to the mouse position
-            Utils.cssPosition(nodeElem, Main.mousePositionToDialoguePosition({ x: Main.mousePosition.x + offset.left, y: Main.mousePosition.y + offset.top }));
+            var position = Main.mousePositionToDialoguePosition(Main.mousePosition);
+            Utils.cssPosition(nodeElem, { left: position.left + offset.left, top: position.top + offset.top });
         }
 
         Main.changeNodeText(node.id);
@@ -245,9 +245,7 @@ var Clipboard;
 
                 idMappings[node.id] = newNode.id; //needed to also copy over jsplumb connectors.
 
-                var newNodeDiv = $("#" + newNode.id);
-
-                Utils.cssPosition(newNodeDiv, node.position);
+                Utils.cssPosition($("#" + newNode.id), node.position);
             });
 
             //all nodes have been created. now copy connectors
