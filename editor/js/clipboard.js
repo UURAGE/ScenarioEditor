@@ -178,13 +178,24 @@ var Clipboard;
                                 connection.sourceId]; //map original source to copied source
                             if (!source)
                                 return true;
-                            plumbInstance.connect(
+                            var newConnection = plumbInstance.connect(
                             {
                                 "source": source,
                                 "target": target
                             });
+
+                            var color = connection.getParameter('color');
+                            if (color)
+                            {
+                                newConnection.setParameter('color', color);
+                            }
                         });
                     });
+
+                    if (ColorPicker.areColorsEnabled())
+                    {
+                        ColorPicker.applyColors();
+                    }
                 });
 
                 // select all nodes just copied
@@ -263,11 +274,17 @@ var Clipboard;
                 {
                     var target = idMappings[connection.targetId]; //map original target to copied target
                     var source = idMappings[connection.sourceId]; //map original source to copied source
-                    newTree.plumbInstance.connect(
+                    var newConnection = newTree.plumbInstance.connect(
                     {
                         "source": source,
                         "target": target
                     });
+
+                    var color = connection.getParameter('color');
+                    if (color)
+                    {
+                        newConnection.setParameter('color', color);
+                    }
                 });
             });
         });
