@@ -816,7 +816,6 @@ var Main;
             allowDialogueEndNode: false,
             allowInterleaveNode: false,
             visited: false,
-            topologicalRank: 0,
             id: id,
             parent: tree.id
         };

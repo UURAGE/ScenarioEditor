@@ -233,7 +233,6 @@ var Load3;
             allowDialogueEndNode: allowDialogueEndNode,
             allowInterleaveNode: allowInterleaveNode,
             visited: false,
-            topologicalRank: 0,
             id: id,
             parent: treeID
         };
@@ -418,7 +417,6 @@ var Load3;
             allowDialogueEndNode: false,
             allowInterleaveNode: false,
             visited: false,
-            topologicalRank: 0,
             id: id,
             parent: treeID
         };
@@ -483,7 +481,6 @@ var Load3;
                     allowDialogueEndNode: false,
                     allowInterleaveNode: false,
                     visited: false,
-                    topologicalRank: 0,
                     id: id,
                     parent: firstConversationNode.parent
                 };

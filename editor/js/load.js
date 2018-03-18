@@ -443,7 +443,6 @@ var Load;
             allowDialogueEndNode: allowDialogueEndNode,
             allowInterleaveNode: allowInterleaveNode,
             visited: false,
-            topologicalRank: 0,
             id: id,
             parent: treeID
         };

@@ -36,6 +36,7 @@
                 tree.plumbInstance.revalidate(nodeID);
 
                 // Delete the properties from node that were used
+                delete Main.nodes[nodeID].topologicalRank;
                 delete Main.nodes[nodeID].topologicalChildren;
                 delete Main.nodes[nodeID].topologicalOrderingVisited;
                 delete Main.nodes[nodeID].topologicalParent;
