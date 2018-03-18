@@ -442,7 +442,6 @@ var Load;
             endNode: endNode,
             allowDialogueEndNode: allowDialogueEndNode,
             allowInterleaveNode: allowInterleaveNode,
-            visited: false,
             id: id,
             parent: treeID
         };

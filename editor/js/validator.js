@@ -290,22 +290,25 @@ var Validator;
     // Checks if there is a cycle in the graph.
     function testCycle(currentNode, nodeToFind)
     {
+        var visited = {};
         for(var nodeID in Main.nodes)
-            Main.nodes[nodeID].visited = false;
+        {
+            visited[nodeID] = false;
+        }
 
-        return testCycleDFS(currentNode, nodeToFind);
+        return testCycleDFS(currentNode, nodeToFind, visited);
     }
 
-    function testCycleDFS(currentNode, nodeToFind)
+    function testCycleDFS(currentNode, nodeToFind, visited)
     {
         if (currentNode === nodeToFind)
             return true;
 
-        Main.nodes[currentNode].visited = true;
+        visited[currentNode] = true;
         var plumbInstance = Main.getPlumbInstanceByNodeID(currentNode);
         var connections = plumbInstance.getConnections({source: currentNode});
         for (var i = 0; i < connections.length; i++)
-            if(!Main.nodes[connections[i].targetId].visited && testCycleDFS(connections[i].targetId, nodeToFind))
+            if(!visited[connections[i].targetId] && testCycleDFS(connections[i].targetId, nodeToFind, visited))
                 return true;
 
         return false;

@@ -232,7 +232,6 @@ var Load3;
             endNode: endNode,
             allowDialogueEndNode: allowDialogueEndNode,
             allowInterleaveNode: allowInterleaveNode,
-            visited: false,
             id: id,
             parent: treeID
         };
@@ -416,7 +415,6 @@ var Load3;
             endNode: endNode,
             allowDialogueEndNode: false,
             allowInterleaveNode: false,
-            visited: false,
             id: id,
             parent: treeID
         };
@@ -480,7 +478,6 @@ var Load3;
                     endNode: endNode,
                     allowDialogueEndNode: false,
                     allowInterleaveNode: false,
-                    visited: false,
                     id: id,
                     parent: firstConversationNode.parent
                 };

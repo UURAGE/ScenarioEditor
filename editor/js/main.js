@@ -815,7 +815,6 @@ var Main;
             endNode: false,
             allowDialogueEndNode: false,
             allowInterleaveNode: false,
-            visited: false,
             id: id,
             parent: tree.id
         };
