@@ -259,7 +259,7 @@ var KeyControl;
         {
             if (Main.selectedElements[0] in Main.nodes)
             {
-                moveNodeUp();
+                moveNode({ y: -1 });
             }
             else if (Main.selectedElements[0] in Main.trees)
             {
@@ -270,7 +270,7 @@ var KeyControl;
         {
             if (Main.selectedElements[0] in Main.nodes)
             {
-                moveNodeDown();
+                moveNode({ y: 1 });
             }
             else if (Main.selectedElements[0] in Main.trees)
             {
@@ -281,7 +281,7 @@ var KeyControl;
         {
             if (Main.selectedElements[0] in Main.nodes)
             {
-                moveNodeRight();
+                moveNode({ x: 1 });
             }
             else if (Main.selectedElements[0] in Main.trees)
             {
@@ -292,7 +292,7 @@ var KeyControl;
         {
             if (Main.selectedElements[0] in Main.nodes)
             {
-                moveNodeLeft();
+                moveNode({ x: -1 });
             }
             else if (Main.selectedElements[0] in Main.trees)
             {
@@ -385,105 +385,48 @@ var KeyControl;
     }
 
     //If a node is selected and arrow up is pressed, move the node up.
-    function moveNodeUp()
+    function moveNode(direction)
     {
-        var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElements[0]);
-
-        // Check if none of the selected nodes are out of the upper bound
-        var outOfUpperBound = false;
-        for (var i = 0; i < Main.selectedElements.length; i++)
-        {
-            var upperBound = $('#main').position().top + 50;
-
-            var newTop = $("#" + Main.selectedElements[i]).offset().top - 5;
-
-            outOfUpperBound = newTop < upperBound - 1;
-
-            if (outOfUpperBound)
-                break;
-        }
-
-        // If none of the nodes is moving outside of the canvas, move and repaint them
-        if (!outOfUpperBound)
-        {
-            for (var j = 0; j < Main.selectedElements.length; j++)
-            {
-                $("#" + Main.selectedElements[j]).offset(
-                {
-                    top: $("#" + Main.selectedElements[j]).offset().top - 5
-                });
-
-                plumbInstance.revalidate(Main.selectedElements[j]);
-            }
-        }
-    }
-
-    //If a node is selected and arrow up is pressed, move the node down.
-    function moveNodeDown()
-    {
-        var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElements[0]);
-
-        for (var i = 0; i < Main.selectedElements.length; i++)
-        {
-            $("#" + Main.selectedElements[i]).offset(
-            {
-                top: $("#" + Main.selectedElements[i]).offset()
-                    .top + 5
-            });
-
-            plumbInstance.revalidate(Main.selectedElements[i]);
-        }
-    }
-
-    //If a node is selected and arrow up is pressed, move the node to the left.
-    function moveNodeLeft()
-    {
-        var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElements[0]);
+        var deltaX = direction.x ? direction.x * 5 : 0;
+        var deltaY = direction.y ? direction.y * 5 : 0;
+        var upperBound = 0;
+        var leftBound = 0;
 
         // Check if none of the nodes will move out of the canvas
-        var outOfLeftBound = false;
-        for (var i = 0; i < Main.selectedElements.length; i++)
+        var outOfLeftBound = direction.x === -1 && Main.selectedElements.some(function(selectedElement)
         {
-            var leftBound = $('#main').position().left;
+            var newLeft = Utils.cssPosition($("#" + selectedElement)).left + deltaX;
+            // Include delta for the left boundary for smaller movements than delta
+            // This is corrected later on by clamping to the bounds
+            return newLeft <= leftBound + deltaX;
+        });
 
-            var newLeft = $("#" + Main.selectedElements[i]).offset().left - 5;
-
-            outOfLeftBound = newLeft < leftBound - 1;
-
-            if (outOfLeftBound)
-            {
-                break;
-            }
-        }
-
-        // If none of the nodes will move out of the canvas, move and repaint them
-        if (!outOfLeftBound)
+        // Check if none of the nodes will move out of the canvas
+        var outOfUpperBound = direction.y === -1 && Main.selectedElements.some(function(selectedElement)
         {
-            for (var j = 0; j < Main.selectedElements.length; j++)
+            var newTop = Utils.cssPosition($("#" + selectedElement)).top + deltaY;
+            // Include delta for the upper boundary for smaller movements than delta
+            // This is corrected later on by clamping to the bounds
+            return newTop <= upperBound + deltaY;
+        });
+
+        // If none of the nodes is moving outside of the canvas, move and repaint them
+        if (!outOfLeftBound && !outOfUpperBound)
+        {
+            Main.unsavedChanges = true;
+
+            var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElements[0]);
+            Main.selectedElements.forEach(function(selectedElement)
             {
-                $("#" + Main.selectedElements[j]).offset(
+                var position = Utils.cssPosition($("#" + selectedElement));
+                Utils.cssPosition($("#" + selectedElement),
                 {
-                    left: $("#" + Main.selectedElements[j]).offset().left - 5
+                    left: Math.max(position.left + deltaX, leftBound),
+                    top: Math.max(position.top + deltaY, upperBound)
                 });
 
-                plumbInstance.revalidate(Main.selectedElements[j]);
-            }
-        }
-    }
-
-    //If a node is selected and arrow up is pressed, move the node to the right.
-    function moveNodeRight()
-    {
-        var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElements[0]);
-
-        for (var i = 0; i < Main.selectedElements.length; i++)
-        {
-            $("#" + Main.selectedElements[i]).offset(
-            {
-                left: $("#" + Main.selectedElements[i]).offset().left + 5
+                plumbInstance.revalidate(selectedElement);
             });
-
-            plumbInstance.revalidate(Main.selectedElements[i]);
         }
     }
 
@@ -520,6 +463,8 @@ var KeyControl;
 
         if (allClear)
         {
+            Main.unsavedChanges = true;
+
             for (var j = 0; j < Main.selectedElements.length; j++)
             {
                 tree = Main.trees[Main.selectedElements[j]];
