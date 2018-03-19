@@ -222,7 +222,7 @@ var Clipboard;
         if (!doNotPosition)
         {
             var position = Main.mousePositionToDialoguePosition(Main.mousePosition);
-            Utils.cssPosition(nodeElem, { left: position.left + offset.left, top: position.top + offset.top });
+            Utils.cssPosition(nodeElem, { left: Math.max(position.left + offset.left, 0), top: Math.max(position.top + offset.top, 0) });
         }
 
         Main.changeNodeText(node.id);

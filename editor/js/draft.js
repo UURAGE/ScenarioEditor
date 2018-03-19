@@ -513,7 +513,7 @@
                     var deltaX = -75 + 150 * Math.random(), deltaY = -75 + 150 * Math.random();
                     itemToNode($(this),
                     {
-                        left: position.left + deltaX, top: position.top + deltaY
+                        left: Math.max(position.left + deltaX, 0), top: Math.max(position.top + deltaY, 0)
                     });
                 }
                 else
