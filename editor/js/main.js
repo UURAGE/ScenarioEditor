@@ -1142,7 +1142,7 @@ var Main;
             startEditingNode(node.id);
         });
         nodeDiv.removeClass("editing");
-        node.editing = false;
+        delete node.editing;
     }
 
     function getPlumbInstanceByNodeID(nodeID)
