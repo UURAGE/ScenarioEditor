@@ -638,6 +638,12 @@ button img
   display: block;
 }
 
+.expander {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+}
+
 #properties.player > #headerComputer,
 #properties.player > #headerSituation,
 #properties.player > #treeSubject,

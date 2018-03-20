@@ -23,7 +23,7 @@ var PlumbGenerator;
         instance.importDefaults(
         {
             Endpoint : ["Dot", {radius:2}],
-            Anchor: [ "Perimeter", { shape: "Rectangle", anchorCount: 150 } ],
+            Anchor: [ "Perimeter", { shape: "Rectangle", anchorCount: 80 } ],
             HoverPaintStyle : PlumbGenerator.defaultHoverPaintStyle,
             Connector: [ "StateMachine", { proximityLimit: 120 } ],
             PaintStyle : PlumbGenerator.defaultPaintStyle,

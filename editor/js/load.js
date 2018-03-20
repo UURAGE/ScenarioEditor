@@ -431,7 +431,7 @@ var Load;
             }
         }
 
-        var node = Main.createAndReturnNode(type, id, Main.trees[treeID].div, Main.trees[treeID].dragDiv.attr('id'));
+        var node = Main.createAndReturnNode(type, id, Main.trees[treeID].div, treeID);
         Main.nodes[id] = {
             text: text,
             type: type,

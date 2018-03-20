@@ -890,6 +890,8 @@ var Main;
     }
 
     // Creates a node, adds it to the html and returns the html of the node.
+    // This function is used extensively when loading a scenario with a large amount of nodes.
+    // For optimal performance the use of jQuery to create DOM elements should be minimized.
     function createAndReturnNode(type, id, parent, parentID)
     {
         if (id === null)
@@ -903,34 +905,39 @@ var Main;
         var plumbInstance = Main.trees[parentID].plumbInstance;
 
         // Add the node to the html.
-        var node = $('<div>', { id: id, class: 'w ' + type });
-        node.append( $('<div>', { class: "ep" }));
+        var node = document.createElement('div');
+        node.setAttribute('id', id);
+        node.classList.add('w');
+        node.classList.add(type);
+
+        var endpoint = document.createElement('div');
+        endpoint.classList.add('ep');
+        node.appendChild(endpoint);
 
         var inputDiv =  $('<div>', { class: "statementInput" });
         inputDiv.hide();
-        node.append(inputDiv);
+        node.appendChild(inputDiv[0]);
 
-        var textDiv = $('<div>', { class:"statementText" });
-        node.append(textDiv);
+        var textDiv = document.createElement('div');
+        textDiv.classList.add('statementText');
+        node.appendChild(textDiv);
 
-        node.append($('<div>', { class:'imgDiv' }));
+        var imgDiv = document.createElement('div');
+        imgDiv.classList.add('imgDiv');
+        node.appendChild(imgDiv);
 
         // Expands node container using overflow when moving a node closer to the bounds of the container
         var scrollOffset = 50;
-        node.append($('<div>', { class: "expander", css: { position: 'absolute', right: -scrollOffset, bottom: -scrollOffset, width: 1, height: 1 } }));
+        var expander = document.createElement('div');
+        expander.classList.add('expander');
+        expander.style.right = -scrollOffset + "px";
+        expander.style.bottom = -scrollOffset + "px";
+        node.appendChild(expander);
 
-        parent.append(node);
-
-        node.on('dblclick', function(e)
+        node.addEventListener('dblclick', function(e)
         {
              startEditingNode(id);
-        });
-
-        Utils.cssPosition(node,
-        {
-            "top": parent.scrollTop(),
-            "left": parent.scrollLeft()
-        });
+        }, false);
 
         // initialise draggable elements.
         plumbInstance.draggable(node,
@@ -965,18 +972,19 @@ var Main;
             {
                 // TODO: delete if jsPlumb katavorio supports scrolling into view
                 var epsilon = 5;
-                var position = Utils.cssPosition(node);
-                if (position.left + node.outerWidth() + scrollOffset + epsilon > parent.width() + parent.scrollLeft())
+                var $node = $(node);
+                var position = Utils.cssPosition($node);
+                if (position.left + $node.outerWidth() + scrollOffset + epsilon > parent.width() + parent.scrollLeft())
                 {
-                    parent.scrollLeft(position.left + node.outerWidth() + scrollOffset - parent.width());
+                    parent.scrollLeft(position.left + $node.outerWidth() + scrollOffset - parent.width());
                 }
                 else if (position.left - scrollOffset < parent.scrollLeft())
                 {
                     parent.scrollLeft(Math.max(position.left - scrollOffset, 0));
                 }
-                if (position.top + node.outerHeight() + scrollOffset + epsilon > parent.height() + parent.scrollTop())
+                if (position.top + $node.outerHeight() + scrollOffset + epsilon > parent.height() + parent.scrollTop())
                 {
-                    parent.scrollTop(position.top + node.outerHeight() + scrollOffset - parent.height());
+                    parent.scrollTop(position.top + $node.outerHeight() + scrollOffset - parent.height());
                 }
                 else if (position.top - scrollOffset < parent.scrollTop())
                 {
@@ -1003,7 +1011,7 @@ var Main;
         });
 
         // Make the node selected when we click on it.
-        node.on("click", function(event)
+        node.addEventListener("click", function(event)
         {
             event.stopPropagation();
             if(invalidateNodeClick)
@@ -1021,9 +1029,11 @@ var Main;
             {
                 selectElement(id);
             }
-        });
+        }, false);
 
-        return node;
+        parent[0].appendChild(node);
+
+        return $(node);
     }
 
     function startEditingNode(nodeID)

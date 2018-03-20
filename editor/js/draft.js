@@ -489,6 +489,15 @@
     {
         if (isItemEmpty(tr)) return;
 
+        if (!position)
+        {
+            position =
+            {
+                left: Zoom.getZoomed().div.scrollLeft(),
+                top: Zoom.getZoomed().div.scrollTop()
+            };
+        }
+
         var props = tr.data('item').properties,
             node = Main.addNewNode(props.type, props.statement, position);
 
