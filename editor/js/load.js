@@ -15,6 +15,8 @@ var Load;
     $(document).ready(function()
     {
         $("#importScenario").on('click', importDialog);
+
+        finishLoad();
     });
 
     function importDialog()
@@ -141,7 +143,7 @@ var Load;
             });
         }
 
-        Main.unsavedChanges = false;
+        finishLoad();
     }
 
     function prepareRebuild()
@@ -165,6 +167,21 @@ var Load;
         Metadata.reset();
         Parameters.reset();
         Evaluations.reset();
+    }
+
+    function finishLoad()
+    {
+        var treeIDs = Object.keys(Main.trees);
+        if (treeIDs.length === 0)
+        {
+            Zoom.zoomIn(Main.createEmptyTree(null, 0, 0));
+        }
+        else if (treeIDs.length === 1)
+        {
+            Zoom.zoomIn(Main.trees[treeIDs[0]]);
+        }
+
+        Main.unsavedChanges = false;
     }
 
     // Generates the entire graph, including the objects.
