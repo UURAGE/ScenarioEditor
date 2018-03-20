@@ -92,9 +92,17 @@ var Clipboard;
     function copyNode(nodeID)
     {
         var toCopy = Utils.clone(Main.nodes[nodeID]);
-        var plumbInstance = Main.getPlumbInstanceByNodeID(nodeID);
 
-        toCopy.connections = plumbInstance.getConnections({ target: nodeID });
+        var plumbInstance = Main.getPlumbInstanceByNodeID(nodeID);
+        toCopy.connections = plumbInstance.getConnections({ target: nodeID }).map(function(connection)
+        {
+            return {
+                sourceId: connection.sourceId,
+                targetId: connection.targetId,
+                color: connection.getParameter('color')
+            };
+        });
+
         toCopy.position = Utils.cssPosition($('#' + nodeID));
 
         return toCopy;
@@ -170,12 +178,10 @@ var Clipboard;
 
                         $.each(connections, function(index, connection)
                         {
-                            var target = idMappings[
-                                connection.targetId]; //map original target to copied target
+                            var target = idMappings[connection.targetId]; //map original target to copied target
                             if (!target)
                                 return true;
-                            var source = idMappings[
-                                connection.sourceId]; //map original source to copied source
+                            var source = idMappings[connection.sourceId]; //map original source to copied source
                             if (!source)
                                 return true;
                             var newConnection = plumbInstance.connect(
@@ -184,10 +190,9 @@ var Clipboard;
                                 "target": target
                             });
 
-                            var color = connection.getParameter('color');
-                            if (color)
+                            if (connection.color)
                             {
-                                newConnection.setParameter('color', color);
+                                newConnection.setParameter('color', connection.color);
                             }
                         });
                     });
@@ -280,10 +285,9 @@ var Clipboard;
                         "target": target
                     });
 
-                    var color = connection.getParameter('color');
-                    if (color)
+                    if (connection.color)
                     {
-                        newConnection.setParameter('color', color);
+                        newConnection.setParameter('color', connection.color);
                     }
                 });
             });
