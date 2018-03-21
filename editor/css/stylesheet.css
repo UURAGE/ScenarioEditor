@@ -249,7 +249,8 @@ a[data-disabled]
 #propertyValuesSection td select,
 #propertyValuesSection td textarea,
 #characterSection td input,
-#characterSection td select
+#characterSection td select,
+#characterSection td textarea
 {
   width: 100%;
   box-sizing: border-box;
