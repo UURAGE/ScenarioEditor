@@ -3,6 +3,7 @@
     "no_name": "The scenario does not have a name.",
     "empty_subject": "Subject \"%s\" is empty.",
     "subject_start_type_error": "Subject \"{{subject}}\" starts with a {{type, lowercase}} node. A subject must be started by the player.",
+    "first_subject_start_type_error": "The first subject \"{{subject}}\" starts with nodes with different types. The types must be the same.",
     "end_with_outgoing_connections": "Subject \"%s\" contains a node that is marked as an end with outgoing connections.",
     "unmarked_end": "Subject \"%s\" contains an end node that has not been marked as such.",
     "unnamed_subject": "There is an unnamed subject.",

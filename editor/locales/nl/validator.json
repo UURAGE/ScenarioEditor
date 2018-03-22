@@ -3,6 +3,7 @@
     "no_name": "Het scenario heeft geen naam.",
     "empty_subject": "Onderwerp \"%s\" is leeg.",
     "subject_start_type_error": "Onderwerp \"{{subject}}\" begint met een {{type, lowercase}}knoop. De speler moet een onderwerp beginnen.",
+    "first_subject_start_type_error": "Het eerste onderwerp \"{{subject}}\" begint met knopen van een verschillend type. Het type moet hetzelfde zijn.",
     "end_outgoing_connections": "Onderwerp \"%s\" bevat een gemarkeerd einde dat nog uitgaande pijlen heeft.",
     "unmarked_end": "Onderwerp \"%s\" bevat een einde dat niet is gemarkeerd als het einde van het gesprek.",
     "unnamed_subject": "Er is een onderwerp zonder naam.",

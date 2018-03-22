@@ -76,15 +76,30 @@ var Validator;
             }
             else
             {
+                var firstStartNodeType = Main.nodes[startNodeIDs[0]].type;
                 $.each(startNodeIDs, function(index, startNodeID)
                 {
                     // the tree on the first level can start with anything, but the trees following can only start with player nodes
-                    if(tree.level !== 0 && Main.nodes[startNodeID].type !== Main.playerType)
+                    if (tree.level !== 0 && Main.nodes[startNodeID].type !== Main.playerType)
                     {
                         validationReport.push(
                         {
                             message: i18next.t('validator:subject_start_type_error',
                                 { subject: tree.subject, type: i18next.t('common:' + Main.nodes[startNodeID].type) }),
+                            level: 'error',
+                            jumpToFunction: function()
+                            {
+                                Zoom.zoomIn(tree);
+                                Main.selectNode(startNodeID);
+                            }
+                        });
+                    }
+
+                    if (tree.level === 0 && Main.nodes[startNodeID].type !== firstStartNodeType)
+                    {
+                        validationReport.push(
+                        {
+                            message: i18next.t('validator:first_subject_start_type_error', { subject: tree.subject }),
                             level: 'error',
                             jumpToFunction: function()
                             {
