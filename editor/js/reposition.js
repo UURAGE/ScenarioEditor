@@ -214,10 +214,10 @@
 
     // This function uses an heuristic to sort the nodes within the ranks to avoid crossing edges in the graph.
     // It sorts every row by the index of the median parent or child of every node in their row.
-    function wmedian(virtualNodeNetwork, iteratie)
+    function wmedian(virtualNodeNetwork, iteration)
     {
         // Every iteration we switch from visiting the ranks in ascending and descending order.
-        if (iteratie % 2 === 0)
+        if (iteration % 2 === 0)
         {
             // Here we visit the ranks is ascending order, starting at rank 1, because the nodes in rank 0 don't have parents.
             for (var i = 1; i < virtualNodeNetwork.length; i++)
@@ -543,13 +543,11 @@
     // This function gives every node a rank (the longest path from the source node).
     function giveNodesRanks(topologicalOrdening, plumbInstance)
     {
-        // Initialise every rank to minus infinity.
         $.each(topologicalOrdening, function(index, nodeID)
         {
             Main.nodes[nodeID].topologicalRank = 0;
         });
-        // The source node has a distance of 0 to the source node.
-        Main.nodes[topologicalOrdening[0]].topologicalRank = 0;
+
         // For every node, in topological order ...
         for (var i = 0; i < topologicalOrdening.length; i++)
         {
