@@ -1777,8 +1777,9 @@ var Main;
         {
             Main.trees[treeID].nodes.forEach(function(nodeID)
             {
-                deleteNode(nodeID);
+                deleteNode(nodeID, true);
             });
+            Main.trees[treeID].nodes = [];
         }, true);
 
         if (treeID === Main.selectedElement)
@@ -1790,7 +1791,7 @@ var Main;
     }
 
     // Deletes the selected node.
-    function deleteNode(nodeID)
+    function deleteNode(nodeID, shouldNotDeleteFromTree)
     {
         if (nodeID === null) return; // No node selected, so do nothing
 
@@ -1801,7 +1802,11 @@ var Main;
             selectElement(null);
 
         var parentTree = Main.trees[Main.nodes[toDelete].parent];
-        parentTree.nodes.splice(parentTree.nodes.indexOf(toDelete), 1);
+        // shouldNotDeleteFromTree should only be true when deleting the node from the tree yourself afterwards
+        if (!shouldNotDeleteFromTree)
+        {
+            parentTree.nodes.splice(parentTree.nodes.indexOf(toDelete), 1);
+        }
 
         // Delete the node of our object and remove it from the graph.
         delete Main.nodes[toDelete];
