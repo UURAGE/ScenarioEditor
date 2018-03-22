@@ -503,7 +503,7 @@ var Save;
     }
 
     //trees is now an object with individual trees as properties
-    //objects cant be sorted, so we return an array of trees, sorted by level
+    //objects cant be sorted, so we return an array of trees, sorted by level, if equal, sorted by x-position
     function sortTrees(trees)
     {
         var result = [];
@@ -515,7 +515,14 @@ var Save;
 
         result.sort(function(a, b)
         {
-            return a.level - b.level;
+            if (a.level === b.level)
+            {
+                return a.leftPos - b.leftPos;
+            }
+            else
+            {
+                return a.level - b.level;
+            }
         });
 
         return result;
