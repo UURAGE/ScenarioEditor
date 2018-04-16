@@ -32,7 +32,7 @@ var KeyControl;
             {
                 var ch = String.fromCharCode(e.keyCode);
                 //Check if the ctrl key is pressed
-                if (e.ctrlKey && !e.shiftKey)
+                if ((e.ctrlKey || e.metaKey) && !e.shiftKey)
                 {
                     if (e.keyCode in ctrlNumberControl)
                     {
@@ -45,12 +45,12 @@ var KeyControl;
 
                     $("#main").focus();
                 }
-                else if (!e.ctrlKey && !e.shiftKey && e.keyCode in numberControl)
+                else if (!(e.ctrlKey || e.metaKey) && !e.shiftKey && e.keyCode in numberControl)
                 {
                     Utils.ensurePreventDefault(this, e, numberControl[e.keyCode]);
                     $("#main").focus();
                 }
-                else if (!e.ctrlKey && !e.shiftKey && ch in letterControl)
+                else if (!(e.ctrlKey || e.metaKey) && !e.shiftKey && ch in letterControl)
                 {
                     Utils.ensurePreventDefault(this, e, letterControl[ch]);
                 }

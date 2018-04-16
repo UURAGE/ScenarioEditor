@@ -77,7 +77,7 @@ var PlumbGenerator;
             var connectionId;
             if (c.id in selectedConnections)
             {
-                if (e.ctrlKey)
+                if (e.ctrlKey || e.metaKey)
                 {
                     Main.deselectConnection(instance, selectedConnections, c.id);
                 }
@@ -91,7 +91,7 @@ var PlumbGenerator;
             }
             else
             {
-                if (!e.ctrlKey)
+                if (!(e.ctrlKey || e.metaKey))
                 {
                     for (connectionId in selectedConnections)
                     {

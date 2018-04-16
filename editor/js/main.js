@@ -674,7 +674,7 @@ var Main;
 
             if (Main.selectedElement === id)
                 return;
-            if (e.ctrlKey)
+            if (e.ctrlKey || e.metaKey)
             {
                 KeyControl.ctrlClickOnElement(id);
             }
@@ -1086,7 +1086,7 @@ var Main;
 
         txtArea.on('keydown', function(e)
         {
-            if(e.ctrlKey && e.keyCode === 13) // enter
+            if((e.ctrlKey || e.metaKey) && e.keyCode === 13) // enter
             {
                 stopEditingNode(node.id, false);
                 e.stopPropagation();

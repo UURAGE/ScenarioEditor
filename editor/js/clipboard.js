@@ -38,7 +38,7 @@
             if (isIEClipboard)
             {
                 var key = String.fromCharCode(e.keyCode);
-                if (e.ctrlKey && key in actionsByKey)
+                if ((e.ctrlKey || e.metaKey) && key in actionsByKey)
                 {
                     handleClipboardEvent(e, window.clipboardData, actionsByKey[key]);
                 }

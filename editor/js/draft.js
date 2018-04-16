@@ -228,7 +228,7 @@
                     tr.find('.col' + col + ' :input').trigger("blur");
 
                     // + CTRL
-                    if (e.ctrlKey)
+                    if (e.ctrlKey || e.metaKey)
                     {
                         // + SHIFT
                         if (e.shiftKey)
@@ -258,7 +258,7 @@
                     }
                 }
                 // CTRL + DELETE
-                else if (e.ctrlKey && e.which === 46)
+                else if ((e.ctrlKey || e.metaKey) && e.which === 46)
                 {
                     // Removes current item
 
