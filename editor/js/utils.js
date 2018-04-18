@@ -21,6 +21,7 @@ var Utils;
         focusFirstTabindexedDescendant: focusFirstTabindexedDescendant,
         setPreserveSpace: setPreserveSpace,
         attachMarkdownTooltip: attachMarkdownTooltip,
+        detachMarkdownTooltip: detachMarkdownTooltip,
         makeSortable: makeSortable,
         confirmDialog: confirmDialog
     };
@@ -177,6 +178,11 @@ var Utils;
 
         });
         tooltipIcon.insertAfter(elem);
+    }
+
+    function detachMarkdownTooltip(elem)
+    {
+        elem.next('.markdown-tooltip').remove();
     }
 
     function makeSortable(container)

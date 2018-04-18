@@ -1078,10 +1078,7 @@ var Main;
 
         txtArea.on('focusout', function(e)
         {
-            if (!txtArea.data('ui-tooltip') || txtArea.tooltip( "option", "disabled" ))
-            {
-                stopEditingNode(node.id, false);
-            }
+            stopEditingNode(node.id, false);
         });
 
         txtArea.on('keydown', function(e)
@@ -1101,9 +1098,13 @@ var Main;
             }
         });
 
-
-        inputDiv.append(txtArea);
-        if (Config.container.settings.statement.type.markdown) Utils.attachMarkdownTooltip(txtArea);
+        inputDiv.prepend(txtArea);
+        if (Config.container.settings.statement.type.markdown)
+        {
+            // Detaches the previous markdown tooltip if it exists
+            Utils.detachMarkdownTooltip(txtArea);
+            Utils.attachMarkdownTooltip(txtArea);
+        }
 
         // Disable dragging for this component
         var plumbInstance = getPlumbInstanceByNodeID(node.id);
@@ -1139,7 +1140,7 @@ var Main;
         var textArea = nodeDiv.find('.nodestatement');
 
         var text = textArea.val();
-        inputDiv.empty();
+        textArea.remove();
         inputDiv.hide();
         textDiv.show();
 
