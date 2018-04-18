@@ -1717,15 +1717,42 @@ var Main;
         // fill div that can hold the images that visualize if the node has certain settings
         var imageDiv = nodeHTML.find('.imgDiv');
         imageDiv.empty();
-        var appendNodePropertyImage = function(imgName)
+
+        var appendNodePropertyImageIfHasValue = function(imgName, propertyValue, showTooltip)
         {
-            imageDiv.append($('<img>', { src: editor_url + "png/node_properties/" + imgName + ".png" }));
+            if (propertyValue)
+            {
+                var nodePropertyImage = $('<img>', { src: editor_url + "png/node_properties/" + imgName + ".png" }).appendTo(imageDiv);
+                if (showTooltip)
+                {
+                     nodePropertyImage.tooltip(
+                    {
+                        items: ":hover",
+                        content: Utils.escapeHTML(propertyValue),
+                        // Taken from: http://stackoverflow.com/a/15014759
+                        close: function(event, ui)
+                        {
+                            ui.tooltip.hover(
+                                function ()
+                                {
+                                    $(this).stop(true).fadeIn();
+                                },
+                                function ()
+                                {
+                                    $(this).fadeOut(function(){ $(this).remove(); });
+                                }
+                            );
+                        }
+                    });
+                }
+            }
         };
 
-        if (node.comment) appendNodePropertyImage("node_has_comments");
-        if (node.allowInterleaveNode) appendNodePropertyImage("node_has_jump");
-        if (node.allowDialogueEndNode) appendNodePropertyImage("node_has_premature_end");
-        if (node.endNode) appendNodePropertyImage("node_has_end");
+        appendNodePropertyImageIfHasValue("node_has_comments", node.comment, true);
+
+        appendNodePropertyImageIfHasValue("node_has_jump", node.allowInterleaveNode);
+        appendNodePropertyImageIfHasValue("node_has_premature_end", node.allowDialogueEndNode);
+        appendNodePropertyImageIfHasValue("node_has_end", node.endNode);
 
         var longNode = text.length > 140;
         if (longNode)
