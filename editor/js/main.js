@@ -336,7 +336,7 @@ var Main;
 
         $("#main").on('mousedown', function(event)
         {
-            ctrlDown = event.ctrlKey;
+            ctrlDown = event.ctrlKey || event.metaKey;
         });
         $("#main").on('selectablestart', function()
         {
@@ -1023,7 +1023,7 @@ var Main;
             }
             if (Main.selectedElement === id)
                 return;
-            if (event.ctrlKey)
+            if (event.ctrlKey || event.metaKey)
             {
                 KeyControl.ctrlClickOnElement(id);
             }
