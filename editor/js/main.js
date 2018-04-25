@@ -24,7 +24,6 @@ var Main;
         gridY: gridY,
         // The mouse position relative to the html document
         mousePosition: { x: 0, y: 0 },
-        unsavedChanges: false,
         //Functions
         addNewNode: addNewNode,
         addNewTree: addNewTree,
@@ -400,7 +399,7 @@ var Main;
     $(window).on('beforeunload', function()
     {
         // confirmation for leaving the page
-        if (Main.unsavedChanges)
+        if (!SaveIndicator.getSavedChanges())
         {
             return i18next.t('main:pending_changes');
         }
@@ -570,7 +569,7 @@ var Main;
         {
             id = "dialogue" + Main.maxTreeNumber;
             Main.maxTreeNumber++;
-            Main.unsavedChanges = true;
+            SaveIndicator.setSavedChanges(false);
         }
 
         var treeDiv = $('<div>', { class: "treeDiv noSelect" });
@@ -900,7 +899,7 @@ var Main;
         {
             Main.jsPlumbCounter++;
             id = "edit_" + Main.jsPlumbCounter;
-            Main.unsavedChanges = true;
+            SaveIndicator.setSavedChanges(false);
         }
 
         Main.trees[parentID].nodes.push(id);
@@ -952,7 +951,7 @@ var Main;
             {
                 invalidateNodeClick = true;
 
-                Main.unsavedChanges = true;
+                SaveIndicator.setSavedChanges(false);
 
                 if (Main.selectedElement === null)
                 {
@@ -1400,7 +1399,7 @@ var Main;
     {
         if (Main.selectedElement === null) return; // No node selected, so do nothing.
 
-        Main.unsavedChanges = true;
+        SaveIndicator.setSavedChanges(false);
 
         // Get the selected node.
         var node = Main.nodes[Main.selectedElement];
@@ -1575,7 +1574,7 @@ var Main;
     //keeps the tree's position up to date for zooming out. handles snapping to grid
     function treeDropHandler(event, id)
     {
-        Main.unsavedChanges = true;
+        SaveIndicator.setSavedChanges(false);
 
         var tree = Main.trees[id];
 
@@ -1791,7 +1790,7 @@ var Main;
 
     function deleteElement(elementID)
     {
-        Main.unsavedChanges = true;
+        SaveIndicator.setSavedChanges(false);
 
         if (elementID in Main.trees)
             deleteTree(elementID);
@@ -1843,7 +1842,7 @@ var Main;
 
     function applyTreeChanges()
     {
-        Main.unsavedChanges = true;
+        SaveIndicator.setSavedChanges(false);
 
         var tree = Main.trees[Main.selectedElement];
 

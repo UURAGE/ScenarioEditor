@@ -814,7 +814,7 @@ button img
 {
   display: inline-block;
   margin: 0;
-  padding: 5px 0;
+  padding: 3px 0;
   background-color: #e9e9e9;
   color: #666;
   text-align: center;
@@ -826,7 +826,7 @@ button img
   #scenarioNameTab span
   {
     margin: 3px 0;
-    padding: 0 10px;
+    padding: 5px;
     min-width: 50px;
     height: 1em;
     color: #000;
@@ -842,6 +842,11 @@ button img
     {
       height: 1em;
       font: inherit;
+    }
+
+    #scenarioNameTab span:empty
+    {
+      padding: 3px 15px;
     }
 
 .noSelect
@@ -1402,4 +1407,14 @@ textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
 #colorPicker .edit:hover, #colorPicker .close:hover {
   opacity: 1;
   cursor: pointer;
+}
+
+.unsavedChanges::after {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 100%;
+  background: #e57373;
+  vertical-align: middle;
 }

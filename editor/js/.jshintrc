@@ -38,7 +38,8 @@
         "Print",
         "Zoom",
         "Clipboard",
-        "ColorPicker"
+        "ColorPicker",
+        "SaveIndicator"
     ],
     "globals": {
         "root_url": false,

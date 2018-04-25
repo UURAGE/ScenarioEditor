@@ -16,7 +16,7 @@
             var startNodeIDs = Main.getStartNodeIDs(tree);
             if (startNodeIDs.length === 0) return;
 
-            Main.unsavedChanges = true;
+            SaveIndicator.setSavedChanges(false);
 
             // First we distribute the nodes vertically based on the longest path to the Node.
             var verticalOrder = distributeNodesVertically(tree);

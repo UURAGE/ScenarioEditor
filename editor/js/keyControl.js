@@ -401,7 +401,7 @@ var KeyControl;
         // If none of the nodes is moving outside of the canvas, move and repaint them
         if (!outOfLeftBound && !outOfUpperBound)
         {
-            Main.unsavedChanges = true;
+            SaveIndicator.setSavedChanges(false);
 
             var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElements[0]);
             Main.selectedElements.forEach(function(selectedElement)
@@ -451,7 +451,7 @@ var KeyControl;
 
         if (allClear)
         {
-            Main.unsavedChanges = true;
+            SaveIndicator.setSavedChanges(false);
 
             for (var j = 0; j < Main.selectedElements.length; j++)
             {

@@ -38,7 +38,7 @@ var Load;
                 text: i18next.t('load:import'),
                 click: function()
                 {
-                    if (!Main.unsavedChanges)
+                    if (SaveIndicator.getSavedChanges())
                     {
                         importScenario(importContainer);
                     }
@@ -181,7 +181,7 @@ var Load;
             Zoom.zoomIn(Main.trees[treeIDs[0]]);
         }
 
-        Main.unsavedChanges = false;
+        SaveIndicator.setSavedChanges(true);
     }
 
     // Generates the entire graph, including the objects.

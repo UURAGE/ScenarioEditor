@@ -180,7 +180,7 @@ var Evaluations;
 
         var consideredSave = function()
         {
-            Main.unsavedChanges = true;
+            SaveIndicator.setSavedChanges(false);
 
             var previouslySelectedElement = Main.selectedElement;
             Main.selectElement(null);

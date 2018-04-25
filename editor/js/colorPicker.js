@@ -292,7 +292,7 @@ var ColorPicker;
 
                     var consideredSaveColorKey = function()
                     {
-                        Main.unsavedChanges = true;
+                        SaveIndicator.setSavedChanges(false);
 
                         ColorPicker.key.sequence = newColorKeySequence;
                         ColorPicker.key.byColor = newColorKeySequence.reduce(function(byColor, color)
@@ -481,7 +481,7 @@ var ColorPicker;
                         });
                         $(this).on('click', function(e)
                         {
-                            Main.unsavedChanges = true;
+                            SaveIndicator.setSavedChanges(false);
 
                             var colorName = $(this).data("color");
                             connection.setParameter("color", colorName);

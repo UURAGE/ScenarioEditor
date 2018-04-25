@@ -32,7 +32,7 @@ var Save;
                 'xmlns:' + Config.additionalNameSpaces[nameSpace], nameSpace);
         }
 
-        if (Main.unsavedChanges) Metadata.container.version++;
+        if (!SaveIndicator.getSavedChanges()) Metadata.container.version++;
         doc.documentElement.setAttribute("version", Metadata.container.version);
         doc.documentElement.setAttribute("schemaVersion", schemaVersion);
         doc.documentElement.setAttribute("configidref", Config.container.id);

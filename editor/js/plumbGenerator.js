@@ -40,7 +40,7 @@ var PlumbGenerator;
         // On dblclick, the connection will be deleted
         instance.bind("dblclick", function(connection, originalEvent)
         {
-            Main.unsavedChanges = true;
+            SaveIndicator.setSavedChanges(false);
 
             instance.deleteConnection(connection, originalEvent);
         });
@@ -127,7 +127,7 @@ var PlumbGenerator;
 
         instance.bind("connection", function(info)
         {
-            Main.unsavedChanges = true;
+            SaveIndicator.setSavedChanges(false);
 
             if($("#" + info.targetId).hasClass("parentSelected") ||
                $("#" + info.targetId).hasClass("selected"))
