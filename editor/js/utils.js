@@ -242,12 +242,12 @@ var Utils;
                 text: i18next.t('common:cancel'),
                 click: function()
                 {
-                    deferredConfirmation.resolve(false);
                     $(this).dialog('close');
                 }
             }],
             close: function()
             {
+                deferredConfirmation.resolve(false);
                 container.remove();
             }
         });
