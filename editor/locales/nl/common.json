@@ -32,5 +32,8 @@
     "initial_value": "Beginwaarde",
     "evaluated": "Geëvalueerd",
     "statement": "Uitspraak",
-    "edit": "Bewerken"
+    "edit": "Bewerken",
+    "info": "Info",
+    "warning": "Waarschuwing",
+    "error": "Fout"
 }

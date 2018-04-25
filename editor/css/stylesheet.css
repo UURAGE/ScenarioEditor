@@ -44,6 +44,22 @@ textarea
   box-sizing: border-box;
 }
 
+.ui-dialog-titlebar.info
+{
+  background: #2BAAF6;
+}
+
+.ui-dialog-titlebar.warning
+{
+  background: #f2b63d;
+}
+
+.ui-dialog-titlebar.error
+{
+  background: #e57373;
+}
+
+
 .long::after
 {
   content: "";

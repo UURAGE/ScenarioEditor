@@ -10,8 +10,5 @@
     "first_layer_count": "The first layer must contain exactly one subject.",
     "no_ending": "The last layer must have at least one marked ending.",
     "no_valid_ending": "There is no valid marked ending.",
-    "empty_scenario": "Scenario contains no subjects.",
-    "info": "Info",
-    "warning": "Warning",
-    "error": "Error"
+    "empty_scenario": "Scenario contains no subjects."
 }

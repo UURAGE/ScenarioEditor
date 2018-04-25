@@ -99,7 +99,7 @@
                 {
                     if (data.configIdRef !== Config.container.id)
                     {
-                        alert("The config id of the pasted content does not match the config id referred to in the scenario");
+                        Utils.alertDialog("The config id of the pasted content does not match the config id referred to in the scenario", 'warning');
                     }
                     return pasteElement(data.type, data.content);
                 }

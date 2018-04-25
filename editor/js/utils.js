@@ -23,6 +23,7 @@ var Utils;
         attachMarkdownTooltip: attachMarkdownTooltip,
         detachMarkdownTooltip: detachMarkdownTooltip,
         makeSortable: makeSortable,
+        alertDialog: alertDialog,
         confirmDialog: confirmDialog
     };
 
@@ -219,12 +220,49 @@ var Utils;
         });
     }
 
-    function confirmDialog(content)
+    function alertDialog(content, type)
+    {
+        var deferredClose = $.Deferred();
+        var container = $('<div>');
+        container.append(content).dialog(
+        {
+            title: i18next.t('common:' + type),
+            classes:
+            {
+                "ui-dialog-titlebar": type,
+            },
+            height: 'auto',
+            maxHeight: 768,
+            width: 400,
+            modal: true,
+            buttons: [
+            {
+                text: i18next.t('common:close'),
+                click: function()
+                {
+                    $(this).dialog('close');
+                }
+            }],
+            close: function()
+            {
+                deferredClose.resolve();
+                container.remove();
+            }
+        });
+        return deferredClose;
+    }
+
+    function confirmDialog(content, type)
     {
         var deferredConfirmation = $.Deferred();
         var container = $('<div>');
         container.append(content).dialog(
         {
+            title: i18next.t('common:' + type),
+            classes:
+            {
+                "ui-dialog-titlebar": type,
+            },
             height: 'auto',
             maxHeight: 768,
             width: 400,

@@ -10,8 +10,5 @@
     "first_layer_count": "De eerste laag moet precies 1 onderwerp bevatten.",
     "no_ending": "De laatste laag van onderwerpen moet tenminste één gemarkeerd einde hebben.",
     "no_valid_ending": "Er is geen valide einde gemarkeerd.",
-    "empty_scenario": "Scenario bevat geen onderwerpen.",
-    "info": "Info",
-    "warning": "Waarschuwing",
-    "error": "Fout"
+    "empty_scenario": "Scenario bevat geen onderwerpen."
 }

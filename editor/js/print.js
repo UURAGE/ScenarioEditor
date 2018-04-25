@@ -21,7 +21,7 @@ var Print;
 
     function printScenario()
     {
-        Utils.confirmDialog(i18next.t('print:warning')).done(function(confirmed)
+        Utils.confirmDialog(i18next.t('print:warning'), 'warning').done(function(confirmed)
         {
             if (confirmed)
             {

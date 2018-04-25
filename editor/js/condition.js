@@ -386,7 +386,7 @@ var Condition;
             }
             else
             {
-                alert(i18next.t('condition:error.no_test'));
+                Utils.alertDialog(i18next.t('condition:error.no_test'), 'error');
             }
         });
         groupCondition.append(addConditionButton);
@@ -401,7 +401,7 @@ var Condition;
             }
             else
             {
-                alert(i18next.t('condition:error.no_test'));
+                Utils.alertDialog(i18next.t('condition:error.no_test'), 'error');
             }
         });
         groupCondition.append(addGroupConditionButton);

@@ -40,7 +40,7 @@ var Config;
         var configXML = $($.parseXML($('#config').text())).children('config');
         if (!configXML.length)
         {
-            alert("The configuration for the editor was not loaded");
+            Utils.alertDialog("The configuration for the editor was not loaded", 'error');
             return;
         }
 

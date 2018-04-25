@@ -280,7 +280,7 @@ var Evaluations;
             });
             if (noNameCounter > 0)
             {
-                return Utils.confirmDialog(i18next.t('evaluations:missing_name_warning'));
+                return Utils.confirmDialog(i18next.t('evaluations:missing_name_warning'), 'warning');
             }
             else
             {
@@ -304,7 +304,7 @@ var Evaluations;
                     removedEvaluationList.append($('<li>', { text: existingEvaluation.name }));
                 });
                 content.append(removedEvaluationList);
-                return Utils.confirmDialog(content);
+                return Utils.confirmDialog(content, 'warning');
             }
             else
             {

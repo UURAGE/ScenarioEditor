@@ -295,7 +295,7 @@ var Main;
             }
             else
             {
-                alert(i18next.t('main:no_parameters_to_affect'));
+                Utils.alertDialog(i18next.t('main:no_parameters_to_affect'), 'info');
             }
         });
 
@@ -2503,7 +2503,7 @@ var Main;
 
         if (Validator.testCycle(targetID, sourceID))
         {
-            alert(i18next.t('main:error.cycle'));
+            Utils.alertDialog(i18next.t('main:error.cycle'), 'error');
             return false;
         }
 
@@ -2513,7 +2513,7 @@ var Main;
         {
             if (targetNode.type != Main.nodes[firstChildId].type)
             {
-                alert(i18next.t('main:error.child_type'));
+                Utils.alertDialog(i18next.t('main:error.child_type'), 'error');
                 return false;
             }
         }

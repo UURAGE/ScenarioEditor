@@ -1,5 +1,5 @@
 {
-    "error": {
-        "export": "Waarschuwing: er zijn fouten aanwezig in het scenario. Weet u zeker dat u wilt exporteren?"
+    "warning": {
+        "export": "Er zijn fouten aanwezig in het scenario. Weet u zeker dat u wilt exporteren?"
     }
 }

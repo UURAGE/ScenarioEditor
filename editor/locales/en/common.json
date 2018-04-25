@@ -32,5 +32,8 @@
     "initial_value": "Initial value",
     "evaluated": "Evaluated",
     "statement": "Statement",
-    "edit": "Edit"
+    "edit": "Edit",
+    "info": "Info",
+    "warning": "Warning",
+    "error": "Error"
 }

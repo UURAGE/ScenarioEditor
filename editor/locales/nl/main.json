@@ -1,8 +1,8 @@
 {
     "error": {
-        "tree_connection": "Error: kan geen connecties tussen bomen maken.",
-        "cycle": "Error: deze connectie kan niet worden gemaakt, want dat zou een cykel creëren.",
-        "child_type": "Error: alle kinderen van één knoop moeten van hetzelfde type zijn."
+        "tree_connection": "Kan geen connecties tussen bomen maken.",
+        "cycle": "Deze connectie kan niet worden gemaakt, want dat zou een cykel creëren.",
+        "child_type": "Alle kinderen van één knoop moeten van hetzelfde type zijn."
     },
     "no_subject_open": "Geen onderwerp geopend!",
     "pending_changes": "Dit scenario heeft mogelijk veranderingen die niet zijn opgeslagen. Weet u zeker dat u de pagina wilt verlaten?",

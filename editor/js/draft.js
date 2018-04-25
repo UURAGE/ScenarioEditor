@@ -450,7 +450,7 @@
     // Clear the table and remove all items
     function clearTable()
     {
-        Utils.confirmDialog(i18next.t('draft:delete_all_confirm')).done(function(confirmed)
+        Utils.confirmDialog(i18next.t('draft:delete_all_confirm'), 'warning').done(function(confirmed)
         {
             if (confirmed)
             {

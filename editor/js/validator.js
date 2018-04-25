@@ -289,7 +289,7 @@ var Validator;
             $.each(errors, function(index, e)
             {
                 var row = $('<tr>').addClass('level-' + e.level);
-                var error = $('<td>').text(i18next.t('validator:' + e.level));
+                var error = $('<td>').text(i18next.t('common:' + e.level));
                 var message = $('<td>').append($('<span>').text(e.message).on('click', e.jumpToFunction).css('cursor', 'pointer'));
                 row.append(error).append(message);
                 table.append(row);

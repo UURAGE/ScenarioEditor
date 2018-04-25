@@ -432,7 +432,7 @@ var Parameters;
             });
             if (noNameCounter > 0)
             {
-                return Utils.confirmDialog(i18next.t('parameters:missing_name_warning'));
+                return Utils.confirmDialog(i18next.t('parameters:missing_name_warning'), 'warning');
             }
             else
             {
@@ -456,7 +456,7 @@ var Parameters;
                     removedParameterList.append($('<li>', { text: existingParameter.name }));
                 });
                 content.append(removedParameterList);
-                return Utils.confirmDialog(content);
+                return Utils.confirmDialog(content, 'warning');
             }
             else
             {

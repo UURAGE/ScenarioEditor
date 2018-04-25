@@ -288,7 +288,7 @@ var Save;
 
         if (hasErrors)
         {
-            Utils.confirmDialog(i18next.t('save:error.export')).done(function(confirmed)
+            Utils.confirmDialog(i18next.t('save:warning.export'), 'warning').done(function(confirmed)
             {
                 if (confirmed)
                 {

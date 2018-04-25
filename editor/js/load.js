@@ -44,7 +44,7 @@ var Load;
                     }
                     else
                     {
-                        Utils.confirmDialog(i18next.t('load:import_warning')).done(function(confirmed)
+                        Utils.confirmDialog(i18next.t('load:import_warning'), 'warning').done(function(confirmed)
                         {
                             if (confirmed)
                             {
@@ -89,7 +89,7 @@ var Load;
             }
             catch (err)
             {
-                alert(i18next.t('load:invalid_xml'));
+                Utils.alertDialog(i18next.t('load:invalid_xml'), 'error');
                 return;
             }
 
@@ -114,7 +114,7 @@ var Load;
         {
             if (Config.container.id !== $(scenarioXML).attr('configidref'))
             {
-                alert("The config id does not match the config id referred to in the scenario");
+                Utils.alertDialog("The config id does not match the config id referred to in the scenario", 'warning');
             }
             loadDefinitions($(scenarioXML).children('definitions').eq(0));
             loadEvaluations($(scenarioXML).children('typedExpressions').eq(0));

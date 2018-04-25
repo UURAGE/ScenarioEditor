@@ -773,7 +773,7 @@ var Types;
                 {
                     confirmed = false;
 
-                    alert(i18next.t('types:primitives.enumeration.definition.no_values'));
+                    Utils.alertDialog(i18next.t('types:primitives.enumeration.definition.no_values'), 'warning');
                     hasValues = currentType.options.sequence.length > 0;
                     return false;
                 }

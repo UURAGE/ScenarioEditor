@@ -1,12 +1,12 @@
 {
     "error": {
-        "tree_connection": "Error: connections must be contained in a single tree.",
-        "cycle": "Error: cannot create connections that complete a cycle.",
-        "child_type": "Error: a node may have only children of the same type."
+        "tree_connection": "Connections must be contained in a single tree.",
+        "cycle": "Cannot create connections that complete a cycle.",
+        "child_type": "A node may have only children of the same type."
     },
     "no_subject_open": "No subject open!",
     "pending_changes": "This scenario may contain unsaved changes. Are you sure you want to leave the page?",
     "default_subject": "Subject name",
-    "no_parameters_to_affect": "Error: there are no user-defined parameters to affect.",
+    "no_parameters_to_affect": "There are no user-defined parameters to affect.",
     "add_effect": "Add effect"
 }

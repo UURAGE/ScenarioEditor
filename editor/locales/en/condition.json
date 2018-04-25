@@ -7,6 +7,6 @@
     "add_group": "Add group",
     "delete_group": "Delete group",
     "error": {
-        "no_test": "Error: there are no parameters to test on."
+        "no_test": "There are no parameters to test on."
     }
 }
