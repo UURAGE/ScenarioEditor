@@ -259,6 +259,13 @@ a[data-disabled]
     word-wrap: break-word;
 }
 
+#metadata td + th,
+#propertyValuesSection td + th,
+#characterSection td + th
+{
+  width: 70%;
+}
+
 #metadata td input,
 #metadata td select,
 #propertyValuesSection td input,
