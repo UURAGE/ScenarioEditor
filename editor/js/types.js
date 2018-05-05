@@ -320,7 +320,7 @@ var Types;
             appendControlTo: function(containerEl, htmlId)
             {
                 var control = $('<' + this.controlName + '>', { id: htmlId, type: this.controlType, value: 0 });
-                control.css('width', 50);
+                control.css('width', 60);
                 containerEl.append(control);
             },
             getFromDOM: function(containerEl)
