@@ -40,6 +40,8 @@ var Main;
         getPlumbInstanceByNodeID: getPlumbInstanceByNodeID,
         getStartNodeIDs: getStartNodeIDs,
         highlightParents: highlightParents,
+        isEditingInCanvas: isEditingInCanvas,
+        isMousePositionWithinEditingCanvas: isMousePositionWithinEditingCanvas,
         makeConnection: makeConnection,
         selectElements: selectElements,
         selectElement: selectElement,
@@ -129,8 +131,6 @@ var Main;
         var scenarioNameInputSpan = $('<span>', { class: "scenarioNameInput" }).append(scenarioNameInput);
         scenarioNameInputSpan.on('focusout', function(e, cancel)
         {
-            KeyControl.hotKeysActive = true;
-
             var nameInput = $('#scenarioNameTab .scenarioNameInput input');
 
             if(!cancel)
@@ -160,8 +160,6 @@ var Main;
 
         $('#scenarioNameTab .scenarioName').on('dblclick', function(e)
         {
-            KeyControl.hotKeysActive = false;
-
             $(this).hide();
 
             var nameInputSpan = $('#scenarioNameTab .scenarioNameInput');
@@ -607,8 +605,6 @@ var Main;
         changeNameInput.hide();
         changeNameInput.on('focusout', function(e, cancel)
         {
-            KeyControl.hotKeysActive = true;
-
             var subDiv = $("#"+id);
             var subjectName = subDiv.find('.subjectName').show();
             var input = subDiv.find('.subjectNameInput').hide();
@@ -1052,8 +1048,6 @@ var Main;
 
         var text = node.text ? node.text : "";
 
-        KeyControl.hotKeysActive = false;
-
         textDiv.hide();
         inputDiv.show();
 
@@ -1130,9 +1124,6 @@ var Main;
         var node = Main.nodes[nodeID];
         if (!node.editing) return;
 
-        // Turn hotkeys on again (they are turned off while typing in the node)
-        KeyControl.hotKeysActive = true;
-
         var nodeDiv = $('#' + node.id);
         var inputDiv = nodeDiv.find('.statementInput');
         var textDiv = nodeDiv.find('.statementText');
@@ -1184,8 +1175,6 @@ var Main;
 
     function triggerSubjectNameInput(id, selectAllInput)
     {
-        KeyControl.hotKeysActive = false;
-
         // hide subject name span and show textbox
         var subDiv = $("#"+id);
         subDiv.find('.subjectName').hide();
@@ -2624,6 +2613,24 @@ var Main;
             left: Math.max(mousePos.x, leftBound) - leftBound + treeDiv.scrollLeft(),
             top: Math.max(mousePos.y, upperBound) - upperBound + treeDiv.scrollTop()
         };
+    }
+
+    function isEditingInCanvas()
+    {
+        var inModal = $(document.body).children(".ui-widget-overlay.ui-front").length > 0;
+        return !inModal && ($("#main").closest(document.activeElement).length > 0 || document.activeElement === null);
+    }
+
+    function isMousePositionWithinEditingCanvas()
+    {
+        var zoomedTree = Zoom.getZoomed();
+        var offset = zoomedTree ? zoomedTree.div.offset() : $("#main").offset();
+        var width = $("#main").width();
+        var height = $("#main").height();
+        return Main.mousePosition.x >= offset.left &&
+            Main.mousePosition.y >= offset.top &&
+            Main.mousePosition.x < offset.left + width &&
+            Main.mousePosition.y < offset.top + height;
     }
 
 })();

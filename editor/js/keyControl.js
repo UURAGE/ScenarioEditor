@@ -6,12 +6,9 @@ var KeyControl;
 {
     "use strict";
 
-    var hotKeysActive;
-
     KeyControl =
     {
-        ctrlClickOnElement: ctrlClickOnElement,
-        hotKeysActive  : hotKeysActive
+        ctrlClickOnElement: ctrlClickOnElement
     };
 
     var ctrlNumberControl,
@@ -21,14 +18,11 @@ var KeyControl;
 
     $(document).ready(function()
     {
-        //activate the hotkeys
-        KeyControl.hotKeysActive = true;
-
         // Event handlers.
-        $("#main").on('keydown', function(e)
+        $(document).on('keydown', function(e)
         {
             // check if hotkeys are active
-            if (KeyControl.hotKeysActive)
+            if (Main.isEditingInCanvas())
             {
                 var ch = String.fromCharCode(e.keyCode);
                 //Check if the ctrl key is pressed
@@ -36,23 +30,24 @@ var KeyControl;
                 {
                     if (e.keyCode in ctrlNumberControl)
                     {
-                        Utils.ensurePreventDefault(this, e, ctrlNumberControl[e.keyCode]);
+                        e.preventDefault();
+                        ctrlNumberControl[e.keyCode]();
                     }
                     else if (ch in ctrlLetterControl)
                     {
-                        Utils.ensurePreventDefault(this, e, ctrlLetterControl[ch]);
+                        e.preventDefault();
+                        ctrlLetterControl[ch]();
                     }
-
-                    $("#main").focus();
                 }
                 else if (!(e.ctrlKey || e.metaKey) && !e.shiftKey && e.keyCode in numberControl)
                 {
-                    Utils.ensurePreventDefault(this, e, numberControl[e.keyCode]);
-                    $("#main").focus();
+                    e.preventDefault();
+                    numberControl[e.keyCode]();
                 }
                 else if (!(e.ctrlKey || e.metaKey) && !e.shiftKey && ch in letterControl)
                 {
-                    Utils.ensurePreventDefault(this, e, letterControl[ch]);
+                    e.preventDefault();
+                    letterControl[ch]();
                 }
             }
         });
@@ -62,21 +57,21 @@ var KeyControl;
     letterControl = {
         Q: function()
         {
-            if (Zoom.isZoomed())
+            if (Zoom.isZoomed() && Main.isMousePositionWithinEditingCanvas())
             {
                 Main.addNewNode(Main.playerType, "", Main.mousePositionToDialoguePosition(Main.mousePosition), true);
             }
         },
         W: function()
         {
-            if (Zoom.isZoomed())
+            if (Zoom.isZoomed() && Main.isMousePositionWithinEditingCanvas())
             {
                 Main.addNewNode(Main.computerType, "", Main.mousePositionToDialoguePosition(Main.mousePosition), true);
             }
         },
         E: function()
         {
-            if (Zoom.isZoomed())
+            if (Zoom.isZoomed() && Main.isMousePositionWithinEditingCanvas())
             {
                 Main.addNewNode(Main.situationType, "", Main.mousePositionToDialoguePosition(Main.mousePosition), true);
             }
@@ -90,7 +85,7 @@ var KeyControl;
         },
         T: function()
         {
-            if (!Zoom.isZoomed())
+            if (!Zoom.isZoomed() && Main.isMousePositionWithinEditingCanvas())
             {
                 Main.addNewTree();
             }

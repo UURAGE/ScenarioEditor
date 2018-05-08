@@ -9,7 +9,6 @@ var Utils;
     Utils =
     {
         clone: clone,
-        ensurePreventDefault: ensurePreventDefault,
         parseDecimalIntWithDefault: parseDecimalIntWithDefault,
         parseBool: parseBool,
         escapeRegex: escapeRegex,
@@ -32,19 +31,6 @@ var Utils;
     function clone(obj)
     {
         return $.extend(true, {}, obj);
-    }
-
-    // Ensures the default event trigger is really prevented,
-    // because of a bug in firefox it is still triggered,
-    // when just calling event.preventDefault()
-    // http://stackoverflow.com/questions/14860759/cant-override-ctrls-in-firefox-using-jquery-hotkeys
-    function ensurePreventDefault(div, event, eventFunction)
-    {
-        event.preventDefault();
-
-        div.blur();
-
-        setTimeout(function() { eventFunction(); }, 50);
     }
 
     function parseDecimalIntWithDefault(string, defaultValue)

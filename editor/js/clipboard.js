@@ -10,12 +10,6 @@
 
         var handleClipboardEvent = function(e, clipboard, action)
         {
-            var isEditingInCanvas = function()
-            {
-                var inModal = $(document.body).children(".ui-widget-overlay.ui-front").length > 0;
-                return !inModal && ($("#main").closest(document.activeElement).length > 0 || document.activeElement === null);
-            };
-
             var handlers =
             {
                 copy: copy,
@@ -25,7 +19,7 @@
 
             var clipboardFormat = isIEClipboard ? clipboardFormat = 'Text' : 'text/plain';
 
-            if (isEditingInCanvas() && handlers[action](clipboard, clipboardFormat))
+            if (Main.isEditingInCanvas() && handlers[action](clipboard, clipboardFormat))
             {
                 e.preventDefault();
             }
@@ -80,17 +74,7 @@
 
     function paste(clipboard, format)
     {
-        var zoomedTree = Zoom.getZoomed();
-        var offset = zoomedTree ? zoomedTree.div.offset() : $("#main").offset();
-        var width = $("#main").width();
-        var height = $("#main").height();
-        var isWithinEditingCanvas =
-            Main.mousePosition.x >= offset.left &&
-            Main.mousePosition.y >= offset.top &&
-            Main.mousePosition.x < offset.left + width &&
-            Main.mousePosition.y < offset.top + height;
-
-        if (isWithinEditingCanvas)
+        if (Main.isMousePositionWithinEditingCanvas())
         {
             try
             {
