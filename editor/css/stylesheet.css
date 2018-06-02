@@ -593,8 +593,6 @@ button img
   box-sizing: border-box;
   padding: 0;
   border-color: #000000;
-  display: table;
-  table-layout: fixed;
   background-size: 20px 20px;
   background-repeat: no-repeat;
   background-position: center right 15px;
@@ -603,6 +601,8 @@ button img
 
   .w.treeContainer.zoom
   {
+    display: table;
+    table-layout: fixed;
     z-index: 50;
     overflow: hidden;
     width: 100%;
@@ -642,17 +642,17 @@ button img
     line-height: 50px;
   }
 
-  .w.treeContainer > div
+  .w.treeContainer.zoom > div
   {
     display: table-row;
   }
 
-    .w.treeContainer > div > div
+    .w.treeContainer.zoom > div > div
     {
       display: table-cell;
     }
 
-    .w.treeContainer > div:nth-child(2) > div
+    .w.treeContainer.zoom > div:nth-child(2) > div
     {
       width: 100%;
       height: 100%;
