@@ -1698,7 +1698,7 @@ var Main;
             });
         }
         var textLength = $(".lengthTest").text(longestWord)[0].clientWidth / 11;
-        var width = Math.max(3, textLength * 1.08, Math.sqrt(text.length));
+        var width = Math.max(4, textLength * 1.08, Math.sqrt(text.length));
 
         // get the node
         var nodeHTML = $('#' + nodeID);
@@ -1759,7 +1759,7 @@ var Main;
         nodeTextDiv.html(text);
 
         // make sure the text fits inside the node
-        var h = nodeTextDiv[0].clientHeight;
+        var h = Math.max(40, nodeTextDiv[0].clientHeight);
         nodeHTML.height(h);
 
         // Add the allowInterleaveNode class to the node for a graphical indication
