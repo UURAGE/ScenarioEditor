@@ -628,11 +628,15 @@ button img
 
       .w.treeContainer.optional:not(.zoom) .subjectDiv
       {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
         padding-right: 40px;
       }
+
+  .w.treeContainer .subjectDiv
+  {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 
   .w.treeContainer .subjectNameSpan
   {

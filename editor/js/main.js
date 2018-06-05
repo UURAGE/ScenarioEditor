@@ -600,7 +600,7 @@ var Main;
         treeDiv.attachDragger();
 
         var defaultName = i18next.t('main:default_subject');
-        var changeNameInput = $('<input type="text" class="subjectNameInput" maxlength="20">');
+        var changeNameInput = $('<input type="text" class="subjectNameInput">');
         changeNameInput.val(defaultName);
         changeNameInput.hide();
         changeNameInput.on('focusout', function(e, cancel)
