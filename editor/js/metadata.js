@@ -51,7 +51,7 @@ var Metadata;
 
         var generalContainer = $('<tbody>');
         generalContainer.append($('<tr>')
-            .append($('<th>').append($('<label>', { for: "scenarioName", text: i18next.t('metadata:scenario_name') })))
+            .append($('<th>').append($('<label>', { for: "scenarioName", text: i18next.t('metadata:scenario_name'), maxlength: 50 })))
             .append($('<td>').append($('<input>', { type: 'text', id: "scenarioName" }))));
         if (Config.container.settings.languages.sequence.length > 0)
         {
@@ -359,7 +359,7 @@ var Metadata;
 
     function formatScenarioName(scenarioName)
     {
-        scenarioName = scenarioName.trim().substr(0, 35);
+        scenarioName = scenarioName.trim().substr(0, 50);
         if (scenarioName !== "")
         {
             return scenarioName;
