@@ -36,10 +36,6 @@ var ColorPicker;
             enabled: true
         },
         {
-            name: "whitesmoke",
-            enabled: true
-        },
-        {
             name: "firebrick",
             enabled: true
         },
@@ -57,6 +53,10 @@ var ColorPicker;
         },
         {
             name: "seagreen",
+            enabled: true
+        },
+        {
+            name: "#5c96bc",
             enabled: true
         },
         {
