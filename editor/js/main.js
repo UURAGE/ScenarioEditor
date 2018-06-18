@@ -655,13 +655,11 @@ var Main;
         inputSpan.append(changeNameInput);
 
         var subjTextSpan = $('<span>',{text: defaultName, class:"subjectName"});
-        var subjSpan = $('<span>', { class: "subjectNameSpan noSelect" });
-        subjSpan.prepend(zoomTreeButton);
-        subjSpan.append(subjTextSpan);
-        subjSpan.append(inputSpan);
 
-        var subjectDiv = $('<div>', {class:"subjectDiv"});
-        subjectDiv.append(subjSpan);
+        var subjectDiv = $('<div>', {class:"subjectDiv noSelect"});
+        subjectDiv.prepend(zoomTreeButton);
+        subjectDiv.append(subjTextSpan);
+        subjectDiv.append(inputSpan);
 
         subjectDiv.on("click", function(e)
         {

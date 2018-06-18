@@ -636,15 +636,15 @@ button img
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-  }
-
-  .w.treeContainer .subjectNameSpan
-  {
-    margin-left: 5px;
     font-weight: bold;
     font-size: 17px;
     line-height: 50px;
   }
+
+    .w.treeContainer .subjectDiv > span
+    {
+      margin-left: 5px;
+    }
 
   .w.treeContainer.zoom > div
   {
