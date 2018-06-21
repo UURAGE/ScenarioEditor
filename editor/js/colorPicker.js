@@ -24,83 +24,83 @@ var ColorPicker;
     var colors =
     [
         {
-            name: "darkslategray",
+            value: "darkslategray",
             enabled: true
         },
         {
-            name: "lightslategray",
+            value: "lightslategray",
             enabled: true
         },
         {
-            name: "silver",
+            value: "silver",
             enabled: true
         },
         {
-            name: "firebrick",
+            value: "firebrick",
             enabled: true
         },
         {
-            name: "chocolate",
+            value: "chocolate",
             enabled: true
         },
         {
-            name: "goldenrod",
+            value: "goldenrod",
             enabled: true
         },
         {
-            name: "limegreen",
+            value: "limegreen",
             enabled: true
         },
         {
-            name: "seagreen",
+            value: "seagreen",
             enabled: true
         },
         {
-            name: "#5c96bc",
+            value: "#5c96bc",
             enabled: true
         },
         {
-            name: "royalblue",
+            value: "royalblue",
             enabled: true
         },
         {
-            name: "darkslateblue",
+            value: "darkslateblue",
             enabled: true
         },
         {
-            name: "indigo",
+            value: "indigo",
             enabled: true
         },
         {
-            name: "coral",
+            value: "coral",
             enabled: true
         },
         {
-            name: "orange",
+            value: "orange",
             enabled: true
         },
         {
-            name: "gold",
+            value: "gold",
             enabled: true
         },
         {
-            name: "greenyellow",
+            value: "greenyellow",
             enabled: true
         },
         {
-            name: "turquoise",
+            value: "turquoise",
             enabled: true
         },
         {
-            name: "dodgerblue",
+            value: "dodgerblue",
             enabled: true
         },
         {
-            name: "slateblue",
+            value: "slateblue",
             enabled: true
         },
         {
-            name: "palevioletred",
+            value: "palevioletred",
             enabled: true
         }
     ];
@@ -118,7 +118,7 @@ var ColorPicker;
         ColorPicker.key = {
             byColor: colors.reduce(function(byColor, color)
             {
-                byColor[color.name] = color;
+                byColor[color.value] = color;
                 return byColor;
             }, {}),
             sequence: colors
@@ -163,10 +163,10 @@ var ColorPicker;
         {
             byValue: enabledColors.reduce(function(byValue, color)
             {
-                byValue[color.name] = { value: color.name, text: ColorPicker.key.byColor[color.name].entry };
+                byValue[color.value] = { value: color.value, text: ColorPicker.key.byColor[color.value].entry };
                 return byValue;
             }, {}),
-            sequence: enabledColors.map(function(color) { return { value: color.name, text: color.entry }; })
+            sequence: enabledColors.map(function(color) { return { value: color.value, text: color.entry }; })
         };
         var colorEnumeration = $.extend({}, Types.primitives.enumeration, { options: options });
         colorEnumeration.insertType(Utils.appendChild(annotationXML, "type"), true);
@@ -181,11 +181,11 @@ var ColorPicker;
         }
     }
 
-    function colorToXML(containerXML, colorName)
+    function colorToXML(containerXML, colorValue)
     {
         var annotationValueXML = Utils.appendChild(containerXML, "annotationValue");
         annotationValueXML.setAttribute('idref', colorAnnotationId);
-        Types.primitives.enumeration.toXML(annotationValueXML, colorName);
+        Types.primitives.enumeration.toXML(annotationValueXML, colorValue);
     }
 
     function keyDialog()
@@ -239,12 +239,12 @@ var ColorPicker;
             entryDataRow.append($('<td>',
             {
                 class: "color",
-                "data-color": color.name,
-                title: i18next.t('colorPicker:colors.' + color.name),
+                "data-color": color.value,
+                title: i18next.t('colorPicker:colors.' + color.value),
                 css:
                 {
-                    borderColor: color.name,
-                    backgroundColor: color.name
+                    borderColor: color.value,
+                    backgroundColor: color.value
                 }
             }));
             var entryContainer = $('<td>', { class: "entry" }).appendTo(entryDataRow);
@@ -268,14 +268,14 @@ var ColorPicker;
                     var justDisabledColors = {};
                     var newColorKeySequence = keyBody.children().map(function()
                     {
-                        var name = $(this).find('.color').data("color");
+                        var value = $(this).find('.color').data("color");
                         var enabled = $(this).find('.enable').children('input').prop("checked");
-                        if (!enabled && enabled !== ColorPicker.key.byColor[name].enabled)
+                        if (!enabled && enabled !== ColorPicker.key.byColor[value].enabled)
                         {
-                            justDisabledColors[name] = 0;
+                            justDisabledColors[value] = 0;
                         }
                         return {
-                            name: name,
+                            value: value,
                             enabled: enabled,
                             entry: Config.container.settings.colorKeyEntry.type.getFromDOM($(this).find('.entry'))
                         };
@@ -297,7 +297,7 @@ var ColorPicker;
                         ColorPicker.key.sequence = newColorKeySequence;
                         ColorPicker.key.byColor = newColorKeySequence.reduce(function(byColor, color)
                         {
-                            byColor[color.name] = color;
+                            byColor[color.value] = color;
                             return byColor;
                         }, {});
 
@@ -320,9 +320,9 @@ var ColorPicker;
                         var warningContainer = $('<div>');
                         warningContainer.append($('<div>', { text: i18next.t('colorPicker:disable_colors_warning') }));
                         warningContainer.append($('<br>'));
-                        for (var colorName in justDisabledColors)
+                        for (var colorValue in justDisabledColors)
                         {
-                            warningContainer.append($('<div>', { text: i18next.t('colorPicker:colors.' + colorName) + ": " + justDisabledColors[colorName] + "x" }));
+                            warningContainer.append($('<div>', { text: i18next.t('colorPicker:colors.' + colorValue) + ": " + justDisabledColors[colorValue] + "x" }));
                         }
                         Utils.confirmDialog(warningContainer, 'warning').done(function(confirmed)
                         {
@@ -399,10 +399,10 @@ var ColorPicker;
                             segment.setAttribute("r", radius - ringPadding);
                         }
                         segment.setAttribute("class", "segment");
-                        segment.setAttribute("fill", color.name);
-                        segment.setAttribute("data-color", color.name);
+                        segment.setAttribute("fill", color.value);
+                        segment.setAttribute("data-color", color.value);
                         var title = Utils.appendChild(segment, "title");
-                        $(title).text(i18next.t('colorPicker:colors.' + color.name) + (color.entry ? ": " + color.entry : ""));
+                        $(title).text(i18next.t('colorPicker:colors.' + color.value) + (color.entry ? ": " + color.entry : ""));
                     };
 
                     var appendBorderTo = function(ring, offset, radius)
@@ -483,8 +483,8 @@ var ColorPicker;
                         {
                             SaveIndicator.setSavedChanges(false);
 
-                            var colorName = $(this).data("color");
-                            connection.setParameter("color", colorName);
+                            var colorValue = $(this).data("color");
+                            connection.setParameter("color", colorValue);
                             if (ColorPicker.areColorsEnabled())
                             {
                                 applyColor(connection, Zoom.getZoomed());
@@ -565,18 +565,18 @@ var ColorPicker;
 
     function applyColor(connection, dialogue)
     {
-        var colorName = connection.getParameter("color");
-        if (colorName)
+        var colorValue = connection.getParameter("color");
+        if (colorValue)
         {
             if (dialogue && connection.id in dialogue.selectedConnections)
             {
-                connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: colorName, outlineStroke: colorName }));
+                connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: colorValue, outlineStroke: colorValue }));
             }
             else
             {
-                connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: colorName, outlineStroke: "transparent" }));
+                connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: colorValue, outlineStroke: "transparent" }));
             }
-            connection.setHoverPaintStyle($.extend({}, PlumbGenerator.defaultHoverPaintStyle, { stroke: colorName, outlineStroke: colorName }));
+            connection.setHoverPaintStyle($.extend({}, PlumbGenerator.defaultHoverPaintStyle, { stroke: colorValue, outlineStroke: colorValue }));
         }
     }
 

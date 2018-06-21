@@ -1323,12 +1323,12 @@ var Main;
         // Connection could just have been removed so we need to check if it still exists
         if (cs.length > 0)
         {
-            var colorName = cs[0].getParameter("color");
-            if (!colorName || !ColorPicker.areColorsEnabled())
+            var colorValue = cs[0].getParameter("color");
+            if (!colorValue || !ColorPicker.areColorsEnabled())
             {
-                colorName = "#5c96bc";
+                colorValue = "#5c96bc";
             }
-            cs[0].setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: colorName, outlineStroke: "transparent" }));
+            cs[0].setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: colorValue, outlineStroke: "transparent" }));
         }
 
         delete selectedConnections[connectionId];

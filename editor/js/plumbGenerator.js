@@ -50,11 +50,11 @@ var PlumbGenerator;
         {
             if (ColorPicker.areColorsEnabled())
             {
-                var colorName = connection.getParameter("color");
-                if (colorName in ColorPicker.key.byColor && ColorPicker.key.byColor[colorName].entry)
+                var colorValue = connection.getParameter("color");
+                if (colorValue in ColorPicker.key.byColor && ColorPicker.key.byColor[colorValue].entry)
                 {
                     // This uses the innerHTML property, so escape the HTML!
-                    connection.addOverlay([ "Label", { id: "color-label", label: Utils.escapeHTML(ColorPicker.key.byColor[colorName].entry), cssClass: "color-label" }]);
+                    connection.addOverlay([ "Label", { id: "color-label", label: Utils.escapeHTML(ColorPicker.key.byColor[colorValue].entry), cssClass: "color-label" }]);
                 }
             }
         });
@@ -100,14 +100,14 @@ var PlumbGenerator;
                 }
 
                 selectedConnections[c.id] = { source: c.sourceId, target: c.targetId };
-                var colorName = c.getParameter("color");
-                if (!colorName || !ColorPicker.areColorsEnabled())
+                var colorValue = c.getParameter("color");
+                if (!colorValue || !ColorPicker.areColorsEnabled())
                 {
                     c.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: "goldenrod" }));
                 }
                 else
                 {
-                    c.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: colorName, outlineStroke: colorName }));
+                    c.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: colorValue, outlineStroke: colorValue }));
                 }
             }
         });

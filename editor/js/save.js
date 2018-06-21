@@ -380,7 +380,7 @@ var Save;
 
             var targetNodes = connections.map(function(connection)
             {
-                return { id: connection.targetId, colorName: connection.getParameter('color') };
+                return { id: connection.targetId, colorValue: connection.getParameter('color') };
             });
             sortIdentifiables(targetNodes);
 
@@ -392,10 +392,10 @@ var Save;
                 var responseEl = addAndReturnElement(responseElName, scenarioNameSpace, responsesEl);
                 responseEl.setAttribute('idref', targetNode.id.replace(/^ext_/, '').replace(/_/g, '.'));
 
-                if (targetNode.colorName)
+                if (targetNode.colorValue)
                 {
                     var annotationValuesEl = Utils.appendChild(responseEl, "annotationValues");
-                    ColorPicker.colorToXML(annotationValuesEl, targetNode.colorName);
+                    ColorPicker.colorToXML(annotationValuesEl, targetNode.colorValue);
                 }
             });
         });

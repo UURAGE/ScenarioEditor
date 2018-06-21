@@ -254,7 +254,7 @@ var Load;
                                 source: sourceId,
                                 target: target.id
                             });
-                            connection.setParameter('color', target.colorName);
+                            connection.setParameter('color', target.colorValue);
                         });
 
                     });
@@ -442,7 +442,7 @@ var Load;
                 var annotationValues = $(targets[m]).children('annotationValues');
                 if (annotationValues.length > 0)
                 {
-                    connection.colorName = ColorPicker.colorFromXML(annotationValues.eq(0));
+                    connection.colorValue = ColorPicker.colorFromXML(annotationValues.eq(0));
                 }
                 connections[id].push(connection);
             }
