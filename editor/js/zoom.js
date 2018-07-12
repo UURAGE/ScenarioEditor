@@ -101,8 +101,8 @@ var Zoom;
 
             var parent = tree.dragDiv.parent();
 
-            $('#tabDock').hide();
             $('#draftScreen').hide();
+            if (!$('#tabDock').children().not('.ui-widget-header').is(':visible')) $('#tabDock').hide();
             MiniMap.deactivate();
 
             // Scroll position needs to 0 when the dom manipulation happens to keep jsPlumb from messing up

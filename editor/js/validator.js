@@ -51,7 +51,7 @@ var Validator;
             {
                 message: i18next.t('validator:empty_scenario'),
                 level: 'error',
-                jumpToFunction: function() { }
+                jumpToFunction: null
             });
         }
 
@@ -191,7 +191,7 @@ var Validator;
             {
                 message: i18next.t('validator:first_layer_count'),
                 level: 'error',
-                jumpToFunction: function() { }
+                jumpToFunction: null
             });
         }
 
@@ -201,7 +201,7 @@ var Validator;
             {
                 message: i18next.t('validator:no_ending'),
                 level: 'error',
-                jumpToFunction: function() { }
+                jumpToFunction: null
             });
         }
 
@@ -211,7 +211,7 @@ var Validator;
             {
                 message: i18next.t('validator:no_valid_ending'),
                 level: 'error',
-                jumpToFunction: function() { }
+                jumpToFunction: null
             });
         }
 
@@ -290,7 +290,8 @@ var Validator;
             {
                 var row = $('<tr>').addClass('level-' + e.level);
                 var error = $('<td>').text(i18next.t('common:' + e.level));
-                var message = $('<td>').append($('<span>').text(e.message).on('click', e.jumpToFunction).css('cursor', 'pointer'));
+                var message = $('<td>').text(e.message);
+                if (e.jumpToFunction) message.on('click', e.jumpToFunction).addClass('clickable');
                 row.append(error).append(message);
                 table.append(row);
             });
