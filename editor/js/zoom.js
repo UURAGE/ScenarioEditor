@@ -26,7 +26,7 @@ var Zoom;
 
     function zoomIn(tree)
     {
-        if (!$('#' + tree.id).hasClass('zoom'))
+        if (tree.id in Main.trees && !$('#' + tree.id).hasClass('zoom'))
         {
             // Unselect the selected tree(s), because we are zooming in
             Main.selectElement(null);
@@ -94,7 +94,7 @@ var Zoom;
         if (!tree) tree = getZoomed();
         if (!tree) return;
 
-        if ($('#' + tree.id).hasClass('zoom'))
+        if (tree.id in Main.trees && $('#' + tree.id).hasClass('zoom'))
         {
             // Unselect the selected nodes(s), because we are zooming out of a tree
             Main.selectElement(null);

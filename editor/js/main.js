@@ -1258,9 +1258,13 @@ var Main;
     function selectElement(elementId)
     {
         if (elementId in Main.trees)
+        {
             selectTree(elementId);
-        else
+        }
+        else if (elementId in Main.nodes || elementId === null)
+        {
             selectNode(elementId);
+        }
 
         // If anything is selected here then we need to deselect all the connections
         if (Zoom.isZoomed())
@@ -1289,6 +1293,12 @@ var Main;
         var zoomedTree = Zoom.getZoomed();
         if (zoomedTree) zoomedTree.plumbInstance.clearDragSelection();
         dehighlightParents();
+
+        if (nodeID !== null && !(nodeID in Main.nodes))
+        {
+            // The node does not exist (anymore)
+            return;
+        }
 
         // Change the selected node.
         Main.selectedElement = nodeID;
@@ -1629,6 +1639,8 @@ var Main;
 
     function selectTree(id)
     {
+        if (!(id in Main.trees)) return;
+
         if (Main.selectedElement !== null)
         {
             applyChanges();
@@ -1636,7 +1648,8 @@ var Main;
 
         var dragDiv = Main.trees[id].dragDiv;
         if (Zoom.isZoomed(id))
-        { //cancel select if the tree is zoomed to prevent acidental deletion and duplication of trees.
+        {
+            // Cancel selection if the tree is zoomed to prevent accidental deletion and duplication of trees.
             selectElement(null);
             return;
         }
