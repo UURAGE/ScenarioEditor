@@ -1296,7 +1296,6 @@ input[type=checkbox][disabled]
 
   #scaledDiv *
   {
-    opacity: 0.8;
     overflow: hidden;
   }
 
