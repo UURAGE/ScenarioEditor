@@ -14,7 +14,7 @@ var Condition;
         fromXML: fromXML,
         toXML: toXML,
         handleParameterTypeChange: handleParameterTypeChange,
-        handleParameterRemoval: handleParameterRemoval
+        filter: filter
     };
 
     var radioButtonCounter = 0;
@@ -223,14 +223,14 @@ var Condition;
     }
 
     // Returns the condition object or null if there are no conditions left
-    function handleParameterRemoval(parameterId, condition)
+    function filter(predicate, condition, onConditionPreservation, onConditionRemoval)
     {
         if ("type" in condition)
         {
             for (var i = 0; i < condition.subconditions.length; i++)
             {
                 var subcondition = condition.subconditions[i];
-                subcondition = handleParameterRemoval(parameterId, subcondition);
+                subcondition = filter(predicate, subcondition, onConditionPreservation, onConditionRemoval);
                 if (subcondition)
                 {
                     condition.subconditions[i] = subcondition;
@@ -257,13 +257,16 @@ var Condition;
         }
         else
         {
-            if (condition.idRef === parameterId)
+            var result = predicate(condition);
+            if (result)
             {
-                return null;
+                if (onConditionPreservation) onConditionPreservation(condition, result);
+                return condition;
             }
             else
             {
-                return condition;
+                if (onConditionRemoval) onConditionRemoval(condition);
+                return null;
             }
         }
     }

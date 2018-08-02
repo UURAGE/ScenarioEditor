@@ -256,20 +256,19 @@ var Parameters;
             {
                 var id = $(this).prop('id');
 
+                var doesNotReferToParameterId = function(referrer)
+                {
+                    return referrer.idRef !== id;
+                };
                 // Remove the preconditions and effects for every node with this parameter.
                 for (var nodeID in Main.nodes)
                 {
                     var node = Main.nodes[nodeID];
-                    for (var i = 0; i < node.parameterEffects.userDefined.length; i++)
-                    {
-                        if (node.parameterEffects.userDefined[i].idRef === id)
-                        {
-                            node.parameterEffects.userDefined.splice(i, 1);
-                        }
-                    }
+                    node.parameterEffects.userDefined = node.parameterEffects.userDefined.filter(doesNotReferToParameterId);
+
                     if (node.preconditions)
                     {
-                        node.preconditions = Condition.handleParameterRemoval(id, node.preconditions);
+                        node.preconditions = Condition.filter(doesNotReferToParameterId, node.preconditions);
                     }
                 }
 

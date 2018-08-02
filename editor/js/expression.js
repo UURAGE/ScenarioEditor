@@ -482,10 +482,11 @@ var Expression;
             },
             handleParameterRemoval: function(parameterId, type, expression)
             {
+                var doesNotReferToParameterId = function(condition) { return condition.idRef !== parameterId; };
                 for (var i = 0; i < expression.choose.whens.length; i++)
                 {
                     var when = expression.choose.whens[i];
-                    when.condition = Condition.handleParameterRemoval(parameterId, when.condition);
+                    when.condition = Condition.filter(doesNotReferToParameterId, when.condition);
                     when.expression.kind.handleParameterRemoval(parameterId, type, when.expression);
                     if (!when.condition)
                     {

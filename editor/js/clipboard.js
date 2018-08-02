@@ -85,7 +85,7 @@
                     {
                         Utils.alertDialog("The config id of the pasted content does not match the config id referred to in the scenario", 'warning');
                     }
-                    return pasteElement(data.type, data.content);
+                    return considerPasting(data.type, data.definitions, data.content);
                 }
             }
             catch(_)
@@ -99,15 +99,24 @@
 
     function copyElement()
     {
+        var definitions = { parameters: { userDefined: $.extend(true, {}, Parameters.container) } };
         if (Main.selectedElement !== null)
         {
             if (!Zoom.isZoomed())
             {
-                return { type: 'dialogue', content: copyTree(Main.selectedElement) };
+                return {
+                    type: 'dialogue',
+                    definitions: definitions,
+                    content: copyTree(Main.selectedElement)
+                };
             }
             else
             {
-                return { type: 'node', content: copyNode(Main.selectedElement) };
+                return {
+                    type: 'node',
+                    definitions: definitions,
+                    content: copyNode(Main.selectedElement)
+                };
             }
         }
         else if (Main.selectedElements !== null)
@@ -116,6 +125,7 @@
             {
                 return {
                     type: 'dialogue',
+                    definitions: definitions,
                     content: Main.selectedElements.map(function(treeID)
                     {
                         return copyTree(treeID);
@@ -126,6 +136,7 @@
             {
                 return {
                     type: 'node',
+                    definitions: definitions,
                     content: Main.selectedElements.map(function(nodeID)
                     {
                         return copyNode(nodeID);
@@ -188,13 +199,11 @@
             {
                 var newTree = pasteTree(content, indicatorPos.left, indicatorPos.top);
                 Main.selectElement(newTree.id);
-                return true;
             }
             else if (type === 'node' && Zoom.isZoomed())
             {
                 var newNode = pasteNode(content, { left: 0, top: 0 });
                 Main.selectElement(newNode.id);
-                return true;
             }
         }
         else
@@ -220,8 +229,6 @@
                 });
 
                 Main.selectElements(pastedTreeIds);
-
-                return true;
             }
             else if (type === 'node' && Zoom.isZoomed())
             {
@@ -274,11 +281,8 @@
 
                 // select all nodes just copied
                 Main.selectElements($.map(idMappings, function (newId) { return newId; }));
-
-                return true;
             }
         }
-        return false;
     }
 
     function pasteNode(copiedNode, offset, tree, doNotPosition)
@@ -364,6 +368,117 @@
         });
 
         return newTree;
+    }
+
+    // Pastes the content if confirmed and returns true if the type, content and context are correct
+    function considerPasting(type, definitions, content)
+    {
+        var getAndDeleteMissingParameterReferrers = function(node)
+        {
+            var getEqualParameter = function(parameter)
+            {
+                var equalParameters = Parameters.container.sequence.filter(function(existingParameter)
+                {
+                    return existingParameter.name === parameter.name && existingParameter.type.equals(parameter.type);
+                });
+                return equalParameters.length > 0 ? equalParameters[0] : null;
+            };
+
+            var missingParameterIds = {};
+            node.parameterEffects.userDefined = node.parameterEffects.userDefined.filter(function(parameterEffect)
+            {
+                var equalParameter = getEqualParameter(definitions.parameters.userDefined.byId[parameterEffect.idRef]);
+                if (equalParameter)
+                {
+                    parameterEffect.idRef = equalParameter.id;
+                }
+                else
+                {
+                    missingParameterIds[parameterEffect.idRef] = true;
+                }
+                return equalParameter;
+            });
+
+            if (node.preconditions)
+            {
+                var onConditionPreservation = function(condition, equalParameter)
+                {
+                    condition.idRef = equalParameter.id;
+                };
+                var onConditionRemoval = function(condition)
+                {
+                    missingParameterIds[condition.idRef] = true;
+                };
+                node.preconditions = Condition.filter(function(condition)
+                {
+                    return getEqualParameter(definitions.parameters.userDefined.byId[condition.idRef]);
+                }, node.preconditions, onConditionPreservation, onConditionRemoval);
+            }
+
+            return missingParameterIds;
+        };
+
+        var canPaste = false;
+        var parameterIds = {};
+        if (!Array.isArray(content))
+        {
+            if (type === 'dialogue' && !Zoom.isZoomed())
+            {
+                parameterIds = content.nodes.reduce(function(misingParameterIds, node)
+                {
+                    return $.extend(misingParameterIds, getAndDeleteMissingParameterReferrers(node));
+                }, {});
+                canPaste = true;
+            }
+            else if (type === 'node' && Zoom.isZoomed())
+            {
+                parameterIds = getAndDeleteMissingParameterReferrers(content);
+                canPaste = true;
+            }
+        }
+        else
+        {
+            if (type === 'dialogue' && !Zoom.isZoomed())
+            {
+                parameterIds = content.reduce(function(misingParameterIds, dialogue)
+                {
+                    return $.extend(misingParameterIds, dialogue.nodes.reduce(function(misingParameterIds, node)
+                    {
+                        return $.extend(misingParameterIds, getAndDeleteMissingParameterReferrers(node));
+                    }, {}));
+                }, {});
+                canPaste = true;
+            }
+            else if (type === 'node' && Zoom.isZoomed())
+            {
+                parameterIds = content.reduce(function(misingParameterIds, node)
+                {
+                    return $.extend(misingParameterIds, getAndDeleteMissingParameterReferrers(node));
+                }, {});
+                canPaste = true;
+            }
+        }
+
+        if (Object.keys(parameterIds).length > 0)
+        {
+            var warning = $('<div>');
+            warning.append($('<div>', { text: i18next.t('clipboard:referrer_warning') }));
+            warning.append($('<ul>').append(Object.keys(parameterIds).map(function(parameterId)
+            {
+                return $('<li>', { text: definitions.parameters.userDefined.byId[parameterId].name });
+            })));
+            Utils.confirmDialog(warning, 'warning')
+            .then(function(confirmed)
+            {
+                if (confirmed) pasteElement(type, content);
+            });
+        }
+        else
+        {
+            pasteElement(type, content);
+        }
+
+        return canPaste;
     }
 
 }());
