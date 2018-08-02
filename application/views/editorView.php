@@ -112,7 +112,7 @@
                 <div class="buttonGroup dropdown" style="left: 32px;" id="file">
                   <!-- File -->
                   <div class="small-buttons">
-                    <button id="fileButton" class="globalButton dropdownButton"><div><?php sLang("edt_file"); ?>...</div></button>
+                    <button id="fileButton" class="globalButton dropdownButton"><div><?php sLang("edt_file"); ?></div></button>
                     <div id="fileDropdown" class="dropdownItems">
                       <button id="importScenario" class="globalButton" title="<?php sLang('edt_import_scenario_title'); ?>">
                         <div>
@@ -132,7 +132,7 @@
                 <div class="buttonGroup dropdown" style="left:144px;" id="scenario">
                 <!-- Scenario -->
                   <div class="small-buttons">
-                    <button id="scenarioButton" class="globalButton dropdownButton"><div><?php sLang("edt_scenario"); ?>...</div></button>
+                    <button id="scenarioButton" class="globalButton dropdownButton"><div><?php sLang("edt_scenario"); ?></div></button>
                     <div id="scenarioDropdown" class="dropdownItems">
                       <button id="editMetadata" class="globalButton" title="<?php sLang('edt_properties_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_properties"); ?>...</div></button>
                       <button id="editParameters" class="globalButton" title="<?php sLang('edt_parameters_title'); ?>"><div><img src="<?php echo editor_url("png/main_buttons/properties.png");?>" alt=""><?php sLang("edt_parameters"); ?>...</div></button>
