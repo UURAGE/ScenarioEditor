@@ -48,6 +48,7 @@ var Main;
         selectNode: selectNode,
         startEditingNode: startEditingNode,
         stopEditingNode: stopEditingNode,
+        triggerSubjectNameInput: triggerSubjectNameInput,
         updateButtons: updateButtons
     };
 

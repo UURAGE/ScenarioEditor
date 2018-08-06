@@ -91,6 +91,11 @@ var Validator;
                             {
                                 Zoom.zoomIn(tree);
                                 Main.selectNode(startNodeID);
+                                var nodeContainer = $("#" + startNodeID);
+                                if (nodeContainer.length > 0)
+                                {
+                                    nodeContainer[0].scrollIntoView(false);
+                                }
                             }
                         });
                     }
@@ -105,6 +110,11 @@ var Validator;
                             {
                                 Zoom.zoomIn(tree);
                                 Main.selectNode(startNodeID);
+                                var nodeContainer = $("#" + startNodeID);
+                                if (nodeContainer.length > 0)
+                                {
+                                    nodeContainer[0].scrollIntoView(false);
+                                }
                             }
                         });
                     }
@@ -123,9 +133,15 @@ var Validator;
                     {
                         message: i18next.t('validator:end_with_outgoing_connections', { postProcess: 'sprintf', sprintf: [tree.subject] }),
                         level: 'error',
-                        jumpToFunction: function() {
+                        jumpToFunction: function()
+                        {
                             Zoom.zoomIn(tree);
                             Main.selectNode(nodeID);
+                            var nodeContainer = $("#" + nodeID);
+                            if (nodeContainer.length > 0)
+                            {
+                                nodeContainer[0].scrollIntoView(false);
+                            }
                         }
                     });
                 }
@@ -150,9 +166,15 @@ var Validator;
                             {
                                 message: i18next.t('validator:unmarked_end', { postProcess: 'sprintf', sprintf: [tree.subject] }),
                                 level: 'error',
-                                jumpToFunction: function() {
+                                jumpToFunction: function()
+                                {
                                     Zoom.zoomIn(tree);
                                     Main.selectNode(nodeID);
+                                    var nodeContainer = $("#" + nodeID);
+                                    if (nodeContainer.length > 0)
+                                    {
+                                        nodeContainer[0].scrollIntoView(false);
+                                    }
                                 }
                             });
                         }
@@ -180,7 +202,12 @@ var Validator;
                 {
                     message: i18next.t('validator:unnamed_subject'),
                     level: 'info',
-                    jumpToFunction: function() { Main.selectElement(tree.id); }
+                    jumpToFunction: function()
+                    {
+                        Zoom.zoomOut();
+                        Main.selectElement(tree.id);
+                        Main.triggerSubjectNameInput(tree.id, false);
+                    }
                 });
             }
         });
