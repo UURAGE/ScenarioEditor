@@ -76,10 +76,17 @@
     {
         if (Main.isMousePositionWithinEditingCanvas())
         {
-            try
-            {
-                var data = JSON.parse(clipboard.getData(format));
-                if (data && data.target === 'scenario' && data.configIdRef && data.type && data.content)
+                var data;
+                try
+                {
+                    data = JSON.parse(clipboard.getData(format));
+                }
+                catch(_)
+                {
+                    return false;
+                }
+
+                if (data && data.target === 'scenario' && data.configIdRef && data.type && data.definitions && data.content)
                 {
                     if (data.configIdRef !== Config.container.id)
                     {
@@ -87,11 +94,6 @@
                     }
                     return considerPasting(data.type, data.definitions, data.content);
                 }
-            }
-            catch(_)
-            {
-                return false;
-            }
         }
 
         return false;
@@ -373,8 +375,34 @@
     // Pastes the content if confirmed and returns true if the type, content and context are correct
     function considerPasting(type, definitions, content)
     {
-        var getAndDeleteMissingParameterReferrers = function(node)
+        // Returns the parameter IDs that are missing
+        var processNode = function(node)
         {
+            // Before performing any operations we need to update the references in the byId object
+            // to the sequenced objects in the node's datastructures
+            var parameterId;
+            var fixedParameterEffects = node.parameterEffects.fixed;
+            for (parameterId in fixedParameterEffects.characterIndependent.byId)
+            {
+                fixedParameterEffects.characterIndependent.byId[parameterId] = [];
+            }
+            fixedParameterEffects.characterIndependent.sequence.forEach(function(effect)
+            {
+                fixedParameterEffects.characterIndependent.byId[effect.idRef].push(effect);
+            });
+            for (var characterId in fixedParameterEffects.perCharacter)
+            {
+                for (parameterId in fixedParameterEffects.perCharacter[characterId].byId)
+                {
+                    fixedParameterEffects.perCharacter[characterId].byId[parameterId] = [];
+                }
+
+                fixedParameterEffects.perCharacter[characterId].sequence.forEach(function(effect)
+                {
+                    fixedParameterEffects.perCharacter[characterId].byId[effect.idRef].push(effect);
+                });
+            }
+
             var getEqualParameter = function(parameter)
             {
                 var equalParameters = Parameters.container.sequence.filter(function(existingParameter)
@@ -419,20 +447,20 @@
         };
 
         var canPaste = false;
-        var parameterIds = {};
+        var missingParameterIds = {};
         if (!Array.isArray(content))
         {
             if (type === 'dialogue' && !Zoom.isZoomed())
             {
-                parameterIds = content.nodes.reduce(function(misingParameterIds, node)
+                missingParameterIds = content.nodes.reduce(function(parameterIds, node)
                 {
-                    return $.extend(misingParameterIds, getAndDeleteMissingParameterReferrers(node));
+                    return $.extend(parameterIds, processNode(node));
                 }, {});
                 canPaste = true;
             }
             else if (type === 'node' && Zoom.isZoomed())
             {
-                parameterIds = getAndDeleteMissingParameterReferrers(content);
+                missingParameterIds = processNode(content);
                 canPaste = true;
             }
         }
@@ -440,42 +468,45 @@
         {
             if (type === 'dialogue' && !Zoom.isZoomed())
             {
-                parameterIds = content.reduce(function(misingParameterIds, dialogue)
+                missingParameterIds = content.reduce(function(parameterIds, dialogue)
                 {
-                    return $.extend(misingParameterIds, dialogue.nodes.reduce(function(misingParameterIds, node)
+                    return $.extend(parameterIds, dialogue.nodes.reduce(function(parameterIds, node)
                     {
-                        return $.extend(misingParameterIds, getAndDeleteMissingParameterReferrers(node));
+                        return $.extend(parameterIds, processNode(node));
                     }, {}));
                 }, {});
                 canPaste = true;
             }
             else if (type === 'node' && Zoom.isZoomed())
             {
-                parameterIds = content.reduce(function(misingParameterIds, node)
+                missingParameterIds = content.reduce(function(parameterIds, node)
                 {
-                    return $.extend(misingParameterIds, getAndDeleteMissingParameterReferrers(node));
+                    return $.extend(parameterIds, processNode(node));
                 }, {});
                 canPaste = true;
             }
         }
 
-        if (Object.keys(parameterIds).length > 0)
+        if (canPaste)
         {
-            var warning = $('<div>');
-            warning.append($('<div>', { text: i18next.t('clipboard:referrer_warning') }));
-            warning.append($('<ul>').append(Object.keys(parameterIds).map(function(parameterId)
+            if (Object.keys(missingParameterIds).length > 0)
             {
-                return $('<li>', { text: definitions.parameters.userDefined.byId[parameterId].name });
-            })));
-            Utils.confirmDialog(warning, 'warning')
-            .then(function(confirmed)
+                var warning = $('<div>');
+                warning.append($('<div>', { text: i18next.t('clipboard:referrer_warning') }));
+                warning.append($('<ul>').append(Object.keys(missingParameterIds).map(function(parameterId)
+                {
+                    return $('<li>', { text: definitions.parameters.userDefined.byId[parameterId].name });
+                })));
+                Utils.confirmDialog(warning, 'warning')
+                .then(function(confirmed)
+                {
+                    if (confirmed) pasteElement(type, content);
+                });
+            }
+            else
             {
-                if (confirmed) pasteElement(type, content);
-            });
-        }
-        else
-        {
-            pasteElement(type, content);
+                pasteElement(type, content);
+            }
         }
 
         return canPaste;
