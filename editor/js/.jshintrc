@@ -7,6 +7,7 @@
     "undef": true,
     "unused": "vars",
     "-W079": true,
+    "-W083": true,
     "predef": [
         "i18next",
         "i18nextXHRBackend",
