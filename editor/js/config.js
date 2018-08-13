@@ -83,6 +83,7 @@ var Config;
 
         settings.statement = loadSettingWithType(settingsXML.children('statement'));
         settings.description = loadSettingWithType(settingsXML.children('description'));
+        settings.evaluationName = loadSettingWithType(settingsXML.children('evaluationName'));
         settings.evaluationDescription = loadSettingWithType(settingsXML.children('evaluationDescription'));
 
         settings.languages = {};

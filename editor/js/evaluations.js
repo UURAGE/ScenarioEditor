@@ -53,7 +53,9 @@ var Evaluations;
 
             evaluationContainer.append($('<td>', { class: 'handle', text: '↕' }));
 
-            evaluationContainer.append($('<td>').append($('<input>', { type: 'text', class: 'evaluation-name' })));
+            var nameInput = $('<input>', { type: 'text', class: 'evaluation-name' });
+            evaluationContainer.append($('<td>').append(nameInput));
+            if (Config.container.settings.evaluationName.type.markdown) Utils.attachMarkdownTooltip(nameInput);
 
             var typeContainer = $('<td>');
             var expressionKindContainer = $('<span>', { class: 'evaluation-expression' });

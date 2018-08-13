@@ -177,6 +177,8 @@ var Parameters;
     {
         var typeSelectContainer = $('<td>');
 
+        var nameInput = $('<input>', { type: 'text', class: "name", style: "width: 197px;" });
+
         var initialValueContainer = $('<span>', { class: "parameter-initial-value-container" });
 
         var description = $('<textarea>', { class: "parameter-description", style: "height:1em;" });
@@ -186,19 +188,23 @@ var Parameters;
         {
             if ($(this).prop('checked'))
             {
+                if (Config.container.settings.evaluationName.type.markdown) Utils.attachMarkdownTooltip(nameInput);
+
                 description.attr('maxlength', Config.container.settings.evaluationDescription.type.maxLength);
                 if (Config.container.settings.evaluationDescription.type.markdown) Utils.attachMarkdownTooltip(description);
             }
             else
             {
+                if (Config.container.settings.evaluationName.type.markdown) Utils.detachMarkdownTooltip(nameInput);
+
                 description.removeAttr('maxlength');
-                if (description.data('ui-tooltip')) description.tooltip('destroy');
+                if (Config.container.settings.evaluationDescription.type.markdown) Utils.detachMarkdownTooltip(description);
             }
         });
 
         var parameterContainer = $('<tr>', { class: "newParameter" })
             .append($('<td>', { class: "handle", text: "↕" }))
-            .append($('<td>').append($('<input>', { type: 'text', class: "name", style: "width: 197px;" })))
+            .append($('<td>').append(nameInput))
             .append(typeSelectContainer)
             .append($('<td>').append(evaluated))
             .append($('<td>').append(initialValueContainer))
