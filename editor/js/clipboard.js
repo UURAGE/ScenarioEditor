@@ -58,18 +58,23 @@
 
     function copy(clipboard, format)
     {
-        var dataAsText = JSON.stringify($.extend(copyElement(), { target: 'scenario', configIdRef: Config.container.id }));
-        clipboard.setData(format, dataAsText);
-        return true;
+        var hasSelectedText = window.getSelection().type !== 'Range';
+        if (hasSelectedText)
+        {
+            var dataAsText = JSON.stringify($.extend(copyElement(), { target: 'scenario', configIdRef: Config.container.id }));
+            clipboard.setData(format, dataAsText);
+        }
+        return hasSelectedText;
     }
 
     function cut(clipboard, format)
     {
-        copy(clipboard, format);
-
-        Main.deleteAllSelected();
-
-        return true;
+        var hasCopied = copy(clipboard, format);
+        if (hasCopied)
+        {
+            Main.deleteAllSelected();
+        }
+        return hasCopied;
     }
 
     function paste(clipboard, format)
