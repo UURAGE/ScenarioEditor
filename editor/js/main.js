@@ -1098,10 +1098,6 @@ var Main;
             Utils.attachMarkdownTooltip(txtArea);
         }
 
-        // Disable dragging for this component
-        var plumbInstance = getPlumbInstanceByNodeID(node.id);
-        plumbInstance.setDraggable(nodeDiv, false);
-
         // Calculate relative width
         var width = Math.sqrt(text.length);
         nodeDiv.width(width + "em");
@@ -1113,7 +1109,7 @@ var Main;
 
         inputDiv.height("100%");
 
-        plumbInstance.revalidate(node.id);
+        getPlumbInstanceByNodeID(node.id).revalidate(node.id);
 
         txtArea.focus();
     }
@@ -1135,9 +1131,6 @@ var Main;
 
         if (!cancel) node.text = text;
         changeNodeText(node.id);
-
-        //Enable dragging for this component
-        getPlumbInstanceByNodeID(node.id).setDraggable(nodeDiv, true);
 
         nodeDiv.on('dblclick', function(e)
         {
