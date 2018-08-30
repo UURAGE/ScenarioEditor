@@ -399,9 +399,11 @@ var Load3;
         }
 
         var characterIdRef;
+        var acceptableScopes = ['per', 'per-' + firstConversationNode.type];
         if (firstConversationNode.type === Main.computerType)
         {
             characterIdRef = Config.container.characters.sequence[0].id;
+            acceptableScopes.push('per-' + firstConversationNode.type + '-own');
         }
 
         var node = Main.createAndReturnNode(firstConversationNode.type, id, Main.trees[treeID].div, Main.trees[treeID].dragDiv.attr('id'));
@@ -410,7 +412,7 @@ var Load3;
             type: firstConversationNode.type,
             parameterEffects: Config.getNewDefaultParameterEffects(characterIdRef),
             preconditions: preconditionsJS,
-            propertyValues: Config.getNewDefaultPropertyValues(['independent']),
+            propertyValues: Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef),
             comment: comment,
             endNode: endNode,
             allowDialogueEndNode: false,
