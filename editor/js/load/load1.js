@@ -20,7 +20,7 @@ var Load1;
 
         tree.plumbInstance.batch(function()
         {
-            $(xml).find('script').children().each(function()
+            $(xml).children().add($(xml).find('script').children()).each(function()
             { //xml has one child: the script
                 switch (this.nodeName)
                 {
