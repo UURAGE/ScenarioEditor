@@ -14,14 +14,14 @@ var Parts;
 
     function deleteButton()
     {
-        return $('<button>', { type: "button", class: "delete", title: i18next.t('common:delete') })
-            .append($('<img>', { src: editor_url + "png/others/minus.png", alt: "-" }));
+        return $('<button>', { type: "button", class: "iconButton delete", title: i18next.t('common:delete') })
+            .append(Utils.sIcon('icon-minus'));
     }
 
     function addButton(text, className)
     {
-        return $('<button>', { type: "button", class: className, title: i18next.t('common:add') })
-            .append($('<img>', { src: editor_url + "png/others/plus.png", alt: '+' }))
-            .append(text ? ' ' + text : "");
+        return $('<button>', { type: "button", class: "iconButton add " + className, title: i18next.t('common:add') })
+            .append(Utils.sIcon('icon-plus'))
+            .append(text ? text : "");
     }
 })();

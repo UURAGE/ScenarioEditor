@@ -55,7 +55,7 @@ var Parameters;
         });
         parametersDialog.append(addParameterButton);
 
-        var addTimeParameterButton = $('<button>', { type: 'button', title: i18next.t('parameters:add_time_title') }).append($('<img>', { src: editor_url + "png/others/stopwatch.png" }));
+        var addTimeParameterButton = $('<button>', { type: 'button', class:'iconButton time', title: i18next.t('parameters:add_time_title') }).append(Utils.sIcon('icon-time'));
         addTimeParameterButton.on('click', function()
         {
             var isTime = parametersContainer.find(".isT").length;

@@ -57,7 +57,7 @@ var Zoom;
             tree.div.selectable('enable');
 
             var zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
-            zoomTreeButton.text("[-]");
+            zoomTreeButton.html(Utils.sIcon('icon-minus'));
 
             jsPlumb.setSuspendDrawing(false);
 
@@ -118,7 +118,7 @@ var Zoom;
             tree.div.selectable('disable');
 
             var zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
-            zoomTreeButton.text("[+]");
+            zoomTreeButton.html(Utils.sIcon('icon-plus'));
 
             parent.css({"overflow": "auto"});
             jsPlumb.setSuspendDrawing(true);

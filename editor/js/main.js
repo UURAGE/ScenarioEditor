@@ -639,7 +639,7 @@ var Main;
             }
         });
 
-        var zoomTreeButton = $('<div>',{text:"[+]", class:"zoomTreeButton button"});
+        var zoomTreeButton = $('<div>',{html: Utils.sIcon('icon-plus'), class:"zoomTreeButton button"});
         zoomTreeButton.on("click", function()
         {
             if(!DragBox.dragging())
@@ -1848,10 +1848,9 @@ var Main;
 
         var zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
         if (Zoom.isZoomed(tree.id))
-            zoomTreeButton.text('[-]');
+            zoomTreeButton.html(Utils.sIcon('icon-minus'));
         else
-            zoomTreeButton.text('[+]');
-
+            zoomTreeButton.html(Utils.sIcon('icon-plus'));
         tree.dragDiv.css('border-color', '');
 
         tree.optional = $('#optionalCheckbox').prop('checked');
@@ -2533,11 +2532,9 @@ var Main;
         //Set the initial state of collapsable and clickable elements:
         $(".collapsable").css("display", "inline-block");
         $(".collapsable").show();
-        $(".clicktag").text("[-]");
-        $(".masterclicktag").text("[-]");
-        //Optional: disable display of "[+]" clicktag span elements...
-        //$(".clicktag").hide();
-        //$(".masterclicktag").hide();
+
+        $(".clicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
+        $(".masterclicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
 
         // click element header to toggle slide property elements
         $(".clickable").on("click", function(e)
@@ -2552,8 +2549,8 @@ var Main;
                             if($(this).css("display") != "none")
                             {
                                $("#properties").find(".collapsable").slideUp(400);
-                               $(".clicktag").text("[+]");
-                               $(".masterclicktag").text("[+]");
+                               $(".clicktag").addClass("collapsed").html(Utils.sIcon("icon-closed"));
+                               $(".masterclicktag").addClass("collapsed").html(Utils.sIcon("icon-closed"));
                                result++;
                                return false;
                             }
@@ -2562,34 +2559,34 @@ var Main;
                     if(result === 0)
                     {
                         $("#properties").find(".collapsable").slideDown(400);
-                        $(".clicktag").text("[-]");
-                        $(".masterclicktag").text("[-]");
+                        $(".clicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
+                        $(".masterclicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
                     }
                   }
                   //A property element header was clicked
                   else
                   {
-                    var mySpan = $(this).find(".clicktag");
+                    var clickTag = $(this).find(".clicktag");
                     //An element was opened
-                    if (mySpan.text()=="[+]")
+                    if (clickTag.hasClass("collapsed"))
                     {
-                        mySpan.text("[-]");
-                        $(".masterclicktag").text("[-]");
+                        clickTag.removeClass("collapsed").html(Utils.sIcon("icon-open"));
+                        $(".masterclicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
                     }
                     //An element was closed
                     else
                     {
-                        mySpan.text("[+]");
+                        clickTag.addClass("collapsed").html(Utils.sIcon("icon-closed"));
 
                         $(".clickable").each(function()
                         {
                             //Check if there is at least one element open
-                            if($(this).find(".clicktag").text()=="[-]")
+                            if(!$(this).find(".clicktag").hasClass("collapsed"))
                             {
-                                $(".masterclicktag").text("[-]");
+                                $(".masterclicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
                                 return false;
                             }
-                            else $(".masterclicktag").text("[+]");
+                            else $(".masterclicktag").addClass("collapsed").html(Utils.sIcon("icon-closed"));
                         });
                     }
                     //Close or open a single element
