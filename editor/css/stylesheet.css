@@ -27,6 +27,12 @@ kbd
   box-shadow: inset 0 -1px 0 #c6cbd1;
 }
 
+svg
+{
+  /* Fixes SVG subpixel rendering in Firefox */
+  transform: scale(1);
+}
+
 .zoomTreeButton
 {
   float: left;
@@ -400,23 +406,18 @@ button img
     display: block;
     height: 26px;
     text-align: left;
+    margin: 1px 0;
   }
 
-  #toolbar #file .small-buttons button
-  {
-    width: 110px;
-  }
-
-  #toolbar #scenario .small-buttons button
-  {
-    width: 130px;
-  }
-
-  #toolbar .small-buttons img
+  #toolbar .small-buttons img,
+  #toolbar .small-buttons svg,
+  #menus svg
   {
     margin: 0 3px;
-    width: 10px;
-    height: 10px;
+    width: 16px;
+    height: 16px;
+    fill: #777;
+    vertical-align: middle;
   }
 
 #toolbar .big-buttons
@@ -440,13 +441,26 @@ button img
     margin: 0 1px;
   }
 
-  #toolbar .big-buttons img
+  #toolbar .big-buttons img,
+  #toolbar .big-buttons svg
   {
     margin: auto;
     margin-bottom: 5px;
     width: 30px;
     height: 30px;
     display: block;
+  }
+
+  #toolbar .big-buttons svg
+  {
+    fill: rgb(118, 100, 133);
+    width: 32px;
+    height: 32px;
+  }
+
+  #toolbar .big-buttons .enabled svg
+  {
+    fill: #fff;
   }
 
 #toolbar button div
@@ -1441,4 +1455,38 @@ textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
   border-radius: 100%;
   background: #e57373;
   vertical-align: middle;
+}
+svg .r
+{
+  fill: #ce192a;
+}
+
+svg .b
+{
+  fill: #00aeef;
+}
+
+svg .y
+{
+  fill: #F59341;
+}
+
+svg .p
+{
+  fill: #662d91;
+}
+
+svg .g
+{
+  fill: #2b8000;
+}
+
+svg .t
+{
+  fill: #2b8090;
+}
+
+svg .s
+{
+  fill: #b38659;
 }

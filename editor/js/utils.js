@@ -23,7 +23,8 @@ var Utils;
         detachMarkdownTooltip: detachMarkdownTooltip,
         makeSortable: makeSortable,
         alertDialog: alertDialog,
-        confirmDialog: confirmDialog
+        confirmDialog: confirmDialog,
+        sIcon: sIcon
     };
 
     // Taken from stackoverflow
@@ -276,6 +277,12 @@ var Utils;
             }
         });
         return deferredConfirmation;
+    }
+
+    function sIcon(icon, extraClass)
+    {
+        if (typeof extraClass === 'undefined') { extraClass = ''; }
+        return '<svg xmlns="http://www.w3.org/2000/svg" class="' + extraClass + '"><use xlink:href="#' + icon + '"></use></svg>';
     }
 
 })();
