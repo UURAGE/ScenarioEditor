@@ -120,11 +120,16 @@ var Config;
             {
                 name = i18next.t('configXML:' + nodeName + '.' + id + '.name', { defaultValue: i18next.t('configXML:' + nodeName + '.' + id) });
             }
+            var description = $(nodeXML).children('description').text();
+            if (!description)
+            {
+                description = i18next.t('configXML:' + nodeName + '.' + id + '.description', { defaultValue: "" });
+            }
             return {
                 kind: nodeName,
                 id: id,
                 name: name,
-                description: $(nodeXML).children('description').text(),
+                description: description,
                 scopes: nodeScopes,
                 type: loadType($(nodeXML).children('type').children(), id, nodeName)
             };
