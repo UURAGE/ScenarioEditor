@@ -116,7 +116,10 @@ var Config;
             mergeScopes(nodeScopes, parentScopes);
             var id = nodeXML.getAttribute('id');
             var name = nodeXML.getAttribute('name');
-            if (!name) name = i18next.t('configXML:' + nodeName + '.' + id);
+            if (!name)
+            {
+                name = i18next.t('configXML:' + nodeName + '.' + id + '.name', { defaultValue: i18next.t('configXML:' + nodeName + '.' + id) });
+            }
             return {
                 kind: nodeName,
                 id: id,
@@ -130,7 +133,8 @@ var Config;
         {
             var subResult = loadCollection($(nodeXML), nodeName, 'section', parentScopes);
             subResult.name = nodeXML.getAttribute('name');
-            if (!subResult.name) subResult.name = i18next.t('configXML:section.' + nodeXML.getAttribute('id'));
+            var sectionId = nodeXML.getAttribute('id');
+            if (!subResult.name) subResult.name = i18next.t('configXML:section.' + sectionId + '.name', { defaultValue: i18next.t('configXML:section.' + sectionId) });
             return subResult;
         }
         else
