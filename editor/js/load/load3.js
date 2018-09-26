@@ -52,7 +52,8 @@ var Load3;
                 tree.subject = Utils.unEscapeHTML($(this).children('subject')[0].textContent);
 
                 tree.optional = Utils.parseBool($(this).attr('optional'));
-
+                var iconDiv = tree.dragDiv.find('.icons');
+                if (tree.optional) iconDiv.html( Utils.sIcon('icon-optional-subject'));
                 $(tree.dragDiv).toggleClass('optional', tree.optional);
 
                 tree.level = level;

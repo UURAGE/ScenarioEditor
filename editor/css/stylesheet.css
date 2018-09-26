@@ -579,6 +579,11 @@ button img
     {
         opacity: 0.5;
     }
+    #sidebar input[type="checkbox"] {
+      transform: scale(1.25);
+      margin-right: .5em;
+    }
+
 #properties
 {
   display: inline-block;
@@ -665,11 +670,6 @@ button img
       cursor: default;
     }
 
-    .w.treeContainer.optional:not(.zoom)
-    {
-      background-image: url('../png/others/optional_subject.png');
-    }
-
       .w.treeContainer.optional:not(.zoom) .subjectDiv
       {
         padding-right: 40px;
@@ -689,6 +689,22 @@ button img
     {
       margin-left: 5px;
     }
+
+    .w.treeContainer .subjectDiv .icons
+    {
+      position: absolute;
+      right: 15px;
+      top: 0;
+      bottom: 0;
+    }
+
+      .w.treeContainer .subjectDiv .icons svg
+      {
+        width: 16px;
+        height: 16px;
+        fill: currentColor;
+        vertical-align: middle;
+      }
 
   .w.treeContainer.zoom > div
   {
@@ -1617,4 +1633,17 @@ svg .t
 svg .s
 {
   fill: #b38659;
+}
+svg .w
+{
+  fill: white;
+}
+
+.imgDiv svg
+{
+  width: 16px;
+  height: 16px;
+  fill: rgba(0, 0, 0, 0.85);
+  margin: 1px;
+  position: relative;
 }

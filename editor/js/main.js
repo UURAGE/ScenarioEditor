@@ -657,10 +657,13 @@ var Main;
 
         var subjTextSpan = $('<span>',{text: defaultName, class:"subjectName"});
 
+        var iconDiv = $('<div>', { class: "icons" });
+
         var subjectDiv = $('<div>', {class:"subjectDiv noSelect"});
         subjectDiv.prepend(zoomTreeButton);
         subjectDiv.append(subjTextSpan);
         subjectDiv.append(inputSpan);
+        subjectDiv.append(iconDiv);
 
         subjectDiv.on("click", function(e)
         {
@@ -1715,12 +1718,13 @@ var Main;
         {
             if (propertyValue)
             {
-                var nodePropertyImage = $('<img>', { src: editor_url + "png/node_properties/" + imgName + ".png" }).appendTo(imageDiv);
+                // Span wrapping required for relative tooltip position.
+                var nodePropertyImage = $('<span>', {html: Utils.sIcon("icon-" + imgName)}).appendTo(imageDiv);
                 if (showTooltip)
                 {
-                     nodePropertyImage.tooltip(
+                    nodePropertyImage.tooltip(
                     {
-                        items: ":hover",
+                        items: "span:hover",
                         content: Utils.escapeHTML(propertyValue),
                         // Taken from: http://stackoverflow.com/a/15014759
                         close: function(event, ui)
@@ -1856,6 +1860,10 @@ var Main;
         tree.optional = $('#optionalCheckbox').prop('checked');
 
         $(Main.trees[Main.selectedElement].dragDiv).toggleClass("optional", tree.optional);
+
+        var iconDiv = tree.dragDiv.find('.icons');
+        iconDiv.empty();
+        if (tree.optional) iconDiv.html( Utils.sIcon('icon-optional-subject'));
 
         Main.trees[Main.selectedElement] = tree;
     }

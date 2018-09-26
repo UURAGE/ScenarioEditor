@@ -300,35 +300,23 @@
                 </div>
               </div>
               <div class="sidebarSection" id="optionalSubject">
-                <div class="sub-header clickable">
-                  <h2 title="<?php sLang('edt_optional_title');?>"><span class="clicktag"><?php echo sIcon("icon-closed"); ?></span> <?php sLang('edt_optional_header');?></h2>
-                </div>
-                <div class="collapsable">
-                  <input type="checkbox" id="optionalCheckbox"/><label for="optionalCheckbox"><?php sLang('edt_optional_description');?></label>
+                <div class="sub-header">
+                  <h2 title="<?php sLang('edt_optional_title');?>"><input type="checkbox" id="optionalCheckbox"/><label for="optionalCheckbox"><?php sLang('edt_optional_header');?></label></h2>
                 </div>
               </div>
               <div class="sidebarSection" id="allowInterleaveNode">
-                <div class="sub-header clickable">
-                  <h2 title="<?php sLang('edt_jump_title');?>"><span class="clicktag"><?php echo sIcon("icon-closed"); ?></span><?php echo sIcon("icon-jumpsubject"); sLang('edt_jump_header');?></h2>
-                </div>
-                <div class="collapsable">
-                  <input type="checkbox" id="allowInterleaveNodeCheckbox"/><label for="allowInterleaveNodeCheckbox"><?php sLang('edt_jump_description');?></label>
+                <div class="sub-header">
+                  <h2 title="<?php sLang('edt_jump_title');?>"><?php echo sIcon("icon-jumpsubject");?><input type="checkbox" id="allowInterleaveNodeCheckbox"/><label for="allowInterleaveNodeCheckbox"><?php sLang('edt_jump_header');?></label></h2>
                 </div>
               </div>
               <div class="sidebarSection" id="allowDialogueEndNode">
-                <div class="sub-header clickable">
-                  <h2 title="<?php sLang('edt_inits_title');?>"><span class="clicktag"><?php echo sIcon("icon-closed"); ?></span><?php echo sIcon("icon-earlyend"); sLang('edt_inits_header');?></h2>
-                </div>
-                <div class="collapsable">
-                  <input type="checkbox" id="allowDialogueEndNodeCheckbox"/><label for="allowDialogueEndNodeCheckbox"><?php sLang('edt_inits_description');?></label>
+                <div class="sub-header">
+                  <h2 title="<?php sLang('edt_inits_title');?>"><?php echo sIcon("icon-earlyend");?><input type="checkbox" id="allowDialogueEndNodeCheckbox"/><label for="allowDialogueEndNodeCheckbox"><?php  sLang('edt_inits_header');?></label></h2>
                 </div>
               </div>
               <div class="sidebarSection" id="endNode">
-                <div class="sub-header clickable">
-                  <h2 title="<?php sLang('edt_end_title');?>"><span class="clicktag"><?php echo sIcon("icon-closed"); ?></span><?php echo sIcon("icon-endofscenario"); sLang('edt_end_header');?></h2>
-                </div>
-                <div class="collapsable">
-                  <input type="checkbox" id="endNodeCheckbox"/><label for="endNodeCheckbox"><?php sLang('edt_end_description');?></label>
+                <div class="sub-header">
+                  <h2 title="<?php sLang('edt_end_title');?>"><?php echo sIcon("icon-endofscenario");?><input type="checkbox" id="endNodeCheckbox"/><label for="endNodeCheckbox"><?php sLang('edt_end_header');?></label></h2>
                 </div>
               </div>
             </div>
