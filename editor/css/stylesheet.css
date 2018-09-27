@@ -91,9 +91,12 @@ textarea
 {
   content: "";
   display: block;
-  background-image: url('../png/others/dots.png');
-  width: 24px;
-  height: 10px;
+  background-image: url('../svg/dots.svg');
+  background-size: 24px 10px;
+  background-position: 4px;
+  background-repeat: no-repeat;
+  width: 28px;
+  height: 12px;
   position: absolute;
   bottom: 0;
   right: 0;
