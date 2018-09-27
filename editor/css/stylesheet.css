@@ -1603,41 +1603,58 @@ textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
   fill: #2b8000;
 }
 
-svg .r
+path.r,
+circle.r,
+rectangle.r
 {
   fill: #ce192a;
 }
 
-svg .b
+path.b,
+circle.b,
+rectangle.b
 {
   fill: #00aeef;
 }
 
-svg .y
+path.y,
+circle.y,
+rectangle.y
 {
   fill: #F59341;
 }
 
-svg .p
+path.p,
+circle.p,
+rectangle.p
 {
   fill: #662d91;
 }
 
-svg .g
+path.g
+circle.g,
+rectangle.g
 {
   fill: #2b8000;
 }
 
-svg .t
+path.t,
+circle.t,
+rectangle.t
 {
   fill: #2b8090;
 }
 
-svg .s
+path.s,
+circle.s,
+rectangle.s
 {
   fill: #b38659;
 }
-svg .w
+
+path.w,
+circle.w,
+rectangle.w
 {
   fill: white;
 }
