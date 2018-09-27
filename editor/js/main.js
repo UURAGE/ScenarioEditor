@@ -1745,11 +1745,11 @@ var Main;
             }
         };
 
-        appendNodePropertyImageIfHasValue("node_has_comments", node.comment, true);
+        appendNodePropertyImageIfHasValue("node-has-comments", node.comment, true);
 
-        appendNodePropertyImageIfHasValue("node_has_jump", node.allowInterleaveNode);
-        appendNodePropertyImageIfHasValue("node_has_premature_end", node.allowDialogueEndNode);
-        appendNodePropertyImageIfHasValue("node_has_end", node.endNode);
+        appendNodePropertyImageIfHasValue("node-has-jump", node.allowInterleaveNode);
+        appendNodePropertyImageIfHasValue("node-has-premature-end", node.allowDialogueEndNode);
+        appendNodePropertyImageIfHasValue("node-has-end", node.endNode);
 
         var longNode = text.length > 140;
         if (longNode)
