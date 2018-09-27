@@ -20,7 +20,9 @@ var Parts;
 
     function addButton(text, className)
     {
-        return $('<button>', { type: "button", class: "iconButton add " + className, title: i18next.t('common:add') })
+        var classNames = "iconButton add";
+        if (className) classNames += " " + className;
+        return $('<button>', { type: "button", class: classNames, title: i18next.t('common:add') })
             .append(Utils.sIcon('icon-plus'))
             .append(text ? text : "");
     }
