@@ -43,16 +43,20 @@ var Metadata;
     function dialog()
     {
         var metadataDialog = $('<div>', { id: "metadata" });
+        var metadataContainer = $('<div>', { class: "content" });
+        var generalCategory = $('<div>', { class: "category" })
+            .append($('<h1>', { text: i18next.t('metadata:general') }));
 
-        var metadataContainer = $('<table>');
+        var generalContainer = $('<div>', { class: "container"});
 
-        var generalHeader = $('<thead>').append($('<th>', { colspan: 2 }).append($('<h3>', { text: i18next.t('metadata:general') })));
-        metadataContainer.append(generalHeader);
+        generalContainer.append(
+            $('<div>', { class: "item" })
+                .append(
+                    $('<div>', {class: "itemLabel" })
+                        .append(
+                            $('<label>', { for: "scenarioName", text: i18next.t('metadata:scenario_name') })),
+                    $('<input>', { type: 'text', id: "scenarioName", maxlength: 50 })));
 
-        var generalContainer = $('<tbody>');
-        generalContainer.append($('<tr>')
-            .append($('<th>').append($('<label>', { for: "scenarioName", text: i18next.t('metadata:scenario_name') })))
-            .append($('<td>').append($('<input>', { type: 'text', id: "scenarioName", maxlength: 50 }))));
         if (Config.container.settings.languages.sequence.length > 0)
         {
             var scenarioLanguageSelect = $('<select>', { id: "scenarioLanguage" });
@@ -60,43 +64,66 @@ var Metadata;
             {
                 scenarioLanguageSelect.append($('<option>', { value: language.code, text: language.name }));
             });
-            var scenarioLanguageContainer = $('<tr>');
-            scenarioLanguageContainer.append($('<th>').append($('<label>', { for: "scenarioLanguage", text: i18next.t('metadata:language') + ':' })));
-            scenarioLanguageContainer.append($('<td>').append(scenarioLanguageSelect));
+            var scenarioLanguageContainer = $('<div>', { class: "item" });
+            scenarioLanguageContainer.append(
+                $('<div>', {class: "itemLabel" })
+                    .append(
+                        $('<label>', { for: "scenarioLanguage", text: i18next.t('metadata:language') + ':' })));
+            scenarioLanguageContainer.append(scenarioLanguageSelect);
             generalContainer.append(scenarioLanguageContainer);
         }
-        generalContainer.append($('<tr>')
-            .append($('<th>').append($('<label>', { for: "scenarioDifficulty", text: i18next.t('metadata:difficulty.translation') })))
-            .append($('<td>').append($('<select>', { id: "scenarioDifficulty" } )
+
+        generalContainer.append($('<div>', { class: "item" }).append(
+            $('<div>', {class: "itemLabel" })
+                .append(
+                    $('<label>', { for: "scenarioDifficulty", text: i18next.t('metadata:difficulty.translation') })),
+            $('<select>', { id: "scenarioDifficulty" })
                 .append($('<option>', { value: "very_easy", text: i18next.t('metadata:difficulty.very_easy') }))
                 .append($('<option>', { value: "easy", text: i18next.t('metadata:difficulty.easy') }))
                 .append($('<option>', { value: "medium", text: i18next.t('metadata:difficulty.medium') }))
                 .append($('<option>', { value: "difficult", text: i18next.t('metadata:difficulty.hard') }))
-                .append($('<option>', { value: "very_difficult", text: i18next.t('metadata:difficulty.very_hard') })))));
-        var scenarioDescription = $('<textarea>', { id: "scenarioDescription", class: "description" } );
+                .append($('<option>', { value: "very_difficult", text: i18next.t('metadata:difficulty.very_hard') }))));
+
+        var scenarioDescription = $('<textarea>', { id: "scenarioDescription" } );
         scenarioDescription.attr('maxlength', Config.container.settings.description.type.maxLength);
-        generalContainer.append($('<tr>')
-        .append($('<th>').append($('<label>', { for: "scenarioDescription", text: i18next.t('common:description') })))
-        .append($('<td>').append(scenarioDescription)));
+
+        generalContainer.append($('<div>', { class: "item" })
+            .append(
+                $('<div>', {class: "itemLabel" })
+                    .append(
+                        $('<label>', { for: "scenarioDescription", text: i18next.t('common:description') })),
+                scenarioDescription));
+
         if (Config.container.settings.description.type.markdown) Utils.attachMarkdownTooltip(scenarioDescription);
-        metadataContainer.append(generalContainer);
+        generalCategory.append(generalContainer);
+        metadataContainer.append(generalCategory);
 
-        var authorsHeader = $('<thead>').append($('<th>').append($('<h3>', { text: i18next.t('metadata:authors') })));
-        metadataContainer.append(authorsHeader);
+        var authorsCategory = $('<div>', { class: "category" })
+            .append($('<h1>', { text: i18next.t('metadata:authors') }));
 
-        var authorsContainer = $('<table>').append($('<tr>')
-            .append($('<th>').append($('<h4>', { text: i18next.t('common:name') })))
-            .append($('<th>').append($('<h4>', { text: i18next.t('metadata:email') })))
-            .append($('<th>').append($('<h4>', { text: i18next.t('metadata:start_date') })))
-            .append($('<th>').append($('<h4>', { text: i18next.t('metadata:end_date') }))));
-        metadataContainer.append($('<tbody>').append($('<tr>').append($('<td>', { colspan: 2 }).append(authorsContainer))));
+        var authorsContainer = $('<table>', { class: "container"})
+            .append($('<thead>').append($('<tr>')
+                .append($('<th>', { text: i18next.t('common:name'), class: "fill" }))
+                .append($('<th>', { text: i18next.t('metadata:start_date') }))
+                .append($('<th>', { text: i18next.t('metadata:end_date') }))));
 
-        metadataContainer.append($('<thead>'));
-        metadataContainer.append($('<tbody>', { id: "meta-property-values" }));
+        authorsCategory.append(authorsContainer);
+        metadataContainer.append(authorsCategory);
 
-        metadataContainer.append($('<thead>').append($('<th>', { colspan: 2 }).append($('<h3>', { text: i18next.t('common:characters') }))));
-        metadataContainer.append($('<tbody>', { id: "meta-character-property-values" }).append($('<tr>').append($('<td>', { colspan: 2 , id: "character-tabs" }))));
+        var propertyCategory = $('<div>', { class: "category"} ).append(
+            $('<div>', { id: "meta-property-values", class: "container" })
+        );
+        metadataContainer.append(propertyCategory);
 
+        var characterCategory = $('<div>', { class: "category" }).append(
+            $('<h1>', { text: i18next.t('common:characters') })
+        );
+        var characterContainer = $('<div>', {id: "meta-character-property-values", class: "container"}).append(
+            $('<div>', { id: "character-tabs", class: "category item"})
+        );
+        characterCategory.append(characterContainer);
+
+        metadataContainer.append(characterCategory);
         metadataDialog.append(metadataContainer);
 
         metadataDialog.dialog(
@@ -137,13 +164,12 @@ var Metadata;
         authorsContainer.find("tr").not("tr:first").remove();
         if (Metadata.container.authors.length > 0)
         {
-            authorsHeader.show();
-            authorsContainer.show();
+            authorsCategory.show();
+
             Metadata.container.authors.forEach(function(author)
             {
                 var authorContainer = $('<tr>');
-                authorContainer.append($('<td>', { text: author.name }));
-                authorContainer.append($('<td>', { text: author.email ? author.email : "" }));
+                authorContainer.append($('<td>', { text: author.name }).append($('<span>', { text: author.email ? author.email : "" })));
                 authorContainer.append($('<td>', { text: author.startDate }));
                 authorContainer.append($('<td>', { text: author.endDate ? author.endDate : "" }));
                 authorsContainer.append(authorContainer);
@@ -151,78 +177,44 @@ var Metadata;
         }
         else
         {
-            authorsHeader.hide();
-            authorsContainer.hide();
+            authorsCategory.hide();
         }
 
         var anyPropertyShown = false;
         var hStartLevel = 3;
 
         var propertyValuesEl = $('#meta-property-values');
-        var showPropertyItem = function (propertyItem, hLevel, tableBody, idPrefix)
+        var showPropertyItem = function (propertyItem, hLevel, container, idPrefix)
         {
             if (propertyItem.scopes.statementScope !== 'independent') return;
             if (propertyItem.kind === 'section')
             {
-                var sectionTable = $('<table>');
-
-                var sectionTableHeader = $('<thead>').append($('<th colspan="2">').append($('<h' + hLevel + '>', { text: propertyItem.name })));
-                sectionTable.append(sectionTableHeader);
-
-                var sectionTableBody = $('<tbody>');
-                sectionTable.append(sectionTableBody);
-
-                var sectionContainer = $('<div>').append(sectionTable);
-                if (hLevel !== hStartLevel) sectionContainer.addClass("subsection");
-                tableBody.append($('<tr>').append($('<td colspan="2">').append(sectionContainer)));
+                var sectionCategory = $('<div>', {class: "category item"}).append(
+                    $('<h' + hLevel + '>', { text: propertyItem.name })
+                );
+                var sectionContainer = $('<div>', {class: "container" });
 
                 propertyItem.sequence.forEach(function (subItem)
                 {
-                     showPropertyItem(subItem, hLevel + 1, sectionTableBody, idPrefix);
+                     showPropertyItem(subItem, hLevel + 1, sectionContainer, idPrefix);
                 });
+
+                sectionCategory.append(sectionContainer);
+                container.append(sectionCategory);
             }
             else
             {
-                var propertyHeader = $('<th>');
                 var controlHtmlId = idPrefix + '-' + propertyItem.id;
                 var controlFirst = propertyItem.type.labelControlOrder === Types.labelControlOrders.singleLineContainerLabel ||
                                    propertyItem.type.labelControlOrder === Types.labelControlOrders.twoLineContainerLabel;
-                propertyHeader.append($('<label>', { text: propertyItem.name + (controlFirst ? '' : ':'), 'for': controlHtmlId }));
 
-                var propertyData = $('<td>', { id: idPrefix + '-container-' + propertyItem.id });
-                propertyItem.type.appendControlTo(propertyData, controlHtmlId);
-
-                var propertyRow = $('<tr>');
-                var additionalPropertyRow;
-                switch (propertyItem.type.labelControlOrder)
-                {
-                    case Types.labelControlOrders.singleLineLabelContainer:
-                        propertyRow.append(propertyHeader);
-                        propertyRow.append(propertyData);
-                        break;
-                    case Types.labelControlOrders.singleLineContainerLabel:
-                        propertyRow.append(propertyHeader);
-                        propertyRow.prepend(propertyData);
-                        break;
-                    case Types.labelControlOrders.container:
-                        propertyData.prop('colspan', "2");
-                        propertyRow.append(propertyData);
-                        break;
-                    case Types.labelControlOrders.twoLineLabelContainer:
-                        propertyRow.append(propertyHeader);
-                        additionalPropertyRow = $('<tr>').append(propertyData);
-                        break;
-                    case Types.labelControlOrders.twoLineContainerLabel:
-                        additionalPropertyRow = propertyRow.append(propertyHeader);
-                        propertyRow = $('<tr>').append(propertyData);
-                        break;
-                    default:
-                        console.error("Not implemented");
-                        break;
-                }
-                tableBody.append(propertyRow);
-                if (additionalPropertyRow) tableBody.append(additionalPropertyRow);
-
+                var propertyRow = $('<div>', { id: idPrefix + '-container-' + propertyItem.id, class: "item " + propertyItem.type.labelControlOrder }).append(
+                    $('<div>', { class: "itemLabel"}).append(
+                        $('<label>', { text: propertyItem.name + (controlFirst ? '' : ':'), 'for': controlHtmlId }),
+                        $('<label>', { class: "description", text: propertyItem.description, 'for': controlHtmlId })
+                ));
+                propertyItem.type.appendControlTo(propertyRow, controlHtmlId);
+                container.append(propertyRow);
                 anyPropertyShown = true;
             }
         };
@@ -257,7 +249,7 @@ var Metadata;
                 characterList.append(characterHeader);
             }
 
-            var characterTab = $('<table>', { id: characterTabId });
+            var characterTab = $('<div>', { id: characterTabId });
             characterTabs.append(characterTab);
 
             Config.container.characters.properties.sequence.forEach(function(propertyItem)

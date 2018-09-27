@@ -64,13 +64,6 @@ textarea
   resize: none;
 }
 
-.description
-{
-  height: 200px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
 .ui-dialog-titlebar.info
 {
   background: #2BAAF6;
