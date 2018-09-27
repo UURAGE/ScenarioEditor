@@ -102,9 +102,6 @@
         <div id="content">
           <div>
             <div id="toolbar" class="noSelect">
-              <!-- commented this button, because the manuals are no longer up to date. TODO: add new manuals
-              <button id="manual" class="globalButton"><div><img src="<?php echo editor_url("png/main_buttons/manual.png");?>" alt=""><?php sLang("edt_manual"); ?></div></button>
-              -->
               <div id="menus">
                 <div id="logo"><img src="<?php echo editor_url("svg/logo.svg") ?>" alt="Editor Logo"/></div>
                 <div class="buttonGroup dropdown" id="file">
