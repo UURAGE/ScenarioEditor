@@ -9,8 +9,9 @@ var PlumbGenerator;
     PlumbGenerator =
     {
         genJsPlumbInstance : genJsPlumbInstance,
-        defaultPaintStyle: { stroke: "#5c96bc", strokeWidth: 2, outlineStroke: "transparent", outlineWidth: 2 },
-        defaultHoverPaintStyle: { stroke: "#5c96bc", strokeWidth: 2, outlineStroke: "#1e8151", outlineWidth: 1 }
+        defaultPaintStyle: { stroke: ColorPicker.defaultColor, strokeWidth: 2, outlineStroke: "transparent", outlineWidth: 2 },
+        defaultHoverPaintStyle: { stroke: ColorPicker.defaultColor, strokeWidth: 2, outlineStroke: ColorPicker.defaultColor, outlineWidth: 1 },
+        defaultSelectedPaintStyle : { stroke: ColorPicker.defaultColor, strokeWidth: 2, outlineStroke: ColorPicker.defaultColor, outlineWidth: 2 }
     };
 
     // Expects an element returned from a jquery selector
@@ -31,7 +32,8 @@ var PlumbGenerator;
                 [ "Arrow", {
                     location: 1,
                     id: "arrow",
-                    length: 14,
+                    width: 12,
+                    length: 10,
                     foldback: 0.8
                 } ]
             ]
@@ -100,15 +102,14 @@ var PlumbGenerator;
                 }
 
                 selectedConnections[c.id] = { source: c.sourceId, target: c.targetId };
+
                 var colorValue = c.getParameter("color");
-                if (!colorValue || !ColorPicker.areColorsEnabled())
+                var paintStyle = PlumbGenerator.defaultSelectedPaintStyle;
+                if (colorValue && ColorPicker.areColorsEnabled())
                 {
-                    c.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: "goldenrod" }));
+                    paintStyle = $.extend({}, paintStyle, { stroke: colorValue, outlineStroke: colorValue });
                 }
-                else
-                {
-                    c.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: colorValue, outlineStroke: colorValue }));
-                }
+                c.setPaintStyle(paintStyle);
             }
         });
 

@@ -8,6 +8,7 @@ var ColorPicker;
 
     ColorPicker =
     {
+        defaultColor: "#606060",
         key: {},
         keyFromXML: keyFromXML,
         keyToXML: keyToXML,
@@ -56,7 +57,7 @@ var ColorPicker;
             enabled: true
         },
         {
-            value: "#5c96bc",
+            value: ColorPicker.defaultColor,
             enabled: true
         },
         {
@@ -570,7 +571,7 @@ var ColorPicker;
         {
             if (dialogue && connection.id in dialogue.selectedConnections)
             {
-                connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: colorValue, outlineStroke: colorValue }));
+                connection.setPaintStyle($.extend({}, PlumbGenerator.defaultSelectedPaintStyle, { stroke: colorValue, outlineStroke: colorValue }));
             }
             else
             {
@@ -593,7 +594,7 @@ var ColorPicker;
     {
         if (dialogue && connection.id in dialogue.selectedConnections)
         {
-            connection.setPaintStyle($.extend({}, PlumbGenerator.defaultPaintStyle, { stroke: "goldenrod" }));
+            connection.setPaintStyle(PlumbGenerator.defaultSelectedPaintStyle);
         }
         else
         {

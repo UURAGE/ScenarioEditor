@@ -57,19 +57,29 @@
 	background: linear-gradient(-135deg, #ff3333 50%, #212121  50%);
 }
 
-.w.selected, .w.ui-selected, .w.ui-selecting, .w:hover {
+.w.selected, .w.ui-selected, .w.ui-selecting,
+.w:hover, .color-label.jtk-hover, .jtk-source-hover, .jtk-target-hover {
 	color: white;
 }
 
-.w.computer:hover {
+.w.computer:hover,
+.w.computer.color-label.jtk-hover,
+.w.computer.jtk-source-hover,
+.w.computer.jtk-target-hover {
 	background-color:#ff3333;
 }
 
-.w.player:hover {
+.w.player:hover,
+.w.player.color-label.jtk-hover,
+.w.player.jtk-source-hover,
+.w.player.jtk-target-hover {
 	background-color:#3366ff;
 }
 
-.w.situation:hover {
+.w.situation:hover,
+.w.situation.color-label.jtk-hover,
+.w.situation.jtk-source-hover,
+.w.situation.jtk-target-hover {
 	background-color:#F79923;
 }
 
@@ -127,11 +137,6 @@
 
 .color-label {
 	transition:background-color 0.15s ease-in, color 0.15s ease-in;
-}
-
-.color-label.jtk-hover, .jtk-source-hover, .jtk-target-hover {
-	background-color:#1e8151;
-	color:white;
 }
 
 .color-label {

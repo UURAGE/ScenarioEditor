@@ -65,6 +65,7 @@
       "js/miniMap.js",
       "js/main.js",
       "js/parts.js",
+      "js/colorPicker.js",
       "js/plumbGenerator.js",
       "js/load.js",
       "js/load/load1.js",
@@ -82,8 +83,7 @@
       "js/print.js",
       "js/draft.js",
       "js/zoom.js",
-      "js/clipboard.js",
-      "js/colorPicker.js"
+      "js/clipboard.js"
   );
   foreach($scripts as $script)
   {
