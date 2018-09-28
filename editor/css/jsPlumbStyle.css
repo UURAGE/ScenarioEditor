@@ -170,4 +170,4 @@
 
 .dragHover { border:2px solid orange; }
 
-path { cursor:pointer; }
+.jtk-connector path { cursor:pointer; }
