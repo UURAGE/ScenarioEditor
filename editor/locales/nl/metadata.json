@@ -1,7 +1,7 @@
 {
     "title": "Eigenschappen",
     "general": "Algemeen",
-    "scenario_name": "Naam scenario",
+    "scenario_name": "Scenarionaam",
     "difficulty": {
         "translation": "Moeilijkheidsgraad",
         "very_easy": "Zeer makkelijk",

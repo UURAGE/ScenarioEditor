@@ -67,8 +67,7 @@ var Metadata;
             var scenarioLanguageContainer = $('<div>', { class: "item" });
             scenarioLanguageContainer.append(
                 $('<div>', {class: "itemLabel" })
-                    .append(
-                        $('<label>', { for: "scenarioLanguage", text: i18next.t('metadata:language') + ':' })));
+                    .append($('<label>', { for: "scenarioLanguage", text: i18next.t('metadata:language') })));
             scenarioLanguageContainer.append(scenarioLanguageSelect);
             generalContainer.append(scenarioLanguageContainer);
         }
@@ -205,12 +204,9 @@ var Metadata;
             else
             {
                 var controlHtmlId = idPrefix + '-' + propertyItem.id;
-                var controlFirst = propertyItem.type.labelControlOrder === Types.labelControlOrders.singleLineContainerLabel ||
-                                   propertyItem.type.labelControlOrder === Types.labelControlOrders.twoLineContainerLabel;
-
                 var propertyRow = $('<div>', { id: idPrefix + '-container-' + propertyItem.id, class: "item " + propertyItem.type.labelControlOrder }).append(
                     $('<div>', { class: "itemLabel"}).append(
-                        $('<label>', { text: propertyItem.name + (controlFirst ? '' : ':'), 'for': controlHtmlId }),
+                        $('<label>', { text: propertyItem.name, 'for': controlHtmlId }),
                         $('<label>', { class: "description", text: propertyItem.description, 'for': controlHtmlId })
                 ));
                 propertyItem.type.appendControlTo(propertyRow, controlHtmlId);
