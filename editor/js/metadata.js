@@ -109,10 +109,7 @@ var Metadata;
         authorsCategory.append(authorsContainer);
         metadataContainer.append(authorsCategory);
 
-        var propertyCategory = $('<div>', { class: "category"} ).append(
-            $('<div>', { id: "meta-property-values", class: "container" })
-        );
-        metadataContainer.append(propertyCategory);
+        metadataContainer.append($('<div>', { id: "meta-property-values" }));
 
         var characterCategory = $('<div>', { class: "category" }).append(
             $('<h1>', { text: i18next.t('common:characters') })
@@ -188,9 +185,8 @@ var Metadata;
             if (propertyItem.scopes.statementScope !== 'independent') return;
             if (propertyItem.kind === 'section')
             {
-                var sectionCategory = $('<div>', {class: "category item"}).append(
-                    $('<h' + hLevel + '>', { text: propertyItem.name })
-                );
+                var sectionCategory = $('<div>', {class: "category"})
+                    .append($('<h' + hLevel + '>', { text: propertyItem.name }));
                 var sectionContainer = $('<div>', {class: "container" });
 
                 propertyItem.sequence.forEach(function (subItem)

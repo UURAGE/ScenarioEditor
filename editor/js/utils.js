@@ -144,7 +144,7 @@ var Utils;
     function attachMarkdownTooltip(elem)
     {
         var tooltipIcon = $('<span>', { class: "markdown-tooltip" });
-        tooltipIcon.append($('<img>', { src: editor_url + "svg/icon_markdown.svg" }));
+        tooltipIcon.append($(Utils.sIcon('icon-markdown')));
         tooltipIcon.tooltip(
         {
             items: ":hover",
@@ -282,7 +282,7 @@ var Utils;
     function sIcon(icon, extraClass)
     {
         if (typeof extraClass === 'undefined') { extraClass = ''; }
-        return '<svg xmlns="http://www.w3.org/2000/svg" class="' + extraClass + '"><use xlink:href="#' + icon + '"></use></svg>';
+        return '<svg xmlns="http://www.w3.org/2000/svg" class="icon ' + extraClass + '"><use xlink:href="#' + icon + '"></use></svg>';
     }
 
 })();

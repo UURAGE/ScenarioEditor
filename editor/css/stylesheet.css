@@ -33,9 +33,9 @@ svg
   transform: scale(1);
 }
 
-svg use
-{
-  pointer-events: none;
+svg.icon {
+  width: 16px;
+  height: 16px;
 }
 
 .zoomTreeButton
@@ -440,6 +440,12 @@ button img
     vertical-align: middle;
   }
 
+  #toolbar svg use,
+  #menus svg use
+  {
+    pointer-events: none;
+  }
+
 #toolbar .big-buttons
 {
   float: left;
@@ -580,6 +586,10 @@ button img
       margin-right: .5em;
     }
 
+    #sidebar .inputgroup {
+      display: inline-block;
+    }
+
 #properties
 {
   display: inline-block;
@@ -602,8 +612,8 @@ button img
 
 .header svg
 {
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   fill: currentColor;
   vertical-align: middle;
   padding: 0 10px;
@@ -1447,7 +1457,7 @@ input[type=checkbox][disabled]
   height: 0;
 }
 
-.markdown-tooltip img
+.markdown-tooltip svg
 {
   width: 10px;
   height: 10px;
@@ -1571,14 +1581,17 @@ textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
   height: 32px;
 }
 
+.iconButton {
+  cursor: pointer;
+}
+
 .iconButton svg
 {
   width: 16px;
   height: 16px;
   fill: currentColor;
   margin: 3px 5px;
-  vertical-align: text-bottom;
-  cursor: pointer;
+  vertical-align: middle;
 }
 
 .iconButton.add svg
@@ -1589,67 +1602,6 @@ textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
 .iconButton.delete svg
 {
   fill: #d92b2b;
-}
-
-.iconButton.time svg
-{
-  fill: #2b8000;
-}
-
-path.r,
-circle.r,
-rectangle.r
-{
-  fill: #ce192a;
-}
-
-path.b,
-circle.b,
-rectangle.b
-{
-  fill: #00aeef;
-}
-
-path.y,
-circle.y,
-rectangle.y
-{
-  fill: #F59341;
-}
-
-path.p,
-circle.p,
-rectangle.p
-{
-  fill: #662d91;
-}
-
-path.g
-circle.g,
-rectangle.g
-{
-  fill: #2b8000;
-}
-
-path.t,
-circle.t,
-rectangle.t
-{
-  fill: #2b8090;
-}
-
-path.s,
-circle.s,
-rectangle.s
-{
-  fill: #b38659;
-}
-
-path.w,
-circle.w,
-rectangle.w
-{
-  fill: white;
 }
 
 .imgDiv svg
