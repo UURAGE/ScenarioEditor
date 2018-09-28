@@ -115,7 +115,7 @@ var Types;
             {
                 return this.name === otherType.name;
             },
-            loadType: function(typeXML)
+            loadType: function(typeXML, _, kind, scopes)
             {
                 var type = this;
 
@@ -158,6 +158,11 @@ var Types;
                 if (defaultEl.length > 0)
                 {
                     type = $.extend({}, type, { defaultValue: defaultEl[0].textContent });
+                }
+
+                if (kind === 'property' && scopes.statementScope === 'independent')
+                {
+                    type = $.extend({}, type, { labelControlOrder: Types.labelControlOrders.twoLineLabelContainer });
                 }
 
                 return type;
@@ -251,7 +256,7 @@ var Types;
                 typeEl.append($('<div>', { text: i18next.t('common:minimum') + ": " }).append(minContainer));
                 typeEl.append($('<div>', { text: i18next.t('common:maximum') + ": " }).append(maxContainer));
             },
-            loadType: function(typeXML)
+            loadType: function(typeXML, _, kind, scopes)
             {
                 var type = this;
 
@@ -271,6 +276,11 @@ var Types;
                 if (defaultEl.length > 0)
                 {
                     type = $.extend({}, type, { defaultValue: parseInt(defaultEl[0].textContent, 10) });
+                }
+
+                if (kind === 'property' && scopes.statementScope === 'independent')
+                {
+                    type = $.extend({}, type, { labelControlOrder: Types.labelControlOrders.twoLineLabelContainer });
                 }
 
                 return type;
@@ -320,7 +330,10 @@ var Types;
             appendControlTo: function(containerEl, htmlId)
             {
                 var control = $('<' + this.controlName + '>', { id: htmlId, type: this.controlType, value: 0 });
-                control.css('width', 60);
+                if (this.labelControlOrder !== Types.labelControlOrders.twoLineLabelContainer)
+                {
+                    control.css('width', 60);
+                }
                 containerEl.append(control);
             },
             getFromDOM: function(containerEl)
@@ -352,7 +365,7 @@ var Types;
             {
                 return this.name === otherType.name;
             },
-            loadType: function(typeXML, id, kind)
+            loadType: function(typeXML, id, kind, scopes)
             {
                 var type = this;
 
@@ -517,7 +530,7 @@ var Types;
                 });
                 valuesContainer.append($('<li>').append(valueInput).append(valueAddButton));
             },
-            loadType: function(typeXML, id)
+            loadType: function(typeXML, id, kind, scopes)
             {
                 var options = { sequence: [] };
                 var addOption = function(index, optionXML)
@@ -565,7 +578,13 @@ var Types;
                     }
                 }
 
-                return $.extend({ options: options }, this, { defaultValue: defaultValue });
+                var labelControlOrder = this.labelControlOrder;
+                if (kind === 'property' && scopes.statementScope === 'independent')
+                {
+                    labelControlOrder = Types.labelControlOrders.twoLineLabelContainer;
+                }
+
+                return $.extend({ options: options }, this, { defaultValue: defaultValue, labelControlOrder: labelControlOrder });
             },
             loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {

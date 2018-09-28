@@ -131,7 +131,7 @@ var Config;
                 name: name,
                 description: description,
                 scopes: nodeScopes,
-                type: loadType($(nodeXML).children('type').children(), id, nodeName)
+                type: loadType($(nodeXML).children('type').children(), id, nodeName, nodeScopes)
             };
         }
         else if (nodeXML.nodeName === nodeName + "Section")
@@ -195,13 +195,13 @@ var Config;
         }
     }
 
-    function loadType(typeXML, id, kind)
+    function loadType(typeXML, id, kind, scopes)
     {
         var nameSpace = typeXML[0].namespaceURI;
         var type = nameSpace === configNameSpace ?
             Types.primitives[typeXML[0].localName] :
             Types.extensions[nameSpace][typeXML[0].localName];
-        return type.loadType(typeXML, id, kind);
+        return type.loadType(typeXML, id, kind, scopes);
     }
 
     function loadCharacterCollection(collectionXML)
