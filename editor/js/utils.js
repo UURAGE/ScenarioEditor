@@ -150,6 +150,7 @@ var Utils;
             items: ":hover",
             content: i18next.t('utils:markdown_tooltip'),
             // Taken from: http://stackoverflow.com/a/15014759
+            create: function() { $(this).data("ui-tooltip").liveRegion.remove(); },
             close: function(event, ui)
             {
                 ui.tooltip.hover(

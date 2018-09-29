@@ -48,7 +48,12 @@
             });
 
             // Show hint for the clipboard buttons
-            $('#' + action).tooltip({ items: '#' + action, content: i18next.t('clipboard:hint', { key: key, action: action }) });
+            $('#' + action).tooltip(
+            {
+                items: '#' + action,
+                content: i18next.t('clipboard:hint', { key: key, action: action }),
+                create: function() { $(this).data("ui-tooltip").liveRegion.remove(); }
+            });
             $('#' + action).on('click', function()
             {
                 $("#main").focus();

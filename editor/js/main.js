@@ -1728,6 +1728,7 @@ var Main;
                         items: "span:hover",
                         content: Utils.escapeHTML(propertyValue),
                         // Taken from: http://stackoverflow.com/a/15014759
+                        create: function() { $(this).data("ui-tooltip").liveRegion.remove(); },
                         close: function(event, ui)
                         {
                             ui.tooltip.hover(
