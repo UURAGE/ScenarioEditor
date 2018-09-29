@@ -420,6 +420,10 @@ var ColorPicker;
 
                     var picker = $('<div>', { id: "colorPicker" });
                     var colorRings = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                    $(colorRings).on('mouseover', function(e)
+                    {
+                        e.stopPropagation();
+                    });
                     picker.append(colorRings);
                     var outerColorRing = Utils.appendChild(colorRings, "g");
                     var innerColorRing;
@@ -497,18 +501,31 @@ var ColorPicker;
                     });
 
                     var xlinkns = "http://www.w3.org/1999/xlink";
-                    var editButton = Utils.appendChild(innerColorRing, "use");
-                    var editButtonSize = 20;
-                    var editButtonOffset = pickerRadius - editButtonSize / 2;
+                    var innerCircle = Utils.appendChild(innerColorRing, 'g');
+                    var editIcon = Utils.appendChild(innerCircle, "use");
+                    var editIconSize = 20;
+                    var editIconOffset = pickerRadius - editIconSize / 2;
+                    editIcon.setAttributeNS(xlinkns, "href", "#icon-edit");
+                    editIcon.setAttribute("x", editIconOffset);
+                    editIcon.setAttribute("y", editIconOffset);
+                    editIcon.setAttribute("width", editIconSize);
+                    editIcon.setAttribute("height", editIconSize);
+                    editIcon.setAttribute("opacity", 0.6);
+                    var editButton = Utils.appendChild(innerCircle, "circle");
+                    var offset = pickerRadius;
+                    var radius = pickerRadius === innerPickerRadius ? pickerRadius / 3 : 2 * innerPickerRadius - pickerRadius;
                     editButton.setAttribute("class", "edit");
-                    editButton.setAttributeNS(xlinkns, "href", "#icon-edit");
-                    editButton.setAttribute("x", editButtonOffset);
-                    editButton.setAttribute("y", editButtonOffset);
-                    editButton.setAttribute("width", editButtonSize);
-                    editButton.setAttribute("height", editButtonSize);
+                    editButton.setAttribute("cx", offset);
+                    editButton.setAttribute("cy", offset);
+                    editButton.setAttribute("r", radius - ringPadding / 2);
+                    editButton.setAttribute("opacity", 0);
                     $(editButton).on('mouseover', function(e)
                     {
-                        e.stopPropagation();
+                        editIcon.setAttribute("opacity", 1);
+                    });
+                    $(editButton).on('mouseout', function(e)
+                    {
+                        editIcon.setAttribute("opacity", 0.6);
                     });
                     $(editButton).on('click', function(e)
                     {
@@ -517,17 +534,30 @@ var ColorPicker;
                         e.stopPropagation();
                     });
 
-                    var closeButton = Utils.appendChild(colorRings, "image");
-                    var closeButtonSize = 20;
+                    var closeIcon = Utils.appendChild(innerCircle, "use");
+                    var closeIconSize = 20;
+                    var closeIconOffsetX = 1.75 * pickerRadius - ringPadding;
+                    var closeIconOffsetY = ringPadding;
+                    closeIcon.setAttributeNS(xlinkns, "href", "#icon-close");
+                    closeIcon.setAttribute("x", closeIconOffsetX);
+                    closeIcon.setAttribute("y", closeIconOffsetY);
+                    closeIcon.setAttribute("width", closeIconSize);
+                    closeIcon.setAttribute("height", closeIconSize);
+                    closeIcon.setAttribute("opacity", 0.6);
+                    var closeButton = Utils.appendChild(innerCircle, "circle");
+                    var closeIconRadius = closeIconSize / 2;
                     closeButton.setAttribute("class", "close");
-                    editButton.setAttributeNS(xlinkns, "href", "#icon-close");
-                    closeButton.setAttribute("x", 1.75 * pickerRadius - ringPadding);
-                    closeButton.setAttribute("y", ringPadding);
-                    closeButton.setAttribute("width", closeButtonSize);
-                    closeButton.setAttribute("height", closeButtonSize);
+                    closeButton.setAttribute("cx", closeIconOffsetX + closeIconRadius);
+                    closeButton.setAttribute("cy", closeIconOffsetY + closeIconRadius);
+                    closeButton.setAttribute("r", closeIconRadius);
+                    closeButton.setAttribute("opacity", 0);
                     $(closeButton).on('mouseover', function(e)
                     {
-                        e.stopPropagation();
+                        closeIcon.setAttribute("opacity", 1);
+                    });
+                    $(closeButton).on('mouseout', function(e)
+                    {
+                        closeIcon.setAttribute("opacity", 0.6);
                     });
                     $(closeButton).on('click', function(e)
                     {

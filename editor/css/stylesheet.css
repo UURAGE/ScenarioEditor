@@ -1488,6 +1488,7 @@ textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
 
 .segment:hover {
   opacity: 0.75;
+  cursor: pointer;
 }
 
 .color {
@@ -1496,11 +1497,9 @@ textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
 
 #colorPicker .edit, #colorPicker .close {
   pointer-events: all;
-  opacity: 0.6;
 }
 
 #colorPicker .edit:hover, #colorPicker .close:hover {
-  opacity: 1;
   cursor: pointer;
 }
 
