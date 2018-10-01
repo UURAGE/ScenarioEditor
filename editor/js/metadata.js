@@ -117,10 +117,12 @@ var Metadata;
 
         metadataContainer.append($('<div>', { id: "meta-property-values" }));
 
-        var characterCategory = $('<div>', { class: "category", id: "characters" }).append(
-            $('<h1>', { text: i18next.t('common:characters') })
+        var firstCharacter = Config.container.characters.sequence[0];
+        var characterSectionHeader = Config.container.characters.sequence.length > 1 ?
+            i18next.t('common:characters') : firstCharacter.name ? firstCharacter.name : firstCharacter.id;
+        var characterCategory = $('<div>', { class: "category", id: "characters" }).append($('<h1>', { text: characterSectionHeader })
         );
-        metadataIndexList.append($('<li>').append($('<a>', { href: "#characters", text: i18next.t('common:characters') })));
+        metadataIndexList.append($('<li>').append($('<a>', { href: "#characters", text: characterSectionHeader })));
 
         var characterContainer = $('<div>', {id: "meta-character-property-values", class: "container"}).append(
             $('<div>', { id: "character-tabs", class: "category item"})
@@ -239,18 +241,11 @@ var Metadata;
         {
             var characterTabId = characterPropertyValuesEl.attr('id') + '-' + character.id;
 
-            var characterHeaderText = character.name ? character.name : character.id;
-
             if (Config.container.characters.sequence.length > 1)
             {
                 // Make a character tab with a link to the div it contains
-                var li = $('<li>').append($('<a>', { href:'#' + characterTabId, value: character.id, text: characterHeaderText }));
+                var li = $('<li>').append($('<a>', { href:'#' + characterTabId, value: character.id, text: character.name ? character.name : character.id }));
                 characterList.append(li);
-            }
-            else
-            {
-                var characterHeader = $('<h4>', { text: characterHeaderText });
-                characterList.append(characterHeader);
             }
 
             var characterTab = $('<div>', { id: characterTabId });
