@@ -1747,6 +1747,7 @@ var Main;
             }
         };
 
+        appendNodePropertyImageIfHasValue("node-has-preconditions", node.preconditions);
         appendNodePropertyImageIfHasValue("node-has-comments", node.comment, true);
 
         appendNodePropertyImageIfHasValue("node-has-jump", node.allowInterleaveNode);
