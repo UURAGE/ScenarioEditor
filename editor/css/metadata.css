@@ -7,7 +7,7 @@
   display: flex; }
   #metadata .index {
     flex: 0 1 auto;
-    width: 200px;
+    width: 150px;
     align-self: flex-start;
     padding-right: 10px;
     box-sizing: border-box;
@@ -33,7 +33,7 @@
           color: black; }
   #metadata .content {
     flex: 1 1 auto;
-    padding-left: 210px; }
+    padding-left: 160px; }
     @supports (position: sticky) {
       #metadata .content {
         padding-left: 0; } }
@@ -44,8 +44,9 @@
     user-select: none; }
   #metadata h1, #metadata h2, #metadata h3, #metadata h4, #metadata h5, #metadata h6 {
     font-size: 1rem;
-    margin-top: 2em;
-    margin-bottom: .5em; }
+    padding-top: 2em;
+    padding-bottom: .5em;
+    margin: 0; }
   #metadata .category .category h1, #metadata .category .category h2, #metadata .category .category h3, #metadata .category .category h4, #metadata .category .category h5, #metadata .category .category h6 {
     margin-top: 1em; }
   #metadata .category .category .item {

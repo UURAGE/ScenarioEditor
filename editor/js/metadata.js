@@ -43,9 +43,15 @@ var Metadata;
     function dialog()
     {
         var metadataDialog = $('<div>', { id: "metadata" });
+
+        var metadataIndex = $('<div>', { class: "index" }).append();
+        var metadataIndexList = $('<ul>');
+        metadataIndex.append(metadataIndexList);
+
         var metadataContainer = $('<div>', { class: "content" });
-        var generalCategory = $('<div>', { class: "category" })
-            .append($('<h1>', { text: i18next.t('metadata:general') }));
+        var generalCategory = $('<div>', { class: "category", id: "general" })
+        .append($('<h1>', { text: i18next.t('metadata:general') }));
+        metadataIndexList.append($('<li>').append($('<a>', { href: "#general", text: i18next.t('metadata:general') })));
 
         var generalContainer = $('<div>', { class: "container"});
 
@@ -97,7 +103,7 @@ var Metadata;
         generalCategory.append(generalContainer);
         metadataContainer.append(generalCategory);
 
-        var authorsCategory = $('<div>', { class: "category" })
+        var authorsCategory = $('<div>', { class: "category", id: "authors" })
             .append($('<h1>', { text: i18next.t('metadata:authors') }));
 
         var authorsContainer = $('<table>', { class: "container"})
@@ -111,15 +117,18 @@ var Metadata;
 
         metadataContainer.append($('<div>', { id: "meta-property-values" }));
 
-        var characterCategory = $('<div>', { class: "category" }).append(
+        var characterCategory = $('<div>', { class: "category", id: "characters" }).append(
             $('<h1>', { text: i18next.t('common:characters') })
         );
+        metadataIndexList.append($('<li>').append($('<a>', { href: "#characters", text: i18next.t('common:characters') })));
+
         var characterContainer = $('<div>', {id: "meta-character-property-values", class: "container"}).append(
             $('<div>', { id: "character-tabs", class: "category item"})
         );
         characterCategory.append(characterContainer);
 
         metadataContainer.append(characterCategory);
+        metadataDialog.append(metadataIndex);
         metadataDialog.append(metadataContainer);
 
         metadataDialog.dialog(
@@ -161,6 +170,7 @@ var Metadata;
         if (Metadata.container.authors.length > 0)
         {
             authorsCategory.show();
+            metadataIndexList.append($('<li>').append($('<a>', { href: "#authors", text: i18next.t('metadata:authors') })));
 
             Metadata.container.authors.forEach(function(author)
             {
@@ -180,13 +190,15 @@ var Metadata;
         var hStartLevel = 3;
 
         var propertyValuesEl = $('#meta-property-values');
-        var showPropertyItem = function (propertyItem, hLevel, container, idPrefix)
+        var showPropertyItem = function (propertyItem, hLevel, container, idPrefix, isTopLevel)
         {
             if (propertyItem.scopes.statementScope !== 'independent') return;
             if (propertyItem.kind === 'section')
             {
-                var sectionCategory = $('<div>', {class: "category"})
+                var sectionCategory = $('<div>', {class: "category", id: "section-" + propertyItem.id})
                     .append($('<h' + hLevel + '>', { text: propertyItem.name }));
+                if (isTopLevel) metadataIndexList.append($('<li>').append($('<a>', { href: "#section-" + propertyItem.id, text: propertyItem.name })));
+
                 var sectionContainer = $('<div>', {class: "container" });
 
                 propertyItem.sequence.forEach(function (subItem)
@@ -212,7 +224,7 @@ var Metadata;
         };
         Config.container.properties.sequence.forEach(function (propertyItem)
         {
-            showPropertyItem(propertyItem, hStartLevel, propertyValuesEl, propertyValuesEl.attr('id'));
+            showPropertyItem(propertyItem, hStartLevel, propertyValuesEl, propertyValuesEl.attr('id'), true);
         });
         propertyValuesEl.toggle(anyPropertyShown);
 
@@ -246,7 +258,7 @@ var Metadata;
 
             Config.container.characters.properties.sequence.forEach(function(propertyItem)
             {
-                showPropertyItem(propertyItem, hStartLevel, characterTab, characterTabId);
+                showPropertyItem(propertyItem, hStartLevel, characterTab, characterTabId, true);
             });
 
             Config.container.characters.byId[character.id].properties.sequence.forEach(function(propertyItem)
@@ -292,6 +304,8 @@ var Metadata;
                 setPropertyInDOM(Metadata.container.propertyValues.perCharacter[characterId], "#meta-character-property-values-" + $.escapeSelector(characterId) + "-container", property);
             }
         }
+
+        loadIndex(metadataIndex, metadataDialog);
     }
 
     function save()
@@ -377,5 +391,22 @@ var Metadata;
 
             Metadata.container.authors.push(author);
         }
+    }
+
+    function loadIndex(indexElement, dialog)
+    {
+        var topMenu = indexElement,
+        menuItems = topMenu.find("a");
+
+        // Smooth scrolling animation
+        menuItems.click(function(e)
+        {
+            var href = $(this).attr("href"),
+            offsetTop = $(href).position().top + $(dialog).scrollTop();
+            $(dialog).stop().animate({
+                scrollTop: offsetTop
+            }, 300);
+            e.preventDefault();
+        });
     }
 })();

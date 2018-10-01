@@ -9,7 +9,7 @@ var Constants;
 
     // Values for the meta dialog
     var heightMetaScreen = 600;
-    var widthMetaScreen = 600;
+    var widthMetaScreen = 750;
 
     // Values for the import dialog
     var heightImportScreen = 500;
