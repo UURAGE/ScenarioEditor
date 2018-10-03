@@ -21,6 +21,8 @@ var PlumbGenerator;
 
         instance.setContainer(container);
 
+        instance.registerConnectionType("basic", { anchor: [ "Perimeter", { shape: "Rectangle", anchorCount: 80 } ], connector:"StateMachine" });
+
         instance.importDefaults(
         {
             Endpoint : ["Dot", {radius:2}],

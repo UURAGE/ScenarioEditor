@@ -112,11 +112,6 @@ textarea
   background-color: #F37812;
 }
 
-.statementText
-{
-  max-width: 93%;
-}
-
 .long .statementText
 {
   max-height: 72px;

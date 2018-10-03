@@ -911,19 +911,25 @@ var Main;
 
         var endpoint = document.createElement('div');
         endpoint.classList.add('ep');
+        var endpointAnchor = document.createElement('div');
+        endpointAnchor.classList.add('anchor');
+        endpoint.appendChild(endpointAnchor);
         node.appendChild(endpoint);
+
+        var nodeContent = document.createElement('div');
+        nodeContent.classList.add("nodeContent");
 
         var inputDiv =  $('<div>', { class: "statementInput" });
         inputDiv.hide();
-        node.appendChild(inputDiv[0]);
+        nodeContent.appendChild(inputDiv[0]);
 
         var textDiv = document.createElement('div');
         textDiv.classList.add('statementText');
-        node.appendChild(textDiv);
+        nodeContent.appendChild(textDiv);
 
         var imgDiv = document.createElement('div');
         imgDiv.classList.add('imgDiv');
-        node.appendChild(imgDiv);
+        nodeContent.appendChild(imgDiv);
 
         // Expands node container using overflow when moving a node closer to the bounds of the container
         var scrollOffset = 50;
@@ -931,11 +937,28 @@ var Main;
         expander.classList.add('expander');
         expander.style.right = -scrollOffset + "px";
         expander.style.bottom = -scrollOffset + "px";
-        node.appendChild(expander);
+        nodeContent.appendChild(expander);
+
+        node.appendChild(nodeContent);
 
         node.addEventListener('dblclick', function(e)
         {
              startEditingNode(id);
+        }, false);
+
+        endpoint.addEventListener('mousemove', function(e)
+        {
+            $(this).find('.anchor').css(
+                {
+                    left: e.pageX - node.getBoundingClientRect().left + 7.5,
+                    top:  e.pageY - node.getBoundingClientRect().top + 7.5
+                }
+            );
+        }, false);
+
+        endpoint.addEventListener('mouseleave', function(e)
+        {
+            $(this).find('.anchor').css({left: "", top: ""});
         }, false);
 
         // initialise draggable elements.
@@ -997,17 +1020,12 @@ var Main;
         // make each ".ep" div a source
         plumbInstance.makeSource(node,
         {
-            filter: ".ep"
+            filter: ".ep",
+            connectionType: "basic"
         });
 
         // initialise all '.w' elements as connection targets.
-        plumbInstance.makeTarget(node,
-        {
-            dropOptions:
-            {
-                hoverClass: "dragHover"
-            }
-        });
+        plumbInstance.makeTarget(node);
 
         // Make the node selected when we click on it.
         node.addEventListener("click", function(event)
