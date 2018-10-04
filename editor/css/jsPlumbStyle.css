@@ -226,6 +226,15 @@
 	transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
+.w:not(.jtk-drag):not(.jtk-drag-active):not(.jtk-connected) > .ep:hover .anchor {
+	transition: background-color 0.25s ease,
+				left 0.15s linear,
+				top 0.15s linear,
+				right 0.15s linear,
+				bottom 0.15s linear;
+	background-color: black;
+}
+
 .w:not(.jtk-drag):not(.jtk-drag-active) > .ep:hover .anchor {
 	background-color: black;
 	transition: background-color 0.25s ease;
