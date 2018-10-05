@@ -122,7 +122,6 @@ var Metadata;
             i18next.t('common:characters') : firstCharacter.name ? firstCharacter.name : firstCharacter.id;
         var characterCategory = $('<div>', { class: "category", id: "characters" }).append($('<h1>', { text: characterSectionHeader })
         );
-        metadataIndexList.append($('<li>').append($('<a>', { href: "#characters", text: characterSectionHeader })));
 
         var characterContainer = $('<div>', {id: "meta-character-property-values", class: "container"}).append(
             $('<div>', { id: "character-tabs", class: "category item"})
@@ -271,6 +270,10 @@ var Metadata;
             });
         }
         characterPropertyValuesEl.toggle(anyPropertyShown);
+        if (anyPropertyShown)
+        {
+            metadataIndexList.append($('<li>').append($('<a>', { href: "#characters", text: characterSectionHeader })));
+        }
 
         var setPropertyInDOM = function(propertyValues, propertyContainerId, property)
         {
