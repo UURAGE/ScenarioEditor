@@ -139,6 +139,7 @@ var Config;
             var subResult = loadCollection($(nodeXML), nodeName, 'section', parentScopes);
             subResult.name = nodeXML.getAttribute('name');
             var sectionId = nodeXML.getAttribute('id');
+            if (sectionId) subResult.id = sectionId;
             if (!subResult.name) subResult.name = i18next.t('configXML:section.' + sectionId + '.name', { defaultValue: i18next.t('configXML:section.' + sectionId) });
             return subResult;
         }
