@@ -48,9 +48,19 @@ var MiniMap;
         {
             updateScrollPosition(e);
         });
-        $("#mainCell #main").on("scroll", function()
+
+        var scrollTimeout = null;
+        $("#mainCell #main").on("scroll", function(e)
         {
-            update(false);
+            // Throttle scroll event
+            if (scrollTimeout === null)
+            {
+                scrollTimeout = setTimeout(function()
+                {
+                    scrollTimeout = null;
+                    update(false);
+                }, 25);
+            }
         });
 
         // Zoomed in scroll event listeners for minimap are created by attachScrollListener,
@@ -91,9 +101,18 @@ var MiniMap;
     {
         if (!enabled) return;
 
+        var scrollTimeout = null;
         treeDiv.on('scroll', function(e)
         {
-            update(false);
+            // Throttle scroll event
+            if (scrollTimeout === null)
+            {
+                scrollTimeout = setTimeout(function()
+                {
+                    scrollTimeout = null;
+                    update(false);
+                }, 25);
+            }
         });
     }
 
