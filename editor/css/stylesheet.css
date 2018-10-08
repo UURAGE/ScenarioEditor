@@ -1598,6 +1598,15 @@ textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
   fill: #d92b2b;
 }
 
+.imgDiv {
+  pointer-events: none;
+}
+
+.imgDiv > span {
+  pointer-events: all;
+  display: inline-block;
+}
+
 .imgDiv svg
 {
   width: 16px;
@@ -1605,4 +1614,5 @@ textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
   fill: rgba(0, 0, 0, 0.85);
   margin: 1px;
   position: relative;
+  pointer-events: none;
 }
