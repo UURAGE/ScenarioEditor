@@ -1584,41 +1584,47 @@ var Main;
         }
     }
 
-    //keeps the tree's position up to date for zooming out. handles snapping to grid
+    // Keeps the tree's position up to date for zooming out. Handles snapping to grid.
     function treeDropHandler(event, id)
     {
-        SaveIndicator.setSavedChanges(false);
-
         var tree = Main.trees[id];
 
-        if (Zoom.isZoomed(id)) //when someone drags a node, the dragstop event is also captured by the tree conatiner. only an issue when zoomed in because it erases the coordinates to return to post zoom
-            return;
+        // When not zoomed in, we have nothing to do
+        if (Zoom.isZoomed(id)) return;
 
         var position = Utils.cssPosition($("#gridIndicator"));
         var gridLeftPos = Math.round(position.left / Main.gridX);
         var gridTopPos = Math.round(position.top / Main.gridY);
 
-        //make sure no trees can be dragged on top of each other
-        if(checkGridAvailable(gridLeftPos, gridTopPos))
+        // Make sure no trees can be dragged on top of each other
+        if (checkGridAvailable(gridLeftPos, gridTopPos))
         {
             Utils.cssPosition(tree.dragDiv,
             {
-                "top": gridTopPos*Main.gridY,
-                "left": gridLeftPos*Main.gridX
+                "top": gridTopPos * Main.gridY,
+                "left": gridLeftPos * Main.gridX
             });
 
-            tree.leftPos = gridLeftPos; //store position to return to this point when zoomed in and out again
-            tree.topPos = gridTopPos;
-            tree.level = Math.round(tree.topPos); //trees have a conversation level. trees on the same level are interleaved. trees on different levels are sequenced from top to bottom (low y to high y)
+            if (!(gridLeftPos === tree.leftPos && gridTopPos === tree.topPos))
+            {
+                SaveIndicator.setSavedChanges(false);
 
-            MiniMap.update(true);
+                // Store position to return to this point when zoomed in and out again
+                tree.leftPos = gridLeftPos;
+                tree.topPos = gridTopPos;
+                // Trees have a conversation level. Trees on the same level are interleaved.
+                // Trees on different levels are sequenced from top to bottom (low y to high y).
+                tree.level = Math.round(tree.topPos);
+
+                MiniMap.update(true);
+            }
         }
         else
         {
             Utils.cssPosition(tree.dragDiv,
             {
-                "top": tree.topPos*Main.gridY,
-                "left": tree.leftPos*Main.gridX
+                "top": tree.topPos * Main.gridY,
+                "left": tree.leftPos * Main.gridX
             });
         }
     }
