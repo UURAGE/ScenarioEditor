@@ -147,14 +147,24 @@ var ColorPicker;
 
         var annotationXML = containerXML.children("annotation[id=" + $.escapeSelector(colorAnnotationId) + "]").eq(0);
         var colorEnumeration = Types.primitives.enumeration.loadType(annotationXML.children('type').eq(0).children('enumeration').eq(0));
+        ColorPicker.key.sequence = [];
         colorEnumeration.options.sequence.forEach(function(option)
         {
+            var color = ColorPicker.key.byColor[option.value];
             if (option.value in ColorPicker.key.byColor)
             {
-                ColorPicker.key.byColor[option.value].enabled = true;
-                ColorPicker.key.byColor[option.value].entry = option.text;
+                color.enabled = true;
+                color.entry = option.text;
+                ColorPicker.key.sequence.push(color);
             }
         });
+        for (var value in ColorPicker.key.byColor)
+        {
+            if (ColorPicker.key.sequence.indexOf(ColorPicker.key.byColor[value]) === -1)
+            {
+                ColorPicker.key.sequence.push(ColorPicker.key.byColor[value]);
+            }
+        }
     }
 
     function keyToXML(containerXML)
