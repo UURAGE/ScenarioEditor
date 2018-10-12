@@ -137,7 +137,13 @@ var ColorPicker;
     {
         resetKey();
 
-        ColorPicker.key.sequence.forEach(function(color) { color.enabled = false; });
+        ColorPicker.key.sequence.forEach(function(color)
+        {
+            if (color.value !== ColorPicker.defaultColor)
+            {
+                color.enabled = false;
+            }
+        });
 
         var annotationXML = containerXML.children("annotation[id=" + $.escapeSelector(colorAnnotationId) + "]").eq(0);
         var colorEnumeration = Types.primitives.enumeration.loadType(annotationXML.children('type').eq(0).children('enumeration').eq(0));
@@ -158,7 +164,7 @@ var ColorPicker;
         annotationXML.setAttribute('name', "");
         var enabledColors = ColorPicker.key.sequence.filter(function(color)
         {
-            return color.enabled;
+            return color.enabled || color === ColorPicker.defaultColor;
         });
         var options =
         {
@@ -206,35 +212,8 @@ var ColorPicker;
             entryDataRow.append($('<td>', { class: "handle", text: "↕" }));
 
             var enabler = $('<input>', { type: 'checkbox' });
-            enabler.prop("checked", color.enabled);
-            enabler.on('change', function()
-            {
-                var confirmButton = keyContainer.parent().find(".confirmColors");
-                if (!enabler.prop("checked"))
-                {
-                    var someColorEnabled = keyBody.children().map(function()
-                    {
-                        return $(this).find('.enable').children('input').prop("checked");
-                    }).get().some(function(enabled) { return enabled; });
-
-                    if (!someColorEnabled)
-                    {
-                        // Disable the confirmation button to restrict disabling all colors
-                        confirmButton.prop("disabled", true);
-                        confirmButton.addClass("ui-state-disabled");
-                    }
-                    else
-                    {
-                        confirmButton.prop("disabled", false);
-                        confirmButton.removeClass("ui-state-disabled");
-                    }
-                }
-                else
-                {
-                    confirmButton.prop("disabled", false);
-                    confirmButton.removeClass("ui-state-disabled");
-                }
-            });
+            enabler.prop("checked", color.enabled || color.value === ColorPicker.defaultColor);
+            enabler.prop("disabled", color.value === ColorPicker.defaultColor);
             entryDataRow.append($('<td>', { class: "enable" }).append(enabler));
 
             entryDataRow.append($('<td>',
@@ -270,7 +249,7 @@ var ColorPicker;
                     var newColorKeySequence = keyBody.children().map(function()
                     {
                         var value = $(this).find('.color').data("color");
-                        var enabled = $(this).find('.enable').children('input').prop("checked");
+                        var enabled = value === ColorPicker.defaultColor || $(this).find('.enable').children('input').prop("checked");
                         if (!enabled && enabled !== ColorPicker.key.byColor[value].enabled)
                         {
                             justDisabledColors[value] = 0;
