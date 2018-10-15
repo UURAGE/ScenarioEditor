@@ -1,0 +1,79 @@
+@charset "UTF-8";
+
+// © Utrecht University and DialogueTrainer
+
+.long {
+    &::after {
+        content: "";
+        display: block;
+        background-image: url('../svg/dots.svg');
+        background-size: 24px 10px;
+        background-position: 4px;
+        background-repeat: no-repeat;
+        width: 28px;
+        height: 12px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        z-index: 10;
+        border-top-left-radius: 5px;
+    }
+    &.player::after {
+        background-color: $col-node-player;
+    }
+    &.computer::after {
+        background-color: $col-node-computer;
+    }
+    &.situation::after {
+        background-color: $col-node-situation;
+    }
+    .statementText {
+        max-height: 72px;
+        overflow: hidden;
+        position: relative;
+        -webkit-mask-image: linear-gradient(rgba(black, 1) 0%, rgba(black, 1) 75%, rgba(black, 0) 100%);
+        mask-image: linear-gradient(rgba(black, 1) 0%, rgba(black, 1) 75%, rgba(black, 0) 100%);
+    }
+    .statementInput {
+        min-height: 200px;
+    }
+}
+
+// Used to test length of string in node
+.lengthTest {
+    position: absolute;
+    visibility: hidden;
+    width: auto;
+    height: auto;
+    white-space: nowrap;
+    font-size: 11px;
+    // Thanks to Herb Caudill comment
+}
+
+.nodestatement {
+    margin: auto;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font: inherit;
+}
+
+.text {
+    width: 420px;
+}
+
+.imgDiv {
+    pointer-events: none;
+    >span {
+        pointer-events: all;
+        display: inline-block;
+    }
+    svg {
+        width: 16px;
+        height: 16px;
+        fill: rgba(black, 0.85);
+        margin: 1px;
+        position: relative;
+        pointer-events: none;
+    }
+}

@@ -1,0 +1,1901 @@
+/* © Utrecht University and DialogueTrainer */
+
+html, body
+{
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: MyriadPro-Regular, "Myriad Pro", sans-serif;
+}
+
+button
+{
+  font-family: inherit;
+}
+
+#node-property-values-container-media audio,
+#node-property-values-container-media img,
+#node-property-values-container-media video,
+#meta-property-values-container-thumbnailImage img,
+#meta-property-values-container-bannerImage img
+{
+  width: 100%;
+}
+
+.no-close .ui-dialog-titlebar-close
+{
+    display: none;
+}
+
+.ui-progressbar
+{
+  position: relative;
+}
+.progress-label
+{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 4px;
+  font-weight: bold;
+}
+
+kbd
+{
+  display: inline-block;
+  padding: 3px 5px;
+  line-height: 10px;
+  color: #444d56;
+  vertical-align: middle;
+  background-color: #fafbfc;
+  border: solid 1px #d1d5da;
+  border-bottom-color: #c6cbd1;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #c6cbd1;
+}
+
+svg
+{
+  /* Fixes SVG subpixel rendering in Firefox */
+  transform: scale(1);
+}
+
+svg.icon {
+  width: 16px;
+  height: 16px;
+}
+
+.zoomTreeButton
+{
+  float: left;
+  width: 50px;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 2em;
+  cursor: pointer;
+  margin-top: -3px;
+  margin-left: 2px;
+}
+
+  .zoomTreeButton svg
+  {
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+    fill: currentColor;
+  }
+
+textarea
+{
+  font-family: inherit;
+  resize: none;
+}
+
+.ui-dialog-titlebar.info
+{
+  background: #2BAAF6;
+}
+
+.ui-dialog-titlebar.warning
+{
+  background: #f2b63d;
+}
+
+.ui-dialog-titlebar.error
+{
+  background: #e57373;
+}
+
+
+.long::after
+{
+  content: "";
+  display: block;
+  background-image: url('../svg/dots.svg');
+  background-size: 24px 10px;
+  background-position: 4px;
+  background-repeat: no-repeat;
+  width: 28px;
+  height: 12px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  border-top-left-radius: 5px;
+}
+
+.long.player::after
+{
+  background-color: #1f71b8;
+}
+
+.long.computer::after
+{
+  background-color: #C31339;
+}
+
+.long.situation::after
+{
+  background-color: #F37812;
+}
+
+.long .statementText
+{
+  max-height: 72px;
+  overflow: hidden;
+  position: relative;
+
+  -webkit-mask-image: linear-gradient(rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%);
+}
+
+.long .statementInput
+{
+  min-height: 200px;
+}
+
+/* Used to test length of string in node */
+.lengthTest
+{
+  position: absolute;
+  visibility: hidden;
+  width: auto;
+  height: auto;
+  white-space: nowrap;
+  font-size: 11px;
+  /* Thanks to Herb Caudill comment */
+}
+
+.nodestatement
+{
+  margin: auto;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font: inherit;
+}
+
+.text
+{
+  width: 420px;
+}
+
+#languages
+{
+  align-self: center;
+  padding-right: 10px;
+  color: rgba(0, 0, 0, 0.25);
+}
+
+#sidebar textarea
+{
+  width: 300px;
+  resize: vertical;
+}
+
+a[data-disabled]
+{
+  text-decoration: line-through;
+}
+
+.clickable:hover
+{
+  cursor: pointer;
+}
+
+/* Warning: initialiseGrid looks up this rule using the exact selector text.
+ * If you change the selector, change the lookup too!
+ */
+.gridded
+{
+  position: absolute;
+  width: 250px;
+  height: 50px;
+  border-radius: 1px !important;
+}
+
+#gridIndicator
+{
+  display: none;
+  background-color: #9c5dc4;
+  opacity: 0.2;
+  pointer-events: none;
+  /*start invisible, main.js will show on mouse enter of #main*/
+}
+
+#categorySelect
+{
+  min-width: 4em;
+}
+
+#wrap
+{
+  position: absolute;
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+
+  #wrap > div
+  {
+    display: table-row;
+  }
+
+    #wrap > div > div
+    {
+      display: table-cell;
+      vertical-align: top;
+    }
+
+#content
+{
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+
+  #content > div
+  {
+    display: table-row;
+  }
+
+    #content > div > div
+    {
+      display: table-cell;
+    }
+
+#mainCell
+{
+  overflow: hidden;
+  height: 100%;
+}
+
+#main
+{
+  position: relative;
+  overflow: auto;
+  height: 100%;
+}
+
+#metadata table,
+#propertyValuesSection table,
+#characterSection table
+{
+    width: 100%;
+    table-layout: fixed;
+}
+
+#metadata th,
+#propertyValuesSection th,
+#characterSection th
+{
+    font-weight: normal;
+    text-align: left;
+    vertical-align: top;
+    width: 30%;
+}
+
+#metadata td,
+#propertyValuesSection td,
+#characterSection td
+{
+    text-align: left;
+    vertical-align: top;
+    word-wrap: break-word;
+}
+
+#metadata td + th,
+#propertyValuesSection td + th,
+#characterSection td + th
+{
+  width: 70%;
+}
+
+#metadata td input,
+#metadata td select,
+#propertyValuesSection td input,
+#propertyValuesSection td select,
+#propertyValuesSection td textarea,
+#characterSection td input,
+#characterSection td select,
+#characterSection td textarea
+{
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#metadata tr,
+#propertyValuesSection tr,
+#characterSection tr
+{
+  border-bottom: 1px solid black;
+}
+
+#logo {
+  width: 32px;
+  height: 32px;
+  padding: 8px;
+  box-sizing: border-box;
+  background: #662D91;
+  transition: 0.5s background ease-out;
+}
+
+#logo:hover {
+  transition: 0.1s background ease-in-out;
+  background: #a345e5;
+}
+
+#logo img {
+  fill: white;
+  width: 16px;
+  height: 16px;
+  transition: 0.5s top ease-out;
+}
+
+#logo.test::after {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  background-image: url('../svg/icon_warning.svg');
+}
+
+button img
+{
+  vertical-align: middle;
+}
+
+#toolbar button,
+#properties button,
+#sidebar button,
+#parameters button,
+#evaluations button,
+.enumeration-values-container button
+{
+  border: 0;
+  background: none;
+}
+
+#properties button,
+#sidebar button
+{
+  padding-right: 1px;
+  padding-left: 1px;
+  color: #666;
+  font-size: 16px;
+}
+
+#properties h1
+{
+  font-size: 40px;
+}
+
+.enumeration-values-container li
+{
+  clear: both
+}
+
+.enumeration-values-container span,
+.enumeration-values-container input
+{
+  float: left;
+}
+
+.enumeration-values-container button
+{
+  float: right;
+}
+
+#ribbon
+{
+  padding: 0 5px;
+}
+
+#ribbon .buttonGroup
+{
+  /* Conforms the ::after element to border radius */
+  overflow: hidden;
+}
+
+#ribbon button
+{
+  margin: 1px;
+  padding: 0;
+  height: 69px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+}
+
+#ribbon button:hover,
+#ribbon .dropped
+{
+  background-color: rgba(163, 69, 229, 0.05);
+  border-color: rgba(163, 69, 229, 0.25);
+  cursor: pointer;
+}
+
+#ribbon button.enabled
+{
+  background-color: rgba(163, 69, 229, 0.25);
+}
+
+#toolbar .small-buttons
+{
+  float: left;
+  padding: 1px;
+}
+
+  #toolbar .small-buttons *
+  {
+    margin: 0;
+    padding: 2px;
+  }
+
+  #toolbar .small-buttons button
+  {
+    display: block;
+    height: 26px;
+    text-align: left;
+    margin: 1px 0;
+  }
+
+  #toolbar .small-buttons img,
+  #toolbar .small-buttons svg,
+  #menus svg
+  {
+    margin: 0 3px;
+    width: 16px;
+    height: 16px;
+    fill: #777;
+    vertical-align: middle;
+  }
+
+  #toolbar svg use,
+  #menus svg use
+  {
+    pointer-events: none;
+  }
+
+#toolbar .big-buttons
+{
+  float: left;
+  padding: 1px;
+}
+
+  #toolbar .big-buttons *
+  {
+    margin: 0;
+  }
+
+  #toolbar .big-buttons button
+  {
+    min-width: 50px;
+  }
+
+  #toolbar .big-buttons div
+  {
+    margin: 0 1px;
+  }
+
+  #toolbar .big-buttons img,
+  #toolbar .big-buttons svg
+  {
+    margin: auto;
+    margin-bottom: 5px;
+    width: 30px;
+    height: 30px;
+    display: block;
+  }
+
+  #toolbar .big-buttons svg
+  {
+    fill: rgb(118, 100, 133);
+    width: 32px;
+    height: 32px;
+  }
+
+#toolbar button div
+{
+  margin: 3px;
+  font-weight: normal;
+  font-size: 12px;
+}
+
+#toolbar :disabled, #toolbar :disabled:hover
+{
+  outline: none;
+  border: none;
+  background-color: transparent;
+  color: #000;
+  opacity: 0.3;
+  cursor: default !important;
+}
+
+#toolbar #manual
+{
+  float: right;
+  overflow: hidden;
+  margin: 5px;
+  width: 25px;
+  height: 25px;
+  border-radius: 100%;
+}
+
+  #toolbar #manual img, #toolbar #manual div
+  {
+    margin: 0;
+    padding: 0;
+    width: 25px;
+    height: 25px;
+  }
+
+#toolbar .separator
+{
+  margin: 5px 0;
+  padding: 0;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+#toolbar #clipboard button
+{
+  cursor: help;
+}
+
+#sidebar
+{
+  width: 475px;
+  height: 100%;
+  background-color: #f9f7fa;
+  color: #555;
+  position: relative;
+  min-width: 5px; /* Grip */
+  overflow-y: hidden; /* Prevents Edge overflow bug */
+}
+
+  #sidebar > div
+  {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+    #sidebar > div > div
+    {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      overflow: auto;
+      padding: 5px;
+    }
+    #sidebar .grip
+    {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -5px;
+        width: 10px;
+        z-index: 100;
+        cursor: ew-resize;
+        background: #000;
+        opacity: 0;
+    }
+    #sidebar .grip:hover
+    {
+        transition: 0s opacity 0.1s linear;
+        opacity: 0.25;
+    }
+    #sidebar.dragging > *
+    {
+        opacity: 0.5;
+    }
+    #sidebar input[type="checkbox"] {
+      transform: scale(1.25);
+      margin-right: .5em;
+    }
+
+    #sidebar .inputgroup {
+      display: inline-block;
+    }
+
+#properties
+{
+  display: inline-block;
+  min-width: 100%;
+}
+
+.header h1
+{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  font-size: 55px;
+}
+
+.header img
+{
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.header svg
+{
+  width: 48px;
+  height: 48px;
+  fill: currentColor;
+  vertical-align: middle;
+  padding: 0 10px;
+}
+
+.sub-header h2
+{
+  margin-top: 7px;
+  margin-bottom: 7px;
+  white-space: nowrap;
+  font-size: 20px;
+}
+
+.sub-header img
+{
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.sub-header svg
+{
+  width: 32px;
+  height: 32px;
+  fill: currentColor;
+  vertical-align: middle;
+  padding: 0 10px;
+}
+
+.w.treeContainer
+{
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 0;
+  border-color: rgba(0, 0, 0, 0.5);
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center right 15px;
+  box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.3);
+}
+
+  .w.treeContainer.zoom
+  {
+    display: table;
+    table-layout: fixed;
+    z-index: 50;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    background-image: none;
+    box-shadow: none;
+    color: black;
+    opacity: 1;
+    cursor: default;
+  }
+
+    .w.treeContainer.zoom:hover
+    {
+      background-color: white;
+      cursor: default;
+    }
+
+      .w.treeContainer.optional:not(.zoom) .subjectDiv
+      {
+        padding-right: 40px;
+      }
+
+  .w.treeContainer .subjectDiv
+  {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: bold;
+    font-size: 17px;
+    line-height: 50px;
+  }
+
+    .w.treeContainer .subjectDiv > span
+    {
+      margin-left: 5px;
+    }
+
+    .w.treeContainer .subjectDiv .icons
+    {
+      position: absolute;
+      right: 15px;
+      top: 0;
+      bottom: 0;
+    }
+
+      .w.treeContainer .subjectDiv .icons svg
+      {
+        width: 16px;
+        height: 16px;
+        fill: currentColor;
+        vertical-align: middle;
+      }
+
+  .w.treeContainer.zoom > div
+  {
+    display: table-row;
+  }
+
+    .w.treeContainer.zoom > div > div
+    {
+      display: table-cell;
+    }
+
+    .w.treeContainer.zoom > div:nth-child(2) > div
+    {
+      width: 100%;
+      height: 100%;
+    }
+
+.treeDiv
+{
+  position: relative;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+
+.treeDiv
+{
+  display: none;
+}
+
+.treeDiv.dragging {
+  cursor: move;
+}
+
+.w.treeContainer.zoom .treeDiv
+{
+  display: block;
+}
+
+.expander {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+}
+
+#properties.player > #headerComputer,
+#properties.player > #headerSituation,
+#properties.player > #treeSubject,
+#properties.player > #allowInterleaveNode,
+#properties.player > #allowDialogueEndNode,
+#properties.player > #optionalSubject,
+#properties.player > #characterSection
+{
+  display: none;
+}
+
+#properties.situation > #headerPlayer,
+#properties.situation > #headerComputer,
+#properties.situation > #treeSubject,
+#properties.situation > #allowInterleaveNode,
+#properties.situation > #allowDialogueEndNode,
+#properties.situation > #optionalSubject,
+#properties.situation > #characterSection
+{
+  display: none;
+}
+
+#properties.computer > #headerPlayer,
+#properties.computer > #headerSituation,
+#properties.computer > #treeSubject,
+#properties.computer > #optionalSubject
+{
+  display: none;
+}
+
+#properties.tree > #headerPlayer,
+#properties.tree > #headerComputer,
+#properties.tree > #headerSituation,
+#properties.tree > #preconditionsSection,
+#properties.tree > #endNode,
+#properties.tree > #allowDialogueEndNode,
+#properties.tree > #allowInterleaveNode,
+#properties.tree > #effectsSection,
+#properties.tree > #propertyValuesSection,
+#properties.tree > #characterSection,
+#properties.tree > #commentSection,
+#properties.tree > #parameterValueRangesSection,
+#properties.tree > #playerSuggestionsSection
+{
+  display: none;
+}
+
+#statement, #comment, #treeNameBox
+{
+  display: block;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.hidden
+{
+  display: none !important;
+}
+
+.removedParameter
+{
+  display: none;
+}
+
+.sidebarSection
+{
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-top: 2px solid white;
+}
+
+  .sidebarSection.withMarginTop
+  {
+    margin-top: 5px;
+  }
+
+.groupConditionDiv
+{
+  margin: 0;
+  margin-left: 12px;
+  padding: 0;
+  padding-left: 10px;
+  border-left: 2px solid white;
+}
+
+.when .groupConditionDiv
+{
+  border-left: 2px solid cornflowerblue;
+}
+
+.condition > button
+{
+  display: block;
+}
+
+.condition > .condition-test-container + button
+{
+  display: inline-block;
+}
+
+.condition > .emptyLabel,
+.condition > .singleLabel,
+.condition > .multipleLabel
+{
+  display: none;
+}
+
+.condition.empty > .emptyLabel,
+.condition.single > .singleLabel,
+.condition.multiple > .multipleLabel
+{
+  display: block;
+}
+
+.groupConditionRadioDiv
+{
+  display: none;
+}
+
+.condition.multiple > .groupConditionRadioDiv
+{
+  display: block;
+}
+
+.ui-accordion .ui-accordion-header
+{
+  margin-bottom: 0;
+}
+
+.ui-accordion .ui-accordion-content
+{
+    padding: 0.5em 1em !important;
+}
+
+.ui-widget
+{
+  font-size: inherit !important;
+}
+
+#preconditionsSection
+{
+  white-space: nowrap;
+}
+
+#scenarioNameTab
+{
+  margin: 0;
+  padding: 3px 0;
+  color: #666;
+  text-align: center;
+  font-size: 1.1em;
+}
+
+  #scenarioNameTab span
+  {
+    margin: 3px 0;
+    padding: 5px;
+    min-width: 50px;
+    height: 1em;
+    color: #000;
+  }
+
+    #scenarioNameTab span:hover
+    {
+      background-color: #f8f8f8;
+      color: #101010;
+    }
+
+    #scenarioNameTab span input[type=text]
+    {
+      height: 1em;
+      font: inherit;
+    }
+
+    #scenarioNameTab span:empty
+    {
+      padding: 3px 15px;
+    }
+
+.noSelect
+{
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */
+}
+
+#tabDock #validationReport
+{
+  position: relative;
+  display: none;
+  overflow: auto;
+  padding: 0 20px;
+  max-height: 200px;
+}
+
+#validationReport > *
+{
+  margin: 20px 0;
+}
+
+#validationReport table
+{
+  width: 100%;
+  border: 1px solid black;
+  border-collapse: collapse;
+  background-color: white;
+  table-layout: fixed;
+}
+
+  #validationReport table td
+  {
+    padding: 5px;
+    border: 1px solid black;
+  }
+
+  #validationReport table tr td:nth-child(1)
+  {
+    width: 15%;
+  }
+
+  #validationReport table tr td:nth-child(2)
+  {
+    width: 85%;
+  }
+
+  #validationReport .no-problems
+  {
+    color: green;
+  }
+
+  #validationReport .level-error
+  {
+    color: #F00;
+  }
+
+  #validationReport .level-warning
+  {
+    color: #F80;
+  }
+
+  #validationReport .level-info
+  {
+    color: #05F;
+  }
+
+.buttonGroup
+{
+  display: inline-block;
+  margin: 5px 0px;
+  padding: 0;
+  height: 78px;
+  border-radius: 5px;
+  background-color: white;
+  vertical-align: top;
+  word-wrap: break-word;
+}
+
+  .buttonGroup::after
+  {
+    float: left;
+    width: 100%;
+    height: 7px;
+    background-color: rgba(163, 69, 229, 0.2);
+    content: "";
+  }
+
+#toolbar
+{
+  margin: 0;
+  padding: 0;
+  background-color: rgba(114, 96, 128, 0.1);
+}
+
+  #toolbar .dropdown
+  {
+    margin-top: 0px;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background-color: transparent;
+  }
+
+.dropdown::after
+{
+  display: none;
+}
+
+#toolbar .dropdown button
+{
+  width: 100%;
+  padding: 2px 5px;
+}
+
+#toolbar #menus .dropdown .dropdownItems button {
+  padding: 5px 7px;
+}
+
+#toolbar .dropdown .dropdownItems
+{
+  display: none;
+  margin: 0;
+  padding: 1px;
+  height: auto;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5);
+  background: #fefefe;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+
+  position: absolute;
+  min-width: 150px;
+  z-index: 52;
+  width: auto;
+}
+
+.buttonGroup:hover::after
+{
+  background-color: rgba(163, 69, 229, 0.25);
+}
+
+#tabDock
+{
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #aaa;
+  background: linear-gradient(to bottom, #fafafa 0,#ffffff 100%);
+}
+
+  #tabDock div
+  {
+    overflow: auto;
+    max-height: 250px;
+    background-color: inherit;
+  }
+
+  #tabDock #closeTabDock
+  {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    background-color: transparent;
+    cursor: pointer;
+  }
+
+.ui-tabs
+{
+  padding: 0 !important;
+  border: 0;
+}
+
+  .ui-tabs .ui-tabs-nav
+  {
+    position: relative;
+    padding: 3px;
+    list-style: none;
+  }
+
+    .ui-tabs .ui-tabs-nav li
+    {
+      position: relative;
+      float: left;
+      margin: 0 3px 0 0;
+      padding: 0;
+      border-bottom-width: 1px;
+    }
+
+    .ui-tabs .ui-tabs-nav .ui-tabs-anchor
+    {
+      padding-right: 0;
+      padding-left: 0;
+      outline: none;
+      text-align: center;
+    }
+
+.ui-resizable-n
+{
+  height: 10px;
+}
+
+.ui-autocomplete
+{
+  max-height: 135px;
+  overflow-y: auto;
+  /* prevent horizontal scrollbar */
+  overflow-x: hidden;
+}
+
+tr.ui-sortable-helper
+{
+  display: table;
+}
+
+#content > #draftScreen
+{
+  position: absolute;
+  right: 366px;
+  bottom: 0;
+  left: 0;
+  display: none;
+  overflow-y: scroll;
+  height: 300px;
+}
+
+#tableSizeFixer
+{
+  overflow-y: auto;
+  max-height: 140px;
+}
+
+#draftTable
+{
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+}
+
+#draftTableHeaders th
+{
+  border: 1px solid #bbb;
+  background-color: white;
+}
+
+#draftTable td
+{
+  vertical-align: top;
+}
+
+#draftTable tr:nth-child(odd) td
+{
+  background-color: #ccc;
+}
+
+  #draftTable tr:nth-child(odd) td:hover
+  {
+    background-color: #ccf;
+  }
+
+#draftTable tr:nth-child(even) td
+{
+  background-color: #aaa;
+}
+
+  #draftTable tr:nth-child(even) td:hover
+  {
+    background-color: #aaf;
+  }
+
+#draftTable td.disabled
+{
+  position: relative;
+  color: #666;
+  font-style: italic;
+  cursor: default;
+}
+
+#addDraftItem
+{
+  width: 100%;
+  background-color: #888;
+  color: #eee;
+  text-align: center;
+}
+
+  #addDraftItem:hover
+  {
+    background-color: #666;
+    color: white;
+  }
+
+.disabled .disabled-text
+{
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: inherit;
+  text-align: center;
+}
+
+#draftTable textarea, #draftTable input, #draftTable select
+{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 21px;
+  border: none;
+}
+
+#draftTable textarea
+{
+  height: 18px;
+  resize: vertical;
+}
+
+td.dragHandle
+{
+  text-align: center;
+  cursor: move;
+}
+
+#draftTable td.dragHandle.disabled
+{
+  font-style: normal !important;
+  cursor: default;
+}
+
+#draftTableHeaders #draftDragAll
+{
+  background-color: #f7f7f7;
+  color: #111;
+  text-align: center;
+  cursor: move;
+}
+
+  #draftTableHeaders #draftDragAll:hover
+  {
+    background-color: #e7e7ff;
+  }
+
+#itemControls
+{
+  display: block !important;
+  float: right;
+  margin: 0;
+  width: 100%;
+  font-size: 14px;
+}
+
+  #itemControls button
+  {
+    display: inline-block;
+    width: 15%;
+    text-align: center;
+  }
+
+#dragBox
+{
+  position: absolute;
+  z-index: 999;
+  margin: 0;
+  padding: 3px;
+  border: 1px solid black;
+  background-color: #eee;
+  color: black;
+  font-size: 12px;
+  cursor: move;
+  pointer-events: none;
+}
+
+#dragBox.error
+{
+  background-color: #c66;
+}
+
+input[type=checkbox][disabled]
+{
+  color: #ccc;
+  opacity: .8;
+}
+
+  input[type=checkbox][disabled] + label
+  {
+    color: #ccc;
+    opacity: .8;
+  }
+
+#miniwrap
+{
+  display: none;
+}
+
+#minimap
+{
+  position: relative;
+  float: right;
+  overflow: scroll;
+  margin: 10px;
+  padding: 0;
+  background-color: white;
+  width: 296px;
+  height: 296px;
+}
+
+  #minimap:hover
+  {
+    cursor: pointer;
+  }
+
+#minimapSelector
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 296px;
+  height: 296px;
+  box-sizing: border-box;
+  border: 2px solid #662D91;
+  border-radius: 1px;
+}
+
+#scaledDiv
+{
+  pointer-events: none;
+}
+
+  #scaledDiv *
+  {
+    overflow: hidden;
+  }
+
+.handle
+{
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: move;
+  cursor: -webkit-grab;
+  cursor: grab;
+}
+
+.ui-sortable-helper .handle
+{
+  cursor: move;
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+
+.parameter-effect .handle
+{
+  padding: 0 5px;
+}
+
+/* Parameters */
+#paramTabs > div > div > select
+{
+  width: auto;
+}
+
+/* This is the class for sections for property values and parameter effects */
+.section
+{
+    margin: 0 auto 15px;
+}
+/* This is the class for subsections for property values and parameter effects */
+.subsection
+{
+    margin-left: 15px;
+    margin-bottom: 15px;
+}
+
+.ui-tooltip-content
+{
+    font-size: 10pt;
+}
+
+/* Parameter Value Range Analysis */
+#parameterValueRanges {
+  padding: 1em 0;
+  width: 100%;
+}
+
+#parameterValueRanges > div
+{
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 1px;
+  padding-top: 1px;
+}
+
+#parameterValueRanges > div:last-child
+{
+  border-bottom-width: 0;
+}
+
+#parameterValueRanges span
+{
+  padding: 1px;
+  border-radius: 3px;
+}
+
+#parameterValueRanges > div > div {
+  float: right;
+}
+
+/* Evaluations */
+.evaluation-expression,
+.scale-expression,
+.expression {
+  box-sizing: border-box;
+  margin: 3x;
+  margin-right: 1px;
+  padding: 3px;
+  padding-right: 1px;
+  background: rgba(242, 212, 61, 0.2);
+  border: 1px solid rgba(166, 124, 65, 0.25);
+  border-radius: 3px;
+}
+
+.evaluation-expression {
+  display: block;
+}
+
+.scale-expression,
+.expression {
+  display: inline-block;
+}
+
+/* Player Suggestions */
+
+#playerSuggestions li {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 3px 0;
+  box-sizing: border-box;
+}
+
+#playerSuggestions li:last-of-type {
+  border-bottom-width: 0;
+}
+
+#playerSuggestions .label {
+  background: grey;
+  padding: 2px;
+  border-radius: 2px;
+  margin-right: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  font-size: 0.9em;
+}
+
+#playerSuggestions .label.note {
+  background: #36d936;
+}
+
+#playerSuggestions .label.edit {
+  background: #f2b63d;
+}
+
+#playerSuggestions .label.add {
+  background: #e57373;
+}
+
+#playerSuggestions .button {
+  margin-left: 10px;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.define-type {
+  width: 36px;
+  height: 36px;
+}
+
+.define-type:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.pick-from-gallery svg {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+
+.gallery {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.gallery-item {
+  padding: 10px;
+  border-radius: 2%;
+}
+
+.gallery-item.selected {
+  background-color: #8c9194;
+  color: white;
+}
+
+.gallery-item:hover {
+  cursor: pointer;
+  background-color: #bdc3c7;
+  color: white;
+}
+
+.gallery-item .name {
+  text-align: center;
+}
+
+.gallery-item .thumbnail {
+  width: 160px;
+  max-width: 160px;
+  border-radius: 2%;
+  background-color: rgb(50, 50, 50);
+  padding-top: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+@supports (grid-template-columns: repeat(auto-fill, minmax(10px, 1fr))) {
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-gap: 0.25em;
+  }
+
+  .gallery-item .thumbnail {
+    max-width: unset;
+    width: 100%;
+  }
+}
+
+.play-dialog button {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.markdown-tooltip {
+  position: relative;
+  display: none;
+  text-align: right;
+  height: 0;
+}
+
+.markdown-tooltip svg
+{
+  width: 10px;
+  height: 10px;
+  padding: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 3px;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
+  display: block;
+}
+
+#colorPicker {
+  z-index: 51;
+  animation: pop-in 0.20s ease-in-out 0s;
+  -webkit-filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.5));
+  filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.5));
+}
+
+@keyframes pop-in {
+  0% { transform: translate(-50%, -50%) scale(0.75); opacity: 0; }
+  50% { opacity: 1; }
+  75% { transform: translate(-50%, -50%) scale(1.025); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.segment:hover {
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.color {
+  border-style: outset;
+}
+
+#colorPicker .edit, #colorPicker .close {
+  pointer-events: all;
+}
+
+#colorPicker .edit:hover, #colorPicker .close:hover {
+  cursor: pointer;
+}
+
+.recordMicrophone {
+  width: 20px !important;
+  height: 20px !important;
+  float: right;
+  cursor: pointer;
+}
+
+.recordMicrophone:hover {
+  opacity: 0.5;
+}
+
+input.audioFileName {
+  float: right;
+  margin-top: 32px;
+  margin-right: 6px;
+}
+
+input.audioFileName:invalid {
+  box-shadow: 0px 0px 4px 0px rgb(240, 8, 8);
+}
+
+.recordingsContainer
+{
+  clear: both;
+  margin-top: 90px;
+}
+
+.recordingsContainer audio
+{
+  width: 90%;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.record {
+  border-radius: 100%;
+  height: 72px;
+  width: 72px;
+  position: relative;
+  float: left;
+  background: rgba(255, 255, 255, 0.75);
+  transition: 0.25s box-shadow ease-in-out, 0.20s top ease;
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.05);
+  position: relative;
+  cursor: pointer;
+  margin-left: 32px;
+  margin-top: 8px;
+}
+
+.record svg {
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -16px;
+  margin-left: -16px;
+  fill: rgba(0, 0, 0, 0.5);
+}
+
+.record .background {
+  border-radius: 100%;
+  height: 100%;
+  transform: scale(0);
+  background: rgba(49, 63, 73, 0.25)
+}
+
+.record .microphone,
+.record .play,
+.record .pause {
+  transition: 0.15s opacity ease;
+  opacity: 0;
+}
+
+.record .microphone {
+  opacity: 1;
+}
+
+.record:hover,
+.record:active {
+    box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
+    top: -1px;
+}
+
+.record:hover .microphone,
+.record:active .microphone {
+  opacity: 0;
+}
+.record:hover .play,
+.record:active .play {
+  opacity: 1;
+}
+
+.record.on {
+  background: #e53939;
+}
+
+.record:hover.on .microphone,
+.record:active.on .microphone {
+  opacity: 0;
+}
+
+.record:hover.on .play,
+.record:active.on .play {
+  opacity: 0;
+}
+
+.record:hover.on .pause,
+.record:active.on .pause {
+  opacity: 1;
+}
+
+.record.on svg {
+  fill: white;
+}
+
+.unsavedChanges::after {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 100%;
+  background: #e57373;
+  vertical-align: middle;
+}
+
+.saving.unsavedChanges::after {
+  animation: fade 1s infinite alternate;
+}
+
+@keyframes fade {
+  to { opacity: 0; }
+}
+
+.clicktag svg,
+.masterclicktag svg
+{
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  opacity: .75;
+  padding: 0;
+}
+
+#toolbar
+{
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#menus
+{
+  display: flex;
+  background-color: rgba(255, 255, 255, 0.25);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#menus > *
+{
+  flex: 0 1 auto;
+}
+
+#menus #scenarioNameTab
+{
+  /* Stretch element to available width */
+  flex: 1 0 auto;
+  align-self: center;
+}
+
+#menus .buttonGroup
+{
+  margin: 0;
+}
+
+#menus button
+{
+  height: auto;
+  text-align: left;
+}
+
+#menus button:hover,
+#menus button.dropped
+{
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Dropdown menu items */
+#menus .dropdown button
+{
+  display: block;
+}
+
+#menus .dropdown svg
+{
+  margin-right: 10px;
+}
+
+#menus .dropdownButton
+{
+  height: 32px;
+}
+
+.iconButton {
+  cursor: pointer;
+}
+
+.iconButton svg
+{
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  margin: 3px 5px;
+  vertical-align: middle;
+}
+
+.iconButton.add svg
+{
+  fill: #0080bf;
+}
+
+.iconButton.delete svg
+{
+  fill: #d92b2b;
+}
+
+.imgDiv svg
+{
+  width: 16px;
+  height: 16px;
+  fill: rgba(0, 0, 0, 0.85);
+  margin: 1px;
+  position: relative;
+}

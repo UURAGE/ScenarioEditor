@@ -15,7 +15,6 @@
   $styles = array(
       "css/stylesheet.css",
       "css/jsPlumbStyle.css",
-      "css/metadata.css",
       "css/vendor/jquery-ui/jquery-ui.min.css",
   );
   foreach ($styles as $style)

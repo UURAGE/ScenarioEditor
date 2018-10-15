@@ -1798,17 +1798,10 @@ var Main;
         var h = Math.max(40, nodeTextDiv[0].clientHeight);
         nodeHTML.height(h);
 
-        // Add the allowInterleaveNode class to the node for a graphical indication
-        if (node.allowInterleaveNode)
-            nodeHTML.addClass('allowInterleaveNode');
-        else
-            nodeHTML.removeClass('allowInterleaveNode');
-
-        // Add the endNode class to the node for a graphical indication
-        if(node.endNode)
-            nodeHTML.addClass("endNode");
-        else
-            nodeHTML.removeClass("endNode");
+        // Add classes to the node for a graphical indication
+        nodeHTML.toggleClass('allowInterleaveNode', node.allowInterleaveNode);
+        nodeHTML.toggleClass('allowDialogueEndNode', node.allowDialogueEndNode);
+        nodeHTML.toggleClass("endNode", node.endNode);
 
         Main.trees[node.parent].plumbInstance.revalidate(node.id);
     }

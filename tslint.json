@@ -1,0 +1,18 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "rules": {
+        "one-line": [
+            false,
+            "check-open-brace"
+        ],
+        "no-console": [
+            false
+        ],
+        "trailing-comma": [
+            false
+        ]
+    }
+}

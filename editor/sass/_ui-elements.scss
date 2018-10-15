@@ -1,0 +1,259 @@
+@charset "UTF-8";
+
+// © Utrecht University and DialogueTrainer
+
+button {
+    font-family: inherit;
+    img {
+        vertical-align: middle;
+    }
+    #properties &,
+    #sidebar & {
+        padding-right: 1px;
+        padding-left: 1px;
+        color: #666;
+        font-size: 16px;
+    }
+    #toolbar &,
+    #properties &,
+    #sidebar &,
+    #parameters &,
+    #evaluations &,
+    .enumeration-values-container & {
+        border: 0;
+        background: none;
+    }
+}
+
+kbd {
+    display: inline-block;
+    padding: 3px 5px;
+    line-height: 10px;
+    color: #444d56;
+    vertical-align: middle;
+    background-color: #fafbfc;
+    border: solid 1px #d1d5da;
+    border-bottom-color: #c6cbd1;
+    border-radius: 3px;
+    box-shadow: inset 0 -1px 0 #c6cbd1;
+}
+
+svg {
+    // Fixes SVG subpixel rendering in Firefox
+    transform: scale(1);
+    &.icon {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+textarea {
+    font-family: inherit;
+    resize: none;
+}
+
+a[data-disabled] {
+    text-decoration: line-through;
+}
+
+.noSelect {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.clickable:hover {
+    cursor: pointer;
+}
+
+.expander {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.removedParameter {
+    display: none;
+}
+
+#dragBox {
+    position: absolute;
+    z-index: 999;
+    margin: 0;
+    padding: 3px;
+    border: 1px solid black;
+    background-color: $col-dragbox;
+    color: black;
+    font-size: 12px;
+    cursor: move;
+    pointer-events: none;
+    &.error {
+        background-color: $col-dragbox-error;
+    }
+}
+
+input[type=checkbox][disabled] {
+    color: #ccc;
+    opacity: .8;
+    +label {
+        color: #ccc;
+        opacity: .8;
+    }
+}
+
+#tabDock {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #aaa;
+    background: linear-gradient(to bottom, #fafafa 0, #ffffff 100%);
+    div {
+        overflow: auto;
+        max-height: 250px;
+        background-color: inherit;
+    }
+    #closeTabDock {
+        position: absolute;
+        top: 2px;
+        right: 5px;
+        background-color: transparent;
+        cursor: pointer;
+    }
+}
+
+.ui-dialog-titlebar {
+    &.info {
+        background: $col-ui-title-info;
+        color: #{color-yiq($col-ui-title-info)};
+    }
+    &.warning {
+        background: $col-ui-title-warning;
+        color: #{color-yiq($col-ui-title-warning)};
+    }
+    &.error {
+        background: $col-ui-title-error;
+        color: #{color-yiq($col-ui-title-error)};
+    }
+}
+
+.ui-tabs {
+    padding: 0 !important;
+    border: 0;
+    .ui-tabs-nav {
+        position: relative;
+        padding: 3px;
+        list-style: none;
+        li {
+            position: relative;
+            float: left;
+            margin: 0 3px 0 0;
+            padding: 0;
+            border-bottom-width: 1px;
+        }
+        .ui-tabs-anchor {
+            padding-right: 0;
+            padding-left: 0;
+            outline: none;
+            text-align: center;
+        }
+    }
+}
+
+.ui-resizable-n {
+    height: 10px;
+}
+
+.ui-autocomplete {
+    max-height: 135px;
+    overflow-y: auto;
+    // prevent horizontal scrollbar
+    overflow-x: hidden;
+}
+
+.ui-tooltip-content {
+    font-size: 10pt;
+}
+
+tr.ui-sortable-helper {
+    display: table;
+}
+
+.markdown-tooltip {
+    position: relative;
+    display: none;
+    text-align: right;
+    height: 0;
+    svg {
+        width: 10px;
+        height: 10px;
+        padding: 5px;
+        border: 1px solid rgba(black, 0.25);
+        background: rgba(white, 0.95);
+        border-radius: 3px;
+        box-shadow: 0px 1px 2px rgba(black, 0.15);
+    }
+    textarea:focus+&,
+    input:focus+& {
+        display: block;
+    }
+}
+
+.enumeration-values-container {
+    li {
+        clear: both;
+    }
+    span,
+    input {
+        float: left;
+    }
+    button {
+        float: right;
+    }
+}
+
+#statement,
+#comment,
+#treeNameBox {
+    display: block;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.iconButton {
+    cursor: pointer;
+    svg {
+        width: 16px;
+        height: 16px;
+        fill: currentColor;
+        margin: 3px 5px;
+        vertical-align: middle;
+    }
+    &.add svg {
+        fill: $col-icon-button-add;
+    }
+    &.delete svg {
+        fill: $col-icon-button-delete;
+    }
+}
+
+// For reordering
+.handle {
+    @extend .noSelect;
+    cursor: move;
+    cursor: -webkit-grab;
+    cursor: grab;
+    .ui-sortable-helper & {
+        cursor: move;
+        cursor: -webkit-grabbing;
+        cursor: grabbing;
+    }
+    .parameter-effect & {
+        padding: 0 5px;
+    }
+}

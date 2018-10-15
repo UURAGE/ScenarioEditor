@@ -8,3 +8,4 @@
 /application/logs/*
 !/application/logs/index.html
 !/application/logs/.htaccess
+editor/sass/.sass-cache/

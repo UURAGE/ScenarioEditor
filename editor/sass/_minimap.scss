@@ -1,0 +1,39 @@
+@charset "UTF-8";
+
+// © Utrecht University and DialogueTrainer
+
+#miniwrap {
+    display: none;
+}
+
+#minimap {
+    position: relative;
+    float: right;
+    overflow: scroll;
+    margin: 10px;
+    padding: 0;
+    background-color: white;
+    width: 296px;
+    height: 296px;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+#minimapSelector {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 296px;
+    height: 296px;
+    box-sizing: border-box;
+    border: 2px solid darken($col-editor, 25%);
+    border-radius: 1px;
+}
+
+#scaledDiv {
+    pointer-events: none;
+    * {
+        overflow: hidden;
+    }
+}

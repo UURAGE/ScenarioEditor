@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+// © Utrecht University and DialogueTrainer
+
+$col-editor:                  #a345e5 !default;
+
+$col-menu-bar:                rgba(white, 0.25) !default;
+$col-toolbar:                 rgba(desaturate($col-editor, 50%), 0.05) !default;
+$col-toolbar-icons:           darken(desaturate($col-editor, 60%), 15%) !default;
+$col-sidebar:                 rgba(desaturate($col-editor, 50%), 0.075) !default;
+$col-ribbon:                  $col-editor !default;
+
+$col-node-player:             #1974c9 !default;
+$col-node-computer:           #CE192A !default;
+$col-node-situation:          #F37812 !default;
+$col-subject:                 #a345e5 !default;
+
+$col-allow-interleave:        #Bf5cd1 !default;
+$col-end-node:                #212121 !default;
+$col-open-response:           #34b982 !default;
+$col-allow-dialogue-end:      #33AACC !default;
+
+$col-positive:                #22aa33 !default;
+$col-warning:                 #F37812 !default;
+$col-negative:                #CE192A !default;
+$col-info:                    #0080bf !default;
+
+$col-unsaved-changes:         rgba($col-negative, 0.75) !default;
+
+$col-dragbox:                 #eee !default;
+$col-dragbox-error:           rgba($col-negative, 0.5) !default;
+
+$col-ui-title-info:           lighten($col-info, 25%) !default;
+$col-ui-title-warning:        lighten($col-warning, 25%) !default;
+$col-ui-title-error:          lighten($col-negative, 25%) !default;
+
+$col-icon-button-add:         $col-info !default;
+$col-icon-button-delete:      $col-negative !default;
+
+$col-expression-background:   #f2b63d !default;
+
+$col-text-dark:               black !default;
+$col-text-light:              white !default;

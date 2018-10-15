@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+// © Utrecht University and DialogueTrainer
+
+#validationReport {
+    >* {
+        margin: 20px 0;
+    }
+    #tabDock & {
+        position: relative;
+        display: none;
+        overflow: auto;
+        padding: 0 20px;
+        max-height: 200px;
+    }
+    table {
+        width: 100%;
+        border: 1px solid black;
+        border-collapse: collapse;
+        background-color: white;
+        table-layout: fixed;
+        td {
+            padding: 5px;
+            border: 1px solid black;
+        }
+        tr td {
+            &:nth-child(1) {
+                width: 15%;
+            }
+            &:nth-child(2) {
+                width: 85%;
+            }
+        }
+    }
+    .no-problems {
+        color: $col-positive;
+    }
+    .level-error {
+        color: $col-negative;
+    }
+    .level-warning {
+        color: $col-warning;
+    }
+    .level-info {
+        color: $col-info;
+    }
+}

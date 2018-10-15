@@ -1,0 +1,305 @@
+
+// These are the elements that are 100% width
+$inputSelectors: "input:not([type=checkbox]), input:not([type=radio]), input:not([type=range]), select, textarea";
+$noSelectors: "h1, h2, label, .d, th, button, ul li";
+$settingsWidth: 600px;
+$indexWidth: 150px;
+$indexPadding: 10px;
+$font-family: MyriadPro-Regular, "Myriad Pro", sans-serif;
+
+$color-warning: #F2B63D;
+$color-container: #fefefe;
+$color-accent: #662D91;
+
+$margin-items: .25em;
+
+#metadata {
+    width: $settingsWidth;
+    margin: 0 auto;
+    background: #fafafa;
+    font-family: $font-family;
+    color: #777;
+
+    display: flex;
+
+    .index {
+        flex: 0 1 auto;
+        width: $indexWidth;
+        align-self: flex-start;
+        padding-right: $indexPadding;
+        box-sizing: border-box;
+        position: fixed;
+        @supports (position: sticky)
+        {
+            position: sticky;
+            top: 0;
+        }
+
+        h1 {
+            opacity: .5;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+
+            a {
+                display: block;
+                text-decoration: none;
+                color: inherit;
+                padding: 7px 15px;
+                margin-bottom: 3px;
+
+                &:hover,
+                &.active {
+                    background-color: rgba($color-accent, 0.05);
+                    border-radius: 3px;
+                    color: black;
+                }
+            }
+        }
+    }
+
+    .content {
+        flex: 1 1 auto;
+        padding-left: $indexWidth + $indexPadding;
+        @supports (position: sticky)
+        {
+            padding-left: 0;
+        }
+
+        & > * {
+            margin-bottom: 10px;
+        }
+    }
+
+    #{$noSelectors} {
+        -moz-user-select: none;
+        user-select: none;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-size: 1rem;
+        padding-top: 2em;
+        padding-bottom: .5em;
+        margin: 0;
+    }
+
+    .category
+    {
+        // Nested items
+        .category {
+            h1, h2, h3, h4, h5, h6 {
+                margin-top: 1em;
+            }
+            .item {
+                padding: 10px 0;
+                border-bottom: 1px solid rgba(black, 0.05);
+            }
+
+            &.ui-tabs {
+                // Prevents double border on characters tabs
+                border: none;
+            }
+        }
+    }
+
+    // Containers on top level
+    & > .content > .category > .container,
+    & > .content > div:not(.category) > .category > .container {
+        background: $color-container;
+        border-radius: 3px;
+        border: 1px solid rgba(0, 0, 0, 0.25);
+        box-shadow: 3px 15px 50px rgba(black, 0.01), 1px 2px 5px rgba(black, 0.01);
+    }
+
+    .item {
+        border-bottom: 1px solid rgba(black, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+
+        &:last-child {
+            border-bottom: none !important;
+        }
+
+        &::after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        & > .itemLabel {
+            margin: $margin-items;
+        }
+
+        // Editor labelControlOrder
+
+        &.singleLineLabelContainer,
+        &.singleLineContainerLabel {
+            flex-direction: row;
+
+            & > * { width: 50%; }
+            & > *:nth-child(2) {
+                flex: 1 1 auto;
+                align-self: center;
+            }
+            & > *:first-child {
+                flex: 1 1 auto;
+            }
+        }
+
+        &.singleLineContainerLabel {
+            & > *:first-child {
+                order: 1;
+            }
+
+            input[type=checkbox]:nth-child(2) {
+                width: auto;
+                flex: 0 0 auto;
+                align-self: flex-start;
+                margin: $margin-items;
+            }
+        }
+
+        &.container {
+            flex-direction: column;
+            align-items: stretch;
+            & > *:first-child { display: none; }
+        }
+
+        &.twoLineLabelContainer,
+        &.twoLineContainerLabel {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        &.twoLineContainerLabel {
+            & > *:first-child { order: 1; }
+        }
+    }
+
+    .item, .category .category {
+        padding: 10px 10px;
+    }
+
+    table {
+        padding: 10px;
+        width: 100%;
+
+        th, td {
+            white-space: nowrap;
+            padding: 5px;
+            text-align: left;
+
+            &.fill {
+                width: 100%;
+            }
+        }
+
+        th {
+            font-size: 0.9em;
+            opacity: .5;
+        }
+
+        tr {
+            td {
+                border-bottom: 1px solid rgba(black, 0.05);
+
+                span {
+                    font-size: .75em;
+                    opacity: .5;
+                    font-style: italic;
+                    display: block;
+                }
+            }
+            &:last-of-type {
+                td {
+                    border-bottom-width: 0;
+                }
+            }
+        }
+    }
+
+    #{$inputSelectors} {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid rgba(black, 0.25);
+        border-radius: 3px;
+        padding: 5px;
+    }
+
+    input[type=checkbox] {
+        display: inline-block;
+        width: auto;
+        margin: 0 10px 0 5px;
+        -ms-transform: scale(1.5);
+        -webkit-transform: scale(1.5);
+        transform: scale(1.5);
+        margin-top: .1em;
+    }
+
+    select {
+        background-color: rgba(black, 0.01);
+    }
+
+    textarea {
+        resize: vertical;
+        font-family: $font-family;
+        min-height: 10rem;
+    }
+
+    label {
+        &::first-letter {
+            text-transform: uppercase;
+        }
+    }
+
+    .description {
+        display: block;
+        font-size: .8em;
+        opacity: .75;
+        margin-top: .5em;
+        margin-bottom: .25em;
+
+        &:empty {
+            display: none;
+        }
+    }
+
+    .inputgroup {
+        display: flex;
+
+        #{$inputSelectors} {
+            flex: 1 1 auto;
+            border-right-width: 0;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        button {
+            flex: 0 0 auto;
+
+            svg {
+                vertical-align: middle;
+            }
+        }
+    }
+}
+
+.alert {
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 5px;
+    font-size: 0.75em;
+
+    a {
+        color: inherit;
+    }
+
+    &.warning {
+        background-color: rgba($color-warning, .25);
+        border-color: darken($color-warning, 15%);
+        color: darken($color-warning, 25%);
+    }
+}

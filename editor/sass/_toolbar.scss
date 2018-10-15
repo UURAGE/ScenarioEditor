@@ -1,0 +1,299 @@
+@charset "UTF-8";
+
+// © Utrecht University and DialogueTrainer
+
+#logo {
+    width: 32px;
+    height: 32px;
+    padding: 8px;
+    box-sizing: border-box;
+    background: darken($col-editor, 25%);
+    transition: 0.5s background ease-out;
+    position: relative;
+    &:hover {
+        transition: 0.1s background ease-in-out;
+        background: $col-editor;
+    }
+    img {
+        fill: white;
+        width: 16px;
+        height: 16px;
+        transition: 0.5s top ease-out;
+    }
+}
+
+#languages {
+    align-self: center;
+    padding-right: 10px;
+    color: rgba(black, 0.25);
+}
+
+.buttonGroup {
+    display: inline-block;
+    margin: 5px 0px;
+    padding: 0;
+    height: 78px;
+    border-radius: 5px;
+    background-color: white;
+    vertical-align: top;
+    word-wrap: break-word;
+    &::after {
+        float: left;
+        width: 100%;
+        height: 7px;
+        background-color: rgba($col-editor, 0.2);
+        content: "";
+    }
+    &:hover::after {
+        background-color: rgba($col-editor, 0.25);
+    }
+}
+
+#toolbar {
+    margin: 0;
+    padding: 0;
+    background-color: $col-toolbar;
+    border-right: 1px solid rgba(darken($col-toolbar, 25%), 0.1);
+    .big-buttons {
+        float: left;
+        padding: 1px;
+        * {
+            margin: 0;
+        }
+        button {
+            min-width: 50px;
+        }
+        div {
+            margin: 0 1px;
+        }
+        img {
+            margin: auto;
+            margin-bottom: 5px;
+            width: 30px;
+            height: 30px;
+            display: block;
+        }
+        svg {
+            margin: auto;
+            margin-bottom: 5px;
+            width: 30px;
+            height: 30px;
+            display: block;
+            fill: $col-toolbar-icons;
+            width: 32px;
+            height: 32px;
+        }
+    }
+    button div {
+        margin: 3px;
+        font-weight: normal;
+        font-size: 12px;
+    }
+    :disabled {
+        outline: none;
+        border-color: transparent;
+        background-color: transparent;
+        color: black;
+        opacity: 0.3;
+        cursor: default !important;
+        &:hover {
+            outline: none;
+            border-color: transparent;
+            background-color: transparent;
+            color: black;
+            opacity: 0.3;
+            cursor: default !important;
+        }
+    }
+    #manual {
+        float: right;
+        overflow: hidden;
+        margin: 5px;
+        width: 25px;
+        height: 25px;
+        border-radius: 100%;
+        img,
+        div {
+            margin: 0;
+            padding: 0;
+            width: 25px;
+            height: 25px;
+        }
+    }
+    .separator {
+        margin: 5px 0;
+        padding: 0;
+        height: 1px;
+        background-color: rgba(black, 0.1);
+    }
+    #clipboard button {
+        cursor: help;
+    }
+    .dropdown {
+        margin-top: 0px;
+        width: auto;
+        height: auto;
+        border-radius: 0;
+        background-color: transparent;
+        button {
+            width: 100%;
+            padding: 2px 5px;
+        }
+        .dropdownItems {
+            display: none;
+            margin: 0;
+            padding: 1px;
+            height: auto;
+            box-shadow: 1px 2px 3px rgba(black, 0.5);
+            background: #fefefe;
+            border: 1px solid rgba(black, 0.25);
+            box-sizing: border-box;
+            position: absolute;
+            min-width: 150px;
+            z-index: 52;
+            width: auto;
+        }
+    }
+    #menus .dropdown .dropdownItems button {
+        padding: 5px 7px;
+    }
+    .small-buttons {
+        float: left;
+        padding: 1px;
+        * {
+            margin: 0;
+            padding: 2px;
+        }
+        button {
+            display: block;
+            height: 26px;
+            text-align: left;
+            margin: 1px 0;
+        }
+        img,
+        svg {
+            margin: 0 3px;
+            width: 16px;
+            height: 16px;
+            fill: rgba(black, 0.5);
+            vertical-align: middle;
+        }
+    }
+}
+
+#menus {
+    display: flex;
+    background-color: $col-menu-bar;
+    border-bottom: 1px solid rgba(black, 0.1);
+    >* {
+        flex: 0 1 auto;
+    }
+    #scenarioNameTab {
+        // Stretch element to available width
+        flex: 1 0 auto;
+        align-self: center;
+    }
+    svg {
+        margin: 0 3px;
+        width: 16px;
+        height: 16px;
+        fill: #777;
+        vertical-align: middle;
+    }
+    .buttonGroup {
+        margin: 0;
+        &::after {
+            display: none;
+        }
+    }
+    button {
+        height: auto;
+        text-align: left;
+        &:hover,
+        &.dropped {
+            background-color: rgba(black, 0.05);
+        }
+    }
+    .dropdown {
+        button {
+            display: block;
+        }
+        svg {
+            margin-right: 10px;
+        }
+    }
+    .dropdownButton {
+        height: 32px;
+    }
+}
+
+#toolbar,
+#menus {
+    svg use {
+        pointer-events: none;
+    }
+}
+
+#ribbon {
+    padding: 0 5px;
+    .buttonGroup {
+        // Conforms the ::after element to border radius
+        overflow: hidden;
+    }
+    button {
+        margin: 1px;
+        padding: 0;
+        height: 69px;
+        border-radius: 5px;
+        border: 1px solid transparent;
+        &:hover {
+            background-color: rgba($col-ribbon, 0.05);
+            border-color: rgba($col-ribbon, 0.25);
+            cursor: pointer;
+        }
+    }
+    .dropped {
+        background-color: rgba($col-ribbon, 0.05);
+        border-color: rgba($col-ribbon, 0.25);
+        cursor: pointer;
+    }
+    button.enabled {
+        background-color: rgba($col-ribbon, 0.25);
+    }
+}
+
+#scenarioNameTab {
+    margin: 0;
+    padding: 3px 0;
+    color: #666;
+    text-align: center;
+    font-size: 1.1em;
+    span {
+        margin: 3px 0;
+        padding: 5px;
+        min-width: 50px;
+        height: 1em;
+        color: #000;
+        &:hover {
+            background-color: #f8f8f8;
+            color: #101010;
+        }
+        input[type=text] {
+            height: 1em;
+            font: inherit;
+        }
+        &:empty {
+            padding: 3px 15px;
+        }
+    }
+}
+
+.unsavedChanges::after {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    background: $col-unsaved-changes;
+    vertical-align: middle;
+}

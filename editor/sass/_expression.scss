@@ -1,0 +1,71 @@
+@charset "UTF-8";
+
+// © Utrecht University and DialogueTrainer
+
+.evaluation-expression,
+.scale-expression,
+.expression {
+    display: block;
+    box-sizing: border-box;
+    margin: 3x;
+    margin-right: 1px;
+    padding: 3px;
+    padding-right: 1px;
+    background: rgba($col-expression-background, 0.2);
+    border: 1px solid rgba(darken($col-expression-background, 25%), 0.25);
+    border-radius: 3px;
+}
+
+.scale-expression,
+.expression {
+    display: inline-block;
+}
+
+.define-type {
+    width: 36px;
+    height: 36px;
+    &:hover {
+        opacity: 0.6;
+        cursor: pointer;
+    }
+}
+
+.groupConditionDiv {
+    margin: 0;
+    margin-left: 12px;
+    padding: 0;
+    padding-left: 10px;
+    border-left: 2px solid rgba(black, 0.10);
+    .when & {
+        border-left: 2px solid cornflowerblue;
+    }
+}
+
+.condition {
+    > {
+        button {
+            display: block;
+        }
+        .condition-test-container+button {
+            display: inline-block;
+        }
+        .emptyLabel,
+        .singleLabel,
+        .multipleLabel {
+            display: none;
+        }
+    }
+    &.empty>.emptyLabel,
+    &.single>.singleLabel,
+    &.multiple>.multipleLabel {
+        display: block;
+    }
+}
+
+.groupConditionRadioDiv {
+    display: none;
+}
+
+.condition.multiple>.groupConditionRadioDiv {
+    display: block;
+}

@@ -1,252 +1,170 @@
-/* © Utrecht University and DialogueTrainer */
-
 .w {
-	padding:0.5em 1em;
-	position:absolute;
-	border: 1px solid black;
-	z-index:4;
-	border-radius:0.5em;
-	opacity:0.8;
-	filter:alpha(opacity=80);
-	cursor:move;
-	background-color:white;
-	font-size:11px;
-	transition:background-color 0.15s ease-in, color 0.15s ease-in;
-	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05), 0px 1px 10px rgba(0, 0, 0, 0.05);
-}
+  padding: 0.5em 1em;
+  position: absolute;
+  border: 1px solid black;
+  z-index: 4;
+  border-radius: 0.5em;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+  cursor: move;
+  background-color: white;
+  font-size: 11px;
+  transition: background-color 0.15s ease-in, color 0.15s ease-in;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05), 0px 1px 10px rgba(0, 0, 0, 0.05); }
+  .w ul {
+    margin: 0;
+    padding: 0; }
+  .w.computer {
+    border: 3px solid #CE192A; }
+  .w.player {
+    border: 3px solid #1974c9; }
+  .w.situation {
+    border: 3px solid #F37812; }
+  .w.editing, .w.jtk-drag {
+    z-index: 5; }
+  .w .nodeContent {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding: .5em;
+    background: transparent; }
+  .w.selected, .w.ui-selected, .w:hover {
+    color: white; }
+  .w:hover.computer, .w.color-label.jtk-hover.computer, .w.jtk-source-hover.computer, .w.jtk-target-hover.computer {
+    background-color: #ef7883; }
+  .w:hover.player, .w.color-label.jtk-hover.player, .w.jtk-source-hover.player, .w.jtk-target-hover.player {
+    background-color: #74b3ee; }
+  .w:hover.situation, .w.color-label.jtk-hover.situation, .w.jtk-source-hover.situation, .w.jtk-target-hover.situation {
+    background-color: #f9bd8b; }
+  .w.treeContainer:hover {
+    background-color: #a345e5; }
+  .w.treeContainer.selected, .w.treeContainer.ui-selected {
+    background-color: #7d1bc2; }
+  .w.treeContainer.ui-selecting {
+    background-color: #7d1bc2; }
+  .w.ui-selecting.computer {
+    background-color: #f7bcc2; }
+  .w.ui-selecting.player {
+    background-color: #b8d8f6; }
+  .w.ui-selecting.situation {
+    background-color: #fde7d4; }
+  .w.selected.computer, .w.ui-selected.computer {
+    background-color: #e94a59; }
+  .w.selected.player, .w.ui-selected.player {
+    background-color: #469ae8; }
+  .w.selected.situation, .w.ui-selected.situation {
+    background-color: #f7a15b; }
+  .w.parentSelected.computer {
+    background-color: #fceaeb; }
+  .w.parentSelected.player {
+    background-color: #e5f1fc; }
+  .w.parentSelected.situation {
+    background-color: white; }
+  .w:not(.jtk-drag):not(.jtk-drag-active) > .ep {
+    position: absolute;
+    z-index: -1;
+    top: -10px;
+    bottom: -10px;
+    left: -10px;
+    right: -10px;
+    cursor: pointer;
+    transition: box-shadow 0.15s ease-in, color 0.15s ease-in;
+    border-radius: 10px; }
+    .w:not(.jtk-drag):not(.jtk-drag-active) > .ep:hover {
+      box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.15), 0px 1px 3px 0px rgba(0, 0, 0, 0.15); }
+      .w:not(.jtk-drag):not(.jtk-drag-active) > .ep:hover .anchor {
+        background-color: black;
+        transition: background-color 0.25s ease; }
+        .w:not(.jtk-drag):not(.jtk-drag-active) > .ep:hover .anchor::after {
+          opacity: .25;
+          transform: scale(5); }
+    .w:not(.jtk-drag):not(.jtk-drag-active) > .ep .anchor {
+      width: 4px;
+      height: 4px;
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      left: calc(100% - 10px);
+      top: 50%;
+      bottom: 50%;
+      right: auto;
+      background-color: transparent;
+      transition: background-color 0.25s ease, left 0s step-end 0.15s, top 0s step-end 0.15s, right 0s step-end 0.15s, bottom 0s step-end 0.15s; }
+      .w:not(.jtk-drag):not(.jtk-drag-active) > .ep .anchor::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: black;
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.25s ease, transform 0.25s ease; }
+  .w:not(.jtk-drag):not(.jtk-drag-active):not(.jtk-connected) > .ep > .anchor {
+    transition: background-color 0.25s ease, left 0.15s linear, top 0.15s linear, right 0.15s linear, bottom 0.15s linear;
+    background-color: rgba(0, 0, 0, 0.75); }
+  .w:not(.jtk-drag):not(.jtk-drag-active):not(.jtk-connected) > .ep:hover > .anchor {
+    transition: background-color 0.25s ease, left 0.15s linear, top 0.15s linear, right 0.15s linear, bottom 0.15s linear;
+    background-color: black; }
 
-.w ul {
-	margin: 0;
-	padding: 0;
-}
+.allowInterleaveNode:hover::before, .allowDialogueEndNode:hover::before, .endNode:hover::before, .openResponse:hover::before {
+  display: block;
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0; }
 
-.w.computer {
-	border:3px solid #C31339;
-}
+.allowInterleaveNode {
+  border-bottom-color: #9c31af !important;
+  border-left-color: #9c31af !important; }
+  .allowInterleaveNode:hover::before {
+    background: linear-gradient(-135deg, transparent 50%, #Bf5cd1 50%); }
 
-.w.player {
-	border:3px solid #1f71b8;
-}
+.allowDialogueEndNode {
+  border-bottom-color: #24778f !important;
+  border-left-color: #24778f !important; }
+  .allowDialogueEndNode:hover::before {
+    background: linear-gradient(-135deg, transparent 50%, #33AACC 50%); }
 
-.w.situation {
-    border:3px solid #F37812;
-}
+.endNode {
+  border-bottom-color: black !important;
+  border-left-color: black !important; }
+  .endNode:hover::before {
+    background: linear-gradient(-135deg, transparent 50%, #212121 50%); }
 
-.w.editing,
-.w.jtk-drag {
-	z-index: 5;
-}
+.openResponse {
+  border-bottom-color: #237d58 !important;
+  border-left-color: #237d58 !important; }
+  .openResponse:hover::before {
+    background: linear-gradient(-135deg, transparent 50%, #34b982 50%); }
 
-.allowInterleaveNode
-{
-	border-bottom-color:#8B4A94   !important;
-	border-left-color:#8B4A94   !important;
-}
-.allowInterleaveNode:hover
-{
-	background: #Bf5cd1;
-	background: linear-gradient(-135deg, #ff3333 50%, #Bf5cd1  50%);
-}
-.endNode
-{
-	border-bottom-color:#212121   !important;
-	border-left-color:#212121   !important;
-}
+.color-label.jtk-hover,
+.jtk-source-hover,
+.jtk-target-hover {
+  color: white; }
 
-.endNode:hover
-{
-	background: #212121;
-	background: linear-gradient(-135deg, #ff3333 50%, #212121  50%);
-}
-
-.openResponse:hover
-{
-	background: #34b982;
-	background: linear-gradient(-135deg, #1f71b8 50%, #34b982  50%);
-}
-
-.w .nodeContent {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 0;
-	padding: .5em;
-	background: transparent;
-}
-
-.w.selected, .w.ui-selected, .w.ui-selecting,
-.w:hover, .color-label.jtk-hover, .jtk-source-hover, .jtk-target-hover {
-	color: white;
-}
-
-.w.computer:hover,
-.w.computer.color-label.jtk-hover,
-.w.computer.jtk-source-hover,
-.w.computer.jtk-target-hover {
-	background-color:#ff3333;
-}
-
-.w.player:hover,
-.w.player.color-label.jtk-hover,
-.w.player.jtk-source-hover,
-.w.player.jtk-target-hover {
-	background-color:#3366ff;
-}
-
-.w.situation:hover,
-.w.situation.color-label.jtk-hover,
-.w.situation.jtk-source-hover,
-.w.situation.jtk-target-hover {
-	background-color:#F79923;
-}
-
-.w.treeContainer:hover{
-	background-color:#a345e5;
-}
-
-.w.treeContainer.selected, .w.treeContainer.ui-selected {
-	background-color:#662D91;
-}
-
-.w.treeContainer.ui-selecting {
-    background-color:#a345e5;
-}
-
-.w.computer.ui-selecting {
-	background-color:#ff3333;
-}
-
-.w.player.ui-selecting {
-	background-color:#3366ff;
-}
-
-.w.situation.ui-selecting {
-	background-color:#F79923;
-}
-
-.w.computer.selected, .w.computer.ui-selected {
-	background-color:rgba(255, 51, 51, 0.8);
-}
-
-.w.player.selected, .w.player.ui-selected {
-	background-color:rgba(51, 102, 255, 0.8);
-}
-
-.w.situation.selected, .w.situation.ui-selected {
-	background-color:rgba(247, 153, 35, 0.8);
-}
-
-.w.computer.parentSelected {
-	background-color:rgba(255, 51, 51, 0.31);
-}
-
-.w.player.parentSelected {
-	background-color:rgba(51, 102, 255, 0.31);
-}
-
-.w.situation.parentSelected {
-	background-color:rgba(247, 153, 35, 0.31);
-}
-
-#clone{
-	opacity:0.5;
-}
-
-.color-label {
-	transition:background-color 0.15s ease-in, color 0.15s ease-in;
-}
+#clone {
+  opacity: 0.5; }
 
 .color-label {
-	background-color:white;
-	opacity:0.8;
-	padding:0.3em;
-	border-radius:0.5em;
-	border:1px solid #346789;
-	cursor:pointer;
-}
-
-.w:not(.jtk-drag):not(.jtk-drag-active) > .ep {
-	position:absolute;
-	z-index: -1;
-	top: -10px;
-	bottom: -10px;
-	left: -10px;
-	right: -10px;
-	cursor: pointer;
-	transition: box-shadow 0.15s ease-in, color 0.15s ease-in;
-
-	border-radius: 10px;
-}
-
-.w:not(.jtk-drag):not(.jtk-drag-active) > .ep:hover {
-	box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.15), 0px 1px 3px 0px rgba(0, 0, 0, 0.15);
-}
-
-.w:not(.jtk-drag):not(.jtk-drag-active) > .ep .anchor {
-	width: 4px;
-	height: 4px;
-	position: absolute;
-	pointer-events: none;
-	border-radius: 50%;
-	left: calc(100% - 10px);
-	top: 50%;
-	bottom: 50%;
-	right: auto;
-	background-color: transparent;
-	transition: background-color 0.25s ease,
-				left 0s step-end 0.15s,
-				top 0s step-end 0.15s,
-				right 0s step-end 0.15s,
-				bottom 0s step-end 0.15s;
-}
-
-.w:not(.jtk-drag):not(.jtk-drag-active):not(.jtk-connected) > .ep > .anchor {
-	/* Only show anchor on not connected nodes */
-	transition: background-color 0.25s ease,
-				left 0.15s linear,
-				top 0.15s linear,
-				right 0.15s linear,
-				bottom 0.15s linear;
-	background-color: rgba(0, 0, 0, 0.75);
-}
-
-.w:not(.jtk-drag):not(.jtk-drag-active) > .ep .anchor::after {
-	content: "";
-	display: block;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	background-color: black;
-	border-radius: 50%;
-	opacity: 0;
-
-	transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.w:not(.jtk-drag):not(.jtk-drag-active):not(.jtk-connected) > .ep:hover .anchor {
-	transition: background-color 0.25s ease,
-				left 0.15s linear,
-				top 0.15s linear,
-				right 0.15s linear,
-				bottom 0.15s linear;
-	background-color: black;
-}
-
-.w:not(.jtk-drag):not(.jtk-drag-active) > .ep:hover .anchor {
-	background-color: black;
-	transition: background-color 0.25s ease;
-}
-
-.w:not(.jtk-drag):not(.jtk-drag-active) > .ep:hover .anchor::after {
-	opacity: .25;
-	transform: scale(5);
-}
+  transition: background-color 0.15s ease-in, color 0.15s ease-in;
+  background-color: white;
+  opacity: 0.8;
+  padding: 0.3em;
+  border-radius: 0.5em;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  cursor: pointer; }
 
 .jtk-endpoint {
-	z-index:3;
-}
+  z-index: 3; }
 
-.jtk-connector path { cursor:pointer; }
+.jtk-connector path {
+  cursor: pointer; }
+
+/*# sourceMappingURL=jsPlumbStyle.css.map */
