@@ -9,7 +9,7 @@ var PlumbGenerator;
     PlumbGenerator =
     {
         genJsPlumbInstance : genJsPlumbInstance,
-        defaultPaintStyle: { stroke: ColorPicker.defaultColor, strokeWidth: 2, outlineStroke: "transparent", outlineWidth: 2 },
+        defaultPaintStyle: { stroke: ColorPicker.defaultColor, strokeWidth: 2, outlineStroke: "transparent", outlineWidth: 1 },
         defaultHoverPaintStyle: { stroke: ColorPicker.defaultColor, strokeWidth: 2, outlineStroke: ColorPicker.defaultColor, outlineWidth: 1 },
         defaultSelectedPaintStyle : { stroke: ColorPicker.defaultColor, strokeWidth: 2, outlineStroke: ColorPicker.defaultColor, outlineWidth: 2 }
     };
