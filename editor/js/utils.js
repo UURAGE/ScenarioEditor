@@ -144,7 +144,7 @@ var Utils;
     function attachMarkdownTooltip(elem)
     {
         var tooltipIcon = $('<span>', { class: "markdown-tooltip" });
-        tooltipIcon.append($(Utils.sIcon('icon-markdown')));
+        tooltipIcon.append($('<span>').append($(Utils.sIcon('icon-markdown'))));
         tooltipIcon.tooltip(
         {
             items: ":hover",
