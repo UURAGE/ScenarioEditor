@@ -1099,7 +1099,7 @@ td.dragHandle {
           border-radius: 3px;
           color: black; }
   #metadata .content {
-    flex: 1 1 auto;
+    flex: 1 1 100%;
     padding-left: 160px; }
     @supports (position: sticky) {
       #metadata .content {
