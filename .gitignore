@@ -8,4 +8,6 @@
 /application/logs/*
 !/application/logs/index.html
 !/application/logs/.htaccess
-editor/sass/.sass-cache/
+
+.sass-cache/
+node_modules/
