@@ -1,4 +1,4 @@
-<img src="https://cdn.rawgit.com/UURAGE/ScenarioEditor/master/logo.svg" width="50%"/>
+<img src="https://raw.githubusercontent.com/UURAGE/ScenarioEditor/master/logo.svg?sanitize=true" width="50%"/>
 
 # Scenario Editor
 
