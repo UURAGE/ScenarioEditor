@@ -27,7 +27,6 @@ var Validator;
     function validate()
     {
         var validationReport = []; // an array of objects containing the errors found
-        //var unmarkedEndNodes = []; // nodes without children not marked as end node
 
         // First save the latest changes.
         Main.applyChanges(Main.selectedElement);
@@ -58,7 +57,6 @@ var Validator;
         var numberOfTreesOnLevels = getNumberOfTreesOnLevels(Main.trees);
         var highestLevel = numberOfTreesOnLevels.length - 1; // note that trees with a high level are low on the editor screen
         var highestLevelHasOneTree = numberOfTreesOnLevels[highestLevel] === 1;
-        var hasValidEnd = false; // if the highest level has an end node this becomes true
         var highestLevelHasEnd = false;
 
         $.each(Main.trees, function(treeID, tree)
@@ -102,39 +100,32 @@ var Validator;
                     }
                 }
 
-                if (node.endNode)
+                if (outgoingConnections.length > 0 && node.endNode)
                 {
-                    if (outgoingConnections.length > 0)
+                    validationReport.push(
                     {
-                        validationReport.push(
+                        message: i18next.t('validator:end_with_outgoing_connections', { postProcess: 'sprintf', sprintf: [tree.subject] }),
+                        level: 'error',
+                        jumpToFunction: function()
                         {
-                            message: i18next.t('validator:end_with_outgoing_connections', { postProcess: 'sprintf', sprintf: [tree.subject] }),
-                            level: 'error',
-                            jumpToFunction: function()
+                            Zoom.zoomIn(tree);
+                            Main.selectNode(nodeID);
+                            var nodeContainer = $("#" + nodeID);
+                            if (nodeContainer.length > 0)
                             {
-                                Zoom.zoomIn(tree);
-                                Main.selectNode(nodeID);
-                                var nodeContainer = $("#" + nodeID);
-                                if (nodeContainer.length > 0)
-                                {
-                                    nodeContainer[0].scrollIntoView(false);
-                                }
+                                nodeContainer[0].scrollIntoView(false);
                             }
-                        });
-                    }
-                    else if (isHighestLevel)
-                    {
-                        hasValidEnd = true;
-                    }
+                        }
+                    });
                 }
 
-                if (isHighestLevel && outgoingConnections.length === 0)
+                if (isHighestLevel)
                 {
                     if (node.endNode)
                     {
                         highestLevelHasEnd = true;
                     }
-                    else if (highestLevelHasOneTree)
+                    else if (outgoingConnections.length === 0 && highestLevelHasOneTree)
                     {
                         // node is a dead end, but not marked as end node
                         validationReport.push(
@@ -224,23 +215,25 @@ var Validator;
         if (!highestLevelHasEnd)
         {
             // no single iteration errors, but there is no valid end
-            validationReport.push(
+            if (numberOfTreesOnLevels.length === 1 && numberOfTreesOnLevels[0] === 1)
             {
-                message: i18next.t('validator:no_ending'),
-                level: 'error',
-                jumpToFunction: null
-            });
-        }
+                validationReport.push(
+                {
+                    message: i18next.t('validator:no_ending.single_subject'),
+                    level: 'error',
+                    jumpToFunction: null
+                });
 
-        if (!hasValidEnd)
-        {
-            // no single iteration errors, but there is no valid end
-            validationReport.push(
+            }
+            else
             {
-                message: i18next.t('validator:no_valid_ending'),
-                level: 'error',
-                jumpToFunction: null
-            });
+                validationReport.push(
+                {
+                    message: i18next.t('validator:no_ending.multiple_subjects'),
+                    level: 'error',
+                    jumpToFunction: null
+                });
+            }
         }
 
         return validationReport; // add highest level unmarked end nodes and return

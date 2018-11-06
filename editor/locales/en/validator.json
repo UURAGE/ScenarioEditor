@@ -4,11 +4,13 @@
     "empty_subject": "Subject \"%s\" is empty.",
     "subject_start_type_error": "Subject \"{{subject}}\" starts with a {{type, lowercase}} node. A subject must be started by the player.",
     "first_subject_start_type_error": "The first subject \"{{subject}}\" starts with nodes with different types. The types must be the same.",
-    "end_with_outgoing_connections": "Subject \"%s\" contains a node that is marked as an end with outgoing connections.",
-    "unmarked_end": "Subject \"%s\" contains an end node that has not been marked as such.",
+    "end_with_outgoing_connections": "Subject \"%s\" contains a node marked as an end that has outgoing connections.",
+    "unmarked_end": "Subject \"%s\" contains a node without outgoing connections that has not been marked as an end node.",
     "unnamed_subject": "There is an unnamed subject.",
     "first_layer_count": "The first layer must contain exactly one subject.",
-    "no_ending": "The last layer must have at least one marked ending.",
-    "no_valid_ending": "There is no valid marked ending.",
+    "no_ending": {
+        "single_subject": "At least one node must be marked as an end.",
+        "multiple_subjects": "The last layer must have at least one node marked as an end."
+    },
     "empty_scenario": "Scenario contains no subjects."
 }

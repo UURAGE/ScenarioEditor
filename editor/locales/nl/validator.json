@@ -4,11 +4,13 @@
     "empty_subject": "Onderwerp \"%s\" is leeg.",
     "subject_start_type_error": "Onderwerp \"{{subject}}\" begint met een {{type, lowercase}}knoop. De speler moet een onderwerp beginnen.",
     "first_subject_start_type_error": "Het eerste onderwerp \"{{subject}}\" begint met knopen van een verschillend type. Het type moet hetzelfde zijn.",
-    "end_outgoing_connections": "Onderwerp \"%s\" bevat een gemarkeerd einde dat nog uitgaande pijlen heeft.",
-    "unmarked_end": "Onderwerp \"%s\" bevat een einde dat niet is gemarkeerd als het einde van het gesprek.",
+    "end_with_outgoing_connections": "Onderwerp \"%s\" bevat een als einde gemarkeerde knoop die uitgaande pijlen heeft.",
+    "unmarked_end": "Onderwerp \"%s\" bevat een knoop zonder uitgaande pijlen die niet is gemarkeerd als het einde van het gesprek.",
     "unnamed_subject": "Er is een onderwerp zonder naam.",
     "first_layer_count": "De eerste laag moet precies 1 onderwerp bevatten.",
-    "no_ending": "De laatste laag van onderwerpen moet tenminste één gemarkeerd einde hebben.",
-    "no_valid_ending": "Er is geen valide einde gemarkeerd.",
+    "no_ending": {
+        "single_subject": "Er moet minstens één knoop als einde gemarkeerd zijn.",
+        "multiple_subjects": "In de laatste laag van onderwerpen moet er ten minste één knoop als einde gemarkeerd zijn."
+    },
     "empty_scenario": "Scenario bevat geen onderwerpen."
 }
