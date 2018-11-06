@@ -57,15 +57,106 @@ var Validator;
 
         var numberOfTreesOnLevels = getNumberOfTreesOnLevels(Main.trees);
         var highestLevel = numberOfTreesOnLevels.length - 1; // note that trees with a high level are low on the editor screen
+        var highestLevelHasOneTree = numberOfTreesOnLevels[highestLevel] === 1;
         var hasValidEnd = false; // if the highest level has an end node this becomes true
         var highestLevelHasEnd = false;
 
-        $.each(Main.trees, function(id, tree)
+        $.each(Main.trees, function(treeID, tree)
         {
-            // Check whether there is exactly one node without parents.
-            var startNodeIDs = Main.getStartNodeIDs(tree);
+            var isHighestLevel = tree.level === highestLevel;
+            var hasANode = false;
+            var startNodes = [];
 
-            if (startNodeIDs.length === 0)
+            $.each(tree.nodes, function(nodeIndex, nodeID)
+            {
+                if (!nodeID) return true;
+
+                hasANode = true;
+                var node = Main.nodes[nodeID];
+                var incomingConnections = tree.plumbInstance.getConnections({ target: nodeID });
+                var outgoingConnections = tree.plumbInstance.getConnections({ source: nodeID });
+
+                if (incomingConnections.length === 0)
+                {
+                    startNodes.push(node);
+
+                    // the tree on the first level can start with anything, but the trees following can only start with player nodes
+                    if (tree.level !== 0 && node.type !== Main.playerType)
+                    {
+                        validationReport.push(
+                        {
+                            message: i18next.t('validator:subject_start_type_error',
+                                { subject: tree.subject, type: i18next.t('common:' + Main.nodes[nodeID].type) }),
+                            level: 'error',
+                            jumpToFunction: function()
+                            {
+                                Zoom.zoomIn(tree);
+                                Main.selectNode(nodeID);
+                                var nodeContainer = $("#" + nodeID);
+                                if (nodeContainer.length > 0)
+                                {
+                                    nodeContainer[0].scrollIntoView(false);
+                                }
+                            }
+                        });
+                    }
+                }
+
+                if (node.endNode)
+                {
+                    if (outgoingConnections.length > 0)
+                    {
+                        validationReport.push(
+                        {
+                            message: i18next.t('validator:end_with_outgoing_connections', { postProcess: 'sprintf', sprintf: [tree.subject] }),
+                            level: 'error',
+                            jumpToFunction: function()
+                            {
+                                Zoom.zoomIn(tree);
+                                Main.selectNode(nodeID);
+                                var nodeContainer = $("#" + nodeID);
+                                if (nodeContainer.length > 0)
+                                {
+                                    nodeContainer[0].scrollIntoView(false);
+                                }
+                            }
+                        });
+                    }
+                    else if (isHighestLevel)
+                    {
+                        hasValidEnd = true;
+                    }
+                }
+
+                if (isHighestLevel && outgoingConnections.length === 0)
+                {
+                    if (node.endNode)
+                    {
+                        highestLevelHasEnd = true;
+                    }
+                    else if (highestLevelHasOneTree)
+                    {
+                        // node is a dead end, but not marked as end node
+                        validationReport.push(
+                        {
+                            message: i18next.t('validator:unmarked_end', { postProcess: 'sprintf', sprintf: [tree.subject] }),
+                            level: 'error',
+                            jumpToFunction: function()
+                            {
+                                Zoom.zoomIn(tree);
+                                Main.selectNode(nodeID);
+                                var nodeContainer = $("#" + nodeID);
+                                if (nodeContainer.length > 0)
+                                {
+                                    nodeContainer[0].scrollIntoView(false);
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+
+            if (!hasANode)
             {
                 validationReport.push(
                 {
@@ -73,127 +164,6 @@ var Validator;
                     level: 'error',
                     jumpToFunction: function() { Zoom.zoomIn(tree); }
                 });
-            }
-            else
-            {
-                var firstStartNodeType = Main.nodes[startNodeIDs[0]].type;
-                $.each(startNodeIDs, function(index, startNodeID)
-                {
-                    // the tree on the first level can start with anything, but the trees following can only start with player nodes
-                    if (tree.level !== 0 && Main.nodes[startNodeID].type !== Main.playerType)
-                    {
-                        validationReport.push(
-                        {
-                            message: i18next.t('validator:subject_start_type_error',
-                                { subject: tree.subject, type: i18next.t('common:' + Main.nodes[startNodeID].type) }),
-                            level: 'error',
-                            jumpToFunction: function()
-                            {
-                                Zoom.zoomIn(tree);
-                                Main.selectNode(startNodeID);
-                                var nodeContainer = $("#" + startNodeID);
-                                if (nodeContainer.length > 0)
-                                {
-                                    nodeContainer[0].scrollIntoView(false);
-                                }
-                            }
-                        });
-                    }
-
-                    if (tree.level === 0 && Main.nodes[startNodeID].type !== firstStartNodeType)
-                    {
-                        validationReport.push(
-                        {
-                            message: i18next.t('validator:first_subject_start_type_error', { subject: tree.subject }),
-                            level: 'error',
-                            jumpToFunction: function()
-                            {
-                                Zoom.zoomIn(tree);
-                                Main.selectNode(startNodeID);
-                                var nodeContainer = $("#" + startNodeID);
-                                if (nodeContainer.length > 0)
-                                {
-                                    nodeContainer[0].scrollIntoView(false);
-                                }
-                            }
-                        });
-                    }
-                });
-            }
-
-            // gets all nodes marked as end node
-            var markedEnds = findAllMarkedEnds(tree);
-
-            $.each(markedEnds, function(index, nodeID)
-            {
-                var connections = tree.plumbInstance.getConnections({ source: nodeID });
-                if (connections.length > 0)
-                {
-                    validationReport.push(
-                    {
-                        message: i18next.t('validator:end_with_outgoing_connections', { postProcess: 'sprintf', sprintf: [tree.subject] }),
-                        level: 'error',
-                        jumpToFunction: function()
-                        {
-                            Zoom.zoomIn(tree);
-                            Main.selectNode(nodeID);
-                            var nodeContainer = $("#" + nodeID);
-                            if (nodeContainer.length > 0)
-                            {
-                                nodeContainer[0].scrollIntoView(false);
-                            }
-                        }
-                    });
-                }
-                else if (tree.level === highestLevel)
-                {
-                    hasValidEnd = true;
-                }
-            });
-
-            if (tree.level === highestLevel)
-            {
-                // gets all nodes without children from the tree
-                var deadEnds = findAllDeadEnds(tree);
-
-                if (numberOfTreesOnLevels[tree.level] === 1)
-                {
-                    $.each(deadEnds, function(index, nodeID)
-                    {
-                        if (markedEnds.indexOf(nodeID) === -1)
-                        { // node is a dead end, but not marked as end node
-                            validationReport.push(
-                            {
-                                message: i18next.t('validator:unmarked_end', { postProcess: 'sprintf', sprintf: [tree.subject] }),
-                                level: 'error',
-                                jumpToFunction: function()
-                                {
-                                    Zoom.zoomIn(tree);
-                                    Main.selectNode(nodeID);
-                                    var nodeContainer = $("#" + nodeID);
-                                    if (nodeContainer.length > 0)
-                                    {
-                                        nodeContainer[0].scrollIntoView(false);
-                                    }
-                                }
-                            });
-                        }
-                        else
-                        {
-                            highestLevelHasEnd = true;
-                        }
-                    });
-                }
-                else
-                {
-                    $.each(deadEnds, function(index, nodeID)
-                    {
-                        if (markedEnds.indexOf(nodeID) !== -1)
-                        {
-                            highestLevelHasEnd = true;
-                        }
-                    });
-                }
             }
 
             if (tree.subject === "")
@@ -210,9 +180,38 @@ var Validator;
                     }
                 });
             }
+
+            if (tree.level === 0)
+            {
+                var startNodeTypes = {};
+
+                $.each(startNodes, function(nodeIndex, node)
+                {
+                    startNodeTypes[node.type] = true;
+                });
+
+                if (Object.keys(startNodeTypes).length > 1)
+                {
+                    validationReport.push(
+                    {
+                        message: i18next.t('validator:first_subject_start_type_error', { subject: tree.subject }),
+                        level: 'error',
+                        jumpToFunction: function()
+                        {
+                            Zoom.zoomIn(tree);
+                            Main.selectElements(startNodes.map(function(node) { return node.id; }));
+                            var firstNodeContainer = $("#" + startNodes[0].id);
+                            if (firstNodeContainer.length > 0)
+                            {
+                                firstNodeContainer[0].scrollIntoView(false);
+                            }
+                        }
+                    });
+                }
+            }
         });
 
-        if(numberOfTreesOnLevels[0] !== 1)
+        if (numberOfTreesOnLevels[0] !== 1)
         {
             validationReport.push(
             {
@@ -222,8 +221,9 @@ var Validator;
             });
         }
 
-        if(!highestLevelHasEnd)
-        { // no single iteration errors, but there is no valid end
+        if (!highestLevelHasEnd)
+        {
+            // no single iteration errors, but there is no valid end
             validationReport.push(
             {
                 message: i18next.t('validator:no_ending'),
@@ -232,8 +232,9 @@ var Validator;
             });
         }
 
-        if(!hasValidEnd)
-        { // no single iteration errors, but there is no valid end
+        if (!hasValidEnd)
+        {
+            // no single iteration errors, but there is no valid end
             validationReport.push(
             {
                 message: i18next.t('validator:no_valid_ending'),
@@ -243,42 +244,6 @@ var Validator;
         }
 
         return validationReport; // add highest level unmarked end nodes and return
-    }
-
-
-
-    function findAllDeadEnds(tree)
-    { // finds all nodes without children
-        var result = [];
-
-        $.each(tree.nodes, function(index, nodeID) {
-            if(!nodeID) {
-                return true;
-            }
-
-            var connections = tree.plumbInstance.getConnections({ source: nodeID });
-            if(connections.length === 0) {
-                result.push(nodeID);
-            }
-        });
-
-        return result;
-    }
-
-    function findAllMarkedEnds(tree)
-    { // find all nodes that are marked as end
-        var result = [];
-        $.each(tree.nodes, function(index, nodeID) {
-            if(!nodeID) {
-                return true;
-            }
-
-            if(Main.nodes[nodeID].endNode) {
-                result.push(nodeID);
-            }
-        });
-
-        return result;
     }
 
     function getNumberOfTreesOnLevels(trees)
