@@ -95,7 +95,7 @@
 </head>
 
 <body>
-  <?php echo file_get_contents(editor_url("svg/icons.svg")); ?>
+  <?php echo file_get_contents(editor_path("svg/icons.svg")); ?>
   <div id="wrap">
     <div id="wrapRow">
       <div id="wrapLeft">
