@@ -67,6 +67,10 @@ a[data-disabled] {
     cursor: pointer;
 }
 
+a.clickable {
+    text-decoration: underline;
+}
+
 .expander {
     position: absolute;
     width: 1px;

@@ -1,16 +1,16 @@
 {
     "no_problems": "Geen problemen gevonden!",
-    "no_name": "Het scenario heeft geen naam.",
-    "empty_subject": "Onderwerp \"%s\" is leeg.",
-    "subject_start_type_error": "Onderwerp \"{{subject}}\" begint met een {{type, lowercase}}knoop. De speler moet een onderwerp beginnen.",
-    "first_subject_start_type_error": "Het eerste onderwerp \"{{subject}}\" begint met knopen van een verschillend type. Het type moet hetzelfde zijn.",
-    "end_with_outgoing_connections": "Onderwerp \"%s\" bevat een als einde gemarkeerde knoop die uitgaande pijlen heeft.",
-    "unmarked_end": "Onderwerp \"%s\" bevat een knoop zonder uitgaande pijlen die niet is gemarkeerd als het einde van het gesprek.",
-    "unnamed_subject": "Er is een onderwerp zonder naam.",
-    "first_layer_count": "De eerste laag moet precies 1 onderwerp bevatten.",
+    "no_name": "Het scenario heeft geen <a>naam</a>.",
+    "empty_subject": "<a>Onderwerp \"{{subject}}\"</a> is leeg.",
+    "subject_start_type_error": "<a>Onderwerp \"{{subject}}\"</a> begint met <a>een {{type, lowercase}}knoop</a>. De speler moet een onderwerp beginnen.",
+    "first_subject_start_type_error": "<a>Het eerste onderwerp \"{{subject}}\"</a> begint met <a>knopen van een verschillend type</a>. Het type moet hetzelfde zijn.",
+    "end_with_outgoing_connections": "<a>Onderwerp \"{{subject}}\"</a> bevat <a>een als einde gemarkeerde knoop</a> die uitgaande pijlen heeft</a>.",
+    "unmarked_end": "<a>Onderwerp \"{{subject}}\"</a> bevat <a>een knoop zonder uitgaande pijlen</a> die niet is gemarkeerd als het einde van het gesprek.",
+    "unnamed_subject": "Er is <a>een onderwerp zonder naam</a>.",
+    "first_layer_count": "<a>De eerste laag</a> moet precies 1 onderwerp bevatten.",
     "no_ending": {
         "single_subject": "Er moet minstens één knoop als einde gemarkeerd zijn.",
-        "multiple_subjects": "In de laatste laag van onderwerpen moet er ten minste één knoop als einde gemarkeerd zijn."
+        "multiple_subjects": "In <a>de laatste laag van onderwerpen</a> moet er ten minste één knoop als einde gemarkeerd zijn."
     },
     "empty_scenario": "Scenario bevat geen onderwerpen."
 }

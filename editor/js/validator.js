@@ -37,10 +37,13 @@ var Validator;
             {
                 message: i18next.t('validator:no_name'),
                 level: 'warning',
-                jumpToFunction: function() {
-                    Metadata.dialog();
-                    $('#scenarioName').focus();
-                }
+                jumpToFunctions:
+                [
+                    function() {
+                        Metadata.dialog();
+                        $('#scenarioName').focus();
+                    }
+                ]
             });
         }
 
@@ -50,7 +53,7 @@ var Validator;
             {
                 message: i18next.t('validator:empty_scenario'),
                 level: 'error',
-                jumpToFunction: null
+                jumpToFunctions: []
             });
         }
 
@@ -86,7 +89,34 @@ var Validator;
                             message: i18next.t('validator:subject_start_type_error',
                                 { subject: tree.subject, type: i18next.t('common:' + Main.nodes[nodeID].type) }),
                             level: 'error',
-                            jumpToFunction: function()
+                            jumpToFunctions:
+                            [
+                                function() { Zoom.zoomIn(tree); },
+                                function()
+                                {
+                                    Zoom.zoomIn(tree);
+                                    Main.selectNode(nodeID);
+                                    var nodeContainer = $("#" + nodeID);
+                                    if (nodeContainer.length > 0)
+                                    {
+                                        nodeContainer[0].scrollIntoView(false);
+                                    }
+                                }
+                            ]
+                        });
+                    }
+                }
+
+                if (outgoingConnections.length > 0 && node.endNode)
+                {
+                    validationReport.push(
+                    {
+                        message: i18next.t('validator:end_with_outgoing_connections', { subject: tree.subject }),
+                        level: 'error',
+                        jumpToFunctions:
+                        [
+                            function() { Zoom.zoomIn(tree); },
+                            function()
                             {
                                 Zoom.zoomIn(tree);
                                 Main.selectNode(nodeID);
@@ -96,26 +126,7 @@ var Validator;
                                     nodeContainer[0].scrollIntoView(false);
                                 }
                             }
-                        });
-                    }
-                }
-
-                if (outgoingConnections.length > 0 && node.endNode)
-                {
-                    validationReport.push(
-                    {
-                        message: i18next.t('validator:end_with_outgoing_connections', { postProcess: 'sprintf', sprintf: [tree.subject] }),
-                        level: 'error',
-                        jumpToFunction: function()
-                        {
-                            Zoom.zoomIn(tree);
-                            Main.selectNode(nodeID);
-                            var nodeContainer = $("#" + nodeID);
-                            if (nodeContainer.length > 0)
-                            {
-                                nodeContainer[0].scrollIntoView(false);
-                            }
-                        }
+                        ]
                     });
                 }
 
@@ -130,18 +141,22 @@ var Validator;
                         // node is a dead end, but not marked as end node
                         validationReport.push(
                         {
-                            message: i18next.t('validator:unmarked_end', { postProcess: 'sprintf', sprintf: [tree.subject] }),
+                            message: i18next.t('validator:unmarked_end', { subject: tree.subject }),
                             level: 'error',
-                            jumpToFunction: function()
-                            {
-                                Zoom.zoomIn(tree);
-                                Main.selectNode(nodeID);
-                                var nodeContainer = $("#" + nodeID);
-                                if (nodeContainer.length > 0)
+                            jumpToFunctions:
+                            [
+                                function() { Zoom.zoomIn(tree); },
+                                function()
                                 {
-                                    nodeContainer[0].scrollIntoView(false);
+                                    Zoom.zoomIn(tree);
+                                    Main.selectNode(nodeID);
+                                    var nodeContainer = $("#" + nodeID);
+                                    if (nodeContainer.length > 0)
+                                    {
+                                        nodeContainer[0].scrollIntoView(false);
+                                    }
                                 }
-                            }
+                            ]
                         });
                     }
                 }
@@ -151,9 +166,9 @@ var Validator;
             {
                 validationReport.push(
                 {
-                    message: i18next.t('validator:empty_subject', { postProcess: 'sprintf', sprintf: [tree.subject] }),
+                    message: i18next.t('validator:empty_subject', { subject: tree.subject }),
                     level: 'error',
-                    jumpToFunction: function() { Zoom.zoomIn(tree); }
+                    jumpToFunctions: [ function() { Zoom.zoomIn(tree); } ]
                 });
             }
 
@@ -163,40 +178,60 @@ var Validator;
                 {
                     message: i18next.t('validator:unnamed_subject'),
                     level: 'info',
-                    jumpToFunction: function()
-                    {
-                        Zoom.zoomOut();
-                        Main.selectElement(tree.id);
-                        Main.triggerSubjectNameInput(tree.id, false);
-                    }
+                    jumpToFunctions:
+                    [
+                        function()
+                        {
+                            Zoom.zoomOut();
+                            Main.selectElement(tree.id);
+                            Main.triggerSubjectNameInput(tree.id, false);
+                        }
+                    ]
                 });
             }
 
             if (tree.level === 0)
             {
-                var startNodeTypes = {};
+                var startNodesByType = {};
 
                 $.each(startNodes, function(nodeIndex, node)
                 {
-                    startNodeTypes[node.type] = true;
+                    if (!startNodesByType[node.type]) startNodesByType[node.type] = [];
+                    startNodesByType[node.type].push(node);
                 });
 
-                if (Object.keys(startNodeTypes).length > 1)
+                var startNodeTypes = Object.keys(startNodesByType);
+
+                if (startNodeTypes.length > 1)
                 {
                     validationReport.push(
                     {
-                        message: i18next.t('validator:first_subject_start_type_error', { subject: tree.subject }),
-                        level: 'error',
-                        jumpToFunction: function()
+                        message: i18next.t('validator:first_subject_start_type_error',
                         {
-                            Zoom.zoomIn(tree);
-                            Main.selectElements(startNodes.map(function(node) { return node.id; }));
-                            var firstNodeContainer = $("#" + startNodes[0].id);
-                            if (firstNodeContainer.length > 0)
+                            subject: tree.subject,
+                            nodes: startNodeTypes
+                                .map(function(nodeType)
+                                {
+                                    return '<a>' + i18next.t('common:' + nodeType).toLowerCase() + '</a>';
+                                })
+                                .join(', ')
+                        }),
+                        level: 'error',
+                        jumpToFunctions: [function() { Zoom.zoomIn(tree); }]
+                            .concat($.map(startNodesByType, function(startNodes)
                             {
-                                firstNodeContainer[0].scrollIntoView(false);
-                            }
-                        }
+                                return function()
+                                {
+                                    Zoom.zoomIn(tree);
+                                    Main.selectElements(startNodes.map(function(node) { return node.id; }));
+                                    var firstNodeContainer = $("#" + startNodes[0].id);
+                                    if (firstNodeContainer.length > 0)
+                                    {
+                                        firstNodeContainer[0].scrollIntoView(false);
+                                    }
+                                };
+                            })
+                        )
                     });
                 }
             }
@@ -208,7 +243,17 @@ var Validator;
             {
                 message: i18next.t('validator:first_layer_count'),
                 level: 'error',
-                jumpToFunction: null
+                jumpToFunctions:
+                [
+                    function()
+                    {
+                        Zoom.zoomOut();
+                        Main.selectElements(Object.keys(Main.trees).filter(function(treeID)
+                        {
+                            return Main.trees[treeID].level === 0;
+                        }));
+                    }
+                ]
             });
         }
 
@@ -221,7 +266,7 @@ var Validator;
                 {
                     message: i18next.t('validator:no_ending.single_subject'),
                     level: 'error',
-                    jumpToFunction: null
+                    jumpToFunctions: []
                 });
 
             }
@@ -231,7 +276,17 @@ var Validator;
                 {
                     message: i18next.t('validator:no_ending.multiple_subjects'),
                     level: 'error',
-                    jumpToFunction: null
+                    jumpToFunctions:
+                    [
+                        function()
+                        {
+                            Zoom.zoomOut();
+                            Main.selectElements(Object.keys(Main.trees).filter(function(treeID)
+                            {
+                                return Main.trees[treeID].level === highestLevel;
+                            }));
+                        }
+                    ]
                 });
             }
         }
@@ -271,12 +326,19 @@ var Validator;
         else
         {
             var table = $('<table>');
-            $.each(errors, function(index, e)
+            $.each(errors, function(_, e)
             {
                 var row = $('<tr>').addClass('level-' + e.level);
                 var error = $('<td>').text(i18next.t('common:' + e.level));
-                var message = $('<td>').text(e.message);
-                if (e.jumpToFunction) message.on('click', e.jumpToFunction).addClass('clickable');
+                var message = $('<td>').html(e.message);
+                message.find('a').each(function(index, linkEl)
+                {
+                    $(linkEl).addClass('clickable').on('click', function()
+                    {
+                        e.jumpToFunctions[index]();
+                        return false;
+                    });
+                });
                 row.append(error).append(message);
                 table.append(row);
             });
