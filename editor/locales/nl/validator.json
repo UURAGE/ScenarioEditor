@@ -6,6 +6,13 @@
     "first_subject_start_type_error": "<a>Het eerste onderwerp \"{{subject}}\"</a> begint met <a>knopen van een verschillend type</a>. Het type moet hetzelfde zijn.",
     "end_with_outgoing_connections": "<a>Onderwerp \"{{subject}}\"</a> bevat <a>een als einde gemarkeerde knoop</a> die uitgaande pijlen heeft</a>.",
     "unmarked_end": "<a>Onderwerp \"{{subject}}\"</a> bevat <a>een knoop zonder uitgaande pijlen</a> die niet is gemarkeerd als het einde van het gesprek.",
+    "special_node_child_type": "<a>Onderwerp \"{{subject}}\"</a> bevat <a>een knoop met {{properties}}</a> met <a>kinderen die geen spelersknopen zijn</a>.",
+    "special_node":
+    {
+        "allowInterleaveNode": "\"Verander van onderwerp\"",
+        "allowDialogueEndNode": "\"Vroegtijdig einde onderwerp\""
+    },
+    "and": " en ",
     "unnamed_subject": "Er is <a>een onderwerp zonder naam</a>.",
     "first_layer_count": "<a>De eerste laag</a> moet precies 1 onderwerp bevatten.",
     "no_ending": {

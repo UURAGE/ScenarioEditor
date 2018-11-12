@@ -160,6 +160,55 @@ var Validator;
                         });
                     }
                 }
+
+                if (node.allowInterleaveNode || node.allowDialogueEndNode)
+                {
+                    var badChildIDs = outgoingConnections
+                        .map(function(connection) { return connection.targetId; })
+                        .filter(function(childID) { return Main.nodes[childID].type !== Main.playerType; });
+                    if (badChildIDs.length !== 0)
+                    {
+                        var specialProperties = ['allowInterleaveNode', 'allowDialogueEndNode']
+                            .filter(function(specialProperty) { return node[specialProperty]; })
+                            .map(function(specialProperty)
+                            {
+                                return i18next.t('validator:special_node.' + specialProperty);
+                            });
+                        validationReport.push(
+                        {
+                            message: i18next.t('validator:special_node_child_type',
+                            {
+                                subject: tree.subject,
+                                properties: specialProperties.join(i18next.t('validator:and'))
+                            }),
+                            level: 'error',
+                            jumpToFunctions:
+                            [
+                                function() { Zoom.zoomIn(tree); },
+                                function()
+                                {
+                                    Zoom.zoomIn(tree);
+                                    Main.selectNode(nodeID);
+                                    var nodeContainer = $("#" + nodeID);
+                                    if (nodeContainer.length > 0)
+                                    {
+                                        nodeContainer[0].scrollIntoView(false);
+                                    }
+                                },
+                                function()
+                                {
+                                    Zoom.zoomIn(tree);
+                                    Main.selectElements(badChildIDs);
+                                    var firstNodeContainer = $("#" + badChildIDs[0]);
+                                    if (firstNodeContainer.length > 0)
+                                    {
+                                        firstNodeContainer[0].scrollIntoView(false);
+                                    }
+                                }
+                            ]
+                        });
+                    }
+                }
             });
 
             if (!hasANode)

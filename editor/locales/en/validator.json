@@ -6,6 +6,13 @@
     "first_subject_start_type_error": "<a>The first subject \"{{subject}}\"</a> starts with nodes with different types ({{-nodes}}). The types must be the same.",
     "end_with_outgoing_connections": "<a>Subject \"{{subject}}\"</a> contains <a>a node marked as an end</a> that has outgoing connections.",
     "unmarked_end": "<a>Subject \"{{subject}}\"</a> contains <a>a node without outgoing connections</a> that has not been marked as an end node.",
+    "special_node_child_type": "<a>Subject \"{{subject}}\"</a> contains <a>a node with {{properties}}</a> with <a>non-player children</a>.",
+    "special_node":
+    {
+        "allowInterleaveNode": "\"Jump to other subject\"",
+        "allowDialogueEndNode": "\"Early end of subject\""
+    },
+    "and": " and ",
     "unnamed_subject": "There is <a>an unnamed subject</a>.",
     "first_layer_count": "<a>The first layer</a> must contain exactly one subject.",
     "no_ending": {
