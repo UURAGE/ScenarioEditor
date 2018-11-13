@@ -15,33 +15,78 @@
     }
     table {
         width: 100%;
-        border: 1px solid black;
         border-collapse: collapse;
-        background-color: white;
-        table-layout: fixed;
+        tr {
+            border-bottom: 1px solid rgba(black, .05);
+            box-sizing: content-box;
+            &:last-of-type {
+                border-bottom: none;
+                margin-bottom: 0;
+            }
+        }
         td {
             padding: 5px;
-            border: 1px solid black;
+            box-sizing: content-box;
         }
         tr td {
+            vertical-align: baseline;
             &:nth-child(1) {
-                width: 15%;
+                white-space: nowrap;
+                width: 1%;
+                text-align: right;
             }
             &:nth-child(2) {
-                width: 85%;
+                width: 100%;
             }
         }
     }
+    .badge {
+        display: inline-block;
+        padding: 5px 7px;
+        border-radius: 3px;
+        color: white;
+        font-size: .9em;
+        font-weight: 400;
+        box-shadow: 0px 2px 1px rgba(black, 0.05);
+    }
+    a {
+        display: inline-block;
+        text-decoration: none;
+        border: 1px solid black;
+        border-radius: 3px;
+        padding: 2px 5px;
+        &::after {
+            content: '↗';
+            margin-left: 5px;
+            font-weight: bold;
+            opacity: .75;
+        }
+        &:hover {
+            &::after {
+                opacity: 1;
+            }
+        }
+    }
+    @mixin validation-cell($sel, $color) {
+        #{$sel} {
+            a {
+                color: darken($color, 15%);
+                background-color: rgba($color, .05);
+                border-color: rgba($color, .1);
+                &:hover {
+                    background-color: rgba($color, .01);
+                    border-color: rgba($color, .5);
+                }
+            }
+            .badge {
+                background-color: $color;
+            }
+        }
+    }
+    @include validation-cell('.level-error',    $col-negative);
+    @include validation-cell('.level-warning',  $col-warning);
+    @include validation-cell('.level-info',     $col-info);
     .no-problems {
         color: $col-positive;
-    }
-    .level-error {
-        color: $col-negative;
-    }
-    .level-warning {
-        color: $col-warning;
-    }
-    .level-info {
-        color: $col-info;
     }
 }

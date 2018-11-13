@@ -1,3 +1,4 @@
+@charset "UTF-8";
 html,
 body {
   margin: 0;
@@ -779,29 +780,83 @@ tr.ui-sortable-helper {
 
 #validationReport table {
   width: 100%;
-  border: 1px solid black;
-  border-collapse: collapse;
-  background-color: white;
-  table-layout: fixed; }
+  border-collapse: collapse; }
+  #validationReport table tr {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    box-sizing: content-box; }
+    #validationReport table tr:last-of-type {
+      border-bottom: none;
+      margin-bottom: 0; }
   #validationReport table td {
     padding: 5px;
-    border: 1px solid black; }
-  #validationReport table tr td:nth-child(1) {
-    width: 15%; }
-  #validationReport table tr td:nth-child(2) {
-    width: 85%; }
+    box-sizing: content-box; }
+  #validationReport table tr td {
+    vertical-align: baseline; }
+    #validationReport table tr td:nth-child(1) {
+      white-space: nowrap;
+      width: 1%;
+      text-align: right; }
+    #validationReport table tr td:nth-child(2) {
+      width: 100%; }
+
+#validationReport .badge {
+  display: inline-block;
+  padding: 5px 7px;
+  border-radius: 3px;
+  color: white;
+  font-size: .9em;
+  font-weight: 400;
+  box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.05); }
+
+#validationReport a {
+  display: inline-block;
+  text-decoration: none;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 2px 5px; }
+  #validationReport a::after {
+    content: '↗';
+    margin-left: 5px;
+    font-weight: bold;
+    opacity: .75; }
+  #validationReport a:hover::after {
+    opacity: 1; }
+
+#validationReport .level-error a {
+  color: #8a111c;
+  background-color: rgba(206, 25, 42, 0.05);
+  border-color: rgba(206, 25, 42, 0.1); }
+  #validationReport .level-error a:hover {
+    background-color: rgba(206, 25, 42, 0.01);
+    border-color: rgba(206, 25, 42, 0.5); }
+
+#validationReport .level-error .badge {
+  background-color: #CE192A; }
+
+#validationReport .level-warning a {
+  color: #b05409;
+  background-color: rgba(243, 120, 18, 0.05);
+  border-color: rgba(243, 120, 18, 0.1); }
+  #validationReport .level-warning a:hover {
+    background-color: rgba(243, 120, 18, 0.01);
+    border-color: rgba(243, 120, 18, 0.5); }
+
+#validationReport .level-warning .badge {
+  background-color: #F37812; }
+
+#validationReport .level-info a {
+  color: #004d73;
+  background-color: rgba(0, 128, 191, 0.05);
+  border-color: rgba(0, 128, 191, 0.1); }
+  #validationReport .level-info a:hover {
+    background-color: rgba(0, 128, 191, 0.01);
+    border-color: rgba(0, 128, 191, 0.5); }
+
+#validationReport .level-info .badge {
+  background-color: #0080bf; }
 
 #validationReport .no-problems {
   color: #22aa33; }
-
-#validationReport .level-error {
-  color: #CE192A; }
-
-#validationReport .level-warning {
-  color: #F37812; }
-
-#validationReport .level-info {
-  color: #0080bf; }
 
 #draftTable {
   overflow-y: auto;

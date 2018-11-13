@@ -206,7 +206,7 @@
           <div>
             <div id="tabDock" style="display: none" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
               <div class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" style="height:22px;">
-                <div id="closeTabDock">X</div>
+                <div id="closeTabDock"><span class="ui-button-icon ui-icon ui-icon-closethick"></span></div>
               </div>
               <div id="draftScreen" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-resizable"></div>
               <div id="validationReport" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-resizable">

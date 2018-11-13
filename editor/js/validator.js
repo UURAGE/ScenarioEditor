@@ -378,7 +378,7 @@ var Validator;
             $.each(errors, function(_, e)
             {
                 var row = $('<tr>').addClass('level-' + e.level);
-                var error = $('<td>').text(i18next.t('common:' + e.level));
+                var error = $('<td>').append($('<span>', { class: "badge", text: i18next.t('common:' + e.level) }));
                 var message = $('<td>').html(e.message);
                 message.find('a').each(function(index, linkEl)
                 {
