@@ -61,8 +61,6 @@ var Load3;
                 tree.dragDiv.find('.subjectName').text(tree.subject); // set subject in HTML
                 tree.dragDiv.find('.subjectNameInput').val(tree.subject); // set subject in HTML
 
-                tree.dragDiv.css('border-color', '');
-
                 plumbInstance.batch(function()
                 {
                     $(this).children().each(function()

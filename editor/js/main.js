@@ -610,17 +610,18 @@ var Main;
             var subjectName = subDiv.find('.subjectName').show();
             var input = subDiv.find('.subjectNameInput').hide();
 
-            if(cancel)
+            if (cancel)
             {
                 subjectName.text(Main.trees[id].subject);
                 input.text(Main.trees[id].subject);
                 input.val(Main.trees[id].subject);
             }
             // Save subject on defocus of textbox
-            else
+            else if (Main.trees[id].subject !== input.val())
             {
                 Main.trees[id].subject = input.val();
                 subjectName.text(Main.trees[id].subject);
+                SaveIndicator.setSavedChanges(false);
             }
 
             updateSideBar();
@@ -1868,32 +1869,18 @@ var Main;
 
     function applyTreeChanges()
     {
-        SaveIndicator.setSavedChanges(false);
+        var hasChanges = !SaveIndicator.getSavedChanges();
 
         var tree = Main.trees[Main.selectedElement];
 
-        var subInput = tree.dragDiv.find('input.subjectNameInput');
-        tree.subject = subInput.val();
-
-        var subname = tree.dragDiv.find('.subjectName');
-        subname.text(tree.subject);
-
-        var zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
-        if (Zoom.isZoomed(tree.id))
-            zoomTreeButton.html(Utils.sIcon('icon-minus'));
-        else
-            zoomTreeButton.html(Utils.sIcon('icon-plus'));
-        tree.dragDiv.css('border-color', '');
-
-        tree.optional = $('#optionalCheckbox').prop('checked');
-
+        var newTreeOptional = $('#optionalCheckbox').prop('checked');
+        hasChanges = hasChanges || tree.optional !== newTreeOptional;
+        tree.optional = newTreeOptional;
         $(Main.trees[Main.selectedElement].dragDiv).toggleClass("optional", tree.optional);
+        var treeIcons = tree.dragDiv.find('.icons').empty();
+        if (tree.optional) treeIcons.html(Utils.sIcon('icon-optional-subject'));
 
-        var iconDiv = tree.dragDiv.find('.icons');
-        iconDiv.empty();
-        if (tree.optional) iconDiv.html( Utils.sIcon('icon-optional-subject'));
-
-        Main.trees[Main.selectedElement] = tree;
+        SaveIndicator.setSavedChanges(!hasChanges);
     }
 
     // Updates the side bar to show the selected node.
