@@ -857,17 +857,25 @@ var Main;
                 left: parentPosition.left
             };
             var node;
-            switch(parent.type)
+            var firstChildNodeId = getFirstChildIdOrNull(parentNodeID);
+            if (firstChildNodeId)
             {
-                case Main.playerType:
-                    node = addNewNode(Main.computerType, "", position, true);
-                    break;
-                case Main.computerType:
-                    node = addNewNode(Main.playerType, "", position, true);
-                    break;
-                case Main.situationType:
-                    node = addNewNode(Main.playerType, "", position, true);
-                    break;
+                node = addNewNode(Main.nodes[firstChildNodeId].type, "", position, true);
+            }
+            else
+            {
+                switch(parent.type)
+                {
+                    case Main.playerType:
+                        node = addNewNode(Main.computerType, "", position, true);
+                        break;
+                    case Main.computerType:
+                        node = addNewNode(Main.playerType, "", position, true);
+                        break;
+                    case Main.situationType:
+                        node = addNewNode(Main.playerType, "", position, true);
+                        break;
+                }
             }
 
             // If there are errors (cycles, invalid pairs, existing connections)
