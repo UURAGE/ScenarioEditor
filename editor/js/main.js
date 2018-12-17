@@ -139,6 +139,7 @@ var Main;
                 var inputName = Metadata.formatScenarioName(nameInput.val());
                 Metadata.container.name = inputName;
                 $('#scenarioNameTab .scenarioName').text(Metadata.container.name);
+                document.title = Metadata.container.name + " - Scenario Editor";
             }
 
             $(this).hide();

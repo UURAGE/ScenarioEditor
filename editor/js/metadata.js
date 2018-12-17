@@ -316,6 +316,7 @@ var Metadata;
         // Save all values in the dialog to the metaObject
         Metadata.container.name = formatScenarioName($("#scenarioName").val());
         $('#scenarioNameTab .scenarioName').text(Metadata.container.name);
+        document.title = Metadata.container.name + " - Scenario Editor";
         var languageCode = $("#scenarioLanguage").val();
         if (languageCode) Metadata.container.language = Config.container.settings.languages.byCode[languageCode];
         Metadata.container.difficulty = $("#scenarioDifficulty").val();
