@@ -111,9 +111,9 @@ input[type=checkbox][disabled] {
 }
 
 #tabDock {
-    margin: 10px;
     padding: 10px;
-    border: 1px solid #aaa;
+    margin-top: 1px;
+    border: 1px solid rgba(black, .1);
     background: linear-gradient(to bottom, #fafafa 0, #ffffff 100%);
     div {
         overflow: auto;

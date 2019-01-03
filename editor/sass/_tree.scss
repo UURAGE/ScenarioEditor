@@ -33,7 +33,7 @@
 
 #gridIndicator {
     display: none;
-    background-color: #9c5dc4;
+    background-color: rgba($col-subject, 0.5);
     opacity: 0.2;
     pointer-events: none;
     // start invisible, main.js will show on mouse enter of #main
@@ -60,6 +60,7 @@
         box-shadow: none;
         color: black;
         opacity: 1;
+        border-color: rgba(black, 0.1);
         cursor: default;
         &:hover {
             background-color: white;
