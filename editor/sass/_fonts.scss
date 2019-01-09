@@ -1,0 +1,38 @@
+@charset "UTF-8";
+/* © Utrecht University and DialogueTrainer */
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans Regular'), local('OpenSans-Regular'),
+       url('../fonts/open-sans-v15-latin_cyrillic-ext_latin-ext_cyrillic_greek_greek-ext-regular.woff2') format('woff2'),
+       url('../fonts/open-sans-v15-latin_cyrillic-ext_latin-ext_cyrillic_greek_greek-ext-regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('OpenSans-Italic'),
+       url('../fonts/open-sans-v15-latin_cyrillic-ext_latin-ext_cyrillic_greek_greek-ext-italic.woff2') format('woff2'),
+       url('../fonts/open-sans-v15-latin_cyrillic-ext_latin-ext_cyrillic_greek_greek-ext-italic.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Open Sans SemiBold'), local('OpenSans-SemiBold'),
+       url('../fonts/open-sans-v15-latin_cyrillic-ext_latin-ext_cyrillic_greek_greek-ext-600.woff2') format('woff2'),
+       url('../fonts/open-sans-v15-latin_cyrillic-ext_latin-ext_cyrillic_greek_greek-ext-600.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'),
+       url('../fonts/open-sans-v15-latin_cyrillic-ext_latin-ext_cyrillic_greek_greek-ext-700.woff2') format('woff2'),
+       url('../fonts/open-sans-v15-latin_cyrillic-ext_latin-ext_cyrillic_greek_greek-ext-700.woff') format('woff');
+}

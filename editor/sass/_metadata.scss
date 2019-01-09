@@ -54,7 +54,7 @@ $margin-items: .25em;
                 &.active {
                     background-color: rgba($color-accent, 0.05);
                     border-radius: 3px;
-                    color: black;
+                    color: $col-text-dark;
                 }
             }
         }

@@ -92,7 +92,7 @@ a.clickable {
     padding: 3px;
     border: 1px solid black;
     background-color: $col-dragbox;
-    color: black;
+    color: $col-text-dark;
     font-size: 12px;
     cursor: move;
     pointer-events: none;
