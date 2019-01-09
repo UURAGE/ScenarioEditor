@@ -69,6 +69,10 @@
         & .treeDiv {
             display: block;
         }
+        .subjectDiv {
+            border-bottom: 1px solid rgba(darken($col-subject, 25%), 0.1);
+            background: rgba(darken($col-subject, 25%), 0.01);
+        }
     }
     &.optional:not(.zoom) .subjectDiv {
         padding-right: 40px;

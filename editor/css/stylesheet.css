@@ -76,7 +76,8 @@ body {
   overflow: auto;
   height: 100%;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  outline: none; }
 
 #wrapLeft {
   flex: 1 1 100%; }
@@ -360,6 +361,9 @@ tr.ui-sortable-helper {
       cursor: default; }
     .w.treeContainer.zoom .treeDiv {
       display: block; }
+    .w.treeContainer.zoom .subjectDiv {
+      border-bottom: 1px solid rgba(97, 21, 150, 0.1);
+      background: rgba(97, 21, 150, 0.01); }
   .w.treeContainer.optional:not(.zoom) .subjectDiv {
     padding-right: 40px; }
   .w.treeContainer .subjectDiv {
