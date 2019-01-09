@@ -193,7 +193,7 @@ var Main;
             selectElement(null);
 
             e.preventDefault(); // Prevent selecting text
-            var text = "[+" + i18next.t('common:subject') + "]";
+            var text = "+ " + i18next.t('common:subject');
 
             Zoom.zoomOut();
 
@@ -207,7 +207,7 @@ var Main;
             selectElement(null);
 
             e.preventDefault(); // Prevent selecting text
-            var text = "[+" + i18next.t('common:computer') + "]";
+            var text = "+ " + i18next.t('common:computer');
 
             if (!Zoom.isZoomed())
             {
@@ -226,7 +226,7 @@ var Main;
             selectElement(null);
 
             e.preventDefault(); // Prevent selecting text
-            var text = "[+" + i18next.t('common:player') + "]";
+            var text = "+ " + i18next.t('common:player');
 
             if (!Zoom.isZoomed())
             {
@@ -245,7 +245,7 @@ var Main;
             selectElement(null);
 
             e.preventDefault(); // Prevent selecting text
-            var text = "[+" + i18next.t('common:situation') + "]";
+            var text = "+ " + i18next.t('common:situation');
 
             if (!Zoom.isZoomed())
             {

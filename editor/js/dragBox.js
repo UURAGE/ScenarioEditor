@@ -19,6 +19,7 @@ var DragBox;
 
     var startPos = {},
         dragPos = {},
+        offset = { x: 24, y: 24 },
         dragSafezone = 25,
         stopHandler = null;
 
@@ -115,7 +116,7 @@ var DragBox;
     {
         dragPos.x = e.pageX;
         dragPos.y = e.pageY;
-        $('#dragBox').css({ left: e.pageX, top: e.pageY });
+        $('#dragBox').css({ left: e.pageX + offset.x, top: e.pageY + offset.y });
     }
 
     function showDraggerWithText(text)

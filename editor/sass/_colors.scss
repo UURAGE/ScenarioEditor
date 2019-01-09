@@ -27,8 +27,8 @@ $col-info:                    #0080bf !default;
 
 $col-unsaved-changes:         rgba($col-negative, 0.75) !default;
 
-$col-dragbox:                 #eee !default;
-$col-dragbox-error:           rgba($col-negative, 0.5) !default;
+$col-dragbox:                 #fafafa !default;
+$col-dragbox-error:           desaturate(lighten($col-negative, 10%), 25%) !default;
 
 $col-ui-title-info:           lighten($col-info, 25%) !default;
 $col-ui-title-warning:        lighten($col-warning, 25%) !default;
