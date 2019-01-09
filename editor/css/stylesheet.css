@@ -147,7 +147,6 @@ input[type=checkbox][disabled] {
     opacity: .8; }
 
 #tabDock {
-  padding: 10px;
   margin-top: 1px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background: linear-gradient(to bottom, #fafafa 0, #ffffff 100%); }
@@ -161,6 +160,8 @@ input[type=checkbox][disabled] {
     right: 5px;
     background-color: transparent;
     cursor: pointer; }
+  #tabDock .ui-tabs-nav {
+    margin: 1px; }
 
 .ui-dialog-titlebar.info {
   background: #40c0ff;
@@ -322,7 +323,7 @@ tr.ui-sortable-helper {
     box-shadow: none;
     color: black;
     opacity: 1;
-    border-color: rgba(0, 0, 0, 0.1);
+    border-color: transparent;
     cursor: default; }
     .w.treeContainer.zoom:hover {
       background-color: white;

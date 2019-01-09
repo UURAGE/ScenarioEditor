@@ -111,7 +111,6 @@ input[type=checkbox][disabled] {
 }
 
 #tabDock {
-    padding: 10px;
     margin-top: 1px;
     border: 1px solid rgba(black, .1);
     background: linear-gradient(to bottom, #fafafa 0, #ffffff 100%);
@@ -126,6 +125,9 @@ input[type=checkbox][disabled] {
         right: 5px;
         background-color: transparent;
         cursor: pointer;
+    }
+    .ui-tabs-nav {
+        margin: 1px;
     }
 }
 
