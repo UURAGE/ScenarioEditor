@@ -101,13 +101,13 @@
 	}
 	&.parentSelected {
 		&.computer {
-			background-color: lighten($col-node-computer, 50%);
+			background-color: lighten($col-node-computer, 45%);
 		}
 		&.player {
-			background-color: lighten($col-node-player, 50%);
+			background-color: lighten($col-node-player, 45%);
 		}
 		&.situation {
-			background-color: lighten($col-node-situation, 50%);
+			background-color: lighten($col-node-situation, 45%);
 		}
 	}
 	&:not(.jtk-drag):not(.jtk-drag-active) {

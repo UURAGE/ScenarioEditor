@@ -57,11 +57,11 @@
   .w.selected.situation, .w.ui-selected.situation {
     background-color: #f7a15b; }
   .w.parentSelected.computer {
-    background-color: #fceaeb; }
+    background-color: #fad3d7; }
   .w.parentSelected.player {
-    background-color: #e5f1fc; }
+    background-color: #cfe4f9; }
   .w.parentSelected.situation {
-    background-color: white; }
+    background-color: #fef4ec; }
   .w:not(.jtk-drag):not(.jtk-drag-active) > .ep {
     position: absolute;
     z-index: -1;
