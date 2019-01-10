@@ -39,11 +39,11 @@
   .w:hover.situation, .w.color-label.jtk-hover.situation, .w.jtk-source-hover.situation, .w.jtk-target-hover.situation {
     background-color: #f9bd8b; }
   .w.treeContainer:hover {
-    background-color: #a345e5; }
+    background-color: #3892FF; }
   .w.treeContainer.selected, .w.treeContainer.ui-selected {
-    background-color: #7d1bc2; }
+    background-color: #006aeb; }
   .w.treeContainer.ui-selecting {
-    background-color: #7d1bc2; }
+    background-color: #006aeb; }
   .w.ui-selecting.computer {
     background-color: #f7bcc2; }
   .w.ui-selecting.player {

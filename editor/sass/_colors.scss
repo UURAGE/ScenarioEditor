@@ -2,11 +2,11 @@
 
 // © Utrecht University and DialogueTrainer
 
-$col-editor:                  #a345e5 !default;
+$col-editor:                  #3892FF !default;
 
 $col-menu-bar:                rgba(white, 0.25) !default;
 $col-toolbar:                 rgba(desaturate($col-editor, 50%), 0.05) !default;
-$col-toolbar-icons:           darken(desaturate($col-editor, 60%), 15%) !default;
+$col-toolbar-icons:           darken(desaturate($col-editor, 75%), 15%) !default;
 $col-sidebar:                 rgba(desaturate($col-editor, 50%), 0.075) !default;
 $col-ribbon:                  $col-editor !default;
 

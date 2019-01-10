@@ -27,7 +27,7 @@
     width: 296px;
     height: 296px;
     box-sizing: border-box;
-    border: 2px solid darken($col-editor, 25%);
+    border: 2px solid darken(desaturate($col-editor, 75%), 15%);
     border-radius: 1px;
 }
 

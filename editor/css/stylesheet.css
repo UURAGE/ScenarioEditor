@@ -329,7 +329,7 @@ tr.ui-sortable-helper {
 
 #gridIndicator {
   display: none;
-  background-color: rgba(163, 69, 229, 0.5);
+  background-color: rgba(56, 146, 255, 0.5);
   opacity: 0.2;
   pointer-events: none; }
 
@@ -362,8 +362,8 @@ tr.ui-sortable-helper {
     .w.treeContainer.zoom .treeDiv {
       display: block; }
     .w.treeContainer.zoom .subjectDiv {
-      border-bottom: 1px solid rgba(97, 21, 150, 0.1);
-      background: rgba(97, 21, 150, 0.01); }
+      border-bottom: 1px solid rgba(0, 83, 184, 0.1);
+      background: rgba(0, 83, 184, 0.01); }
   .w.treeContainer.optional:not(.zoom) .subjectDiv {
     padding-right: 40px; }
   .w.treeContainer .subjectDiv {
@@ -408,12 +408,12 @@ tr.ui-sortable-helper {
   height: 32px;
   padding: 8px;
   box-sizing: border-box;
-  background: #611596;
+  background: #3892FF;
   transition: 0.5s background ease-out;
   position: relative; }
   #logo:hover {
     transition: 0.1s background ease-in-out;
-    background: #a345e5; }
+    background: #52a0ff; }
   #logo img {
     fill: white;
     width: 16px;
@@ -434,14 +434,12 @@ tr.ui-sortable-helper {
 #toolbar {
   margin: 0;
   padding: 0;
-  background-color: rgba(154, 122, 176, 0.05);
-  border-right: 1px solid rgba(89, 64, 107, 0.1); }
+  background-color: rgba(106, 151, 205, 0.05);
+  border-right: 1px solid rgba(46, 87, 138, 0.1); }
   #toolbar .big-buttons {
     padding: 1px; }
     #toolbar .big-buttons * {
       margin: 0; }
-    #toolbar .big-buttons button {
-      min-width: 50px; }
     #toolbar .big-buttons div {
       margin: 0 1px; }
     #toolbar .big-buttons img {
@@ -456,7 +454,7 @@ tr.ui-sortable-helper {
       width: 30px;
       height: 30px;
       display: block;
-      fill: #725e80;
+      fill: #587293;
       width: 32px;
       height: 32px; }
   #toolbar button div {
@@ -587,16 +585,16 @@ tr.ui-sortable-helper {
     padding: 2px;
     border: 1px solid transparent; }
     #ribbon button:hover {
-      background-color: rgba(163, 69, 229, 0.05);
-      border-color: rgba(163, 69, 229, 0.25);
+      background-color: rgba(56, 146, 255, 0.05);
+      border-color: rgba(56, 146, 255, 0.25);
       cursor: pointer; }
   #ribbon .dropped {
-    background-color: rgba(163, 69, 229, 0.05);
-    border-color: rgba(163, 69, 229, 0.25);
+    background-color: rgba(56, 146, 255, 0.05);
+    border-color: rgba(56, 146, 255, 0.25);
     cursor: pointer; }
   #ribbon button.enabled {
-    background-color: rgba(149, 149, 150, 0.05);
-    border-color: rgba(163, 69, 229, 0.5); }
+    background-color: rgba(131, 153, 180, 0.05);
+    border-color: rgba(56, 146, 255, 0.5); }
 
 #scenarioNameTab {
   margin: 0;
@@ -631,7 +629,7 @@ tr.ui-sortable-helper {
 #sidebar {
   width: 475px;
   height: 100%;
-  background-color: rgba(154, 122, 176, 0.075);
+  background-color: rgba(106, 151, 205, 0.075);
   color: rgba(0, 0, 0, 0.6);
   position: relative;
   min-width: 5px;
@@ -1005,7 +1003,7 @@ td.dragHandle {
   width: 296px;
   height: 296px;
   box-sizing: border-box;
-  border: 2px solid #611596;
+  border: 2px solid #587293;
   border-radius: 1px; }
 
 #scaledDiv {

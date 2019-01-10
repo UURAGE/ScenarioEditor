@@ -7,12 +7,12 @@
     height: 32px;
     padding: 8px;
     box-sizing: border-box;
-    background: darken($col-editor, 25%);
+    background: $col-editor;
     transition: 0.5s background ease-out;
     position: relative;
     &:hover {
         transition: 0.1s background ease-in-out;
-        background: $col-editor;
+        background: lighten($col-editor, 5%);
     }
     img {
         fill: white;
@@ -44,9 +44,6 @@
         padding: 1px;
         * {
             margin: 0;
-        }
-        button {
-            min-width: 50px;
         }
         div {
             margin: 0 1px;
