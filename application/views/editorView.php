@@ -25,12 +25,19 @@
 
   <script>
   <?php
-  echo 'var editor_url = "' . editor_url() . '";
-        var root_url = "' . root_url() . '";
-        var base_url = "' . base_url() . '";
-        var environment = "' . ENVIRONMENT . '";
-        var languageCode = "' . $this->config->item('languageCodes')[$language] . '";'
-  ;
+  $jsVars = array(
+      'editor_url' => editor_url(),
+      'root_url' => root_url(),
+      'base_url' => base_url(),
+      'environment' => ENVIRONMENT,
+      'languageCode' => $this->config->item('languageCodes')[$language]
+  );
+
+  echo "\n";
+  foreach ($jsVars as $name => $value)
+  {
+      echo 'var ' . $name . ' = ' . json_encode($value, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES) . ';' . "\n";
+  }
   ?>
   </script>
 
