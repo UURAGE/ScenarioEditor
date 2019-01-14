@@ -49,7 +49,8 @@ var Main;
         startEditingNode: startEditingNode,
         stopEditingNode: stopEditingNode,
         triggerSubjectNameInput: triggerSubjectNameInput,
-        updateButtons: updateButtons
+        updateButtons: updateButtons,
+        updateDocumentTitle: updateDocumentTitle
     };
 
     var ctrlDown = false, spaceDown = false, isSelecting = false, isPanning = false,
@@ -137,9 +138,13 @@ var Main;
             if(!cancel)
             {
                 var inputName = Metadata.formatScenarioName(nameInput.val());
-                Metadata.container.name = inputName;
-                $('#scenarioNameTab .scenarioName').text(Metadata.container.name);
-                document.title = Metadata.container.name + " - Scenario Editor";
+                if (inputName !== Metadata.container.name)
+                {
+                    Metadata.container.name = inputName;
+                    $('#scenarioNameTab .scenarioName').text(Metadata.container.name);
+                    Main.updateDocumentTitle();
+                    SaveIndicator.setSavedChanges(false);
+                }
             }
 
             $(this).hide();
@@ -2657,6 +2662,11 @@ var Main;
             Main.mousePosition.y >= offset.top &&
             Main.mousePosition.x < offset.left + width &&
             Main.mousePosition.y < offset.top + height;
+    }
+
+    function updateDocumentTitle()
+    {
+        document.title = (SaveIndicator.getSavedChanges() ? Metadata.container.name : '• ' + Metadata.container.name) + " - Scenario Editor";
     }
 
 })();

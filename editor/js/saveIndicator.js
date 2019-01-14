@@ -19,16 +19,8 @@ var SaveIndicator;
         if (value === savedChanges) return;
 
         savedChanges = value;
-        if (savedChanges)
-        {
-            $('#scenarioNameTab').removeClass('unsavedChanges');
-            document.title = document.title.substr(2, document.title.length);
-        }
-        else
-        {
-            $('#scenarioNameTab').addClass('unsavedChanges');
-            document.title = '• ' + document.title;
-        }
+        $('#scenarioNameTab').toggleClass('unsavedChanges', !savedChanges);
+        Main.updateDocumentTitle();
     }
 
     function getSavedChanges()
