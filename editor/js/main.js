@@ -2666,7 +2666,9 @@ var Main;
 
     function updateDocumentTitle()
     {
-        document.title = (SaveIndicator.getSavedChanges() ? Metadata.container.name : '• ' + Metadata.container.name) + " - Scenario Editor";
+        var savedIndicator = SaveIndicator.getSavedChanges() ? "" : "• ";
+        var scenarioTitle = Metadata.container.name !== "" ? Metadata.container.name + " - " : "";
+        document.title = savedIndicator + scenarioTitle + "Scenario Editor";
     }
 
 })();

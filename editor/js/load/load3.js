@@ -103,7 +103,7 @@ var Load3;
     {
         Metadata.container.name = Utils.unEscapeHTML($(metadata).find('name').text());
         $('#scenarioNameTab .scenarioName').text(Metadata.container.name);
-        Main.updateDocumentTitle()
+        Main.updateDocumentTitle();
         Metadata.container.description = Utils.unEscapeHTML($(metadata).find('description').text());
         Metadata.container.difficulty = $(metadata).find('difficulty').text();
 

@@ -351,7 +351,7 @@ var Load;
     {
         Metadata.container.name = $(metadata).children('name').text();
         $('#scenarioNameTab .scenarioName').text(Metadata.container.name);
-        Main.updateDocumentTitle()
+        Main.updateDocumentTitle();
         Metadata.container.description = $(metadata).children('description').text();
 
         if (version) Metadata.container.version = version;
