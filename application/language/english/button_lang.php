@@ -8,4 +8,3 @@ $lang["btn_ok"] = "Ok";
 $lang["btn_save"] = "Save";
 $lang["btn_edit"] = "Edit";
 $lang["btn_join"] = "Join";
-?>

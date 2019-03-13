@@ -57,4 +57,3 @@ $lang["edt_end_description"] = "End the scenario";
 $lang["edt_inits_title"] = "Allow the subject to end after this statement";
 $lang["edt_inits_header"] = "Early end of subject";
 $lang["edt_inits_description"] = "Allow early end of subject";
-?>

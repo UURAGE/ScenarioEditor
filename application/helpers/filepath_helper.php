@@ -30,7 +30,3 @@ if(!function_exists('flag_path'))
         return game_path('images/flags/'.$flags[$language].".png");
     }
 }
-
-
-
-?>

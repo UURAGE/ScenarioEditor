@@ -57,4 +57,3 @@ $lang["edt_end_description"] = "Beëindig scenario hier";
 $lang["edt_inits_title"] = "Na deze uitspraak mogelijkheid om het onderwerp vroegtijdig te beëindigen";
 $lang["edt_inits_header"] = "Vroegtijdig einde onderwerp";
 $lang["edt_inits_description"] = "Vroegtijdig einde van onderwerp toestaan";
-?>

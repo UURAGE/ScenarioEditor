@@ -8,4 +8,3 @@ $lang["btn_ok"] = "Ok";
 $lang["btn_save"] = "Opslaan";
 $lang["btn_edit"] = "Bewerken";
 $lang["btn_leave"] = "Verlaten";
-?>

@@ -40,5 +40,3 @@ if(!function_exists('flag_url')) {
         return editor_url('png/flags/'.$flags[$language].".png");
     }
 }
-
-?>
