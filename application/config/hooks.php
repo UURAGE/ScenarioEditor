@@ -11,13 +11,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |	https://codeigniter.com/user_guide/general/hooks.html
 |
 */
-$hook['pre_system'] = array(
-    'class'    => 'SettingFixer',
-    'function' => 'fix',
-    'filename' => 'SettingFixer.php',
-    'filepath' => 'hooks'
-);
-
 $hook['post_controller_constructor'] = array(
     'class'    => 'LanguageLoader',
     'function' => 'load',
