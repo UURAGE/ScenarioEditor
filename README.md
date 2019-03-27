@@ -14,11 +14,11 @@ For online use, any small web hosting package should do; Linux environments are 
 
 ## Installation
 
-Simply place all files in the web root.
+Place all files in a directory and set the `public` subdirectory as the web root (`DocumentRoot` in Apache). If you cannot change the web root, but you have write access to the directory that _contains_ the web root, you can place all files there and move the contents of `public` into the web root.
 
 ## Configuration
 
-Create a configuration XML file based on the [config language](doc/configLanguage.xsd) with the namespace [http://uurage.github.io/ScenarioEditor/config/namespace](http://uurage.github.io/ScenarioEditor/config/namespace) and put it in the editor directory with the filename `config.xml`. A [tutorial](doc/CONFIG_TUTORIAL.md) is also available.
+Create a configuration XML file based on the [config language](doc/configLanguage.xsd) with the namespace [http://uurage.github.io/ScenarioEditor/config/namespace](http://uurage.github.io/ScenarioEditor/config/namespace) and put it in the `public/editor` directory with the filename `config.xml`. A [tutorial](doc/CONFIG_TUTORIAL.md) is also available.
 
 ## Development
 

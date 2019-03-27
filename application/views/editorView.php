@@ -140,7 +140,7 @@
                 </div>
                 <div id="languages">
                   <?php
-                  $languages = scandir(getcwd() . '/application/language');
+                  $languages = scandir(APPPATH . 'language');
                   $isFirst = true;
                   foreach ($languages as $name)
                   {
@@ -148,7 +148,7 @@
 
                       if (!$isFirst) echo ' | ';
 
-                      echo '<a href="' . site_url() . '/language/changeLanguage/' . $name . '">';
+                      echo '<a href="' . site_url('language/changeLanguage/' . $name) . '">';
                       echo '<img src="' . flag_url($name) . '">';
                       echo '</a>';
 

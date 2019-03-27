@@ -5,8 +5,8 @@ if (!function_exists('root_url')) {
 
   /**
    * Root of website, needs to be changed if folder structure changes.
-   * @param type $string
-   * @return type
+   * @param string $string
+   * @return string
    */
 	function root_url($string='')
     {

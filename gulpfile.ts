@@ -6,8 +6,8 @@ import * as sourcemaps from "gulp-sourcemaps";
 import { create } from "browser-sync";
 const browserSync = create();
 
-const sassSrc = "editor/sass/**/*.scss";
-const sassDest = "editor/css/";
+const sassSrc = "public/editor/sass/**/*.scss";
+const sassDest = "public/editor/css/";
 const compileSass = () =>
 {
     return gulp.src(sassSrc)

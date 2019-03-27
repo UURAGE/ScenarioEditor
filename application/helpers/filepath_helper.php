@@ -15,18 +15,3 @@ if (!function_exists('editor_path'))
         return FCPATH . "editor/" . $string;
     }
 }
-
-if(!function_exists('flag_path'))
-{
-    /**
-    * Get the path to the flag of a corrsesponding language
-    * @param string $language
-    * @return string
-    */
-    function flag_path($language)
-    {
-        $flags = config_item("languageFlags");
-
-        return game_path('images/flags/'.$flags[$language].".png");
-    }
-}
