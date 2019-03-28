@@ -579,14 +579,21 @@ var Main;
 
         var treeDiv = $('<div>', { class: "treeDiv noSelect" });
 
+        var isClickAction = false;
         treeDiv.on("click", function(e)
         {
             $(this).focus();
-            if (e.target == this)
+            if (e.target == this && isClickAction)
             {
                 selectElement(null);
                 Main.trees[id].plumbInstance.clearDragSelection();
             }
+            isClickAction = false;
+        });
+
+        treeDiv.on("mousedown", function()
+        {
+            isClickAction = true;
         });
 
         treeDiv.selectable(
@@ -601,6 +608,7 @@ var Main;
             stop: function( event, ui )
             {
                 isSelecting = false;
+                isClickAction = false;
             }
         });
         treeDiv.selectable('disable'); //box selection only useful in zoomed state
