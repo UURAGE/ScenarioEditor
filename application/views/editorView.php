@@ -149,7 +149,7 @@
                       if (!$isFirst) echo ' | ';
 
                       echo '<a href="' . site_url('language/changeLanguage/' . $name) . '">';
-                      echo '<img src="' . flag_url($name) . '">';
+                      echo '<img src="' . flag_url($name) . '" alt="' . $name . '">';
                       echo '</a>';
 
                       $isFirst = false;
