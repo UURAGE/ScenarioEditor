@@ -1,7 +1,7 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /* © Utrecht University and DialogueTrainer */
 
-/*
+/**
  * This class is used to emulate auto loading of language files, normal autoloading can not be based on session data
  */
 class LanguageLoader
@@ -16,61 +16,60 @@ class LanguageLoader
         }
 
         $language = $this->CI->session->userdata('language');
-        $availableLanguages = config_item('languageNames');
 
-        // Strict equality to prevent nasty behaviour
         if (!$language)
         {
-            $browserLang = explode(",",$_SERVER['HTTP_ACCEPT_LANGUAGE']);
-
-            $languages = array();
-
-            for ($i = 0; $i < sizeof($browserLang); $i++)
-            {
-                $lang = explode(";", $browserLang[$i]);
-
-                if (sizeof($lang) == 2)
-                {
-                    // This contains a priority value in the format "q=<priority>"
-                    $lang[1] = substr($lang[1], 2);
-                }
-                else
-                {
-                    // The first language entry has no priority
-                    $lang[1] = "1";
-                }
-
-                $languages[$i] = $lang;
-            }
-
-            $maxPriority = -1;
-            // If no accepted language can be found, the default configured language will be used
-            $acceptedLang = config_item('language');
-
-            for ($i = 0; $i < sizeof($languages); $i++)
-            {
-                $currentLang = $languages[$i][0];
-                $currentPriority = $languages[$i][1];
-                $tempAccepted = "";
-                $languageAvailable = array_key_exists($currentLang, $availableLanguages);
-
-                if ($languageAvailable && $availableLanguages[$currentLang] !== NULL)
-                {
-                    $tempAccepted = $availableLanguages[$currentLang];
-                }
-
-                if ($currentPriority > $maxPriority && $tempAccepted !== "")
-                {
-                    $acceptedLang = $tempAccepted;
-                    $maxPriority = $currentPriority;
-                }
-            }
-
-            $language = $acceptedLang;
+            $language = $this->getHTTPLanguage() ?? config_item('language');
             $this->CI->session->set_userdata('language', $language);
         }
 
         $this->CI->lang->load('Editor', $language);
         $this->CI->lang->load('button', $language);
+    }
+
+    function getHTTPLanguage()
+    {
+        $httpAcceptLanguage = $_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? NULL;
+        if ($httpAcceptLanguage === NULL) return NULL;
+
+        $availableLanguages = config_item('languageNames');
+        $browserLanguages = explode(",", $httpAcceptLanguage);
+
+        $languages = array();
+
+        foreach ($browserLanguages as $browserLanguage)
+        {
+            $lang = explode(";", $browserLanguage);
+
+            if (sizeof($lang) == 2)
+            {
+                // This contains a priority value in the format "q=<priority>"
+                $lang[1] = floatval(substr($lang[1], 2));
+            }
+            else
+            {
+                // The first language entry has no priority
+                $lang[1] = 1;
+            }
+
+            $languages[] = $lang;
+        }
+
+        $acceptedLang = null;
+        $maxPriority = -1;
+
+        foreach ($languages as $language)
+        {
+            $currentLang = $language[0];
+            $currentPriority = $language[1];
+
+            if (array_key_exists($currentLang, $availableLanguages) && $currentPriority > $maxPriority)
+            {
+                $acceptedLang = $availableLanguages[$currentLang];
+                $maxPriority = $currentPriority;
+            }
+        }
+
+        return $acceptedLang;
     }
 }
