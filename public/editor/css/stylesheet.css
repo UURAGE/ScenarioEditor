@@ -436,32 +436,6 @@ tr.ui-sortable-helper {
   padding: 0;
   background-color: rgba(106, 151, 205, 0.05);
   border-right: 1px solid rgba(46, 87, 138, 0.1); }
-  #toolbar .big-buttons {
-    padding: 1px; }
-    #toolbar .big-buttons * {
-      margin: 0; }
-    #toolbar .big-buttons div {
-      margin: 0 1px; }
-    #toolbar .big-buttons img {
-      margin: auto;
-      margin-bottom: 5px;
-      width: 30px;
-      height: 30px;
-      display: block; }
-    #toolbar .big-buttons svg {
-      margin: auto;
-      margin-bottom: 5px;
-      width: 30px;
-      height: 30px;
-      display: block;
-      fill: #587293;
-      width: 32px;
-      height: 32px; }
-  #toolbar button div {
-    margin: 3px;
-    font-weight: 600;
-    font-size: 12px;
-    color: #484848; }
   #toolbar :disabled {
     outline: none;
     border-color: transparent;
@@ -495,47 +469,10 @@ tr.ui-sortable-helper {
     background-color: rgba(0, 0, 0, 0.1); }
   #toolbar #clipboard button {
     cursor: help; }
-  #toolbar .dropdown {
-    margin-top: 0px;
-    width: auto;
-    height: auto;
-    border-radius: 0;
-    background-color: transparent; }
-    #toolbar .dropdown button {
-      width: 100%;
-      padding: 2px 5px; }
-    #toolbar .dropdown .dropdownItems {
-      display: none;
-      margin: 0;
-      padding: 1px;
-      height: auto;
-      box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5);
-      background: #fefefe;
-      border: 1px solid rgba(0, 0, 0, 0.25);
-      box-sizing: border-box;
-      position: absolute;
-      min-width: 150px;
-      z-index: 52;
-      width: auto; }
-  #toolbar #menus .dropdown .dropdownItems button {
-    padding: 5px 7px; }
-  #toolbar .small-buttons {
-    padding: 1px; }
-    #toolbar .small-buttons * {
-      margin: 0;
-      padding: 2px; }
-    #toolbar .small-buttons button {
-      display: block;
-      height: 26px;
-      text-align: left;
-      margin: 1px 0; }
-    #toolbar .small-buttons img,
-    #toolbar .small-buttons svg {
-      margin: 0 3px;
-      width: 16px;
-      height: 16px;
-      fill: rgba(0, 0, 0, 0.5);
-      vertical-align: middle; }
+  #toolbar #menus button.dropdownButton, #toolbar #ribbon button {
+    font-weight: 600;
+    font-size: 12px;
+    color: #484848; }
 
 #menus {
   display: flex;
@@ -552,19 +489,42 @@ tr.ui-sortable-helper {
     height: 16px;
     fill: #777;
     vertical-align: middle; }
-  #menus .buttonGroup {
-    margin: 0; }
-    #menus .buttonGroup::after {
-      display: none; }
   #menus button {
     height: auto;
     text-align: left; }
     #menus button:hover, #menus button.dropped {
       background-color: rgba(0, 0, 0, 0.05); }
-  #menus .dropdown button {
-    display: block; }
-  #menus .dropdown svg {
-    margin-right: 10px; }
+  #menus .buttonGroup {
+    margin: 0; }
+    #menus .buttonGroup::after {
+      display: none; }
+  #menus .dropdown {
+    margin-top: 0px;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    background-color: transparent; }
+    #menus .dropdown button {
+      display: block;
+      width: 100%;
+      padding: 5px 8px; }
+    #menus .dropdown svg {
+      margin-right: 10px; }
+    #menus .dropdown .dropdownItems {
+      display: none;
+      margin: 0;
+      padding: 1px;
+      height: auto;
+      box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.5);
+      background: #fefefe;
+      border: 1px solid rgba(0, 0, 0, 0.25);
+      box-sizing: border-box;
+      position: absolute;
+      min-width: 150px;
+      z-index: 52;
+      width: auto; }
+      #menus .dropdown .dropdownItems button {
+        padding: 5px 7px; }
   #menus .dropdownButton {
     height: 32px; }
 
@@ -588,13 +548,47 @@ tr.ui-sortable-helper {
       background-color: rgba(56, 146, 255, 0.05);
       border-color: rgba(56, 146, 255, 0.25);
       cursor: pointer; }
-  #ribbon .dropped {
-    background-color: rgba(56, 146, 255, 0.05);
-    border-color: rgba(56, 146, 255, 0.25);
-    cursor: pointer; }
   #ribbon button.enabled {
     background-color: rgba(131, 153, 180, 0.05);
     border-color: rgba(56, 146, 255, 0.5); }
+  #ribbon .big-buttons {
+    padding: 1px; }
+    #ribbon .big-buttons * {
+      margin: 0; }
+    #ribbon .big-buttons button {
+      padding: 2px 3px; }
+    #ribbon .big-buttons img {
+      margin: auto;
+      margin-bottom: 5px;
+      width: 30px;
+      height: 30px;
+      display: block; }
+    #ribbon .big-buttons svg {
+      margin: auto;
+      margin-bottom: 5px;
+      width: 30px;
+      height: 30px;
+      display: block;
+      fill: #587293;
+      width: 32px;
+      height: 32px; }
+  #ribbon .small-buttons {
+    padding: 1px; }
+    #ribbon .small-buttons * {
+      margin: 0;
+      padding: 2px; }
+    #ribbon .small-buttons button {
+      display: block;
+      height: 26px;
+      text-align: left;
+      margin: 1px 0; }
+    #ribbon .small-buttons img,
+    #ribbon .small-buttons svg {
+      margin: 0 3px;
+      width: 16px;
+      height: 16px;
+      fill: rgba(0, 0, 0, 0.5);
+      vertical-align: middle; }
 
 #scenarioNameTab {
   margin: 0;

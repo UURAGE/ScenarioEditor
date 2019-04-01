@@ -113,7 +113,7 @@
                 <div id="logo"><img src="<?php echo editor_url("svg/logo.svg") ?>" alt="Editor Logo"/></div>
                 <div class="buttonGroup dropdown" id="file">
                   <!-- File -->
-                    <button id="fileButton" class="globalButton dropdownButton"><div><?php sLang("edt_file"); ?></div></button>
+                    <button id="fileButton" class="globalButton dropdownButton"><?php sLang("edt_file"); ?></button>
                     <div id="fileDropdown" class="dropdownItems">
                       <button id="importScenario" class="globalButton" title="<?php sLang('edt_import_scenario_title'); ?>">
                           <?php echo sIcon("icon-sm-import"); sLang("edt_import_scenario"); ?>...
@@ -127,7 +127,7 @@
                 </div>
                 <div class="buttonGroup dropdown" id="scenario">
                 <!-- Scenario -->
-                  <button id="scenarioButton" class="globalButton dropdownButton"><div><?php sLang("edt_scenario"); ?></div></button>
+                  <button id="scenarioButton" class="globalButton dropdownButton"><?php sLang("edt_scenario"); ?></button>
                   <div id="scenarioDropdown" class="dropdownItems">
                     <button id="editMetadata" class="globalButton" title="<?php sLang('edt_properties_title'); ?>"><?php echo sIcon("icon-sm-properties"); sLang("edt_properties"); ?>...</button>
                     <button id="editParameters" class="globalButton" title="<?php sLang('edt_parameters_title'); ?>"><?php echo sIcon("icon-sm-parameters"); sLang("edt_parameters"); ?>...</button>
@@ -161,43 +161,35 @@
                 <div class="buttonGroup" id="edit">
                   <!-- Edit -->
                   <div class="big-buttons">
-                    <button id="newTree" class="globalButton"><div><?php echo sIcon("icon-subject"); sLang("edt_subject"); ?></button>
-                    <button id="newPlayerNode" class="subjectButton"><div><?php echo sIcon("icon-player"); sLang("edt_player"); ?></div></button>
-                    <button id="newComputerNode" class="subjectButton"><div><?php echo sIcon("icon-computer"); sLang("edt_computer"); ?></div></button>
-                    <button id="newSituationNode" class="subjectButton"><div><?php echo sIcon("icon-situation"); sLang("edt_situation"); ?></div></button>
-                    <button id="newChildNode" class="nodeButton"><div><?php echo sIcon("icon-child"); sLang("edt_child"); ?></div></button>
-                    <button id="toggleDraftScreen" class="subjectButton"><div><?php echo sIcon("icon-notepad"); sLang("edt_note_pad"); ?></div></button>
-                    <button id="delete" class="globalButton"><div><?php echo sIcon("icon-delete"); sLang("btn_delete"); ?></div></button>
+                    <button id="newTree" class="globalButton"><?php echo sIcon("icon-subject"); sLang("edt_subject"); ?></button>
+                    <button id="newPlayerNode" class="subjectButton"><?php echo sIcon("icon-player"); sLang("edt_player"); ?></button>
+                    <button id="newComputerNode" class="subjectButton"><?php echo sIcon("icon-computer"); sLang("edt_computer"); ?></button>
+                    <button id="newSituationNode" class="subjectButton"><?php echo sIcon("icon-situation"); sLang("edt_situation"); ?></button>
+                    <button id="newChildNode" class="nodeButton"><?php echo sIcon("icon-child"); sLang("edt_child"); ?></button>
+                    <button id="toggleDraftScreen" class="subjectButton"><?php echo sIcon("icon-notepad"); sLang("edt_note_pad"); ?></button>
+                    <button id="delete" class="globalButton"><?php echo sIcon("icon-delete"); sLang("btn_delete"); ?></button>
                   </div>
                 </div>
                 <div class="buttonGroup" id="clipboard">
                   <!-- Clipboard -->
                   <div class="big-buttons">
-                    <button id="copy" class="globalButton"><div><?php echo sIcon("icon-copy"); sLang("edt_copy"); ?></div></button>
-                    <button id="cut" class="globalButton"><div><?php echo sIcon("icon-cut"); sLang("edt_cut"); ?></div></button>
-                    <button id="paste" class="globalButton"><div><?php echo sIcon("icon-paste"); sLang("edt_paste"); ?></div></button>
+                    <button id="copy" class="globalButton"><?php echo sIcon("icon-copy"); sLang("edt_copy"); ?></button>
+                    <button id="cut" class="globalButton"><?php echo sIcon("icon-cut"); sLang("edt_cut"); ?></button>
+                    <button id="paste" class="globalButton"><?php echo sIcon("icon-paste"); sLang("edt_paste"); ?></button>
                   </div>
                 </div>
                 <div class="buttonGroup" id="view">
                   <!-- View -->
                   <div class="big-buttons">
-                    <button id="repositionGraph" class="subjectButton" title="<?php sLang('edt_arrange_title'); ?>">
-                      <div><?php echo sIcon("icon-arrange"); sLang("edt_arrange"); ?></div>
-                    </button>
-                    <button id="allParents" class="nodeButton">
-                      <div><?php echo sIcon("icon-parents"); sLang("edt_parents"); ?></div>
-                    </button>
-                    <button id="toggleColors" class="subjectButton">
-                      <div><?php echo sIcon("icon-palette"); sLang("edt_toggle_colors"); ?></div>
-                    </button>
+                    <button id="repositionGraph" class="subjectButton" title="<?php sLang("edt_arrange_title"); ?>"><?php echo sIcon("icon-arrange"); sLang("edt_arrange"); ?></button>
+                    <button id="allParents" class="nodeButton"><?php echo sIcon("icon-parents"); sLang("edt_parents"); ?></button>
+                    <button id="toggleColors" class="subjectButton"><?php echo sIcon("icon-palette"); sLang("edt_toggle_colors"); ?></button>
                   </div>
                 </div>
                 <div class="buttonGroup" id="validate">
                   <!-- Validate -->
                   <div class="big-buttons">
-                    <button id="validation" class="globalButton">
-                      <div><?php echo sIcon("icon-validate"); sLang("edt_validate"); ?></div>
-                    </button>
+                    <button id="validation" class="globalButton"><?php echo sIcon("icon-validate"); sLang("edt_validate"); ?></button>
                   </div>
                 </div>
               </div>
