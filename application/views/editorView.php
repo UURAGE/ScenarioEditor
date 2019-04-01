@@ -27,7 +27,6 @@
   <?php
   $jsVars = array(
       'editor_url' => editor_url(),
-      'root_url' => root_url(),
       'base_url' => base_url(),
       'environment' => ENVIRONMENT,
       'languageCode' => $this->config->item('languageCodes')[$language]

@@ -43,7 +43,6 @@
         "SaveIndicator"
     ],
     "globals": {
-        "root_url": false,
         "base_url": false,
         "editor_url": false,
         "environment": false,

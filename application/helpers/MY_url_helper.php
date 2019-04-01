@@ -1,19 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 // an extension of the original url helper
 
-if (!function_exists('root_url')) {
-
-  /**
-   * Root of website, needs to be changed if folder structure changes.
-   * @param string $string
-   * @return string
-   */
-	function root_url($string='')
-    {
-       return str_replace("", "", base_url()) . $string;
-    }
-}
-
 if (!function_exists('editor_url')) {
 
   /**
