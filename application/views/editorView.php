@@ -5,8 +5,6 @@
 <head>
   <title>UURAGE - Scenario Editor</title>
   <meta charset="utf-8">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="-1">
   <link rel="icon" type="image/x-icon" href="<?php echo editor_url("favicon.ico");?>">
 
   <?php
