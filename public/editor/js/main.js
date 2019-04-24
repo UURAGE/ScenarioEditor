@@ -322,9 +322,9 @@ var Main;
 
         $("#main").on('click', function(e)
         {
-            $(this).focus();
             if (e.target == this)
             {
+                $(this).focus();
                 selectElement(null);
             }
         });
@@ -582,9 +582,9 @@ var Main;
         var isClickAction = false;
         treeDiv.on("click", function(e)
         {
-            $(this).focus();
             if (e.target == this && isClickAction)
             {
+                $(this).focus();
                 selectElement(null);
                 Main.trees[id].plumbInstance.clearDragSelection();
             }
