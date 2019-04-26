@@ -6,8 +6,8 @@
     "singleGroups": true,
     "undef": true,
     "unused": "vars",
+    "loopfunc": true,
     "-W079": true,
-    "-W083": true,
     "predef": [
         "i18next",
         "i18nextXHRBackend",
