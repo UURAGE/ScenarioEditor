@@ -584,9 +584,8 @@ var Main;
         {
             if (e.target == this && isClickAction)
             {
-                $(this).focus();
+                $("#main").focus();
                 selectElement(null);
-                Main.trees[id].plumbInstance.clearDragSelection();
             }
             isClickAction = false;
         });
@@ -683,9 +682,8 @@ var Main;
         subjectDiv.on("click", function(e)
         {
             e.stopPropagation();
-
-            if (Main.selectedElement === id)
-                return;
+            if (!$.contains($("#main")[0], document.activeElement)) $("#main").focus();
+            if (Main.selectedElement === id) return;
             if (e.ctrlKey || e.metaKey)
             {
                 KeyControl.ctrlClickOnElement(id);
@@ -1054,13 +1052,13 @@ var Main;
         node.addEventListener("click", function(event)
         {
             event.stopPropagation();
+            if (!$.contains($("#main")[0], document.activeElement)) $("#main").focus();
             if(invalidateNodeClick)
             {
                 invalidateNodeClick = false;
                 return;
             }
-            if (Main.selectedElement === id)
-                return;
+            if (Main.selectedElement === id) return;
             if (event.ctrlKey || event.metaKey)
             {
                 KeyControl.ctrlClickOnElement(id);
