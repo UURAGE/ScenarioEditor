@@ -320,13 +320,15 @@ var Main;
             //$("#gridIndicator").hide();
         });
 
+        var isMainClickAction = false;
         $("#main").on('click', function(e)
         {
-            if (e.target == this)
+            if (e.target == this && isMainClickAction)
             {
                 $(this).focus();
                 selectElement(null);
             }
+            isMainClickAction = false;
         });
 
         // Used for selecting multiple nodes.
@@ -340,6 +342,7 @@ var Main;
 
         $("#main").on('mousedown', function(event)
         {
+            isMainClickAction = true;
             ctrlDown = event.ctrlKey || event.metaKey;
         });
         $("#main").on('selectablestart', function()
@@ -377,6 +380,8 @@ var Main;
         });
         $("#main").on('selectablestop', function()
         {
+            isMainClickAction = false;
+
             // If there's only one node selected, show the node.
             if (Main.selectedElements.length === 1)
                 selectElement(Main.selectedElements[0]);
