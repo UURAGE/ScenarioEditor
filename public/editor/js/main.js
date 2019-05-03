@@ -737,7 +737,7 @@ var Main;
         //(x,y) of upper left of containment and (x,y) of lower right
         jsPlumb.draggable(dragDiv,
         {
-            filter: ".zoomTreeButton",
+            filter: ".zoomTreeButton, .zoomTreeButton *",
 
             //the constrain function retuts the array with coordinates that will be assigned to the dragged element
             constrain: function(currentCoordinates,element){
