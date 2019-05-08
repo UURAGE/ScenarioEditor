@@ -302,6 +302,8 @@ tr.ui-sortable-helper {
     cursor: grabbing; }
   .parameter-effect .handle {
     padding: 0 5px; }
+  .condition .handle {
+    padding-right: 5px; }
 
 .zoomTreeButton {
   float: left;

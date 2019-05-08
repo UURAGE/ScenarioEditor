@@ -285,6 +285,8 @@ var Condition;
     {
         var condition = $('<div>', { class: "condition" });
         container.append(condition);
+        var handle = $('<span>', { class: "handle", text: "↕" });
+        condition.append(handle);
         var idRefSelect = $('<select>', { class: "parameter-idref-select" });
         condition.append(idRefSelect);
         var testContainer = $('<span>', { class: "condition-test-container" });
@@ -378,6 +380,8 @@ var Condition;
 
         var subconditionsContainer = $('<div>', { class: "groupConditionDiv" });
         groupCondition.append(subconditionsContainer);
+
+        Utils.makeSortable(subconditionsContainer);
 
         var addConditionButton = Parts.addButton(i18next.t('condition:add_condition'));
         addConditionButton.on('click', function()
