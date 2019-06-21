@@ -405,6 +405,12 @@ var Evaluations;
                 description: parameter.description,
                 expression: { kind: Expression.kinds.reference, reference: { parameterIdRef: parameter.id } }
             };
+            if (parameter.type.name === Types.primitives.integer.name && 'maximum' in parameter.type && 'minimum' in parameter.type)
+            {
+                evaluation.expression.reference.calculate = 'percentage';
+                evaluation.type.minimum = 0;
+                evaluation.type.maximum = 100;
+            }
             Evaluations.container.sequence.push(evaluation);
             Evaluations.container.byId[evaluatedParameterId] = evaluation;
         }

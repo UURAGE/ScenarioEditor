@@ -149,9 +149,16 @@ var Expression;
             },
             handleParameterTypeChange: function(oldParameter, newParameter, type, expression)
             {
-                if ('calculate' in expression.reference && (!('maximum' in newParameter.type) || !('minimum' in newParameter.type)))
+                if (newParameter.type.name === Types.primitives.integer.name)
                 {
-                    delete expression.reference.calculate;
+                    if ('calculate' in expression.reference && (!('maximum' in newParameter.type) || !('minimum' in newParameter.type)))
+                    {
+                        delete expression.reference.calculate;
+                    }
+                    else if (!('calculate' in expression.reference) && 'maximum' in newParameter.type && 'minimum' in newParameter.type)
+                    {
+                        expression.reference.calculate = 'percentage';
+                    }
                 }
 
                 if (expression.reference.parameterIdRef === oldParameter.id && !newParameter.type.equals(type))

@@ -349,7 +349,7 @@ var Parameters;
                     Evaluations.handleParameterTypeChange(oldParameter, newParameter);
                 }
 
-                if (oldParameter.evaluated && !newParameter.evaluated || !oldParameter.evaluated && newParameter.evaluated)
+                if ((oldParameter.evaluated || false) !== (newParameter.evaluated || false))
                 {
                     Evaluations.handleParameterEvaluatedChange(newParameter);
                 }
