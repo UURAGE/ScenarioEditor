@@ -704,8 +704,7 @@ tr.ui-sortable-helper {
   #properties.tree > #preconditionsSection,
   #properties.tree > #endNode,
   #properties.tree > #effectsSection,
-  #properties.tree > #propertyValuesSection,
-  #properties.tree > #commentSection {
+  #properties.tree > #propertyValuesSection {
     display: none; }
 
 .header h1 {

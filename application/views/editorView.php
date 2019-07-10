@@ -285,17 +285,17 @@
                   <div id="fixed-character-parameter-effects" class="section"></div>
                 </div>
               </div>
+              <div class="sidebarSection" id="optionalSubject">
+                <div class="sub-header">
+                  <h2 title="<?php sLang('edt_optional_title');?>"><input type="checkbox" id="optionalCheckbox"/><label for="optionalCheckbox"><?php sLang('edt_optional_header');?></label></h2>
+                </div>
+              </div>
               <div id="commentSection" class="sidebarSection">
                 <div class="sub-header clickable">
                   <h2><span class="clicktag"><?php echo sIcon("icon-closed"); ?></span><?php echo sIcon("icon-note"); sLang('edt_authors_note');?></h2>
                 </div>
                 <div class="collapsable">
                   <textarea id="comment"></textarea>
-                </div>
-              </div>
-              <div class="sidebarSection" id="optionalSubject">
-                <div class="sub-header">
-                  <h2 title="<?php sLang('edt_optional_title');?>"><input type="checkbox" id="optionalCheckbox"/><label for="optionalCheckbox"><?php sLang('edt_optional_header');?></label></h2>
                 </div>
               </div>
               <div class="sidebarSection" id="allowInterleaveNode">

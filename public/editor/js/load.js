@@ -206,7 +206,8 @@ var Load;
                 }
 
                 // get the position from the XML, note that this is in grid coordinates, not screen coordinates
-                var position = $(this).children('editingData').children('position')[0];
+                var editingDataXML = $(this).children('editingData');
+                var position = editingDataXML.children('position')[0];
                 var leftPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('x')[0].textContent, 0));
                 var topPos  = Math.round(Utils.parseDecimalIntWithDefault($(position).children('y')[0].textContent, 0));
 
@@ -219,6 +220,8 @@ var Load;
                 var iconDiv = tree.dragDiv.find('.icons');
                 if (tree.optional) iconDiv.html( Utils.sIcon('icon-optional-subject'));
                 $(tree.dragDiv).toggleClass('optional', tree.optional);
+
+                tree.comment = editingDataXML.children('comment').text();
 
                 tree.level = level;
 

@@ -315,6 +315,12 @@ var Save;
         addAndReturnElement('x', scenarioNameSpace, positionElement).textContent = tree.leftPos;
         addAndReturnElement('y', scenarioNameSpace, positionElement).textContent = tree.topPos;
 
+        // Save the comment
+        if (tree.comment !== "")
+        {
+            addAndReturnElement("comment", scenarioNameSpace, editingDataElement, true).textContent = tree.comment;
+        }
+
         var startsElement = addAndReturnElement('starts', scenarioNameSpace, treeElement);
         sortIdentifiables(Main.getStartNodeIDs(tree).map(function(startNodeID) { return { id: startNodeID }; })).forEach(function(startNode)
         {
@@ -357,7 +363,9 @@ var Save;
 
             // Save the comment
             if (node.comment !== "")
+            {
                 addAndReturnElement("comment", scenarioNameSpace, editingDataEl, true).textContent = node.comment;
+            }
 
             // Save the preconditions
             if (node.preconditions)

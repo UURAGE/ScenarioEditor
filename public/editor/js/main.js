@@ -728,6 +728,7 @@ var Main;
             topPos: topPos, //left and topPos are in grid coordinates (if leftPos == 2 screen pos == 2*gridX)
             leftScroll: 0, //necessary to zoom in to the spot on the graph where last zoomed out
             topScroll: 0,
+            comment: "",
             level: topPos,
             nodes: [],
             selectedConnections: {}, // The keys for this object are the connection ids
@@ -1897,6 +1898,10 @@ var Main;
         var treeIcons = tree.dragDiv.find('.icons').empty();
         if (tree.optional) treeIcons.html(Utils.sIcon('icon-optional-subject'));
 
+        var newTreeComment = $("textarea#comment").val();
+        hasChanges = hasChanges || tree.comment !== newTreeComment;
+        tree.comment = newTreeComment;
+
         SaveIndicator.setSavedChanges(!hasChanges);
     }
 
@@ -2483,6 +2488,7 @@ var Main;
 
             $("#optionalCheckbox").prop("checked", Main.trees[Main.selectedElement].optional);
 
+            $("textarea#comment").val(Main.trees[Main.selectedElement].comment);
         }
     }
 
