@@ -332,7 +332,7 @@
         newTree.subject = i18next.t('clipboard:copy_of', { postProcess: 'sprintf', sprintf: [toCopy.subject]});
         newTree.optional = toCopy.optional;
         var iconDiv = newTree.dragDiv.find('.icons');
-        if (newTree.optional) iconDiv.html(Utils.sIcon('icon-optional-subject'));
+        if (newTree.optional) iconDiv.html(Utils.sIcon('icon-tree-is-optional'));
         newTree.dragDiv.toggleClass('optional', newTree.optional);
 
         newTree.leftScroll = toCopy.leftScroll;

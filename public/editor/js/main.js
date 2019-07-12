@@ -1897,7 +1897,7 @@ var Main;
         tree.optional = newTreeOptional;
         $(Main.trees[Main.selectedElement].dragDiv).toggleClass("optional", tree.optional);
         var treeIcons = tree.dragDiv.find('.icons').empty();
-        if (tree.optional) treeIcons.html(Utils.sIcon('icon-optional-subject'));
+        if (tree.optional) treeIcons.html(Utils.sIcon('icon-tree-is-optional'));
 
         var newTreeComment = $("textarea#comment").val();
         hasChanges = hasChanges || tree.comment !== newTreeComment;
@@ -2480,12 +2480,6 @@ var Main;
             MiniMap.deactivate();
 
             $('#properties').attr("class", "tree");
-
-            // Fill subject name line for current subject
-            var currentName = Main.trees[Main.selectedElement].subject;
-            var sideBarSub = $('#treeSubject');
-            sideBarSub.empty();
-            sideBarSub.append($('<h1>', { text: currentName }));
 
             $("#optionalCheckbox").prop("checked", Main.trees[Main.selectedElement].optional);
 

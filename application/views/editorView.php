@@ -158,10 +158,10 @@
                 <div class="buttonGroup" id="edit">
                   <!-- Edit -->
                   <div class="big-buttons">
-                    <button id="newTree" class="globalButton"><?php echo sIcon("icon-subject"); sLang("edt_subject"); ?></button>
-                    <button id="newPlayerNode" class="subjectButton"><?php echo sIcon("icon-player"); sLang("edt_player"); ?></button>
-                    <button id="newComputerNode" class="subjectButton"><?php echo sIcon("icon-computer"); sLang("edt_computer"); ?></button>
-                    <button id="newSituationNode" class="subjectButton"><?php echo sIcon("icon-situation"); sLang("edt_situation"); ?></button>
+                    <button id="newTree" class="globalButton"><?php echo sIcon("icon-add-subject"); sLang("edt_subject"); ?></button>
+                    <button id="newPlayerNode" class="subjectButton"><?php echo sIcon("icon-add-player"); sLang("edt_player"); ?></button>
+                    <button id="newComputerNode" class="subjectButton"><?php echo sIcon("icon-add-computer"); sLang("edt_computer"); ?></button>
+                    <button id="newSituationNode" class="subjectButton"><?php echo sIcon("icon-add-situation"); sLang("edt_situation"); ?></button>
                     <button id="newChildNode" class="nodeButton"><?php echo sIcon("icon-child"); sLang("edt_child"); ?></button>
                     <button id="toggleDraftScreen" class="subjectButton"><?php echo sIcon("icon-notepad"); sLang("edt_note_pad"); ?></button>
                     <button id="delete" class="globalButton"><?php echo sIcon("icon-delete"); sLang("btn_delete"); ?></button>
@@ -229,8 +229,8 @@
               </div>
             </div>
             <div id="properties" class="hidden">
-              <div id="treeSubject">
-                <h1><?php sLang("edt_subject_name"); ?></h1>
+              <div id="headerSubject" class="header clickable collapseAll">
+                <h1><span class="masterclicktag"><?php echo sIcon("icon-closed"); ?></span><?php echo sIcon("icon-subject"); sLang('edt_subject');?></h1>
               </div>
               <div id="headerPlayer" class="header clickable collapseAll">
                 <h1><span class="masterclicktag"><?php echo sIcon("icon-closed"); ?></span><?php echo sIcon("icon-nodeplayer"); sLang('edt_player');?></h1>
@@ -287,7 +287,7 @@
               </div>
               <div class="sidebarSection" id="optionalSubject">
                 <div class="sub-header">
-                  <h2 title="<?php sLang('edt_optional_title');?>"><input type="checkbox" id="optionalCheckbox"/><label for="optionalCheckbox"><?php sLang('edt_optional_header');?></label></h2>
+                  <h2 title="<?php sLang('edt_optional_title');?>"><?php echo sIcon("icon-optional-subject");?><input type="checkbox" id="optionalCheckbox"/><label for="optionalCheckbox"><?php sLang('edt_optional_header');?></label></h2>
                 </div>
               </div>
               <div id="commentSection" class="sidebarSection">

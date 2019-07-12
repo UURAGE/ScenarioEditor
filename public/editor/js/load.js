@@ -218,7 +218,7 @@ var Load;
 
                 tree.optional = Utils.parseBool($(this).attr('optional'));
                 var iconDiv = tree.dragDiv.find('.icons');
-                if (tree.optional) iconDiv.html( Utils.sIcon('icon-optional-subject'));
+                if (tree.optional) iconDiv.html( Utils.sIcon('icon-tree-is-optional'));
                 $(tree.dragDiv).toggleClass('optional', tree.optional);
 
                 tree.comment = editingDataXML.children('comment').text();

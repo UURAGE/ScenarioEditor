@@ -687,9 +687,9 @@ tr.ui-sortable-helper {
   #properties.tree > #allowDialogueEndNode,
   #properties.tree > #characterSection {
     display: none; }
-  #properties.player > #treeSubject,
-  #properties.player > #optionalSubject, #properties.situation > #treeSubject,
-  #properties.situation > #optionalSubject, #properties.computer > #treeSubject,
+  #properties.player > #headerSubject,
+  #properties.player > #optionalSubject, #properties.situation > #headerSubject,
+  #properties.situation > #optionalSubject, #properties.computer > #headerSubject,
   #properties.computer > #optionalSubject {
     display: none; }
   #properties.player > #headerSituation {
