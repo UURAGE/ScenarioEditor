@@ -40,27 +40,16 @@
 
   <?php
 
-  //load language related scripts first since all others depend on them
-  $languageScripts = array(
-      "js/lib/i18nextXHRBackend.min.js",
+  $scripts = array(
       "js/lib/i18nextSprintfPostProcessor.min.js",
       "js/lib/i18next.min.js",
-      "js/i18n.js"
-    );
-
-  foreach($languageScripts as $script)
-  {
-      echo '<script type="text/javascript" src="' .editor_url($script). '?t='.  filemtime(editor_path($script)) .'"></script>';
-  }
-
-  //non language related scripts
-  $scripts = array(
       "js/lib/jquery-3.3.1.min.js",
       "js/lib/jquery-ui.min.js",
       "js/lib/jquery-ui-selectable-patched.js",
       "js/lib/jsplumb.min.js",
       "js/lib/jsplumb-patched.js",
       "js/lib/FileSaver.min.js",
+      "js/i18n.js",
       "js/utils.js",
       "js/types.js",
       "js/config.js",

@@ -18,8 +18,8 @@ class Editor extends CI_Controller
 
     public function GetLocales()
     {
-        $languages = explode(" ", $this->input->get("lng"));
-        $namespaces = explode(" ", $this->input->get("ns"));
+        $languages = (array)$this->input->get("lng");
+        $namespaces = (array)$this->input->get("ns");
         $locales = [];
         foreach ($languages as $language)
         {
