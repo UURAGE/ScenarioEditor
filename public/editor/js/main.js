@@ -963,8 +963,8 @@ var Main;
         var scrollOffset = 50;
         var expander = document.createElement('div');
         expander.classList.add('expander');
-        expander.style.right = -scrollOffset + "px";
-        expander.style.bottom = -scrollOffset + "px";
+        expander.style.right = -(scrollOffset - 1) + "px";
+        expander.style.bottom = -(scrollOffset - 1) + "px";
         nodeContent.appendChild(expander);
 
         node.appendChild(nodeContent);
@@ -1021,24 +1021,24 @@ var Main;
             drag: function(params)
             {
                 // TODO: delete if jsPlumb katavorio supports scrolling into view
-                var epsilon = 5;
-                var $node = $(node);
-                var position = Utils.cssPosition($node);
-                if (position.left + $node.outerWidth() + scrollOffset + epsilon > parent.width() + parent.scrollLeft())
+                var x = params.pos[0];
+                var y = params.pos[1];
+                var container = parent[0];
+                if (x + scrollOffset + node.offsetWidth > container.clientWidth + container.scrollLeft)
                 {
-                    parent.scrollLeft(position.left + $node.outerWidth() + scrollOffset - parent.width());
+                    container.scrollLeft = x + scrollOffset + node.offsetWidth - container.clientWidth;
                 }
-                else if (position.left - scrollOffset < parent.scrollLeft())
+                else if (x - scrollOffset < container.scrollLeft)
                 {
-                    parent.scrollLeft(Math.max(position.left - scrollOffset, 0));
+                    container.scrollLeft = Math.max(x - scrollOffset, 0);
                 }
-                if (position.top + $node.outerHeight() + scrollOffset + epsilon > parent.height() + parent.scrollTop())
+                if (y + scrollOffset + node.offsetHeight > container.clientHeight + container.scrollTop)
                 {
-                    parent.scrollTop(position.top + $node.outerHeight() + scrollOffset - parent.height());
+                    container.scrollTop = y + scrollOffset + node.offsetHeight - container.clientHeight;
                 }
-                else if (position.top - scrollOffset < parent.scrollTop())
+                else if (y - scrollOffset < container.scrollTop)
                 {
-                    parent.scrollTop(Math.max(position.top - scrollOffset, 0));
+                    container.scrollTop = Math.max(y - scrollOffset, 0);
                 }
             }
 
