@@ -989,6 +989,7 @@ var Main;
             $(this).find('.anchor').css({left: "", top: ""});
         }, false);
 
+        var previousMousePosition;
         // initialise draggable elements.
         plumbInstance.draggable(node,
         {
@@ -996,8 +997,10 @@ var Main;
                 return [Math.max(0, currentCoordinates[0]),Math.max(0,currentCoordinates[1])];
             },
 
-            start: function(event)
+            start: function()
             {
+                previousMousePosition = $.extend({}, Main.mousePosition);
+
                 invalidateNodeClick = true;
 
                 SaveIndicator.setSavedChanges(false);
@@ -1020,26 +1023,30 @@ var Main;
 
             drag: function(params)
             {
+                var direction = { x: Main.mousePosition.x - previousMousePosition.x, y: Main.mousePosition.y - previousMousePosition.y };
+
                 // TODO: delete if jsPlumb katavorio supports scrolling into view
                 var x = params.pos[0];
                 var y = params.pos[1];
                 var container = parent[0];
-                if (x + scrollOffset + node.offsetWidth > container.clientWidth + container.scrollLeft)
+                if (direction.x >= 0 && x + scrollOffset + node.offsetWidth > container.clientWidth + container.scrollLeft)
                 {
                     container.scrollLeft = x + scrollOffset + node.offsetWidth - container.clientWidth;
                 }
-                else if (x - scrollOffset < container.scrollLeft)
+                else if (direction.x <= 0 && x - scrollOffset < container.scrollLeft)
                 {
                     container.scrollLeft = Math.max(x - scrollOffset, 0);
                 }
-                if (y + scrollOffset + node.offsetHeight > container.clientHeight + container.scrollTop)
+                if (direction.y >= 0 && y + scrollOffset + node.offsetHeight > container.clientHeight + container.scrollTop)
                 {
                     container.scrollTop = y + scrollOffset + node.offsetHeight - container.clientHeight;
                 }
-                else if (y - scrollOffset < container.scrollTop)
+                else if (direction.y <= 0 && y - scrollOffset < container.scrollTop)
                 {
                     container.scrollTop = Math.max(y - scrollOffset, 0);
                 }
+
+                previousMousePosition = $.extend({}, Main.mousePosition);
             }
 
             //we do not set invalidateNodeClick in a stop handler since it fires before the click handler
