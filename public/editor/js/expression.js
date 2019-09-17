@@ -648,6 +648,13 @@ var Expression;
                 {
                     this.handleParameterRemoval(newParameter.id, type, expression);
                 }
+                if (expression.kind.name === kinds.score.name)
+                {
+                    expression.score.forEach(function(scoreItem)
+                    {
+                        kinds.reference.handleParameterTypeChange(oldParameter, newParameter, type, scoreItem);
+                    });
+                }
             },
             handleParameterRemoval: function(parameterId, type, expression)
             {
