@@ -226,7 +226,7 @@
                 var minX = Number.MAX_VALUE;
                 var minY = Number.MAX_VALUE;
 
-                $.each(content, function(index, tree)
+                content.forEach(function(tree)
                 {
                     if (tree.leftPos < minX) minX = tree.leftPos;
                     if (tree.topPos < minY) minY = tree.topPos;
@@ -249,15 +249,26 @@
                 var plumbInstance = Zoom.getZoomed().plumbInstance;
                 plumbInstance.batch(function()
                 {
-                    $.each(content, function(index, node)
+                    var topLeftNode = content.reduce(function(topLeftNode, node)
                     {
-                        var offset = { left: node.position.left - content[0].position.left, top: node.position.top - content[0].position.top };
+                        if (topLeftNode.position.left + topLeftNode.position.top <= node.position.left + node.position.top)
+                        {
+                            return topLeftNode;
+                        }
+                        else
+                        {
+                            return node;
+                        }
+                    });
+                    content.forEach(function(node)
+                    {
+                        var offset = { left: node.position.left - topLeftNode.position.left, top: node.position.top - topLeftNode.position.top };
                         newNode = pasteNode(node, offset);
                         idMappings[node.id] = newNode.id;
                     });
 
                     // Paste jsPlumb connections
-                    $.each(content, function(index, node)
+                    content.forEach(function(node)
                     {
                         if (!node) //due to deleting from arrays in js leaving values undefined
                             return true;
@@ -274,8 +285,8 @@
                                 return true;
                             var newConnection = plumbInstance.connect(
                             {
-                                "source": source,
-                                "target": target
+                                source: source,
+                                target: target
                             });
 
                             if (connection.color)
@@ -292,7 +303,7 @@
                 });
 
                 // select all nodes just copied
-                Main.selectElements($.map(idMappings, function (newId) { return newId; }));
+                Main.selectElements(Object.keys(idMappings));
             }
         }
     }
