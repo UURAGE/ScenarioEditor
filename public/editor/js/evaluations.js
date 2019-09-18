@@ -1,5 +1,6 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported Evaluations */
 var Evaluations;
 
 (function()
@@ -8,6 +9,7 @@ var Evaluations;
 
     var defaultContainer = { byId: {}, sequence: [] };
 
+    // eslint-disable-next-line no-global-assign
     Evaluations =
     {
         counter: 0,
@@ -110,27 +112,29 @@ var Evaluations;
             height: 768,
             width: 1024,
             modal: true,
-            buttons: [
-            {
-                text: i18next.t('common:confirm'),
-                click: function()
+            buttons:
+            [
                 {
-                    save(evaluationsContainer).done(function(saved)
+                    text: i18next.t('common:confirm'),
+                    click: function()
                     {
-                        if (saved)
+                        save(evaluationsContainer).done(function(saved)
                         {
-                            $(this).dialog('close');
-                        }
-                    }.bind(this));
-                }
-            },
-            {
-                text: i18next.t('common:cancel'),
-                click: function()
+                            if (saved)
+                            {
+                                $(this).dialog('close');
+                            }
+                        }.bind(this));
+                    }
+                },
                 {
-                    $(this).dialog('close');
+                    text: i18next.t('common:cancel'),
+                    click: function()
+                    {
+                        $(this).dialog('close');
+                    }
                 }
-            }],
+            ],
             close: function()
             {
                 $("#main").focus();
@@ -430,5 +434,4 @@ var Evaluations;
         evaluation.name = parameter.name;
         evaluation.description = parameter.description;
     }
-
 })();

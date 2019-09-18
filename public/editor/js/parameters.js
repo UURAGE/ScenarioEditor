@@ -1,5 +1,6 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported Parameters */
 var Parameters;
 
 (function()
@@ -8,6 +9,7 @@ var Parameters;
 
     var defaultContainer = { byId: {}, sequence: [] };
 
+    // eslint-disable-next-line no-global-assign
     Parameters =
     {
         counter: 0,
@@ -55,13 +57,13 @@ var Parameters;
         });
         parametersDialog.append(addParameterButton);
 
-        var addTimeParameterButton = $('<button>', { type: 'button', class:'iconButton time', title: i18next.t('parameters:add_time_title') }).append(Utils.sIcon('icon-time'));
+        var addTimeParameterButton = $('<button>', { type: 'button', class: 'iconButton time', title: i18next.t('parameters:add_time_title') }).append(Utils.sIcon('icon-time'));
         addTimeParameterButton.on('click', function()
         {
             var isTime = parametersContainer.find(".isT").length;
             var isTimeRemoved = parametersContainer.find(".isT.removedParameter").length;
 
-            // if the timeId is empty, or if it is filled, but
+            // If the timeId is empty, or if it is filled, but
             // the parameter in the dialog has been removed (in that case the
             // timeId has not been updated yet)
             if (Parameters.timeId === null || isTimeRemoved === isTime)
@@ -81,19 +83,18 @@ var Parameters;
         });
         parametersContainer.on("focusout", ".parameter-description", function()
         {
-            $(this).animate({height:"1em"}, 500);
+            $(this).animate({ height: "1em" }, 500);
         });
         parametersContainer.on('click', '.delete', function()
         {
             var tr = $(this).closest('tr');
             tr.addClass("removedParameter");
-            if(tr[0].id === "t" && tr.not(".removedParameter"))
+            if (tr[0].id === "t" && tr.not(".removedParameter"))
             {
-                // for time parameter: make visible when Time-parameter has been removed
+                // For time parameter: make visible when Time-parameter has been removed
                 addTimeParameterButton.show();
             }
-            if (parametersContainer.children().not(".removedParameter").length === 0)
-                parametersTableHead.hide();
+            if (parametersContainer.children().not(".removedParameter").length === 0) parametersTableHead.hide();
         });
 
         if (Parameters.timeId !== null)
@@ -111,27 +112,29 @@ var Parameters;
             height: Constants.heightParameterScreen,
             width: Constants.widthParameterScreen,
             modal: true,
-            buttons: [
-            {
-                text: i18next.t('common:confirm'),
-                click: function()
+            buttons:
+            [
                 {
-                    save(parametersContainer).done(function(saved)
+                    text: i18next.t('common:confirm'),
+                    click: function()
                     {
-                        if (saved)
+                        save(parametersContainer).done(function(saved)
                         {
-                            $(this).dialog('close');
-                        }
-                    }.bind(this));
-                }
-            },
-            {
-                text: i18next.t('common:cancel'),
-                click: function()
+                            if (saved)
+                            {
+                                $(this).dialog('close');
+                            }
+                        }.bind(this));
+                    }
+                },
                 {
-                    $(this).dialog('close');
+                    text: i18next.t('common:cancel'),
+                    click: function()
+                    {
+                        $(this).dialog('close');
+                    }
                 }
-            }],
+            ],
             close: function()
             {
                 $("#main").focus();
@@ -183,7 +186,7 @@ var Parameters;
 
         var description = $('<textarea>', { class: "parameter-description", style: "height:1em;" });
 
-        var evaluated = $('<input>', { type: 'checkbox', class: "parameter-evaluated"  });
+        var evaluated = $('<input>', { type: 'checkbox', class: "parameter-evaluated" });
         evaluated.on('change', function()
         {
             if ($(this).prop('checked'))
@@ -280,8 +283,7 @@ var Parameters;
 
                 Evaluations.handleParameterRemoval(id);
 
-                if (id === Parameters.timeId && Parameters.timeId !== null)
-                    Parameters.timeId = null;
+                if (id === Parameters.timeId && Parameters.timeId !== null) Parameters.timeId = null;
 
                 // Remove the parameter from the html and the object.
                 $(this).remove();
@@ -398,10 +400,11 @@ var Parameters;
                         var node = Main.nodes[nodeId];
                         if (node.type === Main.playerType)
                         {
-                            if (node.parameterEffects.userDefined !== undefined && node.parameterEffects.userDefined !== null)
-                                node.parameterEffects.userDefined.push(timeEffect);
-                            else
-                                node.parameterEffects.userDefined = [timeEffect];
+                            if (node.parameterEffects.userDefined === undefined || node.parameterEffects.userDefined === null)
+                            {
+                                node.parameterEffects.userDefined = [];
+                            }
+                            node.parameterEffects.userDefined.push(timeEffect);
                         }
                     }
                 }
@@ -515,5 +518,4 @@ var Parameters;
     {
         return Parameters.container.sequence.some(function(parameter) { return parameter.type.equals(type); });
     }
-
 })();

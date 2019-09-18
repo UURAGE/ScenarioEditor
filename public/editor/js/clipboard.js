@@ -17,7 +17,7 @@
                 paste: paste
             };
 
-            var clipboardFormat = isIEClipboard ? clipboardFormat = 'Text' : 'text/plain';
+            var clipboardFormat = isIEClipboard ? 'Text' : 'text/plain';
 
             if (Main.isEditingInCanvas() && handlers[action](clipboard, clipboardFormat))
             {
@@ -86,24 +86,24 @@
     {
         if (Main.isMousePositionWithinEditingCanvas())
         {
-                var data;
-                try
-                {
-                    data = JSON.parse(clipboard.getData(format));
-                }
-                catch(_)
-                {
-                    return false;
-                }
+            var data;
+            try
+            {
+                data = JSON.parse(clipboard.getData(format));
+            }
+            catch (_)
+            {
+                return false;
+            }
 
-                if (data && data.target === 'scenario' && data.configIdRef && data.type && data.definitions && data.content)
+            if (data && data.target === 'scenario' && data.configIdRef && data.type && data.definitions && data.content)
+            {
+                if (data.configIdRef !== Config.container.id)
                 {
-                    if (data.configIdRef !== Config.container.id)
-                    {
-                        Utils.alertDialog("The config id of the pasted content does not match the config id referred to in the scenario", 'warning');
-                    }
-                    return considerPasting(data.type, data.definitions, data.content);
+                    Utils.alertDialog("The config id of the pasted content does not match the config id referred to in the scenario", 'warning');
                 }
+                return considerPasting(data.type, data.definitions, data.content);
+            }
         }
 
         return false;
@@ -161,7 +161,7 @@
     function copyTree(treeId)
     {
         var tree = Main.trees[treeId];
-        //Save tree data
+        // Save tree data
         var toCopy = Utils.clone(
         {
             subject: tree.subject,
@@ -173,7 +173,7 @@
             topScroll: tree.topScroll
         });
         var nodes = [];
-        //Save all node data in tree
+        // Save all node data in tree
         $.each(Main.trees[treeId].nodes, function(index, nodeId)
         {
             nodes.push(copyNode(nodeId));
@@ -233,7 +233,7 @@
                 });
 
                 // Paste trees relative to top left of smallest bounding box
-                var pastedTreeIds = $.map(content, function(tree, index)
+                var pastedTreeIds = $.map(content, function(tree)
                 {
                     var leftPos = tree.leftPos - minX + indicatorPos.left;
                     var topPos = tree.topPos - minY + indicatorPos.top;
@@ -244,7 +244,7 @@
             }
             else if (type === 'node' && Zoom.isZoomed())
             {
-                //Needed to save jsPlumb connections
+                // Needed to save jsPlumb connections
                 var idMappings = {};
                 var plumbInstance = Zoom.getZoomed().plumbInstance;
                 plumbInstance.batch(function()
@@ -263,26 +263,24 @@
                     content.forEach(function(node)
                     {
                         var offset = { left: node.position.left - topLeftNode.position.left, top: node.position.top - topLeftNode.position.top };
-                        newNode = pasteNode(node, offset);
+                        var newNode = pasteNode(node, offset);
                         idMappings[node.id] = newNode.id;
                     });
 
                     // Paste jsPlumb connections
                     content.forEach(function(node)
                     {
-                        if (!node) //due to deleting from arrays in js leaving values undefined
-                            return true;
+                        // Due to deleting from arrays in js leaving values undefined
+                        if (!node) return true;
 
                         var connections = node.connections;
 
                         $.each(connections, function(index, connection)
                         {
-                            var target = idMappings[connection.targetId]; //map original target to copied target
-                            if (!target)
-                                return true;
-                            var source = idMappings[connection.sourceId]; //map original source to copied source
-                            if (!source)
-                                return true;
+                            var target = idMappings[connection.targetId]; // Map original target to copied target
+                            if (!target) return true;
+                            var source = idMappings[connection.sourceId]; // Map original source to copied source
+                            if (!source) return true;
                             var newConnection = plumbInstance.connect(
                             {
                                 source: source,
@@ -302,7 +300,7 @@
                     }
                 });
 
-                // select all nodes just copied
+                // Select all nodes just copied
                 Main.selectElements(Object.keys(idMappings));
             }
         }
@@ -313,8 +311,10 @@
         if (!tree) tree = Zoom.getZoomed();
         if (!tree) return;
 
-        var node = Utils.clone(copiedNode); //no dom action just yet. this just copies the object in the nodes object
-        var nodeElem = Main.createAndReturnNode(node.type, null, tree.div, tree.id); //to do dom manipulations and create the id
+        // No DOM action just yet; this just copies the object in the nodes object
+        var node = Utils.clone(copiedNode);
+        // To do DOM manipulations and create the id
+        var nodeElem = Main.createAndReturnNode(node.type, null, tree.div, tree.id);
 
         node.id = nodeElem.attr('id');
         node.parent = tree.id;
@@ -340,7 +340,7 @@
 
         var newTree = Main.createEmptyTree(null, leftPos, topPos);
 
-        newTree.subject = i18next.t('clipboard:copy_of', { postProcess: 'sprintf', sprintf: [toCopy.subject]});
+        newTree.subject = i18next.t('clipboard:copy_of', { postProcess: 'sprintf', sprintf: [toCopy.subject] });
         newTree.optional = toCopy.optional;
         var iconDiv = newTree.dragDiv.find('.icons');
         if (newTree.optional) iconDiv.html(Utils.sIcon('icon-tree-is-optional'));
@@ -357,28 +357,29 @@
         {
             $.each(toCopy.nodes, function(index, node)
             {
-                if (!node) //due to deleting from arrays in js leaving values undefined
-                    return true; //$.each version of continue
+                // Can occur due to deleting from arrays in js leaving values undefined
+                if (!node) return true; // $.each version of continue
 
                 var newNode = pasteNode(node, { left: 0, top: 0 }, newTree, true);
 
-                idMappings[node.id] = newNode.id; //needed to also copy over jsplumb connectors.
+                // Needed to also copy over jsplumb connectors
+                idMappings[node.id] = newNode.id;
 
                 Utils.cssPosition($("#" + newNode.id), node.position);
             });
 
-            //all nodes have been created. now copy connectors
+            // All nodes have been created. now copy connectors
             $.each(toCopy.nodes, function(index, node)
             {
-                if (!node) //due to deleting from arrays in js leaving values undefined
-                    return true;
+                // Can occur due to deleting from arrays in js leaving values undefined
+                if (!node) return true;
 
                 var connections = node.connections;
 
                 $.each(connections, function(index, connection)
                 {
-                    var target = idMappings[connection.targetId]; //map original target to copied target
-                    var source = idMappings[connection.sourceId]; //map original source to copied source
+                    var target = idMappings[connection.targetId]; // Map original target to copied target
+                    var source = idMappings[connection.sourceId]; // Map original source to copied source
                     var newConnection = newTree.plumbInstance.connect(
                     {
                         "source": source,
@@ -522,10 +523,10 @@
                     return $('<li>', { text: definitions.parameters.userDefined.byId[parameterId].name });
                 })));
                 Utils.confirmDialog(warning, 'warning')
-                .then(function(confirmed)
-                {
-                    if (confirmed) pasteElement(type, content);
-                });
+                    .then(function(confirmed)
+                    {
+                        if (confirmed) pasteElement(type, content);
+                    });
             }
             else
             {
@@ -535,5 +536,4 @@
 
         return canPaste;
     }
-
-}());
+})();

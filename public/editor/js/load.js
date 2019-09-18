@@ -1,11 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported Load */
 var Load;
 
 (function()
 {
     "use strict";
 
+    // eslint-disable-next-line no-global-assign
     Load =
     {
         importDialog: importDialog,
@@ -25,11 +27,11 @@ var Load;
         var importDialog = $('<div>')
             .append($('<form>', { action: "", method: "post", enctype: "multipart/form-data" })
                 .append($('<label>', { text: i18next.t('load:file_to_import') + ": " })
-                .append(importContainer)));
+                    .append(importContainer)));
 
         importDialog.dialog(
         {
-            title : i18next.t('load:import_title'),
+            title: i18next.t('load:import_title'),
             height: Constants.heightImportScreen,
             width: Constants.widthImportScreen,
             modal: true,
@@ -75,8 +77,7 @@ var Load;
     {
         var files = importContainer.prop('files');
 
-        if (files.length < 1)
-            return;
+        if (files.length < 1) return;
 
         var reader = new FileReader();
 
@@ -150,7 +151,7 @@ var Load;
     {
         Main.selectElement(null);
 
-        if(Main.nodes.length !== 0)
+        if (Main.nodes.length !== 0)
         {
             $.each(Main.trees, function(id, tree)
             {
@@ -205,11 +206,11 @@ var Load;
                     treeID = "ext_" + treeID;
                 }
 
-                // get the position from the XML, note that this is in grid coordinates, not screen coordinates
+                // Get the position from the XML, note that this is in grid coordinates, not screen coordinates
                 var editingDataXML = $(this).children('editingData');
                 var position = editingDataXML.children('position')[0];
                 var leftPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('x')[0].textContent, 0));
-                var topPos  = Math.round(Utils.parseDecimalIntWithDefault($(position).children('y')[0].textContent, 0));
+                var topPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('y')[0].textContent, 0));
 
                 var tree = Main.createEmptyTree(treeID, leftPos, topPos);
                 var plumbInstance = tree.plumbInstance;
@@ -218,15 +219,15 @@ var Load;
 
                 tree.optional = Utils.parseBool($(this).attr('optional'));
                 var iconDiv = tree.dragDiv.find('.icons');
-                if (tree.optional) iconDiv.html( Utils.sIcon('icon-tree-is-optional'));
+                if (tree.optional) iconDiv.html(Utils.sIcon('icon-tree-is-optional'));
                 $(tree.dragDiv).toggleClass('optional', tree.optional);
 
                 tree.comment = editingDataXML.children('comment').text();
 
                 tree.level = level;
 
-                tree.dragDiv.find('.subjectName').text(tree.subject); // set subject in HTML
-                tree.dragDiv.find('.subjectNameInput').val(tree.subject); // set subject in HTML
+                tree.dragDiv.find('.subjectName').text(tree.subject); // Set subject in HTML
+                tree.dragDiv.find('.subjectNameInput').val(tree.subject); // Set subject in HTML
 
                 plumbInstance.batch(function()
                 {
@@ -234,15 +235,15 @@ var Load;
                     {
                         switch (this.nodeName)
                         {
-                            case "computerStatement":
-                                loadStatement(this, Main.computerType, connections, treeID);
-                                break;
-                            case "playerStatement":
-                                loadStatement(this, Main.playerType, connections, treeID);
-                                break;
-                            case "situationStatement":
-                                loadStatement(this, Main.situationType, connections, treeID);
-                                break;
+                        case "computerStatement":
+                            loadStatement(this, Main.computerType, connections, treeID);
+                            break;
+                        case "playerStatement":
+                            loadStatement(this, Main.playerType, connections, treeID);
+                            break;
+                        case "situationStatement":
+                            loadStatement(this, Main.situationType, connections, treeID);
+                            break;
                         }
                     });
 
@@ -258,7 +259,6 @@ var Load;
                             });
                             connection.setParameter('color', target.colorValue);
                         });
-
                     });
                 }.bind(this), true);
             });
@@ -277,8 +277,7 @@ var Load;
             if (parameterMatch !== null)
             {
                 var parameterNumber = parseInt(parameterMatch[1]);
-                if (parameterNumber > Parameters.counter)
-                    Parameters.counter = parameterNumber;
+                if (parameterNumber > Parameters.counter) Parameters.counter = parameterNumber;
             }
 
             var typeXML = $(this).children('type').children();
@@ -391,9 +390,13 @@ var Load;
 
         var idMatch = id.match(/^edit_(\d+)$/);
         if (idMatch !== null)
+        {
             Main.jsPlumbCounter = Math.max(Main.jsPlumbCounter, parseInt(idMatch[1]));
+        }
         else
+        {
             id = "ext_" + id;
+        }
 
         var characterIdRef = $(statement).attr('characteridref');
         var allowInterleaveNode = false;
@@ -420,9 +423,13 @@ var Load;
         var preconditionsXML = $(statement).children("preconditions");
         var preconditions;
         if (preconditionsXML.length === 0)
+        {
             preconditions = null;
+        }
         else
+        {
             preconditions = Condition.fromXML(preconditionsXML.children()[0]);
+        }
 
         var parameterEffects = loadParameterEffects($(statement).children('parameterEffects'), characterIdRef);
 
@@ -438,8 +445,7 @@ var Load;
             for (var m = 0; m < targets.length; m++)
             {
                 var targetID = targets[m].attributes.idref.value.replace(/\./g, '_');
-                if (!/^edit_\d+$/.test(targetID))
-                    targetID = 'ext_' + targetID;
+                if (!/^edit_\d+$/.test(targetID)) targetID = 'ext_' + targetID;
                 var connection = { id: targetID };
 
                 var annotationValues = $(targets[m]).children('annotationValues');

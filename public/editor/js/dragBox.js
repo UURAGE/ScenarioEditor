@@ -1,5 +1,6 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported DragBox */
 var DragBox;
 
 (function()
@@ -8,13 +9,14 @@ var DragBox;
 
     var dragging = false;
 
+    // eslint-disable-next-line no-global-assign
     DragBox =
     {
-        startDragging : startDragging,
-        showError : showError,
-        isDroppable : isDroppable,
+        startDragging: startDragging,
+        showError: showError,
+        isDroppable: isDroppable,
         cancel: cancel,
-        dragging: function(){ return dragging; } // To prevent other code from modifying this value
+        dragging: function() { return dragging; } // To prevent other code from modifying this value
     };
 
     var startPos = {},

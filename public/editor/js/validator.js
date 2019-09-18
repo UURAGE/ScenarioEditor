@@ -1,11 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported Validator */
 var Validator;
 
 (function()
 {
     "use strict";
 
+    // eslint-disable-next-line no-global-assign
     Validator =
     {
         validate: validate,
@@ -26,12 +28,12 @@ var Validator;
 
     function validate()
     {
-        var validationReport = []; // an array of objects containing the errors found
+        var validationReport = []; // An array of objects containing the errors found
 
         // First save the latest changes.
         Main.applyChanges(Main.selectedElement);
         // Checks whether the scenario has a name
-        if(Metadata.container.name === null || Metadata.container.name === "")
+        if (Metadata.container.name === null || Metadata.container.name === "")
         {
             validationReport.push(
             {
@@ -39,7 +41,8 @@ var Validator;
                 level: 'warning',
                 jumpToFunctions:
                 [
-                    function() {
+                    function()
+                    {
                         Metadata.dialog();
                         $('#scenarioName').focus();
                     }
@@ -58,7 +61,7 @@ var Validator;
         }
 
         var numberOfTreesOnLevels = getNumberOfTreesOnLevels(Main.trees);
-        var highestLevel = numberOfTreesOnLevels.length - 1; // note that trees with a high level are low on the editor screen
+        var highestLevel = numberOfTreesOnLevels.length - 1; // Note that trees with a high level are low on the editor screen
         var highestLevelHasOneTree = numberOfTreesOnLevels[highestLevel] === 1;
         var highestLevelHasEnd = false;
 
@@ -81,7 +84,7 @@ var Validator;
                 {
                     startNodes.push(node);
 
-                    // the tree on the first level can start with anything, but the trees following can only start with player nodes
+                    // The tree on the first level can start with anything, but the trees following can only start with player nodes
                     if (tree.level !== 0 && node.type !== Main.playerType)
                     {
                         validationReport.push(
@@ -138,7 +141,7 @@ var Validator;
                     }
                     else if (outgoingConnections.length === 0 && highestLevelHasOneTree)
                     {
-                        // node is a dead end, but not marked as end node
+                        // Node is a dead end, but not marked as end node
                         validationReport.push(
                         {
                             message: i18next.t('validator:unmarked_end', { subject: tree.subject }),
@@ -280,7 +283,7 @@ var Validator;
                                     }
                                 };
                             })
-                        )
+                            )
                     });
                 }
             }
@@ -308,7 +311,7 @@ var Validator;
 
         if (!highestLevelHasEnd)
         {
-            // no single iteration errors, but there is no valid end
+            // No single iteration errors, but there is no valid end
             if (numberOfTreesOnLevels.length === 1 && numberOfTreesOnLevels[0] === 1)
             {
                 validationReport.push(
@@ -317,7 +320,6 @@ var Validator;
                     level: 'error',
                     jumpToFunctions: []
                 });
-
             }
             else
             {
@@ -340,7 +342,7 @@ var Validator;
             }
         }
 
-        return validationReport; // add highest level unmarked end nodes and return
+        return validationReport; // Add highest level unmarked end nodes and return
     }
 
     function getNumberOfTreesOnLevels(trees)
@@ -348,8 +350,7 @@ var Validator;
         var treesOnLevels = [];
         $.each(trees, function(index, tree)
         {
-            if (typeof treesOnLevels[tree.level] == 'undefined')
-                treesOnLevels[tree.level] = 0;
+            if (typeof treesOnLevels[tree.level] == 'undefined') treesOnLevels[tree.level] = 0;
 
             treesOnLevels[tree.level]++;
         });
@@ -403,7 +404,7 @@ var Validator;
     function testCycle(currentNode, nodeToFind)
     {
         var visited = {};
-        for(var nodeID in Main.nodes)
+        for (var nodeID in Main.nodes)
         {
             visited[nodeID] = false;
         }
@@ -413,15 +414,15 @@ var Validator;
 
     function testCycleDFS(currentNode, nodeToFind, visited)
     {
-        if (currentNode === nodeToFind)
-            return true;
+        if (currentNode === nodeToFind) return true;
 
         visited[currentNode] = true;
         var plumbInstance = Main.getPlumbInstanceByNodeID(currentNode);
-        var connections = plumbInstance.getConnections({source: currentNode});
+        var connections = plumbInstance.getConnections({ source: currentNode });
         for (var i = 0; i < connections.length; i++)
-            if(!visited[connections[i].targetId] && testCycleDFS(connections[i].targetId, nodeToFind, visited))
-                return true;
+        {
+            if (!visited[connections[i].targetId] && testCycleDFS(connections[i].targetId, nodeToFind, visited)) return true;
+        }
 
         return false;
     }
@@ -432,6 +433,4 @@ var Validator;
         var plumbInstance = Main.getPlumbInstanceByNodeID(sourceId);
         return plumbInstance.getConnections({ source: sourceId, target: targetId }).length > 0;
     }
-
-
 })();

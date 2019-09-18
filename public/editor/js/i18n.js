@@ -37,11 +37,11 @@
     }).responseJSON;
 
     i18next
-    .use(i18nextSprintfPostProcessor)
-    .init(
+        .use(i18nextSprintfPostProcessor)
+        .init(
     {
         debug: false,
-        // setting this to false ensures setTimeout-free initialisation
+        // Setting this to false ensures setTimeout-free initialisation
         initImmediate: false,
         whitelist: ['en', 'nl'],
         lng: languageCode,
@@ -49,7 +49,7 @@
         resources: resources,
         interpolation:
         {
-            format: function(value, format, lng)
+            format: function(value, format)
             {
                 if (format === 'uppercase') return value.toUpperCase();
                 if (format === 'lowercase') return value.toLowerCase();

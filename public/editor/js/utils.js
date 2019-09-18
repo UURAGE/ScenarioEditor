@@ -1,11 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported Utils */
 var Utils;
 
 (function()
 {
     "use strict";
 
+    // eslint-disable-next-line no-global-assign
     Utils =
     {
         clone: clone,
@@ -49,38 +51,36 @@ var Utils;
     // Taken from https://stackoverflow.com/a/6969486
     function escapeRegex(str)
     {
-        return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+        return str.replace(/[-[\]/{}()*+?.\\^$|]/g, "\\$&");
     }
 
     function escapeHTML(str)
     {
-        if (str === undefined)
-            return str;
+        if (str === undefined) return str;
         else
         {
             return str
-                .replace(/&/g, '&amp;')   // &
-                .replace(/</g, '&lt;')  // <
-                .replace(/>/g, '&gt;')  // >
-                .replace(/\"/g, '&quot;') // "
-                .replace(/\'/g, '&#39;')  // '
-                .replace(/\n/g, "<br/>"); // \n
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')
+                .replace(/\n/g, "<br/>");
         }
     }
 
     function unEscapeHTML(str)
     {
-        if (str === undefined)
-            return str;
+        if (str === undefined) return str;
         else
         {
             return str
-                .replace(/&amp;/g, '&') // &
-                .replace(/&lt;/g, '<') // <
-                .replace(/&gt;/g, '>') // >
-                .replace(/&quot;/g, '"') // "
-                .replace(/&#39;/g, '\'') // '
-                .replace(/<br\/>/g, "\n"); // \n
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&quot;/g, '"')
+                .replace(/&#39;/g, '\'')
+                .replace(/<br\/>/g, "\n");
         }
     }
 
@@ -103,8 +103,8 @@ var Utils;
         else
         {
             return elem.css({
-               'left': newPosition.left + 'px',
-               'top': newPosition.top + 'px'
+                'left': newPosition.left + 'px',
+                'top': newPosition.top + 'px'
             });
         }
     }
@@ -154,13 +154,13 @@ var Utils;
             close: function(event, ui)
             {
                 ui.tooltip.hover(
-                    function ()
+                    function()
                     {
                         $(this).stop(true).fadeIn();
                     },
-                    function ()
+                    function()
                     {
-                        $(this).fadeOut(function(){ $(this).remove(); });
+                        $(this).fadeOut(function() { $(this).remove(); });
                     }
                 );
             }
@@ -217,20 +217,22 @@ var Utils;
             title: i18next.t('common:' + type),
             classes:
             {
-                "ui-dialog-titlebar": type,
+                "ui-dialog-titlebar": type
             },
             height: 'auto',
             maxHeight: 768,
             width: 400,
             modal: true,
-            buttons: [
-            {
-                text: i18next.t('common:close'),
-                click: function()
+            buttons:
+            [
                 {
-                    $(this).dialog('close');
+                    text: i18next.t('common:close'),
+                    click: function()
+                    {
+                        $(this).dialog('close');
+                    }
                 }
-            }],
+            ],
             close: function()
             {
                 deferredClose.resolve();
@@ -249,28 +251,30 @@ var Utils;
             title: i18next.t('common:' + type),
             classes:
             {
-                "ui-dialog-titlebar": type,
+                "ui-dialog-titlebar": type
             },
             height: 'auto',
             maxHeight: 768,
             width: 400,
             modal: true,
-            buttons: [
-            {
-                text: i18next.t('common:confirm'),
-                click: function()
+            buttons:
+            [
                 {
-                    deferredConfirmation.resolve(true);
-                    $(this).dialog('close');
-                }
-            },
-            {
-                text: i18next.t('common:cancel'),
-                click: function()
+                    text: i18next.t('common:confirm'),
+                    click: function()
+                    {
+                        deferredConfirmation.resolve(true);
+                        $(this).dialog('close');
+                    }
+                },
                 {
-                    $(this).dialog('close');
+                    text: i18next.t('common:cancel'),
+                    click: function()
+                    {
+                        $(this).dialog('close');
+                    }
                 }
-            }],
+            ],
             close: function()
             {
                 deferredConfirmation.resolve(false);
@@ -285,5 +289,4 @@ var Utils;
         if (typeof extraClass === 'undefined') { extraClass = ''; }
         return '<svg xmlns="http://www.w3.org/2000/svg" class="icon ' + extraClass + '"><use xlink:href="#' + icon + '"></use></svg>';
     }
-
 })();

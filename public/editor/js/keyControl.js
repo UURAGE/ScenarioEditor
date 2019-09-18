@@ -1,11 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported KeyControl */
 var KeyControl;
 
 (function()
 {
     "use strict";
 
+    // eslint-disable-next-line no-global-assign
     KeyControl =
     {
         ctrlClickOnElement: ctrlClickOnElement
@@ -21,11 +23,11 @@ var KeyControl;
         // Event handlers.
         $(document).on('keydown', function(e)
         {
-            // check if hotkeys are active
+            // Check if hotkeys are active
             if (Main.isEditingInCanvas())
             {
                 var ch = String.fromCharCode(e.keyCode);
-                //Check if the ctrl key is pressed
+                // Check if the ctrl key is pressed
                 if ((e.ctrlKey || e.metaKey) && !e.shiftKey)
                 {
                     if (e.keyCode in ctrlNumberControl)
@@ -53,7 +55,7 @@ var KeyControl;
         });
     });
 
-    //All events for keyboard controls with normal letters.
+    // All events for keyboard controls with normal letters.
     letterControl = {
         Q: function()
         {
@@ -125,7 +127,7 @@ var KeyControl;
         }
     };
 
-    //All events for keyboard controls with special characters.
+    // All events for keyboard controls with special characters.
     numberControl = {
         13: function()
         {
@@ -216,7 +218,7 @@ var KeyControl;
         }
     };
 
-    //All events for keyboard controls with normal letters and ctrl pressed.
+    // All events for keyboard controls with normal letters and ctrl pressed.
     ctrlLetterControl = {
         A: function()
         {
@@ -236,7 +238,7 @@ var KeyControl;
         }
     };
 
-    //All events for keyboard controls with special characters and ctrl pressed.
+    // All events for keyboard controls with special characters and ctrl pressed.
     ctrlNumberControl = {
         38: function()
         {
@@ -246,7 +248,7 @@ var KeyControl;
             }
             else if (Main.selectedElements[0] in Main.trees)
             {
-                moveTree(function(x){return x;}, function(y){return y-1;});//arrow(lambda) functions would be nice here when support is sorted out
+                moveTree(function(x) { return x; }, function(y) { return y - 1; });// Arrow(lambda) functions would be nice here when support is sorted out
             }
         },
         40: function()
@@ -257,7 +259,7 @@ var KeyControl;
             }
             else if (Main.selectedElements[0] in Main.trees)
             {
-                moveTree(function(x){return x;}, function(y){return y+1;});
+                moveTree(function(x) { return x; }, function(y) { return y + 1; });
             }
         },
         39: function()
@@ -268,7 +270,7 @@ var KeyControl;
             }
             else if (Main.selectedElements[0] in Main.trees)
             {
-                moveTree(function(x){return x+1;}, function(y){return y;});
+                moveTree(function(x) { return x + 1; }, function(y) { return y; });
             }
         },
         37: function()
@@ -279,7 +281,7 @@ var KeyControl;
             }
             else if (Main.selectedElements[0] in Main.trees)
             {
-                moveTree(function(x){return x-1;}, function(y){return y;});
+                moveTree(function(x) { return x - 1; }, function(y) { return y; });
             }
         },
         13: function()
@@ -293,7 +295,7 @@ var KeyControl;
         }
     };
 
-    //If the user clicked on a node while ctrl is pressed, check if he need to be selected or deselected.
+    // If the user clicked on a node while ctrl is pressed, check if he need to be selected or deselected.
     function ctrlClickOnElement(node)
     {
         if (Main.selectedElements.indexOf(node) !== -1)
@@ -367,7 +369,7 @@ var KeyControl;
         }
     }
 
-    //If a node is selected and arrow up is pressed, move the node up.
+    // If a node is selected and arrow up is pressed, move the node up.
     function moveNode(direction)
     {
         var deltaX = direction.x ? direction.x * 5 : 0;
@@ -424,15 +426,16 @@ var KeyControl;
             newGridX = modifyX(tree.leftPos);
             newGridY = modifyY(tree.topPos);
 
-            //new position is within bounds
+            // New position is within bounds
             if (newGridX >= 0 && newGridY >= 0)
             {
-                //check if the new position is blocked by an unselected tree
-                //selected trees may occupy the space since they will move anyway
-                //all selected trees will move in the same distance in the same direction so no two selected trees can end up in the same space if they are not already
+                // Check if the new position is blocked by an unselected tree
+                // Selected trees may occupy the space since they will move anyway.
+                // All selected trees will move in the same distance in the same direction,
+                // so no two selected trees can end up in the same space if they are not already.
                 allClear = allClear && checkUnselectedGridAvailable(newGridX, newGridY);
 
-                if(!allClear)
+                if (!allClear)
                 {
                     break;
                 }
@@ -459,8 +462,8 @@ var KeyControl;
 
                 Utils.cssPosition(tree.dragDiv,
                 {
-                    "top": tree.topPos*Main.gridY,
-                    "left": tree.leftPos*Main.gridX
+                    "top": tree.topPos * Main.gridY,
+                    "left": tree.leftPos * Main.gridX
                 });
             }
         }
@@ -474,21 +477,13 @@ var KeyControl;
 
         $.each(Main.trees, function(id, tree)
         {
-            if (id === originID)
+            if (id === originID) return;
+            if (!offsetPredicate(tree)) return;
+            var distance = Math.sqrt(Math.pow(tree.topPos - originTree.topPos, 2) + Math.pow(tree.leftPos - originTree.leftPos, 2));
+            if (distance < minDistance)
             {
-                return;
-            }
-            else
-            {
-                if (offsetPredicate(tree))
-                {
-                    var distance = Math.sqrt(Math.pow(tree.topPos-originTree.topPos, 2) + Math.pow(tree.leftPos-originTree.leftPos, 2));
-                    if (distance < minDistance)
-                    {
-                        minDistance = distance;
-                        selectID = id;
-                    }
-                }
+                minDistance = distance;
+                selectID = id;
             }
         });
 
@@ -524,7 +519,7 @@ var KeyControl;
         }
     }
 
-    //Select the lowest parent from the current selected node.
+    // Select the lowest parent from the current selected node.
     function selectParent()
     {
         if (Main.selectedElement === null) return;
@@ -551,7 +546,7 @@ var KeyControl;
         }
     }
 
-    //Select the highest child from the current selected node.
+    // Select the highest child from the current selected node.
     function selectChild()
     {
         if (Main.selectedElement === null) return;
@@ -578,7 +573,7 @@ var KeyControl;
         }
     }
 
-    //Select the closest brother on the right from the current selected node.
+    // Select the closest brother on the right from the current selected node.
     function selectRightBrother()
     {
         if (Main.selectedElement === null) return;
@@ -618,7 +613,7 @@ var KeyControl;
         }
     }
 
-    //Select the closest brother on the left from the current selected node.
+    // Select the closest brother on the left from the current selected node.
     function selectLeftBrother()
     {
         if (Main.selectedElement === null) return;

@@ -1,11 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported Load3 */
 var Load3;
 
 (function()
 {
     "use strict";
 
+    // eslint-disable-next-line no-global-assign
     Load3 =
     {
         generateGraph: generateGraph,
@@ -41,10 +43,10 @@ var Load3;
                     treeID = "ext_" + treeID;
                 }
 
-                // get the position from the XML, note that this is in grid coordinates, not screen coordinates
+                // Get the position from the XML, note that this is in grid coordinates, not screen coordinates
                 var position = $(this).children('position')[0];
                 var leftPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('x')[0].textContent, 0));
-                var topPos  = Math.round(Utils.parseDecimalIntWithDefault($(position).children('y')[0].textContent, 0));
+                var topPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('y')[0].textContent, 0));
 
                 var tree = Main.createEmptyTree(treeID, leftPos, topPos);
                 var plumbInstance = tree.plumbInstance;
@@ -53,29 +55,29 @@ var Load3;
 
                 tree.optional = Utils.parseBool($(this).attr('optional'));
                 var iconDiv = tree.dragDiv.find('.icons');
-                if (tree.optional) iconDiv.html( Utils.sIcon('icon-tree-is-optional'));
+                if (tree.optional) iconDiv.html(Utils.sIcon('icon-tree-is-optional'));
                 $(tree.dragDiv).toggleClass('optional', tree.optional);
 
                 tree.level = level;
 
-                tree.dragDiv.find('.subjectName').text(tree.subject); // set subject in HTML
-                tree.dragDiv.find('.subjectNameInput').val(tree.subject); // set subject in HTML
+                tree.dragDiv.find('.subjectName').text(tree.subject); // Set subject in HTML
+                tree.dragDiv.find('.subjectNameInput').val(tree.subject); // Set subject in HTML
 
                 plumbInstance.batch(function()
                 {
                     $(this).children().each(function()
-                    { // parse the tree in the container
+                    { // Parse the tree in the container
                         switch (this.nodeName)
                         {
-                            case "computerStatement":
-                                loadStatement(this, Main.computerType, connections, treeID);
-                                break;
-                            case "playerStatement":
-                                loadStatement(this, Main.playerType, connections, treeID);
-                                break;
-                            case "conversation":
-                                loadConversation(this, conversations, treeID);
-                                break;
+                        case "computerStatement":
+                            loadStatement(this, Main.computerType, connections, treeID);
+                            break;
+                        case "playerStatement":
+                            loadStatement(this, Main.playerType, connections, treeID);
+                            break;
+                        case "conversation":
+                            loadConversation(this, conversations, treeID);
+                            break;
                         }
                     });
 
@@ -83,11 +85,13 @@ var Load3;
                     $.each(connections, function(sourceId, targets)
                     {
                         for (var i = 0; i < targets.length; i++)
+                        {
                             plumbInstance.connect(
                             {
                                 source: sourceId,
                                 target: targets[i]
                             });
+                        }
                     });
                 }.bind(this), true);
             });
@@ -116,8 +120,7 @@ var Load3;
             if (paramMatch !== null)
             {
                 var paramNumber = parseInt(paramMatch[1]);
-                if (paramNumber > Parameters.counter)
-                    Parameters.counter = paramNumber;
+                if (paramNumber > Parameters.counter) Parameters.counter = paramNumber;
             }
 
             var defaultValue = this.hasAttribute('initialValue') ? Utils.parseDecimalIntWithDefault(this.attributes.initialValue.value, 0) : 0;
@@ -146,9 +149,13 @@ var Load3;
 
         var idMatch = id.match(/^edit_(\d+)$/);
         if (idMatch !== null)
+        {
             Main.jsPlumbCounter = Math.max(Main.jsPlumbCounter, parseInt(idMatch[1]));
+        }
         else
+        {
             id = "ext_" + id;
+        }
 
         var characterIdRef;
         if (type === Main.computerType)
@@ -169,9 +176,13 @@ var Load3;
         var preconditionsXML = $(statement).find("preconditions");
         var preconditions;
         if (preconditionsXML.length === 0)
+        {
             preconditions = null;
+        }
         else
+        {
             preconditions = loadPreconditions(preconditionsXML.children()[0]);
+        }
 
         var parameterEffects = Config.getNewDefaultParameterEffects(characterIdRef);
         var acceptableScopes = ['per', 'per-' + type];
@@ -181,7 +192,7 @@ var Load3;
         if (type === Main.playerType)
         {
             var pEffEl = $(statement).find('parameterEffects');
-            var pEffs = pEffEl.children(); //all parameter effects of the node.
+            var pEffs = pEffEl.children(); // All parameter effects of the node.
             for (var j = 0; j < pEffs.length; j++)
             {
                 var parameter = pEffs[j];
@@ -200,11 +211,12 @@ var Load3;
             }
 
             targets = $(statement).find('nextComputerStatements').children();
-            if (targets.length === 0)
-                targets = $(statement).find('nextComputerStatement');
+            if (targets.length === 0) targets = $(statement).find('nextComputerStatement');
         }
         else
+        {
             targets = $(statement).find('responses').children();
+        }
 
         var comment = Utils.unEscapeHTML($(statement).find('comment').text());
 
@@ -215,8 +227,7 @@ var Load3;
             for (var m = 0; m < targets.length; m++)
             {
                 var targetID = targets[m].attributes.idref.value.replace(/\./g, '_');
-                if (!/^edit_\d+$/.test(targetID))
-                    targetID = 'ext_' + targetID;
+                if (!/^edit_\d+$/.test(targetID)) targetID = 'ext_' + targetID;
                 connections[id].push(targetID);
             }
         }
@@ -244,7 +255,7 @@ var Load3;
             left: xPos
         });
 
-        // fill the insides with text
+        // Fill the insides with text
         var txtView = node.find('.statementText');
         txtView.html(Utils.escapeHTML(text));
     }
@@ -301,7 +312,7 @@ var Load3;
                 {
                     type = Config.container.properties.byId[migrationPropertyIdRef].type;
                     propertyValue = type.fromXML(valueXML[0]);
-                    propertyValues.characterIndependent[migrationPropertyIdRef] = needsUnEscaping? Utils.unEscapeHTML(propertyValue) : propertyValue;
+                    propertyValues.characterIndependent[migrationPropertyIdRef] = needsUnEscaping ? Utils.unEscapeHTML(propertyValue) : propertyValue;
                 }
                 else if (migrationPropertyIdRef in propertyValues.perCharacter[firstCharacterId])
                 {
@@ -327,9 +338,13 @@ var Load3;
 
         var idMatch = id.match(/^edit_(\d+)$/);
         if (idMatch !== null)
+        {
             Main.jsPlumbCounter = Math.max(Main.jsPlumbCounter, parseInt(idMatch[1]));
+        }
         else
+        {
             id = "ext_" + id;
+        }
 
         var endNode = Utils.parseBool($(conversationXMLElement).attr('possibleEnd'));
         var comment = Utils.unEscapeHTML($(conversationXMLElement).find('comment').text());
@@ -374,9 +389,13 @@ var Load3;
         var preconditionsXML = $(conversationXMLElement).find("preconditions");
         var preconditionsJS;
         if (preconditionsXML.length === 0)
+        {
             preconditionsJS = null;
+        }
         else
+        {
             preconditionsJS = loadPreconditions(preconditionsXML.children()[0]);
+        }
 
         var targets = $(conversationXMLElement).find('responses').children();
         conversations[id].connections = [];
@@ -386,8 +405,7 @@ var Load3;
             for (var m = 0; m < targets.length; m++)
             {
                 var targetID = targets[m].attributes.idref.value.replace(/\./g, '_');
-                if (!/^edit_\d+$/.test(targetID))
-                    targetID = 'ext_' + targetID;
+                if (!/^edit_\d+$/.test(targetID)) targetID = 'ext_' + targetID;
                 conversations[id].connections.push(targetID);
             }
         }
@@ -429,7 +447,7 @@ var Load3;
             left: xPos
         });
 
-        // fill the insides with text
+        // Fill the insides with text
         var txtView = node.find('.statementText');
         txtView.html(Utils.escapeHTML(firstConversationNode.text));
     }
@@ -492,7 +510,7 @@ var Load3;
                     left: Utils.parseDecimalIntWithDefault(conversations[firstConversationNodeId].xPos, 0) + i * 8
                 });
 
-                // fill the insides with text
+                // Fill the insides with text
                 var txtView = node.find('.statementText');
                 txtView.html(Utils.escapeHTML(textNode.text));
 
@@ -524,5 +542,4 @@ var Load3;
             }, true);
         }
     }
-
 })();

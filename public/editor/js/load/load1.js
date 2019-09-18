@@ -1,11 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported Load1 */
 var Load1;
 
 (function()
 {
     "use strict";
 
+    // eslint-disable-next-line no-global-assign
     Load1 =
     {
         generateGraph: generateGraph
@@ -21,18 +23,18 @@ var Load1;
         tree.plumbInstance.batch(function()
         {
             $(xml).children().add($(xml).find('script').children()).each(function()
-            { //xml has one child: the script
+            { // The parameter xml has one child: the script
                 switch (this.nodeName)
                 {
-                    case "computerStatement":
-                        Load3.loadStatement(this, Main.computerType, connections, tree.id);
-                        break;
-                    case "playerStatement":
-                        Load3.loadStatement(this, Main.playerType, connections, tree.id);
-                        break;
-                    case "conversation":
-                        Load3.loadConversation(this, conversations, tree.id);
-                        break;
+                case "computerStatement":
+                    Load3.loadStatement(this, Main.computerType, connections, tree.id);
+                    break;
+                case "playerStatement":
+                    Load3.loadStatement(this, Main.playerType, connections, tree.id);
+                    break;
+                case "conversation":
+                    Load3.loadConversation(this, conversations, tree.id);
+                    break;
                 }
             });
 
@@ -40,11 +42,13 @@ var Load1;
             $.each(connections, function(sourceId, targets)
             {
                 for (var i = 0; i < targets.length; i++)
+                {
                     tree.plumbInstance.connect(
                     {
                         source: sourceId,
                         target: targets[i]
                     });
+                }
             });
         }, true);
 

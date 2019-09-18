@@ -22,7 +22,7 @@
     {
         $("#draftScreen").append($('<div>', { id: "itemControls" }).append($('<button>', { class: "clear", text: i18next.t('draft:delete_all') })));
         $("#draftScreen").append($('<table>', { style: "width:100%" })
-            .append($('<tr>').append($('<table>', { id: "draftTableHeaders", style:"width:100%" })
+            .append($('<tr>').append($('<table>', { id: "draftTableHeaders", style: "width:100%" })
                 .append($('<colgroup>')
                     .append($('<col>', { span: 1, style: "width: 15%;" }))
                     .append($('<col>', { span: 1, style: "width: 7.5%;" }))
@@ -31,14 +31,14 @@
                     .append($('<col>', { span: 1, style: "width: 10%;" }))
                     .append($('<col>', { span: 1, style: "width: 12.5%" })))
                 .append($('<tr>'))
-                    .append($('<th>', { class: "dragHandle noSelect", id: "draftDragAll", title: i18next.t('draft:drag_all'), text: "[[::]]" }))
-                    .append($('<th>',
+                .append($('<th>', { class: "dragHandle noSelect", id: "draftDragAll", title: i18next.t('draft:drag_all'), text: "[[::]]" }))
+                .append($('<th>',
                         {
                             class: "col0",
                             title: i18next.t('common:player') + ' / ' + i18next.t('common:computer') + ' / ' + i18next.t('common:situation'),
-                            text:  i18next.t('draft:letter.player') + '/' + i18next.t('draft:letter.computer') + '/' + i18next.t('draft:letter.situation')
+                            text: i18next.t('draft:letter.player') + '/' + i18next.t('draft:letter.computer') + '/' + i18next.t('draft:letter.situation')
                         }))
-                    .append($('<th>', { class: "col1", text: i18next.t('common:statement') }))))
+                .append($('<th>', { class: "col1", text: i18next.t('common:statement') }))))
             .append($('<tr>').append($('<div>', { id: "tableSizeFixer" }).append($('<table>', { id: "draftTable", data: { properties: "type,statement" }, style: "width: 100%;" })
                 .append($('<colgroup>')
                     .append($('<col>', { span: 1, style: "width: 15%;" }))
@@ -121,7 +121,7 @@
                 {
                     playerOnlyTds.addClass("disabled");
                     playerOnlyTds.append(
-                        '<span class="disabled-text">'+i18next.t('draft:not_available')+'</span>'
+                        '<span class="disabled-text">' + i18next.t('draft:not_available') + '</span>'
                     );
                 }
                 if (value === "player")
@@ -135,7 +135,7 @@
             editingCol = -1;
         });
 
-        // for all nodes together
+        // For all nodes together
         // Drag & drop into main container
         $('#draftDragAll').on("mousedown", function(e)
         {
@@ -166,7 +166,7 @@
             });
         });
 
-        // for the single nodes:
+        // For the single nodes:
         // Drag & drop into main container
         $('#draftTable').on("mousedown", 'td.dragHandle', function(e)
         {
@@ -192,7 +192,7 @@
 
             var stmt = tr.data('item').properties.statement.trimToLength(25);
             var index = $('#draftTable tr.draftItem').index(tr);
-            var text = i18next.t('draft:item_number', { postProcess: 'sprintf', sprintf: [parseInt(index, 10) + 1]});
+            var text = i18next.t('draft:item_number', { postProcess: 'sprintf', sprintf: [parseInt(index, 10) + 1] });
             if (stmt) text += ' ' + stmt;
 
             if (DragBox.isDroppable())
@@ -218,11 +218,9 @@
 
             if (editing)
             {
-
                 // ENTER
                 if (e.which === 13)
                 {
-
                     e.preventDefault();
 
                     tr.find('.col' + col + ' :input').trigger("blur");
@@ -279,12 +277,12 @@
                     if (e.shiftKey)
                     {
                         // Previous
-                        obj = prevCol({tr: tr, col: col});
+                        obj = prevCol({ tr: tr, col: col });
                     }
                     else
                     {
                         // Next
-                        obj = nextCol({tr: tr, col: col});
+                        obj = nextCol({ tr: tr, col: col });
                     }
                     obj.tr.find('td.col' + obj.col).trigger("click");
                 }
@@ -331,9 +329,8 @@
             obj.col = maxCols;
         }
         var field = obj.tr.find('.col' + obj.col);
-        // recursion to skip cols that are disabled or contain a select element
-        if (field.hasClass("disabled") || field.find("select").length > 0)
-            obj = prevCol(obj);
+        // Recursion to skip cols that are disabled or contain a select element
+        if (field.hasClass("disabled") || field.find("select").length > 0) obj = prevCol(obj);
 
         return obj;
     }
@@ -356,9 +353,8 @@
             obj.col = 0;
         }
         var field = obj.tr.find('.col' + obj.col);
-        // recursion to skip cols that are disabled or contain a select element
-        if (field.hasClass("disabled") || field.find("select").length > 0)
-            obj = nextCol(obj);
+        // Recursion to skip cols that are disabled or contain a select element
+        if (field.hasClass("disabled") || field.find("select").length > 0) obj = nextCol(obj);
 
         return obj;
     }
@@ -417,7 +413,7 @@
                     else
                     {
                         html += '<td class="' + p + ' col' + i + '"><span class="value">' + this.properties[
-                                p] + '</span>';
+                            p] + '</span>';
                         html +=
                             '<span class="edit" style="display:none">' +
                             e + '</span></td>';
@@ -549,11 +545,11 @@
         var props = tr.data('item').properties;
         for (var p in props)
         {
-            if (props.hasOwnProperty(p) && p !== "type" && props[p] !== "")
+            if (Object.prototype.hasOwnProperty.call(props, p) && p !== "type" && props[p] !== "")
             {
                 return false;
             }
         }
         return true;
     }
-}());
+})();

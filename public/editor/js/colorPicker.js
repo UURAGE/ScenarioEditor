@@ -1,11 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported ColorPicker */
 var ColorPicker;
 
-(function ()
+(function()
 {
     "use strict";
 
+    // eslint-disable-next-line no-global-assign
     ColorPicker =
     {
         defaultColor: "#606060",
@@ -275,10 +277,10 @@ var ColorPicker;
                     {
                         return Main.trees[treeID].plumbInstance.getAllConnections();
                     }))
-                    .filter(function(connection)
-                    {
-                        return connection.getParameter('color') in justDisabledColors;
-                    });
+                        .filter(function(connection)
+                        {
+                            return connection.getParameter('color') in justDisabledColors;
+                        });
 
                     var consideredSaveColorKey = function()
                     {
@@ -508,11 +510,11 @@ var ColorPicker;
                     editButton.setAttribute("cy", offset);
                     editButton.setAttribute("r", radius - ringPadding / 2);
                     editButton.setAttribute("opacity", 0);
-                    $(editButton).on('mouseover', function(e)
+                    $(editButton).on('mouseover', function()
                     {
                         editIcon.setAttribute("opacity", 1);
                     });
-                    $(editButton).on('mouseout', function(e)
+                    $(editButton).on('mouseout', function()
                     {
                         editIcon.setAttribute("opacity", 0.6);
                     });
@@ -540,11 +542,11 @@ var ColorPicker;
                     closeButton.setAttribute("cy", closeIconOffsetY + closeIconRadius);
                     closeButton.setAttribute("r", closeIconRadius);
                     closeButton.setAttribute("opacity", 0);
-                    $(closeButton).on('mouseover', function(e)
+                    $(closeButton).on('mouseover', function()
                     {
                         closeIcon.setAttribute("opacity", 1);
                     });
-                    $(closeButton).on('mouseout', function(e)
+                    $(closeButton).on('mouseout', function()
                     {
                         closeIcon.setAttribute("opacity", 0.6);
                     });
@@ -631,5 +633,4 @@ var ColorPicker;
             removeColor(connection, dialogue);
         });
     }
-
 })();

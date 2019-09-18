@@ -1,11 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported Types */
 var Types;
 
 (function()
 {
     "use strict";
 
+    // eslint-disable-next-line no-global-assign
     Types =
     {
         primitives: {},
@@ -180,7 +182,7 @@ var Types;
             {
                 return Utils.appendChild(typeXML, this.name);
             },
-            insertTypeIntoDOM: function(containerEl) {},
+            insertTypeIntoDOM: function() {},
             castFrom: function(type, value)
             {
                 return String(value);
@@ -226,11 +228,11 @@ var Types;
             controlType: 'number',
             labelControlOrder: Types.labelControlOrders.singleLineLabelContainer,
             defaultValue: 0,
-            assignmentOperators: [Types.assignmentOperators.assign,             Types.assignmentOperators.addAssign,
-                                  Types.assignmentOperators.subtractAssign],
-            relationalOperators: [Types.relationalOperators.equalTo,                Types.relationalOperators.notEqualTo,
-                                  Types.relationalOperators.greaterThanEqualTo,     Types.relationalOperators.lessThanEqualTo,
-                                  Types.relationalOperators.greaterThan,            Types.relationalOperators.lessThan],
+            assignmentOperators: [Types.assignmentOperators.assign, Types.assignmentOperators.addAssign,
+                Types.assignmentOperators.subtractAssign],
+            relationalOperators: [Types.relationalOperators.equalTo, Types.relationalOperators.notEqualTo,
+                Types.relationalOperators.greaterThanEqualTo, Types.relationalOperators.lessThanEqualTo,
+                Types.relationalOperators.greaterThan, Types.relationalOperators.lessThan],
             unaryOperators: [Types.unaryOperators.atMinimum, Types.unaryOperators.atMaximum],
             equals: function(otherType)
             {
@@ -306,13 +308,13 @@ var Types;
             },
             castFrom: function(type, value)
             {
-                switch(type.name)
+                switch (type.name)
                 {
-                    case Types.primitives.string.name: return Utils.parseDecimalIntWithDefault(value, 0);
-                    case Types.primitives.integer.name: return value;
-                    case Types.primitives.boolean.name: return Number(value);
-                    case Types.primitives.enumeration.name: return Utils.parseDecimalIntWithDefault(value, 0);
-                    default: return Utils.parseDecimalIntWithDefault(value, 0);
+                case Types.primitives.string.name: return Utils.parseDecimalIntWithDefault(value, 0);
+                case Types.primitives.integer.name: return value;
+                case Types.primitives.boolean.name: return Number(value);
+                case Types.primitives.enumeration.name: return Utils.parseDecimalIntWithDefault(value, 0);
+                default: return Utils.parseDecimalIntWithDefault(value, 0);
                 }
             },
             insertType: function(typeXML)
@@ -338,8 +340,7 @@ var Types;
             },
             getFromDOM: function(containerEl)
             {
-                var value = Utils.parseDecimalIntWithDefault(containerEl.children(this.controlName).first().val(), 0);
-                return value;
+                return Utils.parseDecimalIntWithDefault(containerEl.children(this.controlName).first().val(), 0);
             },
             setInDOM: function(containerEl, value)
             {
@@ -365,7 +366,7 @@ var Types;
             {
                 return this.name === otherType.name;
             },
-            loadType: function(typeXML, id, kind, scopes)
+            loadType: function(typeXML, id, kind)
             {
                 var type = this;
 
@@ -397,13 +398,13 @@ var Types;
             },
             castFrom: function(type, value)
             {
-                switch(type.name)
+                switch (type.name)
                 {
-                    case Types.primitives.string.name: return Utils.parseBool(value.toLowerCase());
-                    case Types.primitives.integer.name: return Boolean(value);
-                    case Types.primitives.boolean.name: return value;
-                    case Types.primitives.enumeration.name: return Utils.parseBool(value.toLowerCase());
-                    default: return Utils.parseBool(value);
+                case Types.primitives.string.name: return Utils.parseBool(value.toLowerCase());
+                case Types.primitives.integer.name: return Boolean(value);
+                case Types.primitives.boolean.name: return value;
+                case Types.primitives.enumeration.name: return Utils.parseBool(value.toLowerCase());
+                default: return Utils.parseBool(value);
                 }
             },
             insertType: function(typeXML)
@@ -421,7 +422,7 @@ var Types;
                 {
                     control = $('<' + this.controlName + '>', { id: htmlId });
                     control.append($('<option>', { value: String(false), text: i18next.t('types:primitives.boolean.false') }));
-                    control.append($('<option>', { value: String(true),  text: i18next.t('types:primitives.boolean.true') }));
+                    control.append($('<option>', { value: String(true), text: i18next.t('types:primitives.boolean.true') }));
                 }
                 containerEl.append(control);
             },
@@ -761,31 +762,33 @@ var Types;
             height: 'auto',
             width: 'auto',
             modal: true,
-            buttons: [
-            {
-                text: i18next.t('common:confirm'),
-                click: function()
+            buttons:
+            [
                 {
-                    if (newTypeName === Types.primitives.enumeration.name)
+                    text: i18next.t('common:confirm'),
+                    click: function()
                     {
-                        var newType = Types.primitives[newTypeName].loadTypeFromDOM(containerEl);
-                        hasValues = newType.options.sequence.length > 0;
+                        if (newTypeName === Types.primitives.enumeration.name)
+                        {
+                            var newType = Types.primitives[newTypeName].loadTypeFromDOM(containerEl);
+                            hasValues = newType.options.sequence.length > 0;
+                        }
+
+                        confirmed = true;
+
+                        $(this).dialog('close');
                     }
-
-                    confirmed = true;
-
-                    $(this).dialog('close');
-                }
-            },
-            {
-                text: i18next.t('common:cancel'),
-                click: function()
+                },
                 {
-                    confirmed = false;
+                    text: i18next.t('common:cancel'),
+                    click: function()
+                    {
+                        confirmed = false;
 
-                    $(this).dialog('close');
+                        $(this).dialog('close');
+                    }
                 }
-            }],
+            ],
             beforeClose: function()
             {
                 if (confirmed && newTypeName === Types.primitives.enumeration.name && !hasValues)
@@ -821,6 +824,4 @@ var Types;
             }
         });
     }
-
-
 })();

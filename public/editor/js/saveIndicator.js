@@ -1,11 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported SaveIndicator */
 var SaveIndicator;
 
 (function()
 {
     "use strict";
 
+    // eslint-disable-next-line no-global-assign
     SaveIndicator =
     {
         setSavedChanges: setSavedChanges,
@@ -27,5 +29,4 @@ var SaveIndicator;
     {
         return savedChanges;
     }
-
 })();

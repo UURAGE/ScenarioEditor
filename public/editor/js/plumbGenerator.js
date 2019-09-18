@@ -1,17 +1,19 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported PlumbGenerator */
 var PlumbGenerator;
 
 (function()
 {
     "use strict";
 
+    // eslint-disable-next-line no-global-assign
     PlumbGenerator =
     {
-        genJsPlumbInstance : genJsPlumbInstance,
+        genJsPlumbInstance: genJsPlumbInstance,
         defaultPaintStyle: { stroke: ColorPicker.defaultColor, strokeWidth: 2, outlineStroke: "transparent", outlineWidth: 1 },
         defaultHoverPaintStyle: { stroke: ColorPicker.defaultColor, strokeWidth: 2, outlineStroke: ColorPicker.defaultColor, outlineWidth: 1 },
-        defaultSelectedPaintStyle : { stroke: ColorPicker.defaultColor, strokeWidth: 2, outlineStroke: ColorPicker.defaultColor, outlineWidth: 2 }
+        defaultSelectedPaintStyle: { stroke: ColorPicker.defaultColor, strokeWidth: 2, outlineStroke: ColorPicker.defaultColor, outlineWidth: 2 }
     };
 
     // Expects an element returned from a jquery selector
@@ -21,16 +23,16 @@ var PlumbGenerator;
 
         instance.setContainer(container);
 
-        instance.registerConnectionType("basic", { anchor: [ "Perimeter", { shape: "Rectangle", anchorCount: 80 } ], connector:"StateMachine" });
+        instance.registerConnectionType("basic", { anchor: [ "Perimeter", { shape: "Rectangle", anchorCount: 80 } ], connector: "StateMachine" });
 
         instance.importDefaults(
         {
-            Endpoint : ["Dot", {radius:2}],
+            Endpoint: ["Dot", { radius: 2 }],
             Anchor: [ "Perimeter", { shape: "Rectangle", anchorCount: 80 } ],
-            HoverPaintStyle : PlumbGenerator.defaultHoverPaintStyle,
+            HoverPaintStyle: PlumbGenerator.defaultHoverPaintStyle,
             Connector: [ "StateMachine", { proximityLimit: 120 } ],
-            PaintStyle : PlumbGenerator.defaultPaintStyle,
-            ConnectionOverlays : [
+            PaintStyle: PlumbGenerator.defaultPaintStyle,
+            ConnectionOverlays: [
                 [ "Arrow", {
                     location: 1,
                     id: "arrow",
@@ -50,7 +52,7 @@ var PlumbGenerator;
         });
 
         // On mouseover, show the color key entry
-        instance.bind("mouseover",function(connection, e)
+        instance.bind("mouseover", function(connection)
         {
             if (ColorPicker.areColorsEnabled())
             {
@@ -64,13 +66,13 @@ var PlumbGenerator;
         });
 
         // On mouseout, hide the color key entry
-        instance.bind("mouseout", function(connection, e)
+        instance.bind("mouseout", function(connection)
         {
             connection.removeOverlay("color-label");
         });
 
         // On click, select the connection
-        instance.bind("click",function(c, e)
+        instance.bind("click", function(c, e)
         {
             if (!c || e.which !== 1) return;
 
@@ -123,7 +125,7 @@ var PlumbGenerator;
 
         instance.bind("beforeDrop", function(info)
         {
-            Main.makeConnection(info.sourceId,info.targetId, instance);
+            Main.makeConnection(info.sourceId, info.targetId, instance);
             instance.revalidate(info.sourceId);
             instance.revalidate(info.targetId);
         });
@@ -132,10 +134,10 @@ var PlumbGenerator;
         {
             SaveIndicator.setSavedChanges(false);
 
-            if($("#" + info.targetId).hasClass("parentSelected") ||
+            if ($("#" + info.targetId).hasClass("parentSelected") ||
                $("#" + info.targetId).hasClass("selected"))
             {
-                if($("#allParents").hasClass("enabled"))
+                if ($("#allParents").hasClass("enabled"))
                 {
                     $("#" + info.sourceId).addClass("parentSelected");
                     Main.highlightParents(info.sourceId);

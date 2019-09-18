@@ -74,7 +74,7 @@
         return best;
     }
 
-    // transpose switches the placement of two nodes, checks if the situation has improved, and reverts it otherwise.
+    // Transpose switches the placement of two nodes, checks if the situation has improved, and reverts it otherwise.
     function transpose(order)
     {
         for (var i = 0; i < order.length; i++)
@@ -226,7 +226,7 @@
                 {
                     // For each node, calculate the median value of the index of it's parents.
                     virtualNodeNetwork[i][j].topologicalmedianValue =
-                        median_value(virtualNodeNetwork,
+                        medianValue(virtualNodeNetwork,
                             virtualNodeNetwork[i][j], true);
                 }
                 // Sort the row based on the values just calculated.
@@ -245,7 +245,7 @@
                 {
                     // For each node, calculate the median value of the index of its children.
                     virtualNodeNetwork[k][l].topologicalmedianValue =
-                        median_value(virtualNodeNetwork,
+                        medianValue(virtualNodeNetwork,
                             virtualNodeNetwork[k][l], false);
                 }
                 // Sort the row based on the values just calculated.
@@ -259,7 +259,7 @@
 
     // This function takes all the neighbours (defined as either parents or children, based on the 'parents' bool),
     // and returns the position of the median neighbour in the row above/below.
-    function median_value(virtualNodeNetwork, node, parents)
+    function medianValue(virtualNodeNetwork, node, parents)
     {
         var P;
         // Either look at the level above this one (parents), or look at the level below this one (!parents, or children).
@@ -277,10 +277,10 @@
             {
                 // If this element of rowAbove is a parent, return its index. Else return the sentinel value '-1'.
                 if (node.topologicalParent.some(function(
-                        parentElem)
-                    {
-                        return parentElem == aboveElem;
-                    }))
+                    parentElem)
+                {
+                    return parentElem == aboveElem;
+                }))
                 {
                     return index;
                 }
@@ -307,10 +307,10 @@
             {
                 // If this node is a child of the current node, we return its index. Else we return a sentinel value of -1.
                 if (node.topologicalChildren.some(function(
-                        childElem)
-                    {
-                        return childElem == belowElem;
-                    }))
+                    childElem)
+                {
+                    return childElem == belowElem;
+                }))
                 {
                     return index;
                 }
@@ -482,7 +482,7 @@
             // We check if the minimal width of this row is equal to the width of the graph.
             // If it isn't, we calculate the margins between the nodes of this rank.
             var widthLeft = maximumMinimalWidth - rowWidth[k] - (
-                    virtualNodeNetwork[k].length - 1) *
+                virtualNodeNetwork[k].length - 1) *
                 horizontalMargin;
             var marginForThisRow;
             if (widthLeft !== 0)
@@ -551,14 +551,14 @@
         // For every node, in topological order ...
         for (var i = 0; i < topologicalOrdening.length; i++)
         {
-            //... take a look at every child of that node ...
+            // ... take a look at every child of that node ...
             var connections = plumbInstance.getConnections(
             {
                 source: topologicalOrdening[i]
             });
             for (var j = 0; j < connections.length; j++)
             {
-                //... the new rank of the childnode is the maximum of its current rank and this parents rank + 1.
+                // ... the new rank of the childnode is the maximum of its current rank and this parents rank + 1.
                 // This means that the rank of every node is one bigger than the largest rank of any of it's parents.
                 // This in turn is the length of the longest path to this node from the source.
                 if (Main.nodes[connections[j].targetId].topologicalRank < Main.nodes[topologicalOrdening[i]].topologicalRank + 1)
@@ -576,8 +576,8 @@
         var topologicalOrderening = [];
         $.each(tree.nodes, function(index, nodeID)
         {
-            //java script arrrays tend to have undefined elements because javascript.
-            if(nodeID) //blame the internet, undefined is falsey
+            // Java script arrrays tend to have undefined elements because javascript.
+            if (nodeID) // Blame the internet, undefined is falsey
             {
                 Main.nodes[nodeID].topologicalOrderingVisited = false;
             }
@@ -599,7 +599,7 @@
         // If we haven't visited this node yet ...
         if (!Main.nodes[currentNodeID].topologicalOrderingVisited)
         {
-            //... we have visited this node now.
+            // ... we have visited this node now.
             // While visiting this node we first make sure all children are added to topologicalOrderening, then we add the node itself.
             Main.nodes[currentNodeID].topologicalOrderingVisited = true;
             var connections = plumbInstance.getConnections(

@@ -1,11 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported Config */
 var Config;
 
 (function()
 {
     "use strict";
 
+    // eslint-disable-next-line no-global-assign
     Config =
     {
         additionalNameSpaces: {},
@@ -156,7 +158,7 @@ var Config;
 
         var sequence = [];
         var byId = {};
-        collectionXML.children().each(function (index, childXML)
+        collectionXML.children().each(function(index, childXML)
         {
             var subResult = loadNode(childXML, nodeName, collectionScopes);
             if (subResult.kind === nodeName)
@@ -232,7 +234,7 @@ var Config;
         {
             name = i18next.t('configXML:character.' + id);
         }
-        return { id: id, name: name, properties: properties, parameters: parameters};
+        return { id: id, name: name, properties: properties, parameters: parameters };
     }
 
     function loadCollectionOrDefault(collectionXML, nodeName, defaultCollection, defaultScopes)
@@ -456,5 +458,4 @@ var Config;
 
         return propertyValues;
     }
-
 })();

@@ -1,5 +1,6 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported Expression */
 var Expression;
 
 (function()
@@ -32,7 +33,7 @@ var Expression;
                 var literalXML = Utils.appendChild(expressionXML, this.name);
                 type.toXML(literalXML, literal);
             },
-            isAvailableFor: function(type)
+            isAvailableFor: function()
             {
                 return true;
             },
@@ -40,8 +41,8 @@ var Expression;
             {
                 expression.literal = newType.castFrom(previousType, expression.literal);
             },
-            handleParameterTypeChange: function(){},
-            handleParameterRemoval: function(){}
+            handleParameterTypeChange: function() {},
+            handleParameterRemoval: function() {}
         },
         reference:
         {
@@ -79,7 +80,7 @@ var Expression;
                 container.append(parameterSelect);
                 parameterSelect.trigger('change');
             },
-            getFromDOM: function(container, type)
+            getFromDOM: function(container)
             {
                 var reference = {};
                 reference.parameterIdRef = container.children('.parameter-idref').val();
@@ -99,7 +100,7 @@ var Expression;
                 container.children('.parameter-idref').val(reference.parameterIdRef).trigger('change');
                 if (Config.isCharacterParameter(reference.parameterIdRef))
                 {
-                     container.children('.character-idref').val(reference.characterIdRef).trigger('change');
+                    container.children('.character-idref').val(reference.characterIdRef).trigger('change');
                 }
                 var calculateSelect = container.children('.reference-calculate');
                 if (reference.calculate && calculateSelect.length > 0)
@@ -107,7 +108,7 @@ var Expression;
                     calculateSelect.val(reference.calculate);
                 }
             },
-            fromXML: function(referenceXML, type)
+            fromXML: function(referenceXML)
             {
                 var reference = {};
                 if (referenceXML.hasAttribute("characteridref"))
@@ -279,7 +280,7 @@ var Expression;
                 Expression.appendControlsTo(expressionContainer, type);
                 container.append(expressionContainer);
 
-                var scaleOperatorSelect = $('<select>', { class: "scale-operator"});
+                var scaleOperatorSelect = $('<select>', { class: "scale-operator" });
                 scaleOperatorSelect.append($('<option>', { value: 'scalar', text: '*' }));
                 scaleOperatorSelect.append($('<option>', { value: 'divisor', text: '/' }));
                 container.append(scaleOperatorSelect);
@@ -469,7 +470,7 @@ var Expression;
                 var otherwiseXML = Utils.appendChild(chooseXML, 'otherwise');
                 Expression.toXML(otherwiseXML, type, choose.otherwise);
             },
-            isAvailableFor: function(type)
+            isAvailableFor: function()
             {
                 return true;
             },
@@ -591,7 +592,7 @@ var Expression;
                     score: score
                 };
             },
-            fromXML: function(scoreXML, type)
+            fromXML: function()
             {
                 return null;
             },
@@ -673,6 +674,7 @@ var Expression;
         }
     };
 
+    // eslint-disable-next-line no-global-assign
     Expression =
     {
         kinds: kinds,
@@ -691,7 +693,7 @@ var Expression;
         {
             if (kinds[kindName].isAvailableFor(type))
             {
-                expressionSelect.append($('<option>', { value: kindName, text: i18next.t('common:kinds.' + kindName)}));
+                expressionSelect.append($('<option>', { value: kindName, text: i18next.t('common:kinds.' + kindName) }));
             }
         }
         expressionSelect.on('change', function()
@@ -778,5 +780,4 @@ var Expression;
         expression.kind = kinds.literal;
         expression.literal = type.defaultValue;
     }
-
 })();

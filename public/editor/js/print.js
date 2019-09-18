@@ -1,11 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported Print */
 var Print;
 
 (function()
 {
     "use strict";
 
+    // eslint-disable-next-line no-global-assign
     Print =
     {
         printScenario: printScenario
@@ -29,12 +31,12 @@ var Print;
                 // and is called inside that window HTML on load
                 var setHeights = function setHeights()
                 {
-                    [].forEach.call(document.getElementsByClassName('container'), function (container)
+                    [].forEach.call(document.getElementsByClassName('container'), function(container)
                     {
                         // Set the height to include all bounding rectangles
                         var containerHeight = container.getBoundingClientRect().top;
                         var maxHeight = 0;
-                        [].forEach.call(container.getElementsByTagName('div'), function (div)
+                        [].forEach.call(container.getElementsByTagName('div'), function(div)
                         {
                             var newHeight = div.getBoundingClientRect().bottom - containerHeight;
                             if (newHeight > maxHeight)
@@ -68,8 +70,8 @@ var Print;
                         if (outerHTML && treeDivContentList[i].className)
                         {
                             // If it's a statement we need to loop over its contents and add only the relevant HTML
-                            if (treeDivContentList[i].classList.contains('player')     ||
-                                treeDivContentList[i].classList.contains('computer')   ||
+                            if (treeDivContentList[i].classList.contains('player') ||
+                                treeDivContentList[i].classList.contains('computer') ||
                                 treeDivContentList[i].classList.contains('situation'))
                             {
                                 // Manually add the inner HTML
@@ -78,7 +80,7 @@ var Print;
                                 var statementDivContentList = $(treeDivContentList[i]).children();
                                 for (var j = 0; j < statementDivContentList.length; j++)
                                 {
-                                    if (statementDivContentList[j].className !== 'ep'            &&
+                                    if (statementDivContentList[j].className !== 'ep' &&
                                         statementDivContentList[j].className !== 'nodestatement' &&
                                         statementDivContentList[j].className !== 'statementInput')
                                     {
@@ -105,23 +107,20 @@ var Print;
                 });
 
                 // Open a window for printing
-                var printWindow = window.open
-                (
-                '',
-                '',
-                'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0'
+                var printWindow = window.open(
+                    '',
+                    '',
+                    'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0'
                 );
 
                 // Add style sheet references
                 for (var i = 0; i < document.styleSheets.length; i++)
                 {
-                    printWindow.document.write
-                    (
+                    printWindow.document.write(
                         '<link rel="stylesheet" type="text/css" href="' + document.styleSheets[i].href + '">'
                     );
                 }
-                printWindow.document.write
-                (
+                printWindow.document.write(
                     '<style type="text/css"> .w{ position:absolute; } circle{ display:none } </style>'
                 );
 

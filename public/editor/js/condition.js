@@ -1,11 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported Condition */
 var Condition;
 
 (function()
 {
     "use strict";
 
+    // eslint-disable-next-line no-global-assign
     Condition =
     {
         appendControlsTo: appendControlsTo,
@@ -440,11 +442,7 @@ var Condition;
 
         for (var state in states)
         {
-            if (states[state])
-                div.addClass(state);
-            else
-                div.removeClass(state);
+            div.toggleClass(state, states[state]);
         }
     }
-
 })();

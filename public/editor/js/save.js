@@ -1,11 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported Save */
 var Save;
 
 (function()
 {
     "use strict";
 
+    // eslint-disable-next-line no-global-assign
     Save =
     {
         exportScenario: exportScenario
@@ -65,7 +67,7 @@ var Save;
                 authorEl.setAttribute("name", author.name);
                 if (author.email) authorEl.setAttribute("email", author.email);
                 authorEl.setAttribute("startDate", author.startDate);
-                if(author.endDate) authorEl.setAttribute("endDate", author.endDate);
+                if (author.endDate) authorEl.setAttribute("endDate", author.endDate);
             });
         }
 
@@ -86,25 +88,23 @@ var Save;
             generateTreeXML(interleave, tree);
         };
 
-        while (i < sortedTrees.length) // this loop gets all the levels
+        while (i < sortedTrees.length) // This loop gets all the levels
         {
-            //one interleave tag for each level
+            // One interleave tag for each level
             var interleave = addAndReturnElement("interleave", scenarioNameSpace, seqElement);
             var treeArray = [];
             treeArray.push(sortedTrees[i]);
             i++;
-            // lets see if more trees are at this level
+            // Lets see if more trees are at this level
             for (i; i < sortedTrees.length; i++)
             {
                 var tree = sortedTrees[i];
 
-                if (tree.level == treeArray[0].level)
-                    treeArray.push(tree);
-                else
-                    break;
+                if (tree.level == treeArray[0].level) treeArray.push(tree);
+                else break;
             }
 
-            //for each tree at this level, make the xml
+            // For each tree at this level, make the xml
             $.each(treeArray, function(i, tree) { makeTreeXML(i, tree, interleave); });
         }
         var s = new XMLSerializer();
@@ -148,7 +148,7 @@ var Save;
 
         // Save user-defined parameters
         var userDefinedParametersEl = addAndReturnElement("userDefined", scenarioNameSpace, parametersEl);
-        Parameters.container.sequence.forEach(function (parameter)
+        Parameters.container.sequence.forEach(function(parameter)
         {
             addDefinitionElement(parameter, "parameter", userDefinedParametersEl);
         });
@@ -414,7 +414,7 @@ var Save;
     {
         // Calculate the spans between the nodes on the X and Y axes
         var xPositions = identifiables.map(function(identifiable) { return Utils.cssPosition($("#" + identifiable.id)).left; });
-        var yPositions = identifiables.map(function(identifiable) { return Utils.cssPosition($("#" + identifiable.id)).top;  });
+        var yPositions = identifiables.map(function(identifiable) { return Utils.cssPosition($("#" + identifiable.id)).top; });
         var spanX = Math.max.apply(null, xPositions) - Math.min.apply(null, xPositions);
         var spanY = Math.max.apply(null, yPositions) - Math.min.apply(null, yPositions);
         var sortProperty = spanX > spanY ? 'left' : 'top';
@@ -510,8 +510,7 @@ var Save;
         return elToAdd;
     }
 
-    //trees is now an object with individual trees as properties
-    //objects cant be sorted, so we return an array of trees, sorted by level, if equal, sorted by x-position
+    // Returns an array of trees, sorted by level, if equal, sorted by x-position
     function sortTrees(trees)
     {
         var result = [];

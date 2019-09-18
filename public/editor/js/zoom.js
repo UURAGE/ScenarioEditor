@@ -1,27 +1,27 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported Zoom */
 var Zoom;
 
 (function()
 {
     "use strict";
 
+    // eslint-disable-next-line no-global-assign
     Zoom =
     {
-        toggleZoom : toggleZoom,
-        zoomIn : zoomIn,
-        zoomOut : zoomOut,
+        toggleZoom: toggleZoom,
+        zoomIn: zoomIn,
+        zoomOut: zoomOut,
         getZoomed: getZoomed,
-        isZoomed : isZoomed
+        isZoomed: isZoomed
     };
 
     // Tree (the object, not the id) contains a div and original positions before zoom
     function toggleZoom(tree)
     {
-        if(!tree.dragDiv.hasClass("zoom"))
-            zoomIn(tree);
-        else
-            zoomOut(tree);
+        if (!tree.dragDiv.hasClass("zoom")) zoomIn(tree);
+        else zoomOut(tree);
     }
 
     function zoomIn(tree)
@@ -35,14 +35,15 @@ var Zoom;
             var parent = tree.dragDiv.parent();
 
             // Zoom out all the other trees if they are zoomed in
-            $.each(Main.trees, function(key, value) {
+            $.each(Main.trees, function(key, value)
+            {
                 zoomOut(value);
             });
 
             tree.dragDiv.addClass("zoom");
             // Ensure it looks right
             // Hide overflowing content
-            parent.css({"overflow": "hidden"});
+            parent.css({ "overflow": "hidden" });
             // Put it in the current top left corner of the parent
             Utils.cssPosition(tree.dragDiv, { "top": parent.scrollTop(), "left": parent.scrollLeft() });
             // Make it undraggable
@@ -120,7 +121,7 @@ var Zoom;
             var zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
             zoomTreeButton.html(Utils.sIcon('icon-plus'));
 
-            parent.css({"overflow": "auto"});
+            parent.css({ "overflow": "auto" });
             jsPlumb.setSuspendDrawing(true);
 
             Main.updateButtons();
@@ -143,7 +144,7 @@ var Zoom;
         }
         else
         {
-            return $("#"+treeID).hasClass('zoom');
+            return $("#" + treeID).hasClass('zoom');
         }
     }
 })();

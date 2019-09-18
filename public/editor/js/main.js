@@ -1,5 +1,6 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported Main */
 var Main;
 
 (function()
@@ -9,6 +10,7 @@ var Main;
     var gridX,
         gridY;
 
+    // eslint-disable-next-line no-global-assign
     Main =
     {
         nodes: {},
@@ -24,7 +26,7 @@ var Main;
         gridY: gridY,
         // The mouse position relative to the html document
         mousePosition: { x: 0, y: 0 },
-        //Functions
+        // Functions
         addNewNode: addNewNode,
         addNewTree: addNewTree,
         applyChanges: applyChanges,
@@ -54,47 +56,47 @@ var Main;
     };
 
     var ctrlDown = false, spaceDown = false, isSelecting = false, isPanning = false,
-        invalidateNodeClick = false;//a drag event also triggers a click event, use this flag to catch and stop these events
+        invalidateNodeClick = false;// A drag event also triggers a click event, use this flag to catch and stop these events
 
-        // Copied from: http://stackoverflow.com/a/22079985/1765330
-        $.fn.attachDragger = function()
-        {
-            var lastPosition, position, difference;
-            $(this)
-                .on("mouseenter", function(e)
-                {
-                    lastPosition = [e.clientX, e.clientY];
-                })
-                .on("mousedown", function(e)
-                {
-                    isPanning = true;
-                    lastPosition = [e.clientX, e.clientY];
-                })
-                .on("mouseup", function(e)
-                {
-                    isPanning = false;
-                })
-                .on("mousemove", function(e)
-                {
-                    if (!isPanning) return;
-                    if (spaceDown)
-                    {
-                        position = [e.clientX, e.clientY];
-                        difference = [ position[0]-lastPosition[0], position[1]-lastPosition[1] ];
-                        $(this).scrollLeft( $(this).scrollLeft() - difference[0] );
-                        $(this).scrollTop( $(this).scrollTop() - difference[1] );
-                        lastPosition = [e.clientX, e.clientY];
-                    }
-                    else
-                    {
-                        isPanning = false;
-                    }
-                });
-            $(document).on("mouseup", function()
+    // Copied from: http://stackoverflow.com/a/22079985/1765330
+    $.fn.attachDragger = function()
+    {
+        var lastPosition, position, difference;
+        $(this)
+            .on("mouseenter", function(e)
+            {
+                lastPosition = [e.clientX, e.clientY];
+            })
+            .on("mousedown", function(e)
+            {
+                isPanning = true;
+                lastPosition = [e.clientX, e.clientY];
+            })
+            .on("mouseup", function()
             {
                 isPanning = false;
+            })
+            .on("mousemove", function(e)
+            {
+                if (!isPanning) return;
+                if (spaceDown)
+                {
+                    position = [e.clientX, e.clientY];
+                    difference = [ position[0] - lastPosition[0], position[1] - lastPosition[1] ];
+                    $(this).scrollLeft($(this).scrollLeft() - difference[0]);
+                    $(this).scrollTop($(this).scrollTop() - difference[1]);
+                    lastPosition = [e.clientX, e.clientY];
+                }
+                else
+                {
+                    isPanning = false;
+                }
             });
-        };
+        $(document).on("mouseup", function()
+        {
+            isPanning = false;
+        });
+    };
 
     $(document).ready(function()
     {
@@ -119,7 +121,7 @@ var Main;
         if (Config.container.characters.sequence.length > 1)
         {
             var characterSelection = $("#characterSelection");
-            Config.container.characters.sequence.forEach(function (character)
+            Config.container.characters.sequence.forEach(function(character)
             {
                 characterSelection.append($("<option>", { value: character.id, text: character.name ? character.name : character.id }));
             });
@@ -135,7 +137,7 @@ var Main;
         {
             var nameInput = $('#scenarioNameTab .scenarioNameInput input');
 
-            if(!cancel)
+            if (!cancel)
             {
                 var inputName = Metadata.formatScenarioName(nameInput.val());
                 if (inputName !== Metadata.container.name)
@@ -152,20 +154,20 @@ var Main;
         });
         scenarioNameInputSpan.on('keydown', function(e)
         {
-            if(e.keyCode === 13)// enter
+            if (e.keyCode === 13) // Enter
             {
-                $(this).trigger('focusout',[false]);
+                $(this).trigger('focusout', [false]);
             }
-            if(e.keyCode === 27)// escape
+            if (e.keyCode === 27) // Escape
             {
-                $(this).trigger('focusout',[true]);
+                $(this).trigger('focusout', [true]);
             }
         });
         scenarioNameInputSpan.hide();
 
         $('#scenarioNameTab').append(scenarioNameInputSpan);
 
-        $('#scenarioNameTab .scenarioName').on('dblclick', function(e)
+        $('#scenarioNameTab .scenarioName').on('dblclick', function()
         {
             $(this).hide();
 
@@ -176,22 +178,21 @@ var Main;
             nameInput.focus();
         });
 
-        //handle movement of the div indicating which grid cell youre hovering over
+        // Handle movement of the div indicating which grid cell youre hovering over
         $('#main').on('mousemove', function(e)
         {
             var mainPos = $("#main").offset();
 
             Utils.cssPosition($("#gridIndicator"),
             {
-                "top":  gridPos(e.pageY - mainPos.top  + $("#main").scrollTop(),  Main.gridY),
+                "top": gridPos(e.pageY - mainPos.top + $("#main").scrollTop(), Main.gridY),
                 "left": gridPos(e.pageX - mainPos.left + $("#main").scrollLeft(), Main.gridX)
             });
         });
 
         $('#main').on('dblclick', function()
         {
-            if(!Zoom.isZoomed())
-                addNewTree();
+            if (!Zoom.isZoomed()) addNewTree();
         });
         $('#newTree').on('mousedown', function(e)
         {
@@ -264,7 +265,7 @@ var Main;
                 return true;
             });
         });
-        $("#newChildNode").on('click', function(e)
+        $("#newChildNode").on('click', function()
         {
             createChildNode(Main.selectedElement);
         });
@@ -315,10 +316,10 @@ var Main;
             $("#gridIndicator").show();
         });
 
-        $("#main").on('mouseleave', function()
-        {
-            //$("#gridIndicator").hide();
-        });
+        // $("#main").on('mouseleave', function()
+        // {
+        //     $("#gridIndicator").hide();
+        // });
 
         var isMainClickAction = false;
         $("#main").on('click', function(e)
@@ -360,10 +361,10 @@ var Main;
             // Add all selected nodes to a array.
             var id = element.selected.id;
 
-            //zoomed, select nodes
+            // Zoomed, select nodes
             if (Zoom.isZoomed())
             {
-                if(!(id in Main.trees))
+                if (!(id in Main.trees))
                 {
                     Main.selectedElements.push(id);
 
@@ -372,7 +373,7 @@ var Main;
             }
             else
             {
-                if(id in Main.trees)
+                if (id in Main.trees)
                 {
                     Main.selectedElements.push(id);
                 }
@@ -383,8 +384,7 @@ var Main;
             isMainClickAction = false;
 
             // If there's only one node selected, show the node.
-            if (Main.selectedElements.length === 1)
-                selectElement(Main.selectedElements[0]);
+            if (Main.selectedElements.length === 1) selectElement(Main.selectedElements[0]);
 
             MiniMap.update(true);
         });
@@ -408,7 +408,7 @@ var Main;
 
     $(window).on('beforeunload', function()
     {
-        // confirmation for leaving the page
+        // Confirmation for leaving the page
         if (!SaveIndicator.getSavedChanges())
         {
             return i18next.t('main:pending_changes');
@@ -430,7 +430,8 @@ var Main;
         }
     });
 
-    $(window).on('keyup', function(e) {
+    $(window).on('keyup', function()
+    {
         if (spaceDown)
         {
             var zoomedTree = Zoom.getZoomed();
@@ -520,18 +521,18 @@ var Main;
             // Copied from: http://stackoverflow.com/a/3169849/1765330
             if (window.getSelection)
             {
-              if (window.getSelection().empty)
-              {  // Chrome
-                window.getSelection().empty();
-              }
-              else if (window.getSelection().removeAllRanges)
-              {  // Firefox
-                window.getSelection().removeAllRanges();
-              }
+                if (window.getSelection().empty)
+                { // Chrome
+                    window.getSelection().empty();
+                }
+                else if (window.getSelection().removeAllRanges)
+                { // Firefox
+                    window.getSelection().removeAllRanges();
+                }
             }
             else if (document.selection)
-            {  // IE?
-              document.selection.empty();
+            { // IE?
+                document.selection.empty();
             }
 
             var parentOffset = $(this).offset();
@@ -541,7 +542,7 @@ var Main;
             $('#sidebar').addClass('dragging');
         });
 
-        $(domSidebarGrip).dblclick(function(event)
+        $(domSidebarGrip).dblclick(function()
         {
             collapseSidebar();
         });
@@ -605,17 +606,17 @@ var Main;
             distance: 5,
             filter: ".w", // Only select the nodes.
             appendTo: treeDiv,
-            start: function( event, ui )
+            start: function()
             {
                 isSelecting = true;
             },
-            stop: function( event, ui )
+            stop: function()
             {
                 isSelecting = false;
                 isClickAction = false;
             }
         });
-        treeDiv.selectable('disable'); //box selection only useful in zoomed state
+        treeDiv.selectable('disable'); // Box selection only useful in zoomed state
         treeDiv.attachDragger();
 
         var defaultName = i18next.t('main:default_subject');
@@ -624,7 +625,7 @@ var Main;
         changeNameInput.hide();
         changeNameInput.on('focusout', function(e, cancel)
         {
-            var subDiv = $("#"+id);
+            var subDiv = $("#" + id);
             var subjectName = subDiv.find('.subjectName').show();
             var input = subDiv.find('.subjectNameInput').hide();
 
@@ -646,26 +647,26 @@ var Main;
         });
         changeNameInput.on('keydown', function(e)
         {
-            if(e.keyCode === 13) // enter
+            if (e.keyCode === 13) // Enter
             {
                 changeNameInput.trigger('focusout', [false]);
                 $("#main").focus();
             }
-            if(e.keyCode === 27) // escape
+            if (e.keyCode === 27) // Escape
             {
                 changeNameInput.trigger('focusout', [true]);
                 $("#main").focus();
             }
         });
 
-        var zoomTreeButton = $('<div>',{html: Utils.sIcon('icon-plus'), class:"zoomTreeButton button"});
+        var zoomTreeButton = $('<div>', { html: Utils.sIcon('icon-plus'), class: "zoomTreeButton button" });
         zoomTreeButton.on("click", function()
         {
-            if(!DragBox.dragging())
+            if (!DragBox.dragging())
             {
-                // open/close tree
+                // Open/close tree
                 Main.trees[id].subject = changeNameInput.val();
-                $("#"+id).find('.subjectName').text(Main.trees[id].subject);
+                $("#" + id).find('.subjectName').text(Main.trees[id].subject);
                 Zoom.toggleZoom(Main.trees[id]);
                 MiniMap.update(true);
             }
@@ -674,11 +675,11 @@ var Main;
         var inputSpan = $('<span>');
         inputSpan.append(changeNameInput);
 
-        var subjTextSpan = $('<span>',{text: defaultName, class:"subjectName"});
+        var subjTextSpan = $('<span>', { text: defaultName, class: "subjectName" });
 
         var iconDiv = $('<div>', { class: "icons" });
 
-        var subjectDiv = $('<div>', {class:"subjectDiv noSelect"});
+        var subjectDiv = $('<div>', { class: "subjectDiv noSelect" });
         subjectDiv.prepend(zoomTreeButton);
         subjectDiv.append(subjTextSpan);
         subjectDiv.append(inputSpan);
@@ -707,7 +708,7 @@ var Main;
             e.stopPropagation();
         });
 
-        var dragDiv = $('<div>', {class: "w treeContainer gridded selectable", id: id});
+        var dragDiv = $('<div>', { class: "w treeContainer gridded selectable", id: id });
         dragDiv.append($('<div>').append(subjectDiv));
         dragDiv.append($('<div>').append($('<div>').append(treeDiv)));
 
@@ -724,39 +725,42 @@ var Main;
             id: id,
             subject: defaultName,
             optional: false,
-            leftPos: leftPos, //necessary to return to the right spot after zooming out
-            topPos: topPos, //left and topPos are in grid coordinates (if leftPos == 2 screen pos == 2*gridX)
-            leftScroll: 0, //necessary to zoom in to the spot on the graph where last zoomed out
+            // Necessary to return to the right spot after zooming out
+            // leftPos and topPos are in grid coordinates (if leftPos == 2 screen pos == 2*gridX)
+            leftPos: leftPos,
+            topPos: topPos,
+            // Necessary to zoom in to the spot on the graph where last zoomed out
+            leftScroll: 0,
             topScroll: 0,
             comment: "",
             level: topPos,
             nodes: [],
-            selectedConnections: {}, // The keys for this object are the connection ids
+            // The keys for this object are the connection IDs
+            selectedConnections: {},
             plumbInstance: PlumbGenerator.genJsPlumbInstance(treeDiv)
         };
 
-        //(x,y) of upper left of containment and (x,y) of lower right
+        // (x,y) of upper left of containment and (x,y) of lower right
         jsPlumb.draggable(dragDiv,
         {
             filter: ".zoomTreeButton, .zoomTreeButton *",
 
             // The constrain function returns the array with coordinates that will be assigned to the dragged element
-            constrain: function(currentCoordinates, element)
+            constrain: function(currentCoordinates)
             {
                 return [Math.max(0, currentCoordinates[0]), Math.max(0, currentCoordinates[1])];
             },
 
-            start: function(event)
+            start: function()
             {
-                if(Main.selectedElements[0]!==id)
-                    selectTree(id);
+                if (Main.selectedElements[0] !== id) selectTree(id);
             },
 
-            stop:function(event)
+            stop: function(event)
             {
                 treeDropHandler(event, id);
             }
-        }); //we cannot use the built in grid functionality because it doesnt allow to drag "outside" the graph area to expand it
+        }); // We cannot use the built in grid functionality because it doesnt allow to drag "outside" the graph area to expand it
 
         // Attach minimap scroll event listener to treeDiv
         MiniMap.attachScrollListener(treeDiv);
@@ -829,7 +833,7 @@ var Main;
             type: type,
             parameterEffects: parameterEffects,
             preconditions: null,
-            propertyValues:  Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef),
+            propertyValues: Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef),
             comment: "",
             endNode: false,
             allowDialogueEndNode: false,
@@ -884,17 +888,17 @@ var Main;
             }
             else
             {
-                switch(parent.type)
+                switch (parent.type)
                 {
-                    case Main.playerType:
-                        node = addNewNode(Main.computerType, "", position, true);
-                        break;
-                    case Main.computerType:
-                        node = addNewNode(Main.playerType, "", position, true);
-                        break;
-                    case Main.situationType:
-                        node = addNewNode(Main.playerType, "", position, true);
-                        break;
+                case Main.playerType:
+                    node = addNewNode(Main.computerType, "", position, true);
+                    break;
+                case Main.computerType:
+                    node = addNewNode(Main.playerType, "", position, true);
+                    break;
+                case Main.situationType:
+                    node = addNewNode(Main.playerType, "", position, true);
+                    break;
                 }
             }
 
@@ -947,7 +951,7 @@ var Main;
         var nodeContent = document.createElement('div');
         nodeContent.classList.add("nodeContent");
 
-        var inputDiv =  $('<div>', { class: "statementInput" });
+        var inputDiv = $('<div>', { class: "statementInput" });
         inputDiv.hide();
         nodeContent.appendChild(inputDiv[0]);
 
@@ -969,32 +973,32 @@ var Main;
 
         node.appendChild(nodeContent);
 
-        node.addEventListener('dblclick', function(e)
+        node.addEventListener('dblclick', function()
         {
-             startEditingNode(id);
+            startEditingNode(id);
         }, false);
 
         endpoint.addEventListener('mousemove', function(e)
         {
             $(this).find('.anchor').css(
-                {
-                    left: e.pageX - node.getBoundingClientRect().left + 7.5,
-                    top:  e.pageY - node.getBoundingClientRect().top + 7.5
-                }
-            );
+            {
+                left: e.pageX - node.getBoundingClientRect().left + 7.5,
+                top: e.pageY - node.getBoundingClientRect().top + 7.5
+            });
         }, false);
 
-        endpoint.addEventListener('mouseleave', function(e)
+        endpoint.addEventListener('mouseleave', function()
         {
-            $(this).find('.anchor').css({left: "", top: ""});
+            $(this).find('.anchor').css({ left: "", top: "" });
         }, false);
 
         var previousMousePosition;
-        // initialise draggable elements.
+        // Initialise draggable elements.
         plumbInstance.draggable(node,
         {
-            constrain: function(currentCoordinates,element){
-                return [Math.max(0, currentCoordinates[0]),Math.max(0,currentCoordinates[1])];
+            constrain: function(currentCoordinates)
+            {
+                return [Math.max(0, currentCoordinates[0]), Math.max(0, currentCoordinates[1])];
             },
 
             start: function()
@@ -1049,17 +1053,17 @@ var Main;
                 previousMousePosition = $.extend({}, Main.mousePosition);
             }
 
-            //we do not set invalidateNodeClick in a stop handler since it fires before the click handler
+            // We do not set invalidateNodeClick in a stop handler since it fires before the click handler
         });
 
-        // make each ".ep" div a source
+        // Make each ".ep" div a source
         plumbInstance.makeSource(node,
         {
             filter: ".ep",
             connectionType: "basic"
         });
 
-        // initialise all '.w' elements as connection targets.
+        // Initialise all '.w' elements as connection targets.
         plumbInstance.makeTarget(node);
 
         // Make the node selected when we click on it.
@@ -1067,7 +1071,7 @@ var Main;
         {
             event.stopPropagation();
             if (!$.contains($("#main")[0], document.activeElement)) $("#main").focus();
-            if(invalidateNodeClick)
+            if (invalidateNodeClick)
             {
                 invalidateNodeClick = false;
                 return;
@@ -1124,21 +1128,20 @@ var Main;
             event.stopPropagation();
         });
 
-        txtArea.on('focusout', function(e)
+        txtArea.on('focusout', function()
         {
             stopEditingNode(node.id, false);
         });
 
         txtArea.on('keydown', function(e)
         {
-            if((e.ctrlKey || e.metaKey) && e.keyCode === 13) // enter
+            if ((e.ctrlKey || e.metaKey) && e.keyCode === 13) // Enter
             {
                 stopEditingNode(node.id, false);
                 e.stopPropagation();
                 $("#main").focus();
-
             }
-            if(e.keyCode === 27) // escape
+            if (e.keyCode === 27) // Escape
             {
                 stopEditingNode(node.id, true);
                 e.stopPropagation();
@@ -1188,7 +1191,7 @@ var Main;
         if (!cancel) node.text = text;
         changeNodeText(node.id);
 
-        nodeDiv.on('dblclick', function(e)
+        nodeDiv.on('dblclick', function()
         {
             startEditingNode(node.id);
         });
@@ -1215,16 +1218,15 @@ var Main;
             {
                 target: nodeID
             });
-            if (connections.length === 0)
-                orphanNodes.push(nodeID);
+            if (connections.length === 0) orphanNodes.push(nodeID);
         });
         return orphanNodes;
     }
 
     function triggerSubjectNameInput(id, selectAllInput)
     {
-        // hide subject name span and show textbox
-        var subDiv = $("#"+id);
+        // Hide subject name span and show textbox
+        var subDiv = $("#" + id);
         subDiv.find('.subjectName').hide();
 
         var input = subDiv.find('.subjectNameInput');
@@ -1297,7 +1299,7 @@ var Main;
         {
             selectElement(null);
             Main.selectedElements = elementIds.slice();
-            elementIds.forEach(function (elementId)
+            elementIds.forEach(function(elementId)
             {
                 $("#" + elementId).addClass("ui-selected");
                 if (elementId in Main.nodes) Main.getPlumbInstanceByNodeID(elementId).addToDragSelection(elementId);
@@ -1359,8 +1361,7 @@ var Main;
             $("#" + Main.selectedElement).addClass("selected");
             Main.selectedElements.push(Main.selectedElement);
             $("#" + nodeID).addClass("ui-selected");
-            if ($("#allParents").hasClass("enabled"))
-                highlightParents(nodeID);
+            if ($("#allParents").hasClass("enabled")) highlightParents(nodeID);
         }
         else if ($("#allParents").hasClass("enabled"))
         {
@@ -1409,8 +1410,8 @@ var Main;
 
             if (Main.selectedElement !== null)
             {
-                 // A node is selected, because a tree is zoomed
-                 showButtons(nodeButtons);
+                // A node is selected, because a tree is zoomed
+                showButtons(nodeButtons);
             }
         }
         else
@@ -1423,23 +1424,23 @@ var Main;
     }
     function hideButtons(buttons)
     {
-        for (var i = 0, len = buttons.length; i < len; i++) {
+        for (var i = 0, len = buttons.length; i < len; i++)
+        {
             buttons[i].disabled = true;
         }
     }
     function showButtons(buttons)
     {
-        for (var i = 0, len = buttons.length; i < len; i++){
+        for (var i = 0, len = buttons.length; i < len; i++)
+        {
             buttons[i].disabled = false;
         }
     }
 
     function applyChanges()
     {
-        if (Main.selectedElement in Main.trees)
-            applyTreeChanges();
-        else
-            applyNodeChanges();
+        if (Main.selectedElement in Main.trees) applyTreeChanges();
+        else applyNodeChanges();
     }
 
     // Apply the changes that have been made to the node.
@@ -1712,7 +1713,7 @@ var Main;
         }
         var clone = $("#clone");
         if (clone.length !== 0)
-        { //jsplumb creates clones when nodes are being dragged. if one exists this event is on drop of a node and should not fire
+        { // Jsplumb creates clones when nodes are being dragged. if one exists this event is on drop of a node and should not fire
             return;
         }
 
@@ -1740,22 +1741,22 @@ var Main;
         var longestWord = "";
         switch (node.type)
         {
-            case Main.computerType:
-                // for computerType node: just input text
-                // with characterId prefix when there are multiple characters
-                if (Config.container.characters.sequence.length > 1)
-                {
-                    var character = Config.container.characters.byId[node.characterIdRef];
-                    var characterPrefix = character.name ? Utils.escapeHTML(character.name) : character.id;
-                    text += "<b>" + characterPrefix + ": </b>";
-                }
-                text += Utils.escapeHTML(node.text);
-                break;
-            case Main.playerType:
-            case Main.situationType:
-                // for playerType node: show text input
-                text = Utils.escapeHTML(node.text);
-                break;
+        case Main.computerType:
+            // For computerType node: just input text
+            // with characterId prefix when there are multiple characters
+            if (Config.container.characters.sequence.length > 1)
+            {
+                var character = Config.container.characters.byId[node.characterIdRef];
+                var characterPrefix = character.name ? Utils.escapeHTML(character.name) : character.id;
+                text += "<b>" + characterPrefix + ": </b>";
+            }
+            text += Utils.escapeHTML(node.text);
+            break;
+        case Main.playerType:
+        case Main.situationType:
+            // For playerType node: show text input
+            text = Utils.escapeHTML(node.text);
+            break;
         }
         // Calculate the node width
         if (longestWord === "")
@@ -1768,9 +1769,9 @@ var Main;
         var textLength = $(".lengthTest").text(longestWord)[0].clientWidth / 11;
         var width = Math.max(4, textLength * 1.08, Math.sqrt(text.length));
 
-        // get the node
+        // Get the node
         var nodeHTML = $('#' + nodeID);
-        // fill div that can hold the images that visualize if the node has certain settings
+        // Fill div that can hold the images that visualize if the node has certain settings
         var imageDiv = nodeHTML.find('.imgDiv');
         imageDiv.empty();
 
@@ -1779,7 +1780,7 @@ var Main;
             if (propertyValue)
             {
                 // Span wrapping required for relative tooltip position.
-                var nodePropertyImage = $('<span>', {html: Utils.sIcon("icon-" + imgName)}).appendTo(imageDiv);
+                var nodePropertyImage = $('<span>', { html: Utils.sIcon("icon-" + imgName) }).appendTo(imageDiv);
                 if (showTooltip)
                 {
                     nodePropertyImage.tooltip(
@@ -1791,13 +1792,13 @@ var Main;
                         close: function(event, ui)
                         {
                             ui.tooltip.hover(
-                                function ()
+                                function()
                                 {
                                     $(this).stop(true).fadeIn();
                                 },
-                                function ()
+                                function()
                                 {
-                                    $(this).fadeOut(function(){ $(this).remove(); });
+                                    $(this).fadeOut(function() { $(this).remove(); });
                                 }
                             );
                         }
@@ -1829,7 +1830,7 @@ var Main;
         nodeTextDiv.show();
         nodeTextDiv.html(text);
 
-        // make sure the text fits inside the node
+        // Make sure the text fits inside the node
         var h = Math.max(40, nodeTextDiv[0].clientHeight);
         nodeHTML.height(h);
 
@@ -1845,10 +1846,8 @@ var Main;
     {
         SaveIndicator.setSavedChanges(false);
 
-        if (elementID in Main.trees)
-            deleteTree(elementID);
-        else
-            deleteNode(elementID);
+        if (elementID in Main.trees) deleteTree(elementID);
+        else deleteNode(elementID);
     }
 
     function deleteTree(treeID)
@@ -1862,8 +1861,7 @@ var Main;
             Main.trees[treeID].nodes = [];
         }, true);
 
-        if (treeID === Main.selectedElement)
-            selectElement(null);
+        if (treeID === Main.selectedElement) selectElement(null);
 
         Main.trees[treeID].dragDiv.remove();
 
@@ -1878,11 +1876,10 @@ var Main;
         var toDelete = nodeID;
 
         // No node should be selected after we remove a node.
-        if (nodeID === Main.selectedElement)
-            selectElement(null);
+        if (nodeID === Main.selectedElement) selectElement(null);
 
         var parentTree = Main.trees[Main.nodes[toDelete].parent];
-        // shouldNotDeleteFromTree should only be true when deleting the node from the tree yourself afterwards
+        // ShouldNotDeleteFromTree should only be true when deleting the node from the tree yourself afterwards
         if (!shouldNotDeleteFromTree)
         {
             parentTree.nodes.splice(parentTree.nodes.indexOf(toDelete), 1);
@@ -2011,21 +2008,22 @@ var Main;
                 {
                     var sectionContainer = $('<div>');
                     if (hLevel === hStartLevel) sectionContainer.addClass("section");
-                    else                        sectionContainer.addClass("subsection");
+                    else sectionContainer.addClass("subsection");
                     sectionContainer.append($('<h' + hLevel + '>', { text: parameterItem.name }));
                     container.append(sectionContainer);
 
                     // Show all subsections or possibilities to add effects
                     var anyParameterShown = false;
-                    parameterItem.sequence.forEach(function (subItem)
+                    parameterItem.sequence.forEach(function(subItem)
                     {
                         if (showParameterItem(parameterDefinitions, acceptableScopes, subItem, hLevel + 1, sectionContainer, classPrefix, idRefToEffectsContainer))
+                        {
                             anyParameterShown = true;
+                        }
                     });
 
                     // Remove the section if there are no effects inside it and no effects inside subsections to add
-                    if (!anyParameterShown)
-                        sectionContainer.remove();
+                    if (!anyParameterShown) sectionContainer.remove();
 
                     return anyParameterShown;
                 }
@@ -2041,7 +2039,7 @@ var Main;
                         parameterIdRefSelect = $('<select>', { class: classPrefix + "-idref-select hidden" });
                         container.append(parameterIdRefSelect);
 
-                        effectsContainer = $('<div>', { class: classPrefix + "-container"});
+                        effectsContainer = $('<div>', { class: classPrefix + "-container" });
                         Utils.makeSortable(effectsContainer);
                         container.append(effectsContainer);
 
@@ -2104,7 +2102,7 @@ var Main;
                 var idRefToCharacterEffectsContainer = {};
                 Config.container.characters.sequence.forEach(function(character)
                 {
-                    var characterHeader = $('<h' + hStartLevel +'>', { value: character.id, text: character.name ? character.name : character.id });
+                    var characterHeader = $('<h' + hStartLevel + '>', { value: character.id, text: character.name ? character.name : character.id });
                     var characterDiv = $('<div>');
                     accordionDiv.append(characterHeader).append(characterDiv);
 
@@ -2173,7 +2171,7 @@ var Main;
             }
 
             // Show the node's property values
-            var showPropertyItem = function (propertyValues, acceptableScopes, propertyItem, hLevel, tableBody, idPrefix)
+            var showPropertyItem = function(propertyValues, acceptableScopes, propertyItem, hLevel, tableBody, idPrefix)
             {
                 if (acceptableScopes.indexOf(propertyItem.scopes.statementScope) === -1) return;
                 if (propertyItem.kind === 'section')
@@ -2188,16 +2186,16 @@ var Main;
 
                     var sectionContainer = $('<div>').append(sectionTable);
                     if (hLevel === hStartLevel) sectionContainer.addClass("section");
-                    else                        sectionContainer.addClass("subsection");
+                    else sectionContainer.addClass("subsection");
                     tableBody.append($('<tr>').append($('<td colspan="2">').append(sectionContainer)));
 
                     var anyPropertyShown = false;
-                    propertyItem.sequence.forEach(function (subItem)
+                    propertyItem.sequence.forEach(function(subItem)
                     {
-                         if (showPropertyItem(propertyValues, acceptableScopes, subItem, hLevel + 1, sectionTableBody, idPrefix))
-                         {
-                             anyPropertyShown = true;
-                         }
+                        if (showPropertyItem(propertyValues, acceptableScopes, subItem, hLevel + 1, sectionTableBody, idPrefix))
+                        {
+                            anyPropertyShown = true;
+                        }
                     });
                     return anyPropertyShown;
                 }
@@ -2223,29 +2221,29 @@ var Main;
                     var additionalPropertyRow;
                     switch (propertyItem.type.labelControlOrder)
                     {
-                        case Types.labelControlOrders.singleLineLabelContainer:
-                            propertyRow.append(propertyHeader);
-                            propertyRow.append(propertyData);
-                            break;
-                        case Types.labelControlOrders.singleLineContainerLabel:
-                            propertyRow.append(propertyHeader);
-                            propertyRow.prepend(propertyData);
-                            break;
-                        case Types.labelControlOrders.container:
-                            propertyData.prop('colspan', "2");
-                            propertyRow.append(propertyData);
-                            break;
-                        case Types.labelControlOrders.twoLineLabelContainer:
-                            propertyRow.append(propertyHeader);
-                            additionalPropertyRow = $('<tr>').append(propertyData);
-                            break;
-                        case Types.labelControlOrders.twoLineContainerLabel:
-                            additionalPropertyRow = propertyRow.append(propertyHeader);
-                            propertyRow = $('<tr>').append(propertyData);
-                            break;
-                        default:
-                            console.error("Not implemented");
-                            break;
+                    case Types.labelControlOrders.singleLineLabelContainer:
+                        propertyRow.append(propertyHeader);
+                        propertyRow.append(propertyData);
+                        break;
+                    case Types.labelControlOrders.singleLineContainerLabel:
+                        propertyRow.append(propertyHeader);
+                        propertyRow.prepend(propertyData);
+                        break;
+                    case Types.labelControlOrders.container:
+                        propertyData.prop('colspan', "2");
+                        propertyRow.append(propertyData);
+                        break;
+                    case Types.labelControlOrders.twoLineLabelContainer:
+                        propertyRow.append(propertyHeader);
+                        additionalPropertyRow = $('<tr>').append(propertyData);
+                        break;
+                    case Types.labelControlOrders.twoLineContainerLabel:
+                        additionalPropertyRow = propertyRow.append(propertyHeader);
+                        propertyRow = $('<tr>').append(propertyData);
+                        break;
+                    default:
+                        console.error("Not implemented");
+                        break;
                     }
                     tableBody.append(propertyRow);
                     if (additionalPropertyRow) tableBody.append(additionalPropertyRow);
@@ -2256,7 +2254,7 @@ var Main;
             var nodePropertyValuesEl = $('#node-property-values');
             var nodePropertyValuesTable = $('<table>');
             var anyNodePropertyShown = false;
-            Config.container.properties.sequence.forEach(function (subItem)
+            Config.container.properties.sequence.forEach(function(subItem)
             {
                 if (showPropertyItem(node.propertyValues.characterIndependent, scopes, subItem, hStartLevel, nodePropertyValuesTable, nodePropertyValuesEl.attr('id')))
                 {
@@ -2273,7 +2271,7 @@ var Main;
                 var anyCharacterPropertyShown = false;
                 Config.container.characters.sequence.forEach(function(character)
                 {
-                    var characterHeader = $('<h' + hStartLevel +'>', { value: character.id, text: character.name ? character.name : character.id });
+                    var characterHeader = $('<h' + hStartLevel + '>', { value: character.id, text: character.name ? character.name : character.id });
                     var characterTab = $('<table>');
                     characterAccordion.append(characterHeader).append($('<div>').append(characterTab));
 
@@ -2399,7 +2397,7 @@ var Main;
                 {
                     var characterSelection = $("#characterSelection");
                     characterSelection.off('change');
-                    characterSelection.on('change', function(e)
+                    characterSelection.on('change', function()
                     {
                         if (Main.selectedElement)
                         {
@@ -2534,8 +2532,8 @@ var Main;
         var sourceNode = Main.nodes[sourceID];
         var targetNode = Main.nodes[targetID];
 
-        //do not connect between trees
-        if(targetNode.parent !== sourceNode.parent)
+        // Do not connect between trees
+        if (targetNode.parent !== sourceNode.parent)
         {
             console.log(i18next.t('main:error.tree_connection'));
             return false;
@@ -2558,7 +2556,7 @@ var Main;
             }
         }
 
-        if(Validator.testDuplicateConnection(sourceID, targetID))
+        if (Validator.testDuplicateConnection(sourceID, targetID))
         {
             return false;
         }
@@ -2574,76 +2572,76 @@ var Main;
         return connections.length === 0 ? null : connections[0].targetId;
     }
 
-    //Make .collapsable div sections collapse and expand when .clickable sibling element is clicked
+    // Make .collapsable div sections collapse and expand when .clickable sibling element is clicked
     function makeCollapsable()
     {
-        //Set the initial state of collapsable and clickable elements:
+        // Set the initial state of collapsable and clickable elements:
         $(".collapsable").css("display", "inline-block");
         $(".collapsable").show();
 
         $(".clicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
         $(".masterclicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
 
-        // click element header to toggle slide property elements
+        // Click element header to toggle slide property elements
         $(".clickable").on("click", function(e)
         {
-                  //The main header was clicked, it can collapse all the property elements
-                  if ($(this).hasClass("collapseAll"))
-                  {
-                    //If there is at least one collapsable element open, close all
-                    var result = 0;
-                    $(".collapsable").each(function()
-                        {
-                            if($(this).css("display") != "none")
-                            {
-                               $("#properties").find(".collapsable").slideUp(400);
-                               $(".clicktag").addClass("collapsed").html(Utils.sIcon("icon-closed"));
-                               $(".masterclicktag").addClass("collapsed").html(Utils.sIcon("icon-closed"));
-                               result++;
-                               return false;
-                            }
-                        });
-                    //If there are no collapsable elements open, open all
-                    if(result === 0)
+            // The main header was clicked, it can collapse all the property elements
+            if ($(this).hasClass("collapseAll"))
+            {
+                // If there is at least one collapsable element open, close all
+                var result = 0;
+                $(".collapsable").each(function()
+                {
+                    if ($(this).css("display") != "none")
                     {
-                        $("#properties").find(".collapsable").slideDown(400);
-                        $(".clicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
-                        $(".masterclicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
+                        $("#properties").find(".collapsable").slideUp(400);
+                        $(".clicktag").addClass("collapsed").html(Utils.sIcon("icon-closed"));
+                        $(".masterclicktag").addClass("collapsed").html(Utils.sIcon("icon-closed"));
+                        result++;
+                        return false;
                     }
-                  }
-                  //A property element header was clicked
-                  else
-                  {
-                    var clickTag = $(this).find(".clicktag");
-                    //An element was opened
-                    if (clickTag.hasClass("collapsed"))
-                    {
-                        clickTag.removeClass("collapsed").html(Utils.sIcon("icon-open"));
-                        $(".masterclicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
-                    }
-                    //An element was closed
-                    else
-                    {
-                        clickTag.addClass("collapsed").html(Utils.sIcon("icon-closed"));
+                });
+                // If there are no collapsable elements open, open all
+                if (result === 0)
+                {
+                    $("#properties").find(".collapsable").slideDown(400);
+                    $(".clicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
+                    $(".masterclicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
+                }
+            }
+            // A property element header was clicked
+            else
+            {
+                var clickTag = $(this).find(".clicktag");
+                // An element was opened
+                if (clickTag.hasClass("collapsed"))
+                {
+                    clickTag.removeClass("collapsed").html(Utils.sIcon("icon-open"));
+                    $(".masterclicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
+                }
+                // An element was closed
+                else
+                {
+                    clickTag.addClass("collapsed").html(Utils.sIcon("icon-closed"));
 
-                        $(".clickable").each(function()
+                    $(".clickable").each(function()
+                    {
+                        // Check if there is at least one element open
+                        if (!$(this).find(".clicktag").hasClass("collapsed"))
                         {
-                            //Check if there is at least one element open
-                            if(!$(this).find(".clicktag").hasClass("collapsed"))
-                            {
-                                $(".masterclicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
-                                return false;
-                            }
-                            else $(".masterclicktag").addClass("collapsed").html(Utils.sIcon("icon-closed"));
-                        });
-                    }
-                    //Close or open a single element
-                    $(this).parent().closest("div").find(".collapsable").slideToggle(400);
-                  }
+                            $(".masterclicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
+                            return false;
+                        }
+                        else $(".masterclicktag").addClass("collapsed").html(Utils.sIcon("icon-closed"));
+                    });
+                }
+                // Close or open a single element
+                $(this).parent().closest("div").find(".collapsable").slideToggle(400);
+            }
             e.stopPropagation();
         });
 
-        //Exceptions to stop propagation: .collapsable is clicked directly
+        // Exceptions to stop propagation: .collapsable is clicked directly
         $(".collapsable").on("click", function(e)
         {
             e.stopPropagation();
@@ -2652,10 +2650,10 @@ var Main;
 
     function mousePositionToDialoguePosition(mousePos)
     {
-        // the canvas is open; get the canvas div
+        // The canvas is open; get the canvas div
         var treeDiv = Zoom.getZoomed().div;
 
-        // calculate canvas boundaries
+        // Calculate canvas boundaries
         var leftBound = treeDiv.offset().left;
         var upperBound = treeDiv.offset().top;
 
@@ -2689,5 +2687,4 @@ var Main;
         var scenarioTitle = Metadata.container.name !== "" ? Metadata.container.name + " - " : "";
         document.title = savedIndicator + scenarioTitle + "Scenario Editor";
     }
-
 })();

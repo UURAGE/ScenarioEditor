@@ -1,15 +1,17 @@
 /* © Utrecht University and DialogueTrainer */
 
+/* exported Parts */
 var Parts;
 
-(function ()
+(function()
 {
     "use strict";
 
+    // eslint-disable-next-line no-global-assign
     Parts =
     {
         addButton: addButton,
-        deleteButton: deleteButton,
+        deleteButton: deleteButton
     };
 
     function deleteButton()
