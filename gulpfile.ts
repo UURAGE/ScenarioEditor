@@ -4,6 +4,7 @@ import * as autoprefixer from "gulp-autoprefixer";
 import * as eslint from "gulp-eslint";
 import * as sass from "gulp-sass";
 import * as sourcemaps from "gulp-sourcemaps";
+import * as stylelint from "gulp-stylelint";
 
 import { create } from "browser-sync";
 const browserSync = create();
@@ -23,6 +24,17 @@ const prefixerOptions =
 };
 const sassSrc = "public/editor/sass/**/*.scss";
 const sassDest = "public/editor/css/";
+const lintSass = () =>
+{
+    return gulp.src(sassSrc)
+        .pipe(stylelint(
+        {
+            // @ts-ignore
+            failAfterError: false,
+            reporters: [{ formatter: "string", console: true }]
+        }));
+};
+gulp.task("lint_sass", lintSass);
 const compileSass = () =>
 {
     return gulp.src(sassSrc)
@@ -33,12 +45,16 @@ const compileSass = () =>
         .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(sassDest));
 };
-gulp.task("sass", compileSass);
+const processSass = gulp.series(lintSass, compileSass);
+gulp.task("sass", processSass);
 
 const watch = (done, shouldStream?) =>
 {
     gulp.watch(jsSrc, lintJS);
-    gulp.watch(sassSrc, shouldStream ? () => compileSass().pipe(browserSync.stream()) : compileSass);
+    gulp.watch(
+        sassSrc,
+        gulp.series(lintSass, shouldStream ? () => compileSass().pipe(browserSync.stream()) : compileSass)
+    );
     log.info("Watching for file changes...");
     done();
 };
@@ -53,4 +69,4 @@ gulp.task("stream", (done) =>
     watch(done, true);
 });
 
-gulp.task("default", gulp.series(gulp.parallel(lintJS, compileSass), watch));
+gulp.task("default", gulp.series(gulp.parallel(lintJS, processSass), watch));
