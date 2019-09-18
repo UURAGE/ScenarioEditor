@@ -1,5 +1,6 @@
 import * as log from "fancy-log";
 import * as gulp from "gulp";
+import * as autoprefixer from "gulp-autoprefixer";
 import * as eslint from "gulp-eslint";
 import * as sass from "gulp-sass";
 import * as sourcemaps from "gulp-sourcemaps";
@@ -16,6 +17,10 @@ const lintJS = () =>
 };
 gulp.task("lint_js", lintJS);
 
+const prefixerOptions =
+{
+    flexbox: "no-2009"
+};
 const sassSrc = "public/editor/sass/**/*.scss";
 const sassDest = "public/editor/css/";
 const compileSass = () =>
@@ -23,6 +28,8 @@ const compileSass = () =>
     return gulp.src(sassSrc)
         .pipe(sourcemaps.init())
         .pipe(sass().on("error", sass.logError))
+        // @ts-ignore
+        .pipe(autoprefixer(prefixerOptions))
         .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(sassDest));
 };

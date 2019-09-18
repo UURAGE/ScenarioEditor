@@ -274,8 +274,6 @@ tr.ui-sortable-helper {
 #comment,
 #treeNameBox {
   display: block;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   width: 100%; }
 
@@ -1063,7 +1061,8 @@ td.dragHandle {
 
 #colorPicker {
   z-index: 51;
-  animation: pop-in 0.20s ease-in-out 0s;
+  -webkit-animation: pop-in 0.20s ease-in-out 0s;
+          animation: pop-in 0.20s ease-in-out 0s;
   -webkit-filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.5));
   filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.5)); }
   #colorPicker .edit,
@@ -1079,6 +1078,17 @@ td.dragHandle {
 
 .color {
   border-style: outset; }
+
+@-webkit-keyframes pop-in {
+  0% {
+    transform: translate(-50%, -50%) scale(0.75);
+    opacity: 0; }
+  50% {
+    opacity: 1; }
+  75% {
+    transform: translate(-50%, -50%) scale(1.025); }
+  100% {
+    transform: translate(-50%, -50%) scale(1); } }
 
 @keyframes pop-in {
   0% {
@@ -1170,8 +1180,9 @@ td.dragHandle {
     padding-right: 10px;
     box-sizing: border-box;
     position: fixed; }
-    @supports (position: sticky) {
+    @supports ((position: -webkit-sticky) or (position: sticky)) {
       #metadata .index {
+        position: -webkit-sticky;
         position: sticky;
         top: 0; } }
     #metadata .index h1 {
@@ -1192,14 +1203,16 @@ td.dragHandle {
   #metadata .content {
     flex: 1 1 100%;
     padding-left: 160px; }
-    @supports (position: sticky) {
+    @supports ((position: -webkit-sticky) or (position: sticky)) {
       #metadata .content {
         padding-left: 0; } }
     #metadata .content > * {
       margin-bottom: 10px; }
   #metadata h1, #metadata h2, #metadata label, #metadata .d, #metadata th, #metadata button, #metadata ul li {
     -moz-user-select: none;
-    user-select: none; }
+    -webkit-user-select: none;
+        -ms-user-select: none;
+            user-select: none; }
   #metadata h1, #metadata h2, #metadata h3, #metadata h4, #metadata h5, #metadata h6 {
     font-size: 1rem;
     padding-top: 2em;
@@ -1291,8 +1304,6 @@ td.dragHandle {
     display: inline-block;
     width: auto;
     margin: 0 10px 0 5px;
-    -ms-transform: scale(1.5);
-    -webkit-transform: scale(1.5);
     transform: scale(1.5);
     margin-top: .1em; }
   #metadata select {
