@@ -55,6 +55,7 @@ var Main;
         updateDocumentTitle: updateDocumentTitle
     };
 
+    var firstDragNodeID = null;
     var ctrlDown = false, spaceDown = false, isSelecting = false, isPanning = false,
         invalidateNodeClick = false;// A drag event also triggers a click event, use this flag to catch and stop these events
 
@@ -1003,6 +1004,8 @@ var Main;
 
             start: function()
             {
+                if (firstDragNodeID === null) firstDragNodeID = id;
+
                 previousMousePosition = $.extend({}, Main.mousePosition);
 
                 invalidateNodeClick = true;
@@ -1027,6 +1030,8 @@ var Main;
 
             drag: function(params)
             {
+                if (id !== firstDragNodeID) return;
+
                 var direction = { x: Main.mousePosition.x - previousMousePosition.x, y: Main.mousePosition.y - previousMousePosition.y };
 
                 // TODO: delete if jsPlumb katavorio supports scrolling into view
@@ -1050,7 +1055,13 @@ var Main;
                     container.scrollTop = Math.max(y - scrollOffset, 0);
                 }
 
-                previousMousePosition = $.extend({}, Main.mousePosition);
+                previousMousePosition.x = Main.mousePosition.x;
+                previousMousePosition.y = Main.mousePosition.y;
+            },
+
+            stop: function()
+            {
+                firstDragNodeID = null;
             }
 
             // We do not set invalidateNodeClick in a stop handler since it fires before the click handler
