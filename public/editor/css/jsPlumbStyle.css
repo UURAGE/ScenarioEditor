@@ -1,33 +1,33 @@
 .w {
-  padding: 0.5em 1em;
   position: absolute;
-  border: 1px solid black;
   z-index: 4;
-  border-radius: 0.5em;
-  opacity: 0.8;
-  filter: alpha(opacity=80);
+  padding: .5em 1em;
+  font-size: 11px;
   cursor: move;
   background-color: white;
-  font-size: 11px;
-  transition: background-color 0.15s ease-in, color 0.15s ease-in;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05), 0px 1px 10px rgba(0, 0, 0, 0.05); }
+  border: 1px solid black;
+  border-radius: .5em;
+  opacity: .8;
+  filter: alpha(opacity=80);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05), 0 1px 10px rgba(0, 0, 0, 0.05);
+  transition: background-color .15s ease-in, color .15s ease-in; }
   .w ul {
-    margin: 0;
-    padding: 0; }
+    padding: 0;
+    margin: 0; }
   .w.computer {
     border: 3px solid #CE192A; }
   .w.player {
-    border: 3px solid #1974c9; }
+    border: 3px solid #1974C9; }
   .w.situation {
     border: 3px solid #F37812; }
   .w.editing, .w.jtk-drag {
     z-index: 5; }
   .w .nodeContent {
     position: absolute;
-    left: 0;
-    right: 0;
     top: 0;
+    right: 0;
     bottom: 0;
+    left: 0;
     padding: .5em;
     background: transparent; }
   .w.selected, .w.ui-selected, .w:hover {
@@ -64,73 +64,73 @@
     background-color: #fef4ec; }
   .w:not(.jtk-drag):not(.jtk-drag-active) > .ep {
     position: absolute;
-    z-index: -1;
     top: -10px;
+    right: -10px;
     bottom: -10px;
     left: -10px;
-    right: -10px;
+    z-index: -1;
     cursor: pointer;
-    transition: box-shadow 0.15s ease-in, color 0.15s ease-in;
-    border-radius: 10px; }
+    border-radius: 10px;
+    transition: box-shadow .15s ease-in, color .15s ease-in; }
     .w:not(.jtk-drag):not(.jtk-drag-active) > .ep:hover {
-      box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.15), 0px 1px 3px 0px rgba(0, 0, 0, 0.15); }
+      box-shadow: 0 0 15px 2px rgba(0, 0, 0, 0.15), 0 1px 3px 0 rgba(0, 0, 0, 0.15); }
       .w:not(.jtk-drag):not(.jtk-drag-active) > .ep:hover .anchor {
         background-color: black;
-        transition: background-color 0.25s ease; }
+        transition: background-color .25s ease; }
         .w:not(.jtk-drag):not(.jtk-drag-active) > .ep:hover .anchor::after {
           opacity: .25;
           transform: scale(5); }
     .w:not(.jtk-drag):not(.jtk-drag-active) > .ep .anchor {
+      position: absolute;
+      top: 50%;
+      right: auto;
+      bottom: 50%;
+      left: calc(100% - 10px);
       width: 4px;
       height: 4px;
-      position: absolute;
       pointer-events: none;
-      border-radius: 50%;
-      left: calc(100% - 10px);
-      top: 50%;
-      bottom: 50%;
-      right: auto;
       background-color: transparent;
-      transition: background-color 0.25s ease, left 0s step-end 0.15s, top 0s step-end 0.15s, right 0s step-end 0.15s, bottom 0s step-end 0.15s; }
+      border-radius: 50%;
+      transition: background-color .25s ease, left 0s step-end .15s, top 0s step-end .15s, right 0s step-end .15s, bottom 0s step-end .15s; }
       .w:not(.jtk-drag):not(.jtk-drag-active) > .ep .anchor::after {
-        content: "";
-        display: block;
+        content: '';
         position: absolute;
         top: 0;
+        right: 0;
         bottom: 0;
         left: 0;
-        right: 0;
+        display: block;
         background-color: black;
         border-radius: 50%;
         opacity: 0;
-        transition: opacity 0.25s ease, transform 0.25s ease; }
+        transition: opacity .25s ease, transform .25s ease; }
   .w:not(.jtk-drag):not(.jtk-drag-active):not(.jtk-connected) > .ep > .anchor {
-    transition: background-color 0.25s ease, left 0.15s linear, top 0.15s linear, right 0.15s linear, bottom 0.15s linear;
-    background-color: rgba(0, 0, 0, 0.75); }
+    background-color: rgba(0, 0, 0, 0.75);
+    transition: background-color .25s ease, left .15s linear, top .15s linear, right .15s linear, bottom .15s linear; }
   .w:not(.jtk-drag):not(.jtk-drag-active):not(.jtk-connected) > .ep:hover > .anchor {
-    transition: background-color 0.25s ease, left 0.15s linear, top 0.15s linear, right 0.15s linear, bottom 0.15s linear;
-    background-color: black; }
+    background-color: black;
+    transition: background-color .25s ease, left .15s linear, top .15s linear, right .15s linear, bottom .15s linear; }
 
 .allowInterleaveNode:hover::before, .allowDialogueEndNode:hover::before, .endNode:hover::before, .openResponse:hover::before {
-  display: block;
-  content: "";
+  content: '';
   position: absolute;
-  left: 0;
-  right: 0;
   top: 0;
-  bottom: 0; }
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block; }
 
 .allowInterleaveNode {
   border-bottom-color: #9c31af !important;
   border-left-color: #9c31af !important; }
   .allowInterleaveNode:hover::before {
-    background: linear-gradient(-135deg, transparent 50%, #Bf5cd1 50%); }
+    background: linear-gradient(-135deg, transparent 50%, #BF5CD1 50%); }
 
 .allowDialogueEndNode {
   border-bottom-color: #24778f !important;
   border-left-color: #24778f !important; }
   .allowDialogueEndNode:hover::before {
-    background: linear-gradient(-135deg, transparent 50%, #33AACC 50%); }
+    background: linear-gradient(-135deg, transparent 50%, #3AC 50%); }
 
 .endNode {
   border-bottom-color: black !important;
@@ -142,7 +142,7 @@
   border-bottom-color: #237d58 !important;
   border-left-color: #237d58 !important; }
   .openResponse:hover::before {
-    background: linear-gradient(-135deg, transparent 50%, #34b982 50%); }
+    background: linear-gradient(-135deg, transparent 50%, #34B982 50%); }
 
 .color-label.jtk-hover,
 .jtk-source-hover,
@@ -150,16 +150,16 @@
   color: white; }
 
 #clone {
-  opacity: 0.5; }
+  opacity: .5; }
 
 .color-label {
-  transition: background-color 0.15s ease-in, color 0.15s ease-in;
+  padding: .3em;
+  cursor: pointer;
   background-color: white;
-  opacity: 0.8;
-  padding: 0.3em;
-  border-radius: 0.5em;
   border: 1px solid rgba(0, 0, 0, 0.5);
-  cursor: pointer; }
+  border-radius: .5em;
+  opacity: .8;
+  transition: background-color .15s ease-in, color .15s ease-in; }
 
 .jtk-endpoint {
   z-index: 3; }

@@ -3,272 +3,310 @@
 // © Utrecht University and DialogueTrainer
 
 #logo {
-    width: 32px;
-    height: 32px;
-    padding: 8px;
-    box-sizing: border-box;
-    background: $col-editor;
-    transition: 0.5s background ease-out;
-    position: relative;
-    &:hover {
-        transition: 0.1s background ease-in-out;
-        background: lighten($col-editor, 5%);
-    }
-    img {
-        fill: white;
-        width: 16px;
-        height: 16px;
-        transition: 0.5s top ease-out;
-    }
+  position: relative;
+  width: 32px;
+  height: 32px;
+  padding: 8px;
+  background: $col-editor;
+  box-sizing: border-box;
+  transition: .5s background ease-out;
+
+  &:hover {
+    background: lighten($col-editor, 5%);
+    transition: .1s background ease-in-out;
+  }
+
+  img {
+    width: 16px;
+    height: 16px;
+    fill: white;
+    transition: .5s top ease-out;
+  }
 }
 
 #languages {
-    align-self: center;
-    padding-right: 10px;
-    color: rgba(black, 0.25);
+  align-self: center;
+  padding-right: 10px;
+  color: rgba(black, .25);
 }
 
 .buttonGroup {
-    margin: $buttongroup-margin;
-    background-color: white;
-    vertical-align: top;
-    word-wrap: break-word;
+  margin: $buttongroup-margin;
+  word-wrap: break-word;
+  vertical-align: top;
+  background-color: white;
 }
 
 #toolbar {
-    margin: 0;
+  padding: 0;
+  margin: 0;
+  background-color: $col-toolbar;
+  border-right: 1px solid rgba(darken($col-toolbar, 25%), .1);
+
+  :disabled {
+    color: $col-text-dark;
+    cursor: default !important;
+    background-color: transparent;
+    border-color: transparent;
+    outline: none;
+    opacity: .3;
+
+    &:not(.enabled):hover {
+      color: $col-text-dark;
+      cursor: default !important;
+      background-color: transparent;
+      border-color: transparent;
+      outline: none;
+      opacity: .3;
+    }
+  }
+
+  #manual {
+    width: 25px;
+    height: 25px;
+    margin: 5px;
+    overflow: hidden;
+    border-radius: 100%;
+
+    img,
+    div {
+      width: 25px;
+      height: 25px;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  .separator {
+    height: 1px;
     padding: 0;
-    background-color: $col-toolbar;
-    border-right: 1px solid rgba(darken($col-toolbar, 25%), 0.1);
-    :disabled {
-        outline: none;
-        border-color: transparent;
-        background-color: transparent;
-        color: $col-text-dark;
-        opacity: 0.3;
-        cursor: default !important;
-        &:not(.enabled):hover {
-            outline: none;
-            border-color: transparent;
-            background-color: transparent;
-            color: $col-text-dark;
-            opacity: 0.3;
-            cursor: default !important;
-        }
-    }
-    #manual {
-        overflow: hidden;
-        margin: 5px;
-        width: 25px;
-        height: 25px;
-        border-radius: 100%;
-        img,
-        div {
-            margin: 0;
-            padding: 0;
-            width: 25px;
-            height: 25px;
-        }
-    }
-    .separator {
-        margin: 5px 0;
-        padding: 0;
-        height: 1px;
-        background-color: rgba(black, 0.1);
-    }
-    #clipboard button {
-        cursor: help;
-    }
-    #menus button.dropdownButton, #ribbon button {
-        font-weight: 600;
-        font-size: 12px;
-        color: lighten($col-text-dark, 15%);
-    }
+    margin: 5px 0;
+    background-color: rgba(black, .1);
+  }
+
+  #clipboard button {
+    cursor: help;
+  }
+
+  #menus button.dropdownButton, #ribbon button {
+    font-size: 12px;
+    font-weight: 600;
+    color: lighten($col-text-dark, 15%);
+  }
 }
 
 #menus {
-    display: flex;
-    background-color: $col-menu-bar;
-    border-bottom: 1px solid rgba(black, 0.1);
-    >* {
-        flex: 0 1 auto;
+  display: flex;
+  background-color: $col-menu-bar;
+  border-bottom: 1px solid rgba(black, .1);
+
+  > * {
+    flex: 0 1 auto;
+  }
+
+  #scenarioNameTab {
+    // Stretch element to available width
+    flex: 1 0 auto;
+    align-self: center;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    margin: 0 3px;
+    fill: #777;
+    vertical-align: middle;
+  }
+
+  button {
+    height: auto;
+    text-align: left;
+
+    &:hover,
+    &.dropped {
+      background-color: rgba(black, .05);
     }
-    #scenarioNameTab {
-        // Stretch element to available width
-        flex: 1 0 auto;
-        align-self: center;
+  }
+
+  .buttonGroup {
+    margin: 0;
+
+    &::after {
+      display: none;
     }
-    svg {
-        margin: 0 3px;
-        width: 16px;
-        height: 16px;
-        fill: #777;
-        vertical-align: middle;
-    }
+  }
+
+  .dropdown {
+    width: auto;
+    height: auto;
+    margin-top: 0;
+    background-color: transparent;
+    border-radius: 0;
+
     button {
-        height: auto;
-        text-align: left;
-        &:hover,
-        &.dropped {
-            background-color: rgba(black, 0.05);
-        }
+      display: block;
+      width: 100%;
+      padding: 5px 8px;
     }
-    .buttonGroup {
-        margin: 0;
-        &::after {
-            display: none;
-        }
+
+    svg {
+      margin-right: 10px;
     }
-    .dropdown {
-        margin-top: 0px;
-        width: auto;
-        height: auto;
-        border-radius: 0;
-        background-color: transparent;
-        button {
-            display: block;
-            width: 100%;
-            padding: 5px 8px;
-        }
-        svg {
-            margin-right: 10px;
-        }
-        .dropdownItems {
-            display: none;
-            margin: 0;
-            padding: 1px;
-            height: auto;
-            box-shadow: 1px 2px 3px rgba(black, 0.5);
-            background: #fefefe;
-            border: 1px solid rgba(black, 0.25);
-            box-sizing: border-box;
-            position: absolute;
-            min-width: 150px;
-            z-index: 52;
-            width: auto;
-            button {
-                padding: 5px 7px;
-            }
-        }
+
+    .dropdownItems {
+      position: absolute;
+      z-index: 52;
+      display: none;
+      width: auto;
+      height: auto;
+      min-width: 150px;
+      padding: 1px;
+      margin: 0;
+      background: #FEFEFE;
+      border: 1px solid rgba(black, .25);
+      box-shadow: 1px 2px 3px rgba(black, .5);
+      box-sizing: border-box;
+
+      button {
+        padding: 5px 7px;
+      }
     }
-    .dropdownButton {
-        height: 32px;
-    }
+  }
+
+  .dropdownButton {
+    height: 32px;
+  }
 }
 
 #toolbar,
 #menus {
-    svg use {
-        pointer-events: none;
-    }
+  svg use {
+    pointer-events: none;
+  }
 }
 
 #ribbon {
-    display: flex;
-    flex-wrap: wrap;
-    padding: $buttongroup-margin;
+  display: flex;
+  flex-wrap: wrap;
+  padding: $buttongroup-margin;
 
-    .buttonGroup {
-        // Conforms the ::after element to border radius
-        overflow: hidden;
-        border: 1px solid rgba(black, 0.1);
-        flex: 0 1 auto;
+  .buttonGroup {
+    flex: 0 1 auto;
+    // Conforms the ::after element to border radius
+    overflow: hidden;
+    border: 1px solid rgba(black, .1);
+  }
+
+  button {
+    padding: 2px;
+    margin: 1px;
+    border: 1px solid transparent;
+
+    &:hover {
+      cursor: pointer;
+      background-color: rgba($col-ribbon, .05);
+      border-color: rgba($col-ribbon, .25);
     }
+  }
+
+  button.enabled {
+    background-color: rgba(desaturate($col-ribbon, 75%), .05);
+    border-color: rgba($col-ribbon, .5);
+  }
+
+  .big-buttons {
+    padding: 1px;
+
+    * {
+      margin: 0;
+    }
+
     button {
-        margin: 1px;
-        padding: 2px;
-        border: 1px solid transparent;
-        &:hover {
-            background-color: rgba($col-ribbon, 0.05);
-            border-color: rgba($col-ribbon, 0.25);
-            cursor: pointer;
-        }
+      padding: 2px 3px;
     }
-    button.enabled {
-        background-color: rgba(desaturate($col-ribbon, 75%), 0.05);
-        border-color: rgba($col-ribbon, 0.5);
+
+    img {
+      display: block;
+      width: 30px;
+      height: 30px;
+      margin: auto;
+      margin-bottom: 5px;
     }
-    .big-buttons {
-        padding: 1px;
-        * {
-            margin: 0;
-        }
-        button {
-            padding: 2px 3px;
-        }
-        img {
-            margin: auto;
-            margin-bottom: 5px;
-            width: 30px;
-            height: 30px;
-            display: block;
-        }
-        svg {
-            margin: auto;
-            margin-bottom: 5px;
-            width: 30px;
-            height: 30px;
-            display: block;
-            fill: $col-toolbar-icons;
-            width: 32px;
-            height: 32px;
-        }
+
+    svg {
+      display: block;
+      width: 30px;
+      width: 32px;
+      height: 30px;
+      height: 32px;
+      margin: auto;
+      margin-bottom: 5px;
+      fill: $col-toolbar-icons;
     }
-    .small-buttons {
-        padding: 1px;
-        * {
-            margin: 0;
-            padding: 2px;
-        }
-        button {
-            display: block;
-            height: 26px;
-            text-align: left;
-            margin: 1px 0;
-        }
-        img,
-        svg {
-            margin: 0 3px;
-            width: 16px;
-            height: 16px;
-            fill: rgba(black, 0.5);
-            vertical-align: middle;
-        }
+  }
+
+  .small-buttons {
+    padding: 1px;
+
+    * {
+      padding: 2px;
+      margin: 0;
     }
+
+    button {
+      display: block;
+      height: 26px;
+      margin: 1px 0;
+      text-align: left;
+    }
+
+    img,
+    svg {
+      width: 16px;
+      height: 16px;
+      margin: 0 3px;
+      fill: rgba(black, .5);
+      vertical-align: middle;
+    }
+  }
 }
 
 #scenarioNameTab {
-    margin: 0;
-    padding: 3px 0;
-    color: #666;
-    text-align: center;
-    font-size: 1.1em;
-    span {
-        margin: 3px 0;
-        padding: 5px;
-        min-width: 50px;
-        height: 1em;
-        color: #000;
-        &:hover {
-            background-color: #f8f8f8;
-            color: #101010;
-        }
-        input[type=text] {
-            height: 1em;
-            font: inherit;
-        }
-        &:empty {
-            padding: 3px 15px;
-        }
+  padding: 3px 0;
+  margin: 0;
+  font-size: 1.1em;
+  color: #666;
+  text-align: center;
+
+  span {
+    height: 1em;
+    min-width: 50px;
+    padding: 5px;
+    margin: 3px 0;
+    color: #000;
+
+    &:hover {
+      color: #101010;
+      background-color: #F8F8F8;
     }
+
+    input[type=text] {
+      height: 1em;
+      font: inherit;
+    }
+
+    &:empty {
+      padding: 3px 15px;
+    }
+  }
 }
 
 .unsavedChanges::after {
-    content: "";
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 100%;
-    background: $col-unsaved-changes;
-    vertical-align: middle;
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  vertical-align: middle;
+  background: $col-unsaved-changes;
+  border-radius: 100%;
 }

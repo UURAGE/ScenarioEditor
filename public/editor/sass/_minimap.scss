@@ -3,37 +3,39 @@
 // © Utrecht University and DialogueTrainer
 
 #miniwrap {
-    display: none;
+  display: none;
 }
 
 #minimap {
-    position: relative;
-    float: right;
-    overflow: scroll;
-    margin: 10px;
-    padding: 0;
-    background-color: white;
-    width: 296px;
-    height: 296px;
-    &:hover {
-        cursor: pointer;
-    }
+  position: relative;
+  float: right;
+  width: 296px;
+  height: 296px;
+  padding: 0;
+  margin: 10px;
+  overflow: scroll;
+  background-color: white;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 #minimapSelector {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 296px;
-    height: 296px;
-    box-sizing: border-box;
-    border: 2px solid darken(desaturate($col-editor, 75%), 15%);
-    border-radius: 1px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 296px;
+  height: 296px;
+  border: 2px solid darken(desaturate($col-editor, 75%), 15%);
+  border-radius: 1px;
+  box-sizing: border-box;
 }
 
 #scaledDiv {
-    pointer-events: none;
-    * {
-        overflow: hidden;
-    }
+  pointer-events: none;
+
+  * {
+    overflow: hidden;
+  }
 }

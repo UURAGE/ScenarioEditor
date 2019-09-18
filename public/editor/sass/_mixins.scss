@@ -2,12 +2,11 @@
 
 // © Utrecht University and DialogueTrainer
 
-@mixin nodePropertyGradient($element, $col)
-{
-  #{$element}
-  {
+@mixin nodePropertyGradient($element, $col) {
+  #{$element} {
     border-bottom-color: darken($col, 15%) !important;
     border-left-color: darken($col, 15%) !important;
+
     &:hover::before {
       background: linear-gradient(-135deg, transparent 50%, $col 50%);
     }
@@ -17,15 +16,16 @@
 // Borrowed from Bootstrap 4
 // Color contrast
 @function color-yiq($color) {
-    $r: red($color);
-    $g: green($color);
-    $b: blue($color);
+  $r: red($color);
+  $g: green($color);
+  $b: blue($color);
 
-    $yiq: (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
+  $yiq: (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
 
-    @if ($yiq >= $yiq-contrasted-threshold) {
-      @return $col-text-dark;
-    } @else {
-      @return $col-text-light;
-    }
+  @if ($yiq >= $yiq-contrasted-threshold) {
+    @return $col-text-dark;
+  }
+  @else {
+    @return $col-text-light;
+  }
 }

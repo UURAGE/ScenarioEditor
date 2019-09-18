@@ -3,40 +3,44 @@
 // © Utrecht University and DialogueTrainer
 
 #colorPicker {
-    z-index: 51;
-    animation: pop-in 0.20s ease-in-out 0s;
-    -webkit-filter: drop-shadow(0px 2px 3px rgba(black, 0.5));
-    filter: drop-shadow(0px 2px 3px rgba(black, 0.5));
-    .edit,
-    .close {
-        pointer-events: all;
-        &:hover {
-            cursor: pointer;
-        }
+  z-index: 51;
+  filter: drop-shadow(0 2px 3px rgba(black, .5));
+  animation: pop-in .2s ease-in-out 0s;
+
+  .edit,
+  .close {
+    pointer-events: all;
+
+    &:hover {
+      cursor: pointer;
     }
+  }
 }
 
 .segment:hover {
-    opacity: 0.75;
-    cursor: pointer;
+  cursor: pointer;
+  opacity: .75;
 }
 
 .color {
-    border-style: outset;
+  border-style: outset;
 }
 
 @keyframes pop-in {
-    0% {
-        transform: translate(-50%, -50%) scale(0.75);
-        opacity: 0;
-    }
-    50% {
-        opacity: 1;
-    }
-    75% {
-        transform: translate(-50%, -50%) scale(1.025);
-    }
-    100% {
-        transform: translate(-50%, -50%) scale(1);
-    }
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(.75);
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  75% {
+    transform: translate(-50%, -50%) scale(1.025);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
 }

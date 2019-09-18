@@ -4,30 +4,30 @@
 
 $col-editor:                  #3892FF !default;
 
-$col-menu-bar:                rgba(white, 0.25) !default;
-$col-toolbar:                 rgba(desaturate($col-editor, 50%), 0.05) !default;
+$col-menu-bar:                rgba(white, .25) !default;
+$col-toolbar:                 rgba(desaturate($col-editor, 50%), .05) !default;
 $col-toolbar-icons:           darken(desaturate($col-editor, 75%), 15%) !default;
-$col-sidebar:                 rgba(desaturate($col-editor, 50%), 0.075) !default;
+$col-sidebar:                 rgba(desaturate($col-editor, 50%), .075) !default;
 $col-ribbon:                  $col-editor !default;
 
-$col-node-player:             #1974c9 !default;
+$col-node-player:             #1974C9 !default;
 $col-node-computer:           #CE192A !default;
 $col-node-situation:          #F37812 !default;
 $col-subject:                 $col-editor !default;
 
-$col-allow-interleave:        #Bf5cd1 !default;
+$col-allow-interleave:        #BF5CD1 !default;
 $col-end-node:                #212121 !default;
-$col-open-response:           #34b982 !default;
-$col-allow-dialogue-end:      #33AACC !default;
+$col-open-response:           #34B982 !default;
+$col-allow-dialogue-end:      #3AC !default;
 
-$col-positive:                #22aa33 !default;
+$col-positive:                #2A3 !default;
 $col-warning:                 #F37812 !default;
 $col-negative:                #CE192A !default;
-$col-info:                    #0080bf !default;
+$col-info:                    #0080BF !default;
 
-$col-unsaved-changes:         rgba($col-negative, 0.75) !default;
+$col-unsaved-changes:         rgba($col-negative, .75) !default;
 
-$col-dragbox:                 #fafafa !default;
+$col-dragbox:                 #FAFAFA !default;
 $col-dragbox-error:           desaturate(lighten($col-negative, 10%), 25%) !default;
 
 $col-ui-title-info:           lighten($col-info, 25%) !default;
@@ -37,7 +37,7 @@ $col-ui-title-error:          lighten($col-negative, 25%) !default;
 $col-icon-button-add:         $col-info !default;
 $col-icon-button-delete:      $col-negative !default;
 
-$col-expression-background:   #f2b63d !default;
+$col-expression-background:   #F2B63D !default;
 
 $col-text-dark:               #222 !default;
 $col-text-light:              white !default;

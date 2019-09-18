@@ -5,67 +5,71 @@
 .evaluation-expression,
 .scale-expression,
 .expression {
-    display: block;
-    box-sizing: border-box;
-    margin: 3x;
-    margin-right: 1px;
-    padding: 3px;
-    padding-right: 1px;
-    background: rgba($col-expression-background, 0.2);
-    border: 1px solid rgba(darken($col-expression-background, 25%), 0.25);
-    border-radius: 3px;
+  display: block;
+  padding: 3px;
+  padding-right: 1px;
+  margin-right: 1px;
+  background: rgba($col-expression-background, .2);
+  border: 1px solid rgba(darken($col-expression-background, 25%), .25);
+  border-radius: 3px;
+  box-sizing: border-box;
 }
 
 .scale-expression,
 .expression {
-    display: inline-block;
+  display: inline-block;
 }
 
 .define-type {
-    width: 36px;
-    height: 36px;
-    &:hover {
-        opacity: 0.6;
-        cursor: pointer;
-    }
+  width: 36px;
+  height: 36px;
+
+  &:hover {
+    cursor: pointer;
+    opacity: .6;
+  }
 }
 
 .groupConditionDiv {
-    margin: 0;
-    margin-left: 12px;
-    padding: 0;
-    padding-left: 10px;
-    border-left: 2px solid rgba(black, 0.10);
-    .when & {
-        border-left: 2px solid cornflowerblue;
-    }
+  padding: 0;
+  padding-left: 10px;
+  margin: 0;
+  margin-left: 12px;
+  border-left: 2px solid rgba(black, .1);
+
+  .when & {
+    border-left: 2px solid cornflowerblue;
+  }
 }
 
 .condition {
-    > {
-        button {
-            display: block;
-        }
-        .condition-test-container+button {
-            display: inline-block;
-        }
-        .emptyLabel,
-        .singleLabel,
-        .multipleLabel {
-            display: none;
-        }
+  > {
+    button {
+      display: block;
     }
-    &.empty>.emptyLabel,
-    &.single>.singleLabel,
-    &.multiple>.multipleLabel {
-        display: block;
+
+    .condition-test-container + button {
+      display: inline-block;
     }
+
+    .emptyLabel,
+    .singleLabel,
+    .multipleLabel {
+      display: none;
+    }
+  }
+
+  &.empty > .emptyLabel,
+  &.single > .singleLabel,
+  &.multiple > .multipleLabel {
+    display: block;
+  }
 }
 
 .groupConditionRadioDiv {
-    display: none;
+  display: none;
 }
 
-.condition.multiple>.groupConditionRadioDiv {
-    display: block;
+.condition.multiple > .groupConditionRadioDiv {
+  display: block;
 }
