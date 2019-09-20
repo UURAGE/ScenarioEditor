@@ -18,7 +18,7 @@ const lintJS = () =>
 };
 gulp.task("lint_js", lintJS);
 
-const prefixerOptions =
+const prefixerOptions: autoprefixer.Options =
 {
     flexbox: "no-2009"
 };
@@ -40,7 +40,6 @@ const compileSass = () =>
     return gulp.src(sassSrc)
         .pipe(sourcemaps.init())
         .pipe(sass().on("error", sass.logError))
-        // @ts-ignore
         .pipe(autoprefixer(prefixerOptions))
         .pipe(sourcemaps.write("."))
         .pipe(gulp.dest(sassDest));
