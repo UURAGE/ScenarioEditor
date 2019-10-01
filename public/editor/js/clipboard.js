@@ -300,8 +300,8 @@
                     }
                 });
 
-                // Select all nodes just copied
-                Main.selectElements(Object.keys(idMappings));
+                // Select all nodes just pasted
+                Main.selectElements(Object.keys(idMappings).map(function(oldId) { return idMappings[oldId]; }));
             }
         }
     }
