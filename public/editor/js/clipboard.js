@@ -165,7 +165,6 @@
         var toCopy = Utils.clone(
         {
             subject: tree.subject,
-            level: tree.level,
             optional: tree.optional,
             leftPos: tree.leftPos,
             leftScroll: tree.leftScroll,

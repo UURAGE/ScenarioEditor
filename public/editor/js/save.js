@@ -24,8 +24,6 @@ var Save;
     // Generates the XML
     function generateXML()
     {
-        var sortedTrees = sortTrees(Main.trees);
-
         var doc = document.implementation.createDocument(scenarioNameSpace, 'scenario', null);
 
         for (var nameSpace in Config.additionalNameSpaces)
@@ -79,34 +77,17 @@ var Save;
         // Save property values
         generatePropertyValuesXML(metadataEl, Metadata.container.propertyValues);
 
+        // Save sequence
         var seqElement = addAndReturnElement("sequence", scenarioNameSpace, doc.documentElement);
-
-        var i = 0;
-
-        var makeTreeXML = function(id, tree, interleave)
+        $.each(Main.getInterleaves(), function(i, interleave)
         {
-            generateTreeXML(interleave, tree);
-        };
-
-        while (i < sortedTrees.length) // This loop gets all the levels
-        {
-            // One interleave tag for each level
-            var interleave = addAndReturnElement("interleave", scenarioNameSpace, seqElement);
-            var treeArray = [];
-            treeArray.push(sortedTrees[i]);
-            i++;
-            // Lets see if more trees are at this level
-            for (i; i < sortedTrees.length; i++)
+            var interleaveElement = addAndReturnElement("interleave", scenarioNameSpace, seqElement);
+            $.each(interleave, function(j, tree)
             {
-                var tree = sortedTrees[i];
+                generateTreeXML(interleaveElement, tree);
+            });
+        });
 
-                if (tree.level == treeArray[0].level) treeArray.push(tree);
-                else break;
-            }
-
-            // For each tree at this level, make the xml
-            $.each(treeArray, function(i, tree) { makeTreeXML(i, tree, interleave); });
-        }
         var s = new XMLSerializer();
         return s.serializeToString(doc);
     }
@@ -271,11 +252,7 @@ var Save;
     {
         // Warn user before exporting an invalid scenario
         var errors = Validator.validate();
-        var hasErrors = false;
-        $.each(errors, function(index, value)
-        {
-            hasErrors = hasErrors || value.level === 'error';
-        });
+        var hasErrors = errors.some(function(error) { return error.level === 'error'; });
 
         var consideredExport = function()
         {
@@ -508,30 +485,5 @@ var Save;
         if (preserveSpaces) Utils.setPreserveSpace(elToAdd);
         xmlElement.appendChild(elToAdd);
         return elToAdd;
-    }
-
-    // Returns an array of trees, sorted by level, if equal, sorted by x-position
-    function sortTrees(trees)
-    {
-        var result = [];
-
-        for (var prop in trees)
-        {
-            result.push(trees[prop]);
-        }
-
-        result.sort(function(a, b)
-        {
-            if (a.level === b.level)
-            {
-                return a.leftPos - b.leftPos;
-            }
-            else
-            {
-                return a.level - b.level;
-            }
-        });
-
-        return result;
     }
 })();

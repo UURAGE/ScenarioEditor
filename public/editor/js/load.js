@@ -188,7 +188,6 @@ var Load;
     // Generates the entire graph, including the objects.
     function generateGraph(xml)
     {
-        var level = 0;
         $(xml).children('sequence').children('interleave').each(function()
         {
             $(this).children('dialogue').each(function()
@@ -223,8 +222,6 @@ var Load;
                 $(tree.dragDiv).toggleClass('optional', tree.optional);
 
                 tree.comment = editingDataXML.children('comment').text();
-
-                tree.level = level;
 
                 tree.dragDiv.find('.subjectName').text(tree.subject); // Set subject in HTML
                 tree.dragDiv.find('.subjectNameInput').val(tree.subject); // Set subject in HTML
@@ -262,8 +259,6 @@ var Load;
                     });
                 }.bind(this), true);
             });
-
-            level++;
         });
     }
 

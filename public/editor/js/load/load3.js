@@ -20,7 +20,6 @@ var Load3;
     // Generates the entire graph, including the objects.
     function generateGraph(xml)
     {
-        var level = 0;
         // Conversations stores all the accumulated conversations so we can expand them and give the nodes fresh ids at the end
         var conversations = {};
 
@@ -58,8 +57,6 @@ var Load3;
                 if (tree.optional) iconDiv.html(Utils.sIcon('icon-tree-is-optional'));
                 $(tree.dragDiv).toggleClass('optional', tree.optional);
 
-                tree.level = level;
-
                 tree.dragDiv.find('.subjectName').text(tree.subject); // Set subject in HTML
                 tree.dragDiv.find('.subjectNameInput').val(tree.subject); // Set subject in HTML
 
@@ -95,8 +92,6 @@ var Load3;
                     });
                 }.bind(this), true);
             });
-
-            level++;
         });
 
         expandConversations(conversations);

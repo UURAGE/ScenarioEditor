@@ -58,39 +58,66 @@ var Validator;
                 level: 'error',
                 jumpToFunctions: []
             });
+            return validationReport;
         }
 
-        var numberOfTreesOnLevels = getNumberOfTreesOnLevels(Main.trees);
-        var highestLevel = numberOfTreesOnLevels.length - 1; // Note that trees with a high level are low on the editor screen
-        var highestLevelHasOneTree = numberOfTreesOnLevels[highestLevel] === 1;
-        var highestLevelHasEnd = false;
+        var interleaves = Main.getInterleaves();
+        var lastInterleaveIndex = interleaves.length - 1;
+        var lastInterleaveHasOneTree = interleaves[lastInterleaveIndex].length === 1;
+        var lastInterleaveHasEnd = false;
 
-        $.each(Main.trees, function(treeID, tree)
+        $.each(interleaves, function(interleaveIndex, interleave)
         {
-            var isHighestLevel = tree.level === highestLevel;
-            var hasANode = false;
-            var startNodes = [];
-
-            $.each(tree.nodes, function(nodeIndex, nodeID)
+            $.each(interleave, function(treeIndex, tree)
             {
-                if (!nodeID) return true;
+                var isLastInterleave = interleaveIndex === lastInterleaveIndex;
+                var hasANode = false;
+                var startNodes = [];
 
-                hasANode = true;
-                var node = Main.nodes[nodeID];
-                var incomingConnections = tree.plumbInstance.getConnections({ target: nodeID });
-                var outgoingConnections = tree.plumbInstance.getConnections({ source: nodeID });
-
-                if (incomingConnections.length === 0)
+                $.each(tree.nodes, function(nodeIndex, nodeID)
                 {
-                    startNodes.push(node);
+                    if (!nodeID) return true;
 
-                    // The tree on the first level can start with anything, but the trees following can only start with player nodes
-                    if (tree.level !== 0 && node.type !== Main.playerType)
+                    hasANode = true;
+                    var node = Main.nodes[nodeID];
+                    var incomingConnections = tree.plumbInstance.getConnections({ target: nodeID });
+                    var outgoingConnections = tree.plumbInstance.getConnections({ source: nodeID });
+
+                    if (incomingConnections.length === 0)
+                    {
+                        startNodes.push(node);
+
+                        // The tree in the first interleave can start with anything, but the trees following can only start with player nodes
+                        if (interleaveIndex !== 0 && node.type !== Main.playerType)
+                        {
+                            validationReport.push(
+                            {
+                                message: i18next.t('validator:subject_start_type_error',
+                                    { subject: tree.subject, type: i18next.t('common:' + Main.nodes[nodeID].type) }),
+                                level: 'error',
+                                jumpToFunctions:
+                                [
+                                    function() { Zoom.zoomIn(tree); },
+                                    function()
+                                    {
+                                        Zoom.zoomIn(tree);
+                                        Main.selectNode(nodeID);
+                                        var nodeContainer = $("#" + nodeID);
+                                        if (nodeContainer.length > 0)
+                                        {
+                                            nodeContainer[0].scrollIntoView(false);
+                                        }
+                                    }
+                                ]
+                            });
+                        }
+                    }
+
+                    if (outgoingConnections.length > 0 && node.endNode)
                     {
                         validationReport.push(
                         {
-                            message: i18next.t('validator:subject_start_type_error',
-                                { subject: tree.subject, type: i18next.t('common:' + Main.nodes[nodeID].type) }),
+                            message: i18next.t('validator:end_with_outgoing_connections', { subject: tree.subject }),
                             level: 'error',
                             jumpToFunctions:
                             [
@@ -108,188 +135,164 @@ var Validator;
                             ]
                         });
                     }
-                }
 
-                if (outgoingConnections.length > 0 && node.endNode)
+                    if (isLastInterleave)
+                    {
+                        if (node.endNode)
+                        {
+                            lastInterleaveHasEnd = true;
+                        }
+                        else if (outgoingConnections.length === 0 && lastInterleaveHasOneTree)
+                        {
+                            // Node is a dead end, but not marked as end node
+                            validationReport.push(
+                            {
+                                message: i18next.t('validator:unmarked_end', { subject: tree.subject }),
+                                level: 'error',
+                                jumpToFunctions:
+                                [
+                                    function() { Zoom.zoomIn(tree); },
+                                    function()
+                                    {
+                                        Zoom.zoomIn(tree);
+                                        Main.selectNode(nodeID);
+                                        var nodeContainer = $("#" + nodeID);
+                                        if (nodeContainer.length > 0)
+                                        {
+                                            nodeContainer[0].scrollIntoView(false);
+                                        }
+                                    }
+                                ]
+                            });
+                        }
+                    }
+
+                    if (node.allowInterleaveNode || node.allowDialogueEndNode)
+                    {
+                        var badChildIDs = outgoingConnections
+                            .map(function(connection) { return connection.targetId; })
+                            .filter(function(childID) { return Main.nodes[childID].type !== Main.playerType; });
+                        if (badChildIDs.length !== 0)
+                        {
+                            var specialProperties = ['allowInterleaveNode', 'allowDialogueEndNode']
+                                .filter(function(specialProperty) { return node[specialProperty]; })
+                                .map(function(specialProperty)
+                                {
+                                    return i18next.t('validator:special_node.' + specialProperty);
+                                });
+                            validationReport.push(
+                            {
+                                message: i18next.t('validator:special_node_child_type',
+                                {
+                                    subject: tree.subject,
+                                    properties: specialProperties.join(i18next.t('validator:and'))
+                                }),
+                                level: 'error',
+                                jumpToFunctions:
+                                [
+                                    function() { Zoom.zoomIn(tree); },
+                                    function()
+                                    {
+                                        Zoom.zoomIn(tree);
+                                        Main.selectNode(nodeID);
+                                        var nodeContainer = $("#" + nodeID);
+                                        if (nodeContainer.length > 0)
+                                        {
+                                            nodeContainer[0].scrollIntoView(false);
+                                        }
+                                    },
+                                    function()
+                                    {
+                                        Zoom.zoomIn(tree);
+                                        Main.selectElements(badChildIDs);
+                                        var firstNodeContainer = $("#" + badChildIDs[0]);
+                                        if (firstNodeContainer.length > 0)
+                                        {
+                                            firstNodeContainer[0].scrollIntoView(false);
+                                        }
+                                    }
+                                ]
+                            });
+                        }
+                    }
+                });
+
+                if (!hasANode)
                 {
                     validationReport.push(
                     {
-                        message: i18next.t('validator:end_with_outgoing_connections', { subject: tree.subject }),
+                        message: i18next.t('validator:empty_subject', { subject: tree.subject }),
                         level: 'error',
+                        jumpToFunctions: [ function() { Zoom.zoomIn(tree); } ]
+                    });
+                }
+
+                if (tree.subject === "")
+                {
+                    validationReport.push(
+                    {
+                        message: i18next.t('validator:unnamed_subject'),
+                        level: 'info',
                         jumpToFunctions:
                         [
-                            function() { Zoom.zoomIn(tree); },
                             function()
                             {
-                                Zoom.zoomIn(tree);
-                                Main.selectNode(nodeID);
-                                var nodeContainer = $("#" + nodeID);
-                                if (nodeContainer.length > 0)
-                                {
-                                    nodeContainer[0].scrollIntoView(false);
-                                }
+                                Zoom.zoomOut();
+                                Main.selectElement(tree.id);
+                                Main.triggerSubjectNameInput(tree.id, false);
                             }
                         ]
                     });
                 }
 
-                if (isHighestLevel)
+                if (interleaveIndex === 0)
                 {
-                    if (node.endNode)
-                    {
-                        highestLevelHasEnd = true;
-                    }
-                    else if (outgoingConnections.length === 0 && highestLevelHasOneTree)
-                    {
-                        // Node is a dead end, but not marked as end node
-                        validationReport.push(
-                        {
-                            message: i18next.t('validator:unmarked_end', { subject: tree.subject }),
-                            level: 'error',
-                            jumpToFunctions:
-                            [
-                                function() { Zoom.zoomIn(tree); },
-                                function()
-                                {
-                                    Zoom.zoomIn(tree);
-                                    Main.selectNode(nodeID);
-                                    var nodeContainer = $("#" + nodeID);
-                                    if (nodeContainer.length > 0)
-                                    {
-                                        nodeContainer[0].scrollIntoView(false);
-                                    }
-                                }
-                            ]
-                        });
-                    }
-                }
+                    var startNodesByType = {};
 
-                if (node.allowInterleaveNode || node.allowDialogueEndNode)
-                {
-                    var badChildIDs = outgoingConnections
-                        .map(function(connection) { return connection.targetId; })
-                        .filter(function(childID) { return Main.nodes[childID].type !== Main.playerType; });
-                    if (badChildIDs.length !== 0)
+                    $.each(startNodes, function(nodeIndex, node)
                     {
-                        var specialProperties = ['allowInterleaveNode', 'allowDialogueEndNode']
-                            .filter(function(specialProperty) { return node[specialProperty]; })
-                            .map(function(specialProperty)
-                            {
-                                return i18next.t('validator:special_node.' + specialProperty);
-                            });
+                        if (!startNodesByType[node.type]) startNodesByType[node.type] = [];
+                        startNodesByType[node.type].push(node);
+                    });
+
+                    var startNodeTypes = Object.keys(startNodesByType);
+
+                    if (startNodeTypes.length > 1)
+                    {
                         validationReport.push(
                         {
-                            message: i18next.t('validator:special_node_child_type',
+                            message: i18next.t('validator:first_subject_start_type_error',
                             {
                                 subject: tree.subject,
-                                properties: specialProperties.join(i18next.t('validator:and'))
+                                nodes: startNodeTypes
+                                    .map(function(nodeType)
+                                    {
+                                        return '<a>' + i18next.t('common:' + nodeType).toLowerCase() + '</a>';
+                                    })
+                                    .join(', ')
                             }),
                             level: 'error',
-                            jumpToFunctions:
-                            [
-                                function() { Zoom.zoomIn(tree); },
-                                function()
+                            jumpToFunctions: [function() { Zoom.zoomIn(tree); }]
+                                .concat($.map(startNodesByType, function(startNodes)
                                 {
-                                    Zoom.zoomIn(tree);
-                                    Main.selectNode(nodeID);
-                                    var nodeContainer = $("#" + nodeID);
-                                    if (nodeContainer.length > 0)
+                                    return function()
                                     {
-                                        nodeContainer[0].scrollIntoView(false);
-                                    }
-                                },
-                                function()
-                                {
-                                    Zoom.zoomIn(tree);
-                                    Main.selectElements(badChildIDs);
-                                    var firstNodeContainer = $("#" + badChildIDs[0]);
-                                    if (firstNodeContainer.length > 0)
-                                    {
-                                        firstNodeContainer[0].scrollIntoView(false);
-                                    }
-                                }
-                            ]
+                                        Zoom.zoomIn(tree);
+                                        Main.selectElements(startNodes.map(function(node) { return node.id; }));
+                                        var firstNodeContainer = $("#" + startNodes[0].id);
+                                        if (firstNodeContainer.length > 0)
+                                        {
+                                            firstNodeContainer[0].scrollIntoView(false);
+                                        }
+                                    };
+                                }))
                         });
                     }
                 }
             });
-
-            if (!hasANode)
-            {
-                validationReport.push(
-                {
-                    message: i18next.t('validator:empty_subject', { subject: tree.subject }),
-                    level: 'error',
-                    jumpToFunctions: [ function() { Zoom.zoomIn(tree); } ]
-                });
-            }
-
-            if (tree.subject === "")
-            {
-                validationReport.push(
-                {
-                    message: i18next.t('validator:unnamed_subject'),
-                    level: 'info',
-                    jumpToFunctions:
-                    [
-                        function()
-                        {
-                            Zoom.zoomOut();
-                            Main.selectElement(tree.id);
-                            Main.triggerSubjectNameInput(tree.id, false);
-                        }
-                    ]
-                });
-            }
-
-            if (tree.level === 0)
-            {
-                var startNodesByType = {};
-
-                $.each(startNodes, function(nodeIndex, node)
-                {
-                    if (!startNodesByType[node.type]) startNodesByType[node.type] = [];
-                    startNodesByType[node.type].push(node);
-                });
-
-                var startNodeTypes = Object.keys(startNodesByType);
-
-                if (startNodeTypes.length > 1)
-                {
-                    validationReport.push(
-                    {
-                        message: i18next.t('validator:first_subject_start_type_error',
-                        {
-                            subject: tree.subject,
-                            nodes: startNodeTypes
-                                .map(function(nodeType)
-                                {
-                                    return '<a>' + i18next.t('common:' + nodeType).toLowerCase() + '</a>';
-                                })
-                                .join(', ')
-                        }),
-                        level: 'error',
-                        jumpToFunctions: [function() { Zoom.zoomIn(tree); }]
-                            .concat($.map(startNodesByType, function(startNodes)
-                            {
-                                return function()
-                                {
-                                    Zoom.zoomIn(tree);
-                                    Main.selectElements(startNodes.map(function(node) { return node.id; }));
-                                    var firstNodeContainer = $("#" + startNodes[0].id);
-                                    if (firstNodeContainer.length > 0)
-                                    {
-                                        firstNodeContainer[0].scrollIntoView(false);
-                                    }
-                                };
-                            })
-                            )
-                    });
-                }
-            }
         });
 
-        if (numberOfTreesOnLevels[0] !== 1)
+        if (interleaves[0].length !== 1)
         {
             validationReport.push(
             {
@@ -300,19 +303,15 @@ var Validator;
                     function()
                     {
                         Zoom.zoomOut();
-                        Main.selectElements(Object.keys(Main.trees).filter(function(treeID)
-                        {
-                            return Main.trees[treeID].level === 0;
-                        }));
+                        Main.selectElements(interleaves[0].map(function(tree) { return tree.id; }));
                     }
                 ]
             });
         }
 
-        if (!highestLevelHasEnd)
+        if (!lastInterleaveHasEnd)
         {
-            // No single iteration errors, but there is no valid end
-            if (numberOfTreesOnLevels.length === 1 && numberOfTreesOnLevels[0] === 1)
+            if (interleaves.length === 1 && interleaves[0].length === 1)
             {
                 validationReport.push(
                 {
@@ -332,30 +331,14 @@ var Validator;
                         function()
                         {
                             Zoom.zoomOut();
-                            Main.selectElements(Object.keys(Main.trees).filter(function(treeID)
-                            {
-                                return Main.trees[treeID].level === highestLevel;
-                            }));
+                            Main.selectElements(interleaves[lastInterleaveIndex].map(function(tree) { return tree.id; }));
                         }
                     ]
                 });
             }
         }
 
-        return validationReport; // Add highest level unmarked end nodes and return
-    }
-
-    function getNumberOfTreesOnLevels(trees)
-    {
-        var treesOnLevels = [];
-        $.each(trees, function(index, tree)
-        {
-            if (typeof treesOnLevels[tree.level] == 'undefined') treesOnLevels[tree.level] = 0;
-
-            treesOnLevels[tree.level]++;
-        });
-
-        return treesOnLevels;
+        return validationReport;
     }
 
     function show(errors)

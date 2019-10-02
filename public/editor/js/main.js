@@ -41,6 +41,7 @@ var Main;
         getGridIndicatorPosition: getGridIndicatorPosition,
         getPlumbInstanceByNodeID: getPlumbInstanceByNodeID,
         getStartNodeIDs: getStartNodeIDs,
+        getInterleaves: getInterleaves,
         highlightParents: highlightParents,
         isEditingInCanvas: isEditingInCanvas,
         isMousePositionWithinEditingCanvas: isMousePositionWithinEditingCanvas,
@@ -734,7 +735,6 @@ var Main;
             leftScroll: 0,
             topScroll: 0,
             comment: "",
-            level: topPos,
             nodes: [],
             // The keys for this object are the connection IDs
             selectedConnections: {},
@@ -1234,6 +1234,34 @@ var Main;
         return orphanNodes;
     }
 
+    function getInterleaves()
+    {
+        var sortedTrees = Object.keys(Main.trees)
+            .map(function(treeID) { return Main.trees[treeID]; })
+            .sort(function(a, b)
+            {
+                return (a.topPos - b.topPos) || (a.leftPos - b.leftPos);
+            });
+
+        if (sortedTrees.length === 0) return [];
+
+        var interleaves = [];
+        var currentInterleave = [sortedTrees.shift()];
+        var currentTopPos = currentInterleave[0].topPos;
+        sortedTrees.forEach(function(tree)
+        {
+            if (tree.topPos !== currentTopPos)
+            {
+                interleaves.push(currentInterleave);
+                currentInterleave = [];
+                currentTopPos = tree.topPos;
+            }
+            currentInterleave.push(tree);
+        });
+        interleaves.push(currentInterleave);
+        return interleaves;
+    }
+
     function triggerSubjectNameInput(id, selectAllInput)
     {
         // Hide subject name span and show textbox
@@ -1659,9 +1687,6 @@ var Main;
                 // Store position to return to this point when zoomed in and out again
                 tree.leftPos = gridLeftPos;
                 tree.topPos = gridTopPos;
-                // Trees have a conversation level. Trees on the same level are interleaved.
-                // Trees on different levels are sequenced from top to bottom (low y to high y).
-                tree.level = Math.round(tree.topPos);
 
                 MiniMap.update(true);
             }
