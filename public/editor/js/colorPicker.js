@@ -469,6 +469,22 @@ var ColorPicker;
                     // Inner border for the edit button
                     appendBorderTo(innerColorRing, pickerRadius, pickerRadius === innerPickerRadius ? pickerRadius / 3 : 2 * innerPickerRadius - pickerRadius);
 
+                    var onClickOutside = function(e)
+                    {
+                        if (!picker.is(e.target) && picker.has(e.target).length === 0)
+                        {
+                            closeColorPicker(e);
+                        }
+                    };
+                    $(document).on('click', onClickOutside);
+
+                    var closeColorPicker = function(e)
+                    {
+                        connection.removeOverlay("color-picker");
+                        $(document).off('click', onClickOutside);
+                        e.stopPropagation();
+                    };
+
                     picker.find('.segment').each(function()
                     {
                         $(this).on('mouseover', function(e)
@@ -485,9 +501,8 @@ var ColorPicker;
                             {
                                 applyColor(connection, Zoom.getZoomed());
                             }
-                            connection.removeOverlay("color-picker");
 
-                            e.stopPropagation();
+                            closeColorPicker(e);
                         });
                     });
 
@@ -521,8 +536,7 @@ var ColorPicker;
                     $(editButton).on('click', function(e)
                     {
                         keyDialog();
-                        connection.removeOverlay("color-picker");
-                        e.stopPropagation();
+                        closeColorPicker(e);
                     });
 
                     var closeIcon = Utils.appendChild(innerCircle, "use");
@@ -552,8 +566,7 @@ var ColorPicker;
                     });
                     $(closeButton).on('click', function(e)
                     {
-                        connection.removeOverlay("color-picker");
-                        e.stopPropagation();
+                        closeColorPicker(e);
                     });
 
                     return picker;
