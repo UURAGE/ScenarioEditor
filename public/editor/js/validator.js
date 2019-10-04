@@ -61,56 +61,65 @@ var Validator;
             return validationReport;
         }
 
+        var createJumpToTrees = function(trees)
+        {
+            return function()
+            {
+                Zoom.zoomOut();
+                Main.selectElements(trees.map(function(tree) { return tree.id; }));
+            };
+        };
+        var createJumpToNodes = function(tree, nodeIDs)
+        {
+            return function()
+            {
+                Zoom.zoomIn(tree);
+                Main.selectElements(nodeIDs);
+                var firstNodeContainer = $("#" + nodeIDs[0]);
+                if (firstNodeContainer.length > 0)
+                {
+                    firstNodeContainer[0].scrollIntoView(false);
+                }
+            };
+        };
+
         var interleaves = Main.getInterleaves();
         var lastInterleaveIndex = interleaves.length - 1;
         var lastInterleaveHasOneTree = interleaves[lastInterleaveIndex].length === 1;
         var lastInterleaveHasEnd = false;
 
-        $.each(interleaves, function(interleaveIndex, interleave)
-        {
-            $.each(interleave, function(treeIndex, tree)
-            {
-                var isLastInterleave = interleaveIndex === lastInterleaveIndex;
-                var hasANode = false;
-                var startNodes = [];
+        var previousInterleave = null;
+        var previousInterleaveStartNodeType = null;
+        var previousInterleaveHasOptionalTree = false;
+        var previousInterleaveAllowDialogueEndNode = null;
 
-                $.each(tree.nodes, function(nodeIndex, nodeID)
+        interleaves.forEach(function(interleave, interleaveIndex)
+        {
+            var isLastInterleave = interleaveIndex === lastInterleaveIndex;
+
+            var interleaveHasOptionalTree = false;
+            var interleaveAllowInterleaveNode = null;
+            var interleaveAllowDialogueEndNode = null;
+            var interleaveTreesByStartNodeType = {};
+            interleave.forEach(function(tree)
+            {
+                if (tree.optional) interleaveHasOptionalTree = true;
+
+                var treeHasANode = false;
+                var treeStartNodesByType = {};
+                tree.nodes.forEach(function(nodeID)
                 {
                     if (!nodeID) return true;
 
-                    hasANode = true;
+                    treeHasANode = true;
                     var node = Main.nodes[nodeID];
                     var incomingConnections = tree.plumbInstance.getConnections({ target: nodeID });
                     var outgoingConnections = tree.plumbInstance.getConnections({ source: nodeID });
 
                     if (incomingConnections.length === 0)
                     {
-                        startNodes.push(node);
-
-                        // The tree in the first interleave can start with anything, but the trees following can only start with player nodes
-                        if (interleaveIndex !== 0 && node.type !== Main.playerType)
-                        {
-                            validationReport.push(
-                            {
-                                message: i18next.t('validator:subject_start_type_error',
-                                    { subject: tree.subject, type: i18next.t('common:' + Main.nodes[nodeID].type) }),
-                                level: 'error',
-                                jumpToFunctions:
-                                [
-                                    function() { Zoom.zoomIn(tree); },
-                                    function()
-                                    {
-                                        Zoom.zoomIn(tree);
-                                        Main.selectNode(nodeID);
-                                        var nodeContainer = $("#" + nodeID);
-                                        if (nodeContainer.length > 0)
-                                        {
-                                            nodeContainer[0].scrollIntoView(false);
-                                        }
-                                    }
-                                ]
-                            });
-                        }
+                        if (!treeStartNodesByType[node.type]) treeStartNodesByType[node.type] = [];
+                        treeStartNodesByType[node.type].push(node);
                     }
 
                     if (outgoingConnections.length > 0 && node.endNode)
@@ -122,16 +131,7 @@ var Validator;
                             jumpToFunctions:
                             [
                                 function() { Zoom.zoomIn(tree); },
-                                function()
-                                {
-                                    Zoom.zoomIn(tree);
-                                    Main.selectNode(nodeID);
-                                    var nodeContainer = $("#" + nodeID);
-                                    if (nodeContainer.length > 0)
-                                    {
-                                        nodeContainer[0].scrollIntoView(false);
-                                    }
-                                }
+                                createJumpToNodes(tree, [nodeID])
                             ]
                         });
                     }
@@ -152,16 +152,7 @@ var Validator;
                                 jumpToFunctions:
                                 [
                                     function() { Zoom.zoomIn(tree); },
-                                    function()
-                                    {
-                                        Zoom.zoomIn(tree);
-                                        Main.selectNode(nodeID);
-                                        var nodeContainer = $("#" + nodeID);
-                                        if (nodeContainer.length > 0)
-                                        {
-                                            nodeContainer[0].scrollIntoView(false);
-                                        }
-                                    }
+                                    createJumpToNodes(tree, [nodeID])
                                 ]
                             });
                         }
@@ -169,6 +160,17 @@ var Validator;
 
                     if (node.allowInterleaveNode || node.allowDialogueEndNode)
                     {
+                        if (outgoingConnections.length > 0)
+                        {
+                            if (node.allowInterleaveNode && interleaveAllowInterleaveNode === null)
+                            {
+                                interleaveAllowInterleaveNode = node;
+                            }
+                            if (node.allowDialogueEndNode && interleaveAllowDialogueEndNode === null)
+                            {
+                                interleaveAllowDialogueEndNode = node;
+                            }
+                        }
                         var badChildIDs = outgoingConnections
                             .map(function(connection) { return connection.targetId; })
                             .filter(function(childID) { return Main.nodes[childID].type !== Main.playerType; });
@@ -191,41 +193,13 @@ var Validator;
                                 jumpToFunctions:
                                 [
                                     function() { Zoom.zoomIn(tree); },
-                                    function()
-                                    {
-                                        Zoom.zoomIn(tree);
-                                        Main.selectNode(nodeID);
-                                        var nodeContainer = $("#" + nodeID);
-                                        if (nodeContainer.length > 0)
-                                        {
-                                            nodeContainer[0].scrollIntoView(false);
-                                        }
-                                    },
-                                    function()
-                                    {
-                                        Zoom.zoomIn(tree);
-                                        Main.selectElements(badChildIDs);
-                                        var firstNodeContainer = $("#" + badChildIDs[0]);
-                                        if (firstNodeContainer.length > 0)
-                                        {
-                                            firstNodeContainer[0].scrollIntoView(false);
-                                        }
-                                    }
+                                    createJumpToNodes(tree, [nodeID]),
+                                    createJumpToNodes(tree, badChildIDs)
                                 ]
                             });
                         }
                     }
                 });
-
-                if (!hasANode)
-                {
-                    validationReport.push(
-                    {
-                        message: i18next.t('validator:empty_subject', { subject: tree.subject }),
-                        level: 'error',
-                        jumpToFunctions: [ function() { Zoom.zoomIn(tree); } ]
-                    });
-                }
 
                 if (tree.subject === "")
                 {
@@ -245,69 +219,171 @@ var Validator;
                     });
                 }
 
-                if (interleaveIndex === 0)
+                if (!treeHasANode)
                 {
-                    var startNodesByType = {};
-
-                    $.each(startNodes, function(nodeIndex, node)
+                    validationReport.push(
                     {
-                        if (!startNodesByType[node.type]) startNodesByType[node.type] = [];
-                        startNodesByType[node.type].push(node);
+                        message: i18next.t('validator:empty_subject', { subject: tree.subject }),
+                        level: 'error',
+                        jumpToFunctions: [ function() { Zoom.zoomIn(tree); } ]
                     });
+                    return;
+                }
 
-                    var startNodeTypes = Object.keys(startNodesByType);
-
-                    if (startNodeTypes.length > 1)
+                var treeStartNodeTypes = Object.keys(treeStartNodesByType);
+                if (treeStartNodeTypes.length > 1)
+                {
+                    validationReport.push(
                     {
-                        validationReport.push(
+                        message: i18next.t('validator:subject_start_type_error',
                         {
-                            message: i18next.t('validator:first_subject_start_type_error',
-                            {
-                                subject: tree.subject,
-                                nodes: startNodeTypes
-                                    .map(function(nodeType)
-                                    {
-                                        return '<a>' + i18next.t('common:' + nodeType).toLowerCase() + '</a>';
-                                    })
-                                    .join(', ')
-                            }),
-                            level: 'error',
-                            jumpToFunctions: [function() { Zoom.zoomIn(tree); }]
-                                .concat($.map(startNodesByType, function(startNodes)
+                            subject: tree.subject,
+                            types: treeStartNodeTypes
+                                .map(function(nodeType)
                                 {
-                                    return function()
-                                    {
-                                        Zoom.zoomIn(tree);
-                                        Main.selectElements(startNodes.map(function(node) { return node.id; }));
-                                        var firstNodeContainer = $("#" + startNodes[0].id);
-                                        if (firstNodeContainer.length > 0)
-                                        {
-                                            firstNodeContainer[0].scrollIntoView(false);
-                                        }
-                                    };
-                                }))
-                        });
+                                    return '<a>' + i18next.t('common:' + nodeType).toLowerCase() + '</a>';
+                                })
+                                .join(', ')
+                        }),
+                        level: 'error',
+                        jumpToFunctions: [function() { Zoom.zoomIn(tree); }]
+                            .concat($.map(treeStartNodesByType, function(startNodes)
+                            {
+                                return createJumpToNodes(tree, startNodes.map(function(node) { return node.id; }));
+                            }))
+                    });
+                }
+                else if (treeStartNodeTypes.length === 1)
+                {
+                    var treeStartNodeType = treeStartNodeTypes[0];
+                    if (!interleaveTreesByStartNodeType[treeStartNodeType])
+                    {
+                        interleaveTreesByStartNodeType[treeStartNodeType] = [];
                     }
+                    interleaveTreesByStartNodeType[treeStartNodeType].push(tree);
                 }
             });
-        });
 
-        if (interleaves[0].length !== 1)
-        {
-            validationReport.push(
+            var interleaveStartNodeType = null;
+            var interleaveStartNodeTypes = Object.keys(interleaveTreesByStartNodeType);
+
+            if (interleaveStartNodeTypes.length > 1)
             {
-                message: i18next.t('validator:first_layer_count'),
-                level: 'error',
-                jumpToFunctions:
-                [
-                    function()
+                validationReport.push(
+                {
+                    message: i18next.t('validator:layer_start_type_error',
                     {
-                        Zoom.zoomOut();
-                        Main.selectElements(interleaves[0].map(function(tree) { return tree.id; }));
-                    }
-                ]
-            });
-        }
+                        layerNumber: interleave[0].topPos + 1,
+                        types: interleaveStartNodeTypes
+                            .map(function(nodeType)
+                            {
+                                return '<a>' + i18next.t('common:' + nodeType).toLowerCase() + '</a>';
+                            })
+                            .join(', ')
+                    }),
+                    level: 'error',
+                    jumpToFunctions: [createJumpToTrees(interleave)]
+                        .concat($.map(interleaveTreesByStartNodeType, createJumpToTrees))
+                });
+            }
+            else if (interleaveStartNodeTypes.length === 1)
+            {
+                interleaveStartNodeType = interleaveStartNodeTypes[0];
+
+                if (previousInterleaveHasOptionalTree &&
+                    previousInterleaveStartNodeType !== null &&
+                    interleaveStartNodeType !== previousInterleaveStartNodeType)
+                {
+                    validationReport.push(
+                    {
+                        message: i18next.t('validator:optional_layer_start_type_error',
+                        {
+                            previousLayerNumber: previousInterleave[0].topPos + 1,
+                            thisLayerNumber: interleave[0].topPos + 1,
+                            types: [previousInterleaveStartNodeType, interleaveStartNodeType]
+                                .map(function(nodeType)
+                                {
+                                    return '<a>' + i18next.t('common:' + nodeType).toLowerCase() + '</a>';
+                                })
+                                .join(', ')
+                        }),
+                        level: 'error',
+                        jumpToFunctions:
+                        [
+                            createJumpToTrees(previousInterleave.filter(function(tree) { return tree.optional; })),
+                            createJumpToTrees(interleave),
+                            createJumpToTrees(previousInterleave),
+                            createJumpToTrees(interleave)
+                        ]
+                    });
+                }
+
+                if (interleaveAllowInterleaveNode !== null && interleave.length > 1 && interleaveStartNodeType !== Main.playerType)
+                {
+                    validationReport.push(
+                    {
+                        message: i18next.t('validator:special_node_layer_start_type_error',
+                        {
+                            layerNumber: interleave[0].topPos + 1,
+                            type: i18next.t('common:' + interleaveStartNodeType).toLocaleLowerCase(),
+                            property: i18next.t('validator:special_node.allowInterleaveNode')
+                        }),
+                        level: 'error',
+                        jumpToFunctions:
+                        [
+                            createJumpToTrees(interleave),
+                            createJumpToNodes(Main.trees[interleaveAllowInterleaveNode.parent], [interleaveAllowInterleaveNode.id])
+                        ]
+                    });
+                }
+
+                if (interleaveAllowDialogueEndNode !== null && interleave.length > 1 && interleaveStartNodeType !== Main.playerType)
+                {
+                    validationReport.push(
+                    {
+                        message: i18next.t('validator:special_node_layer_start_type_error',
+                        {
+                            layerNumber: interleave[0].topPos + 1,
+                            type: i18next.t('common:' + interleaveStartNodeType).toLocaleLowerCase(),
+                            property: i18next.t('validator:special_node.allowDialogueEndNode')
+                        }),
+                        level: 'error',
+                        jumpToFunctions:
+                        [
+                            createJumpToTrees(interleave),
+                            createJumpToNodes(Main.trees[interleaveAllowDialogueEndNode.parent], [interleaveAllowDialogueEndNode.id])
+                        ]
+                    });
+                }
+
+                if (previousInterleaveAllowDialogueEndNode !== null && interleaveStartNodeType !== Main.playerType)
+                {
+                    validationReport.push(
+                    {
+                        message: i18next.t('validator:special_node_previous_layer_start_type_error',
+                        {
+                            previousLayerNumber: previousInterleave[0].topPos + 1,
+                            thisLayerNumber: interleave[0].topPos + 1,
+                            property: i18next.t('validator:special_node.allowDialogueEndNode'),
+                            type: i18next.t('common:' + interleaveStartNodeType).toLocaleLowerCase()
+                        }),
+                        level: 'error',
+                        jumpToFunctions:
+                        [
+                            createJumpToTrees(interleave),
+                            createJumpToTrees(previousInterleave),
+                            createJumpToNodes(Main.trees[previousInterleaveAllowDialogueEndNode.parent],
+                                [previousInterleaveAllowDialogueEndNode.id])
+                        ]
+                    });
+                }
+            }
+
+            previousInterleave = interleave;
+            previousInterleaveStartNodeType = interleaveStartNodeType;
+            previousInterleaveHasOptionalTree = interleaveHasOptionalTree;
+            previousInterleaveAllowDialogueEndNode = interleaveAllowDialogueEndNode;
+        });
 
         if (!lastInterleaveHasEnd)
         {
@@ -326,14 +402,7 @@ var Validator;
                 {
                     message: i18next.t('validator:no_ending.multiple_subjects'),
                     level: 'error',
-                    jumpToFunctions:
-                    [
-                        function()
-                        {
-                            Zoom.zoomOut();
-                            Main.selectElements(interleaves[lastInterleaveIndex].map(function(tree) { return tree.id; }));
-                        }
-                    ]
+                    jumpToFunctions: [createJumpToTrees(interleaves[lastInterleaveIndex])]
                 });
             }
         }
@@ -345,7 +414,7 @@ var Validator;
     {
         var hasErrors = false;
         var hasWarningsOrInfo = false;
-        $.each(errors, function(index, value)
+        errors.forEach(function(value)
         {
             hasErrors = hasErrors || value.level === 'error';
             hasWarningsOrInfo = hasWarningsOrInfo || value.level === 'warning' || value.level === 'info';
@@ -359,7 +428,7 @@ var Validator;
         else
         {
             var table = $('<table>');
-            $.each(errors, function(_, e)
+            errors.forEach(function(e)
             {
                 var row = $('<tr>').addClass('level-' + e.level);
                 var error = $('<td>').append($('<span>', { class: "badge", text: i18next.t('common:' + e.level) }));

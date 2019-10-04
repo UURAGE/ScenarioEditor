@@ -2,8 +2,7 @@
     "no_problems": "No problems found!",
     "no_name": "The scenario does not have <a>a name</a>.",
     "empty_subject": "<a>Subject \"{{subject}}\"</a> is empty.",
-    "subject_start_type_error": "<a>Subject \"{{subject}}\"</a> starts with <a>a {{type, lowercase}} node</a>. A subject must be started by the player.",
-    "first_subject_start_type_error": "<a>The first subject \"{{subject}}\"</a> starts with nodes with different types ({{-nodes}}). The types must be the same.",
+    "subject_start_type_error": "<a>Subject \"{{subject}}\"</a> starts with nodes with different types ({{-types}}). The types must be the same.",
     "end_with_outgoing_connections": "<a>Subject \"{{subject}}\"</a> contains <a>a node marked as an end</a> that has outgoing connections.",
     "unmarked_end": "<a>Subject \"{{subject}}\"</a> contains <a>a node without outgoing connections</a> that has not been marked as an end node.",
     "special_node_child_type": "<a>Subject \"{{subject}}\"</a> contains <a>a node with {{properties}}</a> with <a>non-player children</a>.",
@@ -14,7 +13,10 @@
     },
     "and": " and ",
     "unnamed_subject": "There is <a>an unnamed subject</a>.",
-    "first_layer_count": "<a>The first layer</a> must contain exactly one subject.",
+    "layer_start_type_error": "<a>Subjects on layer {{layerNumber}}</a> start with nodes with different types ({{-types}}). The types must be the same.",
+    "special_node_layer_start_type_error": "<a>Subjects on layer {{layerNumber}}</a> start with {{type}} nodes, but one of them contains <a>a node with {{property}}</a>, so they must start with player nodes.",
+    "special_node_previous_layer_start_type_error": "<a>Subjects on layer {{thisLayerNumber}}</a> start with {{type}} nodes, but one of <a>the subjects on layer {{previousLayerNumber}}</a> contains <a>a node with {{property}}</a>, so they must start with player nodes.",
+    "optional_layer_start_type_error": "<a>Some subjects on layer {{previousLayerNumber}}</a> are optional, so the type of start nodes of subjects on that layer must be the same as that of start nodes of <a>subjects on layer {{thisLayerNumber}}</a>. They are different ({{-types}}).",
     "no_ending": {
         "single_subject": "At least one node must be marked as an end.",
         "multiple_subjects": "<a>The last layer</a> must have at least one node marked as an end."

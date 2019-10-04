@@ -2,8 +2,7 @@
     "no_problems": "Geen problemen gevonden!",
     "no_name": "Het scenario heeft geen <a>naam</a>.",
     "empty_subject": "<a>Onderwerp \"{{subject}}\"</a> is leeg.",
-    "subject_start_type_error": "<a>Onderwerp \"{{subject}}\"</a> begint met <a>een {{type, lowercase}}knoop</a>. De speler moet een onderwerp beginnen.",
-    "first_subject_start_type_error": "<a>Het eerste onderwerp \"{{subject}}\"</a> begint met <a>knopen van een verschillend type</a>. Het type moet hetzelfde zijn.",
+    "subject_start_type_error": "<a>Onderwerp \"{{subject}}\"</a> begint met knopen van een verschillend type ({{-types}}). Het type moet hetzelfde zijn.",
     "end_with_outgoing_connections": "<a>Onderwerp \"{{subject}}\"</a> bevat <a>een als einde gemarkeerde knoop</a> die uitgaande pijlen heeft</a>.",
     "unmarked_end": "<a>Onderwerp \"{{subject}}\"</a> bevat <a>een knoop zonder uitgaande pijlen</a> die niet is gemarkeerd als het einde van het gesprek.",
     "special_node_child_type": "<a>Onderwerp \"{{subject}}\"</a> bevat <a>een knoop met {{properties}}</a> met <a>kinderen die geen spelersknopen zijn</a>.",
@@ -14,7 +13,10 @@
     },
     "and": " en ",
     "unnamed_subject": "Er is <a>een onderwerp zonder naam</a>.",
-    "first_layer_count": "<a>De eerste laag</a> moet precies 1 onderwerp bevatten.",
+    "layer_start_type_error": "Op <a>onderwerplaag {{layerNumber}}</a> beginnen onderwerpen met knopen van een verschillend type ({{-types}}). Het type moet hetzelfde zijn.",
+    "special_node_layer_start_type_error": "Op <a>onderwerplaag {{layerNumber}}</a> beginnen onderwerpen met knopen van het type {{type}}, maar een van hen bevat <a>een knoop met {{property}}</a>, dus ze moeten met spelersknopen beginnen.",
+    "special_node_previous_layer_start_type_error": "Op <a>onderwerplaag {{thisLayerNumber}}</a> beginnen onderwerpen met knopen van het type {{type}}, maar een van <a>de onderwerpen op onderwerplaag {{previousLayerNumber}}</a> bevat <a>een knoop met {{property}}</a>, dus ze moeten met spelerskopen beginnen.",
+    "optional_layer_start_type_error": "<a>Sommige onderwerpen op onderwerplaag {{previousLayerNumber}}</a> zijn optioneel, dus het type van de beginknopen van onderwerpen op die laag moet hetzelfde zijn als dat van de beginknopen van <a>onderwerpen op onderwerplaag {{thisLayerNumber}}</a>. Ze zijn verschillend ({{-types}}).",
     "no_ending": {
         "single_subject": "Er moet minstens één knoop als einde gemarkeerd zijn.",
         "multiple_subjects": "In <a>de laatste laag van onderwerpen</a> moet er ten minste één knoop als einde gemarkeerd zijn."
