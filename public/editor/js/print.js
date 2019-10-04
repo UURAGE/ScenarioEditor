@@ -98,7 +98,7 @@ var Print;
                         // http://stackoverflow.com/questions/12865025/convert-svgsvgelement-to-string
                         else if (!outerHTML && treeDivContentList[i].className.baseVal === 'jtk-connector')
                         {
-                            var svgHTML = (new XMLSerializer()).serializeToString(treeDivContentList[i]);
+                            var svgHTML = new XMLSerializer().serializeToString(treeDivContentList[i]);
                             htmlList.push(svgHTML);
                         }
                     }
