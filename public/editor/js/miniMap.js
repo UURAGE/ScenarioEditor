@@ -192,6 +192,7 @@ var MiniMap;
             var clonedMain = main.clone();
             // Remove inappropriate elements from the cloned main
             clonedMain.find("#gridIndicator").remove();
+            clonedMain.find("#colorPicker").remove();
             if (Zoom.isZoomed()) clonedMain.find(".treeContainer").not(".zoom").remove();
             else clonedMain.find(".treeDiv").remove();
             // Remove all event handlers and IDs from the cloned main
