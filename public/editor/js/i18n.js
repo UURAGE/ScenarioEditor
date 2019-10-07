@@ -26,7 +26,7 @@
 
     var resources = $.ajax(
     {
-        url: base_url + 'editor/getlocales',
+        url: site_url + 'editor/getlocales',
         type: 'GET',
         async: false,
         data:

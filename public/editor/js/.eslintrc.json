@@ -38,7 +38,7 @@
         "Clipboard": "readonly",
         "ColorPicker": "readonly",
         "SaveIndicator": "readonly",
-        "base_url": "readonly",
+        "site_url": "readonly",
         "editor_url": "readonly",
         "languageCode": "readonly"
     },
@@ -64,7 +64,7 @@
             {
                 "properties": "always",
                 "allow": [
-                    "base_url",
+                    "site_url",
                     "editor_url"
                 ]
             }
