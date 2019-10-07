@@ -478,7 +478,9 @@ var ColorPicker;
                     // Inner border for the edit button
                     appendBorderTo(innerColorRing, pickerRadius, pickerRadius === innerPickerRadius ? pickerRadius / 3 : 2 * innerPickerRadius - pickerRadius);
 
-                    var onClickOutside = function(e)
+                    var onClickOutside, closeColorPicker;
+
+                    onClickOutside = function(e)
                     {
                         if (!picker.is(e.target) && picker.has(e.target).length === 0)
                         {
@@ -487,7 +489,7 @@ var ColorPicker;
                     };
                     $(document).on('click', onClickOutside);
 
-                    var closeColorPicker = function(e)
+                    closeColorPicker = function(e)
                     {
                         connection.removeOverlay("color-picker");
                         $(document).off('click', onClickOutside);
