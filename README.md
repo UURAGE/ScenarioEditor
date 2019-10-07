@@ -37,7 +37,7 @@ npm install
 
 #### Command-line usage
 
-To build and watch for file changes run:  `gulp`
+To build, run `gulp build`. To build and watch for file changes, run `gulp`.
 
 #### Visual Studio Code
 

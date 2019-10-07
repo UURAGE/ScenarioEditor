@@ -68,4 +68,7 @@ gulp.task("stream", (done) =>
     watch(done, true);
 });
 
-gulp.task("default", gulp.series(gulp.parallel(lintJS, processSass), watch));
+const build = gulp.parallel(lintJS, processSass);
+gulp.task("build", build);
+
+gulp.task("default", gulp.series(build, watch));
