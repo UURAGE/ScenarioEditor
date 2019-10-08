@@ -27,27 +27,6 @@ var Print;
         {
             if (confirmed)
             {
-                // This function is used to set the heights inside the window to be printed
-                // and is called inside that window HTML on load
-                var setHeights = function setHeights()
-                {
-                    [].forEach.call(document.getElementsByClassName('container'), function(container)
-                    {
-                        // Set the height to include all bounding rectangles
-                        var containerHeight = container.getBoundingClientRect().top;
-                        var maxHeight = 0;
-                        [].forEach.call(container.getElementsByTagName('div'), function(div)
-                        {
-                            var newHeight = div.getBoundingClientRect().bottom - containerHeight;
-                            if (newHeight > maxHeight)
-                            {
-                                maxHeight = newHeight;
-                            }
-                        });
-                        container.style.height = maxHeight;
-                    });
-                };
-
                 var htmlList = [];
                 $('#main > .treeContainer').each(function()
                 {
@@ -124,19 +103,41 @@ var Print;
                     '<style type="text/css"> .w{ position:absolute; } circle{ display:none } </style>'
                 );
 
-                // Add the setHeights function javascript
-                printWindow.document.write('<script type="text/javascript">' + setHeights + '</script>');
-
-                // Begin a body that calls setHeights and print on load
-                printWindow.document.write('<body onload="setHeights(); print();">');
-
-                // Write all elements
+                // Write the body
+                printWindow.document.write('<body>');
                 printWindow.document.write(htmlList.join(""));
-
-                // Finish the body
                 printWindow.document.write('</body>');
 
                 printWindow.document.close();
+
+                // This function is used to set the heights inside the window to be printed
+                // and open the print dialog
+                var initialise = function()
+                {
+                    if (printWindow.initialised) return;
+                    Array.prototype.forEach.call(printWindow.document.getElementsByClassName('container'), function(container)
+                    {
+                        // Set the height to include all bounding rectangles
+                        var containerHeight = container.getBoundingClientRect().top;
+                        var maxHeight = 0;
+                        Array.prototype.forEach.call(container.getElementsByTagName('div'), function(div)
+                        {
+                            var newHeight = div.getBoundingClientRect().bottom - containerHeight;
+                            if (newHeight > maxHeight)
+                            {
+                                maxHeight = newHeight;
+                            }
+                        });
+                        container.style.height = maxHeight;
+                    });
+                    printWindow.print();
+                    printWindow.initialised = true;
+                };
+
+                // Run initialise after the document and all resources have finished loading,
+                // regardless of whether the load event has already been fired
+                printWindow.onload = initialise;
+                if (printWindow.document.readyState === 'complete') initialise();
 
                 printWindow.focus();
             }
