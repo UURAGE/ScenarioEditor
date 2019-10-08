@@ -21,22 +21,14 @@
   }
   ?>
 
-  <script>
   <?php
   $jsVars = array(
       'site_url' => site_url('/'),
       'editor_url' => editor_url(),
-      'environment' => ENVIRONMENT,
       'languageCode' => $this->config->item('languageCodes')[$language]
   );
-
-  echo "\n";
-  foreach ($jsVars as $name => $value)
-  {
-      echo 'var ' . $name . ' = ' . json_encode($value, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES) . ';' . "\n";
-  }
   ?>
-  </script>
+  <script id="globals" type="application/json"><?php echo json_encode($jsVars, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES); ?></script>
 
   <?php
 
@@ -49,6 +41,7 @@
       "js/lib/jsplumb.min.js",
       "js/lib/jsplumb-patched.js",
       "js/lib/FileSaver.min.js",
+      "js/globals.js",
       "js/i18n.js",
       "js/utils.js",
       "js/types.js",
