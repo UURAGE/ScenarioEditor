@@ -61,6 +61,13 @@ var Validator;
             return validationReport;
         }
 
+        var specialProperties = ['allowInterleaveNode', 'allowDialogueEndNode'];
+
+        var pushIntoSubArray = function(container, name, element)
+        {
+            if (!container[name]) container[name] = [];
+            container[name].push(element);
+        };
         var createJumpToTrees = function(trees)
         {
             return function()
@@ -91,15 +98,15 @@ var Validator;
         var previousInterleave = null;
         var previousInterleaveStartNodeType = null;
         var previousInterleaveHasOptionalTree = false;
-        var previousInterleaveAllowDialogueEndNode = null;
+        var previousInterleaveSpecialNodesByChildTypeByProperty = null;
 
         interleaves.forEach(function(interleave, interleaveIndex)
         {
             var isLastInterleave = interleaveIndex === lastInterleaveIndex;
 
             var interleaveHasOptionalTree = false;
-            var interleaveAllowInterleaveNode = null;
-            var interleaveAllowDialogueEndNode = null;
+            var interleaveSpecialNodesByChildTypeByProperty = {};
+            specialProperties.forEach(function(property) { interleaveSpecialNodesByChildTypeByProperty[property] = {}; });
             var interleaveTreesByStartNodeType = {};
             interleave.forEach(function(tree)
             {
@@ -116,23 +123,35 @@ var Validator;
                     var incomingConnections = tree.plumbInstance.getConnections({ target: nodeID });
                     var outgoingConnections = tree.plumbInstance.getConnections({ source: nodeID });
 
-                    if (incomingConnections.length === 0)
-                    {
-                        if (!treeStartNodesByType[node.type]) treeStartNodesByType[node.type] = [];
-                        treeStartNodesByType[node.type].push(node);
-                    }
+                    if (incomingConnections.length === 0) pushIntoSubArray(treeStartNodesByType, node.type, node);
 
-                    if (outgoingConnections.length > 0 && node.endNode)
+                    if (outgoingConnections.length > 0)
                     {
-                        validationReport.push(
+                        if (node.endNode)
                         {
-                            message: i18next.t('validator:end_with_outgoing_connections', { subject: tree.subject }),
-                            level: 'error',
-                            jumpToFunctions:
-                            [
-                                function() { Zoom.zoomIn(tree); },
-                                createJumpToNodes(tree, [nodeID])
-                            ]
+                            validationReport.push(
+                            {
+                                message: i18next.t('validator:end_with_outgoing_connections', { subject: tree.subject }),
+                                level: 'error',
+                                jumpToFunctions:
+                                [
+                                    function()
+                                    {
+                                        Zoom.zoomIn(tree);
+                                    },
+                                    createJumpToNodes(tree, [nodeID])
+                                ]
+                            });
+                        }
+
+                        // Type equality of siblings is enforced when attempting to create a connection
+                        var childType = Main.nodes[outgoingConnections[0].targetId].type;
+                        specialProperties.forEach(function(property)
+                        {
+                            if (node[property])
+                            {
+                                pushIntoSubArray(interleaveSpecialNodesByChildTypeByProperty[property], childType, node);
+                            }
                         });
                     }
 
@@ -153,48 +172,6 @@ var Validator;
                                 [
                                     function() { Zoom.zoomIn(tree); },
                                     createJumpToNodes(tree, [nodeID])
-                                ]
-                            });
-                        }
-                    }
-
-                    if (node.allowInterleaveNode || node.allowDialogueEndNode)
-                    {
-                        if (outgoingConnections.length > 0)
-                        {
-                            if (node.allowInterleaveNode && interleaveAllowInterleaveNode === null)
-                            {
-                                interleaveAllowInterleaveNode = node;
-                            }
-                            if (node.allowDialogueEndNode && interleaveAllowDialogueEndNode === null)
-                            {
-                                interleaveAllowDialogueEndNode = node;
-                            }
-                        }
-                        var badChildIDs = outgoingConnections
-                            .map(function(connection) { return connection.targetId; })
-                            .filter(function(childID) { return Main.nodes[childID].type !== Main.playerType; });
-                        if (badChildIDs.length !== 0)
-                        {
-                            var specialProperties = ['allowInterleaveNode', 'allowDialogueEndNode']
-                                .filter(function(specialProperty) { return node[specialProperty]; })
-                                .map(function(specialProperty)
-                                {
-                                    return i18next.t('validator:special_node.' + specialProperty);
-                                });
-                            validationReport.push(
-                            {
-                                message: i18next.t('validator:special_node_child_type',
-                                {
-                                    subject: tree.subject,
-                                    properties: specialProperties.join(i18next.t('validator:and'))
-                                }),
-                                level: 'error',
-                                jumpToFunctions:
-                                [
-                                    function() { Zoom.zoomIn(tree); },
-                                    createJumpToNodes(tree, [nodeID]),
-                                    createJumpToNodes(tree, badChildIDs)
                                 ]
                             });
                         }
@@ -255,12 +232,7 @@ var Validator;
                 }
                 else if (treeStartNodeTypes.length === 1)
                 {
-                    var treeStartNodeType = treeStartNodeTypes[0];
-                    if (!interleaveTreesByStartNodeType[treeStartNodeType])
-                    {
-                        interleaveTreesByStartNodeType[treeStartNodeType] = [];
-                    }
-                    interleaveTreesByStartNodeType[treeStartNodeType].push(tree);
+                    pushIntoSubArray(interleaveTreesByStartNodeType, treeStartNodeTypes[0], tree);
                 }
             });
 
@@ -318,71 +290,81 @@ var Validator;
                     });
                 }
 
-                if (interleaveAllowInterleaveNode !== null && interleave.length > 1 && interleaveStartNodeType !== Main.playerType)
+                if (interleave.length > 1)
                 {
-                    validationReport.push(
+                    specialProperties.map(function(property)
                     {
-                        message: i18next.t('validator:special_node_layer_start_type_error',
+                        var specialNodesByChildType = interleaveSpecialNodesByChildTypeByProperty[property];
+                        for (var specialNodeChildType in specialNodesByChildType)
                         {
-                            layerNumber: interleave[0].topPos + 1,
-                            type: i18next.t('common:' + interleaveStartNodeType).toLocaleLowerCase(),
-                            property: i18next.t('validator:special_node.allowInterleaveNode')
-                        }),
-                        level: 'error',
-                        jumpToFunctions:
-                        [
-                            createJumpToTrees(interleave),
-                            createJumpToNodes(Main.trees[interleaveAllowInterleaveNode.parent], [interleaveAllowInterleaveNode.id])
-                        ]
+                            if (specialNodeChildType === interleaveStartNodeType) continue;
+                            specialNodesByChildType[specialNodeChildType].forEach(function(badNode)
+                            {
+                                var badTree = Main.trees[badNode.parent];
+                                validationReport.push(
+                                {
+                                    message: i18next.t('validator:special_node_layer_start_type_error',
+                                    {
+                                        layerNumber: interleave[0].topPos + 1,
+                                        type: i18next.t('common:' + interleaveStartNodeType).toLocaleLowerCase(),
+                                        property: i18next.t('validator:special_node.' + property),
+                                        otherType: i18next.t('common:' + specialNodeChildType).toLocaleLowerCase()
+                                    }),
+                                    level: 'error',
+                                    jumpToFunctions:
+                                    [
+                                        createJumpToTrees(interleave),
+                                        createJumpToNodes(badTree, [badNode.id]),
+                                        createJumpToNodes(badTree,
+                                            badTree.plumbInstance.getConnections({ source: badNode.id })
+                                                .map(function(connection) { return connection.targetId; }))
+                                    ]
+                                });
+                            });
+                        }
                     });
                 }
 
-                if (interleaveAllowDialogueEndNode !== null && interleave.length > 1 && interleaveStartNodeType !== Main.playerType)
+                if (previousInterleaveSpecialNodesByChildTypeByProperty !== null)
                 {
-                    validationReport.push(
+                    var allowDialogueEndNodesByChildType =
+                        previousInterleaveSpecialNodesByChildTypeByProperty.allowDialogueEndNode;
+                    for (var allowDialogueEndNodeChildType in allowDialogueEndNodesByChildType)
                     {
-                        message: i18next.t('validator:special_node_layer_start_type_error',
+                        if (allowDialogueEndNodeChildType === interleaveStartNodeType) continue;
+                        allowDialogueEndNodesByChildType[allowDialogueEndNodeChildType].forEach(function(badNode)
                         {
-                            layerNumber: interleave[0].topPos + 1,
-                            type: i18next.t('common:' + interleaveStartNodeType).toLocaleLowerCase(),
-                            property: i18next.t('validator:special_node.allowDialogueEndNode')
-                        }),
-                        level: 'error',
-                        jumpToFunctions:
-                        [
-                            createJumpToTrees(interleave),
-                            createJumpToNodes(Main.trees[interleaveAllowDialogueEndNode.parent], [interleaveAllowDialogueEndNode.id])
-                        ]
-                    });
-                }
-
-                if (previousInterleaveAllowDialogueEndNode !== null && interleaveStartNodeType !== Main.playerType)
-                {
-                    validationReport.push(
-                    {
-                        message: i18next.t('validator:special_node_previous_layer_start_type_error',
-                        {
-                            previousLayerNumber: previousInterleave[0].topPos + 1,
-                            thisLayerNumber: interleave[0].topPos + 1,
-                            property: i18next.t('validator:special_node.allowDialogueEndNode'),
-                            type: i18next.t('common:' + interleaveStartNodeType).toLocaleLowerCase()
-                        }),
-                        level: 'error',
-                        jumpToFunctions:
-                        [
-                            createJumpToTrees(interleave),
-                            createJumpToTrees(previousInterleave),
-                            createJumpToNodes(Main.trees[previousInterleaveAllowDialogueEndNode.parent],
-                                [previousInterleaveAllowDialogueEndNode.id])
-                        ]
-                    });
+                            var badTree = Main.trees[badNode.parent];
+                            validationReport.push(
+                            {
+                                message: i18next.t('validator:special_node_previous_layer_start_type_error',
+                                {
+                                    previousLayerNumber: previousInterleave[0].topPos + 1,
+                                    thisLayerNumber: interleave[0].topPos + 1,
+                                    property: i18next.t('validator:special_node.allowDialogueEndNode'),
+                                    type: i18next.t('common:' + interleaveStartNodeType).toLocaleLowerCase(),
+                                    otherType: i18next.t('common:' + allowDialogueEndNodeChildType).toLocaleLowerCase()
+                                }),
+                                level: 'error',
+                                jumpToFunctions:
+                                [
+                                    createJumpToTrees(interleave),
+                                    createJumpToTrees(previousInterleave),
+                                    createJumpToNodes(badTree, [badNode.id]),
+                                    createJumpToNodes(badTree,
+                                        badTree.plumbInstance.getConnections({ source: badNode.id })
+                                            .map(function(connection) { return connection.targetId; }))
+                                ]
+                            });
+                        });
+                    }
                 }
             }
 
             previousInterleave = interleave;
             previousInterleaveStartNodeType = interleaveStartNodeType;
             previousInterleaveHasOptionalTree = interleaveHasOptionalTree;
-            previousInterleaveAllowDialogueEndNode = interleaveAllowDialogueEndNode;
+            previousInterleaveSpecialNodesByChildTypeByProperty = interleaveSpecialNodesByChildTypeByProperty;
         });
 
         if (!lastInterleaveHasEnd)

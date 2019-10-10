@@ -5,17 +5,15 @@
     "subject_start_type_error": "<a>Onderwerp \"{{subject}}\"</a> begint met knopen van een verschillend type ({{-types}}). Het type moet hetzelfde zijn.",
     "end_with_outgoing_connections": "<a>Onderwerp \"{{subject}}\"</a> bevat <a>een als einde gemarkeerde knoop</a> die uitgaande pijlen heeft</a>.",
     "unmarked_end": "<a>Onderwerp \"{{subject}}\"</a> bevat <a>een knoop zonder uitgaande pijlen</a> die niet is gemarkeerd als het einde van het gesprek.",
-    "special_node_child_type": "<a>Onderwerp \"{{subject}}\"</a> bevat <a>een knoop met {{properties}}</a> met <a>kinderen die geen spelersknopen zijn</a>.",
     "special_node":
     {
         "allowInterleaveNode": "\"Verander van onderwerp\"",
         "allowDialogueEndNode": "\"Vroegtijdig einde onderwerp\""
     },
-    "and": " en ",
     "unnamed_subject": "Er is <a>een onderwerp zonder naam</a>.",
     "layer_start_type_error": "Op <a>onderwerplaag {{layerNumber}}</a> beginnen onderwerpen met knopen van een verschillend type ({{-types}}). Het type moet hetzelfde zijn.",
-    "special_node_layer_start_type_error": "Op <a>onderwerplaag {{layerNumber}}</a> beginnen onderwerpen met knopen van het type {{type}}, maar een van hen bevat <a>een knoop met {{property}}</a>, dus ze moeten met spelersknopen beginnen.",
-    "special_node_previous_layer_start_type_error": "Op <a>onderwerplaag {{thisLayerNumber}}</a> beginnen onderwerpen met knopen van het type {{type}}, maar een van <a>de onderwerpen op onderwerplaag {{previousLayerNumber}}</a> bevat <a>een knoop met {{property}}</a>, dus ze moeten met spelerskopen beginnen.",
+    "special_node_layer_start_type_error": "Op <a>onderwerplaag {{layerNumber}}</a> beginnen onderwerpen met knopen van het type {{type}}, maar een van hen bevat <a>een knoop met {{property}}</a> met <a>kinderen van een ander type ({{otherType}})</a>. Het type moet hetzelfde zijn.",
+    "special_node_previous_layer_start_type_error": "Op <a>onderwerplaag {{thisLayerNumber}}</a> beginnen onderwerpen met knopen van het type {{type}}, maar een van <a>de onderwerpen op onderwerplaag {{previousLayerNumber}}</a> bevat <a>een knoop met {{property}}</a> met <a>kinderen van een ander type ({{otherType}})</a>. Het type moet hetzelfde zijn.",
     "optional_layer_start_type_error": "<a>Sommige onderwerpen op onderwerplaag {{previousLayerNumber}}</a> zijn optioneel, dus het type van de beginknopen van onderwerpen op die laag moet hetzelfde zijn als dat van de beginknopen van <a>onderwerpen op onderwerplaag {{thisLayerNumber}}</a>. Ze zijn verschillend ({{-types}}).",
     "no_ending": {
         "single_subject": "Er moet minstens één knoop als einde gemarkeerd zijn.",
