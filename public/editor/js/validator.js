@@ -167,7 +167,7 @@ var Validator;
                             validationReport.push(
                             {
                                 message: i18next.t('validator:unmarked_end', { subject: tree.subject }),
-                                level: 'error',
+                                level: 'warning',
                                 jumpToFunctions:
                                 [
                                     function() { Zoom.zoomIn(tree); },
@@ -374,7 +374,7 @@ var Validator;
                 validationReport.push(
                 {
                     message: i18next.t('validator:no_ending.single_subject'),
-                    level: 'error',
+                    level: 'warning',
                     jumpToFunctions: []
                 });
             }
@@ -383,7 +383,7 @@ var Validator;
                 validationReport.push(
                 {
                     message: i18next.t('validator:no_ending.multiple_subjects'),
-                    level: 'error',
+                    level: 'warning',
                     jumpToFunctions: [createJumpToTrees(interleaves[lastInterleaveIndex])]
                 });
             }
