@@ -349,14 +349,10 @@ var ColorPicker;
     {
         if ($("#colorPicker").length > 0 || !ColorPicker.areColorsEnabled()) return;
 
-        var sourcePosition = connection.endpoints[0].canvas.getBoundingClientRect();
-        var targetPosition = connection.endpoints[1].canvas.getBoundingClientRect();
-        var width = Math.abs(targetPosition.left - sourcePosition.left);
-        var height = Math.abs(targetPosition.top - sourcePosition.top);
+        var sourcePosition = connection.connector.canvas.getBoundingClientRect();
         var x = Math.abs(Main.mousePosition.x - sourcePosition.left);
         var y = Math.abs(Main.mousePosition.y - sourcePosition.top);
-        var length = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2));
-        var location = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) / length;
+        var location = 1 - connection.connector.findSegmentForPoint(x, y).l;
 
         connection.addOverlay(
         [
