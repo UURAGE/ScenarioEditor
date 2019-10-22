@@ -35,52 +35,24 @@ body {
 #wrap {
   position: absolute;
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
+  flex-direction: row;
   width: 100%;
   height: 100%; }
-  #wrap > div {
-    display: flex;
-    flex-direction: row;
-    flex: 1 1 100%; }
 
 #content {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  width: 100%;
-  height: 100%; }
-  #content > div {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch; }
-    #content > div > div {
-      flex: 1 1 auto; }
+  flex: 1 1 100%;
+  align-items: stretch; }
   #content > div:nth-child(2) {
     flex: 1 1; }
-  #content > #draftScreen {
-    position: absolute;
-    right: 366px;
-    bottom: 0;
-    left: 0;
-    display: none;
-    height: 300px;
-    overflow-y: scroll; }
-
-#mainCell {
-  height: 100%;
-  overflow: hidden; }
 
 #main {
   position: relative;
-  height: 100%;
   overflow: auto;
   border: 1px solid rgba(0, 0, 0, 0.1);
   outline: none;
   box-sizing: border-box; }
-
-#wrapLeft {
-  flex: 1 1 100%; }
 
 #sidebar {
   flex: 1 0 auto; }

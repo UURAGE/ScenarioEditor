@@ -130,7 +130,7 @@ var Zoom;
 
     function getZoomed()
     {
-        var zoomedTrees = $("#mainCell .treeContainer.zoom");
+        var zoomedTrees = $("#main .treeContainer.zoom");
         if (zoomedTrees.length === 0) return null;
 
         return Main.trees[zoomedTrees.eq(0).attr("id")];

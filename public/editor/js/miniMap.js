@@ -52,7 +52,7 @@ var MiniMap;
         });
 
         var scrollTimeout = null;
-        $("#mainCell #main").on("scroll", function()
+        $("#main").on("scroll", function()
         {
             // Throttle scroll event
             if (scrollTimeout === null)
@@ -139,13 +139,13 @@ var MiniMap;
 
         if (!Zoom.isZoomed()) // Nothing is zoomed
         {
-            $("#mainCell > #main").scrollLeft(minimapSelectorX);
-            $("#mainCell > #main").scrollTop(minimapSelectorY);
+            $("#main").scrollLeft(minimapSelectorX);
+            $("#main").scrollTop(minimapSelectorY);
         }
         else
         {
-            $("#mainCell .treeContainer.zoom .treeDiv").scrollLeft(minimapSelectorX);
-            $("#mainCell .treeContainer.zoom .treeDiv").scrollTop(minimapSelectorY);
+            $("#main .treeContainer.zoom .treeDiv").scrollLeft(minimapSelectorX);
+            $("#main .treeContainer.zoom .treeDiv").scrollTop(minimapSelectorY);
         }
 
         update(false);
@@ -160,7 +160,7 @@ var MiniMap;
         var realWidth, realHeight;
         var viewportWidth, viewportHeight, viewportX, viewportY;
 
-        var main = $("#mainCell > #main");
+        var main = $("#main");
 
         if (!Zoom.isZoomed()) // Nothing is zoomed
         {
@@ -173,11 +173,11 @@ var MiniMap;
         }
         else
         {
-            var treeDiv = $("#mainCell .treeContainer.zoom .treeDiv");
+            var treeDiv = $("#main .treeContainer.zoom .treeDiv");
             realWidth = treeDiv[0].scrollWidth;
-            realHeight = treeDiv[0].scrollHeight + $("#mainCell .subjectDiv")[0].scrollHeight;
+            realHeight = treeDiv[0].scrollHeight + $("#main .subjectDiv")[0].scrollHeight;
             viewportX = treeDiv.scrollLeft();
-            viewportY = treeDiv.scrollTop() + $("#mainCell .subjectDiv")[0].scrollHeight;
+            viewportY = treeDiv.scrollTop() + $("#main .subjectDiv")[0].scrollHeight;
             viewportWidth = treeDiv[0].clientWidth;
             viewportHeight = treeDiv[0].clientHeight;
         }
