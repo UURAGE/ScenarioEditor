@@ -316,7 +316,8 @@ tr.ui-sortable-helper {
   box-sizing: border-box; }
   .w.treeContainer.zoom {
     z-index: 50;
-    display: table;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -326,13 +327,13 @@ tr.ui-sortable-helper {
     background-image: none;
     border-color: transparent;
     opacity: 1;
-    box-shadow: none;
-    table-layout: fixed; }
+    box-shadow: none; }
     .w.treeContainer.zoom:hover {
       cursor: default;
       background-color: white; }
     .w.treeContainer.zoom .treeDiv {
-      display: block; }
+      display: block;
+      flex: 1 1; }
     .w.treeContainer.zoom .subjectDiv {
       background: rgba(0, 83, 184, 0.01);
       border-bottom: 1px solid rgba(0, 83, 184, 0.1); }
@@ -357,19 +358,10 @@ tr.ui-sortable-helper {
         height: 16px;
         fill: currentColor;
         vertical-align: middle; }
-  .w.treeContainer.zoom > div {
-    display: table-row; }
-    .w.treeContainer.zoom > div > div {
-      display: table-cell; }
-    .w.treeContainer.zoom > div:nth-child(2) > div {
-      width: 100%;
-      height: 100%; }
 
 .treeDiv {
   position: relative;
   display: none;
-  width: 100%;
-  height: 100%;
   overflow: auto;
   background-color: white; }
   .treeDiv.dragging {

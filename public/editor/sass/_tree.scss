@@ -51,7 +51,8 @@
 
   &.zoom {
     z-index: 50;
-    display: table;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -62,7 +63,6 @@
     border-color: transparent;
     opacity: 1;
     box-shadow: none;
-    table-layout: fixed;
 
     &:hover {
       cursor: default;
@@ -71,6 +71,7 @@
 
     .treeDiv {
       display: block;
+      flex: 1 1;
     }
 
     .subjectDiv {
@@ -109,26 +110,11 @@
       }
     }
   }
-
-  &.zoom > div {
-    display: table-row;
-
-    > div {
-      display: table-cell;
-    }
-
-    &:nth-child(2) > div {
-      width: 100%;
-      height: 100%;
-    }
-  }
 }
 
 .treeDiv {
   position: relative;
   display: none;
-  width: 100%;
-  height: 100%;
   overflow: auto;
   background-color: white;
 

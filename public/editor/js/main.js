@@ -711,8 +711,8 @@ var Main;
         });
 
         var dragDiv = $('<div>', { class: "w treeContainer gridded selectable", id: id });
-        dragDiv.append($('<div>').append(subjectDiv));
-        dragDiv.append($('<div>').append($('<div>').append(treeDiv)));
+        dragDiv.append(subjectDiv);
+        dragDiv.append(treeDiv);
 
         $("#main").append(dragDiv);
 
