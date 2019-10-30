@@ -74,7 +74,7 @@ var Evaluations;
                 Expression.handleTypeChange(expressionKindContainer, previousType, newType);
                 previousType = newType;
             };
-            Types.appendControlsTo(typeContainer.appendTo(evaluationContainer), 'evaluation-type', handleEvaluationTypeChange);
+            Types.appendControlsTo(typeContainer.appendTo(evaluationContainer), '.evaluation-name', 'evaluation-type', handleEvaluationTypeChange);
 
             var evaluationDescription = $('<textarea>', { class: 'evaluation-description' });
             evaluationDescription.attr('maxlength', Config.container.settings.evaluationDescription.type.maxLength);

@@ -669,7 +669,7 @@ var Types;
         }
     };
 
-    function appendControlsTo(containerEl, htmlClass, handleChange)
+    function appendControlsTo(containerEl, titleClassSelector, htmlClass, handleChange)
     {
         var typeSelect = $('<select>', { class: htmlClass });
         for (var typeName in Types.primitives)
@@ -699,7 +699,8 @@ var Types;
                     definitionButton.append(buttonIcon);
                     definitionButton.on('click', function()
                     {
-                        dialog(typeDefinitionContainer, typeSelect, previousTypeName, newTypeName, handleChange, false);
+                        var title = containerEl.parent().find(titleClassSelector).val();
+                        dialog(title, typeDefinitionContainer, typeSelect, previousTypeName, newTypeName, handleChange, false);
                     });
                     containerEl.append(definitionButton);
 
@@ -710,7 +711,8 @@ var Types;
                 if (userTypeChange && newTypeName === Types.primitives.enumeration.name)
                 {
                     typeDefinitionContainer.show();
-                    dialog(typeDefinitionContainer, typeSelect, previousTypeName, newTypeName, handleChange, true);
+                    var title = containerEl.parent().find(titleClassSelector).val();
+                    dialog(title, typeDefinitionContainer, typeSelect, previousTypeName, newTypeName, handleChange, true);
                 }
                 else if (newTypeName !== Types.primitives.enumeration.name || type.options.sequence.length > 0)
                 {
@@ -746,7 +748,7 @@ var Types;
         }
     }
 
-    function dialog(containerEl, typeSelect, previousTypeName, newTypeName, handleChange, isFirstTimeForEnumeration)
+    function dialog(title, containerEl, typeSelect, previousTypeName, newTypeName, handleChange, isFirstTimeForEnumeration)
     {
         var currentType = Types.primitives[newTypeName].loadTypeFromDOM(containerEl);
         var hasValues;
@@ -758,7 +760,7 @@ var Types;
         var confirmed = false;
         containerEl.dialog(
         {
-            title: i18next.t('types:primitives.' + newTypeName + '.definition.title'),
+            title: title || i18next.t('types:primitives.' + newTypeName + '.definition.title'),
             height: 'auto',
             width: 'auto',
             modal: true,

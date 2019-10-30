@@ -228,7 +228,7 @@ var Parameters;
             previousType = type;
         };
 
-        Types.appendControlsTo(typeSelectContainer, 'parameter-type-select', handleParameterTypeChange);
+        Types.appendControlsTo(typeSelectContainer, '.name', 'parameter-type-select', handleParameterTypeChange);
 
         parameterContainer.removeClass("changedTypeParameter");
 
