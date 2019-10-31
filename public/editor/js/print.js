@@ -114,7 +114,8 @@ var Print;
                 // and open the print dialog
                 var initialise = function()
                 {
-                    if (printWindow.initialised) return;
+                    if (printWindow.initialisationStarted) return;
+                    printWindow.initialisationStarted = true;
                     Array.prototype.forEach.call(printWindow.document.getElementsByClassName('container'), function(container)
                     {
                         // Set the height to include all bounding rectangles
@@ -130,8 +131,7 @@ var Print;
                         });
                         container.style.height = maxHeight;
                     });
-                    printWindow.print();
-                    printWindow.initialised = true;
+                    printWindow.setTimeout(function() { printWindow.print(); }, 100);
                 };
 
                 // Run initialise after the document and all resources have finished loading,
