@@ -162,6 +162,13 @@
                 "message": "Use '$' instead."
             }
         ],
+        "no-restricted-syntax": [
+            "error",
+            {
+                "selector": "MemberExpression[property.type='Identifier'][property.name='ready'][object.type='CallExpression'][object.callee.type='Identifier'][object.callee.name='$']",
+                "message": "'$(...).ready(f)' is deprecated. Use '$(f)' instead."
+            }
+        ],
         "no-return-assign": [
             "error"
         ],

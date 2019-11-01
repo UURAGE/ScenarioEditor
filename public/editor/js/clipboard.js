@@ -4,7 +4,7 @@
 {
     "use strict";
 
-    $(document).ready(function()
+    $(function()
     {
         var isIEClipboard = window.clipboardData && window.clipboardData.getData;
 

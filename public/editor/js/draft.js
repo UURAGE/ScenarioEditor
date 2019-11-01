@@ -18,7 +18,7 @@
         editingCol = -1,
         maxCols = 0;
 
-    $(document).ready(function()
+    $(function()
     {
         $("#draftScreen").append($('<div>', { id: "itemControls" }).append($('<button>', { class: "clear", text: i18next.t('draft:delete_all') })));
         $("#draftScreen").append($('<table>', { style: "width:100%" })

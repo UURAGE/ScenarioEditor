@@ -4,7 +4,7 @@
 {
     "use strict";
 
-    $(document).ready(function()
+    $(function()
     {
         // Event handlers.
         $("#repositionGraph").on('click', function()

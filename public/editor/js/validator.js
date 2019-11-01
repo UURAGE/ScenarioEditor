@@ -16,7 +16,7 @@ var Validator;
         testDuplicateConnection: testDuplicateConnection
     };
 
-    $(document).ready(function()
+    $(function()
     {
         // Event handlers.
         $("#validation").on('click', function()

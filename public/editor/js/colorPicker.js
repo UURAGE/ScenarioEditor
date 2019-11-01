@@ -108,7 +108,7 @@ var ColorPicker;
         }
     ];
 
-    $(document).ready(function()
+    $(function()
     {
         resetKey();
 

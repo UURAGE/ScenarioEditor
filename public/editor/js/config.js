@@ -34,7 +34,7 @@ var Config;
     // The default collection used when the parameter collection is not present in the XML
     var defaultParameterCollection = { kind: 'toplevel', scopes: defaultParameterScopes, sequence: [], byId: {} };
 
-    $(document).ready(loadConfig);
+    $(loadConfig);
 
     function loadConfig()
     {

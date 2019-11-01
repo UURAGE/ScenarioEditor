@@ -16,7 +16,7 @@ var Save;
     var scenarioNameSpace = "http://uudsl.github.io/scenario/namespace";
     var schemaVersion = "4.7.0";
 
-    $(document).ready(function()
+    $(function()
     {
         $("#exportScenario").on('click', exportScenario);
     });

@@ -22,7 +22,7 @@ var Parameters;
         hasWithType: hasWithType
     };
 
-    $(document).ready(function()
+    $(function()
     {
         $("#editParameters").on('click', dialog);
     });

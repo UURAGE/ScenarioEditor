@@ -18,7 +18,7 @@ var KeyControl;
         numberControl,
         letterControl;
 
-    $(document).ready(function()
+    $(function()
     {
         // Event handlers.
         $(document).on('keydown', function(e)

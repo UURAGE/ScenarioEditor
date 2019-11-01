@@ -17,7 +17,7 @@ var Metadata;
         addOrExtendAuthor: addOrExtendAuthor
     };
 
-    $(document).ready(function()
+    $(function()
     {
         $("#editMetadata").on('click', dialog);
         reset();

@@ -24,7 +24,7 @@ var Evaluations;
         handleEvaluatedParameterChange: handleEvaluatedParameterChange
     };
 
-    $(document).ready(function()
+    $(function()
     {
         $("#editEvaluations").on('click', dialog);
     });

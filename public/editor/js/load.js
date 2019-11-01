@@ -14,7 +14,7 @@ var Load;
         importScenario: importScenario
     };
 
-    $(document).ready(function()
+    $(function()
     {
         $("#importScenario").on('click', importDialog);
 

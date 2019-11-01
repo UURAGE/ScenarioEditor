@@ -13,7 +13,7 @@ var Print;
         printScenario: printScenario
     };
 
-    $(document).ready(function()
+    $(function()
     {
         $("#print").on('click', function()
         {

@@ -100,7 +100,7 @@ var Main;
         });
     };
 
-    $(document).ready(function()
+    $(function()
     {
         makeCollapsable();
 
