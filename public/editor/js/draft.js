@@ -364,7 +364,7 @@
     {
         if (this.length > m)
         {
-            return jQuery.trim(this).substring(0, m)
+            return $.trim(this).substring(0, m)
                 .split(" ").slice(0, -1).join(" ") + "...";
         }
         return this;

@@ -357,11 +357,10 @@ var KeyControl;
         else
         {
             $("#" + elementID).removeClass("ui-selected");
-            Main.selectedElements = jQuery.grep(Main.selectedElements,
-                function(value)
-                {
-                    return value != elementID;
-                });
+            Main.selectedElements = Main.selectedElements.filter(function(value)
+            {
+                return value != elementID;
+            });
             if (Main.selectedElements.length == 1)
             {
                 Main.selectElement(Main.selectedElements[0]);
