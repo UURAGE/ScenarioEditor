@@ -694,9 +694,7 @@ var Types;
 
                     definitionButton = $('<button>', { class: "define-type" });
                     definitionButton.attr('title', i18next.t('types:primitives.' + newTypeName + '.definition.define'));
-                    var buttonIcon = $('<img>', { src: editor_url + (newTypeName === Types.primitives.enumeration.name ? "svg/icon_list.svg" : "svg/icon_cog.svg") });
-                    buttonIcon.attr('alt', i18next.t('types:primitives.' + newTypeName + '.definition.define'));
-                    definitionButton.append(buttonIcon);
+                    definitionButton.html(Utils.sIcon(newTypeName === Types.primitives.enumeration.name ? "icon-list" : "icon-cog"));
                     definitionButton.on('click', function()
                     {
                         var title = containerEl.parent().find(titleClassSelector).val();

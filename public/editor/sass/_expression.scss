@@ -21,12 +21,16 @@
 }
 
 .define-type {
-  width: 36px;
-  height: 36px;
+  vertical-align: middle;
 
   &:hover {
     cursor: pointer;
     opacity: .6;
+  }
+
+  svg {
+    margin-right: 5px;
+    margin-left: 5px;
   }
 }
 

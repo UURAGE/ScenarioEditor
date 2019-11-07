@@ -992,11 +992,13 @@ td.dragHandle {
   display: inline-block; }
 
 .define-type {
-  width: 36px;
-  height: 36px; }
+  vertical-align: middle; }
   .define-type:hover {
     cursor: pointer;
     opacity: .6; }
+  .define-type svg {
+    margin-right: 5px;
+    margin-left: 5px; }
 
 .groupConditionDiv {
   padding: 0;
