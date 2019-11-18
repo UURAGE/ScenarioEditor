@@ -296,3 +296,9 @@ tr.ui-sortable-helper {
     padding-right: 5px;
   }
 }
+
+select:focus {
+  // This fixes a rendering issue in Chrome where the options appear completely black.
+  position: relative;
+  z-index: 1;
+}
