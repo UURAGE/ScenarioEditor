@@ -16,8 +16,9 @@
       "css/vendor/jquery-ui/jquery-ui.min.css",
   );
   foreach ($styles as $style)
-  {   //filemtime appends last edited time, to fix using cached files
-      echo '<link rel="stylesheet" type="text/css" href="' .editor_url($style) . '?t='.  filemtime(editor_path($style)) . '" />';
+  {
+      // Cachebuster: append modification time to fix using cached files
+      echo '<link rel="stylesheet" type="text/css" href="' . editor_url($style) . '?c=' . filemtime(editor_path($style)) . '" />';
   }
   ?>
 
@@ -71,9 +72,10 @@
       "js/zoom.js",
       "js/clipboard.js"
   );
-  foreach($scripts as $script)
+  foreach ($scripts as $script)
   {
-      echo '<script type="text/javascript" src="' .editor_url($script). '?t='.  filemtime(editor_path($script)) .'"></script>';
+      // Cachebuster: append modification time to fix using cached files
+      echo '<script type="text/javascript" src="' . editor_url($script) . '?c=' . filemtime(editor_path($script)) . '"></script>';
   }
 
   ?>
