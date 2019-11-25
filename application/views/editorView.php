@@ -9,6 +9,7 @@
 
   <?php
   $language = $this->session->userdata('language');
+  $bustBrowserCache = $this->config->item('bust_browser_cache');
 
   $styles = array(
       "css/stylesheet.css",
@@ -18,7 +19,9 @@
   foreach ($styles as $style)
   {
       // Cachebuster: append modification time to fix using cached files
-      echo '<link rel="stylesheet" type="text/css" href="' . editor_url($style) . '?c=' . filemtime(editor_path($style)) . '" />';
+      $url = editor_url($style);
+      if ($bustBrowserCache) $url .= '?c=' . filemtime(editor_path($style));
+      echo '<link rel="stylesheet" type="text/css" href="' . $url . '" />';
   }
   ?>
 
@@ -75,7 +78,9 @@
   foreach ($scripts as $script)
   {
       // Cachebuster: append modification time to fix using cached files
-      echo '<script type="text/javascript" src="' . editor_url($script) . '?c=' . filemtime(editor_path($script)) . '"></script>';
+      $url = editor_url($script);
+      if ($bustBrowserCache) $url .= '?c=' . filemtime(editor_path($script));
+      echo '<script type="text/javascript" src="' . $url . '"></script>';
   }
 
   ?>
