@@ -185,8 +185,7 @@
           <div id="closeTabDock"><span class="ui-button-icon ui-icon ui-icon-closethick"></span></div>
         </div>
         <div id="draftScreen" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-resizable"></div>
-        <div id="validationReport" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-resizable">
-        </div>
+        <div id="validationReport" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-resizable"></div>
       </div>
     </div>
     <!-- Sidebar -->

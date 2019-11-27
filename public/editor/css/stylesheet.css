@@ -774,6 +774,13 @@ select:focus {
   fill: currentColor;
   opacity: .75; }
 
+#tabDock > *:not(.ui-widget-header) {
+  position: relative;
+  display: none;
+  max-height: 200px;
+  padding: 0 20px;
+  overflow: auto; }
+
 #validationReport .level-error a {
   color: #8a111c;
   background-color: rgba(206, 25, 42, 0.05);
@@ -809,13 +816,6 @@ select:focus {
 
 #validationReport > * {
   margin: 20px 0; }
-
-#tabDock #validationReport {
-  position: relative;
-  display: none;
-  max-height: 200px;
-  padding: 0 20px;
-  overflow: auto; }
 
 #validationReport table {
   width: 100%;

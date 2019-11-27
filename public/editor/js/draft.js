@@ -304,8 +304,8 @@
         // Button functionality
         $('#toggleDraftScreen').on("click", function()
         {
+            $('#tabDock').children().not('.ui-widget-header').hide();
             $('#draftScreen').show();
-            $('#validationReport').hide();
             $('#tabDock').show();
             $("#main").focus();
         });

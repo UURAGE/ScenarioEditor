@@ -428,7 +428,7 @@ var Validator;
             });
             $('#validationReport').append(table);
         }
-        $('#draftScreen').hide();
+        $('#tabDock').children().not('.ui-widget-header').hide();
         $('#validationReport').show();
         $('#tabDock').show();
         $("#main").focus();
