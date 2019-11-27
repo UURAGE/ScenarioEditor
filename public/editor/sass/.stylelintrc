@@ -7,6 +7,7 @@
     "rules": {
         "at-rule-no-unknown": null,
         "color-hex-case": "upper",
+        "color-no-invalid-hex": true,
         "declaration-block-no-duplicate-properties": [
             true,
             {
@@ -22,6 +23,7 @@
         "font-family-name-quotes": "always-where-recommended",
         "font-family-no-duplicate-names": true,
         "font-family-no-missing-generic-family-keyword": true,
+        "function-calc-no-invalid": true,
         "function-calc-no-unspaced-operator": true,
         "function-url-no-scheme-relative": true,
         "function-url-quotes": "always",
