@@ -282,13 +282,9 @@ select:focus {
   z-index: 1; }
 
 .zoomTreeButton {
-  float: left;
   width: 50px;
-  margin-top: -3px;
-  margin-left: 2px;
-  font-size: 2em;
+  font-size: 0;
   text-align: center;
-  vertical-align: middle;
   cursor: pointer; }
   .zoomTreeButton svg {
     width: 32px;
@@ -343,25 +339,29 @@ select:focus {
     .w.treeContainer.zoom .subjectDiv {
       background: rgba(0, 83, 184, 0.01);
       border-bottom: 1px solid rgba(0, 83, 184, 0.1); }
-  .w.treeContainer.optional:not(.zoom) .subjectDiv {
-    padding-right: 40px; }
+    .w.treeContainer.zoom .subjectNameInput {
+      max-width: 250px; }
   .w.treeContainer .subjectDiv {
+    display: flex;
+    align-items: center;
+    padding-right: 15px;
     overflow: hidden;
     font-size: 17px;
     font-weight: bold;
     line-height: 50px;
-    text-overflow: ellipsis;
     white-space: nowrap; }
-    .w.treeContainer .subjectDiv > span {
-      margin-left: 5px; }
+    .w.treeContainer .subjectDiv .zoomTreeButton {
+      flex: 0 0 auto; }
+    .w.treeContainer .subjectDiv .subjectTextContainer {
+      flex: 1 1 auto;
+      overflow: hidden; }
     .w.treeContainer .subjectDiv .icons {
-      position: absolute;
-      top: 0;
-      right: 15px;
-      bottom: 0; }
+      flex: 0 0 auto;
+      padding-left: 10px; }
       .w.treeContainer .subjectDiv .icons svg {
         width: 16px;
         height: 16px;
+        padding: 0 2px;
         fill: currentColor;
         vertical-align: middle; }
 
@@ -372,6 +372,18 @@ select:focus {
   background-color: white; }
   .treeDiv.dragging {
     cursor: move; }
+
+.subjectName {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis; }
+
+.subjectNameInput {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  box-sizing: border-box; }
 
 #logo {
   position: relative;

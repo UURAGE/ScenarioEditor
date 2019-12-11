@@ -674,17 +674,18 @@ var Main;
             }
         });
 
-        var inputSpan = $('<span>');
-        inputSpan.append(changeNameInput);
-
+        var subjectContainer = $('<div>', { class: "subjectTextContainer" });
         var subjTextSpan = $('<span>', { text: defaultName, class: "subjectName" });
+
+        subjectContainer.append(subjTextSpan);
+        subjectContainer.append(changeNameInput);
 
         var iconDiv = $('<div>', { class: "icons" });
 
         var subjectDiv = $('<div>', { class: "subjectDiv noSelect" });
         subjectDiv.prepend(zoomTreeButton);
-        subjectDiv.append(subjTextSpan);
-        subjectDiv.append(inputSpan);
+
+        subjectDiv.append(subjectContainer);
         subjectDiv.append(iconDiv);
 
         subjectDiv.on("click", function(e)

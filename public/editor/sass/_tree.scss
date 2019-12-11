@@ -3,13 +3,9 @@
 // © Utrecht University and DialogueTrainer
 
 .zoomTreeButton {
-  float: left;
   width: 50px;
-  margin-top: -3px;
-  margin-left: 2px;
-  font-size: 2em;
+  font-size: 0;
   text-align: center;
-  vertical-align: middle;
   cursor: pointer;
 
   svg {
@@ -78,33 +74,39 @@
       background: rgba(darken($col-subject, 25%), .01);
       border-bottom: 1px solid rgba(darken($col-subject, 25%), .1);
     }
-  }
 
-  &.optional:not(.zoom) .subjectDiv {
-    padding-right: 40px;
+    .subjectNameInput {
+      max-width: 250px;
+    }
   }
 
   .subjectDiv {
+    display: flex;
+    align-items: center;
+    padding-right: 15px;
     overflow: hidden;
     font-size: 17px;
     font-weight: bold;
     line-height: 50px;
-    text-overflow: ellipsis;
     white-space: nowrap;
 
-    > span {
-      margin-left: 5px;
+    .zoomTreeButton {
+      flex: 0 0 auto;
+    }
+
+    .subjectTextContainer {
+      flex: 1 1 auto;
+      overflow: hidden;
     }
 
     .icons {
-      position: absolute;
-      top: 0;
-      right: 15px;
-      bottom: 0;
+      flex: 0 0 auto;
+      padding-left: 10px;
 
       svg {
         width: 16px;
         height: 16px;
+        padding: 0 2px;
         fill: currentColor;
         vertical-align: middle;
       }
@@ -121,4 +123,18 @@
   &.dragging {
     cursor: move;
   }
+}
+
+.subjectName {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.subjectNameInput {
+  position: relative;
+  z-index: 1; // Ensures positive z-index on Chromebooks.
+  width: 100%;
+  box-sizing: border-box;
 }
