@@ -201,7 +201,7 @@
         return toCopy;
     }
 
-    function pasteElement(type, content)
+    function pasteElement(type, content, anchorPosition)
     {
         var indicatorPos = Main.getGridIndicatorPosition();
         if (!Array.isArray(content))
@@ -213,7 +213,7 @@
             }
             else if (type === 'node' && Zoom.isZoomed())
             {
-                var newNode = pasteNode(content, { left: 0, top: 0 });
+                var newNode = pasteNode(content, { left: anchorPosition.left, top: anchorPosition.top });
                 Main.selectElement(newNode.id);
             }
         }
@@ -261,8 +261,11 @@
                     });
                     content.forEach(function(node)
                     {
-                        var offset = { left: node.position.left - topLeftNode.position.left, top: node.position.top - topLeftNode.position.top };
-                        var newNode = pasteNode(node, offset);
+                        var newNode = pasteNode(node,
+                        {
+                            left: anchorPosition.left + node.position.left - topLeftNode.position.left,
+                            top: anchorPosition.top + node.position.top - topLeftNode.position.top
+                        });
                         idMappings[node.id] = newNode.id;
                     });
 
@@ -305,7 +308,7 @@
         }
     }
 
-    function pasteNode(copiedNode, offset, tree, doNotPosition)
+    function pasteNode(copiedNode, position, tree)
     {
         if (!tree) tree = Zoom.getZoomed();
         if (!tree) return;
@@ -322,10 +325,9 @@
 
         Main.nodes[node.id] = node;
 
-        if (!doNotPosition)
+        if (position)
         {
-            var position = Main.mousePositionToDialoguePosition(Main.mousePosition);
-            Utils.cssPosition(nodeElem, { left: Math.max(position.left + offset.left, 0), top: Math.max(position.top + offset.top, 0) });
+            Utils.cssPosition(nodeElem, { left: Math.max(position.left, 0), top: Math.max(position.top, 0) });
         }
 
         Main.changeNodeText(node.id);
@@ -359,7 +361,7 @@
                 // Can occur due to deleting from arrays in js leaving values undefined
                 if (!node) return true; // $.each version of continue
 
-                var newNode = pasteNode(node, { left: 0, top: 0 }, newTree, true);
+                var newNode = pasteNode(node, undefined, newTree);
 
                 // Needed to also copy over jsplumb connectors
                 idMappings[node.id] = newNode.id;
@@ -513,6 +515,7 @@
 
         if (canPaste)
         {
+            var anchorPosition = Zoom.isZoomed() ? Main.mousePositionToDialoguePosition(Main.mousePosition) : undefined;
             if (Object.keys(missingParameterIds).length > 0)
             {
                 var warning = $('<div>');
@@ -524,12 +527,12 @@
                 Utils.confirmDialog(warning, 'warning')
                     .then(function(confirmed)
                     {
-                        if (confirmed) pasteElement(type, content);
+                        if (confirmed) pasteElement(type, content, anchorPosition);
                     });
             }
             else
             {
-                pasteElement(type, content);
+                pasteElement(type, content, anchorPosition);
             }
         }
 
