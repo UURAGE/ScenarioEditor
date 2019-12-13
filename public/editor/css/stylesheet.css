@@ -277,9 +277,10 @@ tr.ui-sortable-helper {
   .condition .handle {
     padding-right: 5px; }
 
-select:focus {
-  position: relative;
-  z-index: 1; }
+select {
+  position: relative; }
+  select:focus {
+    z-index: 1; }
 
 .zoomTreeButton {
   width: 50px;

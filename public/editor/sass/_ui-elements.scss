@@ -297,8 +297,11 @@ tr.ui-sortable-helper {
   }
 }
 
-select:focus {
-  // This fixes a rendering issue in Chrome where the options appear completely black.
+select {
   position: relative;
-  z-index: 1;
+
+  &:focus {
+    // This fixes a rendering issue in Chrome where the options appear completely black.
+    z-index: 1;
+  }
 }
