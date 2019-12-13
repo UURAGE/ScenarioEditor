@@ -29,7 +29,6 @@ const lintSass = () =>
     return gulp.src(sassSrc)
         .pipe(stylelint(
         {
-            // @ts-ignore
             failAfterError: false,
             reporters: [{ formatter: "string", console: true }]
         }));
