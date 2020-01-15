@@ -83,7 +83,7 @@ var KeyControl;
         {
             if (!Zoom.isZoomed() && Main.isMousePositionWithinEditingCanvas())
             {
-                Main.addNewTree();
+                Main.addNewTree(true);
             }
         },
         A: function()

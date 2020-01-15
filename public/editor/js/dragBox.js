@@ -23,13 +23,15 @@ var DragBox;
         dragPos = {},
         offset = { x: 24, y: 24 },
         dragSafezone = 25,
-        stopHandler = null;
+        stopHandler = null,
+        repeatable = false;
 
     // Starts a dragging action, registering the stop handler
-    function startDragging(e, text, newStopHandler)
+    function startDragging(e, text, newStopHandler, newRepeatable)
     {
         startPos = { x: e.pageX, y: e.pageY };
         stopHandler = newStopHandler;
+        repeatable = newRepeatable;
         $(document).on('mousemove', handleDrag);
         $(document).on('mouseup', handleStop);
         dragging = true;
@@ -54,7 +56,7 @@ var DragBox;
         updateDraggerPosition(e);
     }
 
-    function handleStop()
+    function handleStop(e)
     {
         // Whether this drop is cancelled or not,
         // stop handling the mouseup event
@@ -62,7 +64,8 @@ var DragBox;
 
         // Allow the stop handler to cancel the drop
         // (i.e. force the user to keep dragging)
-        if (isDroppable() && stopHandler())
+        var draggingContinues = repeatable && e.ctrlKey;
+        if (isDroppable() && stopHandler(draggingContinues) && !draggingContinues)
         {
             stopDragging();
         }

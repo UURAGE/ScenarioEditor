@@ -197,7 +197,7 @@ var Main;
 
         $('#main').on('dblclick', function()
         {
-            if (!Zoom.isZoomed()) addNewTree();
+            if (!Zoom.isZoomed()) addNewTree(true);
         });
         $('#newTree').on('mousedown', function(e)
         {
@@ -208,11 +208,11 @@ var Main;
 
             Zoom.zoomOut();
 
-            DragBox.startDragging(e, text, function()
+            DragBox.startDragging(e, text, function(draggingContinues)
             {
                 if (!isMousePositionWithinEditingCanvas()) return true;
-                return addNewTree();
-            });
+                return addNewTree(!draggingContinues);
+            }, true);
         });
         $('#newComputerNode').on("mousedown", function(e)
         {
@@ -227,12 +227,12 @@ var Main;
                 return;
             }
 
-            DragBox.startDragging(e, text, function()
+            DragBox.startDragging(e, text, function(draggingContinues)
             {
                 var dialoguePosition = mousePositionToDialoguePosition(Main.mousePosition);
-                if (dialoguePosition) addNewNode(Main.computerType, "", dialoguePosition, true);
+                if (dialoguePosition) addNewNode(Main.computerType, "", dialoguePosition, !draggingContinues);
                 return true;
-            });
+            }, true);
         });
         $('#newPlayerNode').on("mousedown", function(e)
         {
@@ -247,12 +247,12 @@ var Main;
                 return;
             }
 
-            DragBox.startDragging(e, text, function()
+            DragBox.startDragging(e, text, function(draggingContinues)
             {
                 var dialoguePosition = mousePositionToDialoguePosition(Main.mousePosition);
-                if (dialoguePosition) addNewNode(Main.playerType, "", dialoguePosition, true);
+                if (dialoguePosition) addNewNode(Main.playerType, "", dialoguePosition, !draggingContinues);
                 return true;
-            });
+            }, true);
         });
         $('#newSituationNode').on("mousedown", function(e)
         {
@@ -267,12 +267,12 @@ var Main;
                 return;
             }
 
-            DragBox.startDragging(e, text, function()
+            DragBox.startDragging(e, text, function(draggingContinues)
             {
                 var dialoguePosition = mousePositionToDialoguePosition(Main.mousePosition);
-                if (dialoguePosition) addNewNode(Main.situationType, "", dialoguePosition, true);
+                if (dialoguePosition) addNewNode(Main.situationType, "", dialoguePosition, !draggingContinues);
                 return true;
-            });
+            }, true);
         });
         $("#newChildNode").on('click', function()
         {
@@ -849,7 +849,7 @@ var Main;
         return Main.trees[id];
     }
 
-    function addNewTree()
+    function addNewTree(shouldSelectAndStartEditing)
     {
         Zoom.zoomOut();
 
@@ -857,8 +857,12 @@ var Main;
         if (!checkGridAvailable(indicatorPos.left, indicatorPos.top)) return null;
 
         var tree = createEmptyTree(null, indicatorPos.left, indicatorPos.top);
-        selectTree(tree.id);
-        triggerSubjectNameInput(tree.id, true);
+
+        if (shouldSelectAndStartEditing)
+        {
+            selectTree(tree.id);
+            triggerSubjectNameInput(tree.id, true);
+        }
 
         return tree;
     }
@@ -928,11 +932,6 @@ var Main;
         if (position)
         {
             Utils.cssPosition(node, position);
-
-            if (!text && !shouldSelectAndStartEditing)
-            {
-                tree.plumbInstance.revalidate(id);
-            }
         }
 
         if (shouldSelectAndStartEditing)
@@ -940,7 +939,7 @@ var Main;
             selectElement(id);
             startEditingNode(id);
         }
-        else if (text)
+        else
         {
             changeNodeText(id);
         }
