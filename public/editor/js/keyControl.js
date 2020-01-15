@@ -319,24 +319,21 @@ var KeyControl;
         }
         else
         {
+            var plumbInstance;
             if (Main.selectedElements.length === 1)
             {
                 var selectedElementID = Main.selectedElements[0];
                 Main.selectElement(null);
                 Main.selectedElements.push(selectedElementID);
                 $("#" + selectedElementID).addClass("ui-selected");
-                if (selectedElementID in Main.nodes)
-                {
-                    Main.getPlumbInstanceByNodeID(selectedElementID).addToDragSelection(selectedElementID);
-                }
+                plumbInstance = selectedElementID in Main.nodes ? Main.getPlumbInstanceByNodeID(selectedElementID) : jsPlumb;
+                plumbInstance.addToDragSelection(selectedElementID);
             }
 
             Main.selectedElements.push(elementID);
             $("#" + elementID).addClass("ui-selected");
-            if (elementID in Main.nodes)
-            {
-                Main.getPlumbInstanceByNodeID(elementID).addToDragSelection(elementID);
-            }
+            plumbInstance = elementID in Main.nodes ? Main.getPlumbInstanceByNodeID(elementID) : jsPlumb;
+            plumbInstance.addToDragSelection(elementID);
         }
     }
 
@@ -345,10 +342,8 @@ var KeyControl;
     {
         if (elementID === null) return;
 
-        if (elementID in Main.nodes)
-        {
-            Main.getPlumbInstanceByNodeID(elementID).removeFromDragSelection(elementID);
-        }
+        var plumbInstance = elementID in Main.nodes ? Main.getPlumbInstanceByNodeID(elementID) : jsPlumb;
+        plumbInstance.removeFromDragSelection(elementID);
 
         if (Main.selectedElement !== null)
         {

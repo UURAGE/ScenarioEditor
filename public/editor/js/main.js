@@ -56,9 +56,12 @@ var Main;
         updateDocumentTitle: updateDocumentTitle
     };
 
-    var firstDragNodeID = null;
-    var ctrlDown = false, spaceDown = false, isSelecting = false, isPanning = false,
-        invalidateNodeClick = false;// A drag event also triggers a click event, use this flag to catch and stop these events
+    // Node dragging
+    var firstDragNodeID = null, invalidateNodeClick = false;
+    // Tree dragging
+    var firstDragTreeID = null, invalidateTreeClick = false, minimumCoordinatesByTree = {};
+    // Selecting and panning
+    var ctrlDown = false, spaceDown = false, isSelecting = false, isPanning = false;
 
     // Copied from: http://stackoverflow.com/a/22079985/1765330
     $.fn.attachDragger = function()
@@ -187,8 +190,8 @@ var Main;
 
             Utils.cssPosition($("#gridIndicator"),
             {
-                "top": gridPos(e.pageY - mainPos.top + $("#main").scrollTop(), Main.gridY),
-                "left": gridPos(e.pageX - mainPos.left + $("#main").scrollLeft(), Main.gridX)
+                "top": pixelPositionToGridPosition(e.pageY - mainPos.top + $("#main").scrollTop(), Main.gridY) * Main.gridY,
+                "left": pixelPositionToGridPosition(e.pageX - mainPos.left + $("#main").scrollLeft(), Main.gridX) * Main.gridX
             });
         });
 
@@ -674,6 +677,11 @@ var Main;
         {
             e.stopPropagation();
             if (!$.contains($("#main")[0], document.activeElement)) $("#main").focus();
+            if (invalidateTreeClick)
+            {
+                invalidateTreeClick = false;
+                return;
+            }
             if (Main.selectedElement === id) return;
             if (e.ctrlKey || e.metaKey)
             {
@@ -724,25 +732,110 @@ var Main;
             plumbInstance: PlumbGenerator.genJsPlumbInstance(treeDiv)
         };
 
-        // (x,y) of upper left of containment and (x,y) of lower right
+        var minimumPosition = null;
         jsPlumb.draggable(dragDiv,
         {
             filter: ".zoomTreeButton, .zoomTreeButton *",
 
             // The constrain function returns the array with coordinates that will be assigned to the dragged element
-            constrain: function(currentCoordinates)
+            constrain: function(currentCoordinates, el)
             {
-                return [Math.max(0, currentCoordinates[0]), Math.max(0, currentCoordinates[1])];
+                var treeMinimumCoordinates = minimumCoordinatesByTree[$(el).attr('id')];
+                return [
+                    Math.max(treeMinimumCoordinates[0], currentCoordinates[0]),
+                    Math.max(treeMinimumCoordinates[1], currentCoordinates[1])
+                ];
             },
 
             start: function()
             {
-                if (Main.selectedElements[0] !== id) selectTree(id);
+                if (firstDragTreeID === null)
+                {
+                    firstDragTreeID = id;
+                }
+                else
+                {
+                    return;
+                }
+
+                invalidateTreeClick = true;
+
+                if (Main.selectedElement === null)
+                {
+                    if (Main.selectedElements.indexOf(id) === -1)
+                    {
+                        selectElement(id);
+                    }
+                }
+                else
+                {
+                    if (Main.selectedElement !== id)
+                    {
+                        selectElement(id);
+                    }
+                }
+
+                minimumPosition = { "top": Infinity, "left": Infinity };
+                Main.selectedElements.forEach(function(selectedElementID)
+                {
+                    var tree = Main.trees[selectedElementID];
+                    if (tree.topPos < minimumPosition.top) minimumPosition.top = tree.topPos;
+                    if (tree.leftPos < minimumPosition.left) minimumPosition.left = tree.leftPos;
+                });
+                minimumCoordinatesByTree = {};
+                Main.selectedElements.forEach(function(selectedElementID)
+                {
+                    var tree = Main.trees[selectedElementID];
+                    minimumCoordinatesByTree[selectedElementID] =
+                    [
+                        (tree.leftPos - minimumPosition.left) * Main.gridX,
+                        (tree.topPos - minimumPosition.top) * Main.gridY
+                    ];
+                });
             },
 
-            stop: function(event)
+            stop: function()
             {
-                treeDropHandler(event, id);
+                var indicatorPos = getGridIndicatorPosition();
+                var thisTree = Main.trees[id];
+                var delta =
+                {
+                    "top": Math.max(-minimumPosition.top, indicatorPos.top - thisTree.topPos),
+                    "left": Math.max(-minimumPosition.left, indicatorPos.left - thisTree.leftPos)
+                };
+
+                var shouldMove = !(delta.left === 0 && delta.top === 0) &&
+                    // Make sure no trees can be dragged on top of each other
+                    Main.selectedElements.every(function(selectedElementID)
+                    {
+                        var tree = Main.trees[selectedElementID];
+                        return checkGridAvailable(tree.leftPos + delta.left, tree.topPos + delta.top, minimumCoordinatesByTree);
+                    });
+
+                if (shouldMove)
+                {
+                    SaveIndicator.setSavedChanges(false);
+                    MiniMap.update(true);
+                }
+
+                Main.selectedElements.forEach(function(selectedElementID)
+                {
+                    var tree = Main.trees[selectedElementID];
+                    if (shouldMove)
+                    {
+                        tree.topPos = tree.topPos + delta.top;
+                        tree.leftPos = tree.leftPos + delta.left;
+                    }
+                    Utils.cssPosition(tree.dragDiv,
+                    {
+                        "top": tree.topPos * Main.gridY,
+                        "left": tree.leftPos * Main.gridX
+                    });
+                });
+
+                firstDragTreeID = null;
+                minimumPosition = null;
+                minimumCoordinatesByTree = {};
             }
         }); // We cannot use the built in grid functionality because it doesnt allow to drag "outside" the graph area to expand it
 
@@ -1324,7 +1417,8 @@ var Main;
             elementIds.forEach(function(elementId)
             {
                 $("#" + elementId).addClass("ui-selected");
-                if (elementId in Main.nodes) Main.getPlumbInstanceByNodeID(elementId).addToDragSelection(elementId);
+                var plumbInstance = elementId in Main.nodes ? Main.getPlumbInstanceByNodeID(elementId) : jsPlumb;
+                plumbInstance.addToDragSelection(elementId);
             });
         }
     }
@@ -1365,7 +1459,8 @@ var Main;
         $(".ui-selected").removeClass("ui-selected");
         Main.selectedElements = [];
         var zoomedTree = Zoom.getZoomed();
-        if (zoomedTree) zoomedTree.plumbInstance.clearDragSelection();
+        var plumbInstance = zoomedTree ? zoomedTree.plumbInstance : jsPlumb;
+        plumbInstance.clearDragSelection();
         dehighlightParents();
 
         if (nodeID !== null && !(nodeID in Main.nodes))
@@ -1642,54 +1737,13 @@ var Main;
         }
     }
 
-    // Keeps the tree's position up to date for zooming out. Handles snapping to grid.
-    function treeDropHandler(event, id)
-    {
-        var tree = Main.trees[id];
-
-        // When not zoomed in, we have nothing to do
-        if (Zoom.isZoomed(id)) return;
-
-        var position = Utils.cssPosition($("#gridIndicator"));
-        var gridLeftPos = Math.round(position.left / Main.gridX);
-        var gridTopPos = Math.round(position.top / Main.gridY);
-
-        // Make sure no trees can be dragged on top of each other
-        if (checkGridAvailable(gridLeftPos, gridTopPos))
-        {
-            Utils.cssPosition(tree.dragDiv,
-            {
-                "top": gridTopPos * Main.gridY,
-                "left": gridLeftPos * Main.gridX
-            });
-
-            if (!(gridLeftPos === tree.leftPos && gridTopPos === tree.topPos))
-            {
-                SaveIndicator.setSavedChanges(false);
-
-                // Store position to return to this point when zoomed in and out again
-                tree.leftPos = gridLeftPos;
-                tree.topPos = gridTopPos;
-
-                MiniMap.update(true);
-            }
-        }
-        else
-        {
-            Utils.cssPosition(tree.dragDiv,
-            {
-                "top": tree.topPos * Main.gridY,
-                "left": tree.leftPos * Main.gridX
-            });
-        }
-    }
-
-    function checkGridAvailable(gridX, gridY)
+    function checkGridAvailable(gridX, gridY, ignore)
     {
         var available = true;
 
         $.each(Main.trees, function(id, tree)
         {
+            if (ignore && id in ignore) return true;
             available = available && !(tree.leftPos === gridX && tree.topPos === gridY);
         });
 
@@ -1700,18 +1754,16 @@ var Main;
     {
         var position = Utils.cssPosition($("#gridIndicator"));
         return {
-            "left": Math.round(position.left / Main.gridX),
-            "top": Math.round(position.top / Main.gridY)
+            "left": pixelPositionToGridPosition(position.left, Main.gridX),
+            "top": pixelPositionToGridPosition(position.top, Main.gridY)
         };
     }
 
-    // Transforms a free position to a grid position
-    // (finds the greatest multiple of gridSize less than freePos)
-    function gridPos(freePos, gridSize)
+    function pixelPositionToGridPosition(pixelPos, gridSize)
     {
         // The grid positions refer to the upper left corners of the cells, we want to find
         // not the closest upper left corner but the cell that contains the position
-        return Math.floor(freePos / gridSize) * gridSize;
+        return Math.floor(pixelPos / gridSize);
     }
 
     function selectTree(id)
@@ -1723,7 +1775,6 @@ var Main;
             applyChanges();
         }
 
-        var dragDiv = Main.trees[id].dragDiv;
         if (Zoom.isZoomed(id))
         {
             // Cancel selection if the tree is zoomed to prevent accidental deletion and duplication of trees.
@@ -1739,6 +1790,11 @@ var Main;
         $(".selected").removeClass("selected");
         $(".ui-selected").removeClass("ui-selected");
         Main.selectedElements = [];
+        var zoomedTree = Zoom.getZoomed();
+        var plumbInstance = zoomedTree ? zoomedTree.plumbInstance : jsPlumb;
+        plumbInstance.clearDragSelection();
+
+        var dragDiv = Main.trees[id].dragDiv;
 
         dragDiv.addClass("selected");
         Main.selectedElement = id;
