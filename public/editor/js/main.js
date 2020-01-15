@@ -351,42 +351,24 @@ var Main;
         $("#main").on('selectablestart', function()
         {
             $(this).focus();
-            // Make sure no node is selected when we start selecting.
-            if (!ctrlDown)
-            {
-                Main.selectedElements = [];
-                selectElement(null);
-            }
+            if (!ctrlDown) selectElement(null);
         });
         $("#main").on('selectableselected', function(event, element)
         {
-            // Add all selected nodes to a array.
             var id = element.selected.id;
 
-            // Zoomed, select nodes
-            if (Zoom.isZoomed())
+            var isZoomed = Zoom.isZoomed();
+            var isTree = id in Main.trees;
+            if ((isZoomed && !isTree) || (!isZoomed && isTree))
             {
-                if (!(id in Main.trees))
-                {
-                    Main.selectedElements.push(id);
-
-                    Zoom.getZoomed().plumbInstance.addToDragSelection(element.selected);
-                }
-            }
-            else
-            {
-                if (id in Main.trees)
-                {
-                    Main.selectedElements.push(id);
-                }
+                Main.selectedElements.push(id);
             }
         });
         $("#main").on('selectablestop', function()
         {
             isMainClickAction = false;
 
-            // If there's only one node selected, show the node.
-            if (Main.selectedElements.length === 1) selectElement(Main.selectedElements[0]);
+            selectElements(Main.selectedElements);
 
             MiniMap.update(true);
         });
@@ -1331,7 +1313,7 @@ var Main;
 
     function selectElements(elementIds)
     {
-        if (elementIds.length == 1)
+        if (elementIds.length === 1)
         {
             selectElement(elementIds[0]);
         }
