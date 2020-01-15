@@ -210,6 +210,7 @@ var Main;
 
             DragBox.startDragging(e, text, function()
             {
+                if (!isMousePositionWithinEditingCanvas()) return true;
                 return addNewTree();
             });
         });
@@ -228,7 +229,8 @@ var Main;
 
             DragBox.startDragging(e, text, function()
             {
-                addNewNode(Main.computerType, "", Main.mousePositionToDialoguePosition(Main.mousePosition), true);
+                var dialoguePosition = mousePositionToDialoguePosition(Main.mousePosition);
+                if (dialoguePosition) addNewNode(Main.computerType, "", dialoguePosition, true);
                 return true;
             });
         });
@@ -247,7 +249,8 @@ var Main;
 
             DragBox.startDragging(e, text, function()
             {
-                addNewNode(Main.playerType, "", Main.mousePositionToDialoguePosition(Main.mousePosition), true);
+                var dialoguePosition = mousePositionToDialoguePosition(Main.mousePosition);
+                if (dialoguePosition) addNewNode(Main.playerType, "", dialoguePosition, true);
                 return true;
             });
         });
@@ -266,7 +269,8 @@ var Main;
 
             DragBox.startDragging(e, text, function()
             {
-                addNewNode(Main.situationType, "", Main.mousePositionToDialoguePosition(Main.mousePosition), true);
+                var dialoguePosition = mousePositionToDialoguePosition(Main.mousePosition);
+                if (dialoguePosition) addNewNode(Main.situationType, "", dialoguePosition, true);
                 return true;
             });
         });
@@ -2725,16 +2729,27 @@ var Main;
 
     function mousePositionToDialoguePosition(mousePos)
     {
-        // The canvas is open; get the canvas div
-        var treeDiv = Zoom.getZoomed().div;
+        // Must return a position (not null) when
+        // Zoom.isZoomed() && isMousePositionWithinEditingCanvas()
 
-        // Calculate canvas boundaries
+        var zoomedTree = Zoom.getZoomed();
+        if (!zoomedTree) return null;
+
+        var treeDiv = zoomedTree.div;
         var leftBound = treeDiv.offset().left;
         var upperBound = treeDiv.offset().top;
+        var rightBound = leftBound + treeDiv.width();
+        var lowerBound = upperBound + treeDiv.height();
+
+        if (!(mousePos.x >= leftBound && mousePos.x < rightBound &&
+            mousePos.y >= upperBound && mousePos.y < lowerBound))
+        {
+            return null;
+        }
 
         return {
-            left: Math.max(mousePos.x, leftBound) - leftBound + treeDiv.scrollLeft(),
-            top: Math.max(mousePos.y, upperBound) - upperBound + treeDiv.scrollTop()
+            left: mousePos.x - leftBound + treeDiv.scrollLeft(),
+            top: mousePos.y - upperBound + treeDiv.scrollTop()
         };
     }
 
@@ -2747,9 +2762,10 @@ var Main;
     function isMousePositionWithinEditingCanvas()
     {
         var zoomedTree = Zoom.getZoomed();
-        var offset = zoomedTree ? zoomedTree.div.offset() : $("#main").offset();
-        var width = $("#main").width();
-        var height = $("#main").height();
+        var canvas = zoomedTree ? zoomedTree.div : $("#main");
+        var offset = canvas.offset();
+        var width = canvas.width();
+        var height = canvas.height();
         return Main.mousePosition.x >= offset.left &&
             Main.mousePosition.y >= offset.top &&
             Main.mousePosition.x < offset.left + width &&

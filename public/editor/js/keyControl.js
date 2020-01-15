@@ -59,24 +59,18 @@ var KeyControl;
     letterControl = {
         Q: function()
         {
-            if (Zoom.isZoomed() && Main.isMousePositionWithinEditingCanvas())
-            {
-                Main.addNewNode(Main.playerType, "", Main.mousePositionToDialoguePosition(Main.mousePosition), true);
-            }
+            var dialoguePosition = Main.mousePositionToDialoguePosition(Main.mousePosition);
+            if (dialoguePosition) Main.addNewNode(Main.playerType, "", dialoguePosition, true);
         },
         W: function()
         {
-            if (Zoom.isZoomed() && Main.isMousePositionWithinEditingCanvas())
-            {
-                Main.addNewNode(Main.computerType, "", Main.mousePositionToDialoguePosition(Main.mousePosition), true);
-            }
+            var dialoguePosition = Main.mousePositionToDialoguePosition(Main.mousePosition);
+            if (dialoguePosition) Main.addNewNode(Main.computerType, "", dialoguePosition, true);
         },
         E: function()
         {
-            if (Zoom.isZoomed() && Main.isMousePositionWithinEditingCanvas())
-            {
-                Main.addNewNode(Main.situationType, "", Main.mousePositionToDialoguePosition(Main.mousePosition), true);
-            }
+            var dialoguePosition = Main.mousePositionToDialoguePosition(Main.mousePosition);
+            if (dialoguePosition) Main.addNewNode(Main.situationType, "", dialoguePosition, true);
         },
         R: function()
         {

@@ -161,7 +161,8 @@
             var text = i18next.t('draft:all_items');
             DragBox.startDragging(e, text, function()
             {
-                allItemsToNodes(Main.mousePositionToDialoguePosition(Main.mousePosition));
+                var dialoguePosition = Main.mousePositionToDialoguePosition(Main.mousePosition);
+                if (dialoguePosition) allItemsToNodes(dialoguePosition);
                 return true;
             });
         });
@@ -205,7 +206,8 @@
             }
             DragBox.startDragging(e, text, function()
             {
-                itemToNode(tr, Main.mousePositionToDialoguePosition(Main.mousePosition));
+                var dialoguePosition = Main.mousePositionToDialoguePosition(Main.mousePosition);
+                if (dialoguePosition) itemToNode(tr, dialoguePosition);
                 return true;
             });
         });
