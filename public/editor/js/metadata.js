@@ -93,6 +93,7 @@ var Metadata;
 
         var scenarioDescription = $('<textarea>', { id: "scenarioDescription" });
         scenarioDescription.attr('maxlength', Config.container.settings.description.type.maxLength);
+        scenarioDescription.attr('rows', Config.container.settings.description.type.rows);
 
         generalContainer.append($('<div>', { class: "item" })
             .append(
