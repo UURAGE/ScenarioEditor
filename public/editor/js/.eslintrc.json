@@ -7,8 +7,6 @@
     "extends": "eslint:recommended",
     "globals": {
         "i18next": "readonly",
-        "i18nextXHRBackend": "readonly",
-        "i18nextLocalStorageCache": "readonly",
         "i18nextSprintfPostProcessor": "readonly",
         "jsPlumb": "readonly",
         "saveAs": "readonly",
