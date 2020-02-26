@@ -26,6 +26,7 @@ var Utils;
         makeSortable: makeSortable,
         alertDialog: alertDialog,
         confirmDialog: confirmDialog,
+        stopQueuedClicks: stopQueuedClicks,
         sIcon: sIcon
     };
 
@@ -282,6 +283,20 @@ var Utils;
             }
         });
         return deferredConfirmation;
+    }
+
+    function stopClick(e)
+    {
+        e.stopPropagation();
+    }
+
+    function stopQueuedClicks()
+    {
+        document.addEventListener('click', stopClick, true);
+        setTimeout(function()
+        {
+            document.removeEventListener('click', stopClick, true);
+        });
     }
 
     function sIcon(icon, extraClass)

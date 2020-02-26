@@ -443,9 +443,12 @@ var Main;
         closeOpenMenu = function(e)
         {
             var dropdownButton = $(".dropdownButton.dropped");
-            // Let the button's regular click handler close the button's own menu
-            // (closing it here would cause the click handler to open it again)
-            if (e && (e.target == dropdownButton[0] || $.contains(dropdownButton[0], e.target))) return;
+            var menu = dropdownButton.closest(".dropdown");
+            if (menu.length === 0) return;
+            // Mousedown events that target the open menu (including its button)
+            // should not close it: both menu buttons and menu items have event
+            // handlers that will do the closing (using closeMenu).
+            if (e && (e.target === menu[0] || $.contains(menu[0], e.target))) return;
 
             closeMenu.call(dropdownButton);
         };
@@ -458,7 +461,7 @@ var Main;
         {
             $(this).removeClass("dropped");
             $(this).closest(".dropdown").find(".dropdownItems").hide();
-            document.removeEventListener("click", closeOpenMenu, true);
+            document.removeEventListener("mousedown", closeOpenMenu, true);
             buttons.off("mouseenter", openMenu);
         };
 
@@ -468,15 +471,38 @@ var Main;
             closeOpenMenu();
             $(this).addClass("dropped");
             $(this).closest(".dropdown").find(".dropdownItems").show();
-            document.addEventListener("click", closeOpenMenu, true);
+            document.addEventListener("mousedown", closeOpenMenu, true);
             buttons.on("mouseenter", openMenu);
         };
 
-        buttons.on("click", function()
-        {
-            var handler = $(this).hasClass("dropped") ? closeMenu : openMenu;
-            handler.call(this);
-        });
+        buttons
+            .on("mousedown", function(e)
+            {
+                if (e.button !== 0) return;
+                $(this).trigger('click');
+            })
+            .on("mouseup", function(e)
+            {
+                if (e.button !== 0) return;
+                Utils.stopQueuedClicks();
+            })
+            .on("click", function()
+            {
+                var handler = $(this).hasClass("dropped") ? closeMenu : openMenu;
+                handler.call(this);
+            });
+
+        $(".dropdownItems")
+            .on("mouseup", "button", function(e)
+            {
+                if (e.button !== 0) return;
+                $(this).trigger('click');
+                Utils.stopQueuedClicks();
+            })
+            .on("click", "button", function()
+            {
+                closeMenu.call($(this).closest(".dropdown").find(".dropdownButton"));
+            });
     }
 
     function initialiseSidebar()
