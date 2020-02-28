@@ -10,7 +10,6 @@
   opacity: .8;
   filter: alpha(opacity=80);
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05), 0 1px 10px rgba(0, 0, 0, 0.05);
-  -webkit-transition: background-color .15s ease-in, color .15s ease-in;
   transition: background-color .15s ease-in, color .15s ease-in; }
   .w ul {
     padding: 0;
@@ -72,18 +71,15 @@
     z-index: -1;
     cursor: pointer;
     border-radius: 10px;
-    -webkit-transition: box-shadow .15s ease-in, color .15s ease-in;
     transition: box-shadow .15s ease-in, color .15s ease-in; }
     .w:not(.jtk-drag):not(.jtk-drag-active) > .ep:hover {
       box-shadow: 0 0 15px 2px rgba(0, 0, 0, 0.15), 0 1px 3px 0 rgba(0, 0, 0, 0.15); }
       .w:not(.jtk-drag):not(.jtk-drag-active) > .ep:hover .anchor {
         background-color: black;
-        -webkit-transition: background-color .25s ease;
         transition: background-color .25s ease; }
         .w:not(.jtk-drag):not(.jtk-drag-active) > .ep:hover .anchor::after {
           opacity: .25;
-          -webkit-transform: scale(5);
-                  transform: scale(5); }
+          transform: scale(5); }
     .w:not(.jtk-drag):not(.jtk-drag-active) > .ep .anchor {
       position: absolute;
       top: 50%;
@@ -95,7 +91,6 @@
       pointer-events: none;
       background-color: transparent;
       border-radius: 50%;
-      -webkit-transition: background-color .25s ease, left 0s step-end .15s, top 0s step-end .15s, right 0s step-end .15s, bottom 0s step-end .15s;
       transition: background-color .25s ease, left 0s step-end .15s, top 0s step-end .15s, right 0s step-end .15s, bottom 0s step-end .15s; }
       .w:not(.jtk-drag):not(.jtk-drag-active) > .ep .anchor::after {
         content: '';
@@ -108,17 +103,12 @@
         background-color: black;
         border-radius: 50%;
         opacity: 0;
-        -webkit-transition: opacity .25s ease, -webkit-transform .25s ease;
-        transition: opacity .25s ease, -webkit-transform .25s ease;
-        transition: opacity .25s ease, transform .25s ease;
-        transition: opacity .25s ease, transform .25s ease, -webkit-transform .25s ease; }
+        transition: opacity .25s ease, transform .25s ease; }
   .w:not(.jtk-drag):not(.jtk-drag-active):not(.jtk-connected) > .ep > .anchor {
     background-color: rgba(0, 0, 0, 0.75);
-    -webkit-transition: background-color .25s ease, left .15s linear, top .15s linear, right .15s linear, bottom .15s linear;
     transition: background-color .25s ease, left .15s linear, top .15s linear, right .15s linear, bottom .15s linear; }
   .w:not(.jtk-drag):not(.jtk-drag-active):not(.jtk-connected) > .ep:hover > .anchor {
     background-color: black;
-    -webkit-transition: background-color .25s ease, left .15s linear, top .15s linear, right .15s linear, bottom .15s linear;
     transition: background-color .25s ease, left .15s linear, top .15s linear, right .15s linear, bottom .15s linear; }
 
 .allowInterleaveNode:hover::before, .allowDialogueEndNode:hover::before, .endNode:hover::before, .openResponse:hover::before {
@@ -169,7 +159,6 @@
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: .5em;
   opacity: .8;
-  -webkit-transition: background-color .15s ease-in, color .15s ease-in;
   transition: background-color .15s ease-in, color .15s ease-in; }
 
 .jtk-endpoint {
