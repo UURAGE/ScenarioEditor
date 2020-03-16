@@ -656,14 +656,8 @@ select {
   #properties h1 {
     font-size: 40px; }
   #properties.player > #headerComputer,
-  #properties.player > #allowInterleaveNode,
-  #properties.player > #allowDialogueEndNode,
   #properties.player > #characterSection, #properties.situation > #headerComputer,
-  #properties.situation > #allowInterleaveNode,
-  #properties.situation > #allowDialogueEndNode,
   #properties.situation > #characterSection, #properties.tree > #headerComputer,
-  #properties.tree > #allowInterleaveNode,
-  #properties.tree > #allowDialogueEndNode,
   #properties.tree > #characterSection {
     display: none; }
   #properties.player > #headerSubject,
@@ -683,7 +677,9 @@ select {
   #properties.tree > #preconditionsSection,
   #properties.tree > #endNode,
   #properties.tree > #effectsSection,
-  #properties.tree > #propertyValuesSection {
+  #properties.tree > #propertyValuesSection,
+  #properties.tree > #allowInterleaveNode,
+  #properties.tree > #allowDialogueEndNode {
     display: none; }
 
 .header h1 {

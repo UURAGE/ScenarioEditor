@@ -87,8 +87,6 @@
   &.tree {
     > {
       #headerComputer,
-      #allowInterleaveNode,
-      #allowDialogueEndNode,
       #characterSection {
         display: none;
       }
@@ -131,7 +129,9 @@
     #preconditionsSection,
     #endNode,
     #effectsSection,
-    #propertyValuesSection {
+    #propertyValuesSection,
+    #allowInterleaveNode,
+    #allowDialogueEndNode {
       display: none;
     }
   }
