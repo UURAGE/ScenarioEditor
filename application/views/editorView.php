@@ -277,12 +277,12 @@
             </div>
             <div class="sidebarSection" id="allowInterleaveNode">
               <div class="sub-header">
-                <h2 title="<?php sLang('edt_jump_title');?>"><?php echo sIcon("icon-jumpsubject");?><input type="checkbox" id="allowInterleaveNodeCheckbox"/><label for="allowInterleaveNodeCheckbox"><?php sLang('edt_jump_header');?></label></h2>
+                <h2 title="<?php sLang('edt_allow_interleave_title');?>"><?php echo sIcon("icon-jumpsubject");?><input type="checkbox" id="allowInterleaveNodeCheckbox"/><label for="allowInterleaveNodeCheckbox"><?php sLang('edt_allow_interleave_header');?></label></h2>
               </div>
             </div>
             <div class="sidebarSection" id="allowDialogueEndNode">
               <div class="sub-header">
-                <h2 title="<?php sLang('edt_inits_title');?>"><?php echo sIcon("icon-earlyend");?><input type="checkbox" id="allowDialogueEndNodeCheckbox"/><label for="allowDialogueEndNodeCheckbox"><?php  sLang('edt_inits_header');?></label></h2>
+                <h2 title="<?php sLang('edt_allow_dialogue_end_title');?>"><?php echo sIcon("icon-earlyend");?><input type="checkbox" id="allowDialogueEndNodeCheckbox"/><label for="allowDialogueEndNodeCheckbox"><?php  sLang('edt_allow_dialogue_end_header');?></label></h2>
               </div>
             </div>
             <div class="sidebarSection" id="endNode">
