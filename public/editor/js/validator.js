@@ -91,19 +91,15 @@ var Validator;
         };
 
         var interleaves = Main.getInterleaves();
-        var lastInterleaveIndex = interleaves.length - 1;
-        var lastInterleaveHasOneTree = interleaves[lastInterleaveIndex].length === 1;
-        var lastInterleaveHasEnd = false;
+        var hasSingleTree = interleaves.length === 1 && interleaves[0].length === 1;
 
         var previousInterleave = null;
         var previousInterleaveStartNodeType = null;
         var previousInterleaveHasOptionalTree = false;
         var previousInterleaveSpecialNodesByChildTypeByProperty = null;
 
-        interleaves.forEach(function(interleave, interleaveIndex)
+        interleaves.forEach(function(interleave)
         {
-            var isLastInterleave = interleaveIndex === lastInterleaveIndex;
-
             var interleaveHasOptionalTree = false;
             var interleaveSpecialNodesByChildTypeByProperty = {};
             specialProperties.forEach(function(property) { interleaveSpecialNodesByChildTypeByProperty[property] = {}; });
@@ -113,6 +109,7 @@ var Validator;
                 if (tree.optional) interleaveHasOptionalTree = true;
 
                 var treeHasANode = false;
+                var treeHasEndNodeOrAllowDialogueEndNode = false;
                 var treeStartNodesByType = {};
                 tree.nodes.forEach(function(nodeID)
                 {
@@ -155,26 +152,23 @@ var Validator;
                         });
                     }
 
-                    if (isLastInterleave)
+                    if (node.endNode || node.allowDialogueEndNode)
                     {
-                        if (node.endNode)
+                        treeHasEndNodeOrAllowDialogueEndNode = true;
+                    }
+                    else if (outgoingConnections.length === 0)
+                    {
+                        // Node is a dead end, but not marked as end or allowDialogueEnd
+                        validationReport.push(
                         {
-                            lastInterleaveHasEnd = true;
-                        }
-                        else if (outgoingConnections.length === 0 && lastInterleaveHasOneTree)
-                        {
-                            // Node is a dead end, but not marked as end node
-                            validationReport.push(
-                            {
-                                message: i18next.t('validator:unmarked_end', { subject: tree.subject }),
-                                level: 'warning',
-                                jumpToFunctions:
-                                [
-                                    function() { Zoom.zoomIn(tree); },
-                                    createJumpToNodes(tree, [nodeID])
-                                ]
-                            });
-                        }
+                            message: i18next.t('validator:unmarked_end', { subject: tree.subject }),
+                            level: 'warning',
+                            jumpToFunctions:
+                            [
+                                function() { Zoom.zoomIn(tree); },
+                                createJumpToNodes(tree, [nodeID])
+                            ]
+                        });
                     }
                 });
 
@@ -233,6 +227,28 @@ var Validator;
                 else if (treeStartNodeTypes.length === 1)
                 {
                     pushIntoSubArray(interleaveTreesByStartNodeType, treeStartNodeTypes[0], tree);
+                }
+
+                if (!treeHasEndNodeOrAllowDialogueEndNode)
+                {
+                    if (hasSingleTree)
+                    {
+                        validationReport.push(
+                        {
+                            message: i18next.t('validator:no_ending.single_subject'),
+                            level: 'warning',
+                            jumpToFunctions: []
+                        });
+                    }
+                    else
+                    {
+                        validationReport.push(
+                        {
+                            message: i18next.t('validator:no_ending.multiple_subjects', { subject: tree.subject }),
+                            level: 'warning',
+                            jumpToFunctions: [ function() { Zoom.zoomIn(tree); } ]
+                        });
+                    }
                 }
             });
 
@@ -366,28 +382,6 @@ var Validator;
             previousInterleaveHasOptionalTree = interleaveHasOptionalTree;
             previousInterleaveSpecialNodesByChildTypeByProperty = interleaveSpecialNodesByChildTypeByProperty;
         });
-
-        if (!lastInterleaveHasEnd)
-        {
-            if (interleaves.length === 1 && interleaves[0].length === 1)
-            {
-                validationReport.push(
-                {
-                    message: i18next.t('validator:no_ending.single_subject'),
-                    level: 'warning',
-                    jumpToFunctions: []
-                });
-            }
-            else
-            {
-                validationReport.push(
-                {
-                    message: i18next.t('validator:no_ending.multiple_subjects'),
-                    level: 'warning',
-                    jumpToFunctions: [createJumpToTrees(interleaves[lastInterleaveIndex])]
-                });
-            }
-        }
 
         return validationReport;
     }
