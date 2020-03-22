@@ -7,13 +7,13 @@
     "unmarked_end": "<a>Subject \"{{subject}}\"</a> contains <a>a node without outgoing connections</a> that has not been marked as an end of the subject or the scenario.",
     "special_node":
     {
-        "allowInterleaveNode": "\"Jump to other subject\"",
-        "allowDialogueEndNode": "\"Early end of subject\""
+        "allowInterleaveNode": "Allow jump to other subject",
+        "allowDialogueEndNode": "Allow end of subject"
     },
     "unnamed_subject": "There is <a>an unnamed subject</a>.",
     "layer_start_type_error": "<a>Subjects on layer {{layerNumber}}</a> start with nodes with different types ({{-types}}). The types must be the same.",
-    "special_node_layer_start_type_error": "<a>Subjects on layer {{layerNumber}}</a> start with {{type}} nodes, but one of them contains <a>a node with {{property}}</a> that has <a>children with another type ({{otherType}})</a>. The types must be the same.",
-    "special_node_previous_layer_start_type_error": "<a>Subjects on layer {{thisLayerNumber}}</a> start with {{type}} nodes, but one of <a>the subjects on layer {{previousLayerNumber}}</a> contains <a>a node with {{property}}</a> that has <a>children of type {{otherType}}</a>. The types must be the same.",
+    "special_node_layer_start_type_error": "<a>Subjects on layer {{layerNumber}}</a> start with {{type}} nodes, but one of them contains <a>a node with \"{{property}}\"</a> that has <a>children with another type ({{otherType}})</a>. The types must be the same.",
+    "special_node_previous_layer_start_type_error": "<a>Subjects on layer {{thisLayerNumber}}</a> start with {{type}} nodes, but one of <a>the subjects on layer {{previousLayerNumber}}</a> contains <a>a node with \"{{property}}\"</a> that has <a>children of type {{otherType}}</a>. The types must be the same.",
     "optional_layer_start_type_error": "<a>Some subjects on layer {{previousLayerNumber}}</a> are optional, so the type of start nodes of subjects on that layer must be the same as that of start nodes of <a>subjects on layer {{thisLayerNumber}}</a>. They are different ({{-types}}).",
     "no_ending": {
         "single_subject": "At least one node must be marked as an end of the subject or the scenario.",
