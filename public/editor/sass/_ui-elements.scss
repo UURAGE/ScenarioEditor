@@ -2,8 +2,18 @@
 
 // © Utrecht University and DialogueTrainer
 
+$font-family: 'Open Sans', 'Frutiger', 'Helvetica', 'Arial', sans-serif;
+
+.ui-widget {
+  font-family: inherit !important;
+
+  input, select, textarea, button {
+    font-family: inherit !important;
+  }
+}
+
 button {
-  font-family: inherit;
+  font-family: $font-family;
 
   img {
     vertical-align: middle;
@@ -52,7 +62,7 @@ svg {
 }
 
 textarea {
-  font-family: inherit;
+  font-family: $font-family;
   resize: none;
 }
 
@@ -303,5 +313,14 @@ select {
   &:focus {
     // This fixes a rendering issue in Chrome where the options appear completely black.
     z-index: 1;
+  }
+}
+
+.evaluation-type {
+  width: 80%;
+
+  ~ .define-type {
+    width: 20%;
+    padding: 0;
   }
 }

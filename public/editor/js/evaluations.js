@@ -109,8 +109,8 @@ var Evaluations;
         evaluationsDialog.dialog(
         {
             title: i18next.t('evaluations:title'),
-            height: 768,
-            width: 1024,
+            height: 800,
+            width: 1200,
             modal: true,
             buttons:
             [

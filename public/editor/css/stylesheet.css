@@ -57,8 +57,13 @@ body {
 #sidebar {
   flex: 1 0 auto; }
 
+.ui-widget {
+  font-family: inherit !important; }
+  .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
+    font-family: inherit !important; }
+
 button {
-  font-family: inherit; }
+  font-family: "Open Sans", "Frutiger", "Helvetica", "Arial", sans-serif; }
   button img {
     vertical-align: middle; }
   #properties button,
@@ -95,7 +100,7 @@ svg {
     height: 16px; }
 
 textarea {
-  font-family: inherit;
+  font-family: "Open Sans", "Frutiger", "Helvetica", "Arial", sans-serif;
   resize: none; }
 
 a[data-disabled] {
@@ -279,6 +284,12 @@ select {
   position: relative; }
   select:focus {
     z-index: 1; }
+
+.evaluation-type {
+  width: 80%; }
+  .evaluation-type ~ .define-type {
+    width: 20%;
+    padding: 0; }
 
 .zoomTreeButton {
   width: 50px;
@@ -762,9 +773,6 @@ select {
 .ui-accordion .ui-accordion-content {
   padding: .5em 1em !important; }
 
-.ui-widget {
-  font-size: inherit !important; }
-
 #preconditionsSection {
   white-space: nowrap; }
 
@@ -1148,7 +1156,7 @@ td.dragHandle {
   display: flex;
   width: 600px;
   margin: 0 auto;
-  font-family: myriadpro-regular, "Myriad Pro", sans-serif;
+  font-family: "Open Sans", "Frutiger", "Helvetica", "Arial", sans-serif;
   color: #777;
   background: #FAFAFA; }
   #metadata .index {
@@ -1288,7 +1296,7 @@ td.dragHandle {
     background-color: rgba(0, 0, 0, 0.01); }
   #metadata textarea {
     min-height: 10rem;
-    font-family: myriadpro-regular, "Myriad Pro", sans-serif;
+    font-family: "Open Sans", "Frutiger", "Helvetica", "Arial", sans-serif;
     resize: vertical; }
   #metadata label::first-letter {
     text-transform: uppercase; }

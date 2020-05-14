@@ -83,7 +83,7 @@ var Parameters;
         });
         parametersContainer.on("focusout", ".parameter-description", function()
         {
-            $(this).animate({ height: "1em" }, 500);
+            $(this).animate({ height: "1.25em" }, 500);
         });
         parametersContainer.on('click', '.delete', function()
         {
@@ -184,7 +184,7 @@ var Parameters;
 
         var initialValueContainer = $('<span>', { class: "parameter-initial-value-container" });
 
-        var description = $('<textarea>', { class: "parameter-description", style: "height:1em;" });
+        var description = $('<textarea>', { class: "parameter-description", style: "height:1.25em;" });
 
         var evaluated = $('<input>', { type: 'checkbox', class: "parameter-evaluated" });
         evaluated.on('change', function()
