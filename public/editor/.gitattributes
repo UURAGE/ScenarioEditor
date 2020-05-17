@@ -1,1 +1,3 @@
 *.map -diff
+*.woff binary
+*.woff2 binary
