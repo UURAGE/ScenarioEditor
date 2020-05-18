@@ -39,7 +39,7 @@
   $scripts = array(
       "js/lib/i18nextSprintfPostProcessor.min.js",
       "js/lib/i18next.min.js",
-      "js/lib/jquery-3.4.1.min.js",
+      "js/lib/jquery-3.5.1.min.js",
       "js/lib/jquery-ui.min.js",
       "js/lib/jquery-ui-selectable-patched.js",
       "js/lib/jsplumb.min.js",
