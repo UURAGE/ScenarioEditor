@@ -394,7 +394,7 @@ $config['sess_regenerate_destroy'] = FALSE;
 $config['cookie_prefix']	= '';
 $config['cookie_domain']	= '';
 $config['cookie_path']		= '/';
-$config['cookie_secure']	= FALSE;
+$config['cookie_secure']	= !empty($_SERVER['HTTPS']);
 $config['cookie_httponly'] 	= FALSE;
 
 /*
