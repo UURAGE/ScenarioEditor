@@ -32,7 +32,7 @@
       'languageCode' => $this->config->item('languageCodes')[$language]
   );
   ?>
-  <script id="globals" type="application/json"><?php echo json_encode($jsVars, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES); ?></script>
+  <script id="globals" type="application/json"><?php echo json_encode($jsVars, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?></script>
 
   <?php
 
