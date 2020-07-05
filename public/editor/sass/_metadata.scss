@@ -8,7 +8,6 @@ $font-family: 'Open Sans', 'Frutiger', 'Helvetica', 'Arial', sans-serif;
 
 $color-warning: #F2B63D;
 $color-container: #FEFEFE;
-$color-accent: #662D91;
 
 $margin-items: .25em;
 
@@ -51,7 +50,7 @@ $margin-items: .25em;
         &:hover,
         &.active {
           color: $col-text-dark;
-          background-color: rgba($color-accent, .05);
+          background-color: lighten($col-editor, 35%);
           border-radius: 3px;
         }
       }

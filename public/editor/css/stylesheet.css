@@ -62,6 +62,31 @@ body {
   .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
     font-family: inherit !important; }
 
+.ui-widget-header {
+  border: 0 !important; }
+  .ui-widget-header.ui-tabs-nav {
+    color: #444;
+    background: #EEE !important; }
+    .ui-widget-header.ui-tabs-nav .ui-icon {
+      background-image: url("vendor/jquery-ui/images/ui-icons_444444_256x240.png"); }
+
+.ui-tabs {
+  padding: 0 !important; }
+  .ui-tabs .ui-tabs-nav li {
+    margin: 0 3px 0 0 !important; }
+  .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+    text-align: center;
+    outline: none; }
+  .ui-tabs .ui-tabs-nav .ui-tabs-active {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important; }
+
+.ui-dialog {
+  padding: 0 !important; }
+
+.ui-dialog .ui-dialog-buttonpane {
+  margin-top: 0 !important; }
+
 button {
   font-family: "Open Sans", "Frutiger", "Helvetica", "Arial", sans-serif; }
   button img {
@@ -166,25 +191,6 @@ input[type=checkbox][disabled] {
   color: #222;
   background: #ef7883; }
 
-.ui-tabs {
-  padding: 0 !important;
-  border: 0; }
-  .ui-tabs .ui-tabs-nav {
-    position: relative;
-    padding: 3px;
-    list-style: none; }
-    .ui-tabs .ui-tabs-nav li {
-      position: relative;
-      float: left;
-      padding: 0;
-      margin: 0 3px 0 0;
-      border-bottom-width: 1px; }
-    .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
-      padding-right: 0;
-      padding-left: 0;
-      text-align: center;
-      outline: none; }
-
 .ui-resizable-n {
   height: 10px; }
 
@@ -198,6 +204,11 @@ input[type=checkbox][disabled] {
 
 tr.ui-sortable-helper {
   display: table; }
+
+.buttonGroup {
+  margin: 1px;
+  word-wrap: break-word;
+  vertical-align: top; }
 
 .markdown-tooltip {
   position: relative;
@@ -405,12 +416,6 @@ select {
   padding-right: 10px;
   color: rgba(0, 0, 0, 0.25); }
 
-.buttonGroup {
-  margin: 1px;
-  word-wrap: break-word;
-  vertical-align: top;
-  background-color: white; }
-
 #toolbar {
   padding: 0;
   margin: 0;
@@ -519,6 +524,7 @@ select {
   #ribbon .buttonGroup {
     flex: 0 1 auto;
     overflow: hidden;
+    background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.1); }
   #ribbon button {
     padding: 2px;
@@ -1432,7 +1438,7 @@ td.dragHandle {
         text-decoration: none; }
         #metadata .index ul a:hover, #metadata .index ul a.active {
           color: #222;
-          background-color: rgba(102, 45, 145, 0.05);
+          background-color: #ebf4ff;
           border-radius: 3px; }
   #metadata .content {
     flex: 1 1 100%;

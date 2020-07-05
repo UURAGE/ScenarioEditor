@@ -12,6 +12,47 @@ $font-family: 'Open Sans', 'Frutiger', 'Helvetica', 'Arial', sans-serif;
   }
 }
 
+.ui-widget-header {
+  border: 0 !important;
+
+  &.ui-tabs-nav {
+    color: #444;
+    background: #EEE !important;
+
+    .ui-icon {
+      background-image: url('vendor/jquery-ui/images/ui-icons_444444_256x240.png');
+    }
+  }
+}
+
+.ui-tabs {
+  padding: 0 !important;
+
+  .ui-tabs-nav {
+    li {
+      margin: 0 3px 0 0 !important;
+    }
+
+    .ui-tabs-anchor {
+      text-align: center;
+      outline: none;
+    }
+
+    .ui-tabs-active {
+      padding-bottom: 0 !important;
+      margin-bottom: 0 !important;
+    }
+  }
+}
+
+.ui-dialog {
+  padding: 0 !important;
+}
+
+.ui-dialog .ui-dialog-buttonpane {
+  margin-top: 0 !important;
+}
+
 button {
   font-family: $font-family;
 
@@ -146,32 +187,6 @@ input[type=checkbox][disabled] {
   }
 }
 
-.ui-tabs {
-  padding: 0 !important;
-  border: 0;
-
-  .ui-tabs-nav {
-    position: relative;
-    padding: 3px;
-    list-style: none;
-
-    li {
-      position: relative;
-      float: left;
-      padding: 0;
-      margin: 0 3px 0 0;
-      border-bottom-width: 1px;
-    }
-
-    .ui-tabs-anchor {
-      padding-right: 0;
-      padding-left: 0;
-      text-align: center;
-      outline: none;
-    }
-  }
-}
-
 .ui-resizable-n {
   height: 10px;
 }
@@ -189,6 +204,12 @@ input[type=checkbox][disabled] {
 
 tr.ui-sortable-helper {
   display: table;
+}
+
+.buttonGroup {
+  margin: $buttongroup-margin;
+  word-wrap: break-word;
+  vertical-align: top;
 }
 
 .markdown-tooltip {
