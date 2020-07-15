@@ -154,26 +154,6 @@ input[type=checkbox][disabled] {
     color: #CCC;
     opacity: .8; }
 
-#tabDock {
-  margin-top: 1px;
-  background: linear-gradient(to bottom, #FAFAFA 0, #FFF 100%);
-  border: 1px solid rgba(0, 0, 0, 0.1); }
-  #tabDock > div {
-    max-height: 250px;
-    overflow: auto;
-    background-color: inherit; }
-  #tabDock #closeTabDock {
-    position: absolute;
-    top: 2px;
-    right: 5px;
-    cursor: pointer;
-    background-color: transparent; }
-  #tabDock .ui-tabs-nav {
-    margin: 1px; }
-  #tabDock .title {
-    margin-left: 5px;
-    line-height: normal; }
-
 .ui-dialog-titlebar.info {
   color: #222;
   background: #40c0ff; }
@@ -792,12 +772,81 @@ select {
   fill: currentColor;
   opacity: .75; }
 
-#tabDock > *:not(.ui-widget-header) {
-  position: relative;
-  display: none;
-  max-height: 200px;
-  padding: 0 20px;
-  overflow: auto; }
+#tabDock {
+  margin-top: 1px;
+  background: linear-gradient(to bottom, #FAFAFA 0, #FFF 100%);
+  border: 1px solid rgba(0, 0, 0, 0.1); }
+  #tabDock > *:not(.ui-widget-header) {
+    position: relative;
+    display: none;
+    max-height: 200px;
+    padding: 0 20px;
+    overflow: auto; }
+  #tabDock > div {
+    max-height: 250px;
+    overflow: auto;
+    background-color: inherit; }
+  #tabDock .ui-tabs-nav {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 1px;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none; }
+    #tabDock .ui-tabs-nav > * {
+      flex: 0 0 auto; }
+    #tabDock .ui-tabs-nav .title {
+      flex: 1 1 100%;
+      padding: 3px 0;
+      margin-left: 5px; }
+  #tabDock #closeTabDock {
+    margin-right: 5px;
+    cursor: pointer; }
+  #tabDock .controls {
+    align-self: stretch;
+    margin-right: 5px;
+    overflow: hidden; }
+    #tabDock .controls > * {
+      margin-right: 3px; }
+      #tabDock .controls > *:last-child {
+        margin-right: 0; }
+    #tabDock .controls button,
+    #tabDock .controls select {
+      height: 100%;
+      padding: 0 5px;
+      font-size: .9em;
+      font-weight: 600;
+      line-height: 20px;
+      color: rgba(0, 0, 0, 0.75);
+      vertical-align: middle;
+      cursor: pointer;
+      border-width: 1px; }
+    #tabDock .controls button {
+      background: transparent;
+      border: 1px solid transparent;
+      border-width: 0 1px; }
+      #tabDock .controls button:hover {
+        color: rgba(0, 0, 0, 0.9);
+        background: rgba(0, 0, 0, 0.025);
+        border-color: rgba(0, 0, 0, 0.05); }
+      #tabDock .controls button:active {
+        color: black;
+        background: rgba(0, 0, 0, 0.1);
+        border-color: rgba(0, 0, 0, 0.15); }
+      #tabDock .controls button svg {
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
+        fill: currentColor;
+        vertical-align: middle; }
+    #tabDock .controls select {
+      top: 1px;
+      height: calc(100% - 4px);
+      border-color: rgba(0, 0, 0, 0.15); }
+      #tabDock .controls select:hover {
+        border-color: rgba(0, 0, 0, 0.25); }
 
 #validationReport .level-error a {
   color: #8a111c;

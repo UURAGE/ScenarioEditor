@@ -129,35 +129,6 @@ input[type=checkbox][disabled] {
   }
 }
 
-#tabDock {
-  margin-top: 1px;
-  background: linear-gradient(to bottom, #FAFAFA 0, #FFF 100%);
-  border: 1px solid rgba(black, .1);
-
-  > div {
-    max-height: 250px;
-    overflow: auto;
-    background-color: inherit;
-  }
-
-  #closeTabDock {
-    position: absolute;
-    top: 2px;
-    right: 5px;
-    cursor: pointer;
-    background-color: transparent;
-  }
-
-  .ui-tabs-nav {
-    margin: 1px;
-  }
-
-  .title {
-    margin-left: 5px;
-    line-height: normal;
-  }
-}
-
 .ui-dialog-titlebar {
   &.info {
     color: #{color-yiq($col-ui-title-info)};
