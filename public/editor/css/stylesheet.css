@@ -969,7 +969,7 @@ td.dragHandle {
   height: 296px;
   padding: 0;
   margin: 10px;
-  overflow: scroll;
+  overflow: hidden;
   background-color: white; }
   #minimap:hover {
     cursor: pointer; }

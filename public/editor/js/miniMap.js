@@ -44,7 +44,6 @@ var MiniMap;
         }
 
         $("#miniwrap").css("display", "block");
-        $("#minimap").css("overflow", "hidden");
 
         $("#minimap").on("click", function(e)
         {

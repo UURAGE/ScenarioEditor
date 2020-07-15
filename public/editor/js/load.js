@@ -183,6 +183,7 @@ var Load;
         }
 
         SaveIndicator.setSavedChanges(true);
+        MiniMap.update(true);
     }
 
     // Generates the entire graph, including the objects.
