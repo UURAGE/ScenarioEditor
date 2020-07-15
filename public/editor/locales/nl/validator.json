@@ -1,4 +1,5 @@
 {
+    "validator_title": "Valideren",
     "no_problems": "Geen problemen gevonden!",
     "no_name": "Het scenario heeft geen <a>naam</a>.",
     "empty_subject": "<a>Onderwerp \"{{subject}}\"</a> is leeg.",

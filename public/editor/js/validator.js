@@ -424,7 +424,7 @@ var Validator;
         }
         $('#tabDock').children().not('.ui-widget-header').hide();
         $('#validationReport').show();
-        $('#tabDock').show();
+        $('#tabDock').find('.title').text(i18next.t('validator:validator_title')).end().show();
         $("#main").focus();
     }
 

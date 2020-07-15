@@ -170,6 +170,9 @@ input[type=checkbox][disabled] {
     background-color: transparent; }
   #tabDock .ui-tabs-nav {
     margin: 1px; }
+  #tabDock .title {
+    margin-left: 5px;
+    line-height: normal; }
 
 .ui-dialog-titlebar.info {
   color: #222;
