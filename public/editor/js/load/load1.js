@@ -26,15 +26,15 @@ var Load1;
             { // The parameter xml has one child: the script
                 switch (this.nodeName)
                 {
-                case "computerStatement":
-                    Load3.loadStatement(this, Main.computerType, connections, tree.id);
-                    break;
-                case "playerStatement":
-                    Load3.loadStatement(this, Main.playerType, connections, tree.id);
-                    break;
-                case "conversation":
-                    Load3.loadConversation(this, conversations, tree.id);
-                    break;
+                    case "computerStatement":
+                        Load3.loadStatement(this, Main.computerType, connections, tree.id);
+                        break;
+                    case "playerStatement":
+                        Load3.loadStatement(this, Main.playerType, connections, tree.id);
+                        break;
+                    case "conversation":
+                        Load3.loadConversation(this, conversations, tree.id);
+                        break;
                 }
             });
 

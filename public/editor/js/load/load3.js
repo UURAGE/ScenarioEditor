@@ -66,15 +66,15 @@ var Load3;
                     { // Parse the tree in the container
                         switch (this.nodeName)
                         {
-                        case "computerStatement":
-                            loadStatement(this, Main.computerType, connections, treeID);
-                            break;
-                        case "playerStatement":
-                            loadStatement(this, Main.playerType, connections, treeID);
-                            break;
-                        case "conversation":
-                            loadConversation(this, conversations, treeID);
-                            break;
+                            case "computerStatement":
+                                loadStatement(this, Main.computerType, connections, treeID);
+                                break;
+                            case "playerStatement":
+                                loadStatement(this, Main.playerType, connections, treeID);
+                                break;
+                            case "conversation":
+                                loadConversation(this, conversations, treeID);
+                                break;
                         }
                     });
 

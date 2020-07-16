@@ -996,15 +996,15 @@ var Main;
             {
                 switch (parent.type)
                 {
-                case Main.playerType:
-                    node = addNewNode(Main.computerType, "", position, true);
-                    break;
-                case Main.computerType:
-                    node = addNewNode(Main.playerType, "", position, true);
-                    break;
-                case Main.situationType:
-                    node = addNewNode(Main.playerType, "", position, true);
-                    break;
+                    case Main.playerType:
+                        node = addNewNode(Main.computerType, "", position, true);
+                        break;
+                    case Main.computerType:
+                        node = addNewNode(Main.playerType, "", position, true);
+                        break;
+                    case Main.situationType:
+                        node = addNewNode(Main.playerType, "", position, true);
+                        break;
                 }
             }
 
@@ -1845,22 +1845,22 @@ var Main;
         var longestWord = "";
         switch (node.type)
         {
-        case Main.computerType:
-            // For computerType node: just input text
-            // with characterId prefix when there are multiple characters
-            if (Config.container.characters.sequence.length > 1)
-            {
-                var character = Config.container.characters.byId[node.characterIdRef];
-                var characterPrefix = character.name ? Utils.escapeHTML(character.name) : character.id;
-                text += "<b>" + characterPrefix + ": </b>";
-            }
-            text += Utils.escapeHTML(node.text);
-            break;
-        case Main.playerType:
-        case Main.situationType:
-            // For playerType node: show text input
-            text = Utils.escapeHTML(node.text);
-            break;
+            case Main.computerType:
+                // For computerType node: just input text
+                // with characterId prefix when there are multiple characters
+                if (Config.container.characters.sequence.length > 1)
+                {
+                    var character = Config.container.characters.byId[node.characterIdRef];
+                    var characterPrefix = character.name ? Utils.escapeHTML(character.name) : character.id;
+                    text += "<b>" + characterPrefix + ": </b>";
+                }
+                text += Utils.escapeHTML(node.text);
+                break;
+            case Main.playerType:
+            case Main.situationType:
+                // For playerType node: show text input
+                text = Utils.escapeHTML(node.text);
+                break;
         }
         // Calculate the node width
         if (longestWord === "")
@@ -2325,29 +2325,29 @@ var Main;
                     var additionalPropertyRow;
                     switch (propertyItem.type.labelControlOrder)
                     {
-                    case Types.labelControlOrders.singleLineLabelContainer:
-                        propertyRow.append(propertyHeader);
-                        propertyRow.append(propertyData);
-                        break;
-                    case Types.labelControlOrders.singleLineContainerLabel:
-                        propertyRow.append(propertyHeader);
-                        propertyRow.prepend(propertyData);
-                        break;
-                    case Types.labelControlOrders.container:
-                        propertyData.prop('colspan', "2");
-                        propertyRow.append(propertyData);
-                        break;
-                    case Types.labelControlOrders.twoLineLabelContainer:
-                        propertyRow.append(propertyHeader);
-                        additionalPropertyRow = $('<tr>').append(propertyData);
-                        break;
-                    case Types.labelControlOrders.twoLineContainerLabel:
-                        additionalPropertyRow = propertyRow.append(propertyHeader);
-                        propertyRow = $('<tr>').append(propertyData);
-                        break;
-                    default:
-                        console.error("Not implemented");
-                        break;
+                        case Types.labelControlOrders.singleLineLabelContainer:
+                            propertyRow.append(propertyHeader);
+                            propertyRow.append(propertyData);
+                            break;
+                        case Types.labelControlOrders.singleLineContainerLabel:
+                            propertyRow.append(propertyHeader);
+                            propertyRow.prepend(propertyData);
+                            break;
+                        case Types.labelControlOrders.container:
+                            propertyData.prop('colspan', "2");
+                            propertyRow.append(propertyData);
+                            break;
+                        case Types.labelControlOrders.twoLineLabelContainer:
+                            propertyRow.append(propertyHeader);
+                            additionalPropertyRow = $('<tr>').append(propertyData);
+                            break;
+                        case Types.labelControlOrders.twoLineContainerLabel:
+                            additionalPropertyRow = propertyRow.append(propertyHeader);
+                            propertyRow = $('<tr>').append(propertyData);
+                            break;
+                        default:
+                            console.error("Not implemented");
+                            break;
                     }
                     tableBody.append(propertyRow);
                     if (additionalPropertyRow) tableBody.append(additionalPropertyRow);

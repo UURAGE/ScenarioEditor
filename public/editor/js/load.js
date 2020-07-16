@@ -233,15 +233,15 @@ var Load;
                     {
                         switch (this.nodeName)
                         {
-                        case "computerStatement":
-                            loadStatement(this, Main.computerType, connections, treeID);
-                            break;
-                        case "playerStatement":
-                            loadStatement(this, Main.playerType, connections, treeID);
-                            break;
-                        case "situationStatement":
-                            loadStatement(this, Main.situationType, connections, treeID);
-                            break;
+                            case "computerStatement":
+                                loadStatement(this, Main.computerType, connections, treeID);
+                                break;
+                            case "playerStatement":
+                                loadStatement(this, Main.playerType, connections, treeID);
+                                break;
+                            case "situationStatement":
+                                loadStatement(this, Main.situationType, connections, treeID);
+                                break;
                         }
                     });
 

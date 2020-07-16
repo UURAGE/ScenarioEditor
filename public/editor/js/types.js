@@ -310,11 +310,11 @@ var Types;
             {
                 switch (type.name)
                 {
-                case Types.primitives.string.name: return Utils.parseDecimalIntWithDefault(value, 0);
-                case Types.primitives.integer.name: return value;
-                case Types.primitives.boolean.name: return Number(value);
-                case Types.primitives.enumeration.name: return Utils.parseDecimalIntWithDefault(value, 0);
-                default: return Utils.parseDecimalIntWithDefault(value, 0);
+                    case Types.primitives.string.name: return Utils.parseDecimalIntWithDefault(value, 0);
+                    case Types.primitives.integer.name: return value;
+                    case Types.primitives.boolean.name: return Number(value);
+                    case Types.primitives.enumeration.name: return Utils.parseDecimalIntWithDefault(value, 0);
+                    default: return Utils.parseDecimalIntWithDefault(value, 0);
                 }
             },
             insertType: function(typeXML)
@@ -400,11 +400,11 @@ var Types;
             {
                 switch (type.name)
                 {
-                case Types.primitives.string.name: return Utils.parseBool(value.toLowerCase());
-                case Types.primitives.integer.name: return Boolean(value);
-                case Types.primitives.boolean.name: return value;
-                case Types.primitives.enumeration.name: return Utils.parseBool(value.toLowerCase());
-                default: return Utils.parseBool(value);
+                    case Types.primitives.string.name: return Utils.parseBool(value.toLowerCase());
+                    case Types.primitives.integer.name: return Boolean(value);
+                    case Types.primitives.boolean.name: return value;
+                    case Types.primitives.enumeration.name: return Utils.parseBool(value.toLowerCase());
+                    default: return Utils.parseBool(value);
                 }
             },
             insertType: function(typeXML)
