@@ -212,7 +212,6 @@
         "string-no-newline": true,
         "string-quotes": "single",
         "unit-no-unknown": true,
-        "value-keyword-case": "lower",
         "value-no-vendor-prefix": true,
         "declaration-colon-newline-after": null,
         "at-rule-empty-line-before": [
