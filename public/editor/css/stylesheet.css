@@ -158,7 +158,7 @@ input[type=checkbox][disabled] {
   margin-top: 1px;
   background: linear-gradient(to bottom, #FAFAFA 0, #FFF 100%);
   border: 1px solid rgba(0, 0, 0, 0.1); }
-  #tabDock div {
+  #tabDock > div {
     max-height: 250px;
     overflow: auto;
     background-color: inherit; }
@@ -293,6 +293,11 @@ select {
   .evaluation-type ~ .define-type {
     width: 20%;
     padding: 0; }
+
+.ui-dialog-content select,
+.ui-dialog-content input,
+.ui-dialog-content textarea {
+  max-width: 100%; }
 
 .zoomTreeButton {
   width: 50px;
@@ -961,6 +966,70 @@ td.dragHandle {
   left: 0;
   text-align: center;
   background-color: inherit; }
+
+.hasStyledTable table {
+  width: 100%;
+  border-spacing: 0; }
+  .hasStyledTable table tr > td {
+    padding: 2px; }
+    .hasStyledTable table tr > td:not(.fill) {
+      width: .1%;
+      white-space: nowrap; }
+  .hasStyledTable table tr.separator > td {
+    padding: 0; }
+  .hasStyledTable table tr:not(.separator) + tr.separator:not(:last-child) > td {
+    padding-top: 2px;
+    padding-bottom: 2px; }
+    .hasStyledTable table tr:not(.separator) + tr.separator:not(:last-child) > td div {
+      height: 2px;
+      background-image: repeating-linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 5px, transparent 5px, transparent 10px); }
+  .hasStyledTable table tr:not(.separator) + tr:not(.separator) > td {
+    border-top: 1px solid rgba(0, 0, 0, 0.05); }
+  .hasStyledTable table tr:not(.separator):hover {
+    background-color: rgba(255, 255, 255, 0.75); }
+
+.hasStyledTable .label {
+  display: block;
+  height: 22px;
+  padding: 2px 4px;
+  margin-right: 10px;
+  font-weight: 500;
+  line-height: 16px;
+  background: grey;
+  border: 1px solid black;
+  border-radius: 12px;
+  box-sizing: border-box; }
+  .hasStyledTable .label svg:first-child {
+    margin-right: 5px;
+    margin-left: 5px; }
+
+.hasStyledTable .jumpControl {
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  background: none;
+  border: none; }
+  .hasStyledTable .jumpControl svg {
+    vertical-align: middle;
+    opacity: .5; }
+    .hasStyledTable .jumpControl svg:hover {
+      opacity: 1; }
+  .hasStyledTable .jumpControl.canJump svg {
+    cursor: pointer;
+    opacity: .5; }
+    .hasStyledTable .jumpControl.canJump svg:hover {
+      opacity: 1; }
+
+.hasStyledTable .highlight {
+  padding: 1px;
+  margin: 3px;
+  margin-left: -1px;
+  background-color: white;
+  border-radius: 3px;
+  -webkit-filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
+          filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5)); }
+  .hasStyledTable .highlight:empty {
+    display: none; }
 
 #miniwrap {
   display: none; }

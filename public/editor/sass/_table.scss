@@ -1,0 +1,114 @@
+@charset "UTF-8";
+
+// © Utrecht University and DialogueTrainer
+
+@mixin tableLabel($kind, $color) {
+  &.#{$kind} {
+    color: darken($color, 10%);
+    background-color: rgba($color, .1);
+    border-color: rgba($color, .25);
+
+    svg {
+      fill: currentColor;
+    }
+  }
+}
+
+.hasStyledTable {
+  table {
+    width: 100%;
+    border-spacing: 0;
+
+    tr > td {
+      padding: 2px;
+
+      &:not(.fill) {
+        width: .1%;
+        white-space: nowrap;
+      }
+    }
+
+    tr.separator > td {
+      padding: 0;
+    }
+
+    tr:not(.separator) {
+      + tr.separator:not(:last-child) > td {
+        padding-top: 2px;
+        padding-bottom: 2px;
+
+        div {
+          height: 2px;
+          background-image: repeating-linear-gradient(to right, rgba(black, .1), rgba(black, .1) 5px, transparent 5px, transparent 10px);
+        }
+      }
+
+      + tr:not(.separator) > td {
+        border-top: 1px solid rgba(black, .05);
+      }
+    }
+
+    tr:not(.separator):hover {
+      background-color: rgba(white, .75);
+    }
+  }
+
+  .label {
+    display: block;
+    height: 22px;
+    padding: 2px 4px;
+    margin-right: 10px;
+    font-weight: 500;
+    line-height: 16px;
+    background: grey;
+    border: 1px solid black;
+    border-radius: 12px;
+    box-sizing: border-box;
+
+    svg:first-child {
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+  }
+
+  .jumpControl {
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    background: none;
+    border: none;
+
+    svg {
+      vertical-align: middle;
+      opacity: .5;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    &.canJump {
+      svg {
+        cursor: pointer;
+        opacity: .5;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .highlight {
+    padding: 1px;
+    margin: 3px;
+    margin-left: -1px;
+    background-color: white;
+    border-radius: 3px;
+    filter: drop-shadow(0 0 1px rgba(black, .5));
+
+    &:empty {
+      display: none;
+    }
+  }
+}
