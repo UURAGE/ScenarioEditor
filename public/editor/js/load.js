@@ -149,6 +149,8 @@ var Load;
 
     function prepareRebuild()
     {
+        $('#tabDock').hide();
+
         Main.selectElement(null);
 
         if (Main.nodes.length !== 0)
