@@ -72,6 +72,7 @@
       "js/reposition.js",
       "js/print.js",
       "js/draft.js",
+      "js/elementList.js",
       "js/zoom.js",
       "js/clipboard.js"
   );
@@ -150,6 +151,7 @@
               <button id="newSituationNode" class="subjectButton"><?php echo sIcon("icon-add-situation"); sLang("edt_situation"); ?></button>
               <button id="newChildNode" class="nodeButton"><?php echo sIcon("icon-child"); sLang("edt_child"); ?></button>
               <button id="toggleDraftScreen" class="subjectButton"><?php echo sIcon("icon-notepad"); sLang("edt_note_pad"); ?></button>
+              <button id="toggleElementList" class="globalButton"><?php echo sIcon("icon-element-list"); ?>List</button>
               <button id="delete" class="globalButton"><?php echo sIcon("icon-delete"); sLang("btn_delete"); ?></button>
             </div>
           </div>
@@ -187,6 +189,7 @@
         </div>
         <div id="draftScreen" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-resizable"></div>
         <div id="validationReport" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-resizable"></div>
+        <div id="elementList" class="hasStyledTable ui-tabs-panel ui-widget-content ui-corner-bottom ui-resizable"></div>
       </div>
     </div>
     <!-- Sidebar -->

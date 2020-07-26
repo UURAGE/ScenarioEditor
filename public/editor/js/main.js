@@ -1944,6 +1944,8 @@ var Main;
         nodeHTML.toggleClass("endNode", node.endNode);
 
         Main.trees[node.parent].plumbInstance.revalidate(node.id);
+
+        ElementList.handleNodeTextChange(node);
     }
 
     function deleteElement(elementID)
@@ -1977,21 +1979,23 @@ var Main;
     {
         if (nodeID === null) return; // No node selected, so do nothing
 
-        var toDelete = nodeID;
-
         // No node should be selected after we remove a node.
         if (nodeID === Main.selectedElement) selectElement(null);
 
-        var parentTree = Main.trees[Main.nodes[toDelete].parent];
+        var node = Main.nodes[nodeID];
+        var parentTree = Main.trees[node.parent];
+
         // ShouldNotDeleteFromTree should only be true when deleting the node from the tree yourself afterwards
         if (!shouldNotDeleteFromTree)
         {
-            parentTree.nodes.splice(parentTree.nodes.indexOf(toDelete), 1);
+            parentTree.nodes.splice(parentTree.nodes.indexOf(nodeID), 1);
         }
 
         // Delete the node of our object and remove it from the graph.
-        delete Main.nodes[toDelete];
-        parentTree.plumbInstance.remove($('#' + toDelete));
+        delete Main.nodes[nodeID];
+        parentTree.plumbInstance.remove($('#' + nodeID));
+
+        ElementList.handleNodeDeletion(node);
     }
 
     function applyTreeChanges()
@@ -2781,7 +2785,8 @@ var Main;
     function isEditingInCanvas()
     {
         var inModal = $(document.body).children(".ui-widget-overlay.ui-front").length > 0;
-        return !inModal && ($("#main").closest(document.activeElement).length > 0 || document.activeElement === null);
+        return !inModal && window.getSelection().isCollapsed &&
+            ($("#main").closest(document.activeElement).length > 0 || document.activeElement === null);
     }
 
     function isMousePositionWithinEditingCanvas()

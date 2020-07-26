@@ -21,7 +21,8 @@
         'save',
         'types',
         'utils',
-        'validator'
+        'validator',
+        'elementList'
     ];
 
     var resources = $.ajax(

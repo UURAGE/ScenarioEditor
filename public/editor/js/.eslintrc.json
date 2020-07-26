@@ -36,6 +36,7 @@
         "Clipboard": "readonly",
         "ColorPicker": "readonly",
         "SaveIndicator": "readonly",
+        "ElementList": "readonly",
         "site_url": "readonly",
         "editor_url": "readonly",
         "languageCode": "readonly"

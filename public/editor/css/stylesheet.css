@@ -1031,6 +1031,27 @@ td.dragHandle {
   .hasStyledTable .highlight:empty {
     display: none; }
 
+#elementList .label.computer {
+  color: #a11321;
+  background-color: rgba(206, 25, 42, 0.1);
+  border-color: rgba(206, 25, 42, 0.25); }
+  #elementList .label.computer svg {
+    fill: currentColor; }
+
+#elementList .label.player {
+  color: #135a9c;
+  background-color: rgba(25, 116, 201, 0.1);
+  border-color: rgba(25, 116, 201, 0.25); }
+  #elementList .label.player svg {
+    fill: currentColor; }
+
+#elementList .label.situation {
+  color: #c8600a;
+  background-color: rgba(243, 120, 18, 0.1);
+  border-color: rgba(243, 120, 18, 0.25); }
+  #elementList .label.situation svg {
+    fill: currentColor; }
+
 #miniwrap {
   display: none; }
 

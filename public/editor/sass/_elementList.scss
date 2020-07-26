@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+// © Utrecht University and DialogueTrainer
+
+#elementList {
+  .label {
+    @include tableLabel('computer', $col-node-computer);
+    @include tableLabel('player', $col-node-player);
+    @include tableLabel('situation', $col-node-situation);
+  }
+}
