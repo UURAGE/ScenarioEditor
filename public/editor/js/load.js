@@ -170,6 +170,7 @@ var Load;
         Metadata.reset();
         Parameters.reset();
         Evaluations.reset();
+        ElementList.reset();
     }
 
     function finishLoad()

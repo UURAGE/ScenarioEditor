@@ -7,18 +7,35 @@ var ElementList;
 {
     "use strict";
 
+    var selectedParameterId = null;
+    var selectedFilter = 'all';
+
     // eslint-disable-next-line no-global-assign
     ElementList =
     {
+        reset: reset,
         handleNodeTextChange: handleNodeTextChange,
-        handleNodeDeletion: handleNodeDeletion
+        handleNodeDeletion: handleNodeDeletion,
+        handleParametersChange: handleParametersChange
     };
 
     $(function()
     {
         // Event handlers.
-        $("#toggleElementList").on('click', listElements);
+        $("#toggleElementList").on('click', function()
+        {
+            reset();
+            listElements();
+        });
+        reset();
     });
+
+    function reset()
+    {
+        selectedParameterId = null;
+        selectedFilter = 'all';
+        $('#elementList').empty();
+    }
 
     function listElements()
     {
@@ -42,9 +59,40 @@ var ElementList;
                         table.append(createRow(tree, Main.nodes[nodeID]));
                     });
             });
+
+        var parameterSelect = $('<select>',
+        {
+            id: 'element-list-parameter-select',
+            title: i18next.t('elementList:parameter')
+        });
+        appendParameterOptionsTo(parameterSelect);
+        parameterSelect.val(selectedParameterId === null ? '' : selectedParameterId);
+
+        var filterSelect = $('<select>',
+        {
+            id: 'element-list-filter-select',
+            title: i18next.t('elementList:show_nodes'),
+            disabled: selectedParameterId === null
+        }).append(
+            $('<option>', { value: 'all', text: i18next.t('elementList:filter.all') }),
+            $('<option>', { value: 'with', text: i18next.t('elementList:filter.with') }),
+            $('<option>', { value: 'without', text: i18next.t('elementList:filter.without') })
+        );
+        filterSelect.val(selectedFilter);
+
+        parameterSelect.add(filterSelect).on('change', function()
+        {
+            var parameterId = parameterSelect.val();
+            if (parameterId === '') parameterId = null;
+            selectParameter(parameterId, filterSelect.val());
+        });
+
         $('#tabDock').children().not('.ui-widget-header').hide();
         $('#elementList').empty().append(table).show();
-        $('#tabDock').find('.title').text(i18next.t('elementList:element_list_title')).end().show();
+        $('#tabDock')
+            .find('.title').text(i18next.t('elementList:element_list_title')).end()
+            .find('.controls').empty().append(parameterSelect, filterSelect).end()
+            .show();
         $("#main").focus();
     }
 
@@ -80,7 +128,75 @@ var ElementList;
                     class: 'text fill'
                 })
         );
+        if (selectedParameterId !== null)
+        {
+            var parameterEffectsCell = $('<td>', { class: 'parameterEffects' });
+            appendSelectedParameterEffectsTo(parameterEffectsCell, node);
+            row.append(parameterEffectsCell);
+            if (selectedFilter !== 'all')
+            {
+                row.toggle(parameterEffectsCell.children().length ?
+                    selectedFilter === 'with' : selectedFilter === 'without');
+            }
+        }
         return row;
+    }
+
+    function appendSelectedParameterEffectsTo(parameterEffectsCell, node)
+    {
+        node.parameterEffects.userDefined.forEach(function(parameterEffect)
+        {
+            if (parameterEffect.idRef !== selectedParameterId) return;
+            parameterEffectsCell.append($('<div>',
+            {
+                text: Types.assignmentOperators[parameterEffect.operator].uiName + ' ' + parameterEffect.value,
+                class: "highlight"
+            }));
+        });
+    }
+
+    function appendParameterOptionsTo(parameterSelect)
+    {
+        parameterSelect.append($('<option>', { value: '', text: i18next.t('common:none') }));
+        Parameters.container.sequence.forEach(function(parameter)
+        {
+            parameterSelect.append($('<option>', { value: parameter.id, text: parameter.name }));
+        });
+    }
+
+    function selectParameter(parameterId, filter)
+    {
+        var needsListing = false;
+        if (parameterId !== selectedParameterId)
+        {
+            selectedParameterId = parameterId;
+            $('#element-list-parameter-select').val(selectedParameterId === null ? '' : selectedParameterId);
+            if (selectedParameterId === null)
+            {
+                $('#elementList').children('table').find('td.parameterEffects').remove();
+                filter = 'all';
+            }
+            else
+            {
+                needsListing = true;
+            }
+        }
+        $('#element-list-filter-select').prop('disabled', selectedParameterId === null);
+        if (filter !== selectedFilter)
+        {
+            selectedFilter = filter;
+            $('#element-list-filter-select').val(filter);
+            if (!needsListing)
+            {
+                $('#elementList').children('table').find('tr').each(function()
+                {
+                    $(this).toggle(selectedFilter === 'all' ||
+                        ($(this).find('td.parameterEffects').children().length ?
+                            selectedFilter === 'with' : selectedFilter === 'without'));
+                });
+            }
+        }
+        if (needsListing) listElements();
     }
 
     function isActive()
@@ -95,6 +211,14 @@ var ElementList;
         if (row.length)
         {
             row.find('.text').text(node.text);
+            if (selectedParameterId !== null)
+            {
+                var parameterEffectsCell = row.find('.parameterEffects').empty();
+                appendSelectedParameterEffectsTo(parameterEffectsCell, node);
+                row.toggle(selectedFilter === 'all' ||
+                    (parameterEffectsCell.children().length ?
+                        selectedFilter === 'with' : selectedFilter === 'without'));
+            }
         }
         else
         {
@@ -131,5 +255,15 @@ var ElementList;
     {
         if (!isActive()) return;
         $('#element-list-' + node.id).remove();
+    }
+
+    function handleParametersChange()
+    {
+        if (!isActive()) return;
+        var parameterSelect = $('#element-list-parameter-select');
+        parameterSelect.empty();
+        appendParameterOptionsTo(parameterSelect);
+        parameterSelect.val(selectedParameterId === null ? '' : selectedParameterId);
+        if (selectedParameterId !== null && parameterSelect.val() !== selectedParameterId) selectParameter(null);
     }
 })();

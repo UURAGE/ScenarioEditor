@@ -308,7 +308,10 @@
         {
             $('#tabDock').children().not('.ui-widget-header').hide();
             $('#draftScreen').show();
-            $('#tabDock').find('.title').text(i18next.t('draft:draft_title')).end().show();
+            $('#tabDock')
+                .find('.title').text(i18next.t('draft:draft_title')).end()
+                .find('.controls').empty().end()
+                .show();
             $("#main").focus();
         });
     });

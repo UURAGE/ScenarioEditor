@@ -423,6 +423,8 @@ var Parameters;
                 }).get();
 
 
+            ElementList.handleParametersChange();
+
             Main.selectElement(previouslySelectedElement);
 
             deferredSave.resolve(true);

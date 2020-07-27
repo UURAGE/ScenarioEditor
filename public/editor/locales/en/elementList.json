@@ -1,3 +1,10 @@
 {
-    "element_list_title": "List"
+    "element_list_title": "List",
+    "parameter": "Parameter",
+    "show_nodes": "Show nodes",
+    "filter": {
+        "all": "All",
+        "with": "With effects",
+        "without": "Without effects"
+    }
 }
