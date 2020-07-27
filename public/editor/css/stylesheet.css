@@ -821,8 +821,10 @@ select {
       line-height: 20px;
       color: rgba(0, 0, 0, 0.75);
       vertical-align: middle;
-      cursor: pointer;
       border-width: 1px; }
+      #tabDock .controls button:not(:disabled),
+      #tabDock .controls select:not(:disabled) {
+        cursor: pointer; }
     #tabDock .controls button {
       background: transparent;
       border: 1px solid transparent;
