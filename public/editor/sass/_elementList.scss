@@ -8,4 +8,43 @@
     @include tableLabel('player', $col-node-player);
     @include tableLabel('situation', $col-node-situation);
   }
+
+  .effectCategoryHidden, .typeHidden {
+    display: none;
+  }
+}
+
+#tabDock .typeButtons {
+  @mixin interactionColors($color, $backgroundColor, $backgroundAlphaBase: 0, $backgroundAlphaStep: 0) {
+    color: rgba($color, .9);
+    background-color: rgba($backgroundColor, $backgroundAlphaBase);
+
+    &:hover {
+      color: rgba($color, .8);
+      background-color: rgba($backgroundColor, $backgroundAlphaBase - $backgroundAlphaStep);
+    }
+
+    &:active {
+      color: $color;
+      background-color: rgba($backgroundColor, $backgroundAlphaBase + $backgroundAlphaStep);
+    }
+  }
+
+  @mixin stateColors($type, $color) {
+    .#{$type} {
+      @include interactionColors($color, transparent);
+    }
+
+    .#{$type}.selectedType {
+      @include interactionColors(white, $color, .9, .1);
+    }
+
+    &.initial .#{$type} {
+      @include interactionColors(black, $color, .25, .1);
+    }
+  }
+
+  @include stateColors('player', $col-node-player);
+  @include stateColors('computer', $col-node-computer);
+  @include stateColors('situation', $col-node-situation);
 }

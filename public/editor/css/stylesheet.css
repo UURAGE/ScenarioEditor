@@ -849,6 +849,17 @@ select {
       border-color: rgba(0, 0, 0, 0.15); }
       #tabDock .controls select:hover {
         border-color: rgba(0, 0, 0, 0.25); }
+    #tabDock .controls .buttonGroup button {
+      height: calc(100% - 4px);
+      margin-top: 2px;
+      margin-left: -1px;
+      line-height: 18px;
+      border-color: rgba(0, 0, 0, 0.1);
+      border-width: 1px; }
+      #tabDock .controls .buttonGroup button:first-child {
+        border-radius: 5px 0 0 5px; }
+      #tabDock .controls .buttonGroup button:last-child {
+        border-radius: 0 5px 5px 0; }
 
 #validationReport .level-error a {
   color: #8a111c;
@@ -1102,6 +1113,99 @@ td.dragHandle {
   border-color: rgba(243, 120, 18, 0.25); }
   #elementList .label.situation svg {
     fill: currentColor; }
+
+#elementList .effectCategoryHidden, #elementList .typeHidden {
+  display: none; }
+
+#tabDock .typeButtons .player {
+  color: rgba(25, 116, 201, 0.9);
+  background-color: rgba(0, 0, 0, 0); }
+  #tabDock .typeButtons .player:hover {
+    color: rgba(25, 116, 201, 0.8);
+    background-color: rgba(0, 0, 0, 0); }
+  #tabDock .typeButtons .player:active {
+    color: #1974C9;
+    background-color: rgba(0, 0, 0, 0); }
+
+#tabDock .typeButtons .player.selectedType {
+  color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(25, 116, 201, 0.9); }
+  #tabDock .typeButtons .player.selectedType:hover {
+    color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(25, 116, 201, 0.8); }
+  #tabDock .typeButtons .player.selectedType:active {
+    color: white;
+    background-color: #1974c9; }
+
+#tabDock .typeButtons.initial .player {
+  color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(25, 116, 201, 0.25); }
+  #tabDock .typeButtons.initial .player:hover {
+    color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(25, 116, 201, 0.15); }
+  #tabDock .typeButtons.initial .player:active {
+    color: black;
+    background-color: rgba(25, 116, 201, 0.35); }
+
+#tabDock .typeButtons .computer {
+  color: rgba(206, 25, 42, 0.9);
+  background-color: rgba(0, 0, 0, 0); }
+  #tabDock .typeButtons .computer:hover {
+    color: rgba(206, 25, 42, 0.8);
+    background-color: rgba(0, 0, 0, 0); }
+  #tabDock .typeButtons .computer:active {
+    color: #CE192A;
+    background-color: rgba(0, 0, 0, 0); }
+
+#tabDock .typeButtons .computer.selectedType {
+  color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(206, 25, 42, 0.9); }
+  #tabDock .typeButtons .computer.selectedType:hover {
+    color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(206, 25, 42, 0.8); }
+  #tabDock .typeButtons .computer.selectedType:active {
+    color: white;
+    background-color: #ce192a; }
+
+#tabDock .typeButtons.initial .computer {
+  color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(206, 25, 42, 0.25); }
+  #tabDock .typeButtons.initial .computer:hover {
+    color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(206, 25, 42, 0.15); }
+  #tabDock .typeButtons.initial .computer:active {
+    color: black;
+    background-color: rgba(206, 25, 42, 0.35); }
+
+#tabDock .typeButtons .situation {
+  color: rgba(243, 120, 18, 0.9);
+  background-color: rgba(0, 0, 0, 0); }
+  #tabDock .typeButtons .situation:hover {
+    color: rgba(243, 120, 18, 0.8);
+    background-color: rgba(0, 0, 0, 0); }
+  #tabDock .typeButtons .situation:active {
+    color: #F37812;
+    background-color: rgba(0, 0, 0, 0); }
+
+#tabDock .typeButtons .situation.selectedType {
+  color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(243, 120, 18, 0.9); }
+  #tabDock .typeButtons .situation.selectedType:hover {
+    color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(243, 120, 18, 0.8); }
+  #tabDock .typeButtons .situation.selectedType:active {
+    color: white;
+    background-color: #f37812; }
+
+#tabDock .typeButtons.initial .situation {
+  color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(243, 120, 18, 0.25); }
+  #tabDock .typeButtons.initial .situation:hover {
+    color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(243, 120, 18, 0.15); }
+  #tabDock .typeButtons.initial .situation:active {
+    color: black;
+    background-color: rgba(243, 120, 18, 0.35); }
 
 #miniwrap {
   display: none; }

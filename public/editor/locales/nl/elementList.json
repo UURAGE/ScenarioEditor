@@ -2,7 +2,7 @@
     "element_list_title": "Lijst",
     "parameter": "Parameter",
     "show_nodes": "Toon knopen",
-    "filter": {
+    "effect_category": {
         "all": "Alle",
         "with": "Met effecten",
         "without": "Zonder effecten"

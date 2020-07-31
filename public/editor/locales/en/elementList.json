@@ -2,7 +2,7 @@
     "element_list_title": "List",
     "parameter": "Parameter",
     "show_nodes": "Show nodes",
-    "filter": {
+    "effect_category": {
         "all": "All",
         "with": "With effects",
         "without": "Without effects"

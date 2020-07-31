@@ -7,8 +7,9 @@ var ElementList;
 {
     "use strict";
 
-    var selectedParameterId = null;
-    var selectedFilter = 'all';
+    var selectedParameterId;
+    var selectedEffectCategory;
+    var selectedTypes;
 
     // eslint-disable-next-line no-global-assign
     ElementList =
@@ -33,7 +34,8 @@ var ElementList;
     function reset()
     {
         selectedParameterId = null;
-        selectedFilter = 'all';
+        selectedEffectCategory = 'all';
+        selectedTypes = null;
         $('#elementList').empty();
     }
 
@@ -68,30 +70,76 @@ var ElementList;
         appendParameterOptionsTo(parameterSelect);
         parameterSelect.val(selectedParameterId === null ? '' : selectedParameterId);
 
-        var filterSelect = $('<select>',
+        var effectCategorySelect = $('<select>',
         {
-            id: 'element-list-filter-select',
+            id: 'element-list-effect-category-select',
             title: i18next.t('elementList:show_nodes'),
             disabled: selectedParameterId === null
         }).append(
-            $('<option>', { value: 'all', text: i18next.t('elementList:filter.all') }),
-            $('<option>', { value: 'with', text: i18next.t('elementList:filter.with') }),
-            $('<option>', { value: 'without', text: i18next.t('elementList:filter.without') })
+            $('<option>', { value: 'all', text: i18next.t('elementList:effect_category.all') }),
+            $('<option>', { value: 'with', text: i18next.t('elementList:effect_category.with') }),
+            $('<option>', { value: 'without', text: i18next.t('elementList:effect_category.without') })
         );
-        filterSelect.val(selectedFilter);
+        effectCategorySelect.val(selectedEffectCategory);
 
-        parameterSelect.add(filterSelect).on('change', function()
+        parameterSelect.add(effectCategorySelect).on('change', function()
         {
             var parameterId = parameterSelect.val();
             if (parameterId === '') parameterId = null;
-            selectParameter(parameterId, filterSelect.val());
+            selectParameter(parameterId, effectCategorySelect.val());
+        });
+
+        var typeButtons = $('<span>', { class: 'typeButtons buttonGroup' });
+        if (selectedTypes === null) typeButtons.addClass('initial');
+        var allTypes = [Main.playerType, Main.computerType, Main.situationType];
+        allTypes.forEach(function(buttonType)
+        {
+            var button = $('<button>',
+            {
+                class: buttonType,
+                text: i18next.t('common:' + buttonType)[0],
+                title: i18next.t('common:' + buttonType),
+                click: function()
+                {
+                    if (selectedTypes === null)
+                    {
+                        selectedTypes = {};
+                        allTypes.forEach(function(type)
+                        {
+                            selectedTypes[type] = false;
+                        });
+                        selectedTypes[buttonType] = true;
+                        typeButtons.removeClass('initial');
+                        $(this).addClass('selectedType');
+                    }
+                    else if (Object.keys(selectedTypes)
+                        .every(function(type) { return selectedTypes[type] === (type === buttonType); }))
+                    {
+                        selectedTypes = null;
+                        typeButtons.addClass('initial');
+                        $(this).removeClass('selectedType');
+                    }
+                    else
+                    {
+                        selectedTypes[buttonType] = !selectedTypes[buttonType];
+                        $(this).toggleClass('selectedType', selectedTypes[buttonType]);
+                    }
+                    $('#elementList').children('table').find('tr').each(function()
+                    {
+                        var node = Main.nodes[$(this).data('nodeID')];
+                        $(this).toggleClass('typeHidden', !(selectedTypes === null || selectedTypes[node.type]));
+                    });
+                }
+            });
+            if (selectedTypes !== null && selectedTypes[buttonType]) button.addClass('selectedType');
+            typeButtons.append(button);
         });
 
         $('#tabDock').children().not('.ui-widget-header').hide();
         $('#elementList').empty().append(table).show();
         $('#tabDock')
             .find('.title').text(i18next.t('elementList:element_list_title')).end()
-            .find('.controls').empty().append(parameterSelect, filterSelect).end()
+            .find('.controls').empty().append(parameterSelect, effectCategorySelect, typeButtons).end()
             .show();
         $("#main").focus();
     }
@@ -103,7 +151,7 @@ var ElementList;
 
     function createRow(tree, node)
     {
-        var row = $('<tr>', { id: 'element-list-' + node.id });
+        var row = $('<tr>', { id: 'element-list-' + node.id, data: { nodeID: node.id } });
         row.append(
             $('<td>').append($('<button>',
                 {
@@ -133,12 +181,13 @@ var ElementList;
             var parameterEffectsCell = $('<td>', { class: 'parameterEffects' });
             appendSelectedParameterEffectsTo(parameterEffectsCell, node);
             row.append(parameterEffectsCell);
-            if (selectedFilter !== 'all')
+            if (selectedEffectCategory !== 'all')
             {
-                row.toggle(parameterEffectsCell.children().length ?
-                    selectedFilter === 'with' : selectedFilter === 'without');
+                row.toggleClass('effectCategoryHidden', !(parameterEffectsCell.children().length ?
+                    selectedEffectCategory === 'with' : selectedEffectCategory === 'without'));
             }
         }
+        row.toggleClass('typeHidden', !(selectedTypes === null || selectedTypes[node.type]));
         return row;
     }
 
@@ -164,7 +213,7 @@ var ElementList;
         });
     }
 
-    function selectParameter(parameterId, filter)
+    function selectParameter(parameterId, effectCategory)
     {
         var needsListing = false;
         if (parameterId !== selectedParameterId)
@@ -174,25 +223,25 @@ var ElementList;
             if (selectedParameterId === null)
             {
                 $('#elementList').children('table').find('td.parameterEffects').remove();
-                filter = 'all';
+                effectCategory = 'all';
             }
             else
             {
                 needsListing = true;
             }
         }
-        $('#element-list-filter-select').prop('disabled', selectedParameterId === null);
-        if (filter !== selectedFilter)
+        $('#element-list-effect-category-select').prop('disabled', selectedParameterId === null);
+        if (effectCategory !== selectedEffectCategory)
         {
-            selectedFilter = filter;
-            $('#element-list-filter-select').val(filter);
+            selectedEffectCategory = effectCategory;
+            $('#element-list-effect-category-select').val(effectCategory);
             if (!needsListing)
             {
                 $('#elementList').children('table').find('tr').each(function()
                 {
-                    $(this).toggle(selectedFilter === 'all' ||
+                    $(this).toggleClass('effectCategoryHidden', !(selectedEffectCategory === 'all' ||
                         ($(this).find('td.parameterEffects').children().length ?
-                            selectedFilter === 'with' : selectedFilter === 'without'));
+                            selectedEffectCategory === 'with' : selectedEffectCategory === 'without')));
                 });
             }
         }
@@ -215,9 +264,9 @@ var ElementList;
             {
                 var parameterEffectsCell = row.find('.parameterEffects').empty();
                 appendSelectedParameterEffectsTo(parameterEffectsCell, node);
-                row.toggle(selectedFilter === 'all' ||
+                row.toggleClass('effectCategoryHidden', !(selectedEffectCategory === 'all' ||
                     (parameterEffectsCell.children().length ?
-                        selectedFilter === 'with' : selectedFilter === 'without'));
+                        selectedEffectCategory === 'with' : selectedEffectCategory === 'without')));
             }
         }
         else
