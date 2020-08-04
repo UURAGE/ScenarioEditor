@@ -58,7 +58,7 @@ var Load;
                 }
             },
             {
-                text: i18next.t('common:close'),
+                text: i18next.t('common:cancel'),
                 click: function()
                 {
                     $(this).dialog('close');
