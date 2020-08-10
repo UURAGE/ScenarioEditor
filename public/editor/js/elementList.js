@@ -25,8 +25,10 @@ var ElementList;
         // Event handlers.
         $("#toggleElementList").on('click', function()
         {
+            TabDock.close();
             reset();
             listElements();
+            TabDock.closeHandler = reset;
         });
         reset();
     });
@@ -37,6 +39,7 @@ var ElementList;
         selectedEffectCategory = 'all';
         selectedTypes = null;
         $('#elementList').empty();
+        dehighlightNodes();
     }
 
     function listElements()
@@ -127,7 +130,9 @@ var ElementList;
                     $('#elementList').children('table').find('tr').each(function()
                     {
                         var node = Main.nodes[$(this).data('nodeID')];
-                        $(this).toggleClass('typeHidden', !(selectedTypes === null || selectedTypes[node.type]));
+                        var hiddenFor = $(this).data('hiddenFor');
+                        hiddenFor.type = !(selectedTypes === null || selectedTypes[node.type]);
+                        toggleRowDisplayAndNodeHighlighting(node, $(this), hiddenFor);
                     });
                 }
             });
@@ -135,7 +140,6 @@ var ElementList;
             typeButtons.append(button);
         });
 
-        $('#tabDock').children().not('.ui-widget-header').hide();
         $('#elementList').empty().append(table).show();
         $('#tabDock')
             .find('.title').text(i18next.t('elementList:element_list_title')).end()
@@ -151,7 +155,8 @@ var ElementList;
 
     function createRow(tree, node)
     {
-        var row = $('<tr>', { id: 'element-list-' + node.id, data: { nodeID: node.id } });
+        var hiddenFor = {};
+        var row = $('<tr>', { id: 'element-list-' + node.id, data: { nodeID: node.id, hiddenFor: hiddenFor } });
         row.append(
             $('<td>').append($('<button>',
                 {
@@ -183,11 +188,12 @@ var ElementList;
             row.append(parameterEffectsCell);
             if (selectedEffectCategory !== 'all')
             {
-                row.toggleClass('effectCategoryHidden', !(parameterEffectsCell.children().length ?
-                    selectedEffectCategory === 'with' : selectedEffectCategory === 'without'));
+                hiddenFor.effectCategory = !(parameterEffectsCell.children().length ?
+                    selectedEffectCategory === 'with' : selectedEffectCategory === 'without');
             }
         }
-        row.toggleClass('typeHidden', !(selectedTypes === null || selectedTypes[node.type]));
+        hiddenFor.type = !(selectedTypes === null || selectedTypes[node.type]);
+        toggleRowDisplayAndNodeHighlighting(node, row, hiddenFor);
         return row;
     }
 
@@ -223,6 +229,7 @@ var ElementList;
             if (selectedParameterId === null)
             {
                 $('#elementList').children('table').find('td.parameterEffects').remove();
+                dehighlightNodes();
                 effectCategory = 'all';
             }
             else
@@ -239,13 +246,31 @@ var ElementList;
             {
                 $('#elementList').children('table').find('tr').each(function()
                 {
-                    $(this).toggleClass('effectCategoryHidden', !(selectedEffectCategory === 'all' ||
+                    var hiddenFor = $(this).data('hiddenFor');
+                    hiddenFor.effectCategory = !(selectedEffectCategory === 'all' ||
                         ($(this).find('td.parameterEffects').children().length ?
-                            selectedEffectCategory === 'with' : selectedEffectCategory === 'without')));
+                            selectedEffectCategory === 'with' : selectedEffectCategory === 'without'));
+                    toggleRowDisplayAndNodeHighlighting(Main.nodes[$(this).data('nodeID')], $(this), hiddenFor);
                 });
             }
         }
         if (needsListing) listElements();
+    }
+
+    function toggleRowDisplayAndNodeHighlighting(node, row, hiddenFor)
+    {
+        var rowVisible = !(hiddenFor.effectCategory || hiddenFor.type);
+        row.toggle(rowVisible);
+        $('#' + node.id).toggleClass('neutralHighlight', selectedParameterId !== null &&
+            rowVisible &&
+            row.find('td.parameterEffects').children().length > 0);
+    }
+
+    function dehighlightNodes()
+    {
+        $('.neutralHighlight').removeClass('neutralHighlight');
+        $('.positiveHighlight').removeClass('positiveHighlight');
+        $('.negativeHighlight').removeClass('negativeHighlight');
     }
 
     function isActive()
@@ -264,9 +289,11 @@ var ElementList;
             {
                 var parameterEffectsCell = row.find('.parameterEffects').empty();
                 appendSelectedParameterEffectsTo(parameterEffectsCell, node);
-                row.toggleClass('effectCategoryHidden', !(selectedEffectCategory === 'all' ||
+                var hiddenFor = row.data('hiddenFor');
+                hiddenFor.effectCategory = !(selectedEffectCategory === 'all' ||
                     (parameterEffectsCell.children().length ?
-                        selectedEffectCategory === 'with' : selectedEffectCategory === 'without')));
+                        selectedEffectCategory === 'with' : selectedEffectCategory === 'without'));
+                toggleRowDisplayAndNodeHighlighting(node, row, hiddenFor);
             }
         }
         else

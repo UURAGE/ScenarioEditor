@@ -380,12 +380,6 @@ var Main;
             MiniMap.update(true);
         });
 
-        $("#closeTabDock").on('click', function()
-        {
-            $('#tabDock').hide();
-            $("#main").focus();
-        });
-
         $(document).on('keydown', function(e)
         {
             if (e.which === 8 && !$(e.target).is('input, textarea'))

@@ -306,7 +306,8 @@
         // Button functionality
         $('#toggleDraftScreen').on("click", function()
         {
-            $('#tabDock').children().not('.ui-widget-header').hide();
+            TabDock.close();
+            TabDock.zoomOutHandler = TabDock.close;
             $('#draftScreen').show();
             $('#tabDock')
                 .find('.title').text(i18next.t('draft:draft_title')).end()

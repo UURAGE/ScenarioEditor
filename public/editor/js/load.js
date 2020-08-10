@@ -149,7 +149,7 @@ var Load;
 
     function prepareRebuild()
     {
-        $('#tabDock').hide();
+        TabDock.close();
 
         Main.selectElement(null);
 

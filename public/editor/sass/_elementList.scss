@@ -8,10 +8,6 @@
     @include tableLabel('player', $col-node-player);
     @include tableLabel('situation', $col-node-situation);
   }
-
-  .effectCategoryHidden, .typeHidden {
-    display: none;
-  }
 }
 
 #tabDock .typeButtons {

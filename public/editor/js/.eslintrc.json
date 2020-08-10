@@ -29,6 +29,7 @@
         "Condition": "readonly",
         "Expression": "readonly",
         "Evaluations": "readonly",
+        "TabDock": "readonly",
         "Validator": "readonly",
         "KeyControl": "readonly",
         "Print": "readonly",

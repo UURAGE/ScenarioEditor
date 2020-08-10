@@ -388,6 +388,8 @@ var Validator;
 
     function show(errors)
     {
+        TabDock.close();
+
         var hasErrors = false;
         var hasWarningsOrInfo = false;
         errors.forEach(function(value)
@@ -396,7 +398,6 @@ var Validator;
             hasWarningsOrInfo = hasWarningsOrInfo || value.level === 'warning' || value.level === 'info';
         });
 
-        $('#validationReport').empty();
         if (!hasErrors && !hasWarningsOrInfo)
         {
             $('#validationReport').append($('<p>').addClass('no-problems').text(i18next.t('validator:no_problems')));
@@ -422,8 +423,11 @@ var Validator;
             });
             $('#validationReport').append(table);
         }
-        $('#tabDock').children().not('.ui-widget-header').hide();
         $('#validationReport').show();
+        TabDock.closeHandler = function()
+        {
+            $('#validationReport').empty();
+        };
         $('#tabDock')
             .find('.title').text(i18next.t('validator:validator_title')).end()
             .find('.controls').empty().end()

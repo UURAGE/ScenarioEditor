@@ -67,6 +67,7 @@
       "js/evaluations.js",
       "js/condition.js",
       "js/expression.js",
+      "js/tabDock.js",
       "js/validator.js",
       "js/keyControl.js",
       "js/reposition.js",
