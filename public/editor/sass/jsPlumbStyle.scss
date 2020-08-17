@@ -219,16 +219,20 @@
     box-sizing: border-box;
   }
 
-  &.positiveHighlight > .ep::before {
+  &.highlight-value-positive > .ep::before {
     border-color: rgba($col-positive, .35);
   }
 
-  &.neutralHighlight > .ep::before {
+  &.highlight-value-neutral > .ep::before {
     border-color: rgba($col-warning, .35);
   }
 
-  &.negativeHighlight > .ep::before {
+  &.highlight-value-negative > .ep::before {
     border-color: rgba($col-negative, .35);
+  }
+
+  &.highlight-operator-addAssign > .ep::before {
+    border-style: dashed;
   }
 }
 

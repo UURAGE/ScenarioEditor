@@ -16,6 +16,7 @@ var Types;
         relationalOperators: {},
         unaryOperators: {},
         labelControlOrders: {},
+        valueCategories: {},
         appendControlsTo: appendControlsTo,
         insertIntoDOM: insertIntoDOM
     };
@@ -94,6 +95,13 @@ var Types;
         'twoLineLabelContainer': 'twoLineLabelContainer',
         'twoLineContainerLabel': 'twoLineContainerLabel',
         'container': 'container'
+    };
+
+    Types.valueCategories =
+    {
+        'positive': 'positive',
+        'neutral': 'neutral',
+        'negative': 'negative'
     };
 
     function toXMLSimple(valueXML, value)
@@ -350,7 +358,49 @@ var Types;
             {
                 return parseInt(valueXML.textContent, 10);
             },
-            toXML: toXMLSimple
+            toXML: toXMLSimple,
+            categoriseValue: function(value)
+            {
+                if (value > 0) return Types.valueCategories.positive;
+                else if (value < 0) return Types.valueCategories.negative;
+                else return Types.valueCategories.neutral;
+            },
+            simplifyEffect: function(effect)
+            {
+                if (effect.operator === Types.assignmentOperators.addAssign.name)
+                {
+                    if (effect.value === 0) return null;
+                    return effect;
+                }
+                else if (effect.operator === Types.assignmentOperators.subtractAssign.name)
+                {
+                    if (effect.value === 0) return null;
+                    return { operator: Types.assignmentOperators.addAssign.name, value: -effect.value };
+                }
+                else
+                {
+                    return effect;
+                }
+            },
+            summariseEffects: function(effects)
+            {
+                if (effects.length === 0) return null;
+                return effects.reduce(function(summary, current)
+                {
+                    if (current.operator === Types.assignmentOperators.assign.name)
+                    {
+                        return current;
+                    }
+                    else if (current.operator === Types.assignmentOperators.addAssign.name)
+                    {
+                        return { operator: summary.operator, value: summary.value + current.value };
+                    }
+                    else if (current.operator === Types.assignmentOperators.subtractAssign.name)
+                    {
+                        return { operator: summary.operator, value: summary.value - current.value };
+                    }
+                });
+            }
         },
         'boolean':
         {
@@ -452,7 +502,11 @@ var Types;
             {
                 return Utils.parseBool(valueXML.textContent);
             },
-            toXML: toXMLSimple
+            toXML: toXMLSimple,
+            categoriseValue: function(value)
+            {
+                return value ? Types.valueCategories.positive : Types.valueCategories.negative;
+            }
         },
         'enumeration':
         {

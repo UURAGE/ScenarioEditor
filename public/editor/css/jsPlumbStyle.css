@@ -121,12 +121,14 @@
     border: 4px solid transparent;
     border-radius: 10px;
     box-sizing: border-box; }
-  .w.positiveHighlight > .ep::before {
+  .w.highlight-value-positive > .ep::before {
     border-color: rgba(34, 170, 51, 0.35); }
-  .w.neutralHighlight > .ep::before {
+  .w.highlight-value-neutral > .ep::before {
     border-color: rgba(243, 120, 18, 0.35); }
-  .w.negativeHighlight > .ep::before {
+  .w.highlight-value-negative > .ep::before {
     border-color: rgba(206, 25, 42, 0.35); }
+  .w.highlight-operator-addAssign > .ep::before {
+    border-style: dashed; }
 
 .allowInterleaveNode:hover::before, .allowDialogueEndNode:hover::before, .endNode:hover::before, .openResponse:hover::before {
   content: '';
