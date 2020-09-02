@@ -1107,9 +1107,9 @@ td.dragHandle {
     fill: currentColor; }
 
 #elementList .label.player {
-  color: #135a9c;
-  background-color: rgba(25, 116, 201, 0.1);
-  border-color: rgba(25, 116, 201, 0.25); }
+  color: #1354a1;
+  background-color: rgba(25, 108, 206, 0.1);
+  border-color: rgba(25, 108, 206, 0.25); }
   #elementList .label.player svg {
     fill: currentColor; }
 
@@ -1121,34 +1121,34 @@ td.dragHandle {
     fill: currentColor; }
 
 #tabDock .typeButtons .player {
-  color: rgba(25, 116, 201, 0.9);
+  color: rgba(25, 108, 206, 0.9);
   background-color: rgba(0, 0, 0, 0); }
   #tabDock .typeButtons .player:hover {
-    color: rgba(25, 116, 201, 0.8);
+    color: rgba(25, 108, 206, 0.8);
     background-color: rgba(0, 0, 0, 0); }
   #tabDock .typeButtons .player:active {
-    color: #1974C9;
+    color: #196CCE;
     background-color: rgba(0, 0, 0, 0); }
 
 #tabDock .typeButtons .player.selectedType {
   color: rgba(255, 255, 255, 0.9);
-  background-color: rgba(25, 116, 201, 0.9); }
+  background-color: rgba(25, 108, 206, 0.9); }
   #tabDock .typeButtons .player.selectedType:hover {
     color: rgba(255, 255, 255, 0.8);
-    background-color: rgba(25, 116, 201, 0.8); }
+    background-color: rgba(25, 108, 206, 0.8); }
   #tabDock .typeButtons .player.selectedType:active {
     color: white;
-    background-color: #1974c9; }
+    background-color: #196cce; }
 
 #tabDock .typeButtons.initial .player {
   color: rgba(0, 0, 0, 0.9);
-  background-color: rgba(25, 116, 201, 0.25); }
+  background-color: rgba(25, 108, 206, 0.25); }
   #tabDock .typeButtons.initial .player:hover {
     color: rgba(0, 0, 0, 0.8);
-    background-color: rgba(25, 116, 201, 0.15); }
+    background-color: rgba(25, 108, 206, 0.15); }
   #tabDock .typeButtons.initial .player:active {
     color: black;
-    background-color: rgba(25, 116, 201, 0.35); }
+    background-color: rgba(25, 108, 206, 0.35); }
 
 #tabDock .typeButtons .computer {
   color: rgba(206, 25, 42, 0.9);
@@ -1354,7 +1354,7 @@ td.dragHandle {
   border-top-left-radius: 5px; }
 
 .long.player::after {
-  background-color: #1974C9; }
+  background-color: #196CCE; }
 
 .long.computer::after {
   background-color: #CE192A; }

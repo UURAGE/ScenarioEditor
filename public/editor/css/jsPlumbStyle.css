@@ -17,7 +17,7 @@
   .w.computer {
     border: 3px solid #CE192A; }
   .w.player {
-    border: 3px solid #1974C9; }
+    border: 3px solid #196CCE; }
   .w.situation {
     border: 3px solid #F37812; }
   .w.editing, .w.jtk-drag {
@@ -35,7 +35,7 @@
   .w:hover.computer, .w.color-label.jtk-hover.computer, .w.jtk-source-hover.computer, .w.jtk-target-hover.computer {
     background-color: #ef7883; }
   .w:hover.player, .w.color-label.jtk-hover.player, .w.jtk-source-hover.player, .w.jtk-target-hover.player {
-    background-color: #74b3ee; }
+    background-color: #78aeef; }
   .w:hover.situation, .w.color-label.jtk-hover.situation, .w.jtk-source-hover.situation, .w.jtk-target-hover.situation {
     background-color: #f9bd8b; }
   .w.treeContainer:hover {
@@ -47,19 +47,19 @@
   .w.ui-selecting.computer {
     background-color: #f7bcc2; }
   .w.ui-selecting.player {
-    background-color: #b8d8f6; }
+    background-color: #bcd7f7; }
   .w.ui-selecting.situation {
     background-color: #fde7d4; }
   .w.selected.computer, .w.ui-selected.computer {
     background-color: #e94a59; }
   .w.selected.player, .w.ui-selected.player {
-    background-color: #469ae8; }
+    background-color: #4a93e9; }
   .w.selected.situation, .w.ui-selected.situation {
     background-color: #f7a15b; }
   .w.parentSelected.computer {
     background-color: #fad3d7; }
   .w.parentSelected.player {
-    background-color: #cfe4f9; }
+    background-color: #d3e5fa; }
   .w.parentSelected.situation {
     background-color: #fef4ec; }
   .w:not(.jtk-drag):not(.jtk-drag-active) > .ep {
