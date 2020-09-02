@@ -341,6 +341,7 @@ var Parameters;
                     }
 
                     Evaluations.handleParameterTypeChange(oldParameter, newParameter);
+                    ElementList.handleParameterTypeChange(oldParameter, newParameter);
 
                     $(this).removeClass("changedTypeParameter");
                 }

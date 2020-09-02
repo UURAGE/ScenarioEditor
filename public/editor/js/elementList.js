@@ -17,6 +17,7 @@ var ElementList;
         reset: reset,
         handleNodeTextChange: handleNodeTextChange,
         handleNodeDeletion: handleNodeDeletion,
+        handleParameterTypeChange: handleParameterTypeChange,
         handleParametersChange: handleParametersChange
     };
 
@@ -365,6 +366,12 @@ var ElementList;
     {
         if (!isActive()) return;
         $('#element-list-' + node.id).remove();
+    }
+
+    function handleParameterTypeChange(oldParameter)
+    {
+        if (!isActive()) return;
+        if (oldParameter.id === selectedParameterId) listElements();
     }
 
     function handleParametersChange()
