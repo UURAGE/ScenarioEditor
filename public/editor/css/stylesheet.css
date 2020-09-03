@@ -1037,23 +1037,29 @@ td.dragHandle {
 
 .hasStyledTable table {
   width: 100%;
+  border: hidden;
+  border-collapse: collapse;
   border-spacing: 0; }
-  .hasStyledTable table tr > td {
-    padding: 2px; }
-    .hasStyledTable table tr > td:not(.fill) {
-      width: .1%;
-      white-space: nowrap; }
-  .hasStyledTable table tr.separator > td {
-    padding: 0; }
-  .hasStyledTable table tr:not(.separator) + tr.separator:not(:last-child) > td {
-    padding-top: 2px;
-    padding-bottom: 2px; }
-    .hasStyledTable table tr:not(.separator) + tr.separator:not(:last-child) > td div {
-      height: 2px;
-      background-image: repeating-linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 5px, transparent 5px, transparent 10px); }
-  .hasStyledTable table tr:not(.separator) + tr:not(.separator) > td {
-    border-top: 1px solid rgba(0, 0, 0, 0.05); }
-  .hasStyledTable table tr:not(.separator):hover {
+  .hasStyledTable table tbody {
+    border: 2px dashed rgba(0, 0, 0, 0.1); }
+    .hasStyledTable table tbody:not(:last-child)::after, .hasStyledTable table tbody:not(:first-child)::before {
+      content: '';
+      display: table-row;
+      height: 3px; }
+    .hasStyledTable table tbody:not(:last-child)::after {
+      border-top: hidden; }
+    .hasStyledTable table tbody:not(:first-child)::before {
+      border-bottom: hidden; }
+    .hasStyledTable table tbody:empty {
+      display: none; }
+  .hasStyledTable table tr {
+    border: 1px solid rgba(0, 0, 0, 0.05); }
+    .hasStyledTable table tr > td {
+      padding: 2px; }
+      .hasStyledTable table tr > td:not(.fill) {
+        width: .1%;
+        white-space: nowrap; }
+  .hasStyledTable table tr:hover {
     background-color: rgba(255, 255, 255, 0.75); }
 
 .hasStyledTable .label {

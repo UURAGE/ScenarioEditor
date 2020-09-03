@@ -17,38 +17,46 @@
 .hasStyledTable {
   table {
     width: 100%;
+    border: hidden;
+    border-collapse: collapse;
     border-spacing: 0;
 
-    tr > td {
-      padding: 2px;
+    tbody {
+      border: 2px dashed rgba(black, .1);
 
-      &:not(.fill) {
-        width: .1%;
-        white-space: nowrap;
+      &:not(:last-child)::after, &:not(:first-child)::before {
+        content: '';
+        display: table-row;
+        height: 3px;
+      }
+
+      &:not(:last-child)::after {
+        border-top: hidden;
+      }
+
+      &:not(:first-child)::before {
+        border-bottom: hidden;
+      }
+
+      &:empty {
+        display: none;
       }
     }
 
-    tr.separator > td {
-      padding: 0;
-    }
+    tr {
+      border: 1px solid rgba(black, .05);
 
-    tr:not(.separator) {
-      + tr.separator:not(:last-child) > td {
-        padding-top: 2px;
-        padding-bottom: 2px;
+      > td {
+        padding: 2px;
 
-        div {
-          height: 2px;
-          background-image: repeating-linear-gradient(to right, rgba(black, .1), rgba(black, .1) 5px, transparent 5px, transparent 10px);
+        &:not(.fill) {
+          width: .1%;
+          white-space: nowrap;
         }
       }
-
-      + tr:not(.separator) > td {
-        border-top: 1px solid rgba(black, .05);
-      }
     }
 
-    tr:not(.separator):hover {
+    tr:hover {
       background-color: rgba(white, .75);
     }
   }
