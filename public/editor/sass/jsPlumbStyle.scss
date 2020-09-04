@@ -231,6 +231,10 @@
     border-color: rgba($col-negative, .35);
   }
 
+  &.highlight-no-effect > .ep::before {
+    border-color: rgba(desaturate($col-editor, 65%), .35);
+  }
+
   &.highlight-operator-addAssign > .ep::before {
     border-style: dashed;
   }

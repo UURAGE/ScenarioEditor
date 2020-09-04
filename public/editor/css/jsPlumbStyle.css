@@ -127,6 +127,8 @@
     border-color: rgba(243, 120, 18, 0.35); }
   .w.highlight-value-negative > .ep::before {
     border-color: rgba(206, 25, 42, 0.35); }
+  .w.highlight-no-effect > .ep::before {
+    border-color: rgba(121, 152, 190, 0.35); }
   .w.highlight-operator-addAssign > .ep::before {
     border-style: dashed; }
 

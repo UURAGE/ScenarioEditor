@@ -291,19 +291,27 @@ var ElementList;
         var nodeElement = $('#' + node.id);
         dehighlightNodes(nodeElement);
         var summaryEffect = row.data('summaryEffect');
-        if (selectedParameterId !== null && rowVisible && summaryEffect !== null)
+        if (selectedParameterId !== null && rowVisible)
         {
-            nodeElement.addClass('highlight');
-            nodeElement.addClass('highlight-operator-' + summaryEffect.operator);
-            var categoriseValue = Parameters.container.byId[selectedParameterId].type.categoriseValue;
-            nodeElement.addClass('highlight-value-' + (categoriseValue ? categoriseValue(summaryEffect.value) : 'neutral'));
+            if (selectedEffectCategory !== 'without' && summaryEffect !== null)
+            {
+                nodeElement.addClass('highlight');
+                nodeElement.addClass('highlight-operator-' + summaryEffect.operator);
+                var categoriseValue = Parameters.container.byId[selectedParameterId].type.categoriseValue;
+                nodeElement.addClass('highlight-value-' + (categoriseValue ? categoriseValue(summaryEffect.value) : 'neutral'));
+            }
+            else if (selectedEffectCategory === 'without' && summaryEffect === null)
+            {
+                nodeElement.addClass('highlight');
+                nodeElement.addClass('highlight-no-effect');
+            }
         }
     }
 
     function dehighlightNodes(nodeElements)
     {
         nodeElements
-            .removeClass('highlight')
+            .removeClass(['highlight', 'highlight-no-effect'])
             .removeClass(Object.keys(Types.valueCategories).map(function(name) { return 'highlight-value-' + name; }))
             .removeClass(Object.keys(Types.assignmentOperators).map(function(name) { return 'highlight-operator-' + name; }));
     }
