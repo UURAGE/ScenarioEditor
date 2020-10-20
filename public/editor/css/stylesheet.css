@@ -1100,8 +1100,7 @@ td.dragHandle {
   margin-left: -1px;
   background-color: white;
   border-radius: 3px;
-  -webkit-filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5));
-          filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5)); }
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.5)); }
   .hasStyledTable .highlight:empty {
     display: none; }
 
@@ -1304,8 +1303,7 @@ td.dragHandle {
 
 #colorPicker {
   z-index: 51;
-  -webkit-filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
-          filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
   -webkit-animation: pop-in .2s ease-in-out 0s;
           animation: pop-in .2s ease-in-out 0s; }
   #colorPicker .edit,
