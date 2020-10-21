@@ -6,8 +6,7 @@ import * as sass from "gulp-sass";
 import * as sourcemaps from "gulp-sourcemaps";
 import * as stylelint from "gulp-stylelint";
 
-import { create } from "browser-sync";
-const browserSync = create();
+import * as browserSync from "browser-sync";
 
 const jsSrc = "public/editor/js/**/*.js";
 const lintJS = () =>
@@ -46,12 +45,12 @@ const compileSass = () =>
 const processSass = gulp.series(lintSass, compileSass);
 gulp.task("sass", processSass);
 
-const watch = (done, shouldStream?) =>
+const watch = (done, browserSyncInstance?: browserSync.BrowserSyncInstance) =>
 {
     gulp.watch(jsSrc, lintJS);
     gulp.watch(
         sassSrc,
-        gulp.series(lintSass, shouldStream ? () => compileSass().pipe(browserSync.stream()) : compileSass)
+        gulp.series(lintSass, browserSyncInstance ? () => compileSass().pipe(browserSyncInstance.stream()) : compileSass)
     );
     log.info("Watching for file changes...");
     done();
@@ -60,11 +59,12 @@ gulp.task("watch", watch);
 
 gulp.task("stream", (done) =>
 {
-    browserSync.init(
+    const browserSyncInstance = browserSync.create();
+    browserSyncInstance.init(
     {
         proxy: "http://localhost"
     });
-    watch(done, true);
+    watch(done, browserSyncInstance);
 });
 
 const build = gulp.parallel(lintJS, processSass);
