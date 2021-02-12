@@ -21,8 +21,21 @@
                         targetInfo = this._jsPlumb.instance.updateOffset({elId:tId}).o,
                         sE = this.endpoints[sIdx], tE = this.endpoints[tIdx];
 
-                    var sAnchorP = sE.anchor.getCurrentLocation({xy: [sourceInfo.left, sourceInfo.top], wh: [sourceInfo.width, sourceInfo.height], element: sE, timestamp: timestamp}),
-                        tAnchorP = tE.anchor.getCurrentLocation({xy: [targetInfo.left, targetInfo.top], wh: [targetInfo.width, targetInfo.height], element: tE, timestamp: timestamp});
+                    var sAnchorP = sE.anchor.getCurrentLocation(
+                        {
+                            xy: [sourceInfo.left, sourceInfo.top],
+                            wh: [sourceInfo.width, sourceInfo.height],
+                            element: sE,
+                            timestamp: timestamp,
+                            rotation:this._jsPlumb.instance.getRotation(this.sourceId)
+                        }),
+                        tAnchorP = tE.anchor.getCurrentLocation({
+                            xy: [targetInfo.left, targetInfo.top],
+                            wh: [targetInfo.width, targetInfo.height],
+                            element: tE,
+                            timestamp: timestamp,
+                            rotation:this._jsPlumb.instance.getRotation(this.targetId)
+                        });
 
                     this.connector.resetBounds();
 
@@ -73,6 +86,7 @@
                             ymax: Math.max(this.connector.bounds.maxY + (lineWidth + outlineWidth), overlayExtents.maxY)
                         };
                     // paint the connector.
+                    this.connector.paintExtents = extents;
                     this.connector.paint(this._jsPlumb.paintStyleInUse, null, extents);
                     // and then the overlays
                     for (var j in this._jsPlumb.overlays) {

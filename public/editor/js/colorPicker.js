@@ -352,7 +352,7 @@ var ColorPicker;
         var sourcePosition = connection.connector.canvas.getBoundingClientRect();
         var x = Math.abs(Main.mousePosition.x - sourcePosition.left);
         var y = Math.abs(Main.mousePosition.y - sourcePosition.top);
-        var location = 1 - connection.connector.findSegmentForPoint(x, y).l;
+        var location = connection.connector.findSegmentForPoint(x, y).l;
 
         connection.addOverlay(
         [
