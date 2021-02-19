@@ -75,7 +75,8 @@
       "js/draft.js",
       "js/elementList.js",
       "js/zoom.js",
-      "js/clipboard.js"
+      "js/clipboard.js",
+      "js/playthroughItemAnalysis.js"
   );
   foreach ($scripts as $script)
   {
@@ -170,6 +171,11 @@
               <button id="repositionGraph" class="subjectButton" title="<?php sLang("edt_arrange_title"); ?>"><?php echo sIcon("icon-arrange"); sLang("edt_arrange"); ?></button>
               <button id="allParents" class="nodeButton"><?php echo sIcon("icon-parents"); sLang("edt_parents"); ?></button>
               <button id="toggleColors" class="subjectButton"><?php echo sIcon("icon-palette"); sLang("edt_toggle_colors"); ?></button>
+            </div>
+          </div>
+          <div class="buttonGroup">
+            <div class="big-buttons">
+              <button id="togglePlaythroughsScreen" class="globalButton"><?php echo sIcon("icon-item-analysis"); sLang("edt_playthrough_item_analysis"); ?></button>
             </div>
           </div>
           <div class="buttonGroup" id="validate">

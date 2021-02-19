@@ -26,6 +26,7 @@ var Utils;
         makeSortable: makeSortable,
         alertDialog: alertDialog,
         confirmDialog: confirmDialog,
+        abbreviateText: abbreviateText,
         stopQueuedClicks: stopQueuedClicks,
         sIcon: sIcon
     };
@@ -283,6 +284,57 @@ var Utils;
             }
         });
         return deferredConfirmation;
+    }
+
+    function abbreviateText(text, separator, maxLength)
+    {
+        if (!text) return "";
+        if (!separator) separator = "";
+
+        var abbreviatedText = text.trim();
+        if (abbreviatedText.length > maxLength)
+        {
+            var words = abbreviatedText.split(/[' \n\r\t]/g);
+            var firstWord = words[0];
+            var lastWord = words[words.length - 1];
+            if (words.length === 1 ||
+                firstWord.length > maxLength ||
+                firstWord.length + separator.length + lastWord.length > maxLength)
+            {
+                abbreviatedText = words[0].substr(0, maxLength - separator.trim().length) + (words.length !== 1 ? separator.trim() : "");
+            }
+            else
+            {
+                abbreviatedText = firstWord + separator + lastWord;
+                var front = [firstWord];
+                var back = [lastWord];
+                var pushToFront = true;
+                while (front.length + back.length < words.length)
+                {
+                    if (pushToFront)
+                    {
+                        front.push(words[front.length]);
+                    }
+                    else
+                    {
+                        back.unshift(words[words.length - back.length - 1]);
+                    }
+
+                    var tentativeAbbreviatedText = front.join(' ') + separator + back.join(' ');
+                    if (tentativeAbbreviatedText.length < maxLength)
+                    {
+                        abbreviatedText = tentativeAbbreviatedText;
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                    pushToFront = !pushToFront;
+                }
+            }
+        }
+        return abbreviatedText;
     }
 
     function stopClick(e)

@@ -1,0 +1,16 @@
+{
+    "title": "Playthrough item analysis",
+    "explanation": "You can perform analyses based on your selection of nodes in playthroughs of this scenario.",
+    "experimental_warning": "This feature is experimental and there is no guarantee yet that research data produced is completely valid.",
+    "import_playthroughs": "Import playthroughs",
+    "frequency": "Frequency",
+    "difficulty": "Difficulty",
+    "discrimination": "Discrimination",
+    "relative_percentage_calculation": "If checked, calculates the percentages based on the relative frequency between nodes; if unchecked, calculates the relative frequency of nodes compared to the total number of playthroughs as a percentage.",
+    "no_nodes_selected": "No nodes selected.",
+    "not_enough_playthroughs": "Not enough playthroughs to perform this analysis.",
+    "discrimination_index_too_high": "The discrimination index should not be this high. It crosses the probabilty threshold for guessing.",
+    "discrimination_index_too_low": "The discrimination index should be higher than 0.2. Consider revising this item.",
+    "discrimination_index_good": "This item has a good discrimination index.",
+    "discrimination_index_fair": "This item has a fair discrimination index."
+}

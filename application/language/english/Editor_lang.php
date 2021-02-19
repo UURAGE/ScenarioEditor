@@ -54,3 +54,4 @@ $lang["edt_allow_dialogue_end_header"] = "Allow end of subject";
 $lang["edt_allow_dialogue_end_title"] = "Allow ending the subject after this statement";
 $lang["edt_end_header"] = "End of scenario";
 $lang["edt_end_title"] = "End the scenario after this statement";
+$lang["edt_playthrough_item_analysis"] = "Playthroughs";

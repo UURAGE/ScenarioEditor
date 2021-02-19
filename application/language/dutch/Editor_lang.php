@@ -54,3 +54,4 @@ $lang["edt_allow_dialogue_end_header"] = "Sta einde onderwerp toe";
 $lang["edt_allow_dialogue_end_title"] = "Na deze uitspraak toestaan om het onderwerp te beëindigen";
 $lang["edt_end_header"] = "Einde scenario";
 $lang["edt_end_title"] = "Scenario na deze uitspraak beëindigen";
+$lang["edt_playthrough_item_analysis"] = "Speelsessies";

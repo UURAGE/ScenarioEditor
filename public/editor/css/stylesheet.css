@@ -290,6 +290,18 @@ select {
 .ui-dialog-content textarea {
   max-width: 100%; }
 
+.indicator {
+  position: absolute;
+  right: -25px;
+  bottom: -25px;
+  padding: 3px 5px;
+  margin: 0 5px 5px 0;
+  color: white;
+  background-color: #3892FF;
+  border: 1px solid #3892FF;
+  border-radius: 3px;
+  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.07); }
+
 .zoomTreeButton {
   width: 50px;
   font-size: 0;

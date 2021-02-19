@@ -329,3 +329,16 @@ select {
     max-width: 100%;
   }
 }
+
+.indicator {
+  position: absolute;
+  right: -25px;
+  bottom: -25px;
+  padding: 3px 5px;
+  margin: 0 5px 5px 0;
+  color: $col-text-light;
+  background-color: $col-editor;
+  border: 1px solid $col-editor;
+  border-radius: 3px;
+  box-shadow: 0 2px 1px rgba(0, 0, 0, .07);
+}

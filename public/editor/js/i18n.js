@@ -17,6 +17,7 @@
         'main',
         'metadata',
         'parameters',
+        'playthroughItemAnalysis',
         'print',
         'save',
         'types',
