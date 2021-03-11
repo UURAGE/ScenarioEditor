@@ -64,12 +64,14 @@
     function copy(clipboard, format)
     {
         var hasSelectedText = window.getSelection().type !== 'Range';
-        if (hasSelectedText)
-        {
-            var dataAsText = JSON.stringify($.extend(copyElement(), { target: 'scenario', configIdRef: Config.container.id }));
-            clipboard.setData(format, dataAsText);
-        }
-        return hasSelectedText;
+        if (!hasSelectedText) return false;
+
+        var copiedElement = copyElement();
+        if (copiedElement === null) return false;
+
+        var dataAsText = JSON.stringify($.extend(copiedElement, { target: 'scenario', configIdRef: Config.container.id }));
+        clipboard.setData(format, dataAsText);
+        return true;
     }
 
     function cut(clipboard, format)
@@ -131,7 +133,7 @@
                 };
             }
         }
-        else if (Main.selectedElements !== null)
+        else if (Main.selectedElements.length > 0)
         {
             if (!Zoom.isZoomed())
             {
@@ -156,6 +158,7 @@
                 };
             }
         }
+        return null;
     }
 
     function copyTree(treeId)
