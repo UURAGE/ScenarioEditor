@@ -1,12 +1,15 @@
+import * as sass from "@selfisekai/gulp-sass";
 import * as log from "fancy-log";
 import * as gulp from "gulp";
 import * as autoprefixer from "gulp-autoprefixer";
 import * as eslint from "gulp-eslint";
-import * as sass from "gulp-sass";
 import * as sourcemaps from "gulp-sourcemaps";
 import * as stylelint from "gulp-stylelint";
+import * as sassCompiler from "node-sass";
 
 import * as browserSync from "browser-sync";
+
+(sass as any).compiler = sassCompiler;
 
 const jsSrc = "public/editor/js/**/*.js";
 const lintJS = () =>
