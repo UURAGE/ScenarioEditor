@@ -20,6 +20,7 @@ $lang["edt_cut"] = "Knippen";
 $lang["edt_paste"] = "Plakken";
 $lang["edt_subject"] = "Onderwerp";
 $lang["edt_note_pad"] = "Kladblad";
+$lang["edt_list"] = "Lijst";
 $lang["edt_player"] = "Speler";
 $lang["edt_computer"] = "Computer";
 $lang["edt_character"] = "Karakter";

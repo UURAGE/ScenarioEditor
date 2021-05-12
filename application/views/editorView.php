@@ -152,7 +152,7 @@
               <button id="newSituationNode" class="subjectButton"><?php echo sIcon("icon-add-situation"); sLang("edt_situation"); ?></button>
               <button id="newChildNode" class="nodeButton"><?php echo sIcon("icon-child"); sLang("edt_child"); ?></button>
               <button id="toggleDraftScreen" class="subjectButton"><?php echo sIcon("icon-notepad"); sLang("edt_note_pad"); ?></button>
-              <button id="toggleElementList" class="globalButton"><?php echo sIcon("icon-element-list"); ?>List</button>
+              <button id="toggleElementList" class="globalButton"><?php echo sIcon("icon-element-list"); sLang("edt_list"); ?></button>
               <button id="delete" class="globalButton"><?php echo sIcon("icon-delete"); sLang("btn_delete"); ?></button>
             </div>
           </div>
