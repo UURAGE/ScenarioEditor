@@ -505,6 +505,7 @@ var KeyControl;
         {
             Main.selectElements(Object.keys(Main.trees));
         }
+        MiniMap.update(true);
     }
 
     // Select the lowest parent from the current selected node.
