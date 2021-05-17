@@ -1433,9 +1433,8 @@ td.dragHandle {
     width: 150px;
     padding-right: 10px;
     box-sizing: border-box; }
-    @supports ((position: -webkit-sticky) or (position: sticky)) {
+    @supports (position: sticky) {
       #metadata .index {
-        position: -webkit-sticky;
         position: sticky;
         top: 0; } }
     #metadata .index h1 {
@@ -1456,7 +1455,7 @@ td.dragHandle {
   #metadata .content {
     flex: 1 1 100%;
     padding-left: 160px; }
-    @supports ((position: -webkit-sticky) or (position: sticky)) {
+    @supports (position: sticky) {
       #metadata .content {
         padding-left: 0; } }
     #metadata .content > * {
