@@ -8,7 +8,7 @@
     {
         $("#togglePlaythroughsScreen").on('click', function()
         {
-            var calculateNodeCounts = function(playthroughs)
+            var calculateNodeCounts = function(playthroughs, nodeIDs)
             {
                 var nodeCounts = {};
                 var count = 0;
@@ -18,8 +18,7 @@
                     {
                         var nodeID = statement.id.replace(/^(.+?\.){3}/, '').replace(/\./g, '_');
                         if (nodeID in Main.nodes &&
-                            (!Main.selectedElement || nodeID === Main.selectedElement) &&
-                            (Main.selectedElements.length === 0 || Main.selectedElements.indexOf(nodeID) !== -1))
+                            (nodeIDs.length === 0 || nodeIDs.indexOf(nodeID) !== -1))
                         {
                             if (!(nodeID in nodeCounts))
                             {
@@ -60,12 +59,28 @@
             };
 
             var correctNodeSelect = null;
+            var resultContainer = null;
+            var childrenOfSelected = null;
             var addCorrectNodeSelect = function()
             {
-                if (Main.selectedElements.length > 0)
+                if (Main.selectedElement)
                 {
                     correctNodeSelect = $('<select>', { class: 'correctNodeSelect' }).appendTo(container);
-                    Main.selectedElements.forEach(function(nodeID)
+                    resultContainer = $('<div>').appendTo(container);
+                    correctNodeSelect.on('change', function()
+                    {
+                        resultContainer.empty();
+                    });
+                    childrenOfSelected = Main.getPlumbInstanceByNodeID(Main.selectedElement)
+                        .getConnections(
+                        {
+                            source: Main.selectedElement
+                        })
+                        .map(function(connection)
+                        {
+                            return connection.targetId;
+                        });
+                    childrenOfSelected.forEach(function(nodeID)
                     {
                         correctNodeSelect.append($('<option>', { value: nodeID, text: Utils.abbreviateText(Main.nodes[nodeID].text, " - ", 36) }));
                     });
@@ -76,6 +91,8 @@
             {
                 if (percentageCalculation) percentageCalculation.parent().remove();
                 if (correctNodeSelect) correctNodeSelect.remove();
+                if (resultContainer) resultContainer.remove();
+                if (childrenOfSelected) childrenOfSelected = null;
 
                 if (itemAnalysisType.val() === 'frequency')
                 {
@@ -120,33 +137,35 @@
                                 var result;
                                 if (itemAnalysisType.val() === 'frequency')
                                 {
-                                    result = calculateNodeCounts(playthroughs);
+                                    result = calculateNodeCounts(playthroughs, Main.selectedElements);
 
                                     for (nodeID in result.nodeCounts)
                                     {
                                         var percentage = result.nodeCounts[nodeID] / (percentageCalculation.prop('checked') ? result.count : playthroughs.length) * 100;
                                         $('#' + nodeID).append($('<div>', { text: percentage.toFixed(1) + "%" + " (" + result.nodeCounts[nodeID] + "x)", class: 'indicator' }));
                                     }
+
+                                    container.dialog('close');
                                 }
                                 else if (itemAnalysisType.val() === 'difficulty')
                                 {
                                     if (correctNodeSelect === null)
                                     {
-                                        Utils.alertDialog(i18next.t('playthroughItemAnalysis:no_nodes_selected'), 'warning');
+                                        Utils.alertDialog(i18next.t('playthroughItemAnalysis:select_exactly_one_node'), 'warning');
                                         return;
                                     }
                                     correctNodeID = correctNodeSelect.val();
 
-                                    result = calculateNodeCounts(playthroughs);
+                                    result = calculateNodeCounts(playthroughs, childrenOfSelected);
                                     correctCount = correctNodeID in result.nodeCounts ? result.nodeCounts[correctNodeID] : 0;
                                     var difficulty = correctCount / result.count;
-                                    $('#' + correctNodeID).append($('<div>', { text: (difficulty * 100).toFixed(2) + "%", class: 'indicator' }));
+                                    resultContainer.empty().append($('<div>', { text: (difficulty * 100).toFixed(2) + "%" }));
                                 }
                                 else if (itemAnalysisType.val() === 'discrimination')
                                 {
                                     if (correctNodeSelect === null)
                                     {
-                                        Utils.alertDialog(i18next.t('playthroughItemAnalysis:no_nodes_selected'), 'warning');
+                                        Utils.alertDialog(i18next.t('playthroughItemAnalysis:select_exactly_one_node'), 'warning');
                                         return;
                                     }
                                     correctNodeID = correctNodeSelect.val();
@@ -169,10 +188,10 @@
                                     var lowestTotalScorePlaythroughs = sortedPlaythroughs.slice(0, groupLength);
                                     var highestTotalScorePlaythroughs = sortedPlaythroughs.slice(-groupLength);
 
-                                    var lowestTotalScoreResult = calculateNodeCounts(lowestTotalScorePlaythroughs);
+                                    var lowestTotalScoreResult = calculateNodeCounts(lowestTotalScorePlaythroughs, childrenOfSelected);
                                     var lowestTotalScoreCorrectCount = correctNodeID in lowestTotalScoreResult.nodeCounts ?
                                         lowestTotalScoreResult.nodeCounts[correctNodeID] : 0;
-                                    var highestTotalScoreResult = calculateNodeCounts(highestTotalScorePlaythroughs);
+                                    var highestTotalScoreResult = calculateNodeCounts(highestTotalScorePlaythroughs, childrenOfSelected);
                                     var highestTotalScoreCorrectCount = correctNodeID in highestTotalScoreResult.nodeCounts ?
                                         highestTotalScoreResult.nodeCounts[correctNodeID] : 0;
                                     var discriminationIndex = highestTotalScoreCorrectCount / groupLength - lowestTotalScoreCorrectCount / groupLength;
@@ -182,7 +201,7 @@
                                         {
                                             return 'too_low';
                                         }
-                                        else if (discriminationIndex > 1 - (1 / Main.selectedElements.length))
+                                        else if (discriminationIndex > 1 - (1 / childrenOfSelected.length))
                                         {
                                             return 'too_high';
                                         }
@@ -195,14 +214,17 @@
                                             return 'fair';
                                         }
                                     };
-                                    $('#' + correctNodeID).append($('<div>',
-                                    {
-                                        text: discriminationIndex.toFixed(2),
-                                        class: 'indicator',
-                                        title: i18next.t('playthroughItemAnalysis:discrimination_index_' + getQualificationForTooltip())
-                                    }));
+                                    resultContainer.empty().append(
+                                        $('<div>',
+                                        {
+                                            text: discriminationIndex.toFixed(2)
+                                        }),
+                                        $('<div>',
+                                        {
+                                            text: i18next.t('playthroughItemAnalysis:discrimination_index_' + getQualificationForTooltip())
+                                        })
+                                    );
                                 }
-                                container.dialog('close');
                             };
                             reader.readAsText(fileInput[0].files[0]);
                         }

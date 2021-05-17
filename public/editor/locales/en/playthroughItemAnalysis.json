@@ -7,7 +7,7 @@
     "difficulty": "Difficulty",
     "discrimination": "Discrimination",
     "relative_percentage_calculation": "If checked, calculates the percentages based on the relative frequency between nodes; if unchecked, calculates the relative frequency of nodes compared to the total number of playthroughs as a percentage.",
-    "no_nodes_selected": "No nodes selected.",
+    "select_exactly_one_node": "Exactly one node must be selected.",
     "not_enough_playthroughs": "Not enough playthroughs to perform this analysis.",
     "discrimination_index_too_high": "The discrimination index should not be this high. It crosses the probabilty threshold for guessing.",
     "discrimination_index_too_low": "The discrimination index should be higher than 0.2. Consider revising this item.",
