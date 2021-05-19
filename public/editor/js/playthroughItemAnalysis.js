@@ -49,13 +49,25 @@
             itemAnalysisType.append($('<option>', { value: 'difficulty', text: i18next.t('playthroughItemAnalysis:difficulty') }));
             itemAnalysisType.append($('<option>', { value: 'discrimination', text: i18next.t('playthroughItemAnalysis:discrimination') }));
 
-            // For item frequency: relative to selected nodes or to all nodes
+            var percentageCalculationContainer = null;
             var percentageCalculation = null;
             var addPercentageCalculationContainer = function()
             {
-                var percentageCalculationContainer = $('<div>', { style: 'margin-top: 20px;' }).appendTo(container);
-                percentageCalculation = $('<input>', { type: 'checkbox' }).appendTo(percentageCalculationContainer);
-                percentageCalculationContainer.append($('<label>', { text: i18next.t('playthroughItemAnalysis:relative_percentage_calculation') }));
+                percentageCalculationContainer = $('<div>', { style: 'margin-top: 20px;' }).appendTo(container);
+                var scope = i18next.t('playthroughItemAnalysis:percentage_calculation_scope.' + (Main.selectedElements.length > 0 ? 'selected' : 'all'));
+                percentageCalculation = $('<select>')
+                    .append(['playthroughs', 'nodes'].map(function(kind)
+                    {
+                        return $('<option>', { value: kind, text: i18next.t('playthroughItemAnalysis:percentage_calculation_kind.' + kind, { scope: scope }) });
+                    }));
+                percentageCalculationContainer.append(
+                    $('<div>', { text: i18next.t('playthroughItemAnalysis:percentage_calculation') }),
+                    $('<div>', { class: 'indent' }).append(
+                        $('<div>', { text: i18next.t('playthroughItemAnalysis:number_of_node_occurrences') }),
+                        $('<div>', { class: 'indent', text: i18next.t('playthroughItemAnalysis:divided_by') }),
+                        $('<div>', { text: i18next.t('playthroughItemAnalysis:number_of') + ' ' }).append(percentageCalculation)
+                    )
+                );
             };
 
             var correctNodeSelect = null;
@@ -89,7 +101,7 @@
 
             itemAnalysisType.on('change', function()
             {
-                if (percentageCalculation) percentageCalculation.parent().remove();
+                if (percentageCalculationContainer) percentageCalculationContainer.remove();
                 if (correctNodeSelect) correctNodeSelect.remove();
                 if (resultContainer) resultContainer.remove();
                 if (childrenOfSelected) childrenOfSelected = null;
@@ -141,7 +153,7 @@
 
                                     for (nodeID in result.nodeCounts)
                                     {
-                                        var percentage = result.nodeCounts[nodeID] / (percentageCalculation.prop('checked') ? result.count : playthroughs.length) * 100;
+                                        var percentage = result.nodeCounts[nodeID] / (percentageCalculation.val() === 'nodes' ? result.count : playthroughs.length) * 100;
                                         $('#' + nodeID).append($('<div>', { text: percentage.toFixed(1) + "%" + " (" + result.nodeCounts[nodeID] + "x)", class: 'indicator' }));
                                     }
 
@@ -221,7 +233,7 @@
                                         }),
                                         $('<div>',
                                         {
-                                            text: i18next.t('playthroughItemAnalysis:discrimination_index_' + getQualificationForTooltip())
+                                            text: i18next.t('playthroughItemAnalysis:discrimination_index.' + getQualificationForTooltip())
                                         })
                                     );
                                 }

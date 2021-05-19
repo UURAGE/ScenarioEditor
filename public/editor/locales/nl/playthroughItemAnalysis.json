@@ -6,11 +6,24 @@
     "frequency": "Frequentie",
     "difficulty": "Moeilijkheidsgraad",
     "discrimination": "Onderscheidingsvermogen",
-    "relative_percentage_calculation": "Indien aangevinkt, worden de percentages op basis van de relatieve frequentie tussen knopen berekend; indien niet aangevinkt, wordt de relatieve frequentie van knooppunten vergeleken met het totale aantal speelsessies berekend als een percentage.",
+    "percentage_calculation": "Bereken voor elke knoop een percentage aan de hand van",
+    "number_of_node_occurrences": "het aantal voorkomens van de knoop",
+    "divided_by": "gedeeld door",
+    "number_of": "het aantal",
+    "percentage_calculation_kind": {
+        "playthroughs": "speelsessies",
+        "nodes": "voorkomens van {{scope}} knopen"
+    },
+    "percentage_calculation_scope": {
+        "all": "alle",
+        "selected": "de geselecteerde"
+    },
     "select_exactly_one_node": "Er moet precies één knoop geselecteerd zijn.",
     "not_enough_playthroughs": "Niet genoeg speelsessies om deze analyse te kunnen doen.",
-    "discrimination_index_too_high": "De index voor het onderscheidingsvermogen zou niet zo hoog moeten zijn. Het gaat nu voorbij de limiet van gokkans voor deze selectie.",
-    "discrimination_index_too_low": "De index voor het onderscheidingsvermogen zou hoger moeten zijn dan 0.2. Overweeg om veranderingen aan te brengen binnen dit gedeelte van het scenario.",
-    "discrimination_index_good": "Dit item heeft een goed onderscheidingsvermogen.",
-    "discrimination_index_fair": "Dit item heeft een redelijk onderscheidingsvermogen."
+    "discrimination_index": {
+        "too_high": "De index voor het onderscheidingsvermogen zou niet zo hoog moeten zijn. Het gaat nu voorbij de limiet van gokkans voor deze selectie.",
+        "too_low": "De index voor het onderscheidingsvermogen zou hoger moeten zijn dan 0.2. Overweeg om veranderingen aan te brengen binnen dit gedeelte van het scenario.",
+        "good": "Dit item heeft een goed onderscheidingsvermogen.",
+        "fair": "Dit item heeft een redelijk onderscheidingsvermogen."
+    }
 }

@@ -6,11 +6,24 @@
     "frequency": "Frequency",
     "difficulty": "Difficulty",
     "discrimination": "Discrimination",
-    "relative_percentage_calculation": "If checked, calculates the percentages based on the relative frequency between nodes; if unchecked, calculates the relative frequency of nodes compared to the total number of playthroughs as a percentage.",
+    "percentage_calculation": "Calculate each node's percentage using",
+    "number_of_node_occurrences": "the number of occurrences of the node",
+    "divided_by": "divided by",
+    "number_of": "the number of",
+    "percentage_calculation_kind": {
+        "playthroughs": "playthroughs",
+        "nodes": "occurrences of {{scope}} nodes"
+    },
+    "percentage_calculation_scope": {
+        "all": "all",
+        "selected": "the selected"
+    },
     "select_exactly_one_node": "Exactly one node must be selected.",
     "not_enough_playthroughs": "Not enough playthroughs to perform this analysis.",
-    "discrimination_index_too_high": "The discrimination index should not be this high. It crosses the probabilty threshold for guessing.",
-    "discrimination_index_too_low": "The discrimination index should be higher than 0.2. Consider revising this item.",
-    "discrimination_index_good": "This item has a good discrimination index.",
-    "discrimination_index_fair": "This item has a fair discrimination index."
+    "discrimination_index": {
+        "too_high": "The discrimination index should not be this high. It crosses the probabilty threshold for guessing.",
+        "too_low": "The discrimination index should be higher than 0.2. Consider revising this item.",
+        "good": "This item has a good discrimination index.",
+        "fair": "This item has a fair discrimination index."
+    }
 }
