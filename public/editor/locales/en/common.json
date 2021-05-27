@@ -35,5 +35,10 @@
     "edit": "Edit",
     "info": "Info",
     "warning": "Warning",
-    "error": "Error"
+    "error": "Error",
+    "special_node":
+    {
+        "allowInterleaveNode": "Allow jump to other subject",
+        "allowDialogueEndNode": "Allow end of subject"
+    }
 }

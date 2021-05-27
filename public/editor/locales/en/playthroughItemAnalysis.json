@@ -18,6 +18,12 @@
         "all": "all",
         "selected": "the selected"
     },
+    "accuracy_warning": "<div>Because of the following:</div><ul>{{-presentIssues}}</ul><div>the result of this analysis might not be accurate:</div><ul><li>Some players may not have seen all nodes listed below</li><li>Some players may have seen nodes not listed below</li>",
+    "accuracy_issues": {
+        "allowInterleave": "The selected node has \"$t(common:special_node.allowInterleaveNode)\"",
+        "allowDialogueEnd": "The selected node has \"$t(common:special_node.allowDialogueEndNode)\"",
+        "preconditions": "Some children of the selected node have preconditions"
+    },
     "select_exactly_one_node": "Exactly one node must be selected.",
     "not_enough_playthroughs": "Not enough playthroughs to perform this analysis.",
     "discrimination_index": {

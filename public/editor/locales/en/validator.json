@@ -6,11 +6,6 @@
     "subject_start_type_error": "<a>Subject \"{{subject}}\"</a> starts with nodes with different types ({{-types}}). The types must be the same.",
     "end_with_outgoing_connections": "<a>Subject \"{{subject}}\"</a> contains <a>a node marked as an end</a> that has outgoing connections.",
     "unmarked_end": "<a>Subject \"{{subject}}\"</a> contains <a>a node without outgoing connections</a> that has not been marked as an end of the subject or the scenario.",
-    "special_node":
-    {
-        "allowInterleaveNode": "Allow jump to other subject",
-        "allowDialogueEndNode": "Allow end of subject"
-    },
     "unnamed_subject": "There is <a>an unnamed subject</a>.",
     "layer_start_type_error": "<a>Subjects on layer {{layerNumber}}</a> start with nodes with different types ({{-types}}). The types must be the same.",
     "special_node_layer_start_type_error": "<a>Subjects on layer {{layerNumber}}</a> start with {{type}} nodes, but one of them contains <a>a node with \"{{property}}\"</a> that has <a>children with another type ({{otherType}})</a>. The types must be the same.",

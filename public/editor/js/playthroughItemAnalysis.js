@@ -49,23 +49,25 @@
             itemAnalysisType.append($('<option>', { value: 'difficulty', text: i18next.t('playthroughItemAnalysis:difficulty') }));
             itemAnalysisType.append($('<option>', { value: 'discrimination', text: i18next.t('playthroughItemAnalysis:discrimination') }));
 
-            var percentageCalculationContainer = null;
+            var detailsContainer = $('<div>').appendTo(container);
+
             var percentageCalculation = null;
             var addPercentageCalculationContainer = function()
             {
-                percentageCalculationContainer = $('<div>', { style: 'margin-top: 20px;' }).appendTo(container);
                 var scope = i18next.t('playthroughItemAnalysis:percentage_calculation_scope.' + (Main.selectedElements.length > 0 ? 'selected' : 'all'));
                 percentageCalculation = $('<select>')
                     .append(['playthroughs', 'nodes'].map(function(kind)
                     {
                         return $('<option>', { value: kind, text: i18next.t('playthroughItemAnalysis:percentage_calculation_kind.' + kind, { scope: scope }) });
                     }));
-                percentageCalculationContainer.append(
-                    $('<div>', { text: i18next.t('playthroughItemAnalysis:percentage_calculation') }),
-                    $('<div>', { class: 'indent' }).append(
-                        $('<div>', { text: i18next.t('playthroughItemAnalysis:number_of_node_occurrences') }),
-                        $('<div>', { class: 'indent', text: i18next.t('playthroughItemAnalysis:divided_by') }),
-                        $('<div>', { text: i18next.t('playthroughItemAnalysis:number_of') + ' ' }).append(percentageCalculation)
+                detailsContainer.append(
+                    $('<div>', { style: 'margin-top: 20px;' }).append(
+                        $('<div>', { text: i18next.t('playthroughItemAnalysis:percentage_calculation') }),
+                        $('<div>', { class: 'indent' }).append(
+                            $('<div>', { text: i18next.t('playthroughItemAnalysis:number_of_node_occurrences') }),
+                            $('<div>', { class: 'indent', text: i18next.t('playthroughItemAnalysis:divided_by') }),
+                            $('<div>', { text: i18next.t('playthroughItemAnalysis:number_of') + ' ' }).append(percentageCalculation)
+                        )
                     )
                 );
             };
@@ -77,12 +79,6 @@
             {
                 if (Main.selectedElement)
                 {
-                    correctNodeSelect = $('<select>', { class: 'correctNodeSelect' }).appendTo(container);
-                    resultContainer = $('<div>').appendTo(container);
-                    correctNodeSelect.on('change', function()
-                    {
-                        resultContainer.empty();
-                    });
                     childrenOfSelected = Main.getPlumbInstanceByNodeID(Main.selectedElement)
                         .getConnections(
                         {
@@ -92,6 +88,32 @@
                         {
                             return connection.targetId;
                         });
+                    var node = Main.nodes[Main.selectedElement];
+                    var issues =
+                    {
+                        allowInterleave: node.allowInterleaveNode,
+                        allowDialogueEnd: node.allowDialogueEndNode,
+                        preconditions: childrenOfSelected.some(function(nodeID) { return Main.nodes[nodeID].preconditions; })
+                    };
+                    var presentIssues = Object.keys(issues).filter(function(issue) { return issues[issue]; });
+                    if (presentIssues.length > 0)
+                    {
+                        detailsContainer.append($('<div>', { class: 'warning alert', style: 'margin-top: 20px;' }).append(
+                            i18next.t('playthroughItemAnalysis:accuracy_warning',
+                            {
+                                presentIssues: presentIssues.map(function(issue)
+                                {
+                                    return '<li>' + i18next.t('playthroughItemAnalysis:accuracy_issues.' + issue) + '</li>';
+                                }).join("")
+                            })
+                        ));
+                    }
+                    correctNodeSelect = $('<select>', { class: 'correctNodeSelect', style: 'margin-top: 20px;' }).appendTo(detailsContainer);
+                    resultContainer = $('<div>', { style: 'margin-top: 20px;' }).appendTo(detailsContainer);
+                    correctNodeSelect.on('change', function()
+                    {
+                        resultContainer.empty();
+                    });
                     childrenOfSelected.forEach(function(nodeID)
                     {
                         correctNodeSelect.append($('<option>', { value: nodeID, text: Utils.abbreviateText(Main.nodes[nodeID].text, " - ", 36) }));
@@ -101,10 +123,8 @@
 
             itemAnalysisType.on('change', function()
             {
-                if (percentageCalculationContainer) percentageCalculationContainer.remove();
-                if (correctNodeSelect) correctNodeSelect.remove();
-                if (resultContainer) resultContainer.remove();
-                if (childrenOfSelected) childrenOfSelected = null;
+                detailsContainer.empty();
+                childrenOfSelected = null;
 
                 if (itemAnalysisType.val() === 'frequency')
                 {

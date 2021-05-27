@@ -18,6 +18,12 @@
         "all": "alle",
         "selected": "de geselecteerde"
     },
+    "accuracy_warning": "<div>Vanwege het volgende:</div><ul>{{-presentIssues}}</ul><div>is het resultaat van deze analyse mogelijk onnauwkeurig:</div><ul><li>Sommige spelers hebben mogelijk niet alle hier opgesomde knopen gezien</li><li>Sommige spelers hebben mogelijk knopen gezien die hier niet opgesomd zijn</li>",
+    "accuracy_issues": {
+        "allowInterleave": "De geselecteerde knoop heeft \"$t(common:special_node.allowInterleaveNode)\"",
+        "allowDialogueEnd": "De geselecteerde knoop heeft \"$t(common:special_node.allowDialogueEndNode)\"",
+        "preconditions": "Sommige kinderen van de geselecteerde knoop hebben precondities"
+    },
     "select_exactly_one_node": "Er moet precies één knoop geselecteerd zijn.",
     "not_enough_playthroughs": "Niet genoeg speelsessies om deze analyse te kunnen doen.",
     "discrimination_index": {

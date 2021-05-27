@@ -323,7 +323,7 @@ var Validator;
                                     {
                                         layerNumber: interleave[0].topPos + 1,
                                         type: i18next.t('common:' + interleaveStartNodeType).toLocaleLowerCase(),
-                                        property: i18next.t('validator:special_node.' + property),
+                                        property: i18next.t('common:special_node.' + property),
                                         otherType: i18next.t('common:' + specialNodeChildType).toLocaleLowerCase()
                                     }),
                                     level: 'error',
@@ -357,7 +357,7 @@ var Validator;
                                 {
                                     previousLayerNumber: previousInterleave[0].topPos + 1,
                                     thisLayerNumber: interleave[0].topPos + 1,
-                                    property: i18next.t('validator:special_node.allowDialogueEndNode'),
+                                    property: i18next.t('common:special_node.allowDialogueEndNode'),
                                     type: i18next.t('common:' + interleaveStartNodeType).toLocaleLowerCase(),
                                     otherType: i18next.t('common:' + allowDialogueEndNodeChildType).toLocaleLowerCase()
                                 }),
