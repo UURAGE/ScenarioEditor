@@ -10,7 +10,7 @@
   opacity: .8;
   filter: alpha(opacity=80);
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05), 0 1px 10px rgba(0, 0, 0, 0.05);
-  transition: background-color .15s ease-in, color .15s ease-in; }
+  transition: background-color .15s ease-out, color .15s ease-out; }
   .w ul {
     padding: 0;
     margin: 0; }
@@ -30,38 +30,72 @@
     left: 0;
     padding: .5em;
     background: transparent; }
-  .w.selected, .w.ui-selected, .w:hover {
-    color: white; }
-  .w:hover.computer, .w.color-label.jtk-hover.computer, .w.jtk-source-hover.computer, .w.jtk-target-hover.computer {
-    background-color: #ef7883; }
-  .w:hover.player, .w.color-label.jtk-hover.player, .w.jtk-source-hover.player, .w.jtk-target-hover.player {
-    background-color: #78aeef; }
-  .w:hover.situation, .w.color-label.jtk-hover.situation, .w.jtk-source-hover.situation, .w.jtk-target-hover.situation {
-    background-color: #f9bd8b; }
-  .w.treeContainer:hover {
-    background-color: #3892FF; }
-  .w.treeContainer.selected, .w.treeContainer.ui-selected {
-    background-color: #006aeb; }
-  .w.treeContainer.ui-selecting {
-    background-color: #006aeb; }
-  .w.ui-selecting.computer {
-    background-color: #f7bcc2; }
-  .w.ui-selecting.player {
-    background-color: #bcd7f7; }
-  .w.ui-selecting.situation {
-    background-color: #fde7d4; }
-  .w.selected.computer, .w.ui-selected.computer {
-    background-color: #e94a59; }
-  .w.selected.player, .w.ui-selected.player {
-    background-color: #4a93e9; }
-  .w.selected.situation, .w.ui-selected.situation {
-    background-color: #f7a15b; }
   .w.ancestorOfSelected.computer {
+    color: #222;
     background-color: #fad3d7; }
   .w.ancestorOfSelected.player {
+    color: #222;
     background-color: #d3e5fa; }
   .w.ancestorOfSelected.situation {
+    color: #222;
     background-color: #fef4ec; }
+  .w.parentOfSelected.computer {
+    color: #222;
+    background-color: #f4a5ad; }
+  .w.parentOfSelected.player {
+    color: #222;
+    background-color: #a5c9f4; }
+  .w.parentOfSelected.situation {
+    color: #222;
+    background-color: #fcd9bc; }
+  .w:hover.computer, .w.color-label.jtk-hover.computer, .w.jtk-source-hover.computer, .w.jtk-target-hover.computer {
+    color: #222;
+    background-color: #f4a5ad; }
+  .w:hover.player, .w.color-label.jtk-hover.player, .w.jtk-source-hover.player, .w.jtk-target-hover.player {
+    color: #222;
+    background-color: #a5c9f4; }
+  .w:hover.situation, .w.color-label.jtk-hover.situation, .w.jtk-source-hover.situation, .w.jtk-target-hover.situation {
+    color: #222;
+    background-color: #fcd9bc; }
+  .w.ui-selecting.computer {
+    color: #222;
+    background-color: #f4a5ad; }
+  .w.ui-selecting.player {
+    color: #222;
+    background-color: #a5c9f4; }
+  .w.ui-selecting.situation {
+    color: #222;
+    background-color: #fcd9bc; }
+  .w.selected.computer, .w.ui-selected.computer, .w.jtk-drag-selected.computer {
+    color: white;
+    background-color: #e94a59; }
+  .w.selected.player, .w.ui-selected.player, .w.jtk-drag-selected.player {
+    color: white;
+    background-color: #4a93e9; }
+  .w.selected.situation, .w.ui-selected.situation, .w.jtk-drag-selected.situation {
+    color: #222;
+    background-color: #f7a15b; }
+  .w.selected.ui-selecting.computer, .w.ui-selected.ui-selecting.computer, .w.jtk-drag-selected.ui-selecting.computer {
+    color: white;
+    background-color: #e41d30; }
+  .w.selected.ui-selecting.player, .w.ui-selected.ui-selecting.player, .w.jtk-drag-selected.ui-selecting.player {
+    color: white;
+    background-color: #1d78e4; }
+  .w.selected.ui-selecting.situation, .w.ui-selected.ui-selecting.situation, .w.jtk-drag-selected.ui-selecting.situation {
+    color: #222;
+    background-color: #f4862a; }
+  .w.treeContainer:not(.zoom):hover {
+    background-color: #3892FF; }
+    .w.treeContainer:not(.zoom):hover .subjectDiv {
+      color: white; }
+  .w.treeContainer:not(.zoom).selected, .w.treeContainer:not(.zoom).ui-selected {
+    background-color: #0053b8; }
+    .w.treeContainer:not(.zoom).selected .subjectDiv, .w.treeContainer:not(.zoom).ui-selected .subjectDiv {
+      color: white; }
+  .w.treeContainer:not(.zoom).ui-selecting {
+    background-color: #0053b8; }
+    .w.treeContainer:not(.zoom).ui-selecting .subjectDiv {
+      color: white; }
   .w:not(.jtk-drag):not(.jtk-drag-active) > .ep {
     position: absolute;
     top: -10px;

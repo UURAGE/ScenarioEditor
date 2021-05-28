@@ -18,7 +18,7 @@
   opacity: .8;
   filter: alpha(opacity=80);
   box-shadow: 0 2px 2px rgba(black, .05), 0 1px 10px rgba(black, .05);
-  transition: background-color .15s ease-in, color .15s ease-in;
+  transition: background-color .15s ease-out, color .15s ease-out;
 
   ul {
     padding: 0;
@@ -52,59 +52,77 @@
     background: transparent;
   }
 
-  &.selected,
-  &.ui-selected,
-  &:hover {
-    color: white;
-  }
-
   @mixin lighterTypeColors($lightenAmount) {
     &.computer {
+      color: color-yiq(lighten($col-node-computer, $lightenAmount));
       background-color: lighten($col-node-computer, $lightenAmount);
     }
 
     &.player {
+      color: color-yiq(lighten($col-node-player, $lightenAmount));
       background-color: lighten($col-node-player, $lightenAmount);
     }
 
     &.situation {
+      color: color-yiq(lighten($col-node-situation, $lightenAmount));
       background-color: lighten($col-node-situation, $lightenAmount);
     }
+  }
+
+  &.ancestorOfSelected {
+    @include lighterTypeColors(45%);
+  }
+
+  &.parentOfSelected {
+    @include lighterTypeColors(35%);
   }
 
   &:hover,
   &.color-label.jtk-hover,
   &.jtk-source-hover,
   &.jtk-target-hover {
-    @include lighterTypeColors(25%);
+    @include lighterTypeColors(35%);
   }
 
-  &.treeContainer {
+  &.ui-selecting {
+    @include lighterTypeColors(35%);
+  }
+
+  &.selected,
+  &.ui-selected,
+  &.jtk-drag-selected {
+    @include lighterTypeColors(15%);
+
+    &.ui-selecting {
+      @include lighterTypeColors(5%);
+    }
+  }
+
+  &.treeContainer:not(.zoom) {
     &:hover {
       background-color: $col-subject;
+
+      .subjectDiv {
+        color: color-yiq($col-subject);
+      }
     }
 
     &.selected,
     &.ui-selected {
-      background-color: darken($col-subject, 15%);
+      background-color: darken($col-subject, 25%);
+
+      .subjectDiv {
+        color: color-yiq(darken($col-subject, 25%));
+      }
     }
 
     &.ui-selecting {
-      background-color: darken($col-subject, 15%);
+      background-color: darken($col-subject, 25%);
+
+      .subjectDiv {
+        color: color-yiq(darken($col-subject, 25%));
+      }
     }
-  }
-
-  &.ui-selecting {
-    @include lighterTypeColors(40%);
-  }
-
-  &.selected,
-  &.ui-selected {
-    @include lighterTypeColors(15%);
-  }
-
-  &.ancestorOfSelected {
-    @include lighterTypeColors(45%);
   }
 
   &:not(.jtk-drag):not(.jtk-drag-active) {

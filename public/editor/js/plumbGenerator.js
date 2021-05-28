@@ -137,8 +137,12 @@ var PlumbGenerator;
             if ($("#highlightAncestors").hasClass("enabled"))
             {
                 var targetNodeDiv = $("#" + info.targetId);
-                if (targetNodeDiv.hasClass("ancestorOfSelected") ||
-                    targetNodeDiv.hasClass("selected"))
+                if (targetNodeDiv.hasClass("selected"))
+                {
+                    $("#" + info.sourceId).addClass(["ancestorOfSelected", "parentOfSelected"]);
+                    Main.highlightAncestors(info.sourceId);
+                }
+                else if (targetNodeDiv.hasClass("ancestorOfSelected"))
                 {
                     $("#" + info.sourceId).addClass("ancestorOfSelected");
                     Main.highlightAncestors(info.sourceId);

@@ -35,7 +35,6 @@ var Main;
         createChildNode: createChildNode,
         createEmptyTree: createEmptyTree,
         createAndReturnNode: createAndReturnNode,
-        dehighlightAncestors: dehighlightAncestors,
         deleteAllSelected: deleteAllSelected,
         deselectConnection: deselectConnection,
         getGridIndicatorPosition: getGridIndicatorPosition,
@@ -289,12 +288,12 @@ var Main;
             if ($(this).hasClass("enabled"))
             {
                 $(this).removeClass("enabled");
-                dehighlightAncestors();
+                dehighlightParentsAndAncestors();
             }
             else
             {
                 $(this).addClass("enabled");
-                Main.selectedElements.forEach(function(nodeID) { highlightAncestors(nodeID); });
+                Main.selectedElements.forEach(function(nodeID) { highlightParentsAndAncestors(nodeID); });
             }
 
             $("#main").focus();
@@ -1447,7 +1446,7 @@ var Main;
             {
                 elementIds.forEach(function(elementId)
                 {
-                    if (elementId in Main.nodes) highlightAncestors(elementId);
+                    if (elementId in Main.nodes) highlightParentsAndAncestors(elementId);
                 });
             }
         }
@@ -1491,7 +1490,7 @@ var Main;
         var zoomedTree = Zoom.getZoomed();
         var plumbInstance = zoomedTree ? zoomedTree.plumbInstance : jsPlumb;
         plumbInstance.clearDragSelection();
-        dehighlightAncestors();
+        dehighlightParentsAndAncestors();
 
         if (nodeID !== null && !(nodeID in Main.nodes))
         {
@@ -1508,7 +1507,7 @@ var Main;
             $("#" + Main.selectedElement).addClass("selected");
             Main.selectedElements.push(Main.selectedElement);
             $("#" + nodeID).addClass("ui-selected");
-            if ($("#highlightAncestors").hasClass("enabled")) highlightAncestors(nodeID);
+            if ($("#highlightAncestors").hasClass("enabled")) highlightParentsAndAncestors(nodeID);
         }
 
         // Update the side bar, so it displays the selected node.
@@ -1709,10 +1708,22 @@ var Main;
         changeNodeText(Main.selectedElement);
     }
 
+    function highlightParentsAndAncestors(nodeID)
+    {
+        var connections = Main.getPlumbInstanceByNodeID(nodeID).getConnections(
+        {
+            target: nodeID
+        });
+
+        connections.forEach(function(connection)
+        {
+            $("#" + connection.sourceId).addClass(["ancestorOfSelected", "parentOfSelected"]);
+            highlightAncestors(connection.sourceId);
+        });
+    }
+
     function highlightAncestors(nodeID)
     {
-        if (nodeID === null) return;
-
         var connections = Main.getPlumbInstanceByNodeID(nodeID).getConnections(
         {
             target: nodeID
@@ -1730,8 +1741,9 @@ var Main;
     }
 
 
-    function dehighlightAncestors()
+    function dehighlightParentsAndAncestors()
     {
+        $(".parentOfSelected").removeClass("parentOfSelected");
         $(".ancestorOfSelected").removeClass("ancestorOfSelected");
     }
 
