@@ -130,26 +130,37 @@ var PlumbGenerator;
             instance.revalidate(info.targetId);
         });
 
-        instance.bind("connection", function(info)
+        instance.bind("connection", function(connectionInfo)
         {
             SaveIndicator.setSavedChanges(false);
 
             if ($("#highlightAncestors").hasClass("enabled"))
             {
-                var targetNodeDiv = $("#" + info.targetId);
-                if (targetNodeDiv.hasClass("selected"))
-                {
-                    $("#" + info.sourceId).addClass(["ancestorOfSelected", "parentOfSelected"]);
-                    Main.highlightAncestors(info.sourceId);
-                }
-                else if (targetNodeDiv.hasClass("ancestorOfSelected"))
-                {
-                    $("#" + info.sourceId).addClass("ancestorOfSelected");
-                    Main.highlightAncestors(info.sourceId);
-                }
+                highlightLinealRelatives(connectionInfo, Main.ancestorHighlightSettings);
+            }
+            if ($("#highlightDescendants").hasClass("enabled"))
+            {
+                highlightLinealRelatives(connectionInfo, Main.descendantHighlightSettings);
             }
         });
 
         return instance;
+    }
+
+    function highlightLinealRelatives(connectionInfo, settings)
+    {
+        var nearNodeDiv = $("#" + connectionInfo[settings.nearKeyword + "Id"]);
+        var farNodeID = connectionInfo[settings.farIDKeyword];
+        var farNodeDiv = $("#" + farNodeID);
+        if (nearNodeDiv.hasClass("selected"))
+        {
+            farNodeDiv.addClass([settings.generalClass, settings.directClass]);
+            Main.highlightLinealRelatives(farNodeID, settings);
+        }
+        else if (nearNodeDiv.hasClass(settings.generalClass))
+        {
+            farNodeDiv.addClass(settings.generalClass);
+            Main.highlightLinealRelatives(farNodeID, settings);
+        }
     }
 })();

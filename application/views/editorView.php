@@ -154,6 +154,7 @@
               <button id="newChildNode" class="nodeButton"><?php echo sIcon("icon-child"); sLang("edt_child"); ?></button>
               <button id="toggleDraftScreen" class="subjectButton"><?php echo sIcon("icon-notepad"); sLang("edt_note_pad"); ?></button>
               <button id="toggleElementList" class="globalButton"><?php echo sIcon("icon-element-list"); sLang("edt_list"); ?></button>
+              <button id="repositionGraph" class="subjectButton" title="<?php sLang("edt_arrange_title"); ?>"><?php echo sIcon("icon-arrange"); sLang("edt_arrange"); ?></button>
               <button id="delete" class="globalButton"><?php echo sIcon("icon-delete"); sLang("btn_delete"); ?></button>
             </div>
           </div>
@@ -168,8 +169,8 @@
           <div class="buttonGroup" id="view">
             <!-- View -->
             <div class="big-buttons">
-              <button id="repositionGraph" class="subjectButton" title="<?php sLang("edt_arrange_title"); ?>"><?php echo sIcon("icon-arrange"); sLang("edt_arrange"); ?></button>
               <button id="highlightAncestors" class="subjectButton"><?php echo sIcon("icon-ancestors"); sLang("edt_ancestors"); ?></button>
+              <button id="highlightDescendants" class="subjectButton"><?php echo sIcon("icon-descendants"); sLang("edt_descendants"); ?></button>
               <button id="toggleColors" class="subjectButton"><?php echo sIcon("icon-palette"); sLang("edt_toggle_colors"); ?></button>
             </div>
           </div>

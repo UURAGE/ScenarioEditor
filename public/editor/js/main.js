@@ -20,6 +20,20 @@ var Main;
         computerType: "computer",
         playerType: "player",
         situationType: "situation",
+        ancestorHighlightSettings:
+        {
+            nearKeyword: "target",
+            farIDKeyword: "sourceId",
+            generalClass: "ancestorOfSelected",
+            directClass: "parentOfSelected"
+        },
+        descendantHighlightSettings:
+        {
+            nearKeyword: "source",
+            farIDKeyword: "targetId",
+            generalClass: "descendantOfSelected",
+            directClass: "childOfSelected"
+        },
         trees: {},
         maxTreeNumber: 0,
         gridX: gridX,
@@ -41,7 +55,7 @@ var Main;
         getPlumbInstanceByNodeID: getPlumbInstanceByNodeID,
         getStartNodeIDs: getStartNodeIDs,
         getInterleaves: getInterleaves,
-        highlightAncestors: highlightAncestors,
+        highlightLinealRelatives: highlightLinealRelatives,
         isEditingInCanvas: isEditingInCanvas,
         isMousePositionWithinEditingCanvas: isMousePositionWithinEditingCanvas,
         makeConnection: makeConnection,
@@ -288,12 +302,33 @@ var Main;
             if ($(this).hasClass("enabled"))
             {
                 $(this).removeClass("enabled");
-                dehighlightParentsAndAncestors();
+                dehighlightLinealRelativesIncludingDirect(Main.ancestorHighlightSettings);
             }
             else
             {
                 $(this).addClass("enabled");
-                Main.selectedElements.forEach(function(nodeID) { highlightParentsAndAncestors(nodeID); });
+                Main.selectedElements.forEach(function(nodeID)
+                {
+                    highlightLinealRelativesIncludingDirect(nodeID, Main.ancestorHighlightSettings);
+                });
+            }
+
+            $("#main").focus();
+        });
+        $("#highlightDescendants").on('click', function()
+        {
+            if ($(this).hasClass("enabled"))
+            {
+                $(this).removeClass("enabled");
+                dehighlightLinealRelativesIncludingDirect(Main.descendantHighlightSettings);
+            }
+            else
+            {
+                $(this).addClass("enabled");
+                Main.selectedElements.forEach(function(nodeID)
+                {
+                    highlightLinealRelativesIncludingDirect(nodeID, Main.descendantHighlightSettings);
+                });
             }
 
             $("#main").focus();
@@ -1442,11 +1477,21 @@ var Main;
                 var plumbInstance = elementId in Main.nodes ? Main.getPlumbInstanceByNodeID(elementId) : jsPlumb;
                 plumbInstance.addToDragSelection(elementId);
             });
-            if ($("#highlightAncestors").hasClass("enabled"))
+            var highlightAncestors = $("#highlightAncestors").hasClass("enabled");
+            var highlightDescendants = $("#highlightDescendants").hasClass("enabled");
+            if (highlightAncestors || highlightDescendants)
             {
                 elementIds.forEach(function(elementId)
                 {
-                    if (elementId in Main.nodes) highlightParentsAndAncestors(elementId);
+                    if (!(elementId in Main.nodes)) return;
+                    if (highlightAncestors)
+                    {
+                        highlightLinealRelativesIncludingDirect(elementId, Main.ancestorHighlightSettings);
+                    }
+                    if (highlightDescendants)
+                    {
+                        highlightLinealRelativesIncludingDirect(elementId, Main.descendantHighlightSettings);
+                    }
                 });
             }
         }
@@ -1490,7 +1535,8 @@ var Main;
         var zoomedTree = Zoom.getZoomed();
         var plumbInstance = zoomedTree ? zoomedTree.plumbInstance : jsPlumb;
         plumbInstance.clearDragSelection();
-        dehighlightParentsAndAncestors();
+        dehighlightLinealRelativesIncludingDirect(Main.ancestorHighlightSettings);
+        dehighlightLinealRelativesIncludingDirect(Main.descendantHighlightSettings);
 
         if (nodeID !== null && !(nodeID in Main.nodes))
         {
@@ -1507,7 +1553,14 @@ var Main;
             $("#" + Main.selectedElement).addClass("selected");
             Main.selectedElements.push(Main.selectedElement);
             $("#" + nodeID).addClass("ui-selected");
-            if ($("#highlightAncestors").hasClass("enabled")) highlightParentsAndAncestors(nodeID);
+            if ($("#highlightAncestors").hasClass("enabled"))
+            {
+                highlightLinealRelativesIncludingDirect(nodeID, Main.ancestorHighlightSettings);
+            }
+            if ($("#highlightDescendants").hasClass("enabled"))
+            {
+                highlightLinealRelativesIncludingDirect(nodeID, Main.descendantHighlightSettings);
+            }
         }
 
         // Update the side bar, so it displays the selected node.
@@ -1708,43 +1761,42 @@ var Main;
         changeNodeText(Main.selectedElement);
     }
 
-    function highlightParentsAndAncestors(nodeID)
+    function highlightLinealRelativesIncludingDirect(nearNodeID, settings)
     {
-        var connections = Main.getPlumbInstanceByNodeID(nodeID).getConnections(
-        {
-            target: nodeID
-        });
+        var options = {};
+        options[settings.nearKeyword] = nearNodeID;
+        var connections = Main.getPlumbInstanceByNodeID(nearNodeID).getConnections(options);
 
         connections.forEach(function(connection)
         {
-            $("#" + connection.sourceId).addClass(["ancestorOfSelected", "parentOfSelected"]);
-            highlightAncestors(connection.sourceId);
+            var farNodeID = connection[settings.farIDKeyword];
+            $("#" + farNodeID).addClass([settings.generalClass, settings.directClass]);
+            highlightLinealRelatives(farNodeID, settings);
         });
     }
 
-    function highlightAncestors(nodeID)
+    function highlightLinealRelatives(nearNodeID, settings)
     {
-        var connections = Main.getPlumbInstanceByNodeID(nodeID).getConnections(
-        {
-            target: nodeID
-        });
+        var options = {};
+        options[settings.nearKeyword] = nearNodeID;
+        var connections = Main.getPlumbInstanceByNodeID(nearNodeID).getConnections(options);
 
         connections.forEach(function(connection)
         {
-            var nodeDiv = $("#" + connection.sourceId);
-            if (!nodeDiv.hasClass("ancestorOfSelected"))
+            var farNodeID = connection[settings.farIDKeyword];
+            var farNodeDiv = $("#" + farNodeID);
+            if (!farNodeDiv.hasClass(settings.generalClass))
             {
-                nodeDiv.addClass("ancestorOfSelected");
-                highlightAncestors(connection.sourceId);
+                farNodeDiv.addClass(settings.generalClass);
+                highlightLinealRelatives(farNodeID, settings);
             }
         });
     }
 
-
-    function dehighlightParentsAndAncestors()
+    function dehighlightLinealRelativesIncludingDirect(settings)
     {
-        $(".parentOfSelected").removeClass("parentOfSelected");
-        $(".ancestorOfSelected").removeClass("ancestorOfSelected");
+        $("." + settings.generalClass).removeClass(settings.generalClass);
+        $("." + settings.directClass).removeClass(settings.directClass);
     }
 
     // Determines grid size from the relevant CSS rules.

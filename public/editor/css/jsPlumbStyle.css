@@ -10,7 +10,7 @@
   opacity: .8;
   filter: alpha(opacity=80);
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05), 0 1px 10px rgba(0, 0, 0, 0.05);
-  transition: background-color .15s ease-out, color .15s ease-out; }
+  transition: background-color .15s ease-out, color .15s ease-out, border-bottom-width .1s linear, border-top-width .1s linear; }
   .w ul {
     padding: 0;
     margin: 0; }
@@ -30,24 +30,32 @@
     left: 0;
     padding: .5em;
     background: transparent; }
-  .w.ancestorOfSelected.computer {
+  .w.ancestorOfSelected.computer, .w.descendantOfSelected.computer {
     color: #222;
     background-color: #fad3d7; }
-  .w.ancestorOfSelected.player {
+  .w.ancestorOfSelected.player, .w.descendantOfSelected.player {
     color: #222;
     background-color: #d3e5fa; }
-  .w.ancestorOfSelected.situation {
+  .w.ancestorOfSelected.situation, .w.descendantOfSelected.situation {
     color: #222;
     background-color: #fef4ec; }
-  .w.parentOfSelected.computer {
+  .w.parentOfSelected.computer, .w.childOfSelected.computer {
     color: #222;
     background-color: #f4a5ad; }
-  .w.parentOfSelected.player {
+  .w.parentOfSelected.player, .w.childOfSelected.player {
     color: #222;
     background-color: #a5c9f4; }
-  .w.parentOfSelected.situation {
+  .w.parentOfSelected.situation, .w.childOfSelected.situation {
     color: #222;
     background-color: #fcd9bc; }
+  .w.ancestorOfSelected {
+    border-bottom-width: 6px; }
+  .w.parentOfSelected {
+    border-bottom-width: 8px; }
+  .w.descendantOfSelected {
+    border-top-width: 6px; }
+  .w.childOfSelected {
+    border-top-width: 8px; }
   .w:hover.computer, .w.color-label.jtk-hover.computer, .w.jtk-source-hover.computer, .w.jtk-target-hover.computer {
     color: #222;
     background-color: #f4a5ad; }
