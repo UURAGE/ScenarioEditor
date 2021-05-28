@@ -169,7 +169,7 @@
             <!-- View -->
             <div class="big-buttons">
               <button id="repositionGraph" class="subjectButton" title="<?php sLang("edt_arrange_title"); ?>"><?php echo sIcon("icon-arrange"); sLang("edt_arrange"); ?></button>
-              <button id="allParents" class="nodeButton"><?php echo sIcon("icon-parents"); sLang("edt_parents"); ?></button>
+              <button id="highlightAncestors" class="subjectButton"><?php echo sIcon("icon-ancestors"); sLang("edt_ancestors"); ?></button>
               <button id="toggleColors" class="subjectButton"><?php echo sIcon("icon-palette"); sLang("edt_toggle_colors"); ?></button>
             </div>
           </div>

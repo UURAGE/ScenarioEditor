@@ -134,13 +134,14 @@ var PlumbGenerator;
         {
             SaveIndicator.setSavedChanges(false);
 
-            if ($("#" + info.targetId).hasClass("parentSelected") ||
-               $("#" + info.targetId).hasClass("selected"))
+            if ($("#highlightAncestors").hasClass("enabled"))
             {
-                if ($("#allParents").hasClass("enabled"))
+                var targetNodeDiv = $("#" + info.targetId);
+                if (targetNodeDiv.hasClass("ancestorOfSelected") ||
+                    targetNodeDiv.hasClass("selected"))
                 {
-                    $("#" + info.sourceId).addClass("parentSelected");
-                    Main.highlightParents(info.sourceId);
+                    $("#" + info.sourceId).addClass("ancestorOfSelected");
+                    Main.highlightAncestors(info.sourceId);
                 }
             }
         });

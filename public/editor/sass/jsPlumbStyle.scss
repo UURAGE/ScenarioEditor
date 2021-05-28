@@ -58,21 +58,25 @@
     color: white;
   }
 
+  @mixin lighterTypeColors($lightenAmount) {
+    &.computer {
+      background-color: lighten($col-node-computer, $lightenAmount);
+    }
+
+    &.player {
+      background-color: lighten($col-node-player, $lightenAmount);
+    }
+
+    &.situation {
+      background-color: lighten($col-node-situation, $lightenAmount);
+    }
+  }
+
   &:hover,
   &.color-label.jtk-hover,
   &.jtk-source-hover,
   &.jtk-target-hover {
-    &.computer {
-      background-color: lighten($col-node-computer, 25%);
-    }
-
-    &.player {
-      background-color: lighten($col-node-player, 25%);
-    }
-
-    &.situation {
-      background-color: lighten($col-node-situation, 25%);
-    }
+    @include lighterTypeColors(25%);
   }
 
   &.treeContainer {
@@ -91,46 +95,16 @@
   }
 
   &.ui-selecting {
-    &.computer {
-      background-color: lighten($col-node-computer, 40%);
-    }
-
-    &.player {
-      background-color: lighten($col-node-player, 40%);
-    }
-
-    &.situation {
-      background-color: lighten($col-node-situation, 40%);
-    }
+    @include lighterTypeColors(40%);
   }
 
   &.selected,
   &.ui-selected {
-    &.computer {
-      background-color: lighten($col-node-computer, 15%);
-    }
-
-    &.player {
-      background-color: lighten($col-node-player, 15%);
-    }
-
-    &.situation {
-      background-color: lighten($col-node-situation, 15%);
-    }
+    @include lighterTypeColors(15%);
   }
 
-  &.parentSelected {
-    &.computer {
-      background-color: lighten($col-node-computer, 45%);
-    }
-
-    &.player {
-      background-color: lighten($col-node-player, 45%);
-    }
-
-    &.situation {
-      background-color: lighten($col-node-situation, 45%);
-    }
+  &.ancestorOfSelected {
+    @include lighterTypeColors(45%);
   }
 
   &:not(.jtk-drag):not(.jtk-drag-active) {

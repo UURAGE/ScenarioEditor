@@ -56,11 +56,11 @@
     background-color: #4a93e9; }
   .w.selected.situation, .w.ui-selected.situation {
     background-color: #f7a15b; }
-  .w.parentSelected.computer {
+  .w.ancestorOfSelected.computer {
     background-color: #fad3d7; }
-  .w.parentSelected.player {
+  .w.ancestorOfSelected.player {
     background-color: #d3e5fa; }
-  .w.parentSelected.situation {
+  .w.ancestorOfSelected.situation {
     background-color: #fef4ec; }
   .w:not(.jtk-drag):not(.jtk-drag-active) > .ep {
     position: absolute;

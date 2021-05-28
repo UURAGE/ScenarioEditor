@@ -88,10 +88,10 @@ var KeyControl;
         },
         A: function()
         {
-            var allParentsButton = $("#allParents");
-            if (!allParentsButton.is(":disabled"))
+            var highlightAncestorsButton = $("#highlightAncestors");
+            if (!highlightAncestorsButton.is(":disabled"))
             {
-                allParentsButton.trigger('click');
+                highlightAncestorsButton.trigger('click');
             }
         },
         B: function()

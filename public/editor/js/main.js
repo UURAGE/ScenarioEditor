@@ -35,14 +35,14 @@ var Main;
         createChildNode: createChildNode,
         createEmptyTree: createEmptyTree,
         createAndReturnNode: createAndReturnNode,
-        dehighlightParents: dehighlightParents,
+        dehighlightAncestors: dehighlightAncestors,
         deleteAllSelected: deleteAllSelected,
         deselectConnection: deselectConnection,
         getGridIndicatorPosition: getGridIndicatorPosition,
         getPlumbInstanceByNodeID: getPlumbInstanceByNodeID,
         getStartNodeIDs: getStartNodeIDs,
         getInterleaves: getInterleaves,
-        highlightParents: highlightParents,
+        highlightAncestors: highlightAncestors,
         isEditingInCanvas: isEditingInCanvas,
         isMousePositionWithinEditingCanvas: isMousePositionWithinEditingCanvas,
         makeConnection: makeConnection,
@@ -284,17 +284,17 @@ var Main;
 
             $("#main").focus();
         });
-        $("#allParents").on('click', function()
+        $("#highlightAncestors").on('click', function()
         {
             if ($(this).hasClass("enabled"))
             {
                 $(this).removeClass("enabled");
-                dehighlightParents();
+                dehighlightAncestors();
             }
             else
             {
                 $(this).addClass("enabled");
-                highlightParents(Main.selectedElement);
+                Main.selectedElements.forEach(function(nodeID) { highlightAncestors(nodeID); });
             }
 
             $("#main").focus();
@@ -1443,6 +1443,13 @@ var Main;
                 var plumbInstance = elementId in Main.nodes ? Main.getPlumbInstanceByNodeID(elementId) : jsPlumb;
                 plumbInstance.addToDragSelection(elementId);
             });
+            if ($("#highlightAncestors").hasClass("enabled"))
+            {
+                elementIds.forEach(function(elementId)
+                {
+                    if (elementId in Main.nodes) highlightAncestors(elementId);
+                });
+            }
         }
     }
 
@@ -1484,7 +1491,7 @@ var Main;
         var zoomedTree = Zoom.getZoomed();
         var plumbInstance = zoomedTree ? zoomedTree.plumbInstance : jsPlumb;
         plumbInstance.clearDragSelection();
-        dehighlightParents();
+        dehighlightAncestors();
 
         if (nodeID !== null && !(nodeID in Main.nodes))
         {
@@ -1501,11 +1508,7 @@ var Main;
             $("#" + Main.selectedElement).addClass("selected");
             Main.selectedElements.push(Main.selectedElement);
             $("#" + nodeID).addClass("ui-selected");
-            if ($("#allParents").hasClass("enabled")) highlightParents(nodeID);
-        }
-        else if ($("#allParents").hasClass("enabled"))
-        {
-            $("#allParents").removeClass("enabled");
+            if ($("#highlightAncestors").hasClass("enabled")) highlightAncestors(nodeID);
         }
 
         // Update the side bar, so it displays the selected node.
@@ -1552,13 +1555,6 @@ var Main;
             {
                 // A node is selected, because a tree is zoomed
                 showButtons(nodeButtons);
-            }
-        }
-        else
-        {
-            if ($("#allParents").hasClass("enabled"))
-            {
-                $("#allParents").removeClass("enabled");
             }
         }
     }
@@ -1713,7 +1709,7 @@ var Main;
         changeNodeText(Main.selectedElement);
     }
 
-    function highlightParents(nodeID)
+    function highlightAncestors(nodeID)
     {
         if (nodeID === null) return;
 
@@ -1722,22 +1718,21 @@ var Main;
             target: nodeID
         });
 
-        for (var i = 0; i < connections.length; i++)
+        connections.forEach(function(connection)
         {
-            if (!$("#" + connections[i].sourceId).hasClass(
-                    "parentSelected"))
+            var nodeDiv = $("#" + connection.sourceId);
+            if (!nodeDiv.hasClass("ancestorOfSelected"))
             {
-                $("#" + connections[i].sourceId).addClass(
-                    "parentSelected");
-                highlightParents(connections[i].sourceId);
+                nodeDiv.addClass("ancestorOfSelected");
+                highlightAncestors(connection.sourceId);
             }
-        }
+        });
     }
 
 
-    function dehighlightParents()
+    function dehighlightAncestors()
     {
-        $(".parentSelected").removeClass("parentSelected");
+        $(".ancestorOfSelected").removeClass("ancestorOfSelected");
     }
 
     // Determines grid size from the relevant CSS rules.
