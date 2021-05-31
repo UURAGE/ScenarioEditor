@@ -112,6 +112,9 @@ var Zoom;
             tree.div.scrollTop(0);
             tree.div.scrollLeft(0);
 
+            // Node selection sometimes causes this class to be added, and it interferes with tree selection, so remove it
+            tree.dragDiv.removeClass("ui-selecting");
+
             tree.dragDiv.removeClass("zoom");
             Utils.cssPosition(tree.dragDiv, { "top": tree.topPos * Main.gridY, "left": tree.leftPos * Main.gridX });
             jsPlumb.setDraggable(tree.dragDiv, true);
