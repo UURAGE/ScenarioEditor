@@ -1404,7 +1404,8 @@ td.dragHandle {
   height: 100%;
   padding: 0;
   margin: auto;
-  font: inherit; }
+  font: inherit;
+  box-sizing: border-box; }
 
 .text {
   width: 420px; }
