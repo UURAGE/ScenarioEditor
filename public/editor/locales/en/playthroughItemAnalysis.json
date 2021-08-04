@@ -27,9 +27,9 @@
     "select_exactly_one_node": "Exactly one node must be selected.",
     "not_enough_playthroughs": "Not enough playthroughs to perform this analysis.",
     "discrimination_index": {
-        "too_high": "The discrimination index should not be this high. It crosses the probabilty threshold for guessing.",
-        "too_low": "The discrimination index should be higher than 0.2. Consider revising this item.",
-        "good": "This item has a good discrimination index.",
-        "fair": "This item has a fair discrimination index."
+        "too_high": "The discrimination index should be lower than {{higherThreshold}}. It crosses the probabilty threshold for guessing.",
+        "too_low": "The discrimination index should be higher than {{lowerThreshold}}. Consider revising this item.",
+        "good": "This item has a good discrimination index, because it's between {{fairThreshold}} and {{higherThreshold}}.",
+        "fair": "This item has a fair discrimination index, because it's between {{lowerThreshold}} and {{fairThreshold}}."
     }
 }

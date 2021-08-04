@@ -227,17 +227,20 @@
                                     var highestTotalScoreCorrectCount = correctNodeID in highestTotalScoreResult.nodeCounts ?
                                         highestTotalScoreResult.nodeCounts[correctNodeID] : 0;
                                     var discriminationIndex = highestTotalScoreCorrectCount / groupLength - lowestTotalScoreCorrectCount / groupLength;
+                                    var lowerThreshold = 0.2;
+                                    var higherThreshold = 1 - (1 / childrenOfSelected.length);
+                                    var fairThreshold = 0.3;
                                     var getQualificationForTooltip = function()
                                     {
-                                        if (discriminationIndex < 0.2)
+                                        if (discriminationIndex < lowerThreshold)
                                         {
                                             return 'too_low';
                                         }
-                                        else if (discriminationIndex > 1 - (1 / childrenOfSelected.length))
+                                        else if (discriminationIndex > higherThreshold)
                                         {
                                             return 'too_high';
                                         }
-                                        else if (discriminationIndex > 0.3)
+                                        else if (discriminationIndex > fairThreshold)
                                         {
                                             return 'good';
                                         }
@@ -253,7 +256,12 @@
                                         }),
                                         $('<div>',
                                         {
-                                            text: i18next.t('playthroughItemAnalysis:discrimination_index.' + getQualificationForTooltip())
+                                            text: i18next.t('playthroughItemAnalysis:discrimination_index.' + getQualificationForTooltip(),
+                                                {
+                                                    lowerThreshold: lowerThreshold.toFixed(2),
+                                                    higherThreshold: higherThreshold.toFixed(2),
+                                                    fairThreshold: fairThreshold.toFixed(2)
+                                                })
                                         })
                                     );
                                 }

@@ -27,9 +27,9 @@
     "select_exactly_one_node": "Er moet precies één knoop geselecteerd zijn.",
     "not_enough_playthroughs": "Niet genoeg speelsessies om deze analyse te kunnen doen.",
     "discrimination_index": {
-        "too_high": "De index voor het onderscheidingsvermogen zou niet zo hoog moeten zijn. Het gaat nu voorbij de limiet van gokkans voor deze selectie.",
-        "too_low": "De index voor het onderscheidingsvermogen zou hoger moeten zijn dan 0.2. Overweeg om veranderingen aan te brengen binnen dit gedeelte van het scenario.",
-        "good": "Dit item heeft een goed onderscheidingsvermogen.",
-        "fair": "Dit item heeft een redelijk onderscheidingsvermogen."
+        "too_high": "De index voor het onderscheidingsvermogen zou lager moeten zijn dan {{higherThreshold}}. Het gaat nu voorbij de limiet van gokkans voor deze selectie.",
+        "too_low": "De index voor het onderscheidingsvermogen zou hoger moeten zijn dan {{lowerThreshold}}. Overweeg om veranderingen aan te brengen binnen dit gedeelte van het scenario.",
+        "good": "Dit item heeft een goed onderscheidingsvermogen, omdat het tussen de {{fairThreshold}} en {{higherThreshold}} ligt.",
+        "fair": "Dit item heeft een redelijk onderscheidingsvermogen, omdat het tussen de {{lowerThreshold}} en {{fairThreshold}} ligt."
     }
 }
