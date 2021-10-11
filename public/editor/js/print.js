@@ -23,124 +23,142 @@ var Print;
 
     function printScenario()
     {
-        Utils.confirmDialog(i18next.t('print:warning'), 'warning').done(function(confirmed)
-        {
-            if (confirmed)
-            {
-                var htmlList = [];
-                $('#main > .treeContainer').each(function()
-                {
-                    // Zoom in and out to create correct HTML for nodes and connections,
-                    // because jsPlumb does this dynamically when a tree is zoomed
-                    if (!Main.trees[this.id].zoomedInBefore) Zoom.zoomIn(Main.trees[this.id]);
-                    var treeDiv = $(this).find('.treeDiv')[0];
-                    var treeDivContentList = $(treeDiv).children();
-                    var name = $(this).find('.subjectName')[0].innerHTML;
-                    if (!Main.trees[this.id].zoomedInBefore) Zoom.zoomOut();
+        // Open a window for printing
+        var printWindow = window.open(
+            '',
+            '',
+            'left=0,top=0,width=800,height=900,toolbar=0,status=0'
+        );
+        printWindow.document.write('<!DOCTYPE html><html><head></head><body></body></html>');
+        printWindow.document.close();
 
-                    // Put the name, except the "[+]" or "[-]" before it, at the top of the page
-                    htmlList.push('<h1>' + name + '</h1>');
-                    // Begin a container div that contains the treeDiv and forces a page break upon printing
-                    htmlList.push('<div class="container" style="page-break-after:always;position:relative;height:1px;">');
-                    // Loop over the contents of the tree div and put the relevant HTML in the htmlList
-                    for (var i = 0; i < treeDivContentList.length; i++)
+        printWindow.document.title = document.title;
+        printWindow.document.body.classList.add('print');
+
+        // Add style sheet references
+        $('head > link').each(function()
+        {
+            if (this.rel !== 'stylesheet') return;
+            var newStyleSheet = printWindow.document.createElement('link');
+            newStyleSheet.rel = 'stylesheet';
+            newStyleSheet.type = 'text/css';
+            newStyleSheet.href = this.href;
+            printWindow.document.head.appendChild(newStyleSheet);
+        });
+
+        // Add a progress bar
+        var progressBar = printWindow.document.createElement('progress');
+        printWindow.document.body.appendChild(progressBar);
+
+        // Add a result container
+        var resultContainer = printWindow.document.createElement('div');
+        resultContainer.style.visibility = 'hidden';
+        printWindow.document.body.appendChild(resultContainer);
+
+        // Create a step for each tree
+        var steps = $('#main > .treeContainer').map(function()
+        {
+            return function()
+            {
+                // Zoom in and out to create correct HTML for nodes and connections
+                if (!Main.trees[this.id].zoomedInBefore)
+                {
+                    Zoom.zoomIn(Main.trees[this.id]);
+                    Zoom.zoomOut();
+                }
+                var treeDiv = $(this).find('.treeDiv');
+                var name = $(this).find('.subjectName').text();
+
+                // Put the name at the top of the page
+                var heading = printWindow.document.createElement('h1');
+                heading.textContent = name;
+                resultContainer.appendChild(heading);
+                // Create a container div for the tree's elements
+                var treeContainer = printWindow.document.createElement('div');
+                treeContainer.classList.add('container');
+                // Loop over the contents of the tree div and copy the relevant HTML
+                $(treeDiv).children().each(function()
+                {
+                    var outerHTML = this.outerHTML;
+                    if (outerHTML && this.className)
                     {
-                        var outerHTML = treeDivContentList[i].outerHTML;
-                        if (outerHTML && treeDivContentList[i].className)
+                        // If it's a statement we need to loop over its contents and add only the relevant HTML
+                        if (this.classList.contains('player') ||
+                            this.classList.contains('computer') ||
+                            this.classList.contains('situation'))
                         {
-                            // If it's a statement we need to loop over its contents and add only the relevant HTML
-                            if (treeDivContentList[i].classList.contains('player') ||
-                                treeDivContentList[i].classList.contains('computer') ||
-                                treeDivContentList[i].classList.contains('situation'))
+                            // Manually add the inner HTML
+                            var htmlList = [];
+                            outerHTML = outerHTML.slice(0, outerHTML.indexOf(this.innerHTML));
+                            htmlList.push(outerHTML);
+                            $(this).children().each(function()
                             {
-                                // Manually add the inner HTML
-                                outerHTML = outerHTML.slice(0, outerHTML.indexOf(treeDivContentList[i].innerHTML));
-                                htmlList.push(outerHTML);
-                                var statementDivContentList = $(treeDivContentList[i]).children();
-                                for (var j = 0; j < statementDivContentList.length; j++)
+                                if (this.className !== 'ep' &&
+                                    this.className !== 'nodestatement' &&
+                                    this.className !== 'statementInput')
                                 {
-                                    if (statementDivContentList[j].className !== 'ep' &&
-                                        statementDivContentList[j].className !== 'nodestatement' &&
-                                        statementDivContentList[j].className !== 'statementInput')
-                                    {
-                                        htmlList.push(statementDivContentList[j].outerHTML);
-                                    }
+                                    htmlList.push(this.outerHTML);
                                 }
-                                htmlList.push('</div>');
-                            }
-                            else
-                            {
-                                htmlList.push(outerHTML);
-                            }
+                            });
+                            htmlList.push('</div>');
+                            treeContainer.insertAdjacentHTML('beforeend', htmlList.join(''));
                         }
-                        // The outerHTML for SVG is not supported in IE and ME, because the HTMLElement is an SVGSVGElement
-                        // http://stackoverflow.com/questions/12865025/convert-svgsvgelement-to-string
-                        else if (!outerHTML && treeDivContentList[i].className.baseVal === 'jtk-connector')
+                        else if (this.className.baseVal === 'jtk-connector')
                         {
-                            var svgHTML = new XMLSerializer().serializeToString(treeDivContentList[i]);
-                            htmlList.push(svgHTML);
+                            treeContainer.insertAdjacentHTML('beforeend', outerHTML);
                         }
                     }
-                    // End the container
-                    htmlList.push('</div>');
-                });
-
-                // Open a window for printing
-                var printWindow = window.open(
-                    '',
-                    '',
-                    'left=0,top=0,width=800,height=900,toolbar=0,status=0'
-                );
-
-                // Add style sheet references
-                for (var i = 0; i < document.styleSheets.length; i++)
-                {
-                    printWindow.document.write(
-                        '<link rel="stylesheet" type="text/css" href="' + document.styleSheets[i].href + '">'
-                    );
-                }
-                printWindow.document.write(
-                    '<style type="text/css"> .w{ position:absolute; } circle{ display:none } </style>'
-                );
-
-                // Write the body
-                printWindow.document.write('<body>');
-                printWindow.document.write(htmlList.join(""));
-                printWindow.document.write('</body>');
-
-                printWindow.document.close();
-
-                // This function is used to set the heights inside the window to be printed
-                // and open the print dialog
-                var initialise = function()
-                {
-                    if (printWindow.initialisationStarted) return;
-                    printWindow.initialisationStarted = true;
-                    Array.prototype.forEach.call(printWindow.document.getElementsByClassName('container'), function(container)
+                    // The outerHTML for SVG is not supported in IE and ME, because the HTMLElement is an SVGSVGElement
+                    // http://stackoverflow.com/questions/12865025/convert-svgsvgelement-to-string
+                    else if (!outerHTML && this.className.baseVal === 'jtk-connector')
                     {
-                        // Set the height to include all bounding rectangles
-                        var containerHeight = container.getBoundingClientRect().top;
-                        var maxHeight = 0;
-                        Array.prototype.forEach.call(container.getElementsByTagName('div'), function(div)
-                        {
-                            var newHeight = div.getBoundingClientRect().bottom - containerHeight;
-                            if (newHeight > maxHeight)
-                            {
-                                maxHeight = newHeight;
-                            }
-                        });
-                        container.style.height = maxHeight;
-                    });
-                    printWindow.setTimeout(function() { printWindow.print(); }, 100);
-                };
+                        var svgHTML = new XMLSerializer().serializeToString(this);
+                        treeContainer.insertAdjacentHTML('beforeend', svgHTML);
+                    }
+                });
+                resultContainer.appendChild(treeContainer);
 
-                // Run initialise after the document and all resources have finished loading,
-                // regardless of whether the load event has already been fired
-                printWindow.onload = initialise;
-                if (printWindow.document.readyState === 'complete') initialise();
+                // Set the height to include all bounding rectangles
+                var containerHeight = treeContainer.getBoundingClientRect().top;
+                var maxHeight = 0;
+                Array.prototype.forEach.call(treeContainer.getElementsByTagName('div'), function(div)
+                {
+                    var newHeight = div.getBoundingClientRect().bottom - containerHeight;
+                    if (newHeight > maxHeight)
+                    {
+                        maxHeight = newHeight;
+                    }
+                });
+                treeContainer.style.height = maxHeight + 'px';
+            }.bind(this);
+        }).get();
 
-                printWindow.focus();
-            }
+        // Add a step for showing the result and opening the print dialog
+        steps.push(function()
+        {
+            printWindow.document.body.removeChild(progressBar);
+            resultContainer.style.visibility = '';
+            printWindow.focus();
+            printWindow.setTimeout(function() { printWindow.print(); }, 100);
         });
+
+        var doStep = function(stepIndex)
+        {
+            steps[stepIndex]();
+            progressBar.value = (stepIndex + 1) / (steps.length - 1);
+            if (stepIndex < steps.length - 1) setTimeout(doStep, 0, stepIndex + 1);
+        };
+
+        var start = function()
+        {
+            if (printWindow.started) return;
+            printWindow.started = true;
+            doStep(0);
+        };
+
+        // Run start after the document and all resources have finished loading,
+        // regardless of whether the load event has already been fired
+        printWindow.onload = start;
+        if (printWindow.document.readyState === 'complete') start();
     }
 })();

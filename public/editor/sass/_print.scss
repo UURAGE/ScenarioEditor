@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+// © Utrecht University and DialogueTrainer
+
+.print {
+  progress {
+    width: 100%;
+    margin-top: 10em;
+  }
+
+  .container {
+    position: relative;
+    height: 1px;
+    page-break-after: always;
+  }
+}

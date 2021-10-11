@@ -1602,4 +1602,13 @@ td.dragHandle {
     background-color: rgba(242, 182, 61, 0.25);
     border-color: #d4930e; }
 
+.print progress {
+  width: 100%;
+  margin-top: 10em; }
+
+.print .container {
+  position: relative;
+  height: 1px;
+  page-break-after: always; }
+
 /*# sourceMappingURL=stylesheet.css.map */
