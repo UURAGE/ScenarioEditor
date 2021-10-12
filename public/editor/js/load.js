@@ -1,7 +1,7 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported Load */
-var Load;
+let Load;
 
 (function()
 {
@@ -23,8 +23,8 @@ var Load;
 
     function importDialog()
     {
-        var importContainer = $('<input>', { type: 'file', accept: '.txt,.xml', multiple: false });
-        var importDialog = $('<div>')
+        const importContainer = $('<input>', { type: 'file', accept: '.txt,.xml', multiple: false });
+        const importDialog = $('<div>')
             .append($('<form>', { action: "", method: "post", enctype: "multipart/form-data" })
                 .append($('<label>', { text: i18next.t('load:file_to_import') + ": " })
                     .append(importContainer)));
@@ -75,15 +75,15 @@ var Load;
     // Creates a graph and metadata from xml file provided by user
     function importScenario(importContainer)
     {
-        var files = importContainer.prop('files');
+        const files = importContainer.prop('files');
 
         if (files.length < 1) return;
 
-        var reader = new FileReader();
+        const reader = new FileReader();
 
         reader.onload = function()
         {
-            var xml;
+            let xml;
             try
             {
                 xml = $.parseXML(reader.result);
@@ -104,11 +104,11 @@ var Load;
     {
         prepareRebuild();
 
-        var scenarioXML = xml.documentElement;
+        const scenarioXML = xml.documentElement;
 
         // Try to find the schemaVersion of the XML and to find the old version
-        var schemaVersion = parseInt($(scenarioXML).attr('schemaVersion'));
-        var oldVersion = parseInt($(scenarioXML).children('metadata').eq(0).children('version').text());
+        const schemaVersion = parseInt($(scenarioXML).attr('schemaVersion'));
+        const oldVersion = parseInt($(scenarioXML).children('metadata').eq(0).children('version').text());
 
         // Load with the newest version of the schema
         if (schemaVersion)
@@ -155,7 +155,7 @@ var Load;
 
         if (Main.nodes.length !== 0)
         {
-            $.each(Main.trees, function(id, tree)
+            Object.values(Main.trees).forEach(function(tree)
             {
                 tree.plumbInstance.deleteEveryEndpoint();
             });
@@ -175,14 +175,14 @@ var Load;
 
     function finishLoad()
     {
-        var treeIDs = Object.keys(Main.trees);
-        if (treeIDs.length === 0)
+        const trees = Object.values(Main.trees);
+        if (trees.length === 0)
         {
             Zoom.zoomIn(Main.createEmptyTree(null, 0, 0));
         }
-        else if (treeIDs.length === 1)
+        else if (trees.length === 1)
         {
-            Zoom.zoomIn(Main.trees[treeIDs[0]]);
+            Zoom.zoomIn(trees[0]);
         }
 
         SaveIndicator.setSavedChanges(true);
@@ -196,10 +196,10 @@ var Load;
         {
             $(this).children('dialogue').each(function()
             {
-                var connections = {};
+                const connections = {};
 
-                var treeID = this.getAttribute('id').replace(/\./g, '_');
-                var idMatch = treeID.match(/^dialogue(\d+)$/);
+                let treeID = this.getAttribute('id').replace(/\./g, '_');
+                const idMatch = treeID.match(/^dialogue(\d+)$/);
                 if (idMatch)
                 {
                     Main.maxTreeNumber = Math.max(parseInt(idMatch[1]) + 1, Main.maxTreeNumber);
@@ -210,18 +210,18 @@ var Load;
                 }
 
                 // Get the position from the XML, note that this is in grid coordinates, not screen coordinates
-                var editingDataXML = $(this).children('editingData');
-                var position = editingDataXML.children('position')[0];
-                var leftPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('x')[0].textContent, 0));
-                var topPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('y')[0].textContent, 0));
+                const editingDataXML = $(this).children('editingData');
+                const position = editingDataXML.children('position')[0];
+                const leftPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('x')[0].textContent, 0));
+                const topPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('y')[0].textContent, 0));
 
-                var tree = Main.createEmptyTree(treeID, leftPos, topPos);
-                var plumbInstance = tree.plumbInstance;
+                const tree = Main.createEmptyTree(treeID, leftPos, topPos);
+                const plumbInstance = tree.plumbInstance;
 
                 tree.subject = $(this).children('subject')[0].textContent;
 
                 tree.optional = Utils.parseBool($(this).attr('optional'));
-                var iconDiv = tree.dragDiv.find('.icons');
+                const iconDiv = tree.dragDiv.find('.icons');
                 if (tree.optional) iconDiv.html(Utils.sIcon('icon-tree-is-optional'));
                 $(tree.dragDiv).toggleClass('optional', tree.optional);
 
@@ -253,7 +253,7 @@ var Load;
                     {
                         targets.forEach(function(target)
                         {
-                            var connection = plumbInstance.connect(
+                            const connection = plumbInstance.connect(
                             {
                                 source: sourceId,
                                 target: target.id
@@ -270,17 +270,17 @@ var Load;
     {
         $(definitions).children('parameters').children('userDefined').children().each(function()
         {
-            var parameterId = this.attributes.id.value;
+            const parameterId = this.attributes.id.value;
 
-            var parameterMatch = parameterId.match(/^p(\d+)$/);
+            const parameterMatch = parameterId.match(/^p(\d+)$/);
             if (parameterMatch !== null)
             {
-                var parameterNumber = parseInt(parameterMatch[1]);
+                const parameterNumber = parseInt(parameterMatch[1]);
                 if (parameterNumber > Parameters.counter) Parameters.counter = parameterNumber;
             }
 
-            var typeXML = $(this).children('type').children();
-            var parameter =
+            const typeXML = $(this).children('type').children();
+            const parameter =
             {
                 id: parameterId,
                 name: this.attributes.name.value,
@@ -293,7 +293,7 @@ var Load;
 
         if ('t' in Parameters.container.byId) Parameters.timeId = 't';
 
-        var annotations = $(definitions).children('annotations');
+        const annotations = $(definitions).children('annotations');
         if (annotations.length > 0)
         {
             ColorPicker.keyFromXML(annotations.eq(0));
@@ -304,19 +304,19 @@ var Load;
     {
         $(evaluationsXML).children().each(function()
         {
-            var evaluationId = this.attributes.id.value;
-            var evaluationIdPrefix = Evaluations.getIdPrefix();
-            var evaluationMatch = evaluationId.match('^' + Utils.escapeRegex(evaluationIdPrefix) + 'e(\\d+)$');
+            const evaluationId = this.attributes.id.value;
+            const evaluationIdPrefix = Evaluations.getIdPrefix();
+            const evaluationMatch = evaluationId.match('^' + Utils.escapeRegex(evaluationIdPrefix) + 'e(\\d+)$');
             if (evaluationMatch !== null)
             {
-                var evaluationCounter = parseInt(evaluationMatch[1]);
+                const evaluationCounter = parseInt(evaluationMatch[1]);
                 if (evaluationCounter > Evaluations.counter)
                 {
                     Evaluations.counter = evaluationCounter;
                 }
             }
 
-            for (var parameterId in Parameters.container.byId)
+            for (const parameterId in Parameters.container.byId)
             {
                 if (evaluationId === Evaluations.getParameterIdPrefix() + parameterId)
                 {
@@ -324,17 +324,17 @@ var Load;
                 }
             }
 
-            var typeXML = $(this).children('type').children();
-            var type = Types.primitives[typeXML[0].nodeName].loadType(typeXML);
+            const typeXML = $(this).children('type').children();
+            let type = Types.primitives[typeXML[0].nodeName].loadType(typeXML);
             if (type.name === Types.primitives.string.name)
             {
                 type = $.extend({}, type, { controlName: 'textarea', rows: 4, markdown: "gfm" });
             }
 
-            var expressionXML = $(this).children('expression').children();
-            var expression = Expression.fromXML(expressionXML[0], type);
+            const expressionXML = $(this).children('expression').children();
+            const expression = Expression.fromXML(expressionXML[0], type);
 
-            var evaluation =
+            const evaluation =
             {
                 id: evaluationId,
                 name: this.attributes.name.value,
@@ -359,7 +359,7 @@ var Load;
 
         $(metadata).children('authors').children().each(function()
         {
-            var author = {};
+            const author = {};
             author.name = this.attributes.name.value;
             if (this.attributes.email) author.email = this.attributes.email.value;
             author.startDate = this.attributes.startDate.value;
@@ -367,10 +367,10 @@ var Load;
             Metadata.container.authors.push(author);
         });
 
-        var languageXML = $(metadata).children('language');
+        const languageXML = $(metadata).children('language');
         if (languageXML.length > 0)
         {
-            var languageCode = $(languageXML).attr('code');
+            const languageCode = $(languageXML).attr('code');
             if (languageCode in Config.container.settings.languages.byCode)
             {
                 Metadata.container.language = { code: languageCode, name: $(languageXML).text() };
@@ -385,9 +385,9 @@ var Load;
     // Load a statement.
     function loadStatement(statement, type, connections, treeID)
     {
-        var id = $(statement).attr('id').replace(/\./g, '_');
+        let id = $(statement).attr('id').replace(/\./g, '_');
 
-        var idMatch = id.match(/^edit_(\d+)$/);
+        const idMatch = id.match(/^edit_(\d+)$/);
         if (idMatch !== null)
         {
             Main.jsPlumbCounter = Math.max(Main.jsPlumbCounter, parseInt(idMatch[1]));
@@ -397,30 +397,30 @@ var Load;
             id = "ext_" + id;
         }
 
-        var characterIdRef = $(statement).attr('characteridref');
-        var allowInterleaveNode = false;
-        var allowInterleaveVal = $(statement).attr('jumpPoint');
+        const characterIdRef = $(statement).attr('characteridref');
+        let allowInterleaveNode = false;
+        let allowInterleaveVal = $(statement).attr('jumpPoint');
         if (allowInterleaveVal !== undefined) allowInterleaveNode = Utils.parseBool(allowInterleaveVal);
         allowInterleaveVal = $(statement).attr('allowInterleave');
         if (allowInterleaveVal !== undefined) allowInterleaveNode = Utils.parseBool(allowInterleaveVal);
-        var allowDialogueEndNode = false;
-        var allowDialogueEndVal = $(statement).attr('inits');
+        let allowDialogueEndNode = false;
+        let allowDialogueEndVal = $(statement).attr('inits');
         if (allowDialogueEndVal !== undefined) allowDialogueEndNode = Utils.parseBool(allowDialogueEndVal);
         allowDialogueEndVal = $(statement).attr('allowDialogueEnd');
         if (allowDialogueEndVal !== undefined) allowDialogueEndNode = Utils.parseBool(allowDialogueEndVal);
-        var endNode = Utils.parseBool($(statement).attr('end'));
+        const endNode = Utils.parseBool($(statement).attr('end'));
 
-        var text = $(statement).children('text').text();
+        const text = $(statement).children('text').text();
 
-        var editingDataXML = $(statement).children('editingData');
-        var positionXML = editingDataXML.children('position');
-        var xPos = positionXML.children('x').text();
-        var yPos = positionXML.children('y').text();
-        var comment = editingDataXML.children('comment').text();
+        const editingDataXML = $(statement).children('editingData');
+        const positionXML = editingDataXML.children('position');
+        const xPos = positionXML.children('x').text();
+        const yPos = positionXML.children('y').text();
+        const comment = editingDataXML.children('comment').text();
 
         // Load the preconditions of this node.
-        var preconditionsXML = $(statement).children("preconditions");
-        var preconditions;
+        const preconditionsXML = $(statement).children("preconditions");
+        let preconditions;
         if (preconditionsXML.length === 0)
         {
             preconditions = null;
@@ -430,24 +430,24 @@ var Load;
             preconditions = Condition.fromXML(preconditionsXML.children()[0]);
         }
 
-        var parameterEffects = loadParameterEffects($(statement).children('parameterEffects'), characterIdRef);
+        const parameterEffects = loadParameterEffects($(statement).children('parameterEffects'), characterIdRef);
 
-        var acceptableScopes = ['per', 'per-' + type];
+        const acceptableScopes = ['per', 'per-' + type];
         if (type === Main.computerType) acceptableScopes.push('per-computer-own');
-        var propertyValues = loadPropertyValues($(statement).children('propertyValues'), acceptableScopes, characterIdRef);
+        const propertyValues = loadPropertyValues($(statement).children('propertyValues'), acceptableScopes, characterIdRef);
 
-        var targets = $(statement).children('responses').children();
+        const targets = $(statement).children('responses').children();
         if (targets.length > 0)
         {
             // Save all the connections. We will create the connections when all nodes have been added.
             connections[id] = [];
-            for (var m = 0; m < targets.length; m++)
+            for (let m = 0; m < targets.length; m++)
             {
-                var targetID = targets[m].attributes.idref.value.replace(/\./g, '_');
+                let targetID = targets[m].attributes.idref.value.replace(/\./g, '_');
                 if (!/^edit_\d+$/.test(targetID)) targetID = 'ext_' + targetID;
-                var connection = { id: targetID };
+                const connection = { id: targetID };
 
-                var annotationValues = $(targets[m]).children('annotationValues');
+                const annotationValues = $(targets[m]).children('annotationValues');
                 if (annotationValues.length > 0)
                 {
                     connection.colorValue = ColorPicker.colorFromXML(annotationValues.eq(0));
@@ -456,7 +456,7 @@ var Load;
             }
         }
 
-        var node = Main.createAndReturnNode(type, id, Main.trees[treeID].div, treeID);
+        const node = Main.createAndReturnNode(type, id, Main.trees[treeID].div, treeID);
         Main.nodes[id] = {
             text: text,
             type: type,
@@ -482,7 +482,7 @@ var Load;
 
     function loadParameterEffects(parameterEffectsXMLElement, characterIdRef)
     {
-        var parameterEffects = Config.getNewDefaultParameterEffects(characterIdRef);
+        const parameterEffects = Config.getNewDefaultParameterEffects(characterIdRef);
         parameterEffectsXMLElement.children('userDefined').children().each(function()
         {
             parameterEffects.userDefined.push(
@@ -494,11 +494,11 @@ var Load;
         });
         parameterEffectsXMLElement.children('fixed').children().each(function()
         {
-            var parameterId = this.attributes.idref.value;
-            var effect;
+            const parameterId = this.attributes.idref.value;
+            let effect;
             if (this.attributes.characteridref)
             {
-                var characterId = this.attributes.characteridref.value;
+                const characterId = this.attributes.characteridref.value;
                 if (characterId in Config.container.characters.byId)
                 {
                     if (parameterId in parameterEffects.fixed.perCharacter[characterId].byId)
@@ -548,15 +548,15 @@ var Load;
 
     function loadPropertyValues(propertyValuesXMLElement, acceptableScopes, characterIdRef)
     {
-        var propertyValues = Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef);
+        const propertyValues = Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef);
         propertyValuesXMLElement.children().each(function()
         {
-            var propertyId = this.attributes.idref.value;
-            var property = null;
-            var storage = null;
+            const propertyId = this.attributes.idref.value;
+            let property = null;
+            let storage = null;
             if (this.attributes.characteridref)
             {
-                var characterId = this.attributes.characteridref.value;
+                const characterId = this.attributes.characteridref.value;
                 if (characterId in Config.container.characters.byId)
                 {
                     storage = propertyValues.perCharacter[characterId];
@@ -577,7 +577,7 @@ var Load;
             }
             if (property)
             {
-                var propertyValue = property.type.fromXML(this);
+                const propertyValue = property.type.fromXML(this);
                 storage[propertyId] = propertyValue;
                 if (property.type.autoComplete)
                 {

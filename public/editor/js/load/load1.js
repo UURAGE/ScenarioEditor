@@ -1,7 +1,7 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported Load1 */
-var Load1;
+let Load1;
 
 (function()
 {
@@ -15,10 +15,10 @@ var Load1;
 
     function generateGraph(xml)
     {
-        var tree = Main.createEmptyTree(null, 0, 0);
-        var connections = {};
+        const tree = Main.createEmptyTree(null, 0, 0);
+        const connections = {};
         // Conversations stores all the accumulated conversations so we can expand them and give the nodes fresh ids at the end
-        var conversations = {};
+        const conversations = {};
 
         tree.plumbInstance.batch(function()
         {
@@ -41,7 +41,7 @@ var Load1;
             // Makes the connections between the nodes.
             $.each(connections, function(sourceId, targets)
             {
-                for (var i = 0; i < targets.length; i++)
+                for (let i = 0; i < targets.length; i++)
                 {
                     tree.plumbInstance.connect(
                     {

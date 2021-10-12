@@ -1,13 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported Parameters */
-var Parameters;
+let Parameters;
 
 (function()
 {
     "use strict";
 
-    var defaultContainer = { byId: {}, sequence: [] };
+    const defaultContainer = { byId: {}, sequence: [] };
 
     // eslint-disable-next-line no-global-assign
     Parameters =
@@ -37,31 +37,31 @@ var Parameters;
 
     function dialog()
     {
-        var parametersDialog = $('<div>', { id: "parameters" });
+        const parametersDialog = $('<div>', { id: "parameters" });
 
-        var parametersTableHead = $('<thead>')
+        const parametersTableHead = $('<thead>')
             .append($('<th>')) // For the sortable handle
             .append($('<th>', { text: i18next.t('common:name') }))
             .append($('<th>', { text: i18next.t('common:type') }))
             .append($('<th>', { text: i18next.t('common:evaluated') }))
             .append($('<th>', { text: i18next.t('common:initial_value') }))
             .append($('<th>', { text: i18next.t('common:description') }));
-        var parametersContainer = $('<tbody>').appendTo($('<table>').append(parametersTableHead).appendTo(parametersDialog));
+        const parametersContainer = $('<tbody>').appendTo($('<table>').append(parametersTableHead).appendTo(parametersDialog));
 
-        var addParameterButton = Parts.addButton();
+        const addParameterButton = Parts.addButton();
         addParameterButton.on('click', function()
         {
-            var parameterContainer = addDefaultDefinition(parametersContainer);
+            const parameterContainer = addDefaultDefinition(parametersContainer);
             Utils.focusFirstTabindexedDescendant(parameterContainer);
             parametersTableHead.show();
         });
         parametersDialog.append(addParameterButton);
 
-        var addTimeParameterButton = $('<button>', { type: 'button', class: 'iconButton time', title: i18next.t('parameters:add_time_title') }).append(Utils.sIcon('icon-time'));
+        const addTimeParameterButton = $('<button>', { type: 'button', class: 'iconButton time', title: i18next.t('parameters:add_time_title') }).append(Utils.sIcon('icon-time'));
         addTimeParameterButton.on('click', function()
         {
-            var isTime = parametersContainer.find(".isT").length;
-            var isTimeRemoved = parametersContainer.find(".isT.removedParameter").length;
+            const isTime = parametersContainer.find(".isT").length;
+            const isTimeRemoved = parametersContainer.find(".isT.removedParameter").length;
 
             // If the timeId is empty, or if it is filled, but
             // the parameter in the dialog has been removed (in that case the
@@ -87,7 +87,7 @@ var Parameters;
         });
         parametersContainer.on('click', '.delete', function()
         {
-            var tr = $(this).closest('tr');
+            const tr = $(this).closest('tr');
             tr.addClass("removedParameter");
             if (tr[0].id === "t" && tr.not(".removedParameter"))
             {
@@ -146,7 +146,7 @@ var Parameters;
 
         Parameters.container.sequence.forEach(function(parameter)
         {
-            var parameterContainer;
+            let parameterContainer;
             if (parameter.id === "t")
             {
                 parameterContainer = addTimeParameterDefinition(parametersContainer);
@@ -178,15 +178,15 @@ var Parameters;
 
     function addDefaultDefinition(parametersContainer)
     {
-        var typeSelectContainer = $('<td>');
+        const typeSelectContainer = $('<td>');
 
-        var nameInput = $('<input>', { type: 'text', class: "name", style: "width: 197px;" });
+        const nameInput = $('<input>', { type: 'text', class: "name", style: "width: 197px;" });
 
-        var initialValueContainer = $('<span>', { class: "parameter-initial-value-container" });
+        const initialValueContainer = $('<span>', { class: "parameter-initial-value-container" });
 
-        var description = $('<textarea>', { class: "parameter-description", style: "height:1.25em;" });
+        const description = $('<textarea>', { class: "parameter-description", style: "height:1.25em;" });
 
-        var evaluated = $('<input>', { type: 'checkbox', class: "parameter-evaluated" });
+        const evaluated = $('<input>', { type: 'checkbox', class: "parameter-evaluated" });
         evaluated.on('change', function()
         {
             if ($(this).prop('checked'))
@@ -205,7 +205,7 @@ var Parameters;
             }
         });
 
-        var parameterContainer = $('<tr>', { class: "newParameter" })
+        const parameterContainer = $('<tr>', { class: "newParameter" })
             .append($('<td>', { class: "handle", text: "↕" }))
             .append($('<td>').append(nameInput))
             .append(typeSelectContainer)
@@ -214,15 +214,15 @@ var Parameters;
             .append($('<td>').append(description))
             .append(Parts.deleteButton());
 
-        var previousType;
-        var handleParameterTypeChange = function(newTypeName)
+        let previousType;
+        const handleParameterTypeChange = function(newTypeName)
         {
             parameterContainer.addClass("changedTypeParameter");
 
-            var initialValue;
+            let initialValue;
             if (previousType) initialValue = previousType.getFromDOM(initialValueContainer);
             initialValueContainer.empty();
-            var type = Types.primitives[newTypeName].loadTypeFromDOM(parameterContainer, initialValueContainer);
+            const type = Types.primitives[newTypeName].loadTypeFromDOM(parameterContainer, initialValueContainer);
             type.appendControlTo(initialValueContainer);
             if (previousType) type.setInDOM(initialValueContainer, type.castFrom(previousType, initialValue));
             previousType = type;
@@ -239,7 +239,7 @@ var Parameters;
 
     function addTimeParameterDefinition(parametersContainer)
     {
-        var parameterContainer = addDefaultDefinition(parametersContainer);
+        const parameterContainer = addDefaultDefinition(parametersContainer);
         parameterContainer.prop('id', 't');
         parameterContainer.find(".name").val(i18next.t('parameters:time'));
         parameterContainer.find(".parameter-type-select").val(Types.primitives.integer.name);
@@ -252,27 +252,27 @@ var Parameters;
 
     function save(parametersContainer)
     {
-        var deferredSave = $.Deferred();
+        const deferredSave = $.Deferred();
 
-        var consideredSave = function()
+        const consideredSave = function()
         {
             SaveIndicator.setSavedChanges(false);
 
-            var previouslySelectedElement = Main.selectedElement;
+            const previouslySelectedElement = Main.selectedElement;
             Main.selectElement(null);
 
             parametersContainer.find(".removedParameter").each(function()
             {
-                var id = $(this).prop('id');
+                const id = $(this).prop('id');
 
-                var doesNotReferToParameterId = function(referrer)
+                const doesNotReferToParameterId = function(referrer)
                 {
                     return referrer.idRef !== id;
                 };
                 // Remove the preconditions and effects for every node with this parameter.
-                for (var nodeID in Main.nodes)
+                for (const nodeID in Main.nodes)
                 {
-                    var node = Main.nodes[nodeID];
+                    const node = Main.nodes[nodeID];
                     node.parameterEffects.userDefined = node.parameterEffects.userDefined.filter(doesNotReferToParameterId);
 
                     if (node.preconditions)
@@ -288,16 +288,16 @@ var Parameters;
                 // Remove the parameter from the html and the object.
                 $(this).remove();
 
-                var removedParameter = Parameters.container.byId[id];
-                var indexOfRemovedParameter = Parameters.container.sequence.indexOf(removedParameter);
+                const removedParameter = Parameters.container.byId[id];
+                const indexOfRemovedParameter = Parameters.container.sequence.indexOf(removedParameter);
                 delete Parameters.container.byId[id];
                 Parameters.container.sequence.splice(indexOfRemovedParameter, 1);
             });
 
-            var getParameterFromDOM = function(container)
+            const getParameterFromDOM = function(container)
             {
-                var typeName = container.find(".parameter-type-select").val();
-                var type = Types.primitives[typeName].loadTypeFromDOM(container, container.find(".parameter-initial-value-container"));
+                const typeName = container.find(".parameter-type-select").val();
+                const type = Types.primitives[typeName].loadTypeFromDOM(container, container.find(".parameter-initial-value-container"));
 
                 return {
                     id: container.prop('id'),
@@ -310,8 +310,8 @@ var Parameters;
 
             parametersContainer.find(".existingParameter").each(function()
             {
-                var newParameter = getParameterFromDOM($(this));
-                var oldParameter = Parameters.container.byId[newParameter.id];
+                const newParameter = getParameterFromDOM($(this));
+                const oldParameter = Parameters.container.byId[newParameter.id];
 
                 if (!newParameter.name)
                 {
@@ -321,13 +321,13 @@ var Parameters;
                 // If an already existing parameter changed type, the effects on the nodes need to be adjusted accordingly
                 if ($(this).hasClass("changedTypeParameter"))
                 {
-                    for (var nodeID in Main.nodes)
+                    for (const nodeID in Main.nodes)
                     {
                         Main.nodes[nodeID].parameterEffects.userDefined.forEach(function(effect)
                         {
                             if (effect.idRef === oldParameter.id)
                             {
-                                var hasOperator = newParameter.type.assignmentOperators.indexOf(Types.assignmentOperators[effect.operator]) !== -1;
+                                const hasOperator = newParameter.type.assignmentOperators.indexOf(Types.assignmentOperators[effect.operator]) !== -1;
                                 if (!hasOperator) effect.operator = newParameter.type.assignmentOperators[0].name;
 
                                 effect.value = newParameter.type.castFrom(oldParameter.type, effect.value);
@@ -370,11 +370,11 @@ var Parameters;
             {
                 if ($(this).prop('id') !== 't')
                 {
-                    var id = 'p' + (Parameters.counter += 1).toString();
+                    const id = 'p' + (Parameters.counter += 1).toString();
                     $(this).prop('id', id);
                 }
 
-                var newParameter = getParameterFromDOM($(this));
+                const newParameter = getParameterFromDOM($(this));
 
                 if (!newParameter.name) return;
 
@@ -388,7 +388,7 @@ var Parameters;
                     Parameters.timeId = newParameter.id;
                     $(this).addClass('isT');
 
-                    var timeEffect =
+                    const timeEffect =
                     {
                         idRef: newParameter.id,
                         type: Types.primitives.integer,
@@ -396,9 +396,9 @@ var Parameters;
                         value: 1
                     };
 
-                    for (var nodeId in Main.nodes)
+                    for (const nodeId in Main.nodes)
                     {
-                        var node = Main.nodes[nodeId];
+                        const node = Main.nodes[nodeId];
                         if (node.type === Main.playerType)
                         {
                             if (node.parameterEffects.userDefined === undefined || node.parameterEffects.userDefined === null)
@@ -431,9 +431,9 @@ var Parameters;
             deferredSave.resolve(true);
         };
 
-        var confirmParametersWithoutNameRemoval = function()
+        const confirmParametersWithoutNameRemoval = function()
         {
-            var noNameCounter = 0;
+            let noNameCounter = 0;
             parametersContainer.find(".newParameter").not(".removedParameter").each(function()
             {
                 if (!$(this).find(".name").val())
@@ -451,17 +451,17 @@ var Parameters;
             }
         };
 
-        var confirmRemovedParametersRemoval = function()
+        const confirmRemovedParametersRemoval = function()
         {
-            var removedExistingParameters = [];
+            const removedExistingParameters = [];
             parametersContainer.find(".removedParameter").not(".newParameter").each(function()
             {
                 removedExistingParameters.push(Parameters.container.byId[$(this).prop('id')]);
             });
             if (removedExistingParameters.length > 0)
             {
-                var content = $('<div>', { text: i18next.t('parameters:removal_warning', { count: removedExistingParameters.length }) });
-                var removedParameterList = $('<ul>');
+                const content = $('<div>', { text: i18next.t('parameters:removal_warning', { count: removedExistingParameters.length }) });
+                const removedParameterList = $('<ul>');
                 removedExistingParameters.forEach(function(existingParameter)
                 {
                     removedParameterList.append($('<li>', { text: existingParameter.name }));

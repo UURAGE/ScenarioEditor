@@ -1,7 +1,7 @@
 {
     "env": {
         "browser": true,
-        "es6": false,
+        "es6": true,
         "jquery": true
     },
     "extends": "eslint:recommended",
@@ -41,9 +41,6 @@
         "site_url": "readonly",
         "editor_url": "readonly",
         "languageCode": "readonly"
-    },
-    "parserOptions": {
-        "ecmaVersion": 5
     },
     "rules": {
         "block-scoped-var": [
@@ -190,6 +187,9 @@
                 "variables": true
             }
         ],
+        "no-var": [
+            "error"
+        ],
         "object-curly-spacing": [
             "error",
             "always"
@@ -210,6 +210,9 @@
                 "prev": "directive",
                 "next": "directive"
             }
+        ],
+        "prefer-const": [
+            "error"
         ],
         "semi": [
             "error",

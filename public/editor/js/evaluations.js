@@ -1,13 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported Evaluations */
-var Evaluations;
+let Evaluations;
 
 (function()
 {
     "use strict";
 
-    var defaultContainer = { byId: {}, sequence: [] };
+    const defaultContainer = { byId: {}, sequence: [] };
 
     // eslint-disable-next-line no-global-assign
     Evaluations =
@@ -37,35 +37,35 @@ var Evaluations;
 
     function dialog()
     {
-        var evaluationsDialog = $('<div>', { id: "evaluations" });
+        const evaluationsDialog = $('<div>', { id: "evaluations" });
 
-        var evaluationsTableHead = $('<thead>')
+        const evaluationsTableHead = $('<thead>')
             .append($('<th>')) // For the sortable handle
             .append($('<th>', { text: i18next.t('common:name') }))
             .append($('<th>', { text: i18next.t('common:type') }))
             .append($('<th>', { text: i18next.t('common:description') }))
             .append($('<th>', { text: i18next.t('common:expression') }));
-        var evaluationsContainer = $('<tbody>').appendTo($('<table>').append(evaluationsTableHead).appendTo(evaluationsDialog));
+        const evaluationsContainer = $('<tbody>').appendTo($('<table>').append(evaluationsTableHead).appendTo(evaluationsDialog));
 
-        var addButton = Parts.addButton();
-        var appendNewEvaluationContainer = function()
+        const addButton = Parts.addButton();
+        const appendNewEvaluationContainer = function()
         {
-            var evaluationContainer = $('<tr>').appendTo(evaluationsContainer);
+            const evaluationContainer = $('<tr>').appendTo(evaluationsContainer);
             evaluationContainer.addClass("added");
 
             evaluationContainer.append($('<td>', { class: 'handle', text: '↕' }));
 
-            var nameInput = $('<input>', { type: 'text', class: 'evaluation-name' });
+            const nameInput = $('<input>', { type: 'text', class: 'evaluation-name' });
             evaluationContainer.append($('<td>').append(nameInput));
             if (Config.container.settings.evaluationName.type.markdown) Utils.attachMarkdownTooltip(nameInput);
 
-            var typeContainer = $('<td>');
-            var expressionKindContainer = $('<span>', { class: 'evaluation-expression' });
+            const typeContainer = $('<td>');
+            const expressionKindContainer = $('<span>', { class: 'evaluation-expression' });
 
-            var previousType;
-            var handleEvaluationTypeChange = function(newTypeName)
+            let previousType;
+            const handleEvaluationTypeChange = function(newTypeName)
             {
-                var newType = Types.primitives[newTypeName].loadTypeFromDOM(typeContainer);
+                let newType = Types.primitives[newTypeName].loadTypeFromDOM(typeContainer);
                 if (newType.name === Types.primitives.string.name)
                 {
                     newType = $.extend(newType, { controlName: 'textarea', rows: 4, markdown: "gfm" });
@@ -76,16 +76,16 @@ var Evaluations;
             };
             Types.appendControlsTo(typeContainer.appendTo(evaluationContainer), '.evaluation-name', 'evaluation-type', handleEvaluationTypeChange);
 
-            var evaluationDescription = $('<textarea>', { class: 'evaluation-description' });
+            const evaluationDescription = $('<textarea>', { class: 'evaluation-description' });
             evaluationDescription.attr('maxlength', Config.container.settings.evaluationDescription.type.maxLength);
             evaluationContainer.append($('<td>').append(evaluationDescription));
             if (Config.container.settings.evaluationDescription.type.markdown) Utils.attachMarkdownTooltip(evaluationDescription);
 
-            var expressionContainer = $('<td>');
+            const expressionContainer = $('<td>');
             expressionContainer.append(expressionKindContainer);
             evaluationContainer.append(expressionContainer);
 
-            var deleteButton = Parts.deleteButton();
+            const deleteButton = Parts.deleteButton();
             deleteButton.on('click', function()
             {
                 evaluationContainer.addClass("removed");
@@ -146,23 +146,23 @@ var Evaluations;
 
         Evaluations.container.sequence.forEach(function(evaluation)
         {
-            var evaluationContainer = appendNewEvaluationContainer();
+            const evaluationContainer = appendNewEvaluationContainer();
             evaluationContainer.removeClass("added").addClass("existed");
 
             evaluationContainer.prop('id', evaluation.id);
 
-            var nameInput = evaluationContainer.find(".evaluation-name");
+            const nameInput = evaluationContainer.find(".evaluation-name");
             nameInput.val(evaluation.name);
 
             Types.insertIntoDOM(evaluationContainer, 'evaluation-type', evaluation.type);
 
-            var descriptionTextArea = evaluationContainer.find(".evaluation-description");
+            const descriptionTextArea = evaluationContainer.find(".evaluation-description");
             descriptionTextArea.val(evaluation.description);
 
-            var expressionContainer = evaluationContainer.find(".evaluation-expression");
+            const expressionContainer = evaluationContainer.find(".evaluation-expression");
             Expression.setInDOM(expressionContainer, evaluation.type, evaluation.expression);
 
-            for (var parameterId in Parameters.container.byId)
+            for (const parameterId in Parameters.container.byId)
             {
                 if (evaluation.id === Evaluations.getParameterIdPrefix() + parameterId)
                 {
@@ -182,37 +182,37 @@ var Evaluations;
 
     function save(evaluationsContainer)
     {
-        var deferredSave = $.Deferred();
+        const deferredSave = $.Deferred();
 
-        var consideredSave = function()
+        const consideredSave = function()
         {
             SaveIndicator.setSavedChanges(false);
 
-            var previouslySelectedElement = Main.selectedElement;
+            const previouslySelectedElement = Main.selectedElement;
             Main.selectElement(null);
 
             evaluationsContainer.find(".removed").each(function()
             {
-                var id = $(this).prop('id');
+                const id = $(this).prop('id');
                 $(this).remove();
 
-                var removedEvaluation = Evaluations.container.byId[id];
-                var indexOfRemovedEvaluation = Evaluations.container.sequence.indexOf(removedEvaluation);
+                const removedEvaluation = Evaluations.container.byId[id];
+                const indexOfRemovedEvaluation = Evaluations.container.sequence.indexOf(removedEvaluation);
                 delete Evaluations.container.byId[id];
                 Evaluations.container.sequence.splice(indexOfRemovedEvaluation, 1);
             });
 
-            var getEvaluationFromDOM = function(container)
+            const getEvaluationFromDOM = function(container)
             {
-                var typeName = container.find(".evaluation-type").val();
-                var type = Types.primitives[typeName].loadTypeFromDOM(container);
+                const typeName = container.find(".evaluation-type").val();
+                let type = Types.primitives[typeName].loadTypeFromDOM(container);
                 if (type.name === Types.primitives.string.name)
                 {
                     type = $.extend(type, { controlName: 'textarea', rows: 4, markdown: "gfm" });
                 }
 
-                var evaluationId = container.prop('id');
-                var expression = Expression.getFromDOM(container.find('.evaluation-expression'), type);
+                const evaluationId = container.prop('id');
+                const expression = Expression.getFromDOM(container.find('.evaluation-expression'), type);
                 if (type.name === Types.primitives.integer.name &&
                     evaluationId.indexOf(getParameterIdPrefix()) === 0)
                 {
@@ -237,8 +237,8 @@ var Evaluations;
             };
             evaluationsContainer.find(".existed").each(function()
             {
-                var newEvaluation = getEvaluationFromDOM($(this));
-                var oldEvaluation = Evaluations.container.byId[newEvaluation.id];
+                const newEvaluation = getEvaluationFromDOM($(this));
+                const oldEvaluation = Evaluations.container.byId[newEvaluation.id];
 
                 if (!newEvaluation.name)
                 {
@@ -250,10 +250,10 @@ var Evaluations;
             evaluationsContainer.find(".added").each(function()
             {
                 Evaluations.counter++;
-                var id = Evaluations.getIdPrefix() + 'e' + Evaluations.counter.toString();
+                const id = Evaluations.getIdPrefix() + 'e' + Evaluations.counter.toString();
                 $(this).prop('id', id);
 
-                var newEvaluation = getEvaluationFromDOM($(this));
+                const newEvaluation = getEvaluationFromDOM($(this));
 
                 if (newEvaluation.name)
                 {
@@ -274,9 +274,9 @@ var Evaluations;
             deferredSave.resolve(true);
         };
 
-        var confirmEvaluationsWithoutNameRemoval = function()
+        const confirmEvaluationsWithoutNameRemoval = function()
         {
-            var noNameCounter = 0;
+            let noNameCounter = 0;
             evaluationsContainer.find(".added").not(".removed").each(function()
             {
                 if (!$(this).find(".evaluation-name").val())
@@ -294,17 +294,17 @@ var Evaluations;
             }
         };
 
-        var confirmRemovedEvaluationsRemoval = function()
+        const confirmRemovedEvaluationsRemoval = function()
         {
-            var removedExistingEvaluations = [];
+            const removedExistingEvaluations = [];
             evaluationsContainer.find(".removed").not(".added").each(function()
             {
                 removedExistingEvaluations.push(Evaluations.container.byId[$(this).prop('id')]);
             });
             if (removedExistingEvaluations.length > 0)
             {
-                var content = $('<div>', { text: i18next.t('evaluations:removal_warning', { count: removedExistingEvaluations.length }) });
-                var removedEvaluationList = $('<ul>');
+                const content = $('<div>', { text: i18next.t('evaluations:removal_warning', { count: removedExistingEvaluations.length }) });
+                const removedEvaluationList = $('<ul>');
                 removedExistingEvaluations.forEach(function(existingEvaluation)
                 {
                     removedEvaluationList.append($('<li>', { text: existingEvaluation.name }));
@@ -355,7 +355,7 @@ var Evaluations;
 
     function handleParameterTypeChange(oldParameter, newParameter)
     {
-        var evaluatedParameterId = Evaluations.getParameterIdPrefix() + oldParameter.id;
+        const evaluatedParameterId = Evaluations.getParameterIdPrefix() + oldParameter.id;
         Evaluations.container.sequence.forEach(function(evaluation)
         {
             if (evaluation.id === evaluatedParameterId)
@@ -379,10 +379,10 @@ var Evaluations;
 
     function handleParameterRemoval(parameterId)
     {
-        var evaluatedParameterId = Evaluations.getParameterIdPrefix() + parameterId;
-        for (var i = 0; i < Evaluations.container.sequence.length; i++)
+        const evaluatedParameterId = Evaluations.getParameterIdPrefix() + parameterId;
+        for (let i = 0; i < Evaluations.container.sequence.length; i++)
         {
-            var evaluation = Evaluations.container.sequence[i];
+            const evaluation = Evaluations.container.sequence[i];
             if (evaluation.id === evaluatedParameterId)
             {
                 delete Evaluations.container.byId[evaluatedParameterId];
@@ -398,8 +398,8 @@ var Evaluations;
 
     function handleParameterEvaluatedChange(parameter)
     {
-        var evaluatedParameterId = Evaluations.getParameterIdPrefix() + parameter.id;
-        var evaluation;
+        const evaluatedParameterId = Evaluations.getParameterIdPrefix() + parameter.id;
+        let evaluation;
         if (parameter.evaluated)
         {
             evaluation = {
@@ -421,7 +421,7 @@ var Evaluations;
         else
         {
             evaluation = Evaluations.container.byId[evaluatedParameterId];
-            var index = Evaluations.container.sequence.indexOf(evaluation);
+            const index = Evaluations.container.sequence.indexOf(evaluation);
             delete Evaluations.container.byId[evaluatedParameterId];
             Evaluations.container.sequence.splice(index, 1);
         }
@@ -429,8 +429,8 @@ var Evaluations;
 
     function handleEvaluatedParameterChange(parameter)
     {
-        var evaluatedParameterId = Evaluations.getParameterIdPrefix() + parameter.id;
-        var evaluation = Evaluations.container.byId[evaluatedParameterId];
+        const evaluatedParameterId = Evaluations.getParameterIdPrefix() + parameter.id;
+        const evaluation = Evaluations.container.byId[evaluatedParameterId];
         evaluation.name = parameter.name;
         evaluation.description = parameter.description;
     }

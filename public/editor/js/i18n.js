@@ -4,7 +4,7 @@
 {
     "use strict";
 
-    var namespaces =
+    const namespaces =
     [
         'clipboard',
         'colorPicker',
@@ -26,7 +26,7 @@
         'elementList'
     ];
 
-    var resources = $.ajax(
+    const resources = $.ajax(
     {
         url: site_url + 'editor/getlocales',
         type: 'GET',

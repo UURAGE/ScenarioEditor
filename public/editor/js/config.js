@@ -1,7 +1,7 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported Config */
-var Config;
+let Config;
 
 (function()
 {
@@ -22,24 +22,24 @@ var Config;
         getNewDefaultPropertyValues: getNewDefaultPropertyValues
     };
 
-    var configNameSpace = "http://uurage.github.io/ScenarioEditor/config/namespace";
+    const configNameSpace = "http://uurage.github.io/ScenarioEditor/config/namespace";
 
     // The default scopes used when there is no statementScope attribute specified for the property in the config
-    var defaultPropertyScopes = { statementScope: 'independent' };
+    const defaultPropertyScopes = { statementScope: 'independent' };
     // The default collection used when the property collection is not present in the XML
-    var defaultPropertyCollection = { kind: 'toplevel', scopes: defaultPropertyScopes, sequence: [], byId: {} };
+    const defaultPropertyCollection = { kind: 'toplevel', scopes: defaultPropertyScopes, sequence: [], byId: {} };
 
     // The default scopes used when there is no statementScope attribute specified for the parameter in the config
-    var defaultParameterScopes = { statementScope: 'per' };
+    const defaultParameterScopes = { statementScope: 'per' };
     // The default collection used when the parameter collection is not present in the XML
-    var defaultParameterCollection = { kind: 'toplevel', scopes: defaultParameterScopes, sequence: [], byId: {} };
+    const defaultParameterCollection = { kind: 'toplevel', scopes: defaultParameterScopes, sequence: [], byId: {} };
 
     $(loadConfig);
 
     function loadConfig()
     {
         // The config.xml is loaded into the DOM on the server-side, so we can parse the XML from the DOM
-        var configXML = $($.parseXML($('#config').text())).children('config');
+        const configXML = $($.parseXML($('#config').text())).children('config');
         if (!configXML.length)
         {
             Utils.alertDialog("The configuration for the editor was not loaded", 'error');
@@ -55,7 +55,7 @@ var Config;
         if (configXML.children('character').length === 1)
         {
             Config.container.characters = { parameters: $.extend({}, defaultParameterCollection), properties: $.extend({}, defaultPropertyCollection), byId: {} };
-            var character = loadCharacterNode(configXML.children('character')[0]);
+            const character = loadCharacterNode(configXML.children('character')[0]);
             Config.container.characters.byId[character.id] = character;
             Config.container.characters.sequence = [character];
         }
@@ -69,9 +69,9 @@ var Config;
 
     function loadSettings(settingsXML)
     {
-        var settings = {};
+        const settings = {};
 
-        var loadSettingWithType = function(settingXML)
+        const loadSettingWithType = function(settingXML)
         {
             if (settingXML.length > 0)
             {
@@ -91,15 +91,15 @@ var Config;
         settings.languages = {};
         settings.languages.sequence = [];
         settings.languages.byCode = {};
-        var languageSettingsXML = settingsXML.children('languages');
+        const languageSettingsXML = settingsXML.children('languages');
         if (languageSettingsXML.length > 0)
         {
             languageSettingsXML.children().each(function(index, languageSettingXML)
             {
-                var languageName = $(languageSettingXML).text();
-                var languageCode = languageSettingXML.getAttribute('code');
+                let languageName = $(languageSettingXML).text();
+                const languageCode = languageSettingXML.getAttribute('code');
                 if (!languageName) languageName = i18next.t('configXML:language.' + languageCode);
-                var language = { code: languageCode, name: languageName };
+                const language = { code: languageCode, name: languageName };
                 settings.languages.byCode[language.code] = language;
                 settings.languages.sequence.push(language);
             });
@@ -114,15 +114,15 @@ var Config;
     {
         if (nodeXML.nodeName === nodeName)
         {
-            var nodeScopes = loadScopes(nodeXML);
+            const nodeScopes = loadScopes(nodeXML);
             mergeScopes(nodeScopes, parentScopes);
-            var id = nodeXML.getAttribute('id');
-            var name = nodeXML.getAttribute('name');
+            const id = nodeXML.getAttribute('id');
+            let name = nodeXML.getAttribute('name');
             if (!name)
             {
                 name = i18next.t('configXML:' + nodeName + '.' + id + '.name', { defaultValue: i18next.t('configXML:' + nodeName + '.' + id) });
             }
-            var description = $(nodeXML).children('description').text();
+            let description = $(nodeXML).children('description').text();
             if (!description)
             {
                 description = i18next.t('configXML:' + nodeName + '.' + id + '.description', { defaultValue: "" });
@@ -138,9 +138,9 @@ var Config;
         }
         else if (nodeXML.nodeName === nodeName + "Section")
         {
-            var subResult = loadCollection($(nodeXML), nodeName, 'section', parentScopes);
+            const subResult = loadCollection($(nodeXML), nodeName, 'section', parentScopes);
             subResult.name = nodeXML.getAttribute('name');
-            var sectionId = nodeXML.getAttribute('id');
+            const sectionId = nodeXML.getAttribute('id');
             if (sectionId) subResult.id = sectionId;
             if (!subResult.name) subResult.name = i18next.t('configXML:section.' + sectionId + '.name', { defaultValue: i18next.t('configXML:section.' + sectionId) });
             return subResult;
@@ -153,14 +153,14 @@ var Config;
 
     function loadCollection(collectionXML, nodeName, kind, parentScopes)
     {
-        var collectionScopes = loadScopes(collectionXML[0]);
+        const collectionScopes = loadScopes(collectionXML[0]);
         mergeScopes(collectionScopes, parentScopes);
 
-        var sequence = [];
-        var byId = {};
+        let sequence = [];
+        const byId = {};
         collectionXML.children().each(function(index, childXML)
         {
-            var subResult = loadNode(childXML, nodeName, collectionScopes);
+            const subResult = loadNode(childXML, nodeName, collectionScopes);
             if (subResult.kind === nodeName)
             {
                 sequence.push(subResult);
@@ -189,7 +189,7 @@ var Config;
     // The local scope always has precedence over the parent scope
     function mergeScopes(localScopes, parentScopes)
     {
-        for (var scopeName in parentScopes)
+        for (const scopeName in parentScopes)
         {
             if (!localScopes[scopeName])
             {
@@ -200,8 +200,8 @@ var Config;
 
     function loadType(typeXML, id, kind, scopes)
     {
-        var nameSpace = typeXML[0].namespaceURI;
-        var type = nameSpace === configNameSpace ?
+        const nameSpace = typeXML[0].namespaceURI;
+        const type = nameSpace === configNameSpace ?
             Types.primitives[typeXML[0].localName] :
             Types.extensions[nameSpace][typeXML[0].localName];
         return type.loadType(typeXML, id, kind, scopes);
@@ -209,12 +209,12 @@ var Config;
 
     function loadCharacterCollection(collectionXML)
     {
-        var characters = {};
+        const characters = {};
         characters.sequence = [];
         characters.byId = {};
         collectionXML.children('character').each(function(index, childXML)
         {
-            var character = loadCharacterNode(childXML);
+            const character = loadCharacterNode(childXML);
             characters.sequence.push(character);
             characters.byId[character.id] = character;
         });
@@ -225,11 +225,11 @@ var Config;
 
     function loadCharacterNode(nodeXML)
     {
-        var properties = loadCollectionOrDefault($(nodeXML).children('properties'), 'property', defaultPropertyCollection, defaultPropertyScopes);
-        var parameters = loadCollectionOrDefault($(nodeXML).children('parameters'), 'parameter', defaultParameterCollection, defaultParameterScopes);
+        const properties = loadCollectionOrDefault($(nodeXML).children('properties'), 'property', defaultPropertyCollection, defaultPropertyScopes);
+        const parameters = loadCollectionOrDefault($(nodeXML).children('parameters'), 'parameter', defaultParameterCollection, defaultParameterScopes);
 
-        var id = nodeXML.getAttribute('id');
-        var name = nodeXML.getAttribute('name');
+        const id = nodeXML.getAttribute('id');
+        let name = nodeXML.getAttribute('name');
         if (!name && i18next.exists('configXML:character.' + id))
         {
             name = i18next.t('configXML:character.' + id);
@@ -239,7 +239,7 @@ var Config;
 
     function loadCollectionOrDefault(collectionXML, nodeName, defaultCollection, defaultScopes)
     {
-        var collection = {};
+        let collection = {};
         if (collectionXML.length > 0)
         {
             collection = loadCollection(collectionXML, nodeName, 'toplevel', defaultScopes);
@@ -253,10 +253,10 @@ var Config;
 
     function loadMigration(migrationXML)
     {
-        var migration = {};
+        const migration = {};
         if (migrationXML.length > 0)
         {
-            var intentPropertyXML = migrationXML.children('intentProperty').eq(0);
+            const intentPropertyXML = migrationXML.children('intentProperty').eq(0);
             if (intentPropertyXML.length > 0)
             {
                 migration.intentProperty = { idRef: intentPropertyXML[0].getAttribute('idref') };
@@ -267,8 +267,8 @@ var Config;
 
     function atLeastOneParameter()
     {
-        var atLeastOnePerCharacterParameter;
-        for (var characterId in Config.container.characters.byId)
+        let atLeastOnePerCharacterParameter;
+        for (const characterId in Config.container.characters.byId)
         {
             if (Config.container.characters.byId[characterId].parameters.sequence.length > 0)
             {
@@ -281,7 +281,7 @@ var Config;
 
     function findParameterById(parameterId, characterId)
     {
-        var parameter;
+        let parameter;
         if (!characterId && parameterId in Config.container.parameters.byId)
         {
             parameter = Config.container.parameters.byId[parameterId];
@@ -318,7 +318,7 @@ var Config;
     // If the type is given, only inserts parameters with the same type
     function insertParametersInto(idRefSelect, type)
     {
-        var appendParameter = function(parameterItem)
+        const appendParameter = function(parameterItem)
         {
             if (parameterItem.kind !== "parameter")
             {
@@ -331,7 +331,7 @@ var Config;
         };
         Config.container.parameters.sequence.forEach(appendParameter);
         Config.container.characters.parameters.sequence.forEach(appendParameter);
-        for (var characterId in Config.container.characters.byId)
+        for (const characterId in Config.container.characters.byId)
         {
             Config.container.characters.byId[characterId].parameters.sequence.forEach(appendParameter);
         }
@@ -339,7 +339,7 @@ var Config;
 
     function insertCharactersInto(characterIdRefSelect, parameterIdRef)
     {
-        var inIndividualCharacter = Config.container.characters.sequence.some(function(character)
+        const inIndividualCharacter = Config.container.characters.sequence.some(function(character)
         {
             if (parameterIdRef in Config.container.characters.byId[character.id].parameters.byId)
             {
@@ -362,8 +362,8 @@ var Config;
 
     function hasParameterWithType(type)
     {
-        var hasType = false;
-        var checkHasType = function(parameterItem)
+        let hasType = false;
+        const checkHasType = function(parameterItem)
         {
             if (parameterItem.kind !== "parameter")
             {
@@ -376,7 +376,7 @@ var Config;
         };
         hasType = hasType || Config.container.parameters.sequence.some(checkHasType);
         hasType = hasType || Config.container.characters.parameters.sequence.forEach(checkHasType);
-        for (var characterId in Config.container.characters.byId)
+        for (const characterId in Config.container.characters.byId)
         {
             hasType = hasType || Config.container.characters.byId[characterId].parameters.sequence.forEach(checkHasType);
         }
@@ -394,28 +394,26 @@ var Config;
 
     function getNewDefaultParameterEffects(characterIdRef)
     {
-        var parameterEffects = { userDefined: [], fixed: {} };
+        const parameterEffects = { userDefined: [], fixed: {} };
         parameterEffects.fixed.characterIndependent = { byId: {}, sequence: [] };
-        var parameterId;
-        for (parameterId in Config.container.parameters.byId)
+        for (const parameterId in Config.container.parameters.byId)
         {
             parameterEffects.fixed.characterIndependent.byId[parameterId] = [];
         }
         parameterEffects.fixed.perCharacter = { };
-        for (var characterId in Config.container.characters.byId)
+        for (const characterId in Config.container.characters.byId)
         {
             parameterEffects.fixed.perCharacter[characterId] = { byId: {}, sequence: [] };
 
-            var statementScope;
-            for (parameterId in Config.container.characters.parameters.byId)
+            for (const parameterId in Config.container.characters.parameters.byId)
             {
-                statementScope = Config.container.characters.parameters.byId[parameterId].scopes.statementScope;
+                const statementScope = Config.container.characters.parameters.byId[parameterId].scopes.statementScope;
                 if (statementScope === 'per-computer-own' && characterId !== characterIdRef) continue;
                 parameterEffects.fixed.perCharacter[characterId].byId[parameterId] = [];
             }
-            for (parameterId in Config.container.characters.byId[characterId].parameters.byId)
+            for (const parameterId in Config.container.characters.byId[characterId].parameters.byId)
             {
-                statementScope = Config.container.characters.byId[characterId].parameters.byId[parameterId].scopes.statementScope;
+                const statementScope = Config.container.characters.byId[characterId].parameters.byId[parameterId].scopes.statementScope;
                 if (statementScope === 'per-computer-own' && characterId !== characterIdRef) continue;
                 parameterEffects.fixed.perCharacter[characterId].byId[parameterId] = [];
             }
@@ -425,31 +423,29 @@ var Config;
 
     function getNewDefaultPropertyValues(acceptableStatementScopes, characterIdRef)
     {
-        var propertyValues = {};
-        var propertyId;
+        const propertyValues = {};
 
         propertyValues.characterIndependent = {};
-        for (propertyId in Config.container.properties.byId)
+        for (const propertyId in Config.container.properties.byId)
         {
             if (acceptableStatementScopes.indexOf(Config.container.properties.byId[propertyId].scopes.statementScope) === -1) continue;
             propertyValues.characterIndependent[propertyId] = Config.container.properties.byId[propertyId].type.defaultValue;
         }
 
         propertyValues.perCharacter = {};
-        for (var characterId in Config.container.characters.byId)
+        for (const characterId in Config.container.characters.byId)
         {
-            var statementScope;
             propertyValues.perCharacter[characterId] = {};
-            for (propertyId in Config.container.characters.properties.byId)
+            for (const propertyId in Config.container.characters.properties.byId)
             {
-                statementScope = Config.container.characters.properties.byId[propertyId].scopes.statementScope;
+                const statementScope = Config.container.characters.properties.byId[propertyId].scopes.statementScope;
                 if (acceptableStatementScopes.indexOf(statementScope) === -1) continue;
                 if (statementScope === 'per-computer-own' && characterId !== characterIdRef) continue;
                 propertyValues.perCharacter[characterId][propertyId] = Config.container.characters.properties.byId[propertyId].type.defaultValue;
             }
-            for (propertyId in Config.container.characters.byId[characterId].properties.byId)
+            for (const propertyId in Config.container.characters.byId[characterId].properties.byId)
             {
-                statementScope = Config.container.characters.byId[characterId].properties.byId[propertyId].scopes.statementScope;
+                const statementScope = Config.container.characters.byId[characterId].properties.byId[propertyId].scopes.statementScope;
                 if (acceptableStatementScopes.indexOf(statementScope) === -1) continue;
                 if (statementScope === 'per-computer-own' && characterId !== characterIdRef) continue;
                 propertyValues.perCharacter[characterId][propertyId] = Config.container.characters.byId[characterId].properties.byId[propertyId].type.defaultValue;

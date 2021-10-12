@@ -1,7 +1,7 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported TabDock */
-var TabDock;
+let TabDock;
 
 (function()
 {
@@ -27,7 +27,7 @@ var TabDock;
 
     function close()
     {
-        var tabDock = $('#tabDock');
+        const tabDock = $('#tabDock');
         tabDock.children().not('.ui-widget-header').hide();
         tabDock.hide();
         if (TabDock.closeHandler) TabDock.closeHandler();

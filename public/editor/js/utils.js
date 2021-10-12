@@ -1,7 +1,7 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported Utils */
-var Utils;
+let Utils;
 
 (function()
 {
@@ -41,7 +41,7 @@ var Utils;
     function parseDecimalIntWithDefault(string, defaultValue)
     {
         // Make sure radix 10 is used (the default is browser-dependent).
-        var value = parseInt(string, 10);
+        const value = parseInt(string, 10);
         return isNaN(value) ? defaultValue : value;
     }
 
@@ -96,7 +96,7 @@ var Utils;
         {
             // "Computed styles of dimensions are almost always pixels"
             // (http://api.jquery.com/css/). We assume this is the case.
-            var position = elem.css(['left', 'top']);
+            const position = elem.css(['left', 'top']);
             return {
                 'left': parseDecimalIntWithDefault(position.left, 0),
                 'top': parseDecimalIntWithDefault(position.top, 0)
@@ -130,10 +130,10 @@ var Utils;
     // This includes elements that are focusable by default, like <input> and <select>.
     function focusFirstTabindexedDescendant(element)
     {
-        var descendants = $(element).find('*');
-        for (var i = 0; i < descendants.length; i++)
+        const descendants = $(element).find('*');
+        for (let i = 0; i < descendants.length; i++)
         {
-            var toTest = $(descendants[i]);
+            const toTest = $(descendants[i]);
             if (toTest.prop('tabIndex') >= 0)
             {
                 return toTest.focus();
@@ -145,7 +145,7 @@ var Utils;
     // Attaches a tooltip to an element, only works when the element has a parent
     function attachMarkdownTooltip(elem)
     {
-        var tooltipIcon = $('<span>', { class: "markdown-tooltip" });
+        const tooltipIcon = $('<span>', { class: "markdown-tooltip" });
         tooltipIcon.append($('<span>').append($(Utils.sIcon('icon-markdown'))));
         tooltipIcon.tooltip(
         {
@@ -187,7 +187,7 @@ var Utils;
             {
                 // Taken from: https://stackoverflow.com/a/36554073
                 // Makes the containment area larger so that the element can be sorted into the top and bottom
-                var sort = $(this).sortable('instance');
+                const sort = $(this).sortable('instance');
                 ui.placeholder.height(ui.helper.height());
                 sort.containment[3] += ui.helper.height() * 1.5 - sort.offset.click.top;
                 sort.containment[1] -= sort.offset.click.top;
@@ -212,8 +212,8 @@ var Utils;
 
     function alertDialog(content, type)
     {
-        var deferredClose = $.Deferred();
-        var container = $('<div>');
+        const deferredClose = $.Deferred();
+        const container = $('<div>');
         container.append(content).dialog(
         {
             title: i18next.t('common:' + type),
@@ -246,8 +246,8 @@ var Utils;
 
     function confirmDialog(content, type)
     {
-        var deferredConfirmation = $.Deferred();
-        var container = $('<div>');
+        const deferredConfirmation = $.Deferred();
+        const container = $('<div>');
         container.append(content).dialog(
         {
             title: i18next.t('common:' + type),
@@ -291,12 +291,12 @@ var Utils;
         if (!text) return "";
         if (!separator) separator = "";
 
-        var abbreviatedText = text.trim();
+        let abbreviatedText = text.trim();
         if (abbreviatedText.length > maxLength)
         {
-            var words = abbreviatedText.split(/[' \n\r\t]/g);
-            var firstWord = words[0];
-            var lastWord = words[words.length - 1];
+            const words = abbreviatedText.split(/[' \n\r\t]/g);
+            const firstWord = words[0];
+            const lastWord = words[words.length - 1];
             if (words.length === 1 ||
                 firstWord.length > maxLength ||
                 firstWord.length + separator.length + lastWord.length > maxLength)
@@ -306,9 +306,9 @@ var Utils;
             else
             {
                 abbreviatedText = firstWord + separator + lastWord;
-                var front = [firstWord];
-                var back = [lastWord];
-                var pushToFront = true;
+                const front = [firstWord];
+                const back = [lastWord];
+                let pushToFront = true;
                 while (front.length + back.length < words.length)
                 {
                     if (pushToFront)
@@ -320,7 +320,7 @@ var Utils;
                         back.unshift(words[words.length - back.length - 1]);
                     }
 
-                    var tentativeAbbreviatedText = front.join(' ') + separator + back.join(' ');
+                    const tentativeAbbreviatedText = front.join(' ') + separator + back.join(' ');
                     if (tentativeAbbreviatedText.length < maxLength)
                     {
                         abbreviatedText = tentativeAbbreviatedText;

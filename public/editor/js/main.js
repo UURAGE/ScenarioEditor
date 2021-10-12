@@ -1,14 +1,11 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported Main */
-var Main;
+let Main;
 
 (function()
 {
     "use strict";
-
-    var gridX,
-        gridY;
 
     // eslint-disable-next-line no-global-assign
     Main =
@@ -36,8 +33,8 @@ var Main;
         },
         trees: {},
         maxTreeNumber: 0,
-        gridX: gridX,
-        gridY: gridY,
+        gridX: null,
+        gridY: null,
         // The mouse position relative to the html document
         mousePosition: { x: 0, y: 0 },
         // Functions
@@ -52,6 +49,7 @@ var Main;
         deleteAllSelected: deleteAllSelected,
         deselectConnection: deselectConnection,
         getGridIndicatorPosition: getGridIndicatorPosition,
+        checkGridAvailable: checkGridAvailable,
         getPlumbInstanceByNodeID: getPlumbInstanceByNodeID,
         getStartNodeIDs: getStartNodeIDs,
         getInterleaves: getInterleaves,
@@ -70,16 +68,16 @@ var Main;
     };
 
     // Node dragging
-    var firstDragNodeID = null, invalidateNodeClick = false;
+    let firstDragNodeID = null, invalidateNodeClick = false;
     // Tree dragging
-    var firstDragTreeID = null, invalidateTreeClick = false, minimumCoordinatesByTree = {};
+    let firstDragTreeID = null, invalidateTreeClick = false, minimumCoordinatesByTree = {};
     // Selecting and panning
-    var ctrlDown = false, spaceDown = false, isSelecting = false, isPanning = false;
+    let ctrlDown = false, spaceDown = false, isSelecting = false, isPanning = false;
 
     // Copied from: http://stackoverflow.com/a/22079985/1765330
     $.fn.attachDragger = function()
     {
-        var lastPosition, position, difference;
+        let lastPosition, position, difference;
         $(this)
             .on("mouseenter", function(e)
             {
@@ -138,7 +136,7 @@ var Main;
 
         if (Config.container.characters.sequence.length > 1)
         {
-            var characterSelection = $("#characterSelection");
+            const characterSelection = $("#characterSelection");
             Config.container.characters.sequence.forEach(function(character)
             {
                 characterSelection.append($("<option>", { value: character.id, text: character.name ? character.name : character.id }));
@@ -149,15 +147,15 @@ var Main;
             $("#characterSelection").remove();
         }
 
-        var scenarioNameInput = $('<input>', { type: 'text', maxlength: 50 });
-        var scenarioNameInputSpan = $('<span>', { class: "scenarioNameInput" }).append(scenarioNameInput);
+        const scenarioNameInput = $('<input>', { type: 'text', maxlength: 50 });
+        const scenarioNameInputSpan = $('<span>', { class: "scenarioNameInput" }).append(scenarioNameInput);
         scenarioNameInputSpan.on('focusout', function(e, cancel)
         {
-            var nameInput = $('#scenarioNameTab .scenarioNameInput input');
+            const nameInput = $('#scenarioNameTab .scenarioNameInput input');
 
             if (!cancel)
             {
-                var inputName = Metadata.formatScenarioName(nameInput.val());
+                const inputName = Metadata.formatScenarioName(nameInput.val());
                 if (inputName !== Metadata.container.name)
                 {
                     Metadata.container.name = inputName;
@@ -189,8 +187,8 @@ var Main;
         {
             $(this).hide();
 
-            var nameInputSpan = $('#scenarioNameTab .scenarioNameInput');
-            var nameInput = nameInputSpan.children('input');
+            const nameInputSpan = $('#scenarioNameTab .scenarioNameInput');
+            const nameInput = nameInputSpan.children('input');
             nameInput.val(Metadata.container.name);
             nameInputSpan.show();
             nameInput.focus();
@@ -199,7 +197,7 @@ var Main;
         // Handle movement of the div indicating which grid cell youre hovering over
         $('#main').on('mousemove', function(e)
         {
-            var mainPos = $("#main").offset();
+            const mainPos = $("#main").offset();
 
             Utils.cssPosition($("#gridIndicator"),
             {
@@ -217,7 +215,7 @@ var Main;
             selectElement(null);
 
             e.preventDefault(); // Prevent selecting text
-            var text = "+ " + i18next.t('common:subject');
+            const text = "+ " + i18next.t('common:subject');
 
             Zoom.zoomOut();
 
@@ -232,7 +230,7 @@ var Main;
             selectElement(null);
 
             e.preventDefault(); // Prevent selecting text
-            var text = "+ " + i18next.t('common:computer');
+            const text = "+ " + i18next.t('common:computer');
 
             if (!Zoom.isZoomed())
             {
@@ -242,7 +240,7 @@ var Main;
 
             DragBox.startDragging(e, text, function(draggingContinues)
             {
-                var dialoguePosition = mousePositionToDialoguePosition(Main.mousePosition);
+                const dialoguePosition = mousePositionToDialoguePosition(Main.mousePosition);
                 if (dialoguePosition) addNewNode(Main.computerType, "", dialoguePosition, !draggingContinues);
                 return true;
             }, true);
@@ -252,7 +250,7 @@ var Main;
             selectElement(null);
 
             e.preventDefault(); // Prevent selecting text
-            var text = "+ " + i18next.t('common:player');
+            const text = "+ " + i18next.t('common:player');
 
             if (!Zoom.isZoomed())
             {
@@ -262,7 +260,7 @@ var Main;
 
             DragBox.startDragging(e, text, function(draggingContinues)
             {
-                var dialoguePosition = mousePositionToDialoguePosition(Main.mousePosition);
+                const dialoguePosition = mousePositionToDialoguePosition(Main.mousePosition);
                 if (dialoguePosition) addNewNode(Main.playerType, "", dialoguePosition, !draggingContinues);
                 return true;
             }, true);
@@ -272,7 +270,7 @@ var Main;
             selectElement(null);
 
             e.preventDefault(); // Prevent selecting text
-            var text = "+ " + i18next.t('common:situation');
+            const text = "+ " + i18next.t('common:situation');
 
             if (!Zoom.isZoomed())
             {
@@ -282,7 +280,7 @@ var Main;
 
             DragBox.startDragging(e, text, function(draggingContinues)
             {
-                var dialoguePosition = mousePositionToDialoguePosition(Main.mousePosition);
+                const dialoguePosition = mousePositionToDialoguePosition(Main.mousePosition);
                 if (dialoguePosition) addNewNode(Main.situationType, "", dialoguePosition, !draggingContinues);
                 return true;
             }, true);
@@ -364,7 +362,7 @@ var Main;
         //     $("#gridIndicator").hide();
         // });
 
-        var isMainClickAction = false;
+        let isMainClickAction = false;
         $("#main").on('click', function(e)
         {
             if (e.target == this && isMainClickAction)
@@ -396,10 +394,10 @@ var Main;
         });
         $("#main").on('selectableselected', function(event, element)
         {
-            var id = element.selected.id;
+            const id = element.selected.id;
 
-            var isZoomed = Zoom.isZoomed();
-            var isTree = id in Main.trees;
+            const isZoomed = Zoom.isZoomed();
+            const isTree = id in Main.trees;
             if ((isZoomed && !isTree) || (!isZoomed && isTree))
             {
                 Main.selectedElements.push(id);
@@ -441,7 +439,7 @@ var Main;
         {
             if (e.which == 32 && !spaceDown)
             {
-                var zoomedTree = Zoom.getZoomed();
+                const zoomedTree = Zoom.getZoomed();
                 spaceDown = true;
                 zoomedTree.div.selectable('disable');
                 zoomedTree.div.addClass('dragging');
@@ -453,7 +451,7 @@ var Main;
     {
         if (spaceDown)
         {
-            var zoomedTree = Zoom.getZoomed();
+            const zoomedTree = Zoom.getZoomed();
             spaceDown = false;
             isPanning = false;
             zoomedTree.div.selectable('enable');
@@ -463,15 +461,17 @@ var Main;
 
     function initialiseMenuBar()
     {
-        var buttons = $(".dropdownButton");
+        const buttons = $(".dropdownButton");
+
+        /* eslint-disable prefer-const */
 
         // These functions reference each other
-        var closeOpenMenu, closeMenu, openMenu;
+        let closeOpenMenu, closeMenu, openMenu;
 
         closeOpenMenu = function(e)
         {
-            var dropdownButton = $(".dropdownButton.dropped");
-            var menu = dropdownButton.closest(".dropdown");
+            const dropdownButton = $(".dropdownButton.dropped");
+            const menu = dropdownButton.closest(".dropdown");
             if (menu.length === 0) return;
             // Mousedown events that target the open menu (including its button)
             // should not close it: both menu buttons and menu items have event
@@ -503,6 +503,8 @@ var Main;
             buttons.on("mouseenter", openMenu);
         };
 
+        /* eslint-enable prefer-const */
+
         buttons
             .on("mousedown", function(e)
             {
@@ -516,7 +518,7 @@ var Main;
             })
             .on("click", function()
             {
-                var handler = $(this).hasClass("dropped") ? closeMenu : openMenu;
+                const handler = $(this).hasClass("dropped") ? closeMenu : openMenu;
                 handler.call(this);
             });
 
@@ -544,16 +546,16 @@ var Main;
             setSidebarWidth(localStorage.getItem('sidebarWidth'));
         }
 
-        var domSidebarGrip = $('#sidebar').find('.grip');
-        var mouseX = 0;
+        const domSidebarGrip = $('#sidebar').find('.grip');
+        let mouseX = 0;
 
-        var mouseMoveHandler = function(event)
+        const mouseMoveHandler = function(event)
         {
-            var width = $(window).width() - event.pageX + mouseX;
+            const width = $(window).width() - event.pageX + mouseX;
             setSidebarWidth(width);
         };
 
-        var mouseUpHandler = function()
+        const mouseUpHandler = function()
         {
             $(document).off("mousemove", mouseMoveHandler);
             $(document).off("mouseup", mouseUpHandler);
@@ -564,23 +566,16 @@ var Main;
         {
             // Clear selection so browser doesn't try to drag selected items
             // Copied from: http://stackoverflow.com/a/3169849/1765330
-            if (window.getSelection)
-            {
-                if (window.getSelection().empty)
-                { // Chrome
-                    window.getSelection().empty();
-                }
-                else if (window.getSelection().removeAllRanges)
-                { // Firefox
-                    window.getSelection().removeAllRanges();
-                }
+            if (window.getSelection().empty)
+            { // Chrome
+                window.getSelection().empty();
             }
-            else if (document.selection)
-            { // IE?
-                document.selection.empty();
+            else if (window.getSelection().removeAllRanges)
+            { // Firefox
+                window.getSelection().removeAllRanges();
             }
 
-            var parentOffset = $(this).offset();
+            const parentOffset = $(this).offset();
             mouseX = (event.pageX - parentOffset.left) / 2;
             $(document).on("mousemove", mouseMoveHandler);
             $(document).on("mouseup", mouseUpHandler);
@@ -595,10 +590,10 @@ var Main;
 
     function setSidebarWidth(width)
     {
-        var minWidth = 100;
-        var maxWidth = $(window).width() / 3;
+        const minWidth = 100;
+        let maxWidth = $(window).width() / 3;
         if (maxWidth < 475) maxWidth = 475;
-        var w = Math.min(Math.max(width, minWidth), maxWidth);
+        const w = Math.min(Math.max(width, minWidth), maxWidth);
         $('#sidebar').css('width', w + 'px');
         localStorage.setItem('sidebarWidth', w);
         localStorage.setItem('sidebarCollapsed', false);
@@ -628,9 +623,9 @@ var Main;
             SaveIndicator.setSavedChanges(false);
         }
 
-        var treeDiv = $('<div>', { class: "treeDiv noSelect" });
+        const treeDiv = $('<div>', { class: "treeDiv noSelect" });
 
-        var isClickAction = false;
+        let isClickAction = false;
         treeDiv.on("click", function(e)
         {
             if (e.target == this && isClickAction)
@@ -664,15 +659,15 @@ var Main;
         treeDiv.selectable('disable'); // Box selection only useful in zoomed state
         treeDiv.attachDragger();
 
-        var defaultName = i18next.t('main:default_subject');
-        var changeNameInput = $('<input type="text" class="subjectNameInput">');
+        const defaultName = i18next.t('main:default_subject');
+        const changeNameInput = $('<input type="text" class="subjectNameInput">');
         changeNameInput.val(defaultName);
         changeNameInput.hide();
         changeNameInput.on('focusout', function(e, cancel)
         {
-            var subDiv = $("#" + id);
-            var subjectName = subDiv.find('.subjectName').show();
-            var input = subDiv.find('.subjectNameInput').hide();
+            const subDiv = $("#" + id);
+            const subjectName = subDiv.find('.subjectName').show();
+            const input = subDiv.find('.subjectNameInput').hide();
 
             if (cancel)
             {
@@ -704,7 +699,7 @@ var Main;
             }
         });
 
-        var zoomTreeButton = $('<div>', { html: Utils.sIcon('icon-plus'), class: "zoomTreeButton button" });
+        const zoomTreeButton = $('<div>', { html: Utils.sIcon('icon-plus'), class: "zoomTreeButton button" });
         zoomTreeButton.on("click", function()
         {
             if (!DragBox.dragging())
@@ -717,15 +712,15 @@ var Main;
             }
         });
 
-        var subjectContainer = $('<div>', { class: "subjectTextContainer" });
-        var subjTextSpan = $('<span>', { text: defaultName, class: "subjectName" });
+        const subjectContainer = $('<div>', { class: "subjectTextContainer" });
+        const subjTextSpan = $('<span>', { text: defaultName, class: "subjectName" });
 
         subjectContainer.append(subjTextSpan);
         subjectContainer.append(changeNameInput);
 
-        var iconDiv = $('<div>', { class: "icons" });
+        const iconDiv = $('<div>', { class: "icons" });
 
-        var subjectDiv = $('<div>', { class: "subjectDiv noSelect" });
+        const subjectDiv = $('<div>', { class: "subjectDiv noSelect" });
         subjectDiv.prepend(zoomTreeButton);
 
         subjectDiv.append(subjectContainer);
@@ -754,12 +749,12 @@ var Main;
         subjectDiv.on("dblclick", function(e)
         {
             if ($(e.target).hasClass("zoomTreeButton")) return;
-            var selectAllInput = false;
+            const selectAllInput = false;
             triggerSubjectNameInput(id, selectAllInput);
             e.stopPropagation();
         });
 
-        var dragDiv = $('<div>', { class: "w treeContainer gridded selectable", id: id });
+        const dragDiv = $('<div>', { class: "w treeContainer gridded selectable", id: id });
         dragDiv.append(subjectDiv);
         dragDiv.append(treeDiv);
 
@@ -790,7 +785,7 @@ var Main;
             plumbInstance: PlumbGenerator.genJsPlumbInstance(treeDiv)
         };
 
-        var minimumPosition = null;
+        let minimumPosition = null;
         jsPlumb.draggable(dragDiv,
         {
             filter: ".zoomTreeButton, .zoomTreeButton *",
@@ -798,7 +793,7 @@ var Main;
             // The constrain function returns the array with coordinates that will be assigned to the dragged element
             constrain: function(currentCoordinates, el)
             {
-                var treeMinimumCoordinates = minimumCoordinatesByTree[$(el).attr('id')];
+                const treeMinimumCoordinates = minimumCoordinatesByTree[$(el).attr('id')];
                 return [
                     Math.max(treeMinimumCoordinates[0], currentCoordinates[0]),
                     Math.max(treeMinimumCoordinates[1], currentCoordinates[1])
@@ -836,14 +831,14 @@ var Main;
                 minimumPosition = { "top": Infinity, "left": Infinity };
                 Main.selectedElements.forEach(function(selectedElementID)
                 {
-                    var tree = Main.trees[selectedElementID];
+                    const tree = Main.trees[selectedElementID];
                     if (tree.topPos < minimumPosition.top) minimumPosition.top = tree.topPos;
                     if (tree.leftPos < minimumPosition.left) minimumPosition.left = tree.leftPos;
                 });
                 minimumCoordinatesByTree = {};
                 Main.selectedElements.forEach(function(selectedElementID)
                 {
-                    var tree = Main.trees[selectedElementID];
+                    const tree = Main.trees[selectedElementID];
                     minimumCoordinatesByTree[selectedElementID] =
                     [
                         (tree.leftPos - minimumPosition.left) * Main.gridX,
@@ -854,20 +849,21 @@ var Main;
 
             stop: function()
             {
-                var indicatorPos = getGridIndicatorPosition();
-                var thisTree = Main.trees[id];
-                var delta =
+                const indicatorPos = getGridIndicatorPosition();
+                const thisTree = Main.trees[id];
+                const delta =
                 {
                     "top": Math.max(-minimumPosition.top, indicatorPos.top - thisTree.topPos),
                     "left": Math.max(-minimumPosition.left, indicatorPos.left - thisTree.leftPos)
                 };
 
-                var shouldMove = !(delta.left === 0 && delta.top === 0) &&
+                const shouldMove = !(delta.left === 0 && delta.top === 0) &&
                     // Make sure no trees can be dragged on top of each other
                     Main.selectedElements.every(function(selectedElementID)
                     {
-                        var tree = Main.trees[selectedElementID];
-                        return checkGridAvailable(tree.leftPos + delta.left, tree.topPos + delta.top, minimumCoordinatesByTree);
+                        const tree = Main.trees[selectedElementID];
+                        return checkGridAvailable(tree.leftPos + delta.left, tree.topPos + delta.top,
+                            function(tree) { return tree.id in minimumCoordinatesByTree; });
                     });
 
                 if (shouldMove)
@@ -878,7 +874,7 @@ var Main;
 
                 Main.selectedElements.forEach(function(selectedElementID)
                 {
-                    var tree = Main.trees[selectedElementID];
+                    const tree = Main.trees[selectedElementID];
                     if (shouldMove)
                     {
                         tree.topPos = tree.topPos + delta.top;
@@ -907,10 +903,10 @@ var Main;
     {
         Zoom.zoomOut();
 
-        var indicatorPos = getGridIndicatorPosition();
+        const indicatorPos = getGridIndicatorPosition();
         if (!checkGridAvailable(indicatorPos.left, indicatorPos.top)) return null;
 
-        var tree = createEmptyTree(null, indicatorPos.left, indicatorPos.top);
+        const tree = createEmptyTree(null, indicatorPos.left, indicatorPos.top);
 
         if (shouldSelectAndStartEditing)
         {
@@ -927,18 +923,18 @@ var Main;
         selectElement(null);
 
         // Create a node of the right type
-        var tree = Zoom.getZoomed();
+        const tree = Zoom.getZoomed();
 
         if (tree === null)
         {
             return null;
         }
 
-        var node = createAndReturnNode(type, null, tree.div, tree.id);
+        const node = createAndReturnNode(type, null, tree.div, tree.id);
 
-        var id = node.attr('id');
+        const id = node.attr('id');
 
-        var characterIdRef;
+        let characterIdRef;
         if (type === Main.computerType)
         {
             if (Config.container.characters.sequence.length > 1)
@@ -951,11 +947,11 @@ var Main;
             }
         }
 
-        var parameterEffects = Config.getNewDefaultParameterEffects(characterIdRef);
+        const parameterEffects = Config.getNewDefaultParameterEffects(characterIdRef);
 
         if (Parameters.timeId && type === Main.playerType)
         {
-            var timeEffect =
+            const timeEffect =
             {
                 idRef: 't',
                 operator: "addAssign",
@@ -964,7 +960,7 @@ var Main;
             parameterEffects.userDefined.push(timeEffect);
         }
 
-        var acceptableScopes = ['per', 'per-' + type];
+        const acceptableScopes = ['per', 'per-' + type];
         if (type === Main.computerType) acceptableScopes.push('per-computer-own');
 
         Main.nodes[id] = {
@@ -1005,17 +1001,17 @@ var Main;
     {
         if (parentNodeID in Main.nodes)
         {
-            var parent = Main.nodes[parentNodeID];
+            const parent = Main.nodes[parentNodeID];
 
-            var parentDiv = $('#' + parentNodeID);
-            var parentPosition = Utils.cssPosition(parentDiv);
-            var position =
+            const parentDiv = $('#' + parentNodeID);
+            const parentPosition = Utils.cssPosition(parentDiv);
+            const position =
             {
                 top: parentPosition.top + parentDiv.height() + 55,
                 left: parentPosition.left
             };
-            var node;
-            var firstChildNodeId = getFirstChildIdOrNull(parentNodeID);
+            let node;
+            const firstChildNodeId = getFirstChildIdOrNull(parentNodeID);
             if (firstChildNodeId)
             {
                 node = addNewNode(Main.nodes[firstChildNodeId].type, "", position, true);
@@ -1038,7 +1034,7 @@ var Main;
 
             // If there are errors (cycles, invalid pairs, existing connections)
             // regarding the connection to be created, delete the new node and cancel.
-            var connection = makeConnection(parent.id, node.id, Zoom.getZoomed().plumbInstance);
+            const connection = makeConnection(parent.id, node.id, Zoom.getZoomed().plumbInstance);
 
             if (!connection)
             {
@@ -1067,39 +1063,39 @@ var Main;
         }
 
         Main.trees[parentID].nodes.push(id);
-        var plumbInstance = Main.trees[parentID].plumbInstance;
+        const plumbInstance = Main.trees[parentID].plumbInstance;
 
         // Add the node to the html.
-        var node = document.createElement('div');
+        const node = document.createElement('div');
         node.setAttribute('id', id);
         node.classList.add('w');
         node.classList.add(type);
 
-        var endpoint = document.createElement('div');
+        const endpoint = document.createElement('div');
         endpoint.classList.add('ep');
-        var endpointAnchor = document.createElement('div');
+        const endpointAnchor = document.createElement('div');
         endpointAnchor.classList.add('anchor');
         endpoint.appendChild(endpointAnchor);
         node.appendChild(endpoint);
 
-        var nodeContent = document.createElement('div');
+        const nodeContent = document.createElement('div');
         nodeContent.classList.add("nodeContent");
 
-        var inputDiv = $('<div>', { class: "statementInput" });
+        const inputDiv = $('<div>', { class: "statementInput" });
         inputDiv.hide();
         nodeContent.appendChild(inputDiv[0]);
 
-        var textDiv = document.createElement('div');
+        const textDiv = document.createElement('div');
         textDiv.classList.add('statementText');
         nodeContent.appendChild(textDiv);
 
-        var imgDiv = document.createElement('div');
+        const imgDiv = document.createElement('div');
         imgDiv.classList.add('imgDiv');
         nodeContent.appendChild(imgDiv);
 
         // Expands node container using overflow when moving a node closer to the bounds of the container
-        var scrollOffset = 50;
-        var expander = document.createElement('div');
+        const scrollOffset = 50;
+        const expander = document.createElement('div');
         expander.classList.add('expander');
         expander.style.right = -(scrollOffset - 1) + "px";
         expander.style.bottom = -(scrollOffset - 1) + "px";
@@ -1126,7 +1122,7 @@ var Main;
             $(this).find('.anchor').css({ left: "", top: "" });
         }, false);
 
-        var previousMousePosition;
+        let previousMousePosition;
         // Initialise draggable elements.
         plumbInstance.draggable(node,
         {
@@ -1165,12 +1161,12 @@ var Main;
             {
                 if (id !== firstDragNodeID) return;
 
-                var direction = { x: Main.mousePosition.x - previousMousePosition.x, y: Main.mousePosition.y - previousMousePosition.y };
+                const direction = { x: Main.mousePosition.x - previousMousePosition.x, y: Main.mousePosition.y - previousMousePosition.y };
 
                 // TODO: delete if jsPlumb katavorio supports scrolling into view
-                var x = params.pos[0];
-                var y = params.pos[1];
-                var container = parent[0];
+                const x = params.pos[0];
+                const y = params.pos[1];
+                const container = parent[0];
                 if (direction.x >= 0 && x + scrollOffset + node.offsetWidth > container.clientWidth + container.scrollLeft)
                 {
                     container.scrollLeft = x + scrollOffset + node.offsetWidth - container.clientWidth;
@@ -1238,23 +1234,23 @@ var Main;
 
     function startEditingNode(nodeID)
     {
-        var node = Main.nodes[nodeID];
+        const node = Main.nodes[nodeID];
         if (node.editing) return;
 
-        var nodeDiv = $('#' + node.id);
-        var inputDiv = nodeDiv.find('.statementInput');
-        var textDiv = nodeDiv.find('.statementText');
+        const nodeDiv = $('#' + node.id);
+        const inputDiv = nodeDiv.find('.statementInput');
+        const textDiv = nodeDiv.find('.statementText');
 
         nodeDiv.off('dblclick');
         nodeDiv.addClass("editing");
         node.editing = true;
 
-        var text = node.text ? node.text : "";
+        const text = node.text ? node.text : "";
 
         textDiv.hide();
         inputDiv.show();
 
-        var txtArea = $('<textarea>',
+        const txtArea = $('<textarea>',
         {
             class: "nodestatement",
             maxlength: Config.container.settings.statement.type.maxLength,
@@ -1302,7 +1298,7 @@ var Main;
         }
 
         // Calculate relative width
-        var width = Math.sqrt(text.length);
+        const width = Math.sqrt(text.length);
         nodeDiv.width(width + "em");
         // Make room for typing text in the node
         nodeDiv.height(inputDiv.height() + 35);
@@ -1319,15 +1315,15 @@ var Main;
 
     function stopEditingNode(nodeID, cancel)
     {
-        var node = Main.nodes[nodeID];
+        const node = Main.nodes[nodeID];
         if (!node.editing) return;
 
-        var nodeDiv = $('#' + node.id);
-        var inputDiv = nodeDiv.find('.statementInput');
-        var textDiv = nodeDiv.find('.statementText');
-        var textArea = nodeDiv.find('.nodestatement');
+        const nodeDiv = $('#' + node.id);
+        const inputDiv = nodeDiv.find('.statementInput');
+        const textDiv = nodeDiv.find('.statementText');
+        const textArea = nodeDiv.find('.nodestatement');
 
-        var text = textArea.val();
+        const text = textArea.val();
         textArea.remove();
         inputDiv.hide();
         textDiv.show();
@@ -1355,10 +1351,10 @@ var Main;
 
     function getNodesWithoutParents(tree)
     {
-        var orphanNodes = [];
-        $.each(tree.nodes, function(index, nodeID)
+        const orphanNodes = [];
+        tree.nodes.forEach(function(nodeID)
         {
-            var connections = tree.plumbInstance.getConnections(
+            const connections = tree.plumbInstance.getConnections(
             {
                 target: nodeID
             });
@@ -1369,8 +1365,7 @@ var Main;
 
     function getInterleaves()
     {
-        var sortedTrees = Object.keys(Main.trees)
-            .map(function(treeID) { return Main.trees[treeID]; })
+        const sortedTrees = Object.values(Main.trees)
             .sort(function(a, b)
             {
                 return (a.topPos - b.topPos) || (a.leftPos - b.leftPos);
@@ -1378,9 +1373,9 @@ var Main;
 
         if (sortedTrees.length === 0) return [];
 
-        var interleaves = [];
-        var currentInterleave = [sortedTrees.shift()];
-        var currentTopPos = currentInterleave[0].topPos;
+        const interleaves = [];
+        let currentInterleave = [sortedTrees.shift()];
+        let currentTopPos = currentInterleave[0].topPos;
         sortedTrees.forEach(function(tree)
         {
             if (tree.topPos !== currentTopPos)
@@ -1398,10 +1393,10 @@ var Main;
     function triggerSubjectNameInput(id, selectAllInput)
     {
         // Hide subject name span and show textbox
-        var subDiv = $("#" + id);
+        const subDiv = $("#" + id);
         subDiv.find('.subjectName').hide();
 
-        var input = subDiv.find('.subjectNameInput');
+        const input = subDiv.find('.subjectNameInput');
         input.show();
         input.focus();
         if (selectAllInput) input.select();
@@ -1409,11 +1404,11 @@ var Main;
 
     function deleteAllSelected()
     {
-        var zoomedTree;
+        let zoomedTree;
         // If there are node or tree elements selected
         if (Main.selectedElements.length > 0)
         {
-            var jsPlumbInstance = jsPlumb;
+            let jsPlumbInstance = jsPlumb;
             if (!(Main.selectedElements[0] in Main.trees))
             {
                 jsPlumbInstance = getPlumbInstanceByNodeID(Main.selectedElements[0]);
@@ -1421,10 +1416,10 @@ var Main;
 
             jsPlumbInstance.batch(function()
             {
-                for (var i = 0; i < Main.selectedElements.length; i++)
+                Main.selectedElements.forEach(function(selectedElement)
                 {
-                    deleteElement(Main.selectedElements[i]);
-                }
+                    deleteElement(selectedElement);
+                });
                 if (Main.selectedElement !== null)
                 {
                     deleteElement(Main.selectedElement);
@@ -1439,9 +1434,9 @@ var Main;
             zoomedTree = Zoom.getZoomed();
             zoomedTree.plumbInstance.batch(function()
             {
-                for (var connectionId in zoomedTree.selectedConnections)
+                for (const connectionId in zoomedTree.selectedConnections)
                 {
-                    var cs = zoomedTree.plumbInstance.getConnections(
+                    const cs = zoomedTree.plumbInstance.getConnections(
                     {
                         source: zoomedTree.selectedConnections[connectionId].source,
                         target: zoomedTree.selectedConnections[connectionId].target
@@ -1474,11 +1469,11 @@ var Main;
             elementIds.forEach(function(elementId)
             {
                 $("#" + elementId).addClass("ui-selected");
-                var plumbInstance = elementId in Main.nodes ? Main.getPlumbInstanceByNodeID(elementId) : jsPlumb;
+                const plumbInstance = elementId in Main.nodes ? Main.getPlumbInstanceByNodeID(elementId) : jsPlumb;
                 plumbInstance.addToDragSelection(elementId);
             });
-            var highlightAncestors = $("#highlightAncestors").hasClass("enabled");
-            var highlightDescendants = $("#highlightDescendants").hasClass("enabled");
+            const highlightAncestors = $("#highlightAncestors").hasClass("enabled");
+            const highlightDescendants = $("#highlightDescendants").hasClass("enabled");
             if (highlightAncestors || highlightDescendants)
             {
                 elementIds.forEach(function(elementId)
@@ -1511,8 +1506,8 @@ var Main;
         // If anything is selected here then we need to deselect all the connections
         if (Zoom.isZoomed())
         {
-            var zoomedTree = Zoom.getZoomed();
-            for (var connectionId in zoomedTree.selectedConnections)
+            const zoomedTree = Zoom.getZoomed();
+            for (const connectionId in zoomedTree.selectedConnections)
             {
                 deselectConnection(zoomedTree.plumbInstance, zoomedTree.selectedConnections, connectionId);
             }
@@ -1532,8 +1527,8 @@ var Main;
         $(".selected").removeClass("selected");
         $(".ui-selected").removeClass("ui-selected");
         Main.selectedElements = [];
-        var zoomedTree = Zoom.getZoomed();
-        var plumbInstance = zoomedTree ? zoomedTree.plumbInstance : jsPlumb;
+        const zoomedTree = Zoom.getZoomed();
+        const plumbInstance = zoomedTree ? zoomedTree.plumbInstance : jsPlumb;
         plumbInstance.clearDragSelection();
         dehighlightLinealRelativesIncludingDirect(Main.ancestorHighlightSettings);
         dehighlightLinealRelativesIncludingDirect(Main.descendantHighlightSettings);
@@ -1570,7 +1565,7 @@ var Main;
 
     function deselectConnection(plumbInstance, selectedConnections, connectionId)
     {
-        var cs = plumbInstance.getConnections(
+        const cs = plumbInstance.getConnections(
         {
             source: selectedConnections[connectionId].source,
             target: selectedConnections[connectionId].target
@@ -1579,8 +1574,8 @@ var Main;
         // Connection could just have been removed so we need to check if it still exists
         if (cs.length > 0)
         {
-            var paintStyle = PlumbGenerator.defaultPaintStyle;
-            var colorValue = cs[0].getParameter("color");
+            let paintStyle = PlumbGenerator.defaultPaintStyle;
+            const colorValue = cs[0].getParameter("color");
             if (colorValue && ColorPicker.areColorsEnabled())
             {
                 paintStyle = $.extend({}, paintStyle, { stroke: colorValue, outlineStroke: "transparent" });
@@ -1593,8 +1588,8 @@ var Main;
 
     function updateButtons()
     {
-        var subjectButtons = document.getElementsByClassName("subjectButton");
-        var nodeButtons = document.getElementsByClassName("nodeButton");
+        const subjectButtons = document.getElementsByClassName("subjectButton");
+        const nodeButtons = document.getElementsByClassName("nodeButton");
 
         hideButtons(subjectButtons);
         hideButtons(nodeButtons);
@@ -1612,14 +1607,14 @@ var Main;
     }
     function hideButtons(buttons)
     {
-        for (var i = 0, len = buttons.length; i < len; i++)
+        for (let i = 0, len = buttons.length; i < len; i++)
         {
             buttons[i].disabled = true;
         }
     }
     function showButtons(buttons)
     {
-        for (var i = 0, len = buttons.length; i < len; i++)
+        for (let i = 0, len = buttons.length; i < len; i++)
         {
             buttons[i].disabled = false;
         }
@@ -1639,13 +1634,13 @@ var Main;
         SaveIndicator.setSavedChanges(false);
 
         // Get the selected node.
-        var node = Main.nodes[Main.selectedElement];
+        const node = Main.nodes[Main.selectedElement];
         node.parameterEffects = Config.getNewDefaultParameterEffects(node.characterIdRef);
 
         // Save user-defined parameter effects.
         $("#userDefinedParameterEffects").children().each(function()
         {
-            var idRef = $(this).find(".parameter-idref-select").find("option:selected").val();
+            const idRef = $(this).find(".parameter-idref-select").find("option:selected").val();
             node.parameterEffects.userDefined.push(
             {
                 idRef: idRef,
@@ -1655,13 +1650,13 @@ var Main;
         });
 
         // Save fixed parameter effects.
-        var getFixedParameterEffectFromDOMAndSetInNode = function(effectContainer, parameterDefinitions, fixedParameterEffects, classPrefix)
+        const getFixedParameterEffectFromDOMAndSetInNode = function(effectContainer, parameterDefinitions, fixedParameterEffects, classPrefix)
         {
-            var parameterIdRef = $(effectContainer).find('.' + $.escapeSelector(classPrefix) + '-effect-idref-select').val();
-            var controlContainer = $(effectContainer).find('.' + $.escapeSelector(classPrefix) + '-effect-control-container');
-            var parameterValue = parameterDefinitions[parameterIdRef].type.getFromDOM(controlContainer);
-            var parameterOperator = $(effectContainer).find('.' + $.escapeSelector(classPrefix) + '-effect-operator-select').val();
-            var parameterEffect = {
+            const parameterIdRef = $(effectContainer).find('.' + $.escapeSelector(classPrefix) + '-effect-idref-select').val();
+            const controlContainer = $(effectContainer).find('.' + $.escapeSelector(classPrefix) + '-effect-control-container');
+            const parameterValue = parameterDefinitions[parameterIdRef].type.getFromDOM(controlContainer);
+            const parameterOperator = $(effectContainer).find('.' + $.escapeSelector(classPrefix) + '-effect-operator-select').val();
+            const parameterEffect = {
                 idRef: parameterIdRef,
                 operator: parameterOperator,
                 value: parameterValue
@@ -1674,17 +1669,16 @@ var Main;
             }
         };
 
-        var fixedParameterEffectsEl = $("#fixed-parameter-effects");
+        const fixedParameterEffectsEl = $("#fixed-parameter-effects");
         fixedParameterEffectsEl.find('.' + fixedParameterEffectsEl.attr('id') + '-effect-container').each(function()
         {
             getFixedParameterEffectFromDOMAndSetInNode(this, Config.container.parameters.byId, node.parameterEffects.fixed.characterIndependent, fixedParameterEffectsEl.attr('id'));
         });
-        var fixedCharacterParameterEffectsEl = $("#fixed-character-parameter-effects");
-        var characterId, classCharacterPrefix, parameterDefinitions;
-        for (characterId in Config.container.characters.byId)
+        const fixedCharacterParameterEffectsEl = $("#fixed-character-parameter-effects");
+        for (const characterId in Config.container.characters.byId)
         {
-            classCharacterPrefix = fixedCharacterParameterEffectsEl.attr('id') + '-' + characterId;
-            parameterDefinitions = $.extend({}, Config.container.characters.parameters.byId, Config.container.characters.byId[characterId].parameters.byId);
+            const classCharacterPrefix = fixedCharacterParameterEffectsEl.attr('id') + '-' + characterId;
+            const parameterDefinitions = $.extend({}, Config.container.characters.parameters.byId, Config.container.characters.byId[characterId].parameters.byId);
             fixedCharacterParameterEffectsEl.find('.' + $.escapeSelector(classCharacterPrefix) + '-effect-container').each(function()
             {
                 getFixedParameterEffectFromDOMAndSetInNode(this, parameterDefinitions, node.parameterEffects.fixed.perCharacter[characterId], classCharacterPrefix);
@@ -1692,9 +1686,9 @@ var Main;
         }
         if (node.type === Main.computerType)
         {
-            var computerOwnParameterEffectsEl = $("#node-computer-own-parameter-effects");
-            classCharacterPrefix = computerOwnParameterEffectsEl.attr('id') + '-' + node.characterIdRef;
-            parameterDefinitions = $.extend({}, Config.container.characters.parameters.byId, Config.container.characters.byId[node.characterIdRef].parameters.byId);
+            const computerOwnParameterEffectsEl = $("#node-computer-own-parameter-effects");
+            const classCharacterPrefix = computerOwnParameterEffectsEl.attr('id') + '-' + node.characterIdRef;
+            const parameterDefinitions = $.extend({}, Config.container.characters.parameters.byId, Config.container.characters.byId[node.characterIdRef].parameters.byId);
             computerOwnParameterEffectsEl.find('.' + $.escapeSelector(classCharacterPrefix) + '-effect-container').each(function()
             {
                 getFixedParameterEffectFromDOMAndSetInNode(this, parameterDefinitions, node.parameterEffects.fixed.perCharacter[node.characterIdRef], classCharacterPrefix);
@@ -1705,10 +1699,10 @@ var Main;
         node.preconditions = Condition.getFromDOM($("#preconditionsDiv"));
 
         // Save property values.
-        var acceptableScopes = ['per', 'per-' + node.type];
+        const acceptableScopes = ['per', 'per-' + node.type];
         if (node.type === Main.computerType) acceptableScopes.push('per-computer-own');
 
-        var getPropertyFromDOMAndSetInNode = function(property, propertyValues, idPrefix, nodeCharacterIdRef, characterId)
+        const getPropertyFromDOMAndSetInNode = function(property, propertyValues, idPrefix, nodeCharacterIdRef, characterId)
         {
             if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) return;
             if (property.scopes.statementScope === 'per-computer-own' && (!characterId || characterId !== nodeCharacterIdRef)) return;
@@ -1720,24 +1714,23 @@ var Main;
             }
         };
 
-        var propertyId, property;
-        for (propertyId in Config.container.properties.byId)
+        for (const propertyId in Config.container.properties.byId)
         {
             getPropertyFromDOMAndSetInNode(Config.container.properties.byId[propertyId], node.propertyValues.characterIndependent, "node-property-values");
         }
-        for (propertyId in Config.container.characters.properties.byId)
+        for (const propertyId in Config.container.characters.properties.byId)
         {
-            for (characterId in Config.container.characters.byId)
+            for (const characterId in Config.container.characters.byId)
             {
-                property = Config.container.characters.properties.byId[propertyId];
+                const property = Config.container.characters.properties.byId[propertyId];
                 getPropertyFromDOMAndSetInNode(property, node.propertyValues.perCharacter[characterId], "node-character-property-values-" + characterId, node.characterIdRef, characterId);
             }
         }
-        for (characterId in Config.container.characters.byId)
+        for (const characterId in Config.container.characters.byId)
         {
-            for (propertyId in Config.container.characters.byId[characterId].properties.byId)
+            for (const propertyId in Config.container.characters.byId[characterId].properties.byId)
             {
-                property = Config.container.characters.byId[characterId].properties.byId[propertyId];
+                const property = Config.container.characters.byId[characterId].properties.byId[propertyId];
                 getPropertyFromDOMAndSetInNode(property, node.propertyValues.perCharacter[characterId], "node-character-property-values-" + characterId, node.characterIdRef, characterId);
             }
         }
@@ -1763,13 +1756,13 @@ var Main;
 
     function highlightLinealRelativesIncludingDirect(nearNodeID, settings)
     {
-        var options = {};
+        const options = {};
         options[settings.nearKeyword] = nearNodeID;
-        var connections = Main.getPlumbInstanceByNodeID(nearNodeID).getConnections(options);
+        const connections = Main.getPlumbInstanceByNodeID(nearNodeID).getConnections(options);
 
         connections.forEach(function(connection)
         {
-            var farNodeID = connection[settings.farIDKeyword];
+            const farNodeID = connection[settings.farIDKeyword];
             $("#" + farNodeID).addClass([settings.generalClass, settings.directClass]);
             highlightLinealRelatives(farNodeID, settings);
         });
@@ -1777,14 +1770,14 @@ var Main;
 
     function highlightLinealRelatives(nearNodeID, settings)
     {
-        var options = {};
+        const options = {};
         options[settings.nearKeyword] = nearNodeID;
-        var connections = Main.getPlumbInstanceByNodeID(nearNodeID).getConnections(options);
+        const connections = Main.getPlumbInstanceByNodeID(nearNodeID).getConnections(options);
 
         connections.forEach(function(connection)
         {
-            var farNodeID = connection[settings.farIDKeyword];
-            var farNodeDiv = $("#" + farNodeID);
+            const farNodeID = connection[settings.farIDKeyword];
+            const farNodeDiv = $("#" + farNodeID);
             if (!farNodeDiv.hasClass(settings.generalClass))
             {
                 farNodeDiv.addClass(settings.generalClass);
@@ -1803,12 +1796,12 @@ var Main;
     // The units are assumed to be pixels!
     function initialiseGrid()
     {
-        for (var iStyleSheet = 0; iStyleSheet < document.styleSheets.length; iStyleSheet++)
+        for (let iStyleSheet = 0; iStyleSheet < document.styleSheets.length; iStyleSheet++)
         {
-            var styleSheet = document.styleSheets[iStyleSheet];
-            for (var iCSSRule = 0; iCSSRule < styleSheet.cssRules.length; iCSSRule++)
+            const styleSheet = document.styleSheets[iStyleSheet];
+            for (let iCSSRule = 0; iCSSRule < styleSheet.cssRules.length; iCSSRule++)
             {
-                var cssRule = styleSheet.cssRules[iCSSRule];
+                const cssRule = styleSheet.cssRules[iCSSRule];
                 if (cssRule.selectorText == '.gridded')
                 {
                     Main.gridX = Utils.parseDecimalIntWithDefault(cssRule.style.width);
@@ -1819,22 +1812,18 @@ var Main;
         }
     }
 
-    function checkGridAvailable(gridX, gridY, ignore)
+    function checkGridAvailable(gridX, gridY, ignorePredicate)
     {
-        var available = true;
-
-        $.each(Main.trees, function(id, tree)
+        return Object.values(Main.trees).every(function(tree)
         {
-            if (ignore && id in ignore) return true;
-            available = available && !(tree.leftPos === gridX && tree.topPos === gridY);
+            if (ignorePredicate && ignorePredicate(tree)) return true;
+            return !(tree.leftPos === gridX && tree.topPos === gridY);
         });
-
-        return available;
     }
 
     function getGridIndicatorPosition()
     {
-        var position = Utils.cssPosition($("#gridIndicator"));
+        const position = Utils.cssPosition($("#gridIndicator"));
         return {
             "left": pixelPositionToGridPosition(position.left, Main.gridX),
             "top": pixelPositionToGridPosition(position.top, Main.gridY)
@@ -1863,7 +1852,7 @@ var Main;
             selectElement(null);
             return;
         }
-        var clone = $("#clone");
+        const clone = $("#clone");
         if (clone.length !== 0)
         { // Jsplumb creates clones when nodes are being dragged. if one exists this event is on drop of a node and should not fire
             return;
@@ -1872,11 +1861,11 @@ var Main;
         $(".selected").removeClass("selected");
         $(".ui-selected").removeClass("ui-selected");
         Main.selectedElements = [];
-        var zoomedTree = Zoom.getZoomed();
-        var plumbInstance = zoomedTree ? zoomedTree.plumbInstance : jsPlumb;
+        const zoomedTree = Zoom.getZoomed();
+        const plumbInstance = zoomedTree ? zoomedTree.plumbInstance : jsPlumb;
         plumbInstance.clearDragSelection();
 
-        var dragDiv = Main.trees[id].dragDiv;
+        const dragDiv = Main.trees[id].dragDiv;
 
         dragDiv.addClass("selected");
         Main.selectedElement = id;
@@ -1892,10 +1881,10 @@ var Main;
     // Change the text of the node.
     function changeNodeText(nodeID)
     {
-        var node = Main.nodes[nodeID];
+        const node = Main.nodes[nodeID];
 
-        var text = "";
-        var longestWord = "";
+        let text = "";
+        let longestWord = "";
         switch (node.type)
         {
             case Main.computerType:
@@ -1903,8 +1892,8 @@ var Main;
                 // with characterId prefix when there are multiple characters
                 if (Config.container.characters.sequence.length > 1)
                 {
-                    var character = Config.container.characters.byId[node.characterIdRef];
-                    var characterPrefix = character.name ? Utils.escapeHTML(character.name) : character.id;
+                    const character = Config.container.characters.byId[node.characterIdRef];
+                    const characterPrefix = character.name ? Utils.escapeHTML(character.name) : character.id;
                     text += "<b>" + characterPrefix + ": </b>";
                 }
                 text += Utils.escapeHTML(node.text);
@@ -1923,21 +1912,21 @@ var Main;
                 return a.length > b.length ? a : b;
             });
         }
-        var textLength = $(".lengthTest").text(longestWord)[0].clientWidth / 11;
-        var width = Math.max(4, textLength * 1.08, Math.sqrt(text.length));
+        const textLength = $(".lengthTest").text(longestWord)[0].clientWidth / 11;
+        const width = Math.max(4, textLength * 1.08, Math.sqrt(text.length));
 
         // Get the node
-        var nodeHTML = $('#' + nodeID);
+        const nodeHTML = $('#' + nodeID);
         // Fill div that can hold the images that visualize if the node has certain settings
-        var imageDiv = nodeHTML.find('.imgDiv');
+        const imageDiv = nodeHTML.find('.imgDiv');
         imageDiv.empty();
 
-        var appendNodePropertyImageIfHasValue = function(imgName, propertyValue, showTooltip)
+        const appendNodePropertyImageIfHasValue = function(imgName, propertyValue, showTooltip)
         {
             if (propertyValue)
             {
                 // Span wrapping required for relative tooltip position.
-                var nodePropertyImage = $('<span>', { html: Utils.sIcon("icon-" + imgName) }).appendTo(imageDiv);
+                const nodePropertyImage = $('<span>', { html: Utils.sIcon("icon-" + imgName) }).appendTo(imageDiv);
                 if (showTooltip)
                 {
                     nodePropertyImage.tooltip(
@@ -1971,7 +1960,7 @@ var Main;
         appendNodePropertyImageIfHasValue("node-has-premature-end", node.allowDialogueEndNode);
         appendNodePropertyImageIfHasValue("node-has-end", node.endNode);
 
-        var longNode = text.length > 140;
+        const longNode = text.length > 140;
         if (longNode)
         {
             nodeHTML.addClass("long");
@@ -1983,12 +1972,12 @@ var Main;
             nodeHTML.width(width + "em");
         }
 
-        var nodeTextDiv = nodeHTML.find('.statementText');
+        const nodeTextDiv = nodeHTML.find('.statementText');
         nodeTextDiv.show();
         nodeTextDiv.html(text);
 
         // Make sure the text fits inside the node
-        var h = Math.max(40, nodeTextDiv[0].clientHeight);
+        const h = Math.max(40, nodeTextDiv[0].clientHeight);
         nodeHTML.height(h);
 
         // Add classes to the node for a graphical indication
@@ -2035,8 +2024,8 @@ var Main;
         // No node should be selected after we remove a node.
         if (nodeID === Main.selectedElement) selectElement(null);
 
-        var node = Main.nodes[nodeID];
-        var parentTree = Main.trees[node.parent];
+        const node = Main.nodes[nodeID];
+        const parentTree = Main.trees[node.parent];
 
         // ShouldNotDeleteFromTree should only be true when deleting the node from the tree yourself afterwards
         if (!shouldNotDeleteFromTree)
@@ -2053,18 +2042,18 @@ var Main;
 
     function applyTreeChanges()
     {
-        var hasChanges = !SaveIndicator.getSavedChanges();
+        let hasChanges = !SaveIndicator.getSavedChanges();
 
-        var tree = Main.trees[Main.selectedElement];
+        const tree = Main.trees[Main.selectedElement];
 
-        var newTreeOptional = $('#optionalCheckbox').prop('checked');
+        const newTreeOptional = $('#optionalCheckbox').prop('checked');
         hasChanges = hasChanges || tree.optional !== newTreeOptional;
         tree.optional = newTreeOptional;
         $(Main.trees[Main.selectedElement].dragDiv).toggleClass("optional", tree.optional);
-        var treeIcons = tree.dragDiv.find('.icons').empty();
+        const treeIcons = tree.dragDiv.find('.icons').empty();
         if (tree.optional) treeIcons.html(Utils.sIcon('icon-tree-is-optional'));
 
-        var newTreeComment = $("textarea#comment").val();
+        const newTreeComment = $("textarea#comment").val();
         hasChanges = hasChanges || tree.comment !== newTreeComment;
         tree.comment = newTreeComment;
 
@@ -2089,8 +2078,8 @@ var Main;
         }
         else if (Main.selectedElement in Main.nodes)
         {
-            var node = Main.nodes[Main.selectedElement];
-            var addedDiv;
+            const node = Main.nodes[Main.selectedElement];
+            let addedDiv;
 
             MiniMap.deactivate();
 
@@ -2098,48 +2087,46 @@ var Main;
             $("#properties").attr("class", node.type);
 
             // Insert the preconditions in the sidebar
-            var preconditionsContainer = $("#preconditionsDiv");
+            const preconditionsContainer = $("#preconditionsDiv");
             Condition.appendControlsTo(preconditionsContainer);
             if (node.preconditions) Condition.setInDOM(preconditionsContainer, node.preconditions);
 
             // Show user-defined parameters
-            for (var k = 0; k < node.parameterEffects.userDefined.length; k++)
+            node.parameterEffects.userDefined.forEach(function(parameter)
             {
-                var parameter = node.parameterEffects.userDefined[k];
-
                 addedDiv = addEmptyUserDefinedParameterEffect();
                 addedDiv.find(".parameter-idref-select").val(parameter.idRef).trigger('change');
                 addedDiv.find(".parameter-effect-operator-select").val(parameter.operator);
                 Parameters.container.byId[parameter.idRef].type.setInDOM(addedDiv.find(".parameter-effect-value-container"), parameter.value);
-            }
+            });
 
-            var scopes = ['per', 'per-' + node.type];
+            const scopes = ['per', 'per-' + node.type];
 
             // Show fixed parameters
             // Appends a default effect to the container, which changes dynamically based on the parameter selected
-            var appendEffectContainerTo = function(effectsContainer, containerClassPrefix, parameterDefinitions)
+            const appendEffectContainerTo = function(effectsContainer, containerClassPrefix, parameterDefinitions)
             {
                 // This element contains the dynamically changing operator and control for possible values
                 // It is separate from the rest so that it can be emptied
-                var effectSubContainer = $('<span>');
+                const effectSubContainer = $('<span>');
 
                 // Dynamically changes the type of the effect according to the given parameter
-                var changeEffectType = function(pId)
+                const changeEffectType = function(pId)
                 {
-                    var operatorSelect = $('<select>', { class: containerClassPrefix + "-effect-operator-select" });
+                    const operatorSelect = $('<select>', { class: containerClassPrefix + "-effect-operator-select" });
                     parameterDefinitions[pId].type.assignmentOperators.forEach(function(op)
                     {
                         operatorSelect.append($('<option>', { value: op.name, text: op.uiName }));
                     });
                     effectSubContainer.append(operatorSelect);
 
-                    var controlContainer = $('<span>', { class: containerClassPrefix + "-effect-control-container" });
+                    const controlContainer = $('<span>', { class: containerClassPrefix + "-effect-control-container" });
                     parameterDefinitions[pId].type.appendControlTo(controlContainer);
                     effectSubContainer.append(controlContainer);
                 };
 
                 // Clone the hidden select accumulated for each separate section and put it in the parameter effect
-                var idRefSelect = effectsContainer.parent().children('select.' + $.escapeSelector(containerClassPrefix) + '-idref-select.hidden').clone();
+                const idRefSelect = effectsContainer.parent().children('select.' + $.escapeSelector(containerClassPrefix) + '-idref-select.hidden').clone();
                 idRefSelect.removeClass(containerClassPrefix + '-idref-select');
                 idRefSelect.addClass(containerClassPrefix + '-effect-idref-select');
                 changeEffectType($(idRefSelect).val());
@@ -2151,30 +2138,30 @@ var Main;
                 idRefSelect.removeClass('hidden');
 
                 // This button deletes the effect (container)
-                var deleteButton = Parts.deleteButton();
+                const deleteButton = Parts.deleteButton();
                 deleteButton.on('click', function() { $(this).parent().remove(); });
 
-                var effectContainer = $('<div>', { class: "parameter-effect " + containerClassPrefix + "-effect-container" });
-                var handle = $('<span>', { class: "handle", text: "↕" });
+                const effectContainer = $('<div>', { class: "parameter-effect " + containerClassPrefix + "-effect-container" });
+                const handle = $('<span>', { class: "handle", text: "↕" });
                 effectContainer.append([handle, idRefSelect, effectSubContainer, deleteButton]);
                 effectsContainer.append(effectContainer);
             };
 
             // Shows the sections and add buttons when there are effects that can be added
-            var hStartLevel = 3;
-            var showParameterItem = function(parameterDefinitions, acceptableScopes, parameterItem, hLevel, container, classPrefix, idRefToEffectsContainer)
+            const hStartLevel = 3;
+            const showParameterItem = function(parameterDefinitions, acceptableScopes, parameterItem, hLevel, container, classPrefix, idRefToEffectsContainer)
             {
                 if (acceptableScopes.indexOf(parameterItem.scopes.statementScope) === -1) return false;
                 if (parameterItem.kind === 'section')
                 {
-                    var sectionContainer = $('<div>');
+                    const sectionContainer = $('<div>');
                     if (hLevel === hStartLevel) sectionContainer.addClass("section");
                     else sectionContainer.addClass("subsection");
                     sectionContainer.append($('<h' + hLevel + '>', { text: parameterItem.name }));
                     container.append(sectionContainer);
 
                     // Show all subsections or possibilities to add effects
-                    var anyParameterShown = false;
+                    let anyParameterShown = false;
                     parameterItem.sequence.forEach(function(subItem)
                     {
                         if (showParameterItem(parameterDefinitions, acceptableScopes, subItem, hLevel + 1, sectionContainer, classPrefix, idRefToEffectsContainer))
@@ -2190,8 +2177,8 @@ var Main;
                 }
                 else
                 {
-                    var parameterIdRefSelect;
-                    var effectsContainer;
+                    let parameterIdRefSelect;
+                    let effectsContainer;
                     if (!container.hasClass(classPrefix + "-possible"))
                     {
                         container.addClass(classPrefix + "-possible");
@@ -2205,7 +2192,7 @@ var Main;
                         container.append(effectsContainer);
 
                         container.append(Parts.addButton(i18next.t('main:add_effect')));
-                        var addEffectButton = container.children().last();
+                        const addEffectButton = container.children().last();
                         addEffectButton.on('click', function()
                         {
                             appendEffectContainerTo(effectsContainer, classPrefix, parameterDefinitions);
@@ -2216,7 +2203,7 @@ var Main;
                         parameterIdRefSelect = container.children('select.' + $.escapeSelector(classPrefix) + '-idref-select.hidden');
                         effectsContainer = container.children('.' + $.escapeSelector(classPrefix) + '-container');
                     }
-                    var parameterIdRefOption = $('<option>', { value: parameterItem.id, text: parameterItem.name });
+                    const parameterIdRefOption = $('<option>', { value: parameterItem.id, text: parameterItem.name });
                     parameterIdRefSelect.append(parameterIdRefOption);
 
                     idRefToEffectsContainer[parameterItem.id] = effectsContainer;
@@ -2226,11 +2213,11 @@ var Main;
             };
 
             // Show the sections for all character-independent fixed parameter effects
-            var fixedParameterEffectsEl = $("#fixed-parameter-effects");
-            var classPrefix = fixedParameterEffectsEl.attr('id');
+            const fixedParameterEffectsEl = $("#fixed-parameter-effects");
+            const classPrefix = fixedParameterEffectsEl.attr('id');
             fixedParameterEffectsEl.removeClass(classPrefix + '-possible');
             // Accumulator for mapping a parameter id to its effects container
-            var idRefToEffectsContainer = {};
+            const idRefToEffectsContainer = {};
             Config.container.parameters.sequence.forEach(function(subItem)
             {
                 showParameterItem(Config.container.parameters.byId, scopes, subItem, hStartLevel, fixedParameterEffectsEl, classPrefix, idRefToEffectsContainer);
@@ -2241,9 +2228,9 @@ var Main;
             {
                 if (effect.idRef in idRefToEffectsContainer)
                 {
-                    var effectsContainer = idRefToEffectsContainer[effect.idRef];
+                    const effectsContainer = idRefToEffectsContainer[effect.idRef];
                     appendEffectContainerTo(effectsContainer, classPrefix, Config.container.parameters.byId);
-                    var addedEffectContainer = effectsContainer.children().last();
+                    const addedEffectContainer = effectsContainer.children().last();
 
                     addedEffectContainer.find('.' + classPrefix + '-effect-idref-select').val(effect.idRef).trigger('change');
                     addedEffectContainer.find('.' + classPrefix + '-effect-operator-select').val(effect.operator);
@@ -2254,27 +2241,27 @@ var Main;
             if (node.type !== Main.computerType || Config.container.characters.sequence.length > 1)
             {
                 // Show the sections for all per-character fixed parameter effects
-                var fixedCharacterParameterEffectsEl = $("#fixed-character-parameter-effects");
-                var characterClassPrefix = fixedCharacterParameterEffectsEl.attr('id');
-                var accordionDiv = $('<div>');
+                const fixedCharacterParameterEffectsEl = $("#fixed-character-parameter-effects");
+                const characterClassPrefix = fixedCharacterParameterEffectsEl.attr('id');
+                const accordionDiv = $('<div>');
                 fixedCharacterParameterEffectsEl.append(accordionDiv);
-                var anyCharacterParameterShown = false;
+                let anyCharacterParameterShown = false;
                 // Accumulator for mapping a character parameter id to its effects container
-                var idRefToCharacterEffectsContainer = {};
+                const idRefToCharacterEffectsContainer = {};
                 Config.container.characters.sequence.forEach(function(character)
                 {
-                    var characterHeader = $('<h' + hStartLevel + '>', { value: character.id, text: character.name ? character.name : character.id });
-                    var characterDiv = $('<div>');
+                    const characterHeader = $('<h' + hStartLevel + '>', { value: character.id, text: character.name ? character.name : character.id });
+                    const characterDiv = $('<div>');
                     accordionDiv.append(characterHeader).append(characterDiv);
 
-                    var classCharacterPrefix = characterClassPrefix + '-' + character.id;
+                    const classCharacterPrefix = characterClassPrefix + '-' + character.id;
 
                     idRefToCharacterEffectsContainer[character.id] = {};
 
                     // The definitions for each parameter need to be available for changing the select,
                     // it can either be a parameter for an individual character or for all the characters,
                     // so we need to merge the definitions into one object and pass it.
-                    var characterParameterDefinitions = $.extend({}, Config.container.characters.parameters.byId, Config.container.characters.byId[character.id].parameters.byId);
+                    const characterParameterDefinitions = $.extend({}, Config.container.characters.parameters.byId, Config.container.characters.byId[character.id].parameters.byId);
 
                     Config.container.characters.parameters.sequence.forEach(function(parameterItem)
                     {
@@ -2310,18 +2297,18 @@ var Main;
                 }
 
                 // Add the per-character effects that were previously defined
-                for (var characterId in Config.container.characters.byId)
+                for (const characterId in Config.container.characters.byId)
                 {
-                    var classCharacterPrefix = characterClassPrefix + '-' + characterId;
-                    var characterParameterDefinitions = $.extend({}, Config.container.characters.parameters.byId, Config.container.characters.byId[characterId].parameters.byId);
+                    const classCharacterPrefix = characterClassPrefix + '-' + characterId;
+                    const characterParameterDefinitions = $.extend({}, Config.container.characters.parameters.byId, Config.container.characters.byId[characterId].parameters.byId);
 
                     node.parameterEffects.fixed.perCharacter[characterId].sequence.forEach(function(effect)
                     {
                         if (effect.idRef in idRefToCharacterEffectsContainer[characterId])
                         {
-                            var effectsContainer = idRefToCharacterEffectsContainer[characterId][effect.idRef];
+                            const effectsContainer = idRefToCharacterEffectsContainer[characterId][effect.idRef];
                             appendEffectContainerTo(effectsContainer, classCharacterPrefix, characterParameterDefinitions);
-                            var addedEffectContainer = effectsContainer.children().last();
+                            const addedEffectContainer = effectsContainer.children().last();
 
                             addedEffectContainer.find('.' + $.escapeSelector(classCharacterPrefix) + '-effect-idref-select').val(effect.idRef).trigger('change');
                             addedEffectContainer.find('.' + $.escapeSelector(classCharacterPrefix) + '-effect-operator-select').val(effect.operator);
@@ -2332,25 +2319,25 @@ var Main;
             }
 
             // Show the node's property values
-            var showPropertyItem = function(propertyValues, acceptableScopes, propertyItem, hLevel, tableBody, idPrefix)
+            const showPropertyItem = function(propertyValues, acceptableScopes, propertyItem, hLevel, tableBody, idPrefix)
             {
                 if (acceptableScopes.indexOf(propertyItem.scopes.statementScope) === -1) return;
                 if (propertyItem.kind === 'section')
                 {
-                    var sectionTable = $('<table>');
+                    const sectionTable = $('<table>');
 
-                    var sectionTableHeader = $('<thead>').append($('<th colspan="2">').append($('<h' + hLevel + '>', { text: propertyItem.name })));
+                    const sectionTableHeader = $('<thead>').append($('<th colspan="2">').append($('<h' + hLevel + '>', { text: propertyItem.name })));
                     sectionTable.append(sectionTableHeader);
 
-                    var sectionTableBody = $('<tbody>');
+                    const sectionTableBody = $('<tbody>');
                     sectionTable.append(sectionTableBody);
 
-                    var sectionContainer = $('<div>').append(sectionTable);
+                    const sectionContainer = $('<div>').append(sectionTable);
                     if (hLevel === hStartLevel) sectionContainer.addClass("section");
                     else sectionContainer.addClass("subsection");
                     tableBody.append($('<tr>').append($('<td colspan="2">').append(sectionContainer)));
 
-                    var anyPropertyShown = false;
+                    let anyPropertyShown = false;
                     propertyItem.sequence.forEach(function(subItem)
                     {
                         if (showPropertyItem(propertyValues, acceptableScopes, subItem, hLevel + 1, sectionTableBody, idPrefix))
@@ -2362,13 +2349,13 @@ var Main;
                 }
                 else
                 {
-                    var propertyHeader = $('<th>');
-                    var controlHtmlId = idPrefix + '-' + propertyItem.id;
-                    var controlFirst = propertyItem.type.labelControlOrder === Types.labelControlOrders.singleLineContainerLabel ||
+                    const propertyHeader = $('<th>');
+                    const controlHtmlId = idPrefix + '-' + propertyItem.id;
+                    const controlFirst = propertyItem.type.labelControlOrder === Types.labelControlOrders.singleLineContainerLabel ||
                                        propertyItem.type.labelControlOrder === Types.labelControlOrders.twoLineContainerLabel;
                     propertyHeader.append($('<label>', { text: propertyItem.name + (controlFirst ? '' : ':'), 'for': controlHtmlId }));
 
-                    var propertyData = $('<td>', { id: idPrefix + '-container-' + propertyItem.id });
+                    const propertyData = $('<td>', { id: idPrefix + '-container-' + propertyItem.id });
                     propertyItem.type.appendControlTo(propertyData, controlHtmlId);
                     propertyItem.type.setInDOM(propertyData, propertyValues[propertyItem.id]);
 
@@ -2378,8 +2365,8 @@ var Main;
                         propertyItem.type.autoCompleteControl(propertyData, propertyItem.autoCompleteList);
                     }
 
-                    var propertyRow = $('<tr>');
-                    var additionalPropertyRow;
+                    let propertyRow = $('<tr>');
+                    let additionalPropertyRow;
                     switch (propertyItem.type.labelControlOrder)
                     {
                         case Types.labelControlOrders.singleLineLabelContainer:
@@ -2412,9 +2399,9 @@ var Main;
                     return true;
                 }
             };
-            var nodePropertyValuesEl = $('#node-property-values');
-            var nodePropertyValuesTable = $('<table>');
-            var anyNodePropertyShown = false;
+            const nodePropertyValuesEl = $('#node-property-values');
+            const nodePropertyValuesTable = $('<table>');
+            let anyNodePropertyShown = false;
             Config.container.properties.sequence.forEach(function(subItem)
             {
                 if (showPropertyItem(node.propertyValues.characterIndependent, scopes, subItem, hStartLevel, nodePropertyValuesTable, nodePropertyValuesEl.attr('id')))
@@ -2424,19 +2411,19 @@ var Main;
             });
             nodePropertyValuesEl.append(nodePropertyValuesTable);
 
-            var nodeCharacterPropertyValuesEl = $('#node-character-property-values');
+            const nodeCharacterPropertyValuesEl = $('#node-character-property-values');
             if (node.type !== Main.computerType || Config.container.characters.sequence.length > 1)
             {
-                var characterAccordion = $('<div>');
+                const characterAccordion = $('<div>');
                 nodeCharacterPropertyValuesEl.append(characterAccordion);
-                var anyCharacterPropertyShown = false;
+                let anyCharacterPropertyShown = false;
                 Config.container.characters.sequence.forEach(function(character)
                 {
-                    var characterHeader = $('<h' + hStartLevel + '>', { value: character.id, text: character.name ? character.name : character.id });
-                    var characterTab = $('<table>');
+                    const characterHeader = $('<h' + hStartLevel + '>', { value: character.id, text: character.name ? character.name : character.id });
+                    const characterTab = $('<table>');
                     characterAccordion.append(characterHeader).append($('<div>').append(characterTab));
 
-                    var containerIdPrefix = nodeCharacterPropertyValuesEl.attr('id') + '-' + character.id;
+                    const containerIdPrefix = nodeCharacterPropertyValuesEl.attr('id') + '-' + character.id;
 
                     Config.container.characters.properties.sequence.forEach(function(propertyItem)
                     {
@@ -2475,26 +2462,26 @@ var Main;
             // Show the per-computer-own parameter effects and property values
             if (node.type === Main.computerType)
             {
-                var updateSideBarCharacterSection = function()
+                const updateSideBarCharacterSection = function()
                 {
-                    var acceptableScopes = ['per-computer-own'];
+                    let acceptableScopes = ['per-computer-own'];
                     if (Config.container.characters.sequence.length === 1)
                     {
                         acceptableScopes = acceptableScopes.concat(scopes);
                     }
 
                     // Show the sections for all per-character fixed parameter effects
-                    var computerOwnParameterEffectsEl = $("#node-computer-own-parameter-effects");
+                    const computerOwnParameterEffectsEl = $("#node-computer-own-parameter-effects");
                     computerOwnParameterEffectsEl.children().remove();
-                    var computerOwnParameterEffectsDiv = $('<div>');
+                    const computerOwnParameterEffectsDiv = $('<div>');
                     computerOwnParameterEffectsEl.append(computerOwnParameterEffectsDiv);
-                    var anyCharacterParameterShown = false;
-                    var classCharacterPrefix = computerOwnParameterEffectsEl.attr('id') + '-' + $.escapeSelector(node.characterIdRef);
-                    var idRefToThisCharacterEffectsContainer = {};
+                    let anyCharacterParameterShown = false;
+                    const classCharacterPrefix = computerOwnParameterEffectsEl.attr('id') + '-' + $.escapeSelector(node.characterIdRef);
+                    const idRefToThisCharacterEffectsContainer = {};
                     // The definitions for each parameter need to be available for changing the select,
                     // it can either be a parameter for an individual character or for all the characters,
                     // so we need to merge the definitions into one object and pass it.
-                    var characterParameterDefinitions = $.extend({}, Config.container.characters.parameters.byId, Config.container.characters.byId[node.characterIdRef].parameters.byId);
+                    const characterParameterDefinitions = $.extend({}, Config.container.characters.parameters.byId, Config.container.characters.byId[node.characterIdRef].parameters.byId);
                     Config.container.characters.parameters.sequence.forEach(function(parameterItem)
                     {
                         if (showParameterItem(characterParameterDefinitions, acceptableScopes, parameterItem, hStartLevel,
@@ -2518,9 +2505,9 @@ var Main;
                     {
                         if (acceptableScopes.indexOf(characterParameterDefinitions[effect.idRef].scopes.statementScope) !== -1)
                         {
-                            var effectsContainer = idRefToThisCharacterEffectsContainer[effect.idRef];
+                            const effectsContainer = idRefToThisCharacterEffectsContainer[effect.idRef];
                             appendEffectContainerTo(effectsContainer, classCharacterPrefix, characterParameterDefinitions);
-                            var addedEffectContainer = effectsContainer.children().last();
+                            const addedEffectContainer = effectsContainer.children().last();
 
                             addedEffectContainer.find('.' + classCharacterPrefix + '-effect-idref-select').val(effect.idRef).trigger('change');
                             addedEffectContainer.find('.' + classCharacterPrefix + '-effect-operator-select').val(effect.operator);
@@ -2528,13 +2515,13 @@ var Main;
                         }
                     });
 
-                    var computerOwnPropertyValuesEl = $("#node-computer-own-property-values");
+                    const computerOwnPropertyValuesEl = $("#node-computer-own-property-values");
                     computerOwnPropertyValuesEl.children().remove();
-                    var computerOwnPropertyValuesTable = $('<table>');
+                    const computerOwnPropertyValuesTable = $('<table>');
                     computerOwnPropertyValuesEl.append(computerOwnPropertyValuesTable);
                     // The same id prefix as the other character property values, so they can be easily retrieved
-                    var containerIdPrefix = nodeCharacterPropertyValuesEl.attr('id') + '-' + node.characterIdRef;
-                    var anyPropertyShown = false;
+                    const containerIdPrefix = nodeCharacterPropertyValuesEl.attr('id') + '-' + node.characterIdRef;
+                    let anyPropertyShown = false;
                     Config.container.characters.properties.sequence.forEach(function(propertyItem)
                     {
                         if (showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], acceptableScopes, propertyItem, hStartLevel + 1, computerOwnPropertyValuesTable, containerIdPrefix))
@@ -2556,7 +2543,7 @@ var Main;
 
                 if (Config.container.characters.sequence.length > 1)
                 {
-                    var characterSelection = $("#characterSelection");
+                    const characterSelection = $("#characterSelection");
                     characterSelection.off('change');
                     characterSelection.on('change', function()
                     {
@@ -2565,20 +2552,19 @@ var Main;
                             // Save the changes of the user if the character changed by the user, so we can store them in the new property values and parameter effects
                             applyNodeChanges();
 
-                            var node = Main.nodes[Main.selectedElement];
+                            const node = Main.nodes[Main.selectedElement];
 
-                            var newCharacterIdRef = $(this).val();
+                            const newCharacterIdRef = $(this).val();
 
-                            var acceptableScopes = ['per', 'per-' + node.type, 'per-computer-own'];
+                            const acceptableScopes = ['per', 'per-' + node.type, 'per-computer-own'];
 
-                            var perCharacterParameterEffects = Config.getNewDefaultParameterEffects(newCharacterIdRef).fixed.perCharacter;
+                            const perCharacterParameterEffects = Config.getNewDefaultParameterEffects(newCharacterIdRef).fixed.perCharacter;
 
-                            var characterId;
-                            for (characterId in node.parameterEffects.fixed.perCharacter)
+                            for (const characterId in node.parameterEffects.fixed.perCharacter)
                             {
                                 node.parameterEffects.fixed.perCharacter[characterId].sequence.forEach(function(effect)
                                 {
-                                    var parameter = Config.container.characters.parameters.byId[effect.idRef];
+                                    let parameter = Config.container.characters.parameters.byId[effect.idRef];
                                     if (!parameter) parameter = Config.container.characters.byId[newCharacterIdRef].parameters.byId[effect.idRef];
 
                                     if (parameter)
@@ -2601,12 +2587,12 @@ var Main;
                             // Store old property values in the new property values and
                             // check for each per-character property value if it is per-computer-own and
                             // if the other character also has that property then store it in the new character property values
-                            var perCharacterPropertyValues = Config.getNewDefaultPropertyValues(acceptableScopes, newCharacterIdRef).perCharacter;
-                            for (characterId in perCharacterPropertyValues)
+                            const perCharacterPropertyValues = Config.getNewDefaultPropertyValues(acceptableScopes, newCharacterIdRef).perCharacter;
+                            for (const characterId in perCharacterPropertyValues)
                             {
-                                for (var propertyId in perCharacterPropertyValues[characterId])
+                                for (const propertyId in perCharacterPropertyValues[characterId])
                                 {
-                                    var property = Config.container.characters.properties.byId[propertyId];
+                                    let property = Config.container.characters.properties.byId[propertyId];
                                     if (!property) property = Config.container.characters.byId[characterId].properties.byId[propertyId];
 
                                     if (property.scopes.statementScope === 'per-computer-own')
@@ -2655,26 +2641,26 @@ var Main;
 
     function addEmptyUserDefinedParameterEffect()
     {
-        var parameterEffect = $('<div>', { class: "parameter-effect" });
+        const parameterEffect = $('<div>', { class: "parameter-effect" });
         parameterEffect.append($('<span>', { class: "handle", text: '↕' }));
-        var idRefSelect = $('<select>', { class: "parameter-idref-select" });
+        const idRefSelect = $('<select>', { class: "parameter-idref-select" });
         parameterEffect.append(idRefSelect);
-        var effectContainer = $('<span>', { class: "parameter-effect-container" });
+        const effectContainer = $('<span>', { class: "parameter-effect-container" });
         parameterEffect.append(effectContainer);
         parameterEffect.append(Parts.deleteButton());
         $("#userDefinedParameterEffects").append(parameterEffect);
 
         Parameters.insertInto(idRefSelect);
-        var changeEffectType = function(pId)
+        const changeEffectType = function(pId)
         {
-            var operatorSelect = $('<select>', { class: "parameter-effect-operator-select" });
+            const operatorSelect = $('<select>', { class: "parameter-effect-operator-select" });
             Parameters.container.byId[pId].type.assignmentOperators.forEach(function(op)
             {
                 operatorSelect.append($('<option>', { value: op.name, text: op.uiName }));
             });
             effectContainer.append(operatorSelect);
 
-            var controlContainer = $('<span>', { class: "parameter-effect-value-container" });
+            const controlContainer = $('<span>', { class: "parameter-effect-value-container" });
             Parameters.container.byId[pId].type.appendControlTo(controlContainer);
             effectContainer.append(controlContainer);
         };
@@ -2690,8 +2676,8 @@ var Main;
 
     function makeConnection(sourceID, targetID, plumbInstance)
     {
-        var sourceNode = Main.nodes[sourceID];
-        var targetNode = Main.nodes[targetID];
+        const sourceNode = Main.nodes[sourceID];
+        const targetNode = Main.nodes[targetID];
 
         // Do not connect between trees
         if (targetNode.parent !== sourceNode.parent)
@@ -2707,7 +2693,7 @@ var Main;
         }
 
         // Ensure that siblings are of the same type only
-        var firstChildId = getFirstChildIdOrNull(sourceID);
+        const firstChildId = getFirstChildIdOrNull(sourceID);
         if (firstChildId !== null)
         {
             if (targetNode.type != Main.nodes[firstChildId].type)
@@ -2729,7 +2715,7 @@ var Main;
 
     function getFirstChildIdOrNull(sourceId)
     {
-        var connections = Main.getPlumbInstanceByNodeID(sourceId).getConnections({ source: sourceId });
+        const connections = Main.getPlumbInstanceByNodeID(sourceId).getConnections({ source: sourceId });
         return connections.length === 0 ? null : connections[0].targetId;
     }
 
@@ -2750,7 +2736,7 @@ var Main;
             if ($(this).hasClass("collapseAll"))
             {
                 // If there is at least one collapsable element open, close all
-                var result = 0;
+                let result = 0;
                 $(".collapsable").each(function()
                 {
                     if ($(this).css("display") != "none")
@@ -2773,7 +2759,7 @@ var Main;
             // A property element header was clicked
             else
             {
-                var clickTag = $(this).find(".clicktag");
+                const clickTag = $(this).find(".clicktag");
                 // An element was opened
                 if (clickTag.hasClass("collapsed"))
                 {
@@ -2814,14 +2800,14 @@ var Main;
         // Must return a position (not null) when
         // Zoom.isZoomed() && isMousePositionWithinEditingCanvas()
 
-        var zoomedTree = Zoom.getZoomed();
+        const zoomedTree = Zoom.getZoomed();
         if (!zoomedTree) return null;
 
-        var treeDiv = zoomedTree.div;
-        var leftBound = treeDiv.offset().left;
-        var upperBound = treeDiv.offset().top;
-        var rightBound = leftBound + treeDiv.width();
-        var lowerBound = upperBound + treeDiv.height();
+        const treeDiv = zoomedTree.div;
+        const leftBound = treeDiv.offset().left;
+        const upperBound = treeDiv.offset().top;
+        const rightBound = leftBound + treeDiv.width();
+        const lowerBound = upperBound + treeDiv.height();
 
         if (!(mousePos.x >= leftBound && mousePos.x < rightBound &&
             mousePos.y >= upperBound && mousePos.y < lowerBound))
@@ -2837,18 +2823,18 @@ var Main;
 
     function isEditingInCanvas()
     {
-        var inModal = $(document.body).children(".ui-widget-overlay.ui-front").length > 0;
+        const inModal = $(document.body).children(".ui-widget-overlay.ui-front").length > 0;
         return !inModal && window.getSelection().isCollapsed &&
             ($("#main").closest(document.activeElement).length > 0 || document.activeElement === null);
     }
 
     function isMousePositionWithinEditingCanvas()
     {
-        var zoomedTree = Zoom.getZoomed();
-        var canvas = zoomedTree ? zoomedTree.div : $("#main");
-        var offset = canvas.offset();
-        var width = canvas.width();
-        var height = canvas.height();
+        const zoomedTree = Zoom.getZoomed();
+        const canvas = zoomedTree ? zoomedTree.div : $("#main");
+        const offset = canvas.offset();
+        const width = canvas.width();
+        const height = canvas.height();
         return Main.mousePosition.x >= offset.left &&
             Main.mousePosition.y >= offset.top &&
             Main.mousePosition.x < offset.left + width &&
@@ -2857,8 +2843,8 @@ var Main;
 
     function updateDocumentTitle()
     {
-        var savedIndicator = SaveIndicator.getSavedChanges() ? "" : "• ";
-        var scenarioTitle = Metadata.container.name !== "" ? Metadata.container.name + " - " : "";
+        const savedIndicator = SaveIndicator.getSavedChanges() ? "" : "• ";
+        const scenarioTitle = Metadata.container.name !== "" ? Metadata.container.name + " - " : "";
         document.title = savedIndicator + scenarioTitle + "Scenario Editor";
     }
 })();

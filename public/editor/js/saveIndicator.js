@@ -1,7 +1,7 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported SaveIndicator */
-var SaveIndicator;
+let SaveIndicator;
 
 (function()
 {
@@ -14,7 +14,7 @@ var SaveIndicator;
         getSavedChanges: getSavedChanges
     };
 
-    var savedChanges = true;
+    let savedChanges = true;
 
     function setSavedChanges(value)
     {

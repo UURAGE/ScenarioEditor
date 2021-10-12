@@ -9,19 +9,19 @@
         // Event handlers.
         $("#repositionGraph").on('click', function()
         {
-            var tree = Zoom.getZoomed();
+            const tree = Zoom.getZoomed();
             if (!tree) return;
 
             // Return if there is no start node.
-            var startNodeIDs = Main.getStartNodeIDs(tree);
+            const startNodeIDs = Main.getStartNodeIDs(tree);
             if (startNodeIDs.length === 0) return;
 
             SaveIndicator.setSavedChanges(false);
 
             // First we distribute the nodes vertically based on the longest path to the Node.
-            var verticalOrder = distributeNodesVertically(tree);
+            const verticalOrder = distributeNodesVertically(tree);
             // Next we try to find a way to place the nodes horizontally to minimize edge crossings.
-            var optimizedOrder = optimizeHorizontalDistribution(verticalOrder);
+            const optimizedOrder = optimizeHorizontalDistribution(verticalOrder);
             // Reposition the jsPlumb nodes based on the optimizedOrder, we suspend drawing while moving the nodes.
             tree.plumbInstance.batch(function()
             {
@@ -49,20 +49,20 @@
     function distributeNodesVertically(tree)
     {
         // Find a topological ordering of the nodes.
-        var topOrd = findTopologicalOrdering(tree);
+        const topOrd = findTopologicalOrdering(tree);
         // Give each node a rank (equal to the length of the longest path to the node from the source).
         giveNodesRanks(topOrd, tree.plumbInstance);
         // Sort the topological ordering based on the ranks of the nodes.
-        var topOrdSortedByRank = topOrd.sort(compareRanks);
+        const topOrdSortedByRank = topOrd.sort(compareRanks);
         // Create the virtual node network, refer to the documentation for more details.
         return addVirtualNodes(topOrdSortedByRank, tree.plumbInstance);
     }
 
     function optimizeHorizontalDistribution(order)
     {
-        var best = shallowArrayOfArraysCopy(order);
+        let best = shallowArrayOfArraysCopy(order);
         // Perform wmedian a set amount of times (as many as dot does), to optimize the node placements within ranks.
-        for (var i = 0; i < 24; i++)
+        for (let i = 0; i < 24; i++)
         {
             wmedian(order, i);
             transpose(order);
@@ -77,14 +77,14 @@
     // Transpose switches the placement of two nodes, checks if the situation has improved, and reverts it otherwise.
     function transpose(order)
     {
-        for (var i = 0; i < order.length; i++)
+        for (let i = 0; i < order.length; i++)
         {
-            var oldCrossings = crossingsWithNextRow(order, i - 1) +
+            let oldCrossings = crossingsWithNextRow(order, i - 1) +
                 crossingsWithNextRow(order, i);
-            for (var j = 0; j < order[i].length - 1; j++)
+            for (let j = 0; j < order[i].length - 1; j++)
             {
                 swap(order[i], j, j + 1);
-                var newCrossings = crossingsWithNextRow(order, i - 1) +
+                const newCrossings = crossingsWithNextRow(order, i - 1) +
                     crossingsWithNextRow(order, i);
                 if (newCrossings < oldCrossings)
                 {
@@ -100,15 +100,15 @@
 
     function swap(array, pos1, pos2)
     {
-        var swapVar = array[pos1];
+        const swapVar = array[pos1];
         array[pos1] = array[pos2];
         array[pos2] = swapVar;
     }
 
     function shallowArrayOfArraysCopy(toBeCopied)
     {
-        var output = [];
-        for (var i = 0; i < toBeCopied.length; i++)
+        const output = [];
+        for (let i = 0; i < toBeCopied.length; i++)
         {
             output.push([].concat(toBeCopied[i]));
         }
@@ -117,8 +117,8 @@
 
     function crossings(virtualNodeNetwork)
     {
-        var runningTotal = 0;
-        for (var i = 0; i < virtualNodeNetwork.length - 1; i++)
+        let runningTotal = 0;
+        for (let i = 0; i < virtualNodeNetwork.length - 1; i++)
         {
             runningTotal += crossingsWithNextRow(virtualNodeNetwork, i);
         }
@@ -132,20 +132,20 @@
         {
             return 0;
         }
-        for (var i = 0; i < virtualNodeNetwork[rowNumber + 1].length; i++)
+        for (let i = 0; i < virtualNodeNetwork[rowNumber + 1].length; i++)
         {
             virtualNodeNetwork[rowNumber + 1][i].positionInRank = i;
         }
 
-        var listOfChildPositions = [];
-        for (var j = 0; j < virtualNodeNetwork[rowNumber].length; j++)
+        let listOfChildPositions = [];
+        for (let j = 0; j < virtualNodeNetwork[rowNumber].length; j++)
         {
-            var childrenPositions = virtualNodeNetwork[rowNumber][j].topologicalChildren
+            const childrenPositions = virtualNodeNetwork[rowNumber][j].topologicalChildren
                 .map(function(child)
                 {
                     return child.positionInRank;
                 });
-            var childrenPositionsSorted = childrenPositions.sort(
+            const childrenPositionsSorted = childrenPositions.sort(
                 function(a, b)
                 {
                     return a - b;
@@ -165,14 +165,14 @@
             return 0;
         }
         // Divide into two halves.
-        var mid = Math.floor((start + end) / 2);
-        var leftCrossings = countUnorderedPairs(inputList, start, mid);
-        var rightCrossings = countUnorderedPairs(inputList, mid, end);
+        const mid = Math.floor((start + end) / 2);
+        const leftCrossings = countUnorderedPairs(inputList, start, mid);
+        const rightCrossings = countUnorderedPairs(inputList, mid, end);
 
-        var centerCrossings = 0;
-        var sortedArray = [];
-        var leftPointer = start;
-        var rightPointer = mid;
+        let centerCrossings = 0;
+        let sortedArray = [];
+        let leftPointer = start;
+        let rightPointer = mid;
         // The left and right list are both sorted from the previous step.
         while (leftPointer < mid && rightPointer < end)
         {
@@ -205,7 +205,7 @@
                     rightPointer, end));
             }
         }
-        for (var i = start; i < end; i++)
+        for (let i = start; i < end; i++)
         {
             inputList[i] = sortedArray[i - start];
         }
@@ -220,9 +220,9 @@
         if (iteration % 2 === 0)
         {
             // Here we visit the ranks is ascending order, starting at rank 1, because the nodes in rank 0 don't have parents.
-            for (var i = 1; i < virtualNodeNetwork.length; i++)
+            for (let i = 1; i < virtualNodeNetwork.length; i++)
             {
-                for (var j = 0; j < virtualNodeNetwork[i].length; j++)
+                for (let j = 0; j < virtualNodeNetwork[i].length; j++)
                 {
                     // For each node, calculate the median value of the index of it's parents.
                     virtualNodeNetwork[i][j].topologicalmedianValue =
@@ -239,9 +239,9 @@
         else
         {
             // Here we visit the ranks is descending order, starting at the second to last rank, because the nodes in the last rank don't have children.
-            for (var k = virtualNodeNetwork.length - 2; k >= 0; k--)
+            for (let k = virtualNodeNetwork.length - 2; k >= 0; k--)
             {
-                for (var l = 0; l < virtualNodeNetwork[k].length; l++)
+                for (let l = 0; l < virtualNodeNetwork[k].length; l++)
                 {
                     // For each node, calculate the median value of the index of its children.
                     virtualNodeNetwork[k][l].topologicalmedianValue =
@@ -261,7 +261,7 @@
     // and returns the position of the median neighbour in the row above/below.
     function medianValue(virtualNodeNetwork, node, parents)
     {
-        var P;
+        let P;
         // Either look at the level above this one (parents), or look at the level below this one (!parents, or children).
         if (parents)
         {
@@ -271,7 +271,7 @@
             {
                 return Infinity;
             }
-            var rowAbove = virtualNodeNetwork[node.topologicalRank - 1];
+            const rowAbove = virtualNodeNetwork[node.topologicalRank - 1];
             // Here we create an array which contains the positions of the parents of this node in the row above.
             P = rowAbove.map(function(aboveElem, index)
             {
@@ -301,7 +301,7 @@
             {
                 return Infinity;
             }
-            var rowBelow = virtualNodeNetwork[node.topologicalRank + 1];
+            const rowBelow = virtualNodeNetwork[node.topologicalRank + 1];
             // Here we create an array which contains the positions of the children of this node in the row below.
             P = rowBelow.map(function(belowElem, index)
             {
@@ -331,7 +331,7 @@
         }
 
         // If there are an even amount of parents/children, return the position of the middle one.
-        var m = Math.floor(P.length / 2);
+        const m = Math.floor(P.length / 2);
         if (P.length % 2 == 1)
         {
             return P[m];
@@ -344,8 +344,8 @@
 
         // If there are a larger, even amount of parents/children, pick a weighted avarage of the 2 middle nodes,
         // favouring the side where the neighbours are closer together.
-        var left = P[m - 1] - P[0];
-        var right = P[P.length - 1] - P[m];
+        const left = P[m - 1] - P[0];
+        const right = P[P.length - 1] - P[m];
         return (P[m - 1] * right + P[m] * left) / (left * right);
     }
 
@@ -355,7 +355,7 @@
     {
         // We are going add an array in each node to save which children (including virtual nodes) it has and which parents.
         // First we initialise (and/or empty) those arrays.
-        for (var i = 0; i < topOrdSortedByRank.length; i++)
+        for (let i = 0; i < topOrdSortedByRank.length; i++)
         {
             Main.nodes[topOrdSortedByRank[i]].topologicalParent = [];
             Main.nodes[topOrdSortedByRank[i]].topologicalChildren = [];
@@ -364,16 +364,16 @@
         // In the following for-loop, we add all nodes to an array of arrays, based on their rank.
         // Also we fill their topologicalParent and topologicalChildren attributes with their parents and children.
         // For now, this only includes the 'real' nodes, we add the virtual nodes later.
-        var virtualNodeNetwork = [];
-        var currentRank = -1;
+        const virtualNodeNetwork = [];
+        let currentRank = -1;
 
-        var connectionToNode = function(connection)
+        const connectionToNode = function(connection)
         {
             return Main.nodes[connection.targetId];
         };
-        var currentNode;
+        let currentNode;
 
-        for (var j = 0; j < topOrdSortedByRank.length; j++)
+        for (let j = 0; j < topOrdSortedByRank.length; j++)
         {
             currentNode = Main.nodes[topOrdSortedByRank[j]];
             // The nodes are already ordered by rank, so we only need to check if we are at a new rank.
@@ -392,21 +392,21 @@
                 source: topOrdSortedByRank[j]
             }).map(connectionToNode);
             // To every child, we add this node as a parent.
-            for (var k = 0; k < currentNode.topologicalChildren.length; k++)
+            for (let k = 0; k < currentNode.topologicalChildren.length; k++)
             {
                 currentNode.topologicalChildren[k].topologicalParent.push(currentNode);
             }
         }
 
         // In this for-loop, we add all the virtual nodes.
-        for (var l = 0; l < virtualNodeNetwork.length; l++)
+        for (let l = 0; l < virtualNodeNetwork.length; l++)
         {
-            for (var m = 0; m < virtualNodeNetwork[l].length; m++)
+            for (let m = 0; m < virtualNodeNetwork[l].length; m++)
             {
                 // We loop over every node, starting at the nodes with the lowest rank.
                 currentNode = virtualNodeNetwork[l][m];
-                var childrenOfCurrentNode = currentNode.topologicalChildren;
-                for (var n = 0; n < childrenOfCurrentNode.length; n++)
+                const childrenOfCurrentNode = currentNode.topologicalChildren;
+                for (let n = 0; n < childrenOfCurrentNode.length; n++)
                 {
                     // For every child of the currentNode, we check whether its rank differs more than 1 with the rank of the currentNode.
                     if (childrenOfCurrentNode[n].topologicalRank >
@@ -414,7 +414,7 @@
                     {
                         // If it does, we add a virtual node between them on the rank below this one.
                         // Note that we will visit this virtualNode when we loop over the next rank.
-                        var virtualNode =
+                        const virtualNode =
                         {
                             topologicalChildren:
                             [
@@ -424,7 +424,7 @@
                             topologicalRank: currentNode.topologicalRank + 1
                         };
                         virtualNodeNetwork[l + 1].push(virtualNode);
-                        var locationOfCurrentNodeInChildsParentList =
+                        const locationOfCurrentNodeInChildsParentList =
                             childrenOfCurrentNode[n].topologicalParent.lastIndexOf(
                                 currentNode);
                         childrenOfCurrentNode[n].topologicalParent[
@@ -442,22 +442,22 @@
     function repositionNodes(virtualNodeNetwork)
     {
         // The minimal margins between the nodes are hardcoded.
-        var topMargin = 5; // The margin between the first row of nodes and the top of the screen.
-        var leftMargin = 20; // The margin between the left most node and the left edge of the screen.
-        var verticalMargin = 40; // The minimum margin between the rows of nodes.
-        var horizontalMargin = 40; // The margin between 2 nodes in the same row.
-        var maxYInThisRank = 0;
-        var currentYOffset = topMargin;
-        var currentXOffset = leftMargin;
-        var currentNode;
-        var currentNodeWidth;
-        var maximumMinimalWidth = 0;
-        var rowWidth = [];
+        const topMargin = 5; // The margin between the first row of nodes and the top of the screen.
+        const leftMargin = 20; // The margin between the left most node and the left edge of the screen.
+        const verticalMargin = 40; // The minimum margin between the rows of nodes.
+        const horizontalMargin = 40; // The margin between 2 nodes in the same row.
+        let maxYInThisRank = 0;
+        let currentYOffset = topMargin;
+        let currentXOffset = leftMargin;
+        let currentNode;
+        let currentNodeWidth;
+        let maximumMinimalWidth = 0;
+        const rowWidth = [];
         // We calculate the minimal width for every rank, and use the largest value as the width of our graph.
-        for (var i = 0; i < virtualNodeNetwork.length; i++)
+        for (let i = 0; i < virtualNodeNetwork.length; i++)
         {
-            var width = 0;
-            for (var j = 0; j < virtualNodeNetwork[i].length; j++)
+            let width = 0;
+            for (let j = 0; j < virtualNodeNetwork[i].length; j++)
             {
                 currentNode = virtualNodeNetwork[i][j];
                 currentNodeWidth = 0;
@@ -477,14 +477,14 @@
         }
 
         // For each rank ...
-        for (var k = 0; k < virtualNodeNetwork.length; k++)
+        for (let k = 0; k < virtualNodeNetwork.length; k++)
         {
             // We check if the minimal width of this row is equal to the width of the graph.
             // If it isn't, we calculate the margins between the nodes of this rank.
-            var widthLeft = maximumMinimalWidth - rowWidth[k] - (
+            let widthLeft = maximumMinimalWidth - rowWidth[k] - (
                 virtualNodeNetwork[k].length - 1) *
                 horizontalMargin;
-            var marginForThisRow;
+            let marginForThisRow;
             if (widthLeft !== 0)
             {
                 widthLeft += (virtualNodeNetwork[k].length - 1) *
@@ -498,7 +498,7 @@
                 marginForThisRow = horizontalMargin;
             }
             // ... and each node in that rank ...
-            for (var l = 0; l < virtualNodeNetwork[k].length; l++)
+            for (let l = 0; l < virtualNodeNetwork[k].length; l++)
             {
                 currentNode = virtualNodeNetwork[k][l];
                 // ... if the node is a virtual node, just leave some space and then go to the next node.
@@ -515,7 +515,7 @@
                 });
                 // Find the width and height of the node.
                 currentNodeWidth = $('#' + currentNode.id).outerWidth();
-                var currentNodeHeight = $('#' + currentNode.id).outerHeight();
+                const currentNodeHeight = $('#' + currentNode.id).outerHeight();
                 // Keep track of the maximum height of a node in this rank.
                 if (maxYInThisRank < currentNodeHeight)
                 {
@@ -543,20 +543,20 @@
     // This function gives every node a rank (the longest path from the source node).
     function giveNodesRanks(topologicalOrdening, plumbInstance)
     {
-        $.each(topologicalOrdening, function(index, nodeID)
+        topologicalOrdening.forEach(function(nodeID)
         {
             Main.nodes[nodeID].topologicalRank = 0;
         });
 
         // For every node, in topological order ...
-        for (var i = 0; i < topologicalOrdening.length; i++)
+        for (let i = 0; i < topologicalOrdening.length; i++)
         {
             // ... take a look at every child of that node ...
-            var connections = plumbInstance.getConnections(
+            const connections = plumbInstance.getConnections(
             {
                 source: topologicalOrdening[i]
             });
-            for (var j = 0; j < connections.length; j++)
+            for (let j = 0; j < connections.length; j++)
             {
                 // ... the new rank of the childnode is the maximum of its current rank and this parents rank + 1.
                 // This means that the rank of every node is one bigger than the largest rank of any of it's parents.
@@ -573,8 +573,8 @@
     function findTopologicalOrdering(tree)
     {
         // Initially, no node has been visited.
-        var topologicalOrderening = [];
-        $.each(tree.nodes, function(index, nodeID)
+        const topologicalOrderening = [];
+        tree.nodes.forEach(function(nodeID)
         {
             // Java script arrrays tend to have undefined elements because javascript.
             if (nodeID) // Blame the internet, undefined is falsey
@@ -583,7 +583,7 @@
             }
         });
 
-        $.each(Main.getStartNodeIDs(tree), function(index, startNodeID)
+        Main.getStartNodeIDs(tree).forEach(function(startNodeID)
         {
             // Recursively find a reversed topological ordering.
             findTopologicalOrderingRec(startNodeID, topologicalOrderening, tree.plumbInstance);
@@ -602,11 +602,11 @@
             // ... we have visited this node now.
             // While visiting this node we first make sure all children are added to topologicalOrderening, then we add the node itself.
             Main.nodes[currentNodeID].topologicalOrderingVisited = true;
-            var connections = plumbInstance.getConnections(
+            const connections = plumbInstance.getConnections(
             {
                 source: currentNodeID
             });
-            for (var i = 0; i < connections.length; i++)
+            for (let i = 0; i < connections.length; i++)
             {
                 findTopologicalOrderingRec(connections[i].targetId,
                     topologicalOrderening, plumbInstance);

@@ -1,7 +1,7 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported Condition */
-var Condition;
+let Condition;
 
 (function()
 {
@@ -19,7 +19,7 @@ var Condition;
         filter: filter
     };
 
-    var radioButtonCounter = 0;
+    let radioButtonCounter = 0;
 
     function appendControlsTo(container, allowReferenceConditions)
     {
@@ -29,14 +29,14 @@ var Condition;
     // May return null if container contains no conditions
     function getFromDOM(container)
     {
-        var getConditionFromDOM = function(conditionContainer)
+        const getConditionFromDOM = function(conditionContainer)
         {
-            var type = conditionContainer.children(".groupConditionRadioDiv").find('input[type=radio]:checked').val();
+            const type = conditionContainer.children(".groupConditionRadioDiv").find('input[type=radio]:checked').val();
 
-            var subconditions = [];
+            const subconditions = [];
             conditionContainer.children(".groupConditionDiv").children().each(function()
             {
-                var subcondition;
+                let subcondition;
                 if ($(this).hasClass("groupcondition"))
                 {
                     subcondition = getConditionFromDOM($(this));
@@ -44,10 +44,10 @@ var Condition;
                 }
                 else
                 {
-                    var parameterIdRef = $(this).find(".parameter-idref-select").val();
-                    var characterIdRef = $(this).find(".character-idref-select").val();
+                    const parameterIdRef = $(this).find(".parameter-idref-select").val();
+                    const characterIdRef = $(this).find(".character-idref-select").val();
 
-                    var parameter = Config.findParameterById(parameterIdRef, characterIdRef);
+                    let parameter = Config.findParameterById(parameterIdRef, characterIdRef);
                     if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
 
                     subcondition = {};
@@ -84,11 +84,11 @@ var Condition;
 
     function setInDOM(container, rootCondition, allowReferenceConditions)
     {
-        var setConditionInDOM = function(parentContainer, condition, isRoot)
+        const setConditionInDOM = function(parentContainer, condition, isRoot)
         {
             if ("type" in condition)
             {
-                var groupConditionContainer;
+                let groupConditionContainer;
                 if (!isRoot)
                 {
                     groupConditionContainer = appendGroupConditionControlsTo(parentContainer, allowReferenceConditions, false);
@@ -109,10 +109,10 @@ var Condition;
                 {
                     parentContainer = parentContainer.children(".groupConditionDiv");
                 }
-                var parameter = Config.findParameterById(condition.idRef, condition.characterIdRef);
+                let parameter = Config.findParameterById(condition.idRef, condition.characterIdRef);
                 if (!parameter) parameter = Parameters.container.byId[condition.idRef];
 
-                var conditionContainer = appendCondition(parentContainer, allowReferenceConditions);
+                const conditionContainer = appendCondition(parentContainer, allowReferenceConditions);
                 conditionContainer.find(".parameter-idref-select").val(condition.idRef).trigger('change');
                 conditionContainer.find(".character-idref-select").val(condition.characterIdRef);
                 conditionContainer.find(".condition-operator-select").val(condition.operator).trigger('change');
@@ -130,19 +130,19 @@ var Condition;
         if (conditionXML.nodeName == "condition" || conditionXML.nodeName == "characterCondition" ||
             conditionXML.nodeName == "referenceCondition" || conditionXML.nodeName == "characterReferenceCondition")
         {
-            var parameterIdRef = conditionXML.attributes.idref.value;
-            var characterIdRef;
+            const parameterIdRef = conditionXML.attributes.idref.value;
+            let characterIdRef;
             if (conditionXML.nodeName == "characterCondition" || conditionXML.nodeName == "characterReferenceCondition")
             {
                 characterIdRef = conditionXML.attributes.characteridref.value;
             }
 
-            var parameter = Config.findParameterById(parameterIdRef, characterIdRef);
+            let parameter = Config.findParameterById(parameterIdRef, characterIdRef);
             if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
 
             if (parameter)
             {
-                var condition = {
+                const condition = {
                     idRef: parameterIdRef,
                     operator: conditionXML.attributes.operator.value
                 };
@@ -171,7 +171,7 @@ var Condition;
     {
         if ("type" in condition)
         {
-            var typeXML = Utils.appendChild(parentXML, condition.type);
+            const typeXML = Utils.appendChild(parentXML, condition.type);
             condition.subconditions.forEach(function(subcondition)
             {
                 toXML(typeXML, subcondition);
@@ -179,12 +179,12 @@ var Condition;
         }
         else
         {
-            var parameter = Config.findParameterById(condition.idRef, condition.characterIdRef);
+            let parameter = Config.findParameterById(condition.idRef, condition.characterIdRef);
             if (!parameter) parameter = Parameters.container.byId[condition.idRef];
 
-            var isReferenceCondition = condition.operator in Types.unaryOperators;
+            const isReferenceCondition = condition.operator in Types.unaryOperators;
 
-            var conditionXML;
+            let conditionXML;
             if (condition.characterIdRef)
             {
                 conditionXML = Utils.appendChild(parentXML, isReferenceCondition ? "characterReferenceCondition" : "characterCondition");
@@ -213,8 +213,8 @@ var Condition;
         }
         else if (condition.idRef === oldParameter.id)
         {
-            var hasRelationalOperator = newParameter.type.relationalOperators.indexOf(Types.relationalOperators[condition.operator]) !== -1;
-            var hasUnaryOperator = newParameter.type.unaryOperators.indexOf(Types.unaryOperators[condition.operator]) !== -1;
+            const hasRelationalOperator = newParameter.type.relationalOperators.indexOf(Types.relationalOperators[condition.operator]) !== -1;
+            const hasUnaryOperator = newParameter.type.unaryOperators.indexOf(Types.unaryOperators[condition.operator]) !== -1;
             if (!hasRelationalOperator && !hasUnaryOperator)
             {
                 condition.operator = newParameter.type.relationalOperators[0].name;
@@ -229,9 +229,9 @@ var Condition;
     {
         if ("type" in condition)
         {
-            for (var i = 0; i < condition.subconditions.length; i++)
+            for (let i = 0; i < condition.subconditions.length; i++)
             {
-                var subcondition = condition.subconditions[i];
+                let subcondition = condition.subconditions[i];
                 subcondition = filter(predicate, subcondition, onConditionPreservation, onConditionRemoval);
                 if (subcondition)
                 {
@@ -259,7 +259,7 @@ var Condition;
         }
         else
         {
-            var result = predicate(condition);
+            const result = predicate(condition);
             if (result)
             {
                 if (onConditionPreservation) onConditionPreservation(condition, result);
@@ -275,7 +275,7 @@ var Condition;
 
     function appendGroupConditionControlsTo(container, allowReferenceConditions, isRoot)
     {
-        var conditionContainer = appendGroupCondition(container, allowReferenceConditions);
+        const conditionContainer = appendGroupCondition(container, allowReferenceConditions);
         if (isRoot)
         {
             conditionContainer.children('.delete').remove();
@@ -285,15 +285,15 @@ var Condition;
 
     function appendCondition(container, allowReferenceConditions)
     {
-        var condition = $('<div>', { class: "condition" });
+        const condition = $('<div>', { class: "condition" });
         container.append(condition);
-        var handle = $('<span>', { class: "handle", text: "↕" });
+        const handle = $('<span>', { class: "handle", text: "↕" });
         condition.append(handle);
-        var idRefSelect = $('<select>', { class: "parameter-idref-select" });
+        const idRefSelect = $('<select>', { class: "parameter-idref-select" });
         condition.append(idRefSelect);
-        var testContainer = $('<span>', { class: "condition-test-container" });
+        const testContainer = $('<span>', { class: "condition-test-container" });
         condition.append(testContainer);
-        var deleteButton = Parts.deleteButton();
+        const deleteButton = Parts.deleteButton();
         deleteButton.on('click', function()
         {
             condition.remove();
@@ -304,19 +304,19 @@ var Condition;
         Parameters.insertInto(idRefSelect);
         Config.insertParametersInto(idRefSelect);
 
-        var changeTestType = function(parameterIdRef)
+        const changeTestType = function(parameterIdRef)
         {
-            var parameter = Config.findParameterById(parameterIdRef);
+            let parameter = Config.findParameterById(parameterIdRef);
             if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
 
             if (Config.isCharacterParameter(parameterIdRef))
             {
-                var characterIdRefSelect = $('<select>', { class: "character-idref-select" });
+                const characterIdRefSelect = $('<select>', { class: "character-idref-select" });
                 Config.insertCharactersInto(characterIdRefSelect, parameterIdRef);
                 testContainer.append(characterIdRefSelect);
             }
 
-            var operatorSelect = $('<select>', { class: "condition-operator-select" });
+            const operatorSelect = $('<select>', { class: "condition-operator-select" });
             parameter.type.relationalOperators.forEach(function(relOp)
             {
                 operatorSelect.append($('<option>', { value: relOp.name, text: relOp.uiName }));
@@ -328,10 +328,10 @@ var Condition;
                     operatorSelect.append($('<option>', { value: unaryOp.name, text: unaryOp.uiName }));
                 });
             }
-            var handleOperatorChange = function(operatorName)
+            const handleOperatorChange = function(operatorName)
             {
-                var previousValueContainer = testContainer.children(".condition-value-container");
-                var previousValue;
+                const previousValueContainer = testContainer.children(".condition-value-container");
+                let previousValue;
                 if (previousValueContainer.length > 0)
                 {
                     previousValue = parameter.type.getFromDOM(previousValueContainer);
@@ -340,7 +340,7 @@ var Condition;
 
                 if (operatorName in Types.relationalOperators)
                 {
-                    var controlContainer = $('<span>', { class: "condition-value-container" });
+                    const controlContainer = $('<span>', { class: "condition-value-container" });
                     parameter.type.appendControlTo(controlContainer);
                     if (previousValue) parameter.type.setInDOM(controlContainer, previousValue);
                     testContainer.append(controlContainer);
@@ -363,14 +363,14 @@ var Condition;
 
     function appendGroupCondition(container, allowReferenceConditions)
     {
-        var groupCondition = $('<div>', { class: "condition groupcondition empty" });
+        const groupCondition = $('<div>', { class: "condition groupcondition empty" });
         groupCondition.append($('<div>', { class: "emptyLabel", text: i18next.t('condition:empty_group') }));
         groupCondition.append($('<div>', { class: "singleLabel hidden", text: i18next.t('condition:one_condition_group') }));
 
-        var groupConditionRadio = $('<div>', { class: "groupConditionRadioDiv" });
-        var andLabel = $('<label>').append($('<input>', { type: 'radio', value: 'and', checked: 'checked' }));
+        const groupConditionRadio = $('<div>', { class: "groupConditionRadioDiv" });
+        const andLabel = $('<label>').append($('<input>', { type: 'radio', value: 'and', checked: 'checked' }));
         andLabel.append(i18next.t('condition:all_true'));
-        var orLabel = $('<label>').append($('<input>', { type: 'radio', value: 'or' }));
+        const orLabel = $('<label>').append($('<input>', { type: 'radio', value: 'or' }));
         orLabel.append(i18next.t('condition:one_true'));
         groupConditionRadio.append(andLabel).append(orLabel);
         radioButtonCounter += 1;
@@ -380,17 +380,17 @@ var Condition;
         });
         groupCondition.append(groupConditionRadio);
 
-        var subconditionsContainer = $('<div>', { class: "groupConditionDiv" });
+        const subconditionsContainer = $('<div>', { class: "groupConditionDiv" });
         groupCondition.append(subconditionsContainer);
 
         Utils.makeSortable(subconditionsContainer);
 
-        var addConditionButton = Parts.addButton(i18next.t('condition:add_condition'));
+        const addConditionButton = Parts.addButton(i18next.t('condition:add_condition'));
         addConditionButton.on('click', function()
         {
             if (Parameters.atLeastOneUserDefined() || Config.atLeastOneParameter())
             {
-                var condition = appendCondition(subconditionsContainer, allowReferenceConditions);
+                const condition = appendCondition(subconditionsContainer, allowReferenceConditions);
                 Utils.focusFirstTabindexedDescendant(condition);
             }
             else
@@ -400,7 +400,7 @@ var Condition;
         });
         groupCondition.append(addConditionButton);
 
-        var addGroupConditionButton = Parts.addButton(i18next.t('condition:add_group'));
+        const addGroupConditionButton = Parts.addButton(i18next.t('condition:add_group'));
         addGroupConditionButton.on('click', function()
         {
             if (Parameters.atLeastOneUserDefined() || Config.atLeastOneParameter())
@@ -415,7 +415,7 @@ var Condition;
         });
         groupCondition.append(addGroupConditionButton);
 
-        var deleteButton = Parts.deleteButton();
+        const deleteButton = Parts.deleteButton();
         deleteButton.append(i18next.t('condition:delete_group'));
         deleteButton.on('click', function()
         {
@@ -433,14 +433,14 @@ var Condition;
 
     function updateGroupConditionCounter(div)
     {
-        var childCount = div.children(".groupConditionDiv").children().length;
-        var states = {
+        const childCount = div.children(".groupConditionDiv").children().length;
+        const states = {
             empty: childCount === 0,
             single: childCount === 1,
             multiple: childCount > 1
         };
 
-        for (var state in states)
+        for (const state in states)
         {
             div.toggleClass(state, states[state]);
         }

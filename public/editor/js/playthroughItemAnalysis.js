@@ -8,15 +8,15 @@
     {
         $("#togglePlaythroughsScreen").on('click', function()
         {
-            var calculateNodeCounts = function(playthroughs, nodeIDs)
+            const calculateNodeCounts = function(playthroughs, nodeIDs)
             {
-                var nodeCounts = {};
-                var count = 0;
+                const nodeCounts = {};
+                let count = 0;
                 playthroughs.forEach(function(playthrough)
                 {
                     playthrough.statements.forEach(function(statement)
                     {
-                        var nodeID = statement.id.replace(/^(.+?\.){3}/, '').replace(/\./g, '_');
+                        const nodeID = statement.id.replace(/^(.+?\.){3}/, '').replace(/\./g, '_');
                         if (nodeID in Main.nodes &&
                             (nodeIDs.length === 0 || nodeIDs.indexOf(nodeID) !== -1))
                         {
@@ -32,29 +32,29 @@
                 return { nodeCounts: nodeCounts, count: count };
             };
 
-            var container = $('<div>');
+            const container = $('<div>');
 
             container.append($('<p>', { text: i18next.t('playthroughItemAnalysis:explanation') }));
 
             container.append($('<p>', { text: i18next.t('playthroughItemAnalysis:experimental_warning'), class: 'warning alert' }));
 
-            var fileInputContainer = $('<div>', { style: 'margin-top: 20px;' }).appendTo(container);
+            const fileInputContainer = $('<div>', { style: 'margin-top: 20px;' }).appendTo(container);
             fileInputContainer.append($('<label>', { text: i18next.t('playthroughItemAnalysis:import_playthroughs') + ' ' }));
-            var fileInput = $('<input>', { type: 'file', accept: 'application/json' }).appendTo(fileInputContainer);
+            const fileInput = $('<input>', { type: 'file', accept: 'application/json' }).appendTo(fileInputContainer);
 
-            var itemAnalysisTypeContainer = $('<div>', { style: 'margin-top: 20px;' }).appendTo(container);
+            const itemAnalysisTypeContainer = $('<div>', { style: 'margin-top: 20px;' }).appendTo(container);
             itemAnalysisTypeContainer.append($('<label>', { text: i18next.t('common:type') + ' ' }));
-            var itemAnalysisType = $('<select>').appendTo(itemAnalysisTypeContainer);
+            const itemAnalysisType = $('<select>').appendTo(itemAnalysisTypeContainer);
             itemAnalysisType.append($('<option>', { value: 'frequency', text: i18next.t('playthroughItemAnalysis:frequency') }));
             itemAnalysisType.append($('<option>', { value: 'difficulty', text: i18next.t('playthroughItemAnalysis:difficulty') }));
             itemAnalysisType.append($('<option>', { value: 'discrimination', text: i18next.t('playthroughItemAnalysis:discrimination') }));
 
-            var detailsContainer = $('<div>').appendTo(container);
+            const detailsContainer = $('<div>').appendTo(container);
 
-            var percentageCalculation = null;
-            var addPercentageCalculationContainer = function()
+            let percentageCalculation = null;
+            const addPercentageCalculationContainer = function()
             {
-                var scope = i18next.t('playthroughItemAnalysis:percentage_calculation_scope.' + (Main.selectedElements.length > 0 ? 'selected' : 'all'));
+                const scope = i18next.t('playthroughItemAnalysis:percentage_calculation_scope.' + (Main.selectedElements.length > 0 ? 'selected' : 'all'));
                 percentageCalculation = $('<select>')
                     .append(['playthroughs', 'nodes'].map(function(kind)
                     {
@@ -72,10 +72,10 @@
                 );
             };
 
-            var correctNodeSelect = null;
-            var resultContainer = null;
-            var childrenOfSelected = null;
-            var addCorrectNodeSelect = function()
+            let correctNodeSelect = null;
+            let resultContainer = null;
+            let childrenOfSelected = null;
+            const addCorrectNodeSelect = function()
             {
                 if (Main.selectedElement)
                 {
@@ -88,14 +88,14 @@
                         {
                             return connection.targetId;
                         });
-                    var node = Main.nodes[Main.selectedElement];
-                    var issues =
+                    const node = Main.nodes[Main.selectedElement];
+                    const issues =
                     {
                         allowInterleave: node.allowInterleaveNode,
                         allowDialogueEnd: node.allowDialogueEndNode,
                         preconditions: childrenOfSelected.some(function(nodeID) { return Main.nodes[nodeID].preconditions; })
                     };
-                    var presentIssues = Object.keys(issues).filter(function(issue) { return issues[issue]; });
+                    const presentIssues = Object.keys(issues).filter(function(issue) { return issues[issue]; });
                     if (presentIssues.length > 0)
                     {
                         detailsContainer.append($('<div>', { class: 'warning alert', style: 'margin-top: 20px;' }).append(
@@ -150,30 +150,29 @@
                         click: function()
                         {
                             if (fileInput[0].files.length === 0) return;
-                            var reader = new FileReader();
+                            const reader = new FileReader();
                             reader.onerror = function()
                             {
                                 Utils.alertDialog('Error reading file', 'error');
                             };
                             reader.onload = function(e)
                             {
-                                var playthroughs = JSON.parse(e.target.result);
+                                const playthroughs = JSON.parse(e.target.result);
 
-                                var correctNodeID, correctCount;
-                                var nodeID;
-                                for (nodeID in Main.nodes)
+                                let correctNodeID, correctCount;
+                                for (const nodeID in Main.nodes)
                                 {
                                     $('#' + nodeID).find('.indicator').remove();
                                 }
 
-                                var result;
+                                let result;
                                 if (itemAnalysisType.val() === 'frequency')
                                 {
                                     result = calculateNodeCounts(playthroughs, Main.selectedElements);
 
-                                    for (nodeID in result.nodeCounts)
+                                    for (const nodeID in result.nodeCounts)
                                     {
-                                        var percentage = result.nodeCounts[nodeID] / (percentageCalculation.val() === 'nodes' ? result.count : playthroughs.length) * 100;
+                                        const percentage = result.nodeCounts[nodeID] / (percentageCalculation.val() === 'nodes' ? result.count : playthroughs.length) * 100;
                                         $('#' + nodeID).append($('<div>', { text: percentage.toFixed(1) + "%" + " (" + result.nodeCounts[nodeID] + "x)", class: 'indicator' }));
                                     }
 
@@ -190,7 +189,7 @@
 
                                     result = calculateNodeCounts(playthroughs, childrenOfSelected);
                                     correctCount = correctNodeID in result.nodeCounts ? result.nodeCounts[correctNodeID] : 0;
-                                    var difficulty = correctCount / result.count;
+                                    const difficulty = correctCount / result.count;
                                     resultContainer.empty().append($('<div>', { text: (difficulty * 100).toFixed(2) + "%" }));
                                 }
                                 else if (itemAnalysisType.val() === 'discrimination')
@@ -202,7 +201,7 @@
                                     }
                                     correctNodeID = correctNodeSelect.val();
 
-                                    var playthroughsWithTotalScore = playthroughs.filter(function(playthrough)
+                                    const playthroughsWithTotalScore = playthroughs.filter(function(playthrough)
                                     {
                                         return playthrough.totalScore !== null || playthrough.totalScore !== undefined;
                                     });
@@ -212,25 +211,25 @@
                                         return;
                                     }
 
-                                    var sortedPlaythroughs = playthroughsWithTotalScore.sort(function(a, b)
+                                    const sortedPlaythroughs = playthroughsWithTotalScore.sort(function(a, b)
                                     {
                                         return a.totalScore - b.totalScore;
                                     });
-                                    var groupLength = Math.round(sortedPlaythroughs.length / 4);
-                                    var lowestTotalScorePlaythroughs = sortedPlaythroughs.slice(0, groupLength);
-                                    var highestTotalScorePlaythroughs = sortedPlaythroughs.slice(-groupLength);
+                                    const groupLength = Math.round(sortedPlaythroughs.length / 4);
+                                    const lowestTotalScorePlaythroughs = sortedPlaythroughs.slice(0, groupLength);
+                                    const highestTotalScorePlaythroughs = sortedPlaythroughs.slice(-groupLength);
 
-                                    var lowestTotalScoreResult = calculateNodeCounts(lowestTotalScorePlaythroughs, childrenOfSelected);
-                                    var lowestTotalScoreCorrectCount = correctNodeID in lowestTotalScoreResult.nodeCounts ?
+                                    const lowestTotalScoreResult = calculateNodeCounts(lowestTotalScorePlaythroughs, childrenOfSelected);
+                                    const lowestTotalScoreCorrectCount = correctNodeID in lowestTotalScoreResult.nodeCounts ?
                                         lowestTotalScoreResult.nodeCounts[correctNodeID] : 0;
-                                    var highestTotalScoreResult = calculateNodeCounts(highestTotalScorePlaythroughs, childrenOfSelected);
-                                    var highestTotalScoreCorrectCount = correctNodeID in highestTotalScoreResult.nodeCounts ?
+                                    const highestTotalScoreResult = calculateNodeCounts(highestTotalScorePlaythroughs, childrenOfSelected);
+                                    const highestTotalScoreCorrectCount = correctNodeID in highestTotalScoreResult.nodeCounts ?
                                         highestTotalScoreResult.nodeCounts[correctNodeID] : 0;
-                                    var discriminationIndex = highestTotalScoreCorrectCount / groupLength - lowestTotalScoreCorrectCount / groupLength;
-                                    var lowerThreshold = 0.2;
-                                    var higherThreshold = 1 - (1 / childrenOfSelected.length);
-                                    var fairThreshold = 0.3;
-                                    var getQualificationForTooltip = function()
+                                    const discriminationIndex = highestTotalScoreCorrectCount / groupLength - lowestTotalScoreCorrectCount / groupLength;
+                                    const lowerThreshold = 0.2;
+                                    const higherThreshold = 1 - (1 / childrenOfSelected.length);
+                                    const fairThreshold = 0.3;
+                                    const getQualificationForTooltip = function()
                                     {
                                         if (discriminationIndex < lowerThreshold)
                                         {

@@ -1,15 +1,15 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported ElementList */
-var ElementList;
+let ElementList;
 
 (function()
 {
     "use strict";
 
-    var selectedParameterId;
-    var selectedEffectCategory;
-    var selectedTypes;
+    let selectedParameterId;
+    let selectedEffectCategory;
+    let selectedTypes;
 
     // eslint-disable-next-line no-global-assign
     ElementList =
@@ -45,9 +45,8 @@ var ElementList;
 
     function listElements()
     {
-        var table = $('<table>');
-        Object.keys(Main.trees)
-            .map(function(treeID) { return Main.trees[treeID]; })
+        const table = $('<table>');
+        Object.values(Main.trees)
             .sort(function(a, b)
             {
                 return (a.topPos - b.topPos) || (a.leftPos - b.leftPos);
@@ -66,7 +65,7 @@ var ElementList;
                     });
             });
 
-        var parameterSelect = $('<select>',
+        const parameterSelect = $('<select>',
         {
             id: 'element-list-parameter-select',
             title: i18next.t('elementList:parameter')
@@ -74,7 +73,7 @@ var ElementList;
         appendParameterOptionsTo(parameterSelect);
         parameterSelect.val(selectedParameterId === null ? '' : selectedParameterId);
 
-        var effectCategorySelect = $('<select>',
+        const effectCategorySelect = $('<select>',
         {
             id: 'element-list-effect-category-select',
             title: i18next.t('elementList:show_nodes'),
@@ -88,17 +87,17 @@ var ElementList;
 
         parameterSelect.add(effectCategorySelect).on('change', function()
         {
-            var parameterId = parameterSelect.val();
+            let parameterId = parameterSelect.val();
             if (parameterId === '') parameterId = null;
             selectParameter(parameterId, effectCategorySelect.val());
         });
 
-        var typeButtons = $('<span>', { class: 'typeButtons buttonGroup' });
+        const typeButtons = $('<span>', { class: 'typeButtons buttonGroup' });
         if (selectedTypes === null) typeButtons.addClass('initial');
-        var allTypes = [Main.playerType, Main.computerType, Main.situationType];
+        const allTypes = [Main.playerType, Main.computerType, Main.situationType];
         allTypes.forEach(function(buttonType)
         {
-            var button = $('<button>',
+            const button = $('<button>',
             {
                 class: buttonType,
                 text: i18next.t('common:' + buttonType)[0],
@@ -130,8 +129,8 @@ var ElementList;
                     }
                     $('#elementList').children('table').find('tr').each(function()
                     {
-                        var node = Main.nodes[$(this).data('nodeID')];
-                        var hiddenFor = $(this).data('hiddenFor');
+                        const node = Main.nodes[$(this).data('nodeID')];
+                        const hiddenFor = $(this).data('hiddenFor');
                         hiddenFor.type = !(selectedTypes === null || selectedTypes[node.type]);
                         setRowDisplayAndNodeHighlighting(node, $(this), hiddenFor);
                     });
@@ -156,8 +155,8 @@ var ElementList;
 
     function createRow(tree, node)
     {
-        var hiddenFor = {};
-        var row = $('<tr>', { id: 'element-list-' + node.id, data: { nodeID: node.id, hiddenFor: hiddenFor } });
+        const hiddenFor = {};
+        const row = $('<tr>', { id: 'element-list-' + node.id, data: { nodeID: node.id, hiddenFor: hiddenFor } });
         row.append(
             $('<td>').append($('<button>',
                 {
@@ -184,7 +183,7 @@ var ElementList;
         );
         if (selectedParameterId !== null)
         {
-            var parameterEffectsCell = $('<td>', { class: 'parameterEffects' });
+            const parameterEffectsCell = $('<td>', { class: 'parameterEffects' });
             processSelectedParameterEffects(parameterEffectsCell, node, row);
             row.append(parameterEffectsCell);
             if (selectedEffectCategory !== 'all')
@@ -200,7 +199,7 @@ var ElementList;
 
     function processSelectedParameterEffects(parameterEffectsCell, node, row)
     {
-        var selectedParameterEffects = node.parameterEffects.userDefined.filter(function(parameterEffect)
+        const selectedParameterEffects = node.parameterEffects.userDefined.filter(function(parameterEffect)
         {
             return parameterEffect.idRef === selectedParameterId;
         });
@@ -216,8 +215,8 @@ var ElementList;
 
         if (selectedParameterEffects.length > 0)
         {
-            var selectedParameterType = Parameters.container.byId[selectedParameterId].type;
-            var summaryEffect = selectedParameterType.summariseEffects ?
+            const selectedParameterType = Parameters.container.byId[selectedParameterId].type;
+            let summaryEffect = selectedParameterType.summariseEffects ?
                 selectedParameterType.summariseEffects(selectedParameterEffects) :
                 selectedParameterEffects[selectedParameterEffects.length - 1];
             if (selectedParameterType.simplifyEffect)
@@ -243,7 +242,7 @@ var ElementList;
 
     function selectParameter(parameterId, effectCategory)
     {
-        var needsListing = false;
+        let needsListing = false;
         if (parameterId !== selectedParameterId)
         {
             selectedParameterId = parameterId;
@@ -272,7 +271,7 @@ var ElementList;
             {
                 $('#elementList').children('table').find('tr').each(function()
                 {
-                    var hiddenFor = $(this).data('hiddenFor');
+                    const hiddenFor = $(this).data('hiddenFor');
                     hiddenFor.effectCategory = !(selectedEffectCategory === 'all' ||
                         ($(this).data('summaryEffect') !== null ?
                             selectedEffectCategory === 'with' : selectedEffectCategory === 'without'));
@@ -285,19 +284,19 @@ var ElementList;
 
     function setRowDisplayAndNodeHighlighting(node, row, hiddenFor)
     {
-        var rowVisible = !(hiddenFor.effectCategory || hiddenFor.type);
+        const rowVisible = !(hiddenFor.effectCategory || hiddenFor.type);
         row.toggle(rowVisible);
 
-        var nodeElement = $('#' + node.id);
+        const nodeElement = $('#' + node.id);
         dehighlightNodes(nodeElement);
-        var summaryEffect = row.data('summaryEffect');
+        const summaryEffect = row.data('summaryEffect');
         if (selectedParameterId !== null && rowVisible)
         {
             if (selectedEffectCategory !== 'without' && summaryEffect !== null)
             {
                 nodeElement.addClass('highlight');
                 nodeElement.addClass('highlight-operator-' + summaryEffect.operator);
-                var categoriseValue = Parameters.container.byId[selectedParameterId].type.categoriseValue;
+                const categoriseValue = Parameters.container.byId[selectedParameterId].type.categoriseValue;
                 nodeElement.addClass('highlight-value-' + (categoriseValue ? categoriseValue(summaryEffect.value) : 'neutral'));
             }
             else if (selectedEffectCategory === 'without' && summaryEffect === null)
@@ -324,15 +323,15 @@ var ElementList;
     function handleNodeTextChange(node)
     {
         if (!isActive()) return;
-        var row = $('#element-list-' + node.id);
+        let row = $('#element-list-' + node.id);
         if (row.length)
         {
             row.find('.text').text(node.text);
             if (selectedParameterId !== null)
             {
-                var parameterEffectsCell = row.find('.parameterEffects').empty();
+                const parameterEffectsCell = row.find('.parameterEffects').empty();
                 processSelectedParameterEffects(parameterEffectsCell, node, row);
-                var hiddenFor = row.data('hiddenFor');
+                const hiddenFor = row.data('hiddenFor');
                 hiddenFor.effectCategory = !(selectedEffectCategory === 'all' ||
                     (row.data('summaryEffect') !== null ?
                         selectedEffectCategory === 'with' : selectedEffectCategory === 'without'));
@@ -341,17 +340,17 @@ var ElementList;
         }
         else
         {
-            var tree = Main.trees[node.parent];
+            const tree = Main.trees[node.parent];
             row = createRow(tree, node);
 
-            var pos = Utils.cssPosition($('#' + node.id));
-            var previousRow = null;
-            var previousPos = null;
+            const pos = Utils.cssPosition($('#' + node.id));
+            let previousRow = null;
+            let previousPos = null;
             tree.nodes.forEach(function(otherNodeID)
             {
-                var otherRow = $('#element-list-' + otherNodeID);
+                const otherRow = $('#element-list-' + otherNodeID);
                 if (!otherRow.length) return;
-                var otherPos = Utils.cssPosition($('#' + otherNodeID));
+                const otherPos = Utils.cssPosition($('#' + otherNodeID));
                 if ((!previousPos || compareNodePositions(previousPos, otherPos) < 0) &&
                     compareNodePositions(otherPos, pos) < 0)
                 {
@@ -385,7 +384,7 @@ var ElementList;
     function handleParametersChange()
     {
         if (!isActive()) return;
-        var parameterSelect = $('#element-list-parameter-select');
+        const parameterSelect = $('#element-list-parameter-select');
         parameterSelect.empty();
         appendParameterOptionsTo(parameterSelect);
         parameterSelect.val(selectedParameterId === null ? '' : selectedParameterId);

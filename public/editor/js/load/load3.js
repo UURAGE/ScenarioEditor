@@ -1,7 +1,7 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported Load3 */
-var Load3;
+let Load3;
 
 (function()
 {
@@ -21,19 +21,19 @@ var Load3;
     function generateGraph(xml)
     {
         // Conversations stores all the accumulated conversations so we can expand them and give the nodes fresh ids at the end
-        var conversations = {};
+        const conversations = {};
 
         $(xml).find('interleave').each(function()
         {
             $(this).children('tree').each(function()
             {
-                var connections = {};
+                const connections = {};
 
-                var treeID = this.getAttribute('id').replace(/\./g, '_');
-                var idMatch = treeID.match(/^tree(\d+)$/);
+                let treeID = this.getAttribute('id').replace(/\./g, '_');
+                const idMatch = treeID.match(/^tree(\d+)$/);
                 if (idMatch)
                 {
-                    var treeNumber = parseInt(idMatch[1]);
+                    const treeNumber = parseInt(idMatch[1]);
                     Main.maxTreeNumber = Math.max(treeNumber + 1, Main.maxTreeNumber);
                     treeID = "dialogue" + treeNumber;
                 }
@@ -43,17 +43,17 @@ var Load3;
                 }
 
                 // Get the position from the XML, note that this is in grid coordinates, not screen coordinates
-                var position = $(this).children('position')[0];
-                var leftPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('x')[0].textContent, 0));
-                var topPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('y')[0].textContent, 0));
+                const position = $(this).children('position')[0];
+                const leftPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('x')[0].textContent, 0));
+                const topPos = Math.round(Utils.parseDecimalIntWithDefault($(position).children('y')[0].textContent, 0));
 
-                var tree = Main.createEmptyTree(treeID, leftPos, topPos);
-                var plumbInstance = tree.plumbInstance;
+                const tree = Main.createEmptyTree(treeID, leftPos, topPos);
+                const plumbInstance = tree.plumbInstance;
 
                 tree.subject = Utils.unEscapeHTML($(this).children('subject')[0].textContent);
 
                 tree.optional = Utils.parseBool($(this).attr('optional'));
-                var iconDiv = tree.dragDiv.find('.icons');
+                const iconDiv = tree.dragDiv.find('.icons');
                 if (tree.optional) iconDiv.html(Utils.sIcon('icon-tree-is-optional'));
                 $(tree.dragDiv).toggleClass('optional', tree.optional);
 
@@ -81,7 +81,7 @@ var Load3;
                     // Makes the connections between the nodes.
                     $.each(connections, function(sourceId, targets)
                     {
-                        for (var i = 0; i < targets.length; i++)
+                        for (let i = 0; i < targets.length; i++)
                         {
                             plumbInstance.connect(
                             {
@@ -106,21 +106,21 @@ var Load3;
         Metadata.container.description = Utils.unEscapeHTML($(metadata).find('description').text());
         Metadata.container.difficulty = $(metadata).find('difficulty').text();
 
-        var parameters = Parameters.container;
+        const parameters = Parameters.container;
         $(metadata).find('parameters').children().each(function()
         {
-            var paramId = this.attributes.id.value;
+            const paramId = this.attributes.id.value;
 
-            var paramMatch = paramId.match(/^p(\d+)$/);
+            const paramMatch = paramId.match(/^p(\d+)$/);
             if (paramMatch !== null)
             {
-                var paramNumber = parseInt(paramMatch[1]);
+                const paramNumber = parseInt(paramMatch[1]);
                 if (paramNumber > Parameters.counter) Parameters.counter = paramNumber;
             }
 
-            var defaultValue = this.hasAttribute('initialValue') ? Utils.parseDecimalIntWithDefault(this.attributes.initialValue.value, 0) : 0;
+            const defaultValue = this.hasAttribute('initialValue') ? Utils.parseDecimalIntWithDefault(this.attributes.initialValue.value, 0) : 0;
 
-            var minimum, maximum;
+            let minimum, maximum;
             if (this.hasAttribute('minimumScore')) minimum = parseInt(this.getAttribute('minimumScore'));
             if (this.hasAttribute('maximumScore')) maximum = parseInt(this.getAttribute('maximumScore'));
 
@@ -140,9 +140,9 @@ var Load3;
     // Load a statement.
     function loadStatement(statement, type, connections, treeID)
     {
-        var id = $(statement).attr('id').replace(/\./g, '_');
+        let id = $(statement).attr('id').replace(/\./g, '_');
 
-        var idMatch = id.match(/^edit_(\d+)$/);
+        const idMatch = id.match(/^edit_(\d+)$/);
         if (idMatch !== null)
         {
             Main.jsPlumbCounter = Math.max(Main.jsPlumbCounter, parseInt(idMatch[1]));
@@ -152,24 +152,24 @@ var Load3;
             id = "ext_" + id;
         }
 
-        var characterIdRef;
+        let characterIdRef;
         if (type === Main.computerType)
         {
             characterIdRef = Config.container.characters.sequence[0].id;
         }
 
-        var allowInterleaveNode = Utils.parseBool($(statement).attr('jumpPoint'));
-        var allowDialogueEndNode = Utils.parseBool($(statement).attr('inits'));
-        var endNode = Utils.parseBool($(statement).attr('possibleEnd'));
+        const allowInterleaveNode = Utils.parseBool($(statement).attr('jumpPoint'));
+        const allowDialogueEndNode = Utils.parseBool($(statement).attr('inits'));
+        const endNode = Utils.parseBool($(statement).attr('possibleEnd'));
 
-        var text = Utils.unEscapeHTML($(statement).find('text').text());
+        const text = Utils.unEscapeHTML($(statement).find('text').text());
 
-        var xPos = $(statement).find('x').text();
-        var yPos = $(statement).find('y').text();
+        const xPos = $(statement).find('x').text();
+        const yPos = $(statement).find('y').text();
 
         // Load the preconditions of this node.
-        var preconditionsXML = $(statement).find("preconditions");
-        var preconditions;
+        const preconditionsXML = $(statement).find("preconditions");
+        let preconditions;
         if (preconditionsXML.length === 0)
         {
             preconditions = null;
@@ -179,18 +179,18 @@ var Load3;
             preconditions = loadPreconditions(preconditionsXML.children()[0]);
         }
 
-        var parameterEffects = Config.getNewDefaultParameterEffects(characterIdRef);
-        var acceptableScopes = ['per', 'per-' + type];
+        const parameterEffects = Config.getNewDefaultParameterEffects(characterIdRef);
+        const acceptableScopes = ['per', 'per-' + type];
         if (type === Main.computerType) acceptableScopes.push('per-' + type + '-own');
-        var propertyValues = Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef);
-        var targets;
+        const propertyValues = Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef);
+        let targets;
         if (type === Main.playerType)
         {
-            var pEffEl = $(statement).find('parameterEffects');
-            var pEffs = pEffEl.children(); // All parameter effects of the node.
-            for (var j = 0; j < pEffs.length; j++)
+            const pEffEl = $(statement).find('parameterEffects');
+            const pEffs = pEffEl.children(); // All parameter effects of the node.
+            for (let j = 0; j < pEffs.length; j++)
             {
-                var parameter = pEffs[j];
+                const parameter = pEffs[j];
                 parameterEffects.userDefined.push(
                 {
                     idRef: parameter.attributes.idref.value,
@@ -199,7 +199,7 @@ var Load3;
                 });
             }
 
-            var intents = $(statement).children('intents');
+            const intents = $(statement).children('intents');
             if (intents.length > 0)
             {
                 migrateProperty(intents[0], 'intent', 'intentProperty', propertyValues, true);
@@ -213,21 +213,21 @@ var Load3;
             targets = $(statement).find('responses').children();
         }
 
-        var comment = Utils.unEscapeHTML($(statement).find('comment').text());
+        const comment = Utils.unEscapeHTML($(statement).find('comment').text());
 
         if (targets.length > 0)
         {
             // Save all the connections. We will create the connections when all nodes have been added.
             connections[id] = [];
-            for (var m = 0; m < targets.length; m++)
+            for (let m = 0; m < targets.length; m++)
             {
-                var targetID = targets[m].attributes.idref.value.replace(/\./g, '_');
+                let targetID = targets[m].attributes.idref.value.replace(/\./g, '_');
                 if (!/^edit_\d+$/.test(targetID)) targetID = 'ext_' + targetID;
                 connections[id].push(targetID);
             }
         }
 
-        var node = Main.createAndReturnNode(type, id, Main.trees[treeID].div, Main.trees[treeID].dragDiv.attr('id'));
+        const node = Main.createAndReturnNode(type, id, Main.trees[treeID].div, Main.trees[treeID].dragDiv.attr('id'));
         Main.nodes[id] = {
             text: text,
             type: type,
@@ -251,18 +251,18 @@ var Load3;
         });
 
         // Fill the insides with text
-        var txtView = node.find('.statementText');
+        const txtView = node.find('.statementText');
         txtView.html(Utils.escapeHTML(text));
     }
 
     // Load all preconditions from a given precondition element tree.
     function loadPreconditions(preconditionXMLElement)
     {
-        var preconditionType = preconditionXMLElement.nodeName;
-        var preconditionsArray = [];
+        const preconditionType = preconditionXMLElement.nodeName;
+        const preconditionsArray = [];
 
-        var preconditionChildren = $(preconditionXMLElement).children();
-        for (var i = 0; i < preconditionChildren.length; i++)
+        const preconditionChildren = $(preconditionXMLElement).children();
+        for (let i = 0; i < preconditionChildren.length; i++)
         {
             if (preconditionChildren[i].nodeName == "condition")
             {
@@ -295,14 +295,14 @@ var Load3;
     {
         if (migrationPropertyName in Config.container.migration)
         {
-            var valueXML = $(parentXML).children(propertyId);
+            const valueXML = $(parentXML).children(propertyId);
             if (valueXML.length > 0)
             {
                 if (attributeName) valueXML.text(valueXML.attr(attributeName));
-                var propertyValue;
-                var type;
-                var migrationPropertyIdRef = Config.container.migration[migrationPropertyName].idRef;
-                var firstCharacterId = Config.container.characters.sequence[0].id;
+                let propertyValue;
+                let type;
+                const migrationPropertyIdRef = Config.container.migration[migrationPropertyName].idRef;
+                const firstCharacterId = Config.container.characters.sequence[0].id;
                 if (migrationPropertyIdRef in propertyValues.characterIndependent)
                 {
                     type = Config.container.properties.byId[migrationPropertyIdRef].type;
@@ -329,9 +329,9 @@ var Load3;
 
     function loadConversation(conversationXMLElement, conversations, treeID)
     {
-        var id = $(conversationXMLElement).attr('id').replace(/\./g, '_');
+        let id = $(conversationXMLElement).attr('id').replace(/\./g, '_');
 
-        var idMatch = id.match(/^edit_(\d+)$/);
+        const idMatch = id.match(/^edit_(\d+)$/);
         if (idMatch !== null)
         {
             Main.jsPlumbCounter = Math.max(Main.jsPlumbCounter, parseInt(idMatch[1]));
@@ -341,11 +341,11 @@ var Load3;
             id = "ext_" + id;
         }
 
-        var endNode = Utils.parseBool($(conversationXMLElement).attr('possibleEnd'));
-        var comment = Utils.unEscapeHTML($(conversationXMLElement).find('comment').text());
+        const endNode = Utils.parseBool($(conversationXMLElement).attr('possibleEnd'));
+        const comment = Utils.unEscapeHTML($(conversationXMLElement).find('comment').text());
 
-        var xPos = $(conversationXMLElement).find('x').text();
-        var yPos = $(conversationXMLElement).find('y').text();
+        const xPos = $(conversationXMLElement).find('x').text();
+        const yPos = $(conversationXMLElement).find('y').text();
 
         conversations[id] = {};
         conversations[id].xPos = xPos;
@@ -381,8 +381,8 @@ var Load3;
         });
 
         // Load the preconditions of this node.
-        var preconditionsXML = $(conversationXMLElement).find("preconditions");
-        var preconditionsJS;
+        const preconditionsXML = $(conversationXMLElement).find("preconditions");
+        let preconditionsJS;
         if (preconditionsXML.length === 0)
         {
             preconditionsJS = null;
@@ -392,34 +392,34 @@ var Load3;
             preconditionsJS = loadPreconditions(preconditionsXML.children()[0]);
         }
 
-        var targets = $(conversationXMLElement).find('responses').children();
+        const targets = $(conversationXMLElement).find('responses').children();
         conversations[id].connections = [];
         if (targets.length > 0)
         {
             // Save all the connections so we can expand the conversation later on and connect the expanded nodes
-            for (var m = 0; m < targets.length; m++)
+            for (let m = 0; m < targets.length; m++)
             {
-                var targetID = targets[m].attributes.idref.value.replace(/\./g, '_');
+                let targetID = targets[m].attributes.idref.value.replace(/\./g, '_');
                 if (!/^edit_\d+$/.test(targetID)) targetID = 'ext_' + targetID;
                 conversations[id].connections.push(targetID);
             }
         }
 
-        var firstConversationNode = conversations[id].textNodes.length > 0 ? conversations[id].textNodes[0] : null;
+        let firstConversationNode = conversations[id].textNodes.length > 0 ? conversations[id].textNodes[0] : null;
         if (!firstConversationNode)
         {
             firstConversationNode = { type: Main.playerType, text: "" };
         }
 
-        var characterIdRef;
-        var acceptableScopes = ['per', 'per-' + firstConversationNode.type];
+        let characterIdRef;
+        const acceptableScopes = ['per', 'per-' + firstConversationNode.type];
         if (firstConversationNode.type === Main.computerType)
         {
             characterIdRef = Config.container.characters.sequence[0].id;
             acceptableScopes.push('per-' + firstConversationNode.type + '-own');
         }
 
-        var node = Main.createAndReturnNode(firstConversationNode.type, id, Main.trees[treeID].div, Main.trees[treeID].dragDiv.attr('id'));
+        const node = Main.createAndReturnNode(firstConversationNode.type, id, Main.trees[treeID].div, Main.trees[treeID].dragDiv.attr('id'));
         Main.nodes[id] = {
             text: firstConversationNode.text,
             type: firstConversationNode.type,
@@ -443,29 +443,29 @@ var Load3;
         });
 
         // Fill the insides with text
-        var txtView = node.find('.statementText');
+        const txtView = node.find('.statementText');
         txtView.html(Utils.escapeHTML(firstConversationNode.text));
     }
 
     function expandConversations(conversations)
     {
-        for (var firstConversationNodeId in conversations)
+        for (const firstConversationNodeId in conversations)
         {
-            var firstConversationNode = Main.nodes[firstConversationNodeId];
-            var lastConversationNodeId = firstConversationNodeId;
+            const firstConversationNode = Main.nodes[firstConversationNodeId];
+            let lastConversationNodeId = firstConversationNodeId;
             // Stores the connections single between conversation nodes
-            var singleConnections = {};
-            var previousConversationNodeId = firstConversationNodeId;
+            const singleConnections = {};
+            let previousConversationNodeId = firstConversationNodeId;
 
             // Loop over all textNodes except for the first, it has already been created
-            for (var i = 1; i < conversations[firstConversationNodeId].textNodes.length; i++)
+            for (let i = 1; i < conversations[firstConversationNodeId].textNodes.length; i++)
             {
-                var textNode = conversations[firstConversationNodeId].textNodes[i];
+                const textNode = conversations[firstConversationNodeId].textNodes[i];
 
-                var node = Main.createAndReturnNode(textNode.type, null, Main.trees[firstConversationNode.parent].div, Main.trees[firstConversationNode.parent].dragDiv.attr('id'));
-                var id = node.attr('id');
+                const node = Main.createAndReturnNode(textNode.type, null, Main.trees[firstConversationNode.parent].div, Main.trees[firstConversationNode.parent].dragDiv.attr('id'));
+                const id = node.attr('id');
 
-                var endNode = false;
+                let endNode = false;
                 if (i === conversations[firstConversationNodeId].textNodes.length - 1)
                 {
                     endNode = firstConversationNode.endNode;
@@ -475,8 +475,8 @@ var Load3;
 
                 singleConnections[previousConversationNodeId] = id;
 
-                var characterIdRef;
-                var acceptableScopes = ['per', 'per-' + textNode.type];
+                let characterIdRef;
+                const acceptableScopes = ['per', 'per-' + textNode.type];
                 if (textNode.type === Main.computerType)
                 {
                     characterIdRef = Config.container.characters.sequence[0].id;
@@ -506,17 +506,17 @@ var Load3;
                 });
 
                 // Fill the insides with text
-                var txtView = node.find('.statementText');
+                const txtView = node.find('.statementText');
                 txtView.html(Utils.escapeHTML(textNode.text));
 
                 previousConversationNodeId = id;
             }
 
-            var plumbInstance = Main.getPlumbInstanceByNodeID(firstConversationNodeId);
+            const plumbInstance = Main.getPlumbInstanceByNodeID(firstConversationNodeId);
             plumbInstance.batch(function()
             {
                 // Connect each conversation node sequentially
-                for (var source in singleConnections)
+                for (const source in singleConnections)
                 {
                     plumbInstance.connect(
                     {

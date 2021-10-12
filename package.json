@@ -23,5 +23,9 @@
     "stylelint-scss": "^3.19.0",
     "ts-node": "^9.1.1",
     "typescript": "^4.3.2"
-  }
+  },
+  "browserslist": [
+    "defaults",
+    "not IE >= 0"
+  ]
 }

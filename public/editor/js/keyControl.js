@@ -1,7 +1,7 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported KeyControl */
-var KeyControl;
+let KeyControl;
 
 (function()
 {
@@ -13,10 +13,239 @@ var KeyControl;
         ctrlClickOnElement: ctrlClickOnElement
     };
 
-    var ctrlNumberControl,
-        ctrlLetterControl,
-        numberControl,
-        letterControl;
+    // All events for keyboard controls with normal letters.
+    const letterControl = {
+        Q: function()
+        {
+            const dialoguePosition = Main.mousePositionToDialoguePosition(Main.mousePosition);
+            if (dialoguePosition) Main.addNewNode(Main.playerType, "", dialoguePosition, true);
+        },
+        W: function()
+        {
+            const dialoguePosition = Main.mousePositionToDialoguePosition(Main.mousePosition);
+            if (dialoguePosition) Main.addNewNode(Main.computerType, "", dialoguePosition, true);
+        },
+        E: function()
+        {
+            const dialoguePosition = Main.mousePositionToDialoguePosition(Main.mousePosition);
+            if (dialoguePosition) Main.addNewNode(Main.situationType, "", dialoguePosition, true);
+        },
+        R: function()
+        {
+            if (Zoom.isZoomed() && Main.selectedElement)
+            {
+                Main.createChildNode(Main.selectedElement);
+            }
+        },
+        T: function()
+        {
+            if (!Zoom.isZoomed() && Main.isMousePositionWithinEditingCanvas())
+            {
+                Main.addNewTree(true);
+            }
+        },
+        A: function()
+        {
+            const highlightAncestorsButton = $("#highlightAncestors");
+            if (!highlightAncestorsButton.is(":disabled"))
+            {
+                highlightAncestorsButton.trigger('click');
+            }
+        },
+        B: function()
+        {
+            Metadata.dialog();
+        },
+        P: function()
+        {
+            Parameters.dialog();
+        },
+        X: function()
+        {
+            Evaluations.dialog();
+        },
+        I: function()
+        {
+            Load.importDialog();
+        },
+        O: function()
+        {
+            Save.exportScenario();
+        },
+        V: function()
+        {
+            const errors = Validator.validate();
+            Validator.show(errors);
+        }
+    };
+
+    // All events for keyboard controls with special characters.
+    const numberControl = {
+        13: function()
+        {
+            if (Main.selectedElements[0] in Main.nodes)
+            {
+                Main.startEditingNode(Main.selectedElements[0]);
+            }
+            else if (Main.selectedElements[0] in Main.trees)
+            {
+                Zoom.toggleZoom(Main.trees[Main.selectedElements[0]]);
+            }
+        },
+        46: function()
+        {
+            Main.deleteAllSelected();
+        },
+        38: function()
+        {
+            if (Main.selectedElements[0] in Main.nodes)
+            {
+                selectParent();
+            }
+            else if (Main.selectedElements[0] in Main.trees)
+            {
+                const selectedTree = Main.trees[Main.selectedElements[0]];
+                const upPredicate = function(tree)
+                {
+                    return tree.topPos < selectedTree.topPos && tree.leftPos === selectedTree.leftPos;
+                };
+
+                selectClosestOffsetTree(upPredicate, Main.selectedElements[0]);
+            }
+        },
+        40: function()
+        {
+            if (Main.selectedElements[0] in Main.nodes)
+            {
+                selectChild();
+            }
+            else if (Main.selectedElements[0] in Main.trees)
+            {
+                const selectedTree = Main.trees[Main.selectedElements[0]];
+                const downPredicate = function(tree)
+                {
+                    return tree.topPos > selectedTree.topPos && tree.leftPos === selectedTree.leftPos;
+                };
+
+                selectClosestOffsetTree(downPredicate, Main.selectedElements[0]);
+            }
+        },
+        39: function()
+        {
+            if (Main.selectedElements[0] in Main.nodes)
+            {
+                selectRightBrother();
+            }
+            else if (Main.selectedElements[0] in Main.trees)
+            {
+                const selectedTree = Main.trees[Main.selectedElements[0]];
+                const rightPredicate = function(tree)
+                {
+                    return tree.topPos === selectedTree.topPos && tree.leftPos > selectedTree.leftPos;
+                };
+
+                selectClosestOffsetTree(rightPredicate, Main.selectedElements[0]);
+            }
+        },
+        37: function()
+        {
+            if (Main.selectedElements[0] in Main.nodes)
+            {
+                selectLeftBrother();
+            }
+            else if (Main.selectedElements[0] in Main.trees)
+            {
+                const selectedTree = Main.trees[Main.selectedElements[0]];
+                const leftPredicate = function(tree)
+                {
+                    return tree.topPos === selectedTree.topPos && tree.leftPos < selectedTree.leftPos;
+                };
+
+                selectClosestOffsetTree(leftPredicate, Main.selectedElements[0]);
+            }
+        },
+        27: function()
+        {
+            DragBox.cancel();
+        }
+    };
+
+    // All events for keyboard controls with normal letters and ctrl pressed.
+    const ctrlLetterControl = {
+        A: function()
+        {
+            selectAll();
+        },
+        S: function()
+        {
+            Save.exportScenario();
+        },
+        L: function()
+        {
+            location.reload();
+        },
+        P: function()
+        {
+            Print.printScenario();
+        }
+    };
+
+    // All events for keyboard controls with special characters and ctrl pressed.
+    const ctrlNumberControl = {
+        38: function()
+        {
+            if (Main.selectedElements[0] in Main.nodes)
+            {
+                moveNode(0, -1);
+            }
+            else if (Main.selectedElements[0] in Main.trees)
+            {
+                moveTree(0, -1);
+            }
+        },
+        40: function()
+        {
+            if (Main.selectedElements[0] in Main.nodes)
+            {
+                moveNode(0, 1);
+            }
+            else if (Main.selectedElements[0] in Main.trees)
+            {
+                moveTree(0, 1);
+            }
+        },
+        39: function()
+        {
+            if (Main.selectedElements[0] in Main.nodes)
+            {
+                moveNode(1, 0);
+            }
+            else if (Main.selectedElements[0] in Main.trees)
+            {
+                moveTree(1, 0);
+            }
+        },
+        37: function()
+        {
+            if (Main.selectedElements[0] in Main.nodes)
+            {
+                moveNode(-1, 0);
+            }
+            else if (Main.selectedElements[0] in Main.trees)
+            {
+                moveTree(-1, 0);
+            }
+        },
+        13: function()
+        {
+            const selectedTree = Zoom.getZoomed();
+            if (Main.selectedElements[0] === undefined && selectedTree !== null)
+            {
+                Zoom.toggleZoom(selectedTree);
+                Main.selectElement(selectedTree.id);
+            }
+        }
+    };
 
     $(function()
     {
@@ -26,7 +255,7 @@ var KeyControl;
             // Check if hotkeys are active
             if (Main.isEditingInCanvas())
             {
-                var ch = String.fromCharCode(e.keyCode);
+                const ch = String.fromCharCode(e.keyCode);
                 // Check if the ctrl key is pressed
                 if ((e.ctrlKey || e.metaKey) && !e.shiftKey)
                 {
@@ -55,240 +284,6 @@ var KeyControl;
         });
     });
 
-    // All events for keyboard controls with normal letters.
-    letterControl = {
-        Q: function()
-        {
-            var dialoguePosition = Main.mousePositionToDialoguePosition(Main.mousePosition);
-            if (dialoguePosition) Main.addNewNode(Main.playerType, "", dialoguePosition, true);
-        },
-        W: function()
-        {
-            var dialoguePosition = Main.mousePositionToDialoguePosition(Main.mousePosition);
-            if (dialoguePosition) Main.addNewNode(Main.computerType, "", dialoguePosition, true);
-        },
-        E: function()
-        {
-            var dialoguePosition = Main.mousePositionToDialoguePosition(Main.mousePosition);
-            if (dialoguePosition) Main.addNewNode(Main.situationType, "", dialoguePosition, true);
-        },
-        R: function()
-        {
-            if (Zoom.isZoomed() && Main.selectedElement)
-            {
-                Main.createChildNode(Main.selectedElement);
-            }
-        },
-        T: function()
-        {
-            if (!Zoom.isZoomed() && Main.isMousePositionWithinEditingCanvas())
-            {
-                Main.addNewTree(true);
-            }
-        },
-        A: function()
-        {
-            var highlightAncestorsButton = $("#highlightAncestors");
-            if (!highlightAncestorsButton.is(":disabled"))
-            {
-                highlightAncestorsButton.trigger('click');
-            }
-        },
-        B: function()
-        {
-            Metadata.dialog();
-        },
-        P: function()
-        {
-            Parameters.dialog();
-        },
-        X: function()
-        {
-            Evaluations.dialog();
-        },
-        I: function()
-        {
-            Load.importDialog();
-        },
-        O: function()
-        {
-            Save.exportScenario();
-        },
-        V: function()
-        {
-            var errors = Validator.validate();
-            Validator.show(errors);
-        }
-    };
-
-    // All events for keyboard controls with special characters.
-    numberControl = {
-        13: function()
-        {
-            if (Main.selectedElements[0] in Main.nodes)
-            {
-                Main.startEditingNode(Main.selectedElements[0]);
-            }
-            else if (Main.selectedElements[0] in Main.trees)
-            {
-                Zoom.toggleZoom(Main.trees[Main.selectedElements[0]]);
-            }
-        },
-        46: function()
-        {
-            Main.deleteAllSelected();
-        },
-        38: function()
-        {
-            if (Main.selectedElements[0] in Main.nodes)
-            {
-                selectParent();
-            }
-            else if (Main.selectedElements[0] in Main.trees)
-            {
-                var selectedTree = Main.trees[Main.selectedElements[0]];
-                var upPredicate = function(tree)
-                {
-                    return tree.topPos < selectedTree.topPos && tree.leftPos === selectedTree.leftPos;
-                };
-
-                selectClosestOffsetTree(upPredicate, Main.selectedElements[0]);
-            }
-        },
-        40: function()
-        {
-            if (Main.selectedElements[0] in Main.nodes)
-            {
-                selectChild();
-            }
-            else if (Main.selectedElements[0] in Main.trees)
-            {
-                var selectedTree = Main.trees[Main.selectedElements[0]];
-                var downPredicate = function(tree)
-                {
-                    return tree.topPos > selectedTree.topPos && tree.leftPos === selectedTree.leftPos;
-                };
-
-                selectClosestOffsetTree(downPredicate, Main.selectedElements[0]);
-            }
-        },
-        39: function()
-        {
-            if (Main.selectedElements[0] in Main.nodes)
-            {
-                selectRightBrother();
-            }
-            else if (Main.selectedElements[0] in Main.trees)
-            {
-                var selectedTree = Main.trees[Main.selectedElements[0]];
-                var rightPredicate = function(tree)
-                {
-                    return tree.topPos == selectedTree.topPos && tree.leftPos > selectedTree.leftPos;
-                };
-
-                selectClosestOffsetTree(rightPredicate, Main.selectedElements[0]);
-            }
-        },
-        37: function()
-        {
-            if (Main.selectedElements[0] in Main.nodes)
-            {
-                selectLeftBrother();
-            }
-            else if (Main.selectedElements[0] in Main.trees)
-            {
-                var selectedTree = Main.trees[Main.selectedElements[0]];
-                var leftPredicate = function(tree)
-                {
-                    return tree.topPos === selectedTree.topPos && tree.leftPos < selectedTree.leftPos;
-                };
-
-                selectClosestOffsetTree(leftPredicate, Main.selectedElements[0]);
-            }
-        },
-        27: function()
-        {
-            DragBox.cancel();
-        }
-    };
-
-    // All events for keyboard controls with normal letters and ctrl pressed.
-    ctrlLetterControl = {
-        A: function()
-        {
-            selectAll();
-        },
-        S: function()
-        {
-            Save.exportScenario();
-        },
-        L: function()
-        {
-            location.reload();
-        },
-        P: function()
-        {
-            Print.printScenario();
-        }
-    };
-
-    // All events for keyboard controls with special characters and ctrl pressed.
-    ctrlNumberControl = {
-        38: function()
-        {
-            if (Main.selectedElements[0] in Main.nodes)
-            {
-                moveNode({ y: -1 });
-            }
-            else if (Main.selectedElements[0] in Main.trees)
-            {
-                moveTree(function(x) { return x; }, function(y) { return y - 1; });// Arrow(lambda) functions would be nice here when support is sorted out
-            }
-        },
-        40: function()
-        {
-            if (Main.selectedElements[0] in Main.nodes)
-            {
-                moveNode({ y: 1 });
-            }
-            else if (Main.selectedElements[0] in Main.trees)
-            {
-                moveTree(function(x) { return x; }, function(y) { return y + 1; });
-            }
-        },
-        39: function()
-        {
-            if (Main.selectedElements[0] in Main.nodes)
-            {
-                moveNode({ x: 1 });
-            }
-            else if (Main.selectedElements[0] in Main.trees)
-            {
-                moveTree(function(x) { return x + 1; }, function(y) { return y; });
-            }
-        },
-        37: function()
-        {
-            if (Main.selectedElements[0] in Main.nodes)
-            {
-                moveNode({ x: -1 });
-            }
-            else if (Main.selectedElements[0] in Main.trees)
-            {
-                moveTree(function(x) { return x - 1; }, function(y) { return y; });
-            }
-        },
-        13: function()
-        {
-            var selectedTree = Zoom.getZoomed();
-            if (Main.selectedElements[0] === undefined && selectedTree !== null)
-            {
-                Zoom.toggleZoom(selectedTree);
-                Main.selectElement(selectedTree.id);
-            }
-        }
-    };
-
     // If the user clicked on a node while ctrl is pressed, check if he need to be selected or deselected.
     function ctrlClickOnElement(node)
     {
@@ -313,10 +308,10 @@ var KeyControl;
         }
         else
         {
-            var plumbInstance;
+            let plumbInstance;
             if (Main.selectedElements.length === 1)
             {
-                var selectedElementID = Main.selectedElements[0];
+                const selectedElementID = Main.selectedElements[0];
                 Main.selectElement(null);
                 Main.selectedElements.push(selectedElementID);
                 $("#" + selectedElementID).addClass("ui-selected");
@@ -336,7 +331,7 @@ var KeyControl;
     {
         if (elementID === null) return;
 
-        var plumbInstance = elementID in Main.nodes ? Main.getPlumbInstanceByNodeID(elementID) : jsPlumb;
+        const plumbInstance = elementID in Main.nodes ? Main.getPlumbInstanceByNodeID(elementID) : jsPlumb;
         plumbInstance.removeFromDragSelection(elementID);
 
         if (Main.selectedElement !== null)
@@ -357,30 +352,29 @@ var KeyControl;
         }
     }
 
-    // If a node is selected and arrow up is pressed, move the node up.
-    function moveNode(direction)
+    function moveNode(deltaX, deltaY)
     {
-        var deltaX = direction.x ? direction.x * 5 : 0;
-        var deltaY = direction.y ? direction.y * 5 : 0;
-        var upperBound = 0;
-        var leftBound = 0;
+        const pixelDeltaX = deltaX * 5;
+        const pixelDeltaY = deltaY * 5;
+        const upperBound = 0;
+        const leftBound = 0;
 
         // Check if none of the nodes will move out of the canvas
-        var outOfLeftBound = direction.x === -1 && Main.selectedElements.some(function(selectedElement)
+        const outOfLeftBound = deltaX < 0 && Main.selectedElements.some(function(selectedElement)
         {
-            var newLeft = Utils.cssPosition($("#" + selectedElement)).left + deltaX;
+            const newLeft = Utils.cssPosition($("#" + selectedElement)).left + pixelDeltaX;
             // Include delta for the left boundary for smaller movements than delta
             // This is corrected later on by clamping to the bounds
-            return newLeft <= leftBound + deltaX;
+            return newLeft <= leftBound + pixelDeltaX;
         });
 
         // Check if none of the nodes will move out of the canvas
-        var outOfUpperBound = direction.y === -1 && Main.selectedElements.some(function(selectedElement)
+        const outOfUpperBound = deltaY < 0 && Main.selectedElements.some(function(selectedElement)
         {
-            var newTop = Utils.cssPosition($("#" + selectedElement)).top + deltaY;
+            const newTop = Utils.cssPosition($("#" + selectedElement)).top + pixelDeltaY;
             // Include delta for the upper boundary for smaller movements than delta
             // This is corrected later on by clamping to the bounds
-            return newTop <= upperBound + deltaY;
+            return newTop <= upperBound + pixelDeltaY;
         });
 
         // If none of the nodes is moving outside of the canvas, move and repaint them
@@ -388,14 +382,14 @@ var KeyControl;
         {
             SaveIndicator.setSavedChanges(false);
 
-            var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElements[0]);
+            const plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElements[0]);
             Main.selectedElements.forEach(function(selectedElement)
             {
-                var position = Utils.cssPosition($("#" + selectedElement));
+                const position = Utils.cssPosition($("#" + selectedElement));
                 Utils.cssPosition($("#" + selectedElement),
                 {
-                    left: Math.max(position.left + deltaX, leftBound),
-                    top: Math.max(position.top + deltaY, upperBound)
+                    left: Math.max(position.left + pixelDeltaX, leftBound),
+                    top: Math.max(position.top + pixelDeltaY, upperBound)
                 });
 
                 plumbInstance.revalidate(selectedElement);
@@ -403,16 +397,13 @@ var KeyControl;
         }
     }
 
-    function moveTree(modifyX, modifyY)
+    function moveTree(deltaX, deltaY)
     {
-        var allClear = true;
-        var tree, newGridX, newGridY;
-
-        for (var i = 0; i < Main.selectedElements.length; i++)
+        const allClear = Main.selectedElements.every(function(treeID)
         {
-            tree = Main.trees[Main.selectedElements[i]];
-            newGridX = modifyX(tree.leftPos);
-            newGridY = modifyY(tree.topPos);
+            const tree = Main.trees[treeID];
+            const newGridX = tree.leftPos + deltaX;
+            const newGridY = tree.topPos + deltaY;
 
             // New position is within bounds
             if (newGridX >= 0 && newGridY >= 0)
@@ -421,29 +412,24 @@ var KeyControl;
                 // Selected trees may occupy the space since they will move anyway.
                 // All selected trees will move in the same distance in the same direction,
                 // so no two selected trees can end up in the same space if they are not already.
-                allClear = allClear && checkUnselectedGridAvailable(newGridX, newGridY);
-
-                if (!allClear)
-                {
-                    break;
-                }
+                return Main.checkGridAvailable(newGridX, newGridY,
+                    function(tree) { return Main.selectedElements.indexOf(tree.id) !== -1; });
             }
             else
             {
-                allClear = false;
-                break;
+                return false;
             }
-        }
+        });
 
         if (allClear)
         {
             SaveIndicator.setSavedChanges(false);
 
-            for (var j = 0; j < Main.selectedElements.length; j++)
+            Main.selectedElements.forEach(function(treeID)
             {
-                tree = Main.trees[Main.selectedElements[j]];
-                newGridX = modifyX(tree.leftPos);
-                newGridY = modifyY(tree.topPos);
+                const tree = Main.trees[treeID];
+                const newGridX = tree.leftPos + deltaX;
+                const newGridY = tree.topPos + deltaY;
 
                 tree.leftPos = newGridX;
                 tree.topPos = newGridY;
@@ -453,21 +439,21 @@ var KeyControl;
                     "top": tree.topPos * Main.gridY,
                     "left": tree.leftPos * Main.gridX
                 });
-            }
+            });
         }
     }
 
     function selectClosestOffsetTree(offsetPredicate, originID)
     {
-        var minDistance = Number.MAX_VALUE;
-        var originTree = Main.trees[originID];
-        var selectID = "";
+        let minDistance = Number.MAX_VALUE;
+        const originTree = Main.trees[originID];
+        let selectID = "";
 
         $.each(Main.trees, function(id, tree)
         {
             if (id === originID) return;
             if (!offsetPredicate(tree)) return;
-            var distance = Math.sqrt(Math.pow(tree.topPos - originTree.topPos, 2) + Math.pow(tree.leftPos - originTree.leftPos, 2));
+            const distance = Math.sqrt(Math.pow(tree.topPos - originTree.topPos, 2) + Math.pow(tree.leftPos - originTree.leftPos, 2));
             if (distance < minDistance)
             {
                 minDistance = distance;
@@ -479,20 +465,6 @@ var KeyControl;
         {
             Main.selectElement(selectID);
         }
-    }
-
-    function checkUnselectedGridAvailable(gridX, gridY)
-    {
-        var available = true;
-
-        $.each(Main.trees, function(id, tree)
-        {
-            if (Main.selectedElements.indexOf(id) !== -1) return;
-
-            available = available && !(tree.leftPos === gridX && tree.topPos === gridY);
-        });
-
-        return available;
     }
 
     function selectAll()
@@ -513,22 +485,22 @@ var KeyControl;
     {
         if (Main.selectedElement === null) return;
 
-        var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElement);
+        const plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElement);
 
-        var connections = plumbInstance.getConnections(
+        const connections = plumbInstance.getConnections(
         {
             target: Main.selectedElement
         });
-        var closestNode;
-        var top = -Infinity;
-        for (var i = 0; i < connections.length; i++)
+        let closestNode;
+        let top = -Infinity;
+        connections.forEach(function(connection)
         {
-            if ($("#" + connections[i].sourceId).offset().top > top)
+            if ($("#" + connection.sourceId).offset().top > top)
             {
-                closestNode = connections[i].sourceId;
+                closestNode = connection.sourceId;
                 top = $("#" + closestNode).offset().top;
             }
-        }
+        });
         if (top !== -Infinity)
         {
             Main.selectElement(closestNode);
@@ -540,22 +512,22 @@ var KeyControl;
     {
         if (Main.selectedElement === null) return;
 
-        var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElement);
+        const plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElement);
 
-        var connections = plumbInstance.getConnections(
+        const connections = plumbInstance.getConnections(
         {
             source: Main.selectedElement
         });
-        var closestNode;
-        var top = Infinity;
-        for (var i = 0; i < connections.length; i++)
+        let closestNode;
+        let top = Infinity;
+        connections.forEach(function(connection)
         {
-            if ($("#" + connections[i].targetId).offset().top < top)
+            if ($("#" + connection.targetId).offset().top < top)
             {
-                closestNode = connections[i].targetId;
+                closestNode = connection.targetId;
                 top = $("#" + closestNode).offset().top;
             }
-        }
+        });
         if (top !== Infinity)
         {
             Main.selectElement(closestNode);
@@ -567,25 +539,25 @@ var KeyControl;
     {
         if (Main.selectedElement === null) return;
 
-        var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElement);
+        const plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElement);
 
-        var connections = plumbInstance.getConnections(
+        const connections = plumbInstance.getConnections(
         {
             target: Main.selectedElement
         });
-        var closestNode;
-        var left = Infinity;
-        var leftCurrent = $("#" + Main.selectedElement).offset().left;
-        for (var i = 0; i < connections.length; i++)
+        let closestNode;
+        let left = Infinity;
+        const leftCurrent = $("#" + Main.selectedElement).offset().left;
+        connections.forEach(function(connection)
         {
-            var connections2 = plumbInstance.getConnections(
+            const sourceConnections = plumbInstance.getConnections(
             {
-                source: connections[i].sourceId
+                source: connection.sourceId
             });
-            for (var j = 0; j < connections2.length; j++)
+            sourceConnections.forEach(function(sourceConnection)
             {
-                var nodeLookedAt = connections2[j].targetId;
-                var leftLookedAt = $("#" + nodeLookedAt).offset().left;
+                const nodeLookedAt = sourceConnection.targetId;
+                const leftLookedAt = $("#" + nodeLookedAt).offset().left;
 
                 if (nodeLookedAt != Main.selectedElement &&
                     leftLookedAt > leftCurrent &&
@@ -594,8 +566,8 @@ var KeyControl;
                     closestNode = nodeLookedAt;
                     left = leftLookedAt;
                 }
-            }
-        }
+            });
+        });
         if (left !== Infinity)
         {
             Main.selectElement(closestNode);
@@ -607,27 +579,27 @@ var KeyControl;
     {
         if (Main.selectedElement === null) return;
 
-        var plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElement);
+        const plumbInstance = Main.getPlumbInstanceByNodeID(Main.selectedElement);
 
-        var connections = plumbInstance.getConnections(
+        const connections = plumbInstance.getConnections(
         {
             target: Main.selectedElement
         });
 
-        var closestNode;
-        var right = -Infinity;
-        var rightCurrent = $("#" + Main.selectedElement).offset().left;
-        for (var i = 0; i < connections.length; i++)
+        let closestNode;
+        let right = -Infinity;
+        const rightCurrent = $("#" + Main.selectedElement).offset().left;
+        connections.forEach(function(connection)
         {
-            var sourceConnections = plumbInstance.getConnections(
+            const sourceConnections = plumbInstance.getConnections(
             {
-                source: connections[i].sourceId
+                source: connection.sourceId
             });
 
-            for (var j = 0; j < sourceConnections.length; j++)
+            sourceConnections.forEach(function(sourceConnection)
             {
-                var nodeLookedAt = sourceConnections[j].targetId;
-                var rightLookedAt = $("#" + nodeLookedAt).offset().left;
+                const nodeLookedAt = sourceConnection.targetId;
+                const rightLookedAt = $("#" + nodeLookedAt).offset().left;
 
                 if (nodeLookedAt != Main.selectedElement &&
                     rightLookedAt < rightCurrent &&
@@ -636,8 +608,8 @@ var KeyControl;
                     closestNode = nodeLookedAt;
                     right = rightLookedAt;
                 }
-            }
-        }
+            });
+        });
 
         if (right !== -Infinity)
         {

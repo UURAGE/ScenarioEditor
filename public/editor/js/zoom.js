@@ -1,7 +1,7 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported Zoom */
-var Zoom;
+let Zoom;
 
 (function()
 {
@@ -32,13 +32,10 @@ var Zoom;
             Main.selectElement(null);
 
             // Find the treeContainer
-            var parent = tree.dragDiv.parent();
+            const parent = tree.dragDiv.parent();
 
             // Zoom out all the other trees if they are zoomed in
-            $.each(Main.trees, function(key, value)
-            {
-                zoomOut(value);
-            });
+            Object.values(Main.trees).forEach(zoomOut);
 
             tree.dragDiv.addClass("zoom");
             // Ensure it looks right
@@ -57,7 +54,7 @@ var Zoom;
 
             tree.div.selectable('enable');
 
-            var zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
+            const zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
             zoomTreeButton.html(Utils.sIcon('icon-minus'));
 
             jsPlumb.setSuspendDrawing(false);
@@ -100,7 +97,7 @@ var Zoom;
             // Unselect the selected nodes(s), because we are zooming out of a tree
             Main.selectElement(null);
 
-            var parent = tree.dragDiv.parent();
+            const parent = tree.dragDiv.parent();
 
             TabDock.handleZoomOut();
             MiniMap.deactivate();
@@ -120,7 +117,7 @@ var Zoom;
             jsPlumb.setDraggable(tree.dragDiv, true);
             tree.div.selectable('disable');
 
-            var zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
+            const zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
             zoomTreeButton.html(Utils.sIcon('icon-plus'));
 
             parent.css({ "overflow": "auto" });
@@ -132,7 +129,7 @@ var Zoom;
 
     function getZoomed()
     {
-        var zoomedTrees = $("#main .treeContainer.zoom");
+        const zoomedTrees = $("#main .treeContainer.zoom");
         if (zoomedTrees.length === 0) return null;
 
         return Main.trees[zoomedTrees.eq(0).attr("id")];

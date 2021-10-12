@@ -4,8 +4,8 @@
 {
     "use strict";
 
-    var globals = JSON.parse(document.getElementById("globals").textContent);
-    for (var globalName in globals)
+    const globals = JSON.parse(document.getElementById("globals").textContent);
+    for (const globalName in globals)
     {
         Object.defineProperty(window, globalName,
         {

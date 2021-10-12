@@ -5,21 +5,15 @@
 */
 
 /* exported MiniMap */
-var MiniMap;
+let MiniMap;
 
 (function()
 {
     "use strict";
 
-    var zoom = 1,
-        // Show details? Set to false to speed up editor processing in large scenarios
-        detailed = true;
-
     // eslint-disable-next-line no-global-assign
     MiniMap =
     {
-        zoom: zoom,
-        detailed: detailed,
         initialise: initialise,
         attachScrollListener: attachScrollListener,
         update: update,
@@ -28,7 +22,11 @@ var MiniMap;
     };
 
     // Turned on for this session? (based on e.g. browser)
-    var enabled = true,
+    const enabled = true;
+
+    let zoom = 1,
+        // Show details? Set to false to speed up editor processing in large scenarios
+        detailed = true,
         // Allowed by the context? If not, hidden completely, including controls
         active = true,
         // Turned on by the user? If not, hidden, but controls are still visible
@@ -50,7 +48,7 @@ var MiniMap;
             updateScrollPosition(e);
         });
 
-        var scrollTimeout = null;
+        let scrollTimeout = null;
         $("#main").on("scroll", function()
         {
             // Throttle scroll event
@@ -102,7 +100,7 @@ var MiniMap;
     {
         if (!enabled) return;
 
-        var scrollTimeout = null;
+        let scrollTimeout = null;
         treeDiv.on('scroll', function()
         {
             // Throttle scroll event
@@ -119,12 +117,12 @@ var MiniMap;
 
     function updateScrollPosition(e)
     {
-        var minimapSelectorX = e.pageX - $("#minimap").offset().left - $("#minimapSelector").width() / 2;
-        var minimapSelectorY = e.pageY - $("#minimap").offset().top - $("#minimapSelector").height() / 2;
+        let minimapSelectorX = e.pageX - $("#minimap").offset().left - $("#minimapSelector").width() / 2;
+        let minimapSelectorY = e.pageY - $("#minimap").offset().top - $("#minimapSelector").height() / 2;
 
         // Limit the minimum/maximum positions of the selector
-        var maxX = $("#minimap").width() - $("#minimapSelector").width();
-        var maxY = $("#minimap").height() - $("#minimapSelector").height();
+        const maxX = $("#minimap").width() - $("#minimapSelector").width();
+        const maxY = $("#minimap").height() - $("#minimapSelector").height();
         if (minimapSelectorX < 0) minimapSelectorX = 0;
         if (minimapSelectorY < 0) minimapSelectorY = 0;
         if (minimapSelectorX > maxX) minimapSelectorX = maxX;
@@ -156,10 +154,10 @@ var MiniMap;
     {
         if (!(enabled && active && shown)) return;
 
-        var realWidth, realHeight;
-        var viewportWidth, viewportHeight, viewportX, viewportY;
+        let realWidth, realHeight;
+        let viewportWidth, viewportHeight, viewportX, viewportY;
 
-        var main = $("#main");
+        const main = $("#main");
 
         if (!Zoom.isZoomed()) // Nothing is zoomed
         {
@@ -172,7 +170,7 @@ var MiniMap;
         }
         else
         {
-            var treeDiv = $("#main .treeContainer.zoom .treeDiv");
+            const treeDiv = $("#main .treeContainer.zoom .treeDiv");
             realWidth = treeDiv[0].scrollWidth;
             realHeight = treeDiv[0].scrollHeight + $("#main .subjectDiv")[0].scrollHeight;
             viewportX = treeDiv.scrollLeft();
@@ -188,7 +186,7 @@ var MiniMap;
         if (detailed && refresh)
         {
             $("#scaledDiv").empty();
-            var clonedMain = main.clone();
+            const clonedMain = main.clone();
             // Remove inappropriate elements from the cloned main
             clonedMain.find("#gridIndicator").remove();
             clonedMain.find("#colorPicker").remove();
@@ -200,16 +198,16 @@ var MiniMap;
         }
 
         // Standard width/height for minimap container
-        var width = 300;
+        const width = 300;
 
-        var zoomFactor = width / realWidth;
+        let zoomFactor = width / realWidth;
         // Minimap gets taller than the allowed screenheight
         if (zoomFactor * realHeight > $("#sidebar").height())
         {
             zoomFactor = $("#sidebar").height() / (realHeight + realHeight * 0.1);
         }
 
-        var minimapSize = {
+        const minimapSize = {
             width: realWidth * zoomFactor + "px",
             height: realHeight * zoomFactor + "px"
         };
@@ -242,7 +240,7 @@ var MiniMap;
 
     function recallShown()
     {
-        var recalledShown = localStorage.getItem('MiniMap.shown');
+        const recalledShown = localStorage.getItem('MiniMap.shown');
         if (recalledShown !== null) shown = Boolean(JSON.parse(recalledShown));
     }
 
@@ -262,8 +260,8 @@ var MiniMap;
     function showAnimated(element)
     {
         // Slide Down with animation stopper
-        var savedSize = element.data('savedSize');
-        var finalHeight = savedSize ? savedSize.height : element.css('height', 'auto').height();
+        const savedSize = element.data('savedSize');
+        const finalHeight = savedSize ? savedSize.height : element.css('height', 'auto').height();
         element.height(0).show().stop(true, false).animate({ height: finalHeight }, 400);
     }
 

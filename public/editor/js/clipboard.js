@@ -6,42 +6,26 @@
 
     $(function()
     {
-        var isIEClipboard = window.clipboardData && window.clipboardData.getData;
-
-        var handleClipboardEvent = function(e, clipboard, action)
+        const handleClipboardEvent = function(e, clipboard, action)
         {
-            var handlers =
+            const handlers =
             {
                 copy: copy,
                 cut: cut,
                 paste: paste
             };
 
-            var clipboardFormat = isIEClipboard ? 'Text' : 'text/plain';
-
-            if (Main.isEditingInCanvas() && handlers[action](clipboard, clipboardFormat))
+            if (Main.isEditingInCanvas() && handlers[action](clipboard, 'text/plain'))
             {
                 e.preventDefault();
             }
         };
 
-        var actionsByKey = { C: 'copy', X: 'cut', V: 'paste' };
+        const actionsByKey = { C: 'copy', X: 'cut', V: 'paste' };
 
-        $(document).on('keydown', function(e)
+        Object.keys(actionsByKey).forEach(function(key)
         {
-            if (isIEClipboard)
-            {
-                var key = String.fromCharCode(e.keyCode);
-                if ((e.ctrlKey || e.metaKey) && key in actionsByKey)
-                {
-                    handleClipboardEvent(e, window.clipboardData, actionsByKey[key]);
-                }
-            }
-        });
-
-        Object.keys(actionsByKey).map(function(key)
-        {
-            var action = actionsByKey[key];
+            const action = actionsByKey[key];
             $(document).on(action, function(e)
             {
                 handleClipboardEvent(e, e.originalEvent.clipboardData, action);
@@ -63,20 +47,20 @@
 
     function copy(clipboard, format)
     {
-        var hasSelectedText = window.getSelection().type !== 'Range';
+        const hasSelectedText = window.getSelection().type !== 'Range';
         if (!hasSelectedText) return false;
 
-        var copiedElement = copyElement();
+        const copiedElement = copyElement();
         if (copiedElement === null) return false;
 
-        var dataAsText = JSON.stringify($.extend(copiedElement, { target: 'scenario', configIdRef: Config.container.id }));
+        const dataAsText = JSON.stringify($.extend(copiedElement, { target: 'scenario', configIdRef: Config.container.id }));
         clipboard.setData(format, dataAsText);
         return true;
     }
 
     function cut(clipboard, format)
     {
-        var hasCopied = copy(clipboard, format);
+        const hasCopied = copy(clipboard, format);
         if (hasCopied)
         {
             Main.deleteAllSelected();
@@ -88,7 +72,7 @@
     {
         if (Main.isMousePositionWithinEditingCanvas())
         {
-            var data;
+            let data;
             try
             {
                 data = JSON.parse(clipboard.getData(format));
@@ -113,7 +97,7 @@
 
     function copyElement()
     {
-        var definitions = { parameters: { userDefined: $.extend(true, {}, Parameters.container) } };
+        const definitions = { parameters: { userDefined: $.extend(true, {}, Parameters.container) } };
         if (Main.selectedElement !== null)
         {
             if (!Zoom.isZoomed())
@@ -163,9 +147,8 @@
 
     function copyTree(treeId)
     {
-        var tree = Main.trees[treeId];
-        // Save tree data
-        var toCopy = Utils.clone(
+        const tree = Main.trees[treeId];
+        const toCopy = Utils.clone(
         {
             subject: tree.subject,
             optional: tree.optional,
@@ -174,22 +157,16 @@
             topPos: tree.topPos,
             topScroll: tree.topScroll
         });
-        var nodes = [];
-        // Save all node data in tree
-        $.each(Main.trees[treeId].nodes, function(index, nodeId)
-        {
-            nodes.push(copyNode(nodeId));
-        });
-        toCopy.nodes = nodes;
+        toCopy.nodes = tree.nodes.map(copyNode);
 
         return toCopy;
     }
 
     function copyNode(nodeID)
     {
-        var toCopy = Utils.clone(Main.nodes[nodeID]);
+        const toCopy = Utils.clone(Main.nodes[nodeID]);
 
-        var plumbInstance = Main.getPlumbInstanceByNodeID(nodeID);
+        const plumbInstance = Main.getPlumbInstanceByNodeID(nodeID);
         toCopy.connections = plumbInstance.getConnections({ target: nodeID }).map(function(connection)
         {
             return {
@@ -206,17 +183,17 @@
 
     function pasteElement(type, content, anchorPosition)
     {
-        var indicatorPos = Main.getGridIndicatorPosition();
+        const indicatorPos = Main.getGridIndicatorPosition();
         if (!Array.isArray(content))
         {
             if (type === 'dialogue' && !Zoom.isZoomed())
             {
-                var newTree = pasteTree(content, indicatorPos.left, indicatorPos.top);
+                const newTree = pasteTree(content, indicatorPos.left, indicatorPos.top);
                 Main.selectElement(newTree.id);
             }
             else if (type === 'node' && Zoom.isZoomed())
             {
-                var newNode = pasteNode(content, { left: anchorPosition.left, top: anchorPosition.top });
+                const newNode = pasteNode(content, { left: anchorPosition.left, top: anchorPosition.top });
                 Main.selectElement(newNode.id);
             }
         }
@@ -225,8 +202,8 @@
             if (type === 'dialogue' && !Zoom.isZoomed())
             {
                 // In grid positions
-                var minX = Number.MAX_VALUE;
-                var minY = Number.MAX_VALUE;
+                let minX = Number.MAX_VALUE;
+                let minY = Number.MAX_VALUE;
 
                 content.forEach(function(tree)
                 {
@@ -235,10 +212,10 @@
                 });
 
                 // Paste trees relative to top left of smallest bounding box
-                var pastedTreeIds = $.map(content, function(tree)
+                const pastedTreeIds = $.map(content, function(tree)
                 {
-                    var leftPos = tree.leftPos - minX + indicatorPos.left;
-                    var topPos = tree.topPos - minY + indicatorPos.top;
+                    const leftPos = tree.leftPos - minX + indicatorPos.left;
+                    const topPos = tree.topPos - minY + indicatorPos.top;
                     return pasteTree(tree, leftPos, topPos).id;
                 });
 
@@ -247,11 +224,11 @@
             else if (type === 'node' && Zoom.isZoomed())
             {
                 // Needed to save jsPlumb connections
-                var idMappings = {};
-                var plumbInstance = Zoom.getZoomed().plumbInstance;
+                const idMappings = {};
+                const plumbInstance = Zoom.getZoomed().plumbInstance;
                 plumbInstance.batch(function()
                 {
-                    var topLeftNode = content.reduce(function(topLeftNode, node)
+                    const topLeftNode = content.reduce(function(topLeftNode, node)
                     {
                         if (topLeftNode.position.left + topLeftNode.position.top <= node.position.left + node.position.top)
                         {
@@ -264,7 +241,7 @@
                     });
                     content.forEach(function(node)
                     {
-                        var newNode = pasteNode(node,
+                        const newNode = pasteNode(node,
                         {
                             left: anchorPosition.left + node.position.left - topLeftNode.position.left,
                             top: anchorPosition.top + node.position.top - topLeftNode.position.top
@@ -278,15 +255,13 @@
                         // Due to deleting from arrays in js leaving values undefined
                         if (!node) return true;
 
-                        var connections = node.connections;
-
-                        $.each(connections, function(index, connection)
+                        node.connections.forEach(function(connection)
                         {
-                            var target = idMappings[connection.targetId]; // Map original target to copied target
+                            const target = idMappings[connection.targetId]; // Map original target to copied target
                             if (!target) return true;
-                            var source = idMappings[connection.sourceId]; // Map original source to copied source
+                            const source = idMappings[connection.sourceId]; // Map original source to copied source
                             if (!source) return true;
-                            var newConnection = plumbInstance.connect(
+                            const newConnection = plumbInstance.connect(
                             {
                                 source: source,
                                 target: target
@@ -306,7 +281,7 @@
                 });
 
                 // Select all nodes just pasted
-                Main.selectElements(Object.keys(idMappings).map(function(oldId) { return idMappings[oldId]; }));
+                Main.selectElements(Object.values(idMappings));
             }
         }
     }
@@ -317,9 +292,9 @@
         if (!tree) return;
 
         // No DOM action just yet; this just copies the object in the nodes object
-        var node = Utils.clone(copiedNode);
+        const node = Utils.clone(copiedNode);
         // To do DOM manipulations and create the id
-        var nodeElem = Main.createAndReturnNode(node.type, null, tree.div, tree.id);
+        const nodeElem = Main.createAndReturnNode(node.type, null, tree.div, tree.id);
 
         node.id = nodeElem.attr('id');
         node.parent = tree.id;
@@ -340,51 +315,49 @@
 
     function pasteTree(toCopy, leftPos, topPos)
     {
-        var idMappings = {};
+        const idMappings = {};
 
-        var newTree = Main.createEmptyTree(null, leftPos, topPos);
+        const newTree = Main.createEmptyTree(null, leftPos, topPos);
 
         newTree.subject = i18next.t('clipboard:copy_of', { postProcess: 'sprintf', sprintf: [toCopy.subject] });
         newTree.optional = toCopy.optional;
-        var iconDiv = newTree.dragDiv.find('.icons');
+        const iconDiv = newTree.dragDiv.find('.icons');
         if (newTree.optional) iconDiv.html(Utils.sIcon('icon-tree-is-optional'));
         newTree.dragDiv.toggleClass('optional', newTree.optional);
 
         newTree.leftScroll = toCopy.leftScroll;
         newTree.topScroll = toCopy.topScroll;
 
-        var treeDiv = $("#" + newTree.id);
+        const treeDiv = $("#" + newTree.id);
         treeDiv.find(".subjectName").text(newTree.subject);
         treeDiv.find(".subjectNameInput").val(newTree.subject);
 
         newTree.plumbInstance.batch(function()
         {
-            $.each(toCopy.nodes, function(index, node)
+            toCopy.nodes.forEach(function(node)
             {
                 // Can occur due to deleting from arrays in js leaving values undefined
-                if (!node) return true; // $.each version of continue
+                if (!node) return;
 
-                var newNode = pasteNode(node, undefined, newTree);
+                const newNode = pasteNode(node, undefined, newTree);
 
-                // Needed to also copy over jsplumb connectors
+                // Needed to also copy over jsplumb connections
                 idMappings[node.id] = newNode.id;
 
                 Utils.cssPosition($("#" + newNode.id), node.position);
             });
 
-            // All nodes have been created. now copy connectors
-            $.each(toCopy.nodes, function(index, node)
+            // All nodes have been created, now copy connections
+            toCopy.nodes.forEach(function(node)
             {
                 // Can occur due to deleting from arrays in js leaving values undefined
                 if (!node) return true;
 
-                var connections = node.connections;
-
-                $.each(connections, function(index, connection)
+                node.connections.forEach(function(connection)
                 {
-                    var target = idMappings[connection.targetId]; // Map original target to copied target
-                    var source = idMappings[connection.sourceId]; // Map original source to copied source
-                    var newConnection = newTree.plumbInstance.connect(
+                    const target = idMappings[connection.targetId]; // Map original target to copied target
+                    const source = idMappings[connection.sourceId]; // Map original source to copied source
+                    const newConnection = newTree.plumbInstance.connect(
                     {
                         "source": source,
                         "target": target
@@ -405,13 +378,12 @@
     function considerPasting(type, definitions, content)
     {
         // Returns the parameter IDs that are missing
-        var processNode = function(node)
+        const processNode = function(node)
         {
             // Before performing any operations we need to update the references in the byId object
             // to the sequenced objects in the node's datastructures
-            var parameterId;
-            var fixedParameterEffects = node.parameterEffects.fixed;
-            for (parameterId in fixedParameterEffects.characterIndependent.byId)
+            const fixedParameterEffects = node.parameterEffects.fixed;
+            for (const parameterId in fixedParameterEffects.characterIndependent.byId)
             {
                 fixedParameterEffects.characterIndependent.byId[parameterId] = [];
             }
@@ -419,9 +391,9 @@
             {
                 fixedParameterEffects.characterIndependent.byId[effect.idRef].push(effect);
             });
-            for (var characterId in fixedParameterEffects.perCharacter)
+            for (const characterId in fixedParameterEffects.perCharacter)
             {
-                for (parameterId in fixedParameterEffects.perCharacter[characterId].byId)
+                for (const parameterId in fixedParameterEffects.perCharacter[characterId].byId)
                 {
                     fixedParameterEffects.perCharacter[characterId].byId[parameterId] = [];
                 }
@@ -432,19 +404,19 @@
                 });
             }
 
-            var getEqualParameter = function(parameter)
+            const getEqualParameter = function(parameter)
             {
-                var equalParameters = Parameters.container.sequence.filter(function(existingParameter)
+                const equalParameters = Parameters.container.sequence.filter(function(existingParameter)
                 {
                     return existingParameter.name === parameter.name && existingParameter.type.equals(parameter.type);
                 });
                 return equalParameters.length > 0 ? equalParameters[0] : null;
             };
 
-            var missingParameterIds = {};
+            const missingParameterIds = {};
             node.parameterEffects.userDefined = node.parameterEffects.userDefined.filter(function(parameterEffect)
             {
-                var equalParameter = getEqualParameter(definitions.parameters.userDefined.byId[parameterEffect.idRef]);
+                const equalParameter = getEqualParameter(definitions.parameters.userDefined.byId[parameterEffect.idRef]);
                 if (equalParameter)
                 {
                     parameterEffect.idRef = equalParameter.id;
@@ -458,11 +430,11 @@
 
             if (node.preconditions)
             {
-                var onConditionPreservation = function(condition, equalParameter)
+                const onConditionPreservation = function(condition, equalParameter)
                 {
                     condition.idRef = equalParameter.id;
                 };
-                var onConditionRemoval = function(condition)
+                const onConditionRemoval = function(condition)
                 {
                     missingParameterIds[condition.idRef] = true;
                 };
@@ -475,8 +447,8 @@
             return missingParameterIds;
         };
 
-        var canPaste = false;
-        var missingParameterIds = {};
+        let canPaste = false;
+        let missingParameterIds = {};
         if (!Array.isArray(content))
         {
             if (type === 'dialogue' && !Zoom.isZoomed())
@@ -518,10 +490,10 @@
 
         if (canPaste)
         {
-            var anchorPosition = Zoom.isZoomed() ? Main.mousePositionToDialoguePosition(Main.mousePosition) : undefined;
+            const anchorPosition = Zoom.isZoomed() ? Main.mousePositionToDialoguePosition(Main.mousePosition) : undefined;
             if (Object.keys(missingParameterIds).length > 0)
             {
-                var warning = $('<div>');
+                const warning = $('<div>');
                 warning.append($('<div>', { text: i18next.t('clipboard:referrer_warning') }));
                 warning.append($('<ul>').append(Object.keys(missingParameterIds).map(function(parameterId)
                 {

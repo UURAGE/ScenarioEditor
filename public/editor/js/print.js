@@ -1,7 +1,7 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported Print */
-var Print;
+let Print;
 
 (function()
 {
@@ -24,7 +24,7 @@ var Print;
     function printScenario()
     {
         // Open a window for printing
-        var printWindow = window.open(
+        const printWindow = window.open(
             '',
             '',
             'left=0,top=0,width=800,height=900,toolbar=0,status=0'
@@ -39,7 +39,7 @@ var Print;
         $('head > link').each(function()
         {
             if (this.rel !== 'stylesheet') return;
-            var newStyleSheet = printWindow.document.createElement('link');
+            const newStyleSheet = printWindow.document.createElement('link');
             newStyleSheet.rel = 'stylesheet';
             newStyleSheet.type = 'text/css';
             newStyleSheet.href = this.href;
@@ -47,16 +47,16 @@ var Print;
         });
 
         // Add a progress bar
-        var progressBar = printWindow.document.createElement('progress');
+        const progressBar = printWindow.document.createElement('progress');
         printWindow.document.body.appendChild(progressBar);
 
         // Add a result container
-        var resultContainer = printWindow.document.createElement('div');
+        const resultContainer = printWindow.document.createElement('div');
         resultContainer.style.visibility = 'hidden';
         printWindow.document.body.appendChild(resultContainer);
 
         // Create a step for each tree
-        var steps = $('#main > .treeContainer').map(function()
+        const steps = $('#main > .treeContainer').map(function()
         {
             return function()
             {
@@ -66,64 +66,49 @@ var Print;
                     Zoom.zoomIn(Main.trees[this.id]);
                     Zoom.zoomOut();
                 }
-                var treeDiv = $(this).find('.treeDiv');
-                var name = $(this).find('.subjectName').text();
+                const treeDiv = $(this).find('.treeDiv');
+                const name = $(this).find('.subjectName').text();
 
                 // Put the name at the top of the page
-                var heading = printWindow.document.createElement('h1');
+                const heading = printWindow.document.createElement('h1');
                 heading.textContent = name;
                 resultContainer.appendChild(heading);
                 // Create a container div for the tree's elements
-                var treeContainer = printWindow.document.createElement('div');
+                const treeContainer = printWindow.document.createElement('div');
                 treeContainer.classList.add('container');
-                // Loop over the contents of the tree div and copy the relevant HTML
+                // Loop over the contents of the tree div and copy the relevant elements
                 $(treeDiv).children().each(function()
                 {
-                    var outerHTML = this.outerHTML;
-                    if (outerHTML && this.className)
+                    // If it's a statement we need to loop over its contents and add only the relevant elements
+                    if (this.classList.contains('player') ||
+                        this.classList.contains('computer') ||
+                        this.classList.contains('situation'))
                     {
-                        // If it's a statement we need to loop over its contents and add only the relevant HTML
-                        if (this.classList.contains('player') ||
-                            this.classList.contains('computer') ||
-                            this.classList.contains('situation'))
+                        const copiedElement = printWindow.document.importNode(this, false);
+                        $(this).children().each(function()
                         {
-                            // Manually add the inner HTML
-                            var htmlList = [];
-                            outerHTML = outerHTML.slice(0, outerHTML.indexOf(this.innerHTML));
-                            htmlList.push(outerHTML);
-                            $(this).children().each(function()
+                            if (this.className !== 'ep' &&
+                                this.className !== 'nodestatement' &&
+                                this.className !== 'statementInput')
                             {
-                                if (this.className !== 'ep' &&
-                                    this.className !== 'nodestatement' &&
-                                    this.className !== 'statementInput')
-                                {
-                                    htmlList.push(this.outerHTML);
-                                }
-                            });
-                            htmlList.push('</div>');
-                            treeContainer.insertAdjacentHTML('beforeend', htmlList.join(''));
-                        }
-                        else if (this.className.baseVal === 'jtk-connector')
-                        {
-                            treeContainer.insertAdjacentHTML('beforeend', outerHTML);
-                        }
+                                copiedElement.appendChild(printWindow.document.importNode(this, true));
+                            }
+                        });
+                        treeContainer.appendChild(copiedElement);
                     }
-                    // The outerHTML for SVG is not supported in IE and ME, because the HTMLElement is an SVGSVGElement
-                    // http://stackoverflow.com/questions/12865025/convert-svgsvgelement-to-string
-                    else if (!outerHTML && this.className.baseVal === 'jtk-connector')
+                    else if (this.className.baseVal === 'jtk-connector')
                     {
-                        var svgHTML = new XMLSerializer().serializeToString(this);
-                        treeContainer.insertAdjacentHTML('beforeend', svgHTML);
+                        treeContainer.appendChild(printWindow.document.importNode(this, true));
                     }
                 });
                 resultContainer.appendChild(treeContainer);
 
                 // Set the height to include all bounding rectangles
-                var containerHeight = treeContainer.getBoundingClientRect().top;
-                var maxHeight = 0;
+                const containerHeight = treeContainer.getBoundingClientRect().top;
+                let maxHeight = 0;
                 Array.prototype.forEach.call(treeContainer.getElementsByTagName('div'), function(div)
                 {
-                    var newHeight = div.getBoundingClientRect().bottom - containerHeight;
+                    const newHeight = div.getBoundingClientRect().bottom - containerHeight;
                     if (newHeight > maxHeight)
                     {
                         maxHeight = newHeight;
@@ -142,14 +127,14 @@ var Print;
             printWindow.setTimeout(function() { printWindow.print(); }, 100);
         });
 
-        var doStep = function(stepIndex)
+        const doStep = function(stepIndex)
         {
             steps[stepIndex]();
             progressBar.value = (stepIndex + 1) / (steps.length - 1);
             if (stepIndex < steps.length - 1) setTimeout(doStep, 0, stepIndex + 1);
         };
 
-        var start = function()
+        const start = function()
         {
             if (printWindow.started) return;
             printWindow.started = true;

@@ -1,7 +1,7 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported Parts */
-var Parts;
+let Parts;
 
 (function()
 {
@@ -22,7 +22,7 @@ var Parts;
 
     function addButton(text, className)
     {
-        var classNames = "iconButton add";
+        let classNames = "iconButton add";
         if (className) classNames += " " + className;
         return $('<button>', { type: "button", class: classNames, title: i18next.t('common:add') })
             .append(Utils.sIcon('icon-plus'))

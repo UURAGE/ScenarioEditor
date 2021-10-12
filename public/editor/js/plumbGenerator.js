@@ -1,7 +1,7 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported PlumbGenerator */
-var PlumbGenerator;
+let PlumbGenerator;
 
 (function()
 {
@@ -19,7 +19,7 @@ var PlumbGenerator;
     // Expects an element returned from a jquery selector
     function genJsPlumbInstance(container)
     {
-        var instance = jsPlumb.getInstance();
+        const instance = jsPlumb.getInstance();
 
         instance.setContainer(container);
 
@@ -56,7 +56,7 @@ var PlumbGenerator;
         {
             if (ColorPicker.areColorsEnabled())
             {
-                var colorValue = connection.getParameter("color");
+                const colorValue = connection.getParameter("color");
                 if (colorValue in ColorPicker.key.byColor && ColorPicker.key.byColor[colorValue].entry)
                 {
                     // This uses the innerHTML property, so escape the HTML!
@@ -79,8 +79,7 @@ var PlumbGenerator;
             // There are other elements (nodes or trees) selected, so deselect those elements
             if (Main.selectedElements.length > 0) Main.selectElement(null);
 
-            var selectedConnections = Zoom.getZoomed().selectedConnections;
-            var connectionId;
+            const selectedConnections = Zoom.getZoomed().selectedConnections;
             if (c.id in selectedConnections)
             {
                 if (e.ctrlKey || e.metaKey)
@@ -89,7 +88,7 @@ var PlumbGenerator;
                 }
                 else
                 {
-                    for (connectionId in selectedConnections)
+                    for (const connectionId in selectedConnections)
                     {
                         Main.deselectConnection(instance, selectedConnections, connectionId);
                     }
@@ -99,7 +98,7 @@ var PlumbGenerator;
             {
                 if (!(e.ctrlKey || e.metaKey))
                 {
-                    for (connectionId in selectedConnections)
+                    for (const connectionId in selectedConnections)
                     {
                         Main.deselectConnection(instance, selectedConnections, connectionId);
                     }
@@ -107,8 +106,8 @@ var PlumbGenerator;
 
                 selectedConnections[c.id] = { source: c.sourceId, target: c.targetId };
 
-                var colorValue = c.getParameter("color");
-                var paintStyle = PlumbGenerator.defaultSelectedPaintStyle;
+                const colorValue = c.getParameter("color");
+                let paintStyle = PlumbGenerator.defaultSelectedPaintStyle;
                 if (colorValue && ColorPicker.areColorsEnabled())
                 {
                     paintStyle = $.extend({}, paintStyle, { stroke: colorValue, outlineStroke: colorValue });
@@ -149,9 +148,9 @@ var PlumbGenerator;
 
     function highlightLinealRelatives(connectionInfo, settings)
     {
-        var nearNodeDiv = $("#" + connectionInfo[settings.nearKeyword + "Id"]);
-        var farNodeID = connectionInfo[settings.farIDKeyword];
-        var farNodeDiv = $("#" + farNodeID);
+        const nearNodeDiv = $("#" + connectionInfo[settings.nearKeyword + "Id"]);
+        const farNodeID = connectionInfo[settings.farIDKeyword];
+        const farNodeDiv = $("#" + farNodeID);
         if (nearNodeDiv.hasClass("selected"))
         {
             farNodeDiv.addClass([settings.generalClass, settings.directClass]);

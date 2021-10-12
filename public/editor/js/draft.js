@@ -4,8 +4,7 @@
 {
     "use strict";
 
-    var itemProperties = [],
-        propEditors =
+    const propEditors =
         {
             fallback: '<input tabindex="1" type="text">',
             type: '<select tabindex="1" class="type">' +
@@ -13,7 +12,9 @@
                 '<option value="computer">' + i18next.t('draft:letter.computer') + '</option>' +
                 '<option value="situation">' + i18next.t('draft:letter.situation') + '</option>' +
                 '</select>'
-        },
+        };
+
+    let itemProperties = [],
         editing = null,
         editingCol = -1,
         maxCols = 0;
@@ -70,7 +71,7 @@
             '.draftItem td:has(span.value):not(:has(:input:focus))',
             function()
             {
-                var tr = $(this).closest('tr'),
+                const tr = $(this).closest('tr'),
                     value = $(this).find('.value'),
                     edit = $(this).find('.edit'),
                     editField = edit.children();
@@ -101,7 +102,7 @@
         // Save select values on change
         $('#draftTable').on("change", 'select', function()
         {
-            var tr = $(this).closest('tr'),
+            const tr = $(this).closest('tr'),
                 item = tr.data('item'),
                 property = $(this).parents('td').attr("class").split(" ")[0],
                 value = $(this).val(),
@@ -115,8 +116,8 @@
             // Disable / enable player-only properties
             if ($(this).hasClass("type"))
             {
-                var playerOnlySel = '.col' + playerOnlyCols.join(", .col");
-                var playerOnlyTds = tr.find(playerOnlySel);
+                const playerOnlySel = '.col' + playerOnlyCols.join(", .col");
+                const playerOnlyTds = tr.find(playerOnlySel);
                 if (value === "computer")
                 {
                     playerOnlyTds.addClass("disabled");
@@ -158,10 +159,10 @@
 
             if (editing) editing.find(':input:focus').trigger("blur");
 
-            var text = i18next.t('draft:all_items');
+            const text = i18next.t('draft:all_items');
             DragBox.startDragging(e, text, function()
             {
-                var dialoguePosition = Main.mousePositionToDialoguePosition(Main.mousePosition);
+                const dialoguePosition = Main.mousePositionToDialoguePosition(Main.mousePosition);
                 if (dialoguePosition) allItemsToNodes(dialoguePosition);
                 return true;
             });
@@ -182,7 +183,7 @@
                 return;
             }
 
-            var tr = $(this).closest('tr');
+            const tr = $(this).closest('tr');
             if (isItemEmpty(tr))
             {
                 DragBox.showError(e, i18next.t('draft:empty_item'));
@@ -191,9 +192,9 @@
 
             tr.find(':input:focus').trigger("blur");
 
-            var stmt = tr.data('item').properties.statement.trimToLength(25);
-            var index = $('#draftTable tr.draftItem').index(tr);
-            var text = i18next.t('draft:item_number', { postProcess: 'sprintf', sprintf: [parseInt(index, 10) + 1] });
+            const stmt = tr.data('item').properties.statement.trimToLength(25);
+            const index = $('#draftTable tr.draftItem').index(tr);
+            let text = i18next.t('draft:item_number', { postProcess: 'sprintf', sprintf: [parseInt(index, 10) + 1] });
             if (stmt) text += ' ' + stmt;
 
             if (DragBox.isDroppable())
@@ -206,7 +207,7 @@
             }
             DragBox.startDragging(e, text, function()
             {
-                var dialoguePosition = Main.mousePositionToDialoguePosition(Main.mousePosition);
+                const dialoguePosition = Main.mousePositionToDialoguePosition(Main.mousePosition);
                 if (dialoguePosition) itemToNode(tr, dialoguePosition);
                 return true;
             });
@@ -215,7 +216,7 @@
         // Keydown events
         $('#draftTable').keydown(function(e)
         {
-            var tr = editing,
+            const tr = editing,
                 col = editingCol;
 
             if (editing)
@@ -245,16 +246,15 @@
                     else if (!e.shiftKey)
                     {
                         // Next row
-                        var next = tr.next();
+                        let next = tr.next();
 
                         if (next.length === 0)
                         {
                             createDraftItem();
                             next = tr.next();
                         }
-                        col = 1;
 
-                        next.find('.col' + col).trigger("click");
+                        next.find('.col1').trigger("click");
                     }
                 }
                 // CTRL + DELETE
@@ -275,7 +275,7 @@
                     tr.find('.col' + col + ' :input').trigger("blur");
 
                     // + SHIFT
-                    var obj;
+                    let obj;
                     if (e.shiftKey)
                     {
                         // Previous
@@ -325,7 +325,7 @@
         obj.col -= 1;
         if (obj.col < 1)
         {
-            var prev = obj.tr.prev();
+            const prev = obj.tr.prev();
             if (prev.length === 0)
             {
                 obj.col = 1;
@@ -334,7 +334,7 @@
             obj.tr = prev;
             obj.col = maxCols;
         }
-        var field = obj.tr.find('.col' + obj.col);
+        const field = obj.tr.find('.col' + obj.col);
         // Recursion to skip cols that are disabled or contain a select element
         if (field.hasClass("disabled") || field.find("select").length > 0) obj = prevCol(obj);
 
@@ -347,7 +347,7 @@
         obj.col += 1;
         if (obj.col > maxCols)
         {
-            var next = obj.tr.next();
+            const next = obj.tr.next();
             if (next.length === 0)
             {
                 obj.tr = createDraftItem();
@@ -358,7 +358,7 @@
             }
             obj.col = 0;
         }
-        var field = obj.tr.find('.col' + obj.col);
+        const field = obj.tr.find('.col' + obj.col);
         // Recursion to skip cols that are disabled or contain a select element
         if (field.hasClass("disabled") || field.find("select").length > 0) obj = nextCol(obj);
 
@@ -379,17 +379,15 @@
     // Dynamically style the table depending on the amount of properties
     function styleTableSpacing()
     {
-        var wt = $('#content').width(),
+        const wt = $('#content').width(),
             w0 = 45 / wt * 100,
             wh = 35 / wt * 100,
             wp = w0 + wh,
-            w = (100 - wp) / (itemProperties.length - 1),
-            style = "#draftTable td,#draftTable th{width:" + w + "%}";
-        style += " #draftTable td.col0,#draftTable th.col0{width:" + w0 +
-            "%;} ";
-        style +=
-            " #draftTable td.dragHandle,#draftTable th.dragHandle{width:" +
-            wh + "%;}";
+            w = (100 - wp) / (itemProperties.length - 1);
+
+        let style = "#draftTable td,#draftTable th{width:" + w + "%}";
+        style += " #draftTable td.col0,#draftTable th.col0{width:" + w0 + "%;} ";
+        style += " #draftTable td.dragHandle,#draftTable th.dragHandle{width:" + wh + "%;}";
 
         $('#draftStyle').append(style);
     }
@@ -398,18 +396,17 @@
     // Returns the item as an object
     function createDraftItem(ignore)
     {
-        var item = {
+        const item = {
             properties: {},
             toHtml: function()
             {
-                var i, p, e,
-                    html = '<tr class="draftItem">';
+                let html = '<tr class="draftItem">';
                 html += '<td class="dragHandle noSelect">::::::</td>';
 
-                for (i = 0; i < itemProperties.length; i += 1)
+                for (let i = 0; i < itemProperties.length; i += 1)
                 {
-                    p = itemProperties[i];
-                    e = propEditors[p] === undefined ?
+                    const p = itemProperties[i];
+                    const e = propEditors[p] === undefined ?
                         propEditors.fallback : propEditors[p];
 
                     if (e.indexOf('<select') !== -1)
@@ -437,7 +434,7 @@
 
         item.properties.type = "player";
 
-        var tr = $(item.toHtml());
+        const tr = $(item.toHtml());
         tr.data('item', item);
         $('#draftTable').append(tr);
 
@@ -464,7 +461,7 @@
 
     function saveOnBlur(input)
     {
-        var tr = $(input).closest('tr'),
+        const tr = $(input).closest('tr'),
             item = tr.data('item'),
             property = input.parents('td').attr("class").split(" ")[0],
             value = input.val(),
@@ -501,7 +498,7 @@
             };
         }
 
-        var props = tr.data('item').properties,
+        const props = tr.data('item').properties,
             node = Main.addNewNode(props.type, props.statement, position);
 
         if (node === null)
@@ -522,7 +519,7 @@
             {
                 if (position)
                 {
-                    var deltaX = -75 + 150 * Math.random(), deltaY = -75 + 150 * Math.random();
+                    const deltaX = -75 + 150 * Math.random(), deltaY = -75 + 150 * Math.random();
                     itemToNode($(this),
                     {
                         left: Math.max(position.left + deltaX, 0), top: Math.max(position.top + deltaY, 0)
@@ -538,7 +535,7 @@
 
     function allIsEmpty()
     {
-        var allEmpty = true;
+        let allEmpty = true;
         $('#draftTable .draftItem').each(function()
         {
             allEmpty = allEmpty && isItemEmpty($(this));
@@ -548,8 +545,8 @@
 
     function isItemEmpty(tr)
     {
-        var props = tr.data('item').properties;
-        for (var p in props)
+        const props = tr.data('item').properties;
+        for (const p in props)
         {
             if (Object.prototype.hasOwnProperty.call(props, p) && p !== "type" && props[p] !== "")
             {

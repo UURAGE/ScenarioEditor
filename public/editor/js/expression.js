@@ -1,13 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported Expression */
-var Expression;
+let Expression;
 
 (function()
 {
     "use strict";
 
-    var kinds =
+    const kinds =
     {
         literal:
         {
@@ -30,7 +30,7 @@ var Expression;
             },
             toXML: function(expressionXML, type, literal)
             {
-                var literalXML = Utils.appendChild(expressionXML, this.name);
+                const literalXML = Utils.appendChild(expressionXML, this.name);
                 type.toXML(literalXML, literal);
             },
             isAvailableFor: function()
@@ -49,27 +49,27 @@ var Expression;
             name: 'reference',
             appendControlTo: function(container, type)
             {
-                var parameterSelect = $('<select>', { class: "parameter-idref" });
+                const parameterSelect = $('<select>', { class: "parameter-idref" });
                 Parameters.insertInto(parameterSelect, type);
                 Config.insertParametersInto(parameterSelect, type);
                 parameterSelect.on('change', function()
                 {
                     container.children('.character-idref').remove();
-                    var parameterIdRef = $(this).val();
+                    const parameterIdRef = $(this).val();
                     if (Config.isCharacterParameter(parameterIdRef))
                     {
-                        var characterIdRefSelect = $('<select>', { class: "character-idref" });
+                        const characterIdRefSelect = $('<select>', { class: "character-idref" });
                         Config.insertCharactersInto(characterIdRefSelect, parameterIdRef);
                         container.append(characterIdRefSelect);
                     }
 
                     container.children('.reference-calculate').remove();
-                    var parameter = Config.findParameterById(parameterIdRef);
+                    let parameter = Config.findParameterById(parameterIdRef);
                     if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
                     if (parameter.type.name === Types.primitives.integer.name &&
                         'maximum' in parameter.type && 'minimum' in parameter.type)
                     {
-                        var calculateSelect = $('<select>', { class: "reference-calculate" });
+                        const calculateSelect = $('<select>', { class: "reference-calculate" });
                         calculateSelect.append($('<option>', { value: 'value', text: i18next.t('common:as_value') }));
                         calculateSelect.append($('<option>', { value: 'percentage', text: i18next.t('common:as_percentage') }));
                         container.append(calculateSelect);
@@ -82,13 +82,13 @@ var Expression;
             },
             getFromDOM: function(container)
             {
-                var reference = {};
+                const reference = {};
                 reference.parameterIdRef = container.children('.parameter-idref').val();
                 if (Config.isCharacterParameter(reference.parameterIdRef))
                 {
                     reference.characterIdRef = container.children('.character-idref').val();
                 }
-                var calculateSelect = container.children('.reference-calculate');
+                const calculateSelect = container.children('.reference-calculate');
                 if (calculateSelect.length > 0)
                 {
                     reference.calculate = calculateSelect.val();
@@ -102,7 +102,7 @@ var Expression;
                 {
                     container.children('.character-idref').val(reference.characterIdRef).trigger('change');
                 }
-                var calculateSelect = container.children('.reference-calculate');
+                const calculateSelect = container.children('.reference-calculate');
                 if (reference.calculate && calculateSelect.length > 0)
                 {
                     calculateSelect.val(reference.calculate);
@@ -110,7 +110,7 @@ var Expression;
             },
             fromXML: function(referenceXML)
             {
-                var reference = {};
+                const reference = {};
                 if (referenceXML.hasAttribute("characteridref"))
                 {
                     reference.characterIdRef = referenceXML.attributes.characteridref.value;
@@ -124,7 +124,7 @@ var Expression;
             },
             toXML: function(expressionXML, type, reference)
             {
-                var referenceXML;
+                let referenceXML;
                 if (reference.characterIdRef)
                 {
                     referenceXML = Utils.appendChild(expressionXML, "characterParameterReference");
@@ -183,17 +183,17 @@ var Expression;
             name: 'sum',
             appendControlTo: function(container, type)
             {
-                var sumExpressionsContainer = $('<ul>');
-                var addButton = Parts.addButton("", "add-sum-expression");
+                const sumExpressionsContainer = $('<ul>');
+                const addButton = Parts.addButton("", "add-sum-expression");
                 addButton.on('click', function()
                 {
-                    var sumExpressionAndDeleteButtonContainer = $('<li>');
+                    const sumExpressionAndDeleteButtonContainer = $('<li>');
 
-                    var sumExpressionContainer = $('<span>', { class: "sum-expression" });
+                    const sumExpressionContainer = $('<span>', { class: "sum-expression" });
                     Expression.appendControlsTo(sumExpressionContainer, type);
                     sumExpressionAndDeleteButtonContainer.append(sumExpressionContainer);
 
-                    var deleteButton = Parts.deleteButton();
+                    const deleteButton = Parts.deleteButton();
                     deleteButton.on('click', function()
                     {
                         sumExpressionAndDeleteButtonContainer.remove();
@@ -217,9 +217,9 @@ var Expression;
             {
                 sum.forEach(function(expression)
                 {
-                    var addButton = container.children('.add-sum-expression');
+                    const addButton = container.children('.add-sum-expression');
                     addButton.trigger('click');
-                    var sumExpressionContainer = container.children('ul').children('li').last().children('.sum-expression');
+                    const sumExpressionContainer = container.children('ul').children('li').last().children('.sum-expression');
                     Expression.setInDOM(sumExpressionContainer, type, expression);
                 });
             },
@@ -232,7 +232,7 @@ var Expression;
             },
             toXML: function(expressionXML, type, sum)
             {
-                var sumXML = Utils.appendChild(expressionXML, this.name);
+                const sumXML = Utils.appendChild(expressionXML, this.name);
                 sum.forEach(function(expression)
                 {
                     Expression.toXML(sumXML, type, expression);
@@ -276,16 +276,16 @@ var Expression;
             name: 'scale',
             appendControlTo: function(container, type)
             {
-                var expressionContainer = $('<span>', { class: "scale-expression" });
+                const expressionContainer = $('<span>', { class: "scale-expression" });
                 Expression.appendControlsTo(expressionContainer, type);
                 container.append(expressionContainer);
 
-                var scaleOperatorSelect = $('<select>', { class: "scale-operator" });
+                const scaleOperatorSelect = $('<select>', { class: "scale-operator" });
                 scaleOperatorSelect.append($('<option>', { value: 'scalar', text: '*' }));
                 scaleOperatorSelect.append($('<option>', { value: 'divisor', text: '/' }));
                 container.append(scaleOperatorSelect);
 
-                var scaleValueContainer = $('<span>', { class: "scale-value" });
+                const scaleValueContainer = $('<span>', { class: "scale-value" });
                 type.appendControlTo(scaleValueContainer);
                 container.append(scaleValueContainer);
             },
@@ -305,8 +305,8 @@ var Expression;
             },
             fromXML: function(scaleXML, type)
             {
-                var scale;
-                var expression = Expression.fromXML($(scaleXML).children()[0], type);
+                let scale;
+                let expression = Expression.fromXML($(scaleXML).children()[0], type);
                 if (scaleXML.hasAttribute('divisor'))
                 {
                     scale = {
@@ -316,7 +316,7 @@ var Expression;
                     };
                 }
 
-                var scalar = parseInt(scaleXML.attributes.scalar.value);
+                const scalar = parseInt(scaleXML.attributes.scalar.value);
                 if (!scale || scalar !== 1)
                 {
                     if (scale)
@@ -337,7 +337,7 @@ var Expression;
             },
             toXML: function(expressionXML, type, scale)
             {
-                var scaleXML = Utils.appendChild(expressionXML, this.name);
+                const scaleXML = Utils.appendChild(expressionXML, this.name);
                 if (scale.operator !== 'scalar')
                 {
                     scaleXML.setAttribute('scalar', 1);
@@ -375,18 +375,18 @@ var Expression;
             name: 'choose',
             appendControlTo: function(container, type)
             {
-                var whensContainer = $('<ul>');
-                var addButton = Parts.addButton("", "add-when");
+                const whensContainer = $('<ul>');
+                const addButton = Parts.addButton("", "add-when");
                 addButton.on('click', function()
                 {
-                    var whenAndDeleteButtonContainer = $('<li>');
+                    const whenAndDeleteButtonContainer = $('<li>');
 
-                    var whenContainer = $('<span>', { class: "when", text: i18next.t('common:when') + ' ' });
+                    const whenContainer = $('<span>', { class: "when", text: i18next.t('common:when') + ' ' });
                     Condition.appendControlsTo(whenContainer, true);
                     Expression.appendControlsTo(whenContainer, type);
                     whenAndDeleteButtonContainer.append(whenContainer);
 
-                    var deleteButton = Parts.deleteButton();
+                    const deleteButton = Parts.deleteButton();
                     deleteButton.on('click', function()
                     {
                         whenAndDeleteButtonContainer.remove();
@@ -399,13 +399,13 @@ var Expression;
 
                 container.append(addButton);
 
-                var otherwiseContainer = $('<div>', { class: "otherwise", text: i18next.t('common:otherwise') + ' ' });
+                const otherwiseContainer = $('<div>', { class: "otherwise", text: i18next.t('common:otherwise') + ' ' });
                 Expression.appendControlsTo(otherwiseContainer, type);
                 container.append(otherwiseContainer);
             },
             getFromDOM: function(container, type)
             {
-                var choose =
+                const choose =
                 {
                     whens: [],
                     otherwise: Expression.getFromDOM(container.children('.otherwise'), type)
@@ -413,8 +413,8 @@ var Expression;
 
                 container.children('ul').children('li').each(function()
                 {
-                    var whenContainer = $(this).children('.when');
-                    var condition = Condition.getFromDOM(whenContainer);
+                    const whenContainer = $(this).children('.when');
+                    const condition = Condition.getFromDOM(whenContainer);
                     if (condition)
                     {
                         choose.whens.push(
@@ -431,9 +431,9 @@ var Expression;
             {
                 choose.whens.forEach(function(when)
                 {
-                    var addButton = container.children('.add-when');
+                    const addButton = container.children('.add-when');
                     addButton.trigger('click');
-                    var whenContainer = container.children('ul').children('li').last().children('.when');
+                    const whenContainer = container.children('ul').children('li').last().children('.when');
                     Condition.setInDOM(whenContainer, when.condition, true);
                     Expression.setInDOM(whenContainer, type, when.expression);
                 });
@@ -454,20 +454,20 @@ var Expression;
             },
             toXML: function(expressionXML, type, choose)
             {
-                var chooseXML = Utils.appendChild(expressionXML, this.name);
+                const chooseXML = Utils.appendChild(expressionXML, this.name);
 
                 choose.whens.forEach(function(when)
                 {
-                    var whenXML = Utils.appendChild(chooseXML, 'when');
+                    const whenXML = Utils.appendChild(chooseXML, 'when');
 
-                    var conditionXML = Utils.appendChild(whenXML, 'condition');
+                    const conditionXML = Utils.appendChild(whenXML, 'condition');
                     Condition.toXML(conditionXML, when.condition);
 
-                    var expressionXML = Utils.appendChild(whenXML, 'expression');
+                    const expressionXML = Utils.appendChild(whenXML, 'expression');
                     Expression.toXML(expressionXML, type, when.expression);
                 });
 
-                var otherwiseXML = Utils.appendChild(chooseXML, 'otherwise');
+                const otherwiseXML = Utils.appendChild(chooseXML, 'otherwise');
                 Expression.toXML(otherwiseXML, type, choose.otherwise);
             },
             isAvailableFor: function()
@@ -493,10 +493,10 @@ var Expression;
             },
             handleParameterRemoval: function(parameterId, type, expression)
             {
-                var doesNotReferToParameterId = function(condition) { return condition.idRef !== parameterId; };
-                for (var i = 0; i < expression.choose.whens.length; i++)
+                const doesNotReferToParameterId = function(condition) { return condition.idRef !== parameterId; };
+                for (let i = 0; i < expression.choose.whens.length; i++)
                 {
-                    var when = expression.choose.whens[i];
+                    const when = expression.choose.whens[i];
                     when.condition = Condition.filter(doesNotReferToParameterId, when.condition);
                     when.expression.kind.handleParameterRemoval(parameterId, type, when.expression);
                     if (!when.condition)
@@ -513,22 +513,22 @@ var Expression;
             name: 'score',
             appendControlTo: function(container, type)
             {
-                var scoreItemsContainer = $('<ul>');
-                var addButton = Parts.addButton("", "add-score-item");
+                const scoreItemsContainer = $('<ul>');
+                const addButton = Parts.addButton("", "add-score-item");
                 addButton.on('click', function()
                 {
-                    var scoreItemAndDeleteButtonContainer = $('<li>');
+                    const scoreItemAndDeleteButtonContainer = $('<li>');
 
-                    var referenceContainer = $('<span>', { class: "score-reference" });
+                    const referenceContainer = $('<span>', { class: "score-reference" });
                     kinds.reference.appendControlTo(referenceContainer, type);
                     scoreItemAndDeleteButtonContainer.append(referenceContainer);
 
-                    var weightContainer = $('<span>', { class: "score-weight" });
+                    const weightContainer = $('<span>', { class: "score-weight" });
                     Types.primitives.integer.appendControlTo(weightContainer);
                     Types.primitives.integer.setInDOM(weightContainer, 1);
                     scoreItemAndDeleteButtonContainer.append(weightContainer);
 
-                    var deleteButton = Parts.deleteButton();
+                    const deleteButton = Parts.deleteButton();
                     deleteButton.on('click', function()
                     {
                         scoreItemAndDeleteButtonContainer.remove();
@@ -555,9 +555,9 @@ var Expression;
             {
                 score.forEach(function(scoreItem)
                 {
-                    var addButton = container.children('.add-score-item');
+                    const addButton = container.children('.add-score-item');
                     addButton.trigger('click');
-                    var scoreItemContainer = container.children('ul').children('li').last();
+                    const scoreItemContainer = container.children('ul').children('li').last();
                     kinds.reference.setInDOM(scoreItemContainer.children('.score-reference'), type, scoreItem.reference);
                     Types.primitives.integer.setInDOM(scoreItemContainer.children('.score-weight'), scoreItem.weight);
                 });
@@ -567,8 +567,8 @@ var Expression;
                 if (!(expression.kind.name === kinds.scale.name &&
                     expression.scale.operator === 'divisor' &&
                     expression.scale.expression.kind.name === kinds.sum.name)) return null;
-                var score = [];
-                var divisor = 0;
+                const score = [];
+                let divisor = 0;
                 expression.scale.expression.sum.forEach(function(itemExpression)
                 {
                     if (!(divisor !== null &&
@@ -598,8 +598,8 @@ var Expression;
             },
             toXML: function(expressionXML, type, score)
             {
-                var itemExpressions = [];
-                var divisor = 0;
+                const itemExpressions = [];
+                let divisor = 0;
                 score.forEach(function(scoreItem)
                 {
                     itemExpressions.push(
@@ -618,7 +618,7 @@ var Expression;
                     });
                     divisor += scoreItem.weight;
                 });
-                var sumExpression =
+                const sumExpression =
                 {
                     kind: kinds.scale,
                     scale:
@@ -688,8 +688,8 @@ var Expression;
 
     function appendControlsTo(container, type)
     {
-        var expressionSelect = $('<select>', { class: "expression-kind" });
-        for (var kindName in kinds)
+        const expressionSelect = $('<select>', { class: "expression-kind" });
+        for (const kindName in kinds)
         {
             if (kinds[kindName].isAvailableFor(type))
             {
@@ -699,7 +699,7 @@ var Expression;
         expressionSelect.on('change', function()
         {
             container.children('.expression').remove();
-            var expressionContainer = $('<span>', { class: "expression" });
+            const expressionContainer = $('<span>', { class: "expression" });
             kinds[$(this).val()].appendControlTo(expressionContainer, type);
             container.append(expressionContainer);
         });
@@ -710,22 +710,22 @@ var Expression;
     function setInDOM(container, type, expression)
     {
         container.children('.expression-kind').val(expression.kind.name).trigger('change');
-        var expressionContainer = container.children('.expression');
+        const expressionContainer = container.children('.expression');
         expression.kind.setInDOM(expressionContainer, type, expression[expression.kind.name]);
     }
 
     function getFromDOM(container, type)
     {
-        var expression = {};
+        const expression = {};
         expression.kind = kinds[container.children('.expression-kind').val()];
-        var expressionContainer = container.children('.expression');
+        const expressionContainer = container.children('.expression');
         expression[expression.kind.name] = expression.kind.getFromDOM(expressionContainer, type);
         return expression;
     }
 
     function fromXML(expressionXML, type)
     {
-        var kind;
+        let kind;
         if (!(expressionXML.nodeName in kinds))
         {
             kind = kinds.reference;
@@ -734,13 +734,13 @@ var Expression;
         {
             kind = kinds[expressionXML.nodeName];
         }
-        var expression = { kind: kind };
+        let expression = { kind: kind };
         expression[kind.name] = kind.fromXML(expressionXML, type);
 
-        for (var kindName in kinds)
+        for (const kindName in kinds)
         {
             if (!kinds[kindName].adopt) continue;
-            var newExpression = kinds[kindName].adopt(expression);
+            const newExpression = kinds[kindName].adopt(expression);
             if (newExpression !== null)
             {
                 expression = newExpression;
@@ -760,7 +760,7 @@ var Expression;
     {
         if (previousType)
         {
-            var expression = getFromDOM(container, previousType);
+            const expression = getFromDOM(container, previousType);
             expression.kind.handleTypeChange(previousType, newType, expression);
             container.empty();
             appendControlsTo(container, newType);

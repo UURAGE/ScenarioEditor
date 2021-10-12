@@ -1,7 +1,7 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported Types */
-var Types;
+let Types;
 
 (function()
 {
@@ -127,12 +127,12 @@ var Types;
             },
             loadType: function(typeXML, _, kind, scopes)
             {
-                var type = this;
+                let type = this;
 
-                var rowsAttr = typeXML.attr('rows');
+                const rowsAttr = typeXML.attr('rows');
                 if (rowsAttr)
                 {
-                    var rows = Utils.parseDecimalIntWithDefault(rowsAttr);
+                    const rows = Utils.parseDecimalIntWithDefault(rowsAttr);
                     if (rows > 1)
                     {
                         type = $.extend({}, type, { controlName: 'textarea' });
@@ -141,16 +141,16 @@ var Types;
                     type = $.extend({}, type, { rows: rows });
                 }
 
-                var maxLengthAttr = typeXML.attr('maxLength');
+                const maxLengthAttr = typeXML.attr('maxLength');
                 if (maxLengthAttr)
                 {
                     type = $.extend({}, type, { maxLength: Utils.parseDecimalIntWithDefault(maxLengthAttr) });
                 }
 
-                var autoComplete = Utils.parseBool(typeXML.attr('autoComplete'));
+                const autoComplete = Utils.parseBool(typeXML.attr('autoComplete'));
                 if (autoComplete)
                 {
-                    var autoCompleteControl = function(containerEl, autoCompleteList)
+                    const autoCompleteControl = function(containerEl, autoCompleteList)
                     {
                         containerEl.children(type.controlName).autocomplete({ autoFocus: true, source: autoCompleteList });
                     };
@@ -160,11 +160,11 @@ var Types;
 
                 if ($(typeXML)[0].hasAttribute('markdown'))
                 {
-                    var markdown = typeXML.attr('markdown');
+                    const markdown = typeXML.attr('markdown');
                     type = $.extend({}, type, { markdown: markdown ? markdown : "gfm" });
                 }
 
-                var defaultEl = typeXML.children('default');
+                const defaultEl = typeXML.children('default');
                 if (defaultEl.length > 0)
                 {
                     type = $.extend({}, type, { defaultValue: defaultEl[0].textContent });
@@ -179,7 +179,7 @@ var Types;
             },
             loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
-                var type = $.extend({}, this);
+                const type = $.extend({}, this);
                 if (defaultValueContainer)
                 {
                     type.defaultValue = type.getFromDOM(defaultValueContainer);
@@ -197,7 +197,7 @@ var Types;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                var control;
+                let control;
                 if (this.controlType)
                 {
                     control = $('<' + this.controlName + '>', { id: htmlId, type: this.controlType, maxlength: this.maxLength, rows: this.rows });
@@ -248,8 +248,8 @@ var Types;
             },
             appendTypeControlsTo: function(typeEl)
             {
-                var minContainer = $('<span>', { class: "min-container" });
-                var maxContainer = $('<span>', { class: "max-container" });
+                const minContainer = $('<span>', { class: "min-container" });
+                const maxContainer = $('<span>', { class: "max-container" });
 
                 if (!minContainer.children(Types.primitives.integer.controlName).length)
                 {
@@ -268,21 +268,21 @@ var Types;
             },
             loadType: function(typeXML, _, kind, scopes)
             {
-                var type = this;
+                let type = this;
 
-                var minimumAttr = typeXML.attr('minimum');
+                const minimumAttr = typeXML.attr('minimum');
                 if (minimumAttr)
                 {
                     type = $.extend({}, type, { minimum: parseInt(minimumAttr) });
                 }
 
-                var maximumAttr = typeXML.attr('maximum');
+                const maximumAttr = typeXML.attr('maximum');
                 if (maximumAttr)
                 {
                     type = $.extend({}, type, { maximum: parseInt(maximumAttr) });
                 }
 
-                var defaultEl = typeXML.children('default');
+                const defaultEl = typeXML.children('default');
                 if (defaultEl.length > 0)
                 {
                     type = $.extend({}, type, { defaultValue: parseInt(defaultEl[0].textContent, 10) });
@@ -297,13 +297,13 @@ var Types;
             },
             loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
-                var type = $.extend({}, this);
-                var minimum = parseInt(typeEl.find(".min-container").children(type.controlName).first().val());
+                const type = $.extend({}, this);
+                const minimum = parseInt(typeEl.find(".min-container").children(type.controlName).first().val());
                 if (!isNaN(minimum))
                 {
                     type.minimum = minimum;
                 }
-                var maximum = parseInt(typeEl.find(".max-container").children(type.controlName).first().val());
+                const maximum = parseInt(typeEl.find(".max-container").children(type.controlName).first().val());
                 if (!isNaN(maximum))
                 {
                     type.maximum = maximum;
@@ -327,7 +327,7 @@ var Types;
             },
             insertType: function(typeXML)
             {
-                var integerXML = Utils.appendChild(typeXML, this.name);
+                const integerXML = Utils.appendChild(typeXML, this.name);
                 if ('minimum' in this) integerXML.setAttribute('minimum', this.minimum);
                 if ('maximum' in this) integerXML.setAttribute('maximum', this.maximum);
                 return integerXML;
@@ -339,7 +339,7 @@ var Types;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                var control = $('<' + this.controlName + '>', { id: htmlId, type: this.controlType, value: 0 });
+                const control = $('<' + this.controlName + '>', { id: htmlId, type: this.controlType, value: 0 });
                 if (this.labelControlOrder !== Types.labelControlOrders.twoLineLabelContainer)
                 {
                     control.css('width', 60);
@@ -418,7 +418,7 @@ var Types;
             },
             loadType: function(typeXML, id, kind)
             {
-                var type = this;
+                let type = this;
 
                 if (kind !== 'property')
                 {
@@ -426,7 +426,7 @@ var Types;
                     delete type.controlType;
                 }
 
-                var defaultEl = typeXML.children('default');
+                const defaultEl = typeXML.children('default');
                 if (defaultEl.length > 0)
                 {
                     type = $.extend({}, type, { defaultValue: Utils.parseBool(defaultEl[0].textContent) });
@@ -436,7 +436,7 @@ var Types;
             },
             loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
-                var type = $.extend({}, this, { controlName: 'select' });
+                const type = $.extend({}, this, { controlName: 'select' });
                 delete type.controlType;
 
                 if (defaultValueContainer)
@@ -463,7 +463,7 @@ var Types;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                var control;
+                let control;
                 if (this.controlType)
                 {
                     control = $('<' + this.controlName + '>', { id: htmlId, type: this.controlType });
@@ -519,7 +519,7 @@ var Types;
             unaryOperators: [],
             equals: function(otherType)
             {
-                var equal = true;
+                let equal = true;
                 if (this.name === otherType.name && this.options.sequence.length === otherType.options.sequence.length)
                 {
                     if (this.options.byValue && otherType.options.byValue)
@@ -550,28 +550,28 @@ var Types;
             appendTypeControlsTo: function(typeEl)
             {
                 typeEl.append($('<div>', { text: i18next.t('types:primitives.enumeration.definition.values') }));
-                var valuesContainer = $('<ul>', { class: "enumeration-values-container" }).appendTo(typeEl);
-                var valueInput = $('<input>', { autofocus: true, type: 'text' });
-                var appendValue = function(value)
+                const valuesContainer = $('<ul>', { class: "enumeration-values-container" }).appendTo(typeEl);
+                const valueInput = $('<input>', { autofocus: true, type: 'text' });
+                const appendValue = function(value)
                 {
                     // The value of an enumeration can not be the empty string
                     if (value)
                     {
-                        var deleteButton = Parts.deleteButton();
+                        const deleteButton = Parts.deleteButton();
                         deleteButton.on('click', function()
                         {
                             $(this).parent().remove();
                             valueInput.focus();
                         });
 
-                        var valueItem = $('<li>').append($('<span>', { text: value }));
+                        const valueItem = $('<li>').append($('<span>', { text: value }));
                         valueItem.append(deleteButton);
                         valueItem.insertBefore(valuesContainer.children().last());
 
                         valueInput.val("").focus();
                     }
                 };
-                var valueAddButton = Parts.addButton("", "add-enumeration-value");
+                const valueAddButton = Parts.addButton("", "add-enumeration-value");
                 valueAddButton.on('click', function()
                 {
                     appendValue(valueInput.val());
@@ -587,11 +587,11 @@ var Types;
             },
             loadType: function(typeXML, id, kind, scopes)
             {
-                var options = { sequence: [] };
-                var addOption = function(index, optionXML)
+                const options = { sequence: [] };
+                const addOption = function(index, optionXML)
                 {
-                    var value = $(optionXML).attr('value');
-                    var text = optionXML.textContent;
+                    const value = $(optionXML).attr('value');
+                    let text = optionXML.textContent;
                     if (!text && id)
                     {
                         text = i18next.t('configXML:' + ['type', this.name, id, value].join('.'));
@@ -602,7 +602,7 @@ var Types;
                         options.byValue = {};
                     }
 
-                    var option = { text: text };
+                    const option = { text: text };
                     if (value)
                     {
                         option.value = value;
@@ -612,11 +612,11 @@ var Types;
                 };
                 typeXML.children('option').each(addOption.bind(this));
 
-                var defaultValue = options.byValue ? options.sequence[0].value : options.sequence[0].text;
-                var defaultEl = typeXML.children('default');
+                let defaultValue = options.byValue ? options.sequence[0].value : options.sequence[0].text;
+                const defaultEl = typeXML.children('default');
                 if (defaultEl.length > 0)
                 {
-                    var value = $(defaultEl).attr('value');
+                    const value = $(defaultEl).attr('value');
                     if (defaultEl[0].textContent)
                     {
                         options.sequence.forEach(function(option)
@@ -633,7 +633,7 @@ var Types;
                     }
                 }
 
-                var labelControlOrder = this.labelControlOrder;
+                let labelControlOrder = this.labelControlOrder;
                 if (kind === 'property' && scopes.statementScope === 'independent')
                 {
                     labelControlOrder = Types.labelControlOrders.twoLineLabelContainer;
@@ -643,13 +643,13 @@ var Types;
             },
             loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
-                var options = { sequence: [] };
+                const options = { sequence: [] };
                 typeEl.find(".enumeration-values-container").children().not(":last-child").each(function(index, valueItem)
                 {
-                    var option = { text: $(valueItem).children('span').text() };
+                    const option = { text: $(valueItem).children('span').text() };
                     options.sequence.push(option);
                 });
-                var defaultValue;
+                let defaultValue;
                 if (defaultValueContainer)
                 {
                     defaultValue = this.getFromDOM(defaultValueContainer);
@@ -662,7 +662,7 @@ var Types;
             },
             castFrom: function(type, value)
             {
-                var castValue = this.options.sequence[0].text;
+                let castValue = this.options.sequence[0].text;
                 this.options.sequence.forEach(function(option)
                 {
                     if (option.text === String(value)) castValue = option.text;
@@ -671,10 +671,10 @@ var Types;
             },
             insertType: function(typeXML, detailed)
             {
-                var enumerationXML = Utils.appendChild(typeXML, this.name);
-                var appendOptionChild = function(option)
+                const enumerationXML = Utils.appendChild(typeXML, this.name);
+                const appendOptionChild = function(option)
                 {
-                    var optionXML = Utils.appendChild(enumerationXML, 'option');
+                    const optionXML = Utils.appendChild(enumerationXML, 'option');
                     if (this.options.byValue && detailed)
                     {
                         optionXML.setAttribute('value', option.value);
@@ -690,8 +690,8 @@ var Types;
             },
             insertTypeIntoDOM: function(typeEl)
             {
-                var valuesContainer = typeEl.find(".enumeration-values-container");
-                var addValueButton = valuesContainer.find(".add-enumeration-value");
+                const valuesContainer = typeEl.find(".enumeration-values-container");
+                const addValueButton = valuesContainer.find(".add-enumeration-value");
                 this.options.sequence.forEach(function(option)
                 {
                     valuesContainer.children().last().children('input').val(option.text);
@@ -700,7 +700,7 @@ var Types;
             },
             appendControlTo: function(containerEl, htmlId)
             {
-                var control = $('<' + this.controlName + '>', { id: htmlId });
+                const control = $('<' + this.controlName + '>', { id: htmlId });
                 this.options.sequence.forEach(function(option)
                 {
                     control.append($('<option>', option));
@@ -725,20 +725,20 @@ var Types;
 
     function appendControlsTo(containerEl, titleClassSelector, htmlClass, handleChange)
     {
-        var typeSelect = $('<select>', { class: htmlClass });
-        for (var typeName in Types.primitives)
+        const typeSelect = $('<select>', { class: htmlClass });
+        for (const typeName in Types.primitives)
         {
             typeSelect.append($('<option>', { value: typeName, text: i18next.t('types:primitives.' + typeName + '.translation') }));
         }
 
-        var typeDefinitionContainer = $('<div>');
-        var previousTypeName;
+        const typeDefinitionContainer = $('<div>');
+        let previousTypeName;
         typeSelect.on('change', function(e)
         {
-            var newTypeName = $(this).val();
-            var userTypeChange = e.originalEvent;
+            const newTypeName = $(this).val();
+            const userTypeChange = e.originalEvent;
 
-            var definitionButton = containerEl.find(".define-type");
+            let definitionButton = containerEl.find(".define-type");
             if (Types.primitives[newTypeName].appendTypeControlsTo)
             {
                 if (previousTypeName !== newTypeName)
@@ -751,7 +751,7 @@ var Types;
                     definitionButton.html(Utils.sIcon(newTypeName === Types.primitives.enumeration.name ? "icon-list" : "icon-cog"));
                     definitionButton.on('click', function()
                     {
-                        var title = containerEl.parent().find(titleClassSelector).val();
+                        const title = containerEl.parent().find(titleClassSelector).val();
                         dialog(title, typeDefinitionContainer, typeSelect, previousTypeName, newTypeName, handleChange, false);
                     });
                     containerEl.append(definitionButton);
@@ -759,11 +759,11 @@ var Types;
                     Types.primitives[newTypeName].appendTypeControlsTo(typeDefinitionContainer);
                 }
 
-                var type = Types.primitives[newTypeName].loadTypeFromDOM(typeDefinitionContainer);
+                const type = Types.primitives[newTypeName].loadTypeFromDOM(typeDefinitionContainer);
                 if (userTypeChange && newTypeName === Types.primitives.enumeration.name)
                 {
                     typeDefinitionContainer.show();
-                    var title = containerEl.parent().find(titleClassSelector).val();
+                    const title = containerEl.parent().find(titleClassSelector).val();
                     dialog(title, typeDefinitionContainer, typeSelect, previousTypeName, newTypeName, handleChange, true);
                 }
                 else if (newTypeName !== Types.primitives.enumeration.name || type.options.sequence.length > 0)
@@ -791,7 +791,7 @@ var Types;
 
     function insertIntoDOM(containerEl, htmlClass, type)
     {
-        var typeSelect = containerEl.find("." + htmlClass);
+        const typeSelect = containerEl.find("." + htmlClass);
         typeSelect.val(type.name).trigger('change');
         if (type.insertTypeIntoDOM)
         {
@@ -802,14 +802,14 @@ var Types;
 
     function dialog(title, containerEl, typeSelect, previousTypeName, newTypeName, handleChange, isFirstTimeForEnumeration)
     {
-        var currentType = Types.primitives[newTypeName].loadTypeFromDOM(containerEl);
-        var hasValues;
+        const currentType = Types.primitives[newTypeName].loadTypeFromDOM(containerEl);
+        let hasValues;
         if (newTypeName === Types.primitives.enumeration.name)
         {
             hasValues = currentType.options.sequence.length > 0;
         }
 
-        var confirmed = false;
+        let confirmed = false;
         containerEl.dialog(
         {
             title: title || i18next.t('types:primitives.' + newTypeName + '.definition.title'),
@@ -824,7 +824,7 @@ var Types;
                     {
                         if (newTypeName === Types.primitives.enumeration.name)
                         {
-                            var newType = Types.primitives[newTypeName].loadTypeFromDOM(containerEl);
+                            const newType = Types.primitives[newTypeName].loadTypeFromDOM(containerEl);
                             hasValues = newType.options.sequence.length > 0;
                         }
 

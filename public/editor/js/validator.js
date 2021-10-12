@@ -1,7 +1,7 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported Validator */
-var Validator;
+let Validator;
 
 (function()
 {
@@ -21,14 +21,14 @@ var Validator;
         // Event handlers.
         $("#validation").on('click', function()
         {
-            var errors = validate();
+            const errors = validate();
             show(errors);
         });
     });
 
     function validate()
     {
-        var validationReport = []; // An array of objects containing the errors found
+        const validationReport = []; // An array of objects containing the errors found
 
         // First save the latest changes.
         Main.applyChanges(Main.selectedElement);
@@ -61,14 +61,14 @@ var Validator;
             return validationReport;
         }
 
-        var specialProperties = ['allowInterleaveNode', 'allowDialogueEndNode'];
+        const specialProperties = ['allowInterleaveNode', 'allowDialogueEndNode'];
 
-        var pushIntoSubArray = function(container, name, element)
+        const pushIntoSubArray = function(container, name, element)
         {
             if (!container[name]) container[name] = [];
             container[name].push(element);
         };
-        var createJumpToTrees = function(trees)
+        const createJumpToTrees = function(trees)
         {
             return function()
             {
@@ -76,13 +76,13 @@ var Validator;
                 Main.selectElements(trees.map(function(tree) { return tree.id; }));
             };
         };
-        var createJumpToNodes = function(tree, nodeIDs)
+        const createJumpToNodes = function(tree, nodeIDs)
         {
             return function()
             {
                 Zoom.zoomIn(tree);
                 Main.selectElements(nodeIDs);
-                var firstNodeContainer = $("#" + nodeIDs[0]);
+                const firstNodeContainer = $("#" + nodeIDs[0]);
                 if (firstNodeContainer.length > 0)
                 {
                     firstNodeContainer[0].scrollIntoView(false);
@@ -90,35 +90,35 @@ var Validator;
             };
         };
 
-        var interleaves = Main.getInterleaves();
-        var hasSingleTree = interleaves.length === 1 && interleaves[0].length === 1;
+        const interleaves = Main.getInterleaves();
+        const hasSingleTree = interleaves.length === 1 && interleaves[0].length === 1;
 
-        var previousInterleave = null;
-        var previousInterleaveStartNodeType = null;
-        var previousInterleaveHasOptionalTree = false;
-        var previousInterleaveSpecialNodesByChildTypeByProperty = null;
+        let previousInterleave = null;
+        let previousInterleaveStartNodeType = null;
+        let previousInterleaveHasOptionalTree = false;
+        let previousInterleaveSpecialNodesByChildTypeByProperty = null;
 
         interleaves.forEach(function(interleave)
         {
-            var interleaveHasOptionalTree = false;
-            var interleaveSpecialNodesByChildTypeByProperty = {};
+            let interleaveHasOptionalTree = false;
+            const interleaveSpecialNodesByChildTypeByProperty = {};
             specialProperties.forEach(function(property) { interleaveSpecialNodesByChildTypeByProperty[property] = {}; });
-            var interleaveTreesByStartNodeType = {};
+            const interleaveTreesByStartNodeType = {};
             interleave.forEach(function(tree)
             {
                 if (tree.optional) interleaveHasOptionalTree = true;
 
-                var treeHasANode = false;
-                var treeHasEndNodeOrAllowDialogueEndNode = false;
-                var treeStartNodesByType = {};
+                let treeHasANode = false;
+                let treeHasEndNodeOrAllowDialogueEndNode = false;
+                const treeStartNodesByType = {};
                 tree.nodes.forEach(function(nodeID)
                 {
                     if (!nodeID) return true;
 
                     treeHasANode = true;
-                    var node = Main.nodes[nodeID];
-                    var incomingConnections = tree.plumbInstance.getConnections({ target: nodeID });
-                    var outgoingConnections = tree.plumbInstance.getConnections({ source: nodeID });
+                    const node = Main.nodes[nodeID];
+                    const incomingConnections = tree.plumbInstance.getConnections({ target: nodeID });
+                    const outgoingConnections = tree.plumbInstance.getConnections({ source: nodeID });
 
                     if (incomingConnections.length === 0) pushIntoSubArray(treeStartNodesByType, node.type, node);
 
@@ -142,7 +142,7 @@ var Validator;
                         }
 
                         // Type equality of siblings is enforced when attempting to create a connection
-                        var childType = Main.nodes[outgoingConnections[0].targetId].type;
+                        const childType = Main.nodes[outgoingConnections[0].targetId].type;
                         specialProperties.forEach(function(property)
                         {
                             if (node[property])
@@ -201,7 +201,7 @@ var Validator;
                     return;
                 }
 
-                var treeStartNodeTypes = Object.keys(treeStartNodesByType);
+                const treeStartNodeTypes = Object.keys(treeStartNodesByType);
                 if (treeStartNodeTypes.length > 1)
                 {
                     validationReport.push(
@@ -252,8 +252,8 @@ var Validator;
                 }
             });
 
-            var interleaveStartNodeType = null;
-            var interleaveStartNodeTypes = Object.keys(interleaveTreesByStartNodeType);
+            let interleaveStartNodeType = null;
+            const interleaveStartNodeTypes = Object.keys(interleaveTreesByStartNodeType);
 
             if (interleaveStartNodeTypes.length > 1)
             {
@@ -310,13 +310,13 @@ var Validator;
                 {
                     specialProperties.map(function(property)
                     {
-                        var specialNodesByChildType = interleaveSpecialNodesByChildTypeByProperty[property];
-                        for (var specialNodeChildType in specialNodesByChildType)
+                        const specialNodesByChildType = interleaveSpecialNodesByChildTypeByProperty[property];
+                        for (const specialNodeChildType in specialNodesByChildType)
                         {
                             if (specialNodeChildType === interleaveStartNodeType) continue;
                             specialNodesByChildType[specialNodeChildType].forEach(function(badNode)
                             {
-                                var badTree = Main.trees[badNode.parent];
+                                const badTree = Main.trees[badNode.parent];
                                 validationReport.push(
                                 {
                                     message: i18next.t('validator:special_node_layer_start_type_error',
@@ -343,14 +343,14 @@ var Validator;
 
                 if (previousInterleaveSpecialNodesByChildTypeByProperty !== null)
                 {
-                    var allowDialogueEndNodesByChildType =
+                    const allowDialogueEndNodesByChildType =
                         previousInterleaveSpecialNodesByChildTypeByProperty.allowDialogueEndNode;
-                    for (var allowDialogueEndNodeChildType in allowDialogueEndNodesByChildType)
+                    for (const allowDialogueEndNodeChildType in allowDialogueEndNodesByChildType)
                     {
                         if (allowDialogueEndNodeChildType === interleaveStartNodeType) continue;
                         allowDialogueEndNodesByChildType[allowDialogueEndNodeChildType].forEach(function(badNode)
                         {
-                            var badTree = Main.trees[badNode.parent];
+                            const badTree = Main.trees[badNode.parent];
                             validationReport.push(
                             {
                                 message: i18next.t('validator:special_node_previous_layer_start_type_error',
@@ -390,8 +390,8 @@ var Validator;
     {
         TabDock.close();
 
-        var hasErrors = false;
-        var hasWarningsOrInfo = false;
+        let hasErrors = false;
+        let hasWarningsOrInfo = false;
         errors.forEach(function(value)
         {
             hasErrors = hasErrors || value.level === 'error';
@@ -404,12 +404,12 @@ var Validator;
         }
         else
         {
-            var table = $('<table>');
+            const table = $('<table>');
             errors.forEach(function(e)
             {
-                var row = $('<tr>').addClass('level-' + e.level);
-                var error = $('<td>').append($('<span>', { class: "badge", text: i18next.t('common:' + e.level) }));
-                var message = $('<td>').html(e.message);
+                const row = $('<tr>').addClass('level-' + e.level);
+                const error = $('<td>').append($('<span>', { class: "badge", text: i18next.t('common:' + e.level) }));
+                const message = $('<td>').html(e.message);
                 message.find('a').each(function(index, linkEl)
                 {
                     $(linkEl).addClass('clickable').on('click', function()
@@ -438,8 +438,8 @@ var Validator;
     // Checks if there is a cycle in the graph.
     function testCycle(currentNode, nodeToFind)
     {
-        var visited = {};
-        for (var nodeID in Main.nodes)
+        const visited = {};
+        for (const nodeID in Main.nodes)
         {
             visited[nodeID] = false;
         }
@@ -452,9 +452,9 @@ var Validator;
         if (currentNode === nodeToFind) return true;
 
         visited[currentNode] = true;
-        var plumbInstance = Main.getPlumbInstanceByNodeID(currentNode);
-        var connections = plumbInstance.getConnections({ source: currentNode });
-        for (var i = 0; i < connections.length; i++)
+        const plumbInstance = Main.getPlumbInstanceByNodeID(currentNode);
+        const connections = plumbInstance.getConnections({ source: currentNode });
+        for (let i = 0; i < connections.length; i++)
         {
             if (!visited[connections[i].targetId] && testCycleDFS(connections[i].targetId, nodeToFind, visited)) return true;
         }
@@ -465,7 +465,7 @@ var Validator;
     // Checks if a connection between the node already has been made.
     function testDuplicateConnection(sourceId, targetId)
     {
-        var plumbInstance = Main.getPlumbInstanceByNodeID(sourceId);
+        const plumbInstance = Main.getPlumbInstanceByNodeID(sourceId);
         return plumbInstance.getConnections({ source: sourceId, target: targetId }).length > 0;
     }
 })();

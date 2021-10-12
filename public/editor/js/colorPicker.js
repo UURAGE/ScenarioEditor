@@ -1,7 +1,7 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported ColorPicker */
-var ColorPicker;
+let ColorPicker;
 
 (function()
 {
@@ -22,9 +22,9 @@ var ColorPicker;
         removeColors: removeColors
     };
 
-    var colorAnnotationId = "colour.c1";
+    const colorAnnotationId = "colour.c1";
 
-    var colors =
+    const colors =
     [
         {
             value: "darkslategray",
@@ -147,12 +147,12 @@ var ColorPicker;
             }
         });
 
-        var annotationXML = containerXML.children("annotation[id=" + $.escapeSelector(colorAnnotationId) + "]").eq(0);
-        var colorEnumeration = Types.primitives.enumeration.loadType(annotationXML.children('type').eq(0).children('enumeration').eq(0));
+        const annotationXML = containerXML.children("annotation[id=" + $.escapeSelector(colorAnnotationId) + "]").eq(0);
+        const colorEnumeration = Types.primitives.enumeration.loadType(annotationXML.children('type').eq(0).children('enumeration').eq(0));
         ColorPicker.key.sequence = [];
         colorEnumeration.options.sequence.forEach(function(option)
         {
-            var color = ColorPicker.key.byColor[option.value];
+            const color = ColorPicker.key.byColor[option.value];
             if (option.value in ColorPicker.key.byColor)
             {
                 color.enabled = true;
@@ -160,7 +160,7 @@ var ColorPicker;
                 ColorPicker.key.sequence.push(color);
             }
         });
-        for (var value in ColorPicker.key.byColor)
+        for (const value in ColorPicker.key.byColor)
         {
             if (ColorPicker.key.sequence.indexOf(ColorPicker.key.byColor[value]) === -1)
             {
@@ -171,14 +171,14 @@ var ColorPicker;
 
     function keyToXML(containerXML)
     {
-        var annotationXML = Utils.appendChild(containerXML, "annotation");
+        const annotationXML = Utils.appendChild(containerXML, "annotation");
         annotationXML.setAttribute('id', colorAnnotationId);
         annotationXML.setAttribute('name', "");
-        var enabledColors = ColorPicker.key.sequence.filter(function(color)
+        const enabledColors = ColorPicker.key.sequence.filter(function(color)
         {
             return color.enabled || color === ColorPicker.defaultColor;
         });
-        var options =
+        const options =
         {
             byValue: enabledColors.reduce(function(byValue, color)
             {
@@ -187,13 +187,13 @@ var ColorPicker;
             }, {}),
             sequence: enabledColors.map(function(color) { return { value: color.value, text: color.entry }; })
         };
-        var colorEnumeration = $.extend({}, Types.primitives.enumeration, { options: options });
+        const colorEnumeration = $.extend({}, Types.primitives.enumeration, { options: options });
         colorEnumeration.insertType(Utils.appendChild(annotationXML, "type"), true);
     }
 
     function colorFromXML(containerXML)
     {
-        var annotationValueXML = containerXML.children("annotationValue[idref=" + $.escapeSelector(colorAnnotationId) + "]").eq(0);
+        const annotationValueXML = containerXML.children("annotationValue[idref=" + $.escapeSelector(colorAnnotationId) + "]").eq(0);
         if (annotationValueXML.length > 0)
         {
             return annotationValueXML.text();
@@ -202,28 +202,28 @@ var ColorPicker;
 
     function colorToXML(containerXML, colorValue)
     {
-        var annotationValueXML = Utils.appendChild(containerXML, "annotationValue");
+        const annotationValueXML = Utils.appendChild(containerXML, "annotationValue");
         annotationValueXML.setAttribute('idref', colorAnnotationId);
         Types.primitives.enumeration.toXML(annotationValueXML, colorValue);
     }
 
     function keyDialog()
     {
-        var keyContainer = $('<div>');
+        const keyContainer = $('<div>');
 
-        var keyTable = $('<table>').appendTo(keyContainer);
-        var keyHeaderRow = $('<tr>').appendTo($('<thead>')).appendTo(keyTable);
+        const keyTable = $('<table>').appendTo(keyContainer);
+        const keyHeaderRow = $('<tr>').appendTo($('<thead>')).appendTo(keyTable);
         keyHeaderRow.append($('<th>')); // For the sortable handle
         keyHeaderRow.append($('<th>')); // For the enabled checkbox
         keyHeaderRow.append($('<th>', { text: i18next.t('colorPicker:color') }));
         keyHeaderRow.append($('<th>', { text: i18next.t('colorPicker:entry') }));
-        var keyBody = $('<tbody>').appendTo(keyTable);
+        const keyBody = $('<tbody>').appendTo(keyTable);
         ColorPicker.key.sequence.forEach(function(color)
         {
-            var entryDataRow = $('<tr>').appendTo(keyBody);
+            const entryDataRow = $('<tr>').appendTo(keyBody);
             entryDataRow.append($('<td>', { class: "handle", text: "↕" }));
 
-            var enabler = $('<input>', { type: 'checkbox' });
+            const enabler = $('<input>', { type: 'checkbox' });
             enabler.prop("checked", color.enabled || color.value === ColorPicker.defaultColor);
             enabler.prop("disabled", color.value === ColorPicker.defaultColor);
             entryDataRow.append($('<td>', { class: "enable" }).append(enabler));
@@ -239,7 +239,7 @@ var ColorPicker;
                     backgroundColor: color.value
                 }
             }));
-            var entryContainer = $('<td>', { class: "entry" }).appendTo(entryDataRow);
+            const entryContainer = $('<td>', { class: "entry" }).appendTo(entryDataRow);
             Config.container.settings.colorKeyEntry.type.appendControlTo(entryContainer);
             Config.container.settings.colorKeyEntry.type.setInDOM(entryContainer, color.entry);
         });
@@ -257,11 +257,11 @@ var ColorPicker;
                 text: i18next.t('common:confirm'),
                 click: function()
                 {
-                    var justDisabledColors = {};
-                    var newColorKeySequence = keyBody.children().map(function()
+                    const justDisabledColors = {};
+                    const newColorKeySequence = keyBody.children().map(function()
                     {
-                        var value = $(this).find('.color').data("color");
-                        var enabled = value === ColorPicker.defaultColor || $(this).find('.enable').children('input').prop("checked");
+                        const value = $(this).find('.color').data("color");
+                        const enabled = value === ColorPicker.defaultColor || $(this).find('.enable').children('input').prop("checked");
                         if (!enabled && enabled !== ColorPicker.key.byColor[value].enabled)
                         {
                             justDisabledColors[value] = 0;
@@ -273,16 +273,16 @@ var ColorPicker;
                         };
                     }).get();
 
-                    var changedConnections = [].concat.apply([], Object.keys(Main.trees).map(function(treeID)
+                    const changedConnections = [].concat.apply([], Object.values(Main.trees).map(function(tree)
                     {
-                        return Main.trees[treeID].plumbInstance.getAllConnections();
+                        return tree.plumbInstance.getAllConnections();
                     }))
                         .filter(function(connection)
                         {
                             return connection.getParameter('color') in justDisabledColors;
                         });
 
-                    var consideredSaveColorKey = function()
+                    const consideredSaveColorKey = function()
                     {
                         SaveIndicator.setSavedChanges(false);
 
@@ -309,10 +309,10 @@ var ColorPicker;
 
                     if (changedConnections.length > 0)
                     {
-                        var warningContainer = $('<div>');
+                        const warningContainer = $('<div>');
                         warningContainer.append($('<div>', { text: i18next.t('colorPicker:disable_colors_warning') }));
                         warningContainer.append($('<br>'));
-                        for (var colorValue in justDisabledColors)
+                        for (const colorValue in justDisabledColors)
                         {
                             warningContainer.append($('<div>', { text: i18next.t('colorPicker:colors.' + colorValue) + ": " + justDisabledColors[colorValue] + "x" }));
                         }
@@ -349,10 +349,10 @@ var ColorPicker;
     {
         if ($("#colorPicker").length > 0 || !ColorPicker.areColorsEnabled()) return;
 
-        var sourcePosition = connection.connector.canvas.getBoundingClientRect();
-        var x = Math.abs(Main.mousePosition.x - sourcePosition.left);
-        var y = Math.abs(Main.mousePosition.y - sourcePosition.top);
-        var location = connection.connector.findSegmentForPoint(x, y).l;
+        const sourcePosition = connection.connector.canvas.getBoundingClientRect();
+        const x = Math.abs(Main.mousePosition.x - sourcePosition.left);
+        const y = Math.abs(Main.mousePosition.y - sourcePosition.top);
+        const location = connection.connector.findSegmentForPoint(x, y).l;
 
         connection.addOverlay(
         [
@@ -360,27 +360,27 @@ var ColorPicker;
             {
                 create: function()
                 {
-                    var ringPadding = 5;
-                    var pickerRadius = 100;
-                    var innerPickerRadius = pickerRadius / 2 + 2 * ringPadding;
-                    var innerColorMaximum = 8;
-                    var outerColorMaximum = 12;
+                    const ringPadding = 5;
+                    let pickerRadius = 100;
+                    const innerPickerRadius = pickerRadius / 2 + 2 * ringPadding;
+                    const innerColorMaximum = 8;
+                    const outerColorMaximum = 12;
 
-                    var appendColorSegmentTo = function(ring, color, index, radius, count, drawOffset)
+                    const appendColorSegmentTo = function(ring, color, index, radius, count, drawOffset)
                     {
-                        var segment;
+                        let segment;
                         if (count > 1)
                         {
-                            var segmentAngle = 360 / count;
-                            var startAngle = index * segmentAngle;
-                            var endAngle = startAngle + segmentAngle;
+                            const segmentAngle = 360 / count;
+                            const startAngle = index * segmentAngle;
+                            const endAngle = startAngle + segmentAngle;
 
-                            var x1 = Math.round(drawOffset + (radius - ringPadding) * Math.cos(Math.PI * startAngle / 180));
-                            var y1 = Math.round(drawOffset + (radius - ringPadding) * Math.sin(Math.PI * startAngle / 180));
-                            var x2 = Math.round(drawOffset + (radius - ringPadding) * Math.cos(Math.PI * endAngle / 180));
-                            var y2 = Math.round(drawOffset + (radius - ringPadding) * Math.sin(Math.PI * endAngle / 180));
+                            const x1 = Math.round(drawOffset + (radius - ringPadding) * Math.cos(Math.PI * startAngle / 180));
+                            const y1 = Math.round(drawOffset + (radius - ringPadding) * Math.sin(Math.PI * startAngle / 180));
+                            const x2 = Math.round(drawOffset + (radius - ringPadding) * Math.cos(Math.PI * endAngle / 180));
+                            const y2 = Math.round(drawOffset + (radius - ringPadding) * Math.sin(Math.PI * endAngle / 180));
 
-                            var d =
+                            const d =
                                 " M" + drawOffset + "," + drawOffset +
                                 " L" + x1 + "," + y1 +
                                 " A" + (radius - ringPadding) + "," + (radius - ringPadding) + " 0 " + (endAngle - startAngle > 180 ? 1 : 0) + ",1 " + x2 + "," + y2 +
@@ -398,13 +398,13 @@ var ColorPicker;
                         segment.setAttribute("class", "segment");
                         segment.setAttribute("fill", color.value);
                         segment.setAttribute("data-color", color.value);
-                        var title = Utils.appendChild(segment, "title");
+                        const title = Utils.appendChild(segment, "title");
                         $(title).text(i18next.t('colorPicker:colors.' + color.value) + (color.entry ? ": " + color.entry : ""));
                     };
 
-                    var appendBorderTo = function(ring, offset, radius)
+                    const appendBorderTo = function(ring, offset, radius)
                     {
-                        var border = Utils.appendChild(ring, "circle");
+                        const border = Utils.appendChild(ring, "circle");
                         border.setAttribute("class", "dop");
                         border.setAttribute("cx", offset);
                         border.setAttribute("cy", offset);
@@ -414,16 +414,16 @@ var ColorPicker;
                         border.setAttribute("fill", "#fafafa");
                     };
 
-                    var picker = $('<div>', { id: "colorPicker" });
-                    var colorRings = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                    const picker = $('<div>', { id: "colorPicker" });
+                    const colorRings = document.createElementNS("http://www.w3.org/2000/svg", "svg");
                     $(colorRings).on('mouseover', function(e)
                     {
                         e.stopPropagation();
                     });
                     picker.append(colorRings);
-                    var outerColorRing = Utils.appendChild(colorRings, "g");
-                    var innerColorRing;
-                    var enabledColors = ColorPicker.key.sequence.filter(function(color)
+                    const outerColorRing = Utils.appendChild(colorRings, "g");
+                    let innerColorRing;
+                    const enabledColors = ColorPicker.key.sequence.filter(function(color)
                     {
                         return color.enabled;
                     });
@@ -433,8 +433,8 @@ var ColorPicker;
                         appendBorderTo(outerColorRing, pickerRadius, pickerRadius);
 
                         // Divide equally over inner and outer rings
-                        var outerColorEndIndex = Math.floor(enabledColors.length * innerColorMaximum / outerColorMaximum);
-                        var outerColors = enabledColors.slice(0, outerColorEndIndex);
+                        const outerColorEndIndex = Math.floor(enabledColors.length * innerColorMaximum / outerColorMaximum);
+                        const outerColors = enabledColors.slice(0, outerColorEndIndex);
                         outerColors.forEach(function(color, index)
                         {
                             appendColorSegmentTo(outerColorRing, color, index, pickerRadius, outerColors.length, pickerRadius);
@@ -445,7 +445,7 @@ var ColorPicker;
                         // Outer inner border
                         appendBorderTo(innerColorRing, pickerRadius, innerPickerRadius);
 
-                        var innerColors = enabledColors.slice(outerColorEndIndex, enabledColors.length);
+                        const innerColors = enabledColors.slice(outerColorEndIndex, enabledColors.length);
                         innerColors.forEach(function(color, index)
                         {
                             appendColorSegmentTo(innerColorRing, color, index, innerPickerRadius, innerColors.length, pickerRadius);
@@ -474,7 +474,9 @@ var ColorPicker;
                     // Inner border for the edit button
                     appendBorderTo(innerColorRing, pickerRadius, pickerRadius === innerPickerRadius ? pickerRadius / 3 : 2 * innerPickerRadius - pickerRadius);
 
-                    var onClickOutside, closeColorPicker;
+                    /* eslint-disable prefer-const */
+
+                    let onClickOutside, closeColorPicker;
 
                     onClickOutside = function(e)
                     {
@@ -492,6 +494,8 @@ var ColorPicker;
                         e.stopPropagation();
                     };
 
+                    /* eslint-enable prefer-const */
+
                     picker.find('.segment').each(function()
                     {
                         $(this).on('mouseover', function(e)
@@ -502,7 +506,7 @@ var ColorPicker;
                         {
                             SaveIndicator.setSavedChanges(false);
 
-                            var colorValue = $(this).data("color");
+                            const colorValue = $(this).data("color");
                             connection.setParameter("color", colorValue);
                             if (ColorPicker.areColorsEnabled())
                             {
@@ -513,20 +517,20 @@ var ColorPicker;
                         });
                     });
 
-                    var xlinkns = "http://www.w3.org/1999/xlink";
-                    var innerCircle = Utils.appendChild(innerColorRing, 'g');
-                    var editIcon = Utils.appendChild(innerCircle, "use");
-                    var editIconSize = 20;
-                    var editIconOffset = pickerRadius - editIconSize / 2;
+                    const xlinkns = "http://www.w3.org/1999/xlink";
+                    const innerCircle = Utils.appendChild(innerColorRing, 'g');
+                    const editIcon = Utils.appendChild(innerCircle, "use");
+                    const editIconSize = 20;
+                    const editIconOffset = pickerRadius - editIconSize / 2;
                     editIcon.setAttributeNS(xlinkns, "href", "#icon-edit");
                     editIcon.setAttribute("x", editIconOffset);
                     editIcon.setAttribute("y", editIconOffset);
                     editIcon.setAttribute("width", editIconSize);
                     editIcon.setAttribute("height", editIconSize);
                     editIcon.setAttribute("opacity", 0.6);
-                    var editButton = Utils.appendChild(innerCircle, "circle");
-                    var offset = pickerRadius;
-                    var radius = pickerRadius === innerPickerRadius ? pickerRadius / 3 : 2 * innerPickerRadius - pickerRadius;
+                    const editButton = Utils.appendChild(innerCircle, "circle");
+                    const offset = pickerRadius;
+                    const radius = pickerRadius === innerPickerRadius ? pickerRadius / 3 : 2 * innerPickerRadius - pickerRadius;
                     editButton.setAttribute("class", "edit");
                     editButton.setAttribute("cx", offset);
                     editButton.setAttribute("cy", offset);
@@ -546,18 +550,18 @@ var ColorPicker;
                         closeColorPicker(e);
                     });
 
-                    var closeIcon = Utils.appendChild(innerCircle, "use");
-                    var closeIconSize = 20;
-                    var closeIconOffsetX = 1.75 * pickerRadius - ringPadding;
-                    var closeIconOffsetY = ringPadding;
+                    const closeIcon = Utils.appendChild(innerCircle, "use");
+                    const closeIconSize = 20;
+                    const closeIconOffsetX = 1.75 * pickerRadius - ringPadding;
+                    const closeIconOffsetY = ringPadding;
                     closeIcon.setAttributeNS(xlinkns, "href", "#icon-close");
                     closeIcon.setAttribute("x", closeIconOffsetX);
                     closeIcon.setAttribute("y", closeIconOffsetY);
                     closeIcon.setAttribute("width", closeIconSize);
                     closeIcon.setAttribute("height", closeIconSize);
                     closeIcon.setAttribute("opacity", 0.6);
-                    var closeButton = Utils.appendChild(innerCircle, "circle");
-                    var closeIconRadius = closeIconSize / 2;
+                    const closeButton = Utils.appendChild(innerCircle, "circle");
+                    const closeIconRadius = closeIconSize / 2;
                     closeButton.setAttribute("class", "close");
                     closeButton.setAttribute("cx", closeIconOffsetX + closeIconRadius);
                     closeButton.setAttribute("cy", closeIconOffsetY + closeIconRadius);
@@ -591,7 +595,7 @@ var ColorPicker;
 
     function toggleColors()
     {
-        var toggleColorsButton = $("#toggleColors");
+        const toggleColorsButton = $("#toggleColors");
         if (toggleColorsButton.hasClass("enabled"))
         {
             toggleColorsButton.removeClass("enabled");
@@ -608,7 +612,7 @@ var ColorPicker;
 
     function applyColor(connection, dialogue)
     {
-        var colorValue = connection.getParameter("color");
+        const colorValue = connection.getParameter("color");
         if (colorValue)
         {
             if (dialogue && connection.id in dialogue.selectedConnections)
@@ -625,7 +629,7 @@ var ColorPicker;
 
     function applyColors()
     {
-        var dialogue = Zoom.getZoomed();
+        const dialogue = Zoom.getZoomed();
         dialogue.plumbInstance.getAllConnections().forEach(function(connection)
         {
             applyColor(connection, dialogue);
@@ -647,7 +651,7 @@ var ColorPicker;
 
     function removeColors()
     {
-        var dialogue = Zoom.getZoomed();
+        const dialogue = Zoom.getZoomed();
         dialogue.plumbInstance.getAllConnections().forEach(function(connection)
         {
             removeColor(connection, dialogue);

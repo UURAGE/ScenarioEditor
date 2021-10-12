@@ -1,13 +1,13 @@
 /* © Utrecht University and DialogueTrainer */
 
 /* exported DragBox */
-var DragBox;
+let DragBox;
 
 (function()
 {
     "use strict";
 
-    var dragging = false;
+    let dragging = false;
 
     // eslint-disable-next-line no-global-assign
     DragBox =
@@ -19,10 +19,11 @@ var DragBox;
         dragging: function() { return dragging; } // To prevent other code from modifying this value
     };
 
-    var startPos = {},
+    const offset = { x: 24, y: 24 },
+        dragSafezone = 25;
+
+    let startPos = {},
         dragPos = {},
-        offset = { x: 24, y: 24 },
-        dragSafezone = 25,
         stopHandler = null,
         repeatable = false;
 
@@ -64,7 +65,7 @@ var DragBox;
 
         // Allow the stop handler to cancel the drop
         // (i.e. force the user to keep dragging)
-        var draggingContinues = repeatable && e.ctrlKey;
+        const draggingContinues = repeatable && e.ctrlKey;
         if (isDroppable() && stopHandler(draggingContinues) && !draggingContinues)
         {
             stopDragging();
@@ -100,7 +101,7 @@ var DragBox;
     // Only droppable if dragger is moved more than X pixels
     function isDroppable()
     {
-        var dragMove = Math.abs(dragPos.x - startPos.x) +
+        const dragMove = Math.abs(dragPos.x - startPos.x) +
             Math.abs(dragPos.y - startPos.y);
         return dragging && dragMove > dragSafezone;
     }
@@ -110,7 +111,7 @@ var DragBox;
         updateDraggerPosition(e);
         showDraggerWithText(text);
 
-        var drag = $('#dragBox');
+        const drag = $('#dragBox');
         drag.addClass('error');
         // .delay(1000) cannot be cancelled using .stop(true),
         // but .animate with a dummy value can.
@@ -126,7 +127,7 @@ var DragBox;
 
     function showDraggerWithText(text)
     {
-        var drag = $('#dragBox');
+        const drag = $('#dragBox');
         drag.stop(true).css({ opacity: "" }).show();
         drag.text(text);
     }
