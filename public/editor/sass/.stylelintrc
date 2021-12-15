@@ -1,37 +1,35 @@
 {
-    "extends": "stylelint-config-standard",
+    "extends": "stylelint-config-standard-scss",
     "plugins": [
-        "stylelint-order",
-        "stylelint-scss"
+        "stylelint-order"
 	],
     "rules": {
-        "at-rule-no-unknown": null,
-        "color-hex-case": "upper",
-        "color-no-invalid-hex": true,
-        "declaration-block-no-duplicate-properties": [
-            true,
+        "alpha-value-notation": null,
+        "at-rule-empty-line-before": [
+            "always",
             {
+                "except": [
+                    "blockless-after-same-name-blockless",
+                    "first-nested"
+                ],
                 "ignore": [
-                    "consecutive-duplicates"
+                    "after-comment"
+                ],
+                "ignoreAtRules": [
+                    "else"
                 ]
             }
         ],
-        "declaration-block-no-redundant-longhand-properties": true,
-        "declaration-block-no-shorthand-property-overrides": true,
+        "block-closing-brace-newline-after": "always",
+        "color-function-notation": null,
+        "color-hex-case": "upper",
         "declaration-block-single-line-max-declarations": 3,
+        "declaration-colon-newline-after": null,
         "declaration-colon-space-after": "always",
-        "font-family-name-quotes": "always-where-recommended",
-        "font-family-no-duplicate-names": true,
-        "font-family-no-missing-generic-family-keyword": true,
-        "function-calc-no-invalid": true,
-        "function-calc-no-unspaced-operator": true,
+        "no-descending-specificity": null,
         "function-url-no-scheme-relative": true,
-        "function-url-quotes": "always",
-        "indentation": 2,
-        "keyframe-declaration-no-important": true,
-        "no-duplicate-selectors": true,
-        "no-empty-first-line": true,
-        "no-extra-semicolons": true,
+        "keyframes-name-pattern": null,
+        "max-line-length": null,
         "no-unknown-animations": true,
         "number-leading-zero": "never",
         "number-max-precision": 3,
@@ -199,36 +197,22 @@
             "unicode-bidi",
             "speak"
         ],
-        "property-no-vendor-prefix": true,
-        "scss/at-rule-no-unknown": true,
-        "scss/selector-no-redundant-nesting-selector": true,
-        "scss/at-import-no-partial-leading-underscore": true,
+        "scss/at-mixin-pattern": null,
+        "scss/at-if-closing-brace-newline-after": null,
+        "scss/at-if-closing-brace-space-after": null,
+        "scss/at-rule-conditional-no-parentheses": null,
         "scss/dollar-variable-colon-space-after": "at-least-one-space",
+        "scss/dollar-variable-empty-line-before": null,
+        "scss/dollar-variable-pattern": null,
+        "scss/double-slash-comment-empty-line-before": null,
+        "scss/no-global-function-names": null,
+        "scss/percent-placeholder-pattern": null,
+        "scss/selector-no-redundant-nesting-selector": true,
+        "selector-attribute-quotes": "never",
+        "selector-class-pattern": null,
+        "selector-id-pattern": null,
         "selector-list-comma-newline-after": "always-multi-line",
         "selector-list-comma-space-after": "always-single-line",
-        "selector-pseudo-class-no-unknown": true,
-        "selector-type-no-unknown": true,
-        "shorthand-property-no-redundant-values": true,
-        "string-no-newline": true,
-        "string-quotes": "single",
-        "unit-no-unknown": true,
-        "value-no-vendor-prefix": true,
-        "declaration-colon-newline-after": null,
-        "at-rule-empty-line-before": [
-            "always",
-            {
-                "except": [
-                    "blockless-after-same-name-blockless",
-                    "first-nested"
-                ],
-                "ignore": [
-                    "after-comment"
-                ],
-                "ignoreAtRules": [
-                    "else"
-                ]
-            }
-        ],
-        "no-descending-specificity": null
+        "string-quotes": "single"
     }
 }

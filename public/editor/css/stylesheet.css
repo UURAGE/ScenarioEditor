@@ -131,7 +131,7 @@ textarea {
 a[data-disabled] {
   text-decoration: line-through; }
 
-.noSelect, .handle {
+.noSelect {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none; }
@@ -263,7 +263,10 @@ tr.ui-sortable-helper {
 .handle {
   cursor: move;
   cursor: -webkit-grab;
-  cursor: grab; }
+  cursor: grab;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none; }
   .ui-sortable-helper .handle {
     cursor: move;
     cursor: -webkit-grabbing;
@@ -658,7 +661,7 @@ select {
       transition: 0s opacity .1s linear; }
   #sidebar.dragging > * {
     opacity: .5; }
-  #sidebar input[type='checkbox'] {
+  #sidebar input[type=checkbox] {
     margin-right: .5em;
     transform: scale(1.25); }
   #sidebar .inputgroup {
