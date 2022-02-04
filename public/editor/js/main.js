@@ -147,7 +147,7 @@ let Main;
             $("#characterSelection").remove();
         }
 
-        const scenarioNameInput = $('<input>', { type: 'text', maxlength: 50 });
+        const scenarioNameInput = $('<input>', { type: 'text' });
         const scenarioNameInputSpan = $('<span>', { class: "scenarioNameInput" }).append(scenarioNameInput);
         scenarioNameInputSpan.on('focusout', function(e, cancel)
         {

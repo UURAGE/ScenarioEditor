@@ -63,7 +63,7 @@ let Metadata;
                     $('<div>', { class: "itemLabel" })
                         .append(
                             $('<label>', { for: "scenarioName", text: i18next.t('metadata:scenario_name') })),
-                    $('<input>', { type: 'text', id: "scenarioName", maxlength: 50 })));
+                    $('<input>', { type: 'text', id: "scenarioName" })));
 
         if (Config.container.settings.languages.sequence.length > 0)
         {
@@ -359,7 +359,7 @@ let Metadata;
 
     function formatScenarioName(scenarioName)
     {
-        scenarioName = scenarioName.trim().substr(0, 50);
+        scenarioName = scenarioName.trim();
         if (scenarioName !== "")
         {
             return scenarioName;
