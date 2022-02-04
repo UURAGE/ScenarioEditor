@@ -107,7 +107,7 @@
                 <button id="exportScenario" class="globalButton" title="<?php sLang('edt_export_scenario_title'); ?>">
                     <?php echo sIcon("icon-sm-export"); sLang("edt_export_scenario"); ?>...
                 </button>
-                <div class="separator"></div>
+                <hr/>
                 <button id="print" class="globalButton"><?php echo sIcon("icon-sm-print"); sLang("edt_print"); ?>...</button>
               </div>
           </div>

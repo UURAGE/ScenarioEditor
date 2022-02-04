@@ -70,11 +70,12 @@
     }
   }
 
-  .separator {
+  hr {
     height: 1px;
     padding: 0;
     margin: 5px 0;
     background-color: rgba(black, .1);
+    border: none;
   }
 
   #clipboard button {
