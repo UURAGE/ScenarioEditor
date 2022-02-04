@@ -3,7 +3,6 @@ import * as log from "fancy-log";
 import * as gulp from "gulp";
 import * as autoprefixer from "gulp-autoprefixer";
 import * as sassFactory from "gulp-sass";
-import * as sourcemaps from "gulp-sourcemaps";
 import * as stylelint from "gulp-stylelint";
 import * as sassCompiler from "node-sass";
 
@@ -38,12 +37,10 @@ const lintSass = () =>
 gulp.task("lint_sass", lintSass);
 const compileSass = () =>
 {
-    return gulp.src(sassSrc)
-        .pipe(sourcemaps.init())
+    return gulp.src(sassSrc, { sourcemaps: true })
         .pipe(sass().on("error", sass.logError))
         .pipe(autoprefixer(prefixerOptions))
-        .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest(sassDest));
+        .pipe(gulp.dest(sassDest, { sourcemaps: '.' }));
 };
 const processSass = gulp.series(lintSass, compileSass);
 gulp.task("sass", processSass);

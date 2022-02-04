@@ -213,6 +213,12 @@
         "selector-id-pattern": null,
         "selector-list-comma-newline-after": "always-multi-line",
         "selector-list-comma-space-after": "always-single-line",
-        "string-quotes": "single"
+        "string-quotes": "single",
+        "value-keyword-case": [
+            "lower",
+            {
+                "camelCaseSvgKeywords": true
+            }
+        ]
     }
 }
