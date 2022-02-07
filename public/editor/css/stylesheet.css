@@ -601,29 +601,28 @@ select {
   min-width: 0;
   padding: 0 5px;
   font-size: 1.1em;
-  color: #666;
-  gap: 10px; }
+  gap: 5px; }
   #scenarioNameTab > *, #scenarioNameTab::after {
     flex-shrink: 0; }
-  #scenarioNameTab span {
-    min-width: 50px;
-    color: #000; }
-    #scenarioNameTab span:hover {
-      color: #101010;
-      background-color: #F8F8F8; }
-    #scenarioNameTab span.hint {
-      color: #666; }
-    #scenarioNameTab span:empty {
-      padding: 3px 15px; }
   #scenarioNameTab .scenarioName,
   #scenarioNameTab .scenarioNameInput {
     flex-shrink: 1; }
 
 .scenarioName {
+  padding: 0 5px;
   overflow: hidden;
   text-align: center;
   text-overflow: ellipsis;
-  white-space: nowrap; }
+  white-space: nowrap;
+  border: 1px solid transparent;
+  border-radius: 5px; }
+  .scenarioName:hover, .scenarioName:empty {
+    color: #101010;
+    background-color: rgba(56, 146, 255, 0.1);
+    border-color: #3892FF; }
+  .scenarioName:empty {
+    min-width: 50px;
+    min-height: 1.25em; }
 
 .scenarioNameInput {
   flex-grow: 1; }

@@ -272,29 +272,10 @@
   min-width: 0;
   padding: 0 5px;
   font-size: 1.1em;
-  color: #666;
-  gap: 10px;
+  gap: 5px;
 
   > *, &::after {
     flex-shrink: 0;
-  }
-
-  span {
-    min-width: 50px;
-    color: #000;
-
-    &:hover {
-      color: #101010;
-      background-color: #F8F8F8;
-    }
-
-    &.hint {
-      color: #666;
-    }
-
-    &:empty {
-      padding: 3px 15px;
-    }
   }
 
   .scenarioName,
@@ -304,10 +285,25 @@
 }
 
 .scenarioName {
+  padding: 0 5px;
   overflow: hidden;
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
+  border: 1px solid transparent;
+  border-radius: 5px;
+
+  &:hover,
+  &:empty {
+    color: #101010;
+    background-color: rgba($col-editor, .1);
+    border-color: $col-editor;
+  }
+
+  &:empty {
+    min-width: 50px;
+    min-height: 1.25em;
+  }
 }
 
 .scenarioNameInput {

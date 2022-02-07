@@ -121,7 +121,6 @@
             </div>
           </div>
           <div id="scenarioNameTab">
-              <span class="hint"><?php sLang("edt_scenario"); ?>:</span>
             <span class="scenarioName"></span>
           </div>
           <div id="languages">
