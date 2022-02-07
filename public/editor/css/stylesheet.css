@@ -744,6 +744,8 @@ select {
   margin-bottom: 7px;
   font-size: 20px;
   white-space: nowrap; }
+  .sub-header h2 label {
+    vertical-align: middle; }
 
 .sub-header img {
   margin-right: 5px;
