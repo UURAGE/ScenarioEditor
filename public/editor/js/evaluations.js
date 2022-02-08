@@ -70,8 +70,8 @@ let Evaluations;
                 {
                     newType = $.extend(newType, { controlName: 'textarea', rows: 4, markdown: "gfm" });
                 }
-
                 Expression.handleTypeChange(expressionKindContainer, previousType, newType);
+                Types.attachDefinitionTooltip(typeContainer, newType);
                 previousType = newType;
             };
             Types.appendControlsTo(typeContainer.appendTo(evaluationContainer), '.evaluation-name', 'evaluation-type', handleEvaluationTypeChange);

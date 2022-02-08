@@ -18,7 +18,8 @@ let Types;
         labelControlOrders: {},
         valueCategories: {},
         appendControlsTo: appendControlsTo,
-        insertIntoDOM: insertIntoDOM
+        insertIntoDOM: insertIntoDOM,
+        attachDefinitionTooltip: attachDefinitionTooltip
     };
 
     Types.assignmentOperators =
@@ -747,7 +748,6 @@ let Types;
                     definitionButton.remove();
 
                     definitionButton = $('<button>', { class: "define-type" });
-                    definitionButton.attr('title', i18next.t('types:primitives.' + newTypeName + '.definition.define'));
                     definitionButton.html(Utils.sIcon(newTypeName === Types.primitives.enumeration.name ? "icon-list" : "icon-cog"));
                     definitionButton.on('click', function()
                     {
@@ -797,6 +797,36 @@ let Types;
         {
             type.insertTypeIntoDOM(typeSelect.parent());
             typeSelect.trigger('change');
+        }
+    }
+
+    function attachDefinitionTooltip(containerEl, type)
+    {
+        const tooltipContent = $('<div>').append($('<b>', { text: i18next.t('types:primitives.' + type.name + '.definition.define') }));
+        if (type.name === Types.primitives.integer.name)
+        {
+            if (type.minimum !== undefined)
+            {
+                tooltipContent.append($('<br>'), $('<span>', { text: i18next.t('common:minimum') + ': ' + type.minimum }));
+            }
+            if (type.maximum !== undefined)
+            {
+                tooltipContent.append($('<br>'), $('<span>', { text: i18next.t('common:maximum') + ': ' + type.maximum }));
+            }
+        }
+        const defineTypeButton = containerEl.find(".define-type");
+        if (defineTypeButton.tooltip('instance'))
+        {
+            defineTypeButton.tooltip('option', 'content', tooltipContent);
+        }
+        else
+        {
+            defineTypeButton.tooltip(
+            {
+                items: 'button:hover',
+                content: tooltipContent,
+                create: function() { $(this).data("ui-tooltip").liveRegion.remove(); }
+            });
         }
     }
 

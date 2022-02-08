@@ -225,6 +225,7 @@ let Parameters;
             const type = Types.primitives[newTypeName].loadTypeFromDOM(parameterContainer, initialValueContainer);
             type.appendControlTo(initialValueContainer);
             if (previousType) type.setInDOM(initialValueContainer, type.castFrom(previousType, initialValue));
+            Types.attachDefinitionTooltip(typeSelectContainer, type);
             previousType = type;
         };
 
