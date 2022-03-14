@@ -165,6 +165,10 @@
             {
                 "selector": "MemberExpression[property.type='Identifier'][property.name='ready'][object.type='CallExpression'][object.callee.type='Identifier'][object.callee.name='$']",
                 "message": "'$(...).ready(f)' is deprecated. Use '$(f)' instead."
+            },
+            {
+                "selector": "MemberExpression[object.type='Identifier'][object.name='$'][property.type='Identifier'][property.name='Deferred']",
+                "message": "Use Promise instead of $.Deferred."
             }
         ],
         "no-return-assign": [

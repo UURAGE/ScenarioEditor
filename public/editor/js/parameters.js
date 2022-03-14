@@ -118,7 +118,7 @@ let Parameters;
                     text: i18next.t('common:confirm'),
                     click: function()
                     {
-                        save(parametersContainer).done(function(saved)
+                        save(parametersContainer).then(function(saved)
                         {
                             if (saved)
                             {
@@ -253,8 +253,6 @@ let Parameters;
 
     function save(parametersContainer)
     {
-        const deferredSave = $.Deferred();
-
         const consideredSave = function()
         {
             SaveIndicator.setSavedChanges(false);
@@ -428,8 +426,6 @@ let Parameters;
             ElementList.handleParametersChange();
 
             Main.selectElement(previouslySelectedElement);
-
-            deferredSave.resolve(true);
         };
 
         const confirmParametersWithoutNameRemoval = function()
@@ -448,7 +444,7 @@ let Parameters;
             }
             else
             {
-                return $.Deferred().resolve(true);
+                return Promise.resolve(true);
             }
         };
 
@@ -472,33 +468,28 @@ let Parameters;
             }
             else
             {
-                return $.Deferred().resolve(true);
+                return Promise.resolve(true);
             }
         };
 
-        confirmParametersWithoutNameRemoval().done(function(confirmed)
+        return confirmParametersWithoutNameRemoval().then(function(confirmed)
         {
             if (confirmed)
             {
-                return confirmRemovedParametersRemoval().done(function(confirmed)
+                return confirmRemovedParametersRemoval().then(function(confirmed)
                 {
                     if (confirmed)
                     {
                         consideredSave();
                     }
-                    else
-                    {
-                        deferredSave.resolve(false);
-                    }
+                    return Promise.resolve(confirmed);
                 });
             }
             else
             {
-                deferredSave.resolve(false);
+                return Promise.resolve(false);
             }
         });
-
-        return deferredSave;
     }
 
     function atLeastOneUserDefined()

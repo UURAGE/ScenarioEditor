@@ -46,7 +46,7 @@ let Load;
                     }
                     else
                     {
-                        Utils.confirmDialog(i18next.t('load:import_warning'), 'warning').done(function(confirmed)
+                        Utils.confirmDialog(i18next.t('load:import_warning'), 'warning').then(function(confirmed)
                         {
                             if (confirmed)
                             {

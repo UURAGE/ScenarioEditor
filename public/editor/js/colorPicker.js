@@ -316,7 +316,7 @@ let ColorPicker;
                         {
                             warningContainer.append($('<div>', { text: i18next.t('colorPicker:colors.' + colorValue) + ": " + justDisabledColors[colorValue] + "x" }));
                         }
-                        Utils.confirmDialog(warningContainer, 'warning').done(function(confirmed)
+                        Utils.confirmDialog(warningContainer, 'warning').then(function(confirmed)
                         {
                             if (confirmed)
                             {

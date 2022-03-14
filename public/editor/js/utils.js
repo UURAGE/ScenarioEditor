@@ -212,78 +212,80 @@ let Utils;
 
     function alertDialog(content, type)
     {
-        const deferredClose = $.Deferred();
-        const container = $('<div>');
-        container.append(content).dialog(
+        return new Promise(function(resolve)
         {
-            title: i18next.t('common:' + type),
-            classes:
+            const container = $('<div>');
+            container.append(content).dialog(
             {
-                "ui-dialog-titlebar": type
-            },
-            height: 'auto',
-            maxHeight: 768,
-            width: 400,
-            modal: true,
-            buttons:
-            [
+                title: i18next.t('common:' + type),
+                classes:
                 {
-                    text: i18next.t('common:close'),
-                    click: function()
+                    "ui-dialog-titlebar": type
+                },
+                height: 'auto',
+                maxHeight: 768,
+                width: 400,
+                modal: true,
+                buttons:
+                [
                     {
-                        $(this).dialog('close');
+                        text: i18next.t('common:close'),
+                        click: function()
+                        {
+                            $(this).dialog('close');
+                        }
                     }
+                ],
+                close: function()
+                {
+                    resolve();
+                    container.remove();
                 }
-            ],
-            close: function()
-            {
-                deferredClose.resolve();
-                container.remove();
-            }
+            });
         });
-        return deferredClose;
     }
 
     function confirmDialog(content, type)
     {
-        const deferredConfirmation = $.Deferred();
-        const container = $('<div>');
-        container.append(content).dialog(
+        return new Promise(function(resolve)
         {
-            title: i18next.t('common:' + type),
-            classes:
+            const container = $('<div>');
+            container.append(content).dialog(
             {
-                "ui-dialog-titlebar": type
-            },
-            height: 'auto',
-            maxHeight: 768,
-            width: 400,
-            modal: true,
-            buttons:
-            [
+                title: i18next.t('common:' + type),
+                classes:
                 {
-                    text: i18next.t('common:confirm'),
-                    click: function()
-                    {
-                        deferredConfirmation.resolve(true);
-                        $(this).dialog('close');
-                    }
+                    "ui-dialog-titlebar": type
                 },
-                {
-                    text: i18next.t('common:cancel'),
-                    click: function()
+                height: 'auto',
+                maxHeight: 768,
+                width: 400,
+                modal: true,
+                buttons:
+                [
                     {
-                        $(this).dialog('close');
+                        text: i18next.t('common:confirm'),
+                        click: function()
+                        {
+                            resolve(true);
+                            $(this).dialog('close');
+                        }
+                    },
+                    {
+                        text: i18next.t('common:cancel'),
+                        click: function()
+                        {
+                            $(this).dialog('close');
+                        }
                     }
+                ],
+                close: function()
+                {
+                    resolve(false);
+                    container.remove();
                 }
-            ],
-            close: function()
-            {
-                deferredConfirmation.resolve(false);
-                container.remove();
-            }
+            });
         });
-        return deferredConfirmation;
     }
 
     function abbreviateText(text, separator, maxLength)

@@ -118,7 +118,7 @@ let Evaluations;
                     text: i18next.t('common:confirm'),
                     click: function()
                     {
-                        save(evaluationsContainer).done(function(saved)
+                        save(evaluationsContainer).then(function(saved)
                         {
                             if (saved)
                             {
@@ -182,8 +182,6 @@ let Evaluations;
 
     function save(evaluationsContainer)
     {
-        const deferredSave = $.Deferred();
-
         const consideredSave = function()
         {
             SaveIndicator.setSavedChanges(false);
@@ -270,8 +268,6 @@ let Evaluations;
                 }).get();
 
             Main.selectElement(previouslySelectedElement);
-
-            deferredSave.resolve(true);
         };
 
         const confirmEvaluationsWithoutNameRemoval = function()
@@ -290,7 +286,7 @@ let Evaluations;
             }
             else
             {
-                return $.Deferred().resolve(true);
+                return Promise.resolve(true);
             }
         };
 
@@ -314,33 +310,28 @@ let Evaluations;
             }
             else
             {
-                return $.Deferred().resolve(true);
+                return Promise.resolve(true);
             }
         };
 
-        confirmEvaluationsWithoutNameRemoval().done(function(confirmed)
+        return confirmEvaluationsWithoutNameRemoval().then(function(confirmed)
         {
             if (confirmed)
             {
-                return confirmRemovedEvaluationsRemoval().done(function(confirmed)
+                return confirmRemovedEvaluationsRemoval().then(function(confirmed)
                 {
                     if (confirmed)
                     {
                         consideredSave();
                     }
-                    else
-                    {
-                        deferredSave.resolve(false);
-                    }
+                    return Promise.resolve(confirmed);
                 });
             }
             else
             {
-                deferredSave.resolve(false);
+                return Promise.resolve(false);
             }
         });
-
-        return deferredSave;
     }
 
     function getIdPrefix()
