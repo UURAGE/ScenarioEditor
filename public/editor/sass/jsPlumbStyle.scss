@@ -2,9 +2,7 @@
 
 // © Utrecht University and DialogueTrainer
 
-@import 'variables';
-@import 'colors';
-@import 'mixins';
+@use 'base' as *;
 
 .w {
   position: absolute;

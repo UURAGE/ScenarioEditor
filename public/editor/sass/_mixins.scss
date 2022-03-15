@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+@use 'sass:math';
+@use 'variables' as *;
+@use 'colors' as *;
+
 // © Utrecht University and DialogueTrainer
 
 @mixin nodePropertyGradient($element, $col) {
@@ -20,7 +24,7 @@
   $g: green($color);
   $b: blue($color);
 
-  $yiq: (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
+  $yiq: math.div(($r * 299) + ($g * 587) + ($b * 114), 1000);
 
   @if ($yiq >= $yiq-contrasted-threshold) {
     @return $col-text-dark;

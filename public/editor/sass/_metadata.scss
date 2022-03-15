@@ -1,3 +1,8 @@
+@charset "UTF-8";
+
+// © Utrecht University and DialogueTrainer
+
+@use 'base' as *;
 // These are the elements that are 100% width
 $inputSelectors: 'input:not([type=checkbox]), input:not([type=radio]), input:not([type=range]), select, textarea';
 $noSelectors: 'h1, h2, label, .d, th, button, ul li';

@@ -4,7 +4,7 @@ import * as gulp from "gulp";
 import * as autoprefixer from "gulp-autoprefixer";
 import * as sassFactory from "gulp-sass";
 import * as stylelint from "gulp-stylelint";
-import * as sassCompiler from "node-sass";
+import * as sassCompiler from "sass-embedded";
 
 import * as browserSync from "browser-sync";
 

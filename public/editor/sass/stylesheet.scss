@@ -2,23 +2,20 @@
 
 // © Utrecht University and DialogueTrainer
 
-@import 'variables';
-@import 'colors';
-@import 'mixins';
-@import 'fonts';
-@import 'layout';
-@import 'uiElements';
-@import 'tree';
-@import 'toolbar';
-@import 'sidebar';
-@import 'tabDock';
-@import 'validation';
-@import 'draft';
-@import 'table';
-@import 'elementList';
-@import 'minimap';
-@import 'expression';
-@import 'colorPicker';
-@import 'node';
-@import 'metadata';
-@import 'print';
+@use 'fonts';
+@use 'layout';
+@use 'uiElements';
+@use 'tree';
+@use 'toolbar';
+@use 'sidebar';
+@use 'tabDock';
+@use 'validation';
+@use 'draft';
+@use 'table';
+@use 'elementList';
+@use 'minimap';
+@use 'expression';
+@use 'colorPicker';
+@use 'node';
+@use 'metadata';
+@use 'print';
