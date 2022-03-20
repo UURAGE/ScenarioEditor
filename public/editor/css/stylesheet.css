@@ -892,6 +892,7 @@ select:focus {
   white-space: nowrap;
 }
 .sub-header h2 label {
+  line-height: 1em;
   vertical-align: middle;
 }
 .sub-header img {
