@@ -1,12 +1,11 @@
-import * as eslint from "@doamatto/gulp-eslint";
-import * as log from "fancy-log";
-import * as gulp from "gulp";
-import * as autoprefixer from "gulp-autoprefixer";
-import * as sassFactory from "gulp-sass";
-import * as stylelint from "gulp-stylelint";
+import browserSync from "browser-sync";
+import log from "fancy-log";
+import gulp from "gulp";
+import autoprefixer from "gulp-autoprefixer";
+import eslint from "gulp-eslint-new";
+import sassFactory from "gulp-sass";
+import stylelint from "gulp-stylelint";
 import * as sassCompiler from "sass-embedded";
-
-import * as browserSync from "browser-sync";
 
 const sass = sassFactory(sassCompiler);
 
