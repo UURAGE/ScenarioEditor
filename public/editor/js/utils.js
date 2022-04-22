@@ -26,9 +26,19 @@ let Utils;
         makeSortable: makeSortable,
         alertDialog: alertDialog,
         confirmDialog: confirmDialog,
+        fitDialogWidthToWindow: fitDialogWidthToWindow,
+        fitDialogHeightToWindow: fitDialogHeightToWindow,
         abbreviateText: abbreviateText,
         stopQueuedClicks: stopQueuedClicks,
-        sIcon: sIcon
+        sIcon: sIcon,
+        dialogSizes:
+        {
+            extraSmall: 320,
+            small: 500,
+            medium: 800,
+            large: 1024,
+            extraLarge: 1200
+        }
     };
 
     // Taken from stackoverflow
@@ -286,6 +296,16 @@ let Utils;
                 }
             });
         });
+    }
+
+    function fitDialogWidthToWindow(size)
+    {
+        return Math.min(size, $(window).width());
+    }
+
+    function fitDialogHeightToWindow(size)
+    {
+        return Math.min(size, $(window).height());
     }
 
     function abbreviateText(text, separator, maxLength)

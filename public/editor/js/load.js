@@ -32,8 +32,8 @@ let Load;
         importDialog.dialog(
         {
             title: i18next.t('load:import_title'),
-            height: Constants.heightImportScreen,
-            width: Constants.widthImportScreen,
+            height: Utils.fitDialogHeightToWindow(Utils.dialogSizes.small),
+            width: Utils.fitDialogWidthToWindow(Utils.dialogSizes.small),
             modal: true,
             buttons:
             [{

@@ -109,8 +109,8 @@ let Parameters;
         parametersDialog.dialog(
         {
             title: i18next.t('parameters:title'),
-            height: Constants.heightParameterScreen,
-            width: Constants.widthParameterScreen,
+            height: Utils.fitDialogHeightToWindow(Utils.dialogSizes.medium),
+            width: Utils.fitDialogWidthToWindow(Utils.dialogSizes.large),
             modal: true,
             buttons:
             [

@@ -248,7 +248,7 @@ let ColorPicker;
         keyContainer.dialog(
         {
             title: i18next.t('colorPicker:key_title'),
-            height: 800,
+            height: Utils.fitDialogHeightToWindow(Utils.dialogSizes.medium),
             width: Config.container.settings.colorKeyEntry.type.rows ? 360 : 320,
             modal: true,
             buttons:

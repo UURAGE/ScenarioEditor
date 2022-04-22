@@ -13,7 +13,6 @@
         "Utils": "readonly",
         "Types": "readonly",
         "Config": "readonly",
-        "Constants": "readonly",
         "DragBox": "readonly",
         "MiniMap": "readonly",
         "Main": "readonly",

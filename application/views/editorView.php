@@ -50,7 +50,6 @@
       "js/utils.js",
       "js/types.js",
       "js/config.js",
-      "js/constants.js",
       "js/dragBox.js",
       "js/miniMap.js",
       "js/main.js",

@@ -138,8 +138,8 @@ let Metadata;
         metadataDialog.dialog(
         {
             title: i18next.t('metadata:title'),
-            height: Constants.heightMetaScreen,
-            width: Constants.widthMetaScreen,
+            height: Utils.fitDialogHeightToWindow(Utils.dialogSizes.medium),
+            width: Utils.fitDialogWidthToWindow(Utils.dialogSizes.medium),
             modal: true,
             buttons:
             [

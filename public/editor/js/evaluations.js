@@ -109,8 +109,8 @@ let Evaluations;
         evaluationsDialog.dialog(
         {
             title: i18next.t('evaluations:title'),
-            height: 800,
-            width: 1200,
+            height: Utils.fitDialogHeightToWindow(Utils.dialogSizes.medium),
+            width: Utils.fitDialogWidthToWindow(Utils.dialogSizes.extraLarge),
             modal: true,
             buttons:
             [
