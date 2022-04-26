@@ -153,6 +153,8 @@ let Load;
 
         Main.selectElement(null);
 
+        Zoom.zoomOut();
+
         if (Main.nodes.length !== 0)
         {
             Object.values(Main.trees).forEach(function(tree)
