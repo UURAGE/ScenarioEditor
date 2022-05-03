@@ -53,7 +53,7 @@ See "NPM package" above. Run `gulp sass` to compile once.
 
 #### Using Sass Compiler
 
-When compiling using the [standard Sass compiler](http://sass-lang.com/install), you need to watch the folder `editor/sass` to compile to `editor/css`.
+When compiling using the [standard Sass compiler](http://sass-lang.com/install), you need to watch the folder `public/editor/sass` to compile to `public/editor/css`.
 
 #### Live-reload
 
