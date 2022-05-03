@@ -31,7 +31,7 @@ let Validator;
         const validationReport = []; // An array of objects containing the errors found
 
         // First save the latest changes.
-        Main.applyChanges(Main.selectedElement);
+        Main.applyChanges();
         // Checks whether the scenario has a name
         if (Metadata.container.name === null || Metadata.container.name === "")
         {
