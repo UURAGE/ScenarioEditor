@@ -4,6 +4,6 @@
     "add_time_title": "Add parameter time +1 to every node",
     "missing_name_warning": "Some parameters will not be saved, because a parameter needs a name. Are you sure you want to continue?",
     "removal_warning": "You removed the following $t(parameters:parameter, { 'count': {{count}} }). Are you sure you want to continue?",
-    "parameter": "parameter",
-    "parameter_plural": "parameters"
+    "parameter_one": "parameter",
+    "parameter_other": "parameters"
 }

@@ -38,26 +38,24 @@
         }
     }).responseJSON;
 
-    i18next
-        .init(
+    i18next.init(
     {
         debug: false,
         // Setting this to false ensures setTimeout-free initialisation
         initImmediate: false,
-        whitelist: ['en', 'nl'],
+        supportedLngs: ['en', 'nl'],
         lng: languageCode,
         fallbackLng: 'en',
         resources: resources,
-        interpolation:
-        {
-            format: function(value, format)
-            {
-                if (format === 'uppercase') return value.toUpperCase();
-                if (format === 'lowercase') return value.toLowerCase();
-                // Future: For formatting dates in multiple locales we can use 'moment.js' and for numbers 'numerical.js'
-                // if(value instanceof Date) return moment(value).format(format);
-                return value;
-            }
-        }
+        // Setting this (to its default value) disables natural language detection
+        nsSeparator: ':'
+    });
+    i18next.services.formatter.add('uppercase', function(value)
+    {
+        return value.toUpperCase();
+    });
+    i18next.services.formatter.add('lowercase', function(value)
+    {
+        return value.toLowerCase();
     });
 })();
