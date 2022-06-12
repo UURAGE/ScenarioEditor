@@ -194,7 +194,7 @@
 
             const stmt = tr.data('item').properties.statement.trimToLength(25);
             const index = $('#draftTable tr.draftItem').index(tr);
-            let text = i18next.t('draft:item_number', { postProcess: 'sprintf', sprintf: [parseInt(index, 10) + 1] });
+            let text = i18next.t('draft:item_number', { number: index + 1 });
             if (stmt) text += ' ' + stmt;
 
             if (DragBox.isDroppable())

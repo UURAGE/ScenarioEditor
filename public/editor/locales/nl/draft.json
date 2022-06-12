@@ -10,7 +10,7 @@
     "add_item": "Nieuw item",
     "not_available": "Niet beschikbaar",
     "all_items": "Alle items",
-    "item_number": "Item #%i",
+    "item_number": "Item #{{number}}",
     "no_filled_items": "Geen niet-lege items aanwezig!",
     "no_subject_open": "Geen onderwerp geopend!",
     "empty_item": "Item is leeg!",

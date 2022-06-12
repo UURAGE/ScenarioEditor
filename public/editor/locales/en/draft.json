@@ -10,7 +10,7 @@
     "add_item": "Add item",
     "not_available": "Not available",
     "all_items": "All items",
-    "item_number": "Item #%i",
+    "item_number": "Item #{{number}}",
     "no_filled_items": "No filled items present!",
     "no_subject_open": "No subject open!",
     "empty_item": "Item is empty!",

@@ -1,5 +1,5 @@
 {
-    "copy_of": "Copy of %s",
+    "copy_of": "Copy of {{name}}",
     "copy": "cut",
     "cut": "copy",
     "paste": "paste",

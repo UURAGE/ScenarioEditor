@@ -39,7 +39,6 @@
     }).responseJSON;
 
     i18next
-        .use(i18nextSprintfPostProcessor)
         .init(
     {
         debug: false,

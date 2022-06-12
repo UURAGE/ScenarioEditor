@@ -7,7 +7,6 @@
     "extends": "eslint:recommended",
     "globals": {
         "i18next": "readonly",
-        "i18nextSprintfPostProcessor": "readonly",
         "jsPlumb": "readonly",
         "saveAs": "readonly",
         "Utils": "readonly",

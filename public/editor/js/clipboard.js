@@ -319,7 +319,7 @@
 
         const newTree = Main.createEmptyTree(null, leftPos, topPos);
 
-        newTree.subject = i18next.t('clipboard:copy_of', { postProcess: 'sprintf', sprintf: [toCopy.subject] });
+        newTree.subject = i18next.t('clipboard:copy_of', { name: toCopy.subject });
         newTree.optional = toCopy.optional;
         const iconDiv = newTree.dragDiv.find('.icons');
         if (newTree.optional) iconDiv.html(Utils.sIcon('icon-tree-is-optional'));

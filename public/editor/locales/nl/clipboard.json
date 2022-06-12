@@ -1,5 +1,5 @@
 {
-    "copy_of": "Kopie %s",
+    "copy_of": "Kopie {{name}}",
     "copy": "kopiëren",
     "cut": "knippen",
     "paste": "plakken",
