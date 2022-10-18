@@ -241,6 +241,12 @@ tr.ui-sortable-helper {
   }
 }
 
+.markdownUITooltip {
+  code {
+    white-space: nowrap;
+  }
+}
+
 .enumeration-values-container {
   li {
     clear: both;
