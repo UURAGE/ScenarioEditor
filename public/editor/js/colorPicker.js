@@ -507,10 +507,32 @@ let ColorPicker;
                             SaveIndicator.setSavedChanges(false);
 
                             const colorValue = $(this).data("color");
-                            connection.setParameter("color", colorValue);
-                            if (ColorPicker.areColorsEnabled())
+                            const dialogue = Zoom.getZoomed();
+                            const selectedConnections = dialogue.selectedConnections;
+                            for (const connectionId in selectedConnections)
                             {
-                                applyColor(connection, Zoom.getZoomed());
+                                const cs = dialogue.plumbInstance.getConnections(
+                                {
+                                    source: selectedConnections[connectionId].source,
+                                    target: selectedConnections[connectionId].target
+                                });
+                                // Connection could just have been removed so we need to check if it still exists
+                                if (cs.length > 0)
+                                {
+                                    cs[0].setParameter("color", colorValue);
+                                    if (ColorPicker.areColorsEnabled())
+                                    {
+                                        applyColor(cs[0], dialogue);
+                                    }
+                                }
+                            }
+                            if (!(connection.id in selectedConnections))
+                            {
+                                connection.setParameter("color", colorValue);
+                                if (ColorPicker.areColorsEnabled())
+                                {
+                                    applyColor(connection, dialogue);
+                                }
                             }
 
                             closeColorPicker(e);

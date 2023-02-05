@@ -104,21 +104,30 @@ let PlumbGenerator;
                     }
                 }
 
-                selectedConnections[c.id] = { source: c.sourceId, target: c.targetId };
-
-                const colorValue = c.getParameter("color");
-                let paintStyle = PlumbGenerator.defaultSelectedPaintStyle;
-                if (colorValue && ColorPicker.areColorsEnabled())
-                {
-                    paintStyle = $.extend({}, paintStyle, { stroke: colorValue, outlineStroke: colorValue });
-                }
-                c.setPaintStyle(paintStyle);
+                selectConnection(selectedConnections, c);
             }
         });
 
-        instance.bind("contextmenu", function(connection, e)
+        instance.bind("contextmenu", function(c, e)
         {
-            ColorPicker.showFor(connection);
+            // There are other elements (nodes or trees) selected, so deselect those elements
+            if (Main.selectedElements.length > 0) Main.selectElement(null);
+
+            const selectedConnections = Zoom.getZoomed().selectedConnections;
+            if (!(c.id in selectedConnections))
+            {
+                if (!(e.ctrlKey || e.metaKey))
+                {
+                    for (const connectionId in selectedConnections)
+                    {
+                        Main.deselectConnection(instance, selectedConnections, connectionId);
+                    }
+                }
+
+                selectConnection(selectedConnections, c);
+            }
+
+            ColorPicker.showFor(c);
             e.preventDefault();
         });
 
@@ -144,6 +153,19 @@ let PlumbGenerator;
         });
 
         return instance;
+    }
+
+    function selectConnection(selectedConnections, connection)
+    {
+        selectedConnections[connection.id] = { source: connection.sourceId, target: connection.targetId };
+
+        const colorValue = connection.getParameter("color");
+        let paintStyle = PlumbGenerator.defaultSelectedPaintStyle;
+        if (colorValue && ColorPicker.areColorsEnabled())
+        {
+            paintStyle = $.extend({}, paintStyle, { stroke: colorValue, outlineStroke: colorValue });
+        }
+        connection.setPaintStyle(paintStyle);
     }
 
     function highlightLinealRelatives(connectionInfo, settings)
