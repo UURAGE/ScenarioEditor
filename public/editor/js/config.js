@@ -362,7 +362,6 @@ let Config;
 
     function hasParameterWithType(type)
     {
-        let hasType = false;
         const checkHasType = function(parameterItem)
         {
             if (parameterItem.kind !== "parameter")
@@ -373,14 +372,14 @@ let Config;
             {
                 return true;
             }
+            return false;
         };
-        hasType = hasType || Config.container.parameters.sequence.some(checkHasType);
-        hasType = hasType || Config.container.characters.parameters.sequence.forEach(checkHasType);
-        for (const characterId in Config.container.characters.byId)
+        return Config.container.parameters.sequence.some(checkHasType) ||
+        Config.container.characters.parameters.sequence.some(checkHasType) ||
+        Config.container.characters.sequence.some(function(character)
         {
-            hasType = hasType || Config.container.characters.byId[characterId].parameters.sequence.forEach(checkHasType);
-        }
-        return hasType;
+            return character.parameters.sequence.some(checkHasType);
+        });
     }
 
     function isCharacterParameter(parameterId)
