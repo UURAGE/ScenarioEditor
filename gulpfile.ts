@@ -1,5 +1,4 @@
 import browserSync from "browser-sync";
-import log from "fancy-log";
 import gulp from "gulp";
 import autoprefixer from "gulp-autoprefixer";
 import eslint from "gulp-eslint-new";
@@ -51,7 +50,7 @@ const watch = (done, browserSyncInstance?: browserSync.BrowserSyncInstance) =>
         sassSrc,
         gulp.series(lintSass, browserSyncInstance ? () => compileSass().pipe(browserSyncInstance.stream()) : compileSass)
     );
-    log.info("Watching for file changes...");
+    console.log("Watching for file changes...");
     done();
 };
 gulp.task("watch", watch);

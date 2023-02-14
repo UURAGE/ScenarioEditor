@@ -313,7 +313,6 @@ textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
 
 .handle {
   cursor: move;
-  cursor: -webkit-grab;
   cursor: grab;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -321,7 +320,6 @@ textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
 }
 .ui-sortable-helper .handle {
   cursor: move;
-  cursor: -webkit-grabbing;
   cursor: grabbing;
 }
 .parameter-effect .handle {
@@ -1606,8 +1604,7 @@ td.dragHandle {
 #colorPicker {
   z-index: 51;
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
-  -webkit-animation: pop-in 0.2s ease-in-out 0s;
-          animation: pop-in 0.2s ease-in-out 0s;
+  animation: pop-in 0.2s ease-in-out 0s;
 }
 #colorPicker .edit,
 #colorPicker .close {
@@ -1625,22 +1622,6 @@ td.dragHandle {
 
 .color {
   border-style: outset;
-}
-
-@-webkit-keyframes pop-in {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.75);
-  }
-  50% {
-    opacity: 1;
-  }
-  75% {
-    transform: translate(-50%, -50%) scale(1.025);
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1);
-  }
 }
 
 @keyframes pop-in {
@@ -1747,9 +1728,8 @@ td.dragHandle {
   padding-right: 10px;
   box-sizing: border-box;
 }
-@supports ((position: -webkit-sticky) or (position: sticky)) {
+@supports (position: sticky) {
   #metadata .index {
-    position: -webkit-sticky;
     position: sticky;
     top: 0;
   }
@@ -1777,7 +1757,7 @@ td.dragHandle {
   flex: 1 1 100%;
   padding-left: 160px;
 }
-@supports ((position: -webkit-sticky) or (position: sticky)) {
+@supports (position: sticky) {
   #metadata .content {
     padding-left: 0;
   }

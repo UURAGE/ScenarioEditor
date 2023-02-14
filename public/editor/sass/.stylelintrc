@@ -213,6 +213,7 @@
         "selector-id-pattern": null,
         "selector-list-comma-newline-after": "always-multi-line",
         "selector-list-comma-space-after": "always-single-line",
+        "selector-not-notation": null,
         "string-quotes": "single",
         "value-keyword-case": [
             "lower",

@@ -3,26 +3,24 @@
   "private": true,
   "devDependencies": {
     "@types/browser-sync": "^2.26.3",
-    "@types/fancy-log": "^1.3.1",
-    "@types/gulp": "^4.0.9",
+    "@types/gulp": "^4.0.10",
     "@types/gulp-autoprefixer": "0.0.33",
     "@types/gulp-sass": "^5.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.27.1",
-    "@typescript-eslint/parser": "^5.27.1",
-    "browser-sync": "^2.27.10",
-    "eslint": "8.17.0",
-    "fancy-log": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "browser-sync": "^2.27.11",
+    "eslint": "8.34.0",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^8.0.0",
-    "gulp-eslint-new": "^1.5.0",
+    "gulp-eslint-new": "^1.7.2",
     "gulp-sass": "^5.1.0",
     "gulp-stylelint": "^13.0.0",
-    "sass-embedded": "^1.52.3",
-    "stylelint": "^14.9.0",
-    "stylelint-config-standard-scss": "^4.0.0",
+    "sass-embedded": "^1.57.1",
+    "stylelint": "^14.16.1",
+    "stylelint-config-standard-scss": "^5.0.0",
     "stylelint-order": "^5.0.0",
-    "ts-node": "^10.8.1",
-    "typescript": "^4.7.3"
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
   },
   "overrides": {
     "gulp-stylelint": {
@@ -31,6 +29,8 @@
   },
   "browserslist": [
     "defaults",
-    "not IE >= 0"
+    "last 3 iOS major versions",
+    "last 10 Chrome versions",
+    "last 10 Edge versions"
   ]
 }
