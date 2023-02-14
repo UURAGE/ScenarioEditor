@@ -107,12 +107,10 @@
 
     function shallowArrayOfArraysCopy(toBeCopied)
     {
-        const output = [];
-        for (let i = 0; i < toBeCopied.length; i++)
+        return toBeCopied.map(function(array)
         {
-            output.push([].concat(toBeCopied[i]));
-        }
-        return output;
+            return Array.from(array);
+        });
     }
 
     function crossings(virtualNodeNetwork)

@@ -287,7 +287,7 @@ let KeyControl;
     // If the user clicked on a node while ctrl is pressed, check if he need to be selected or deselected.
     function ctrlClickOnElement(node)
     {
-        if (Main.selectedElements.indexOf(node) !== -1)
+        if (Main.selectedElements.includes(node))
         {
             deselectElement(node);
         }
@@ -413,7 +413,7 @@ let KeyControl;
                 // All selected trees will move in the same distance in the same direction,
                 // so no two selected trees can end up in the same space if they are not already.
                 return Main.checkGridAvailable(newGridX, newGridY,
-                    function(tree) { return Main.selectedElements.indexOf(tree.id) !== -1; });
+                    function(tree) { return Main.selectedElements.includes(tree.id); });
             }
             else
             {

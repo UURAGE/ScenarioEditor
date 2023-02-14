@@ -428,7 +428,7 @@ let Config;
         propertyValues.characterIndependent = {};
         for (const propertyId in Config.container.properties.byId)
         {
-            if (acceptableStatementScopes.indexOf(Config.container.properties.byId[propertyId].scopes.statementScope) === -1) continue;
+            if (!acceptableStatementScopes.includes(Config.container.properties.byId[propertyId].scopes.statementScope)) continue;
             propertyValues.characterIndependent[propertyId] = Config.container.properties.byId[propertyId].type.defaultValue;
         }
 
@@ -439,14 +439,14 @@ let Config;
             for (const propertyId in Config.container.characters.properties.byId)
             {
                 const statementScope = Config.container.characters.properties.byId[propertyId].scopes.statementScope;
-                if (acceptableStatementScopes.indexOf(statementScope) === -1) continue;
+                if (!acceptableStatementScopes.includes(statementScope)) continue;
                 if (statementScope === 'per-computer-own' && characterId !== characterIdRef) continue;
                 propertyValues.perCharacter[characterId][propertyId] = Config.container.characters.properties.byId[propertyId].type.defaultValue;
             }
             for (const propertyId in Config.container.characters.byId[characterId].properties.byId)
             {
                 const statementScope = Config.container.characters.byId[characterId].properties.byId[propertyId].scopes.statementScope;
-                if (acceptableStatementScopes.indexOf(statementScope) === -1) continue;
+                if (!acceptableStatementScopes.includes(statementScope)) continue;
                 if (statementScope === 'per-computer-own' && characterId !== characterIdRef) continue;
                 propertyValues.perCharacter[characterId][propertyId] = Config.container.characters.byId[characterId].properties.byId[propertyId].type.defaultValue;
             }

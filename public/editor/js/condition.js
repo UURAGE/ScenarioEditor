@@ -213,8 +213,8 @@ let Condition;
         }
         else if (condition.idRef === oldParameter.id)
         {
-            const hasRelationalOperator = newParameter.type.relationalOperators.indexOf(Types.relationalOperators[condition.operator]) !== -1;
-            const hasUnaryOperator = newParameter.type.unaryOperators.indexOf(Types.unaryOperators[condition.operator]) !== -1;
+            const hasRelationalOperator = newParameter.type.relationalOperators.includes(Types.relationalOperators[condition.operator]);
+            const hasUnaryOperator = newParameter.type.unaryOperators.includes(Types.unaryOperators[condition.operator]);
             if (!hasRelationalOperator && !hasUnaryOperator)
             {
                 condition.operator = newParameter.type.relationalOperators[0].name;

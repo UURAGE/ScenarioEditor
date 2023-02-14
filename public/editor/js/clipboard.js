@@ -406,11 +406,10 @@
 
             const getEqualParameter = function(parameter)
             {
-                const equalParameters = Parameters.container.sequence.filter(function(existingParameter)
+                return Parameters.container.sequence.find(function(existingParameter)
                 {
                     return existingParameter.name === parameter.name && existingParameter.type.equals(parameter.type);
-                });
-                return equalParameters.length > 0 ? equalParameters[0] : null;
+                }) || null;
             };
 
             const missingParameterIds = {};

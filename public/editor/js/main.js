@@ -815,7 +815,7 @@ let Main;
 
                 if (Main.selectedElement === null)
                 {
-                    if (Main.selectedElements.indexOf(id) === -1)
+                    if (!Main.selectedElements.includes(id))
                     {
                         selectElement(id);
                     }
@@ -1143,7 +1143,7 @@ let Main;
 
                 if (Main.selectedElement === null)
                 {
-                    if (Main.selectedElements.indexOf(id) === -1)
+                    if (!Main.selectedElements.includes(id))
                     {
                         selectElement(id);
                     }
@@ -1704,11 +1704,11 @@ let Main;
 
         const getPropertyFromDOMAndSetInNode = function(property, propertyValues, idPrefix, nodeCharacterIdRef, characterId)
         {
-            if (acceptableScopes.indexOf(property.scopes.statementScope) === -1) return;
+            if (!acceptableScopes.includes(property.scopes.statementScope)) return;
             if (property.scopes.statementScope === 'per-computer-own' && (!characterId || characterId !== nodeCharacterIdRef)) return;
             propertyValues[property.id] = property.type.getFromDOM($('#' + $.escapeSelector(idPrefix) + "-container-" + $.escapeSelector(property.id)));
 
-            if (property.type.autoComplete && property.autoCompleteList.indexOf(propertyValues[property.id]) === -1)
+            if (property.type.autoComplete && !property.autoCompleteList.includes(propertyValues[property.id]))
             {
                 property.autoCompleteList.push(propertyValues[property.id]);
             }
@@ -2151,7 +2151,7 @@ let Main;
             const hStartLevel = 3;
             const showParameterItem = function(parameterDefinitions, acceptableScopes, parameterItem, hLevel, container, classPrefix, idRefToEffectsContainer)
             {
-                if (acceptableScopes.indexOf(parameterItem.scopes.statementScope) === -1) return false;
+                if (!acceptableScopes.includes(parameterItem.scopes.statementScope)) return false;
                 if (parameterItem.kind === 'section')
                 {
                     const sectionContainer = $('<div>');
@@ -2321,7 +2321,7 @@ let Main;
             // Show the node's property values
             const showPropertyItem = function(propertyValues, acceptableScopes, propertyItem, hLevel, tableBody, idPrefix)
             {
-                if (acceptableScopes.indexOf(propertyItem.scopes.statementScope) === -1) return;
+                if (!acceptableScopes.includes(propertyItem.scopes.statementScope)) return;
                 if (propertyItem.kind === 'section')
                 {
                     const sectionTable = $('<table>');
@@ -2503,7 +2503,7 @@ let Main;
                     // Add the previously defined per-computer-own fixed parameter effects
                     node.parameterEffects.fixed.perCharacter[node.characterIdRef].sequence.forEach(function(effect)
                     {
-                        if (acceptableScopes.indexOf(characterParameterDefinitions[effect.idRef].scopes.statementScope) !== -1)
+                        if (acceptableScopes.includes(characterParameterDefinitions[effect.idRef].scopes.statementScope))
                         {
                             const effectsContainer = idRefToThisCharacterEffectsContainer[effect.idRef];
                             appendEffectContainerTo(effectsContainer, classCharacterPrefix, characterParameterDefinitions);

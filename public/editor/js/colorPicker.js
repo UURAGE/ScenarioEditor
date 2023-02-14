@@ -162,7 +162,7 @@ let ColorPicker;
         });
         for (const value in ColorPicker.key.byColor)
         {
-            if (ColorPicker.key.sequence.indexOf(ColorPicker.key.byColor[value]) === -1)
+            if (!ColorPicker.key.sequence.includes(ColorPicker.key.byColor[value]))
             {
                 ColorPicker.key.sequence.push(ColorPicker.key.byColor[value]);
             }
@@ -273,10 +273,11 @@ let ColorPicker;
                         };
                     }).get();
 
-                    const changedConnections = [].concat.apply([], Object.values(Main.trees).map(function(tree)
-                    {
-                        return tree.plumbInstance.getAllConnections();
-                    }))
+                    const changedConnections = Object.values(Main.trees)
+                        .flatMap(function(tree)
+                        {
+                            return tree.plumbInstance.getAllConnections();
+                        })
                         .filter(function(connection)
                         {
                             return connection.getParameter('color') in justDisabledColors;

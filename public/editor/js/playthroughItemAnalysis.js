@@ -18,7 +18,7 @@
                     {
                         const nodeID = statement.id.replace(/^(.+?\.){3}/, '').replace(/\./g, '_');
                         if (nodeID in Main.nodes &&
-                            (nodeIDs.length === 0 || nodeIDs.indexOf(nodeID) !== -1))
+                            (nodeIDs.length === 0 || nodeIDs.includes(nodeID)))
                         {
                             if (!(nodeID in nodeCounts))
                             {

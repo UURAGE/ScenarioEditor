@@ -212,7 +212,7 @@ let Evaluations;
                 const evaluationId = container.prop('id');
                 const expression = Expression.getFromDOM(container.find('.evaluation-expression'), type);
                 if (type.name === Types.primitives.integer.name &&
-                    evaluationId.indexOf(getParameterIdPrefix()) === 0)
+                    evaluationId.startsWith(getParameterIdPrefix()))
                 {
                     if (expression.reference.calculate === 'percentage')
                     {

@@ -326,7 +326,7 @@ let Parameters;
                         {
                             if (effect.idRef === oldParameter.id)
                             {
-                                const hasOperator = newParameter.type.assignmentOperators.indexOf(Types.assignmentOperators[effect.operator]) !== -1;
+                                const hasOperator = newParameter.type.assignmentOperators.includes(Types.assignmentOperators[effect.operator]);
                                 if (!hasOperator) effect.operator = newParameter.type.assignmentOperators[0].name;
 
                                 effect.value = newParameter.type.castFrom(oldParameter.type, effect.value);

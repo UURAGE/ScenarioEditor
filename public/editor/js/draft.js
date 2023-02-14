@@ -370,7 +370,7 @@
     {
         if (this.length > m)
         {
-            return $.trim(this).substring(0, m)
+            return this.trim().substring(0, m)
                 .split(" ").slice(0, -1).join(" ") + "...";
         }
         return this;
@@ -409,7 +409,7 @@
                     const e = propEditors[p] === undefined ?
                         propEditors.fallback : propEditors[p];
 
-                    if (e.indexOf('<select') !== -1)
+                    if (e.includes('<select'))
                     {
                         html += '<td class="' + p + ' col' + i + '">' + e + '</td>';
                     }
