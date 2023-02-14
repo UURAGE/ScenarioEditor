@@ -54,9 +54,11 @@ $font-family: 'Open Sans', 'Frutiger', 'Helvetica', 'Arial', sans-serif;
   margin-top: 0 !important;
 }
 
-button {
+input, select, textarea, button {
   font-family: $font-family;
+}
 
+button {
   img {
     vertical-align: middle;
   }
@@ -104,7 +106,6 @@ svg {
 }
 
 textarea {
-  font-family: $font-family;
   resize: none;
 }
 

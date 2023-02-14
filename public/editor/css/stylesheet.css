@@ -105,9 +105,10 @@ body {
   margin-top: 0 !important;
 }
 
-button {
+input, select, textarea, button {
   font-family: "Open Sans", "Frutiger", "Helvetica", "Arial", sans-serif;
 }
+
 button img {
   vertical-align: middle;
 }
@@ -144,7 +145,6 @@ svg.icon {
 }
 
 textarea {
-  font-family: "Open Sans", "Frutiger", "Helvetica", "Arial", sans-serif;
   resize: none;
 }
 
