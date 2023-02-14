@@ -15,7 +15,8 @@ let ElementList;
     ElementList =
     {
         reset: reset,
-        handleNodeTextChange: handleNodeTextChange,
+        handleNodeTextUpdate: handleNodeTextUpdate,
+        handleNodeDecorationsUpdate: handleNodeDecorationsUpdate,
         handleNodeDeletion: handleNodeDeletion,
         handleParameterTypeChange: handleParameterTypeChange,
         handleParametersChange: handleParametersChange
@@ -320,13 +321,26 @@ let ElementList;
         return $('#elementList').is(':visible');
     }
 
-    function handleNodeTextChange(node)
+    function handleNodeTextUpdate(node)
     {
         if (!isActive()) return;
-        let row = $('#element-list-' + node.id);
+        const row = $('#element-list-' + node.id);
         if (row.length)
         {
             row.find('.text').text(node.text);
+        }
+        else
+        {
+            handleNodeCreation(node);
+        }
+    }
+
+    function handleNodeDecorationsUpdate(node)
+    {
+        if (!isActive()) return;
+        const row = $('#element-list-' + node.id);
+        if (row.length)
+        {
             if (selectedParameterId !== null)
             {
                 const parameterEffectsCell = row.find('.parameterEffects').empty();
@@ -340,32 +354,37 @@ let ElementList;
         }
         else
         {
-            const tree = Main.trees[node.parent];
-            row = createRow(tree, node);
+            handleNodeCreation(node);
+        }
+    }
 
-            const pos = Utils.cssPosition($('#' + node.id));
-            let previousRow = null;
-            let previousPos = null;
-            tree.nodes.forEach(function(otherNodeID)
+    function handleNodeCreation(node)
+    {
+        const tree = Main.trees[node.parent];
+        const row = createRow(tree, node);
+
+        const pos = Utils.cssPosition($('#' + node.id));
+        let previousRow = null;
+        let previousPos = null;
+        tree.nodes.forEach(function(otherNodeID)
+        {
+            const otherRow = $('#element-list-' + otherNodeID);
+            if (!otherRow.length) return;
+            const otherPos = Utils.cssPosition($('#' + otherNodeID));
+            if ((!previousPos || compareNodePositions(previousPos, otherPos) < 0) &&
+                compareNodePositions(otherPos, pos) < 0)
             {
-                const otherRow = $('#element-list-' + otherNodeID);
-                if (!otherRow.length) return;
-                const otherPos = Utils.cssPosition($('#' + otherNodeID));
-                if ((!previousPos || compareNodePositions(previousPos, otherPos) < 0) &&
-                    compareNodePositions(otherPos, pos) < 0)
-                {
-                    previousRow = otherRow;
-                    previousPos = otherPos;
-                }
-            });
-            if (previousRow !== null)
-            {
-                row.insertAfter(previousRow);
+                previousRow = otherRow;
+                previousPos = otherPos;
             }
-            else
-            {
-                $('#elementList').children('table').prepend(row);
-            }
+        });
+        if (previousRow !== null)
+        {
+            row.insertAfter(previousRow);
+        }
+        else
+        {
+            $('#elementList').children('table').prepend(row);
         }
     }
 

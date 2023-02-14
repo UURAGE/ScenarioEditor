@@ -41,7 +41,7 @@ let Main;
         addNewNode: addNewNode,
         addNewTree: addNewTree,
         applyChanges: applyChanges,
-        changeNodeText: changeNodeText,
+        updateNodeGraphics: updateNodeGraphics,
         mousePositionToDialoguePosition: mousePositionToDialoguePosition,
         createChildNode: createChildNode,
         createEmptyTree: createEmptyTree,
@@ -991,7 +991,7 @@ let Main;
         }
         else
         {
-            changeNodeText(id);
+            updateNodeGraphics(id);
         }
 
         return Main.nodes[id];
@@ -1329,7 +1329,7 @@ let Main;
         textDiv.show();
 
         if (!cancel) node.text = text;
-        changeNodeText(node.id);
+        updateNodeText(node.id);
 
         nodeDiv.on('dblclick', function()
         {
@@ -1735,23 +1735,15 @@ let Main;
             }
         }
 
-        // Save endNode.
+        // Save other items.
         node.endNode = $("#endNodeCheckbox").prop("checked");
-
-        // Save allowDialogueEndNode.
         node.allowDialogueEndNode = $("#allowDialogueEndNodeCheckbox").prop("checked");
-
-        // Save allowInterleaveNode.
         node.allowInterleaveNode = $("#allowInterleaveNodeCheckbox").prop("checked");
-
-        // Save comment.
         node.comment = $("textarea#comment").val();
 
-        // Ensure the node is not being edited.
         stopEditingNode(node.id, false);
 
-        // Change the text of the node.
-        changeNodeText(Main.selectedElement);
+        updateNodeDecorations(Main.selectedElement);
     }
 
     function highlightLinealRelativesIncludingDirect(nearNodeID, settings)
@@ -1878,8 +1870,14 @@ let Main;
         $("#main").focus();
     }
 
-    // Change the text of the node.
-    function changeNodeText(nodeID)
+    function updateNodeGraphics(nodeID)
+    {
+        updateNodeText(nodeID);
+        updateNodeDecorations(nodeID);
+    }
+
+    // Update the node text in DOM
+    function updateNodeText(nodeID)
     {
         const node = Main.nodes[nodeID];
 
@@ -1915,7 +1913,36 @@ let Main;
         const textLength = $(".lengthTest").text(longestWord)[0].clientWidth / 11;
         const width = Math.max(4, textLength * 1.08, Math.sqrt(text.length));
 
-        // Get the node
+        const nodeHTML = $('#' + nodeID);
+
+        const longNode = text.length > 140;
+        if (longNode)
+        {
+            nodeHTML.addClass("long");
+            nodeHTML.width(150 + "px");
+        }
+        else
+        {
+            nodeHTML.removeClass("long");
+            nodeHTML.width(width + "em");
+        }
+
+        const nodeTextDiv = nodeHTML.find('.statementText');
+        nodeTextDiv.show();
+        nodeTextDiv.html(text);
+
+        // Make sure the text fits inside the node
+        const h = Math.max(40, nodeTextDiv[0].clientHeight);
+        nodeHTML.height(h);
+
+        Main.trees[node.parent].plumbInstance.revalidate(node.id);
+
+        ElementList.handleNodeTextUpdate(node);
+    }
+
+    function updateNodeDecorations(nodeID)
+    {
+        const node = Main.nodes[nodeID];
         const nodeHTML = $('#' + nodeID);
         // Fill div that can hold the images that visualize if the node has certain settings
         const imageDiv = nodeHTML.find('.imgDiv');
@@ -1960,34 +1987,11 @@ let Main;
         appendNodePropertyImageIfHasValue("node-has-premature-end", node.allowDialogueEndNode);
         appendNodePropertyImageIfHasValue("node-has-end", node.endNode);
 
-        const longNode = text.length > 140;
-        if (longNode)
-        {
-            nodeHTML.addClass("long");
-            nodeHTML.width(150 + "px");
-        }
-        else
-        {
-            nodeHTML.removeClass("long");
-            nodeHTML.width(width + "em");
-        }
-
-        const nodeTextDiv = nodeHTML.find('.statementText');
-        nodeTextDiv.show();
-        nodeTextDiv.html(text);
-
-        // Make sure the text fits inside the node
-        const h = Math.max(40, nodeTextDiv[0].clientHeight);
-        nodeHTML.height(h);
-
-        // Add classes to the node for a graphical indication
         nodeHTML.toggleClass('allowInterleaveNode', node.allowInterleaveNode);
         nodeHTML.toggleClass('allowDialogueEndNode', node.allowDialogueEndNode);
         nodeHTML.toggleClass("endNode", node.endNode);
 
-        Main.trees[node.parent].plumbInstance.revalidate(node.id);
-
-        ElementList.handleNodeTextChange(node);
+        ElementList.handleNodeDecorationsUpdate(node);
     }
 
     function deleteElement(elementID)
@@ -2613,7 +2617,7 @@ let Main;
                             node.characterIdRef = newCharacterIdRef;
 
                             updateSideBarCharacterSection();
-                            changeNodeText(Main.selectedElement);
+                            updateNodeGraphics(Main.selectedElement);
                         }
                     });
                 }

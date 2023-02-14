@@ -308,7 +308,7 @@
             Utils.cssPosition(nodeElem, { left: Math.max(position.left, 0), top: Math.max(position.top, 0) });
         }
 
-        Main.changeNodeText(node.id);
+        Main.updateNodeGraphics(node.id);
 
         return node;
     }
