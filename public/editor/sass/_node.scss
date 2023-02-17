@@ -45,6 +45,11 @@
   }
 }
 
+.statementText {
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
 // Used to test length of string in node
 .lengthTest {
   position: absolute;

@@ -1905,17 +1905,17 @@ let Main;
         // Calculate the node width
         if (longestWord === "")
         {
-            longestWord = text.split(" ").reduce(function(a, b)
+            longestWord = node.text.split(/[ \n]/).reduce(function(a, b)
             {
                 return a.length > b.length ? a : b;
             });
         }
         const textLength = $(".lengthTest").text(longestWord)[0].clientWidth / 11;
-        const width = Math.max(4, textLength * 1.08, Math.sqrt(text.length));
+        const width = Math.min(Math.max(4, textLength, Math.sqrt(node.text.length)), 25);
 
         const nodeHTML = $('#' + nodeID);
 
-        const longNode = text.length > 140;
+        const longNode = node.text.length > 140;
         if (longNode)
         {
             nodeHTML.addClass("long");

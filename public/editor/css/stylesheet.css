@@ -1674,6 +1674,12 @@ td.dragHandle {
   min-height: 200px;
 }
 
+.statementText {
+  overflow-wrap: break-word;
+  -webkit-hyphens: auto;
+          hyphens: auto;
+}
+
 .lengthTest {
   position: absolute;
   width: auto;
