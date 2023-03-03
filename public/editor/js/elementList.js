@@ -37,7 +37,7 @@ let ElementList;
 
     function reset()
     {
-        selectedParameterId = null;
+        selectedParameterId = false;
         selectedEffectCategory = 'all';
         selectedTypes = null;
         $('#elementList').empty();
@@ -72,13 +72,13 @@ let ElementList;
             title: i18next.t('elementList:parameter')
         });
         appendParameterOptionsTo(parameterSelect);
-        parameterSelect.val(selectedParameterId === null ? '' : selectedParameterId);
+        setSelectedParameterIdIn(parameterSelect);
 
         const effectCategorySelect = $('<select>',
         {
             id: 'element-list-effect-category-select',
             title: i18next.t('elementList:show_nodes'),
-            disabled: selectedParameterId === null
+            disabled: selectedParameterId === false
         }).append(
             $('<option>', { value: 'all', text: i18next.t('elementList:effect_category.all') }),
             $('<option>', { value: 'with', text: i18next.t('elementList:effect_category.with') }),
@@ -89,7 +89,9 @@ let ElementList;
         parameterSelect.add(effectCategorySelect).on('change', function()
         {
             let parameterId = parameterSelect.val();
-            if (parameterId === '') parameterId = null;
+            if (parameterId === 'false') parameterId = false;
+            else if (parameterId === 'true') parameterId = true;
+            else parameterId = parameterId.substring(1);
             selectParameter(parameterId, effectCategorySelect.val());
         });
 
@@ -182,14 +184,14 @@ let ElementList;
                     class: 'text fill'
                 })
         );
-        if (selectedParameterId !== null)
+        if (selectedParameterId !== false)
         {
             const parameterEffectsCell = $('<td>', { class: 'parameterEffects' });
             processSelectedParameterEffects(parameterEffectsCell, node, row);
             row.append(parameterEffectsCell);
             if (selectedEffectCategory !== 'all')
             {
-                hiddenFor.effectCategory = !(row.data('summaryEffect') !== null ?
+                hiddenFor.effectCategory = !(row.data('summaryEffect') !== false ?
                     selectedEffectCategory === 'with' : selectedEffectCategory === 'without');
             }
         }
@@ -200,45 +202,70 @@ let ElementList;
 
     function processSelectedParameterEffects(parameterEffectsCell, node, row)
     {
-        const selectedParameterEffects = node.parameterEffects.userDefined.filter(function(parameterEffect)
+        let selectedParameterEffects = node.parameterEffects.userDefined;
+        if (selectedParameterId !== true)
         {
-            return parameterEffect.idRef === selectedParameterId;
-        });
+            selectedParameterEffects = selectedParameterEffects.filter(function(parameterEffect)
+            {
+                return parameterEffect.idRef === selectedParameterId;
+            });
+        }
 
         selectedParameterEffects.forEach(function(parameterEffect)
         {
+            let text = Types.assignmentOperators[parameterEffect.operator].uiName + ' ' + parameterEffect.value;
+            if (selectedParameterId === true)
+            {
+                text = Parameters.container.byId[parameterEffect.idRef].name + ' ' + text;
+            }
             parameterEffectsCell.append($('<div>',
             {
-                text: Types.assignmentOperators[parameterEffect.operator].uiName + ' ' + parameterEffect.value,
+                text: text,
                 class: "highlight"
             }));
         });
 
         if (selectedParameterEffects.length > 0)
         {
-            const selectedParameterType = Parameters.container.byId[selectedParameterId].type;
-            let summaryEffect = selectedParameterType.summariseEffects ?
-                selectedParameterType.summariseEffects(selectedParameterEffects) :
-                selectedParameterEffects[selectedParameterEffects.length - 1];
-            if (selectedParameterType.simplifyEffect)
+            if (selectedParameterId === true)
             {
-                summaryEffect = selectedParameterType.simplifyEffect(summaryEffect);
+                row.data('summaryEffect', true);
             }
-            row.data('summaryEffect', summaryEffect);
+            else
+            {
+                const selectedParameterType = Parameters.container.byId[selectedParameterId].type;
+                let summaryEffect = selectedParameterType.summariseEffects ?
+                    selectedParameterType.summariseEffects(selectedParameterEffects) :
+                    selectedParameterEffects[selectedParameterEffects.length - 1];
+                if (selectedParameterType.simplifyEffect)
+                {
+                    summaryEffect = selectedParameterType.simplifyEffect(summaryEffect);
+                }
+                row.data('summaryEffect', summaryEffect);
+            }
         }
         else
         {
-            row.data('summaryEffect', null);
+            row.data('summaryEffect', false);
         }
     }
 
     function appendParameterOptionsTo(parameterSelect)
     {
-        parameterSelect.append($('<option>', { value: '', text: i18next.t('common:none') }));
+        parameterSelect.append($('<option>', { value: 'false', text: i18next.t('common:none'), class: 'system' }));
+        parameterSelect.append($('<option>', { value: 'true', text: i18next.t('common:all'), class: 'system' }));
         Parameters.container.sequence.forEach(function(parameter)
         {
-            parameterSelect.append($('<option>', { value: parameter.id, text: parameter.name }));
+            parameterSelect.append($('<option>', { value: 'v' + parameter.id, text: parameter.name }));
         });
+    }
+
+    function setSelectedParameterIdIn(parameterSelect)
+    {
+        parameterSelect.val(
+            (selectedParameterId !== true && selectedParameterId !== false ? 'v' : '') +
+                selectedParameterId
+        );
     }
 
     function selectParameter(parameterId, effectCategory)
@@ -247,8 +274,8 @@ let ElementList;
         if (parameterId !== selectedParameterId)
         {
             selectedParameterId = parameterId;
-            $('#element-list-parameter-select').val(selectedParameterId === null ? '' : selectedParameterId);
-            if (selectedParameterId === null)
+            setSelectedParameterIdIn($('#element-list-parameter-select'));
+            if (selectedParameterId === false)
             {
                 $('#elementList').children('table').find('tr').each(function()
                 {
@@ -263,7 +290,7 @@ let ElementList;
                 needsListing = true;
             }
         }
-        $('#element-list-effect-category-select').prop('disabled', selectedParameterId === null);
+        $('#element-list-effect-category-select').prop('disabled', selectedParameterId === false);
         if (effectCategory !== selectedEffectCategory)
         {
             selectedEffectCategory = effectCategory;
@@ -274,7 +301,7 @@ let ElementList;
                 {
                     const hiddenFor = $(this).data('hiddenFor');
                     hiddenFor.effectCategory = !(selectedEffectCategory === 'all' ||
-                        ($(this).data('summaryEffect') !== null ?
+                        ($(this).data('summaryEffect') !== false ?
                             selectedEffectCategory === 'with' : selectedEffectCategory === 'without'));
                     setRowDisplayAndNodeHighlighting(Main.nodes[$(this).data('nodeID')], $(this), hiddenFor);
                 });
@@ -291,16 +318,23 @@ let ElementList;
         const nodeElement = $('#' + node.id);
         dehighlightNodes(nodeElement);
         const summaryEffect = row.data('summaryEffect');
-        if (selectedParameterId !== null && rowVisible)
+        if (selectedParameterId !== false && rowVisible)
         {
-            if (selectedEffectCategory !== 'without' && summaryEffect !== null)
+            if (selectedEffectCategory !== 'without' && summaryEffect !== false)
             {
                 nodeElement.addClass('highlight');
-                nodeElement.addClass('highlight-operator-' + summaryEffect.operator);
-                const categoriseValue = Parameters.container.byId[selectedParameterId].type.categoriseValue;
-                nodeElement.addClass('highlight-value-' + (categoriseValue ? categoriseValue(summaryEffect.value) : 'neutral'));
+                if (selectedParameterId !== true)
+                {
+                    nodeElement.addClass('highlight-operator-' + summaryEffect.operator);
+                    const categoriseValue = Parameters.container.byId[selectedParameterId].type.categoriseValue;
+                    nodeElement.addClass('highlight-value-' + (categoriseValue ? categoriseValue(summaryEffect.value) : 'neutral'));
+                }
+                else
+                {
+                    nodeElement.addClass('highlight-value-neutral');
+                }
             }
-            else if (selectedEffectCategory === 'without' && summaryEffect === null)
+            else if (selectedEffectCategory === 'without' && summaryEffect === false)
             {
                 nodeElement.addClass('highlight');
                 nodeElement.addClass('highlight-no-effect');
@@ -341,13 +375,13 @@ let ElementList;
         const row = $('#element-list-' + node.id);
         if (row.length)
         {
-            if (selectedParameterId !== null)
+            if (selectedParameterId !== false)
             {
                 const parameterEffectsCell = row.find('.parameterEffects').empty();
                 processSelectedParameterEffects(parameterEffectsCell, node, row);
                 const hiddenFor = row.data('hiddenFor');
                 hiddenFor.effectCategory = !(selectedEffectCategory === 'all' ||
-                    (row.data('summaryEffect') !== null ?
+                    (row.data('summaryEffect') !== false ?
                         selectedEffectCategory === 'with' : selectedEffectCategory === 'without'));
                 setRowDisplayAndNodeHighlighting(node, row, hiddenFor);
             }
@@ -406,7 +440,11 @@ let ElementList;
         const parameterSelect = $('#element-list-parameter-select');
         parameterSelect.empty();
         appendParameterOptionsTo(parameterSelect);
-        parameterSelect.val(selectedParameterId === null ? '' : selectedParameterId);
-        if (selectedParameterId !== null && parameterSelect.val() !== selectedParameterId) selectParameter(null);
+        setSelectedParameterIdIn(parameterSelect);
+        if (selectedParameterId !== true && selectedParameterId !== false &&
+            parameterSelect.val() !== 'v' + selectedParameterId)
+        {
+            selectParameter(false);
+        }
     }
 })();

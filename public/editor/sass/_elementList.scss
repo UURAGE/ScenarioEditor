@@ -13,6 +13,12 @@
   }
 }
 
+#element-list-parameter-select {
+  .system {
+    font-style: italic;
+  }
+}
+
 #tabDock .typeButtons {
   @mixin interactionColors($color, $backgroundColor, $backgroundAlphaBase: 0, $backgroundAlphaStep: 0) {
     color: rgba($color, .9);

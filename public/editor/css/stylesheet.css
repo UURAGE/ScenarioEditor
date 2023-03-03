@@ -1392,6 +1392,10 @@ td.dragHandle {
   fill: currentColor;
 }
 
+#element-list-parameter-select .system {
+  font-style: italic;
+}
+
 #tabDock .typeButtons .player {
   color: rgba(25, 108, 206, 0.9);
   background-color: rgba(0, 0, 0, 0);
