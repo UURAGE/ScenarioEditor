@@ -981,7 +981,7 @@ let Main;
 
         if (position)
         {
-            Utils.cssPosition(node, position);
+            Utils.cssPosition(node, SnapToGrid.roundPosition(position));
         }
 
         if (shouldSelectAndStartEditing)
@@ -1191,7 +1191,12 @@ let Main;
             stop: function()
             {
                 firstDragNodeID = null;
-            }
+            },
+
+            grid: [
+                Config.container.settings.grid ? Config.container.settings.grid.x : 0,
+                Config.container.settings.grid ? Config.container.settings.grid.y : 0,
+            ]
 
             // We do not set invalidateNodeClick in a stop handler since it fires before the click handler
         });
@@ -2819,10 +2824,10 @@ let Main;
             return null;
         }
 
-        return {
+        return SnapToGrid.roundPosition({
             left: mousePos.x - leftBound + treeDiv.scrollLeft(),
             top: mousePos.y - upperBound + treeDiv.scrollTop()
-        };
+        });
     }
 
     function isEditingInCanvas()

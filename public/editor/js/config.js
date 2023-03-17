@@ -83,6 +83,14 @@ let Config;
             }
         };
 
+        if (settingsXML.children('grid').length > 0)
+        {
+            settings.grid = {
+                x: parseInt(settingsXML.children('grid').attr('x')),
+                y: parseInt(settingsXML.children('grid').attr('y'))
+            };
+        }
+
         settings.statement = loadSettingWithType(settingsXML.children('statement'));
         settings.description = loadSettingWithType(settingsXML.children('description'));
         settings.evaluationName = loadSettingWithType(settingsXML.children('evaluationName'));

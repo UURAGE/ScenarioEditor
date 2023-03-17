@@ -36,6 +36,7 @@
         "ColorPicker": "readonly",
         "SaveIndicator": "readonly",
         "ElementList": "readonly",
+        "SnapToGrid": "readonly",
         "site_url": "readonly",
         "editor_url": "readonly",
         "languageCode": "readonly"

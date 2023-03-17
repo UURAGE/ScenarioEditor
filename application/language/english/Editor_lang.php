@@ -56,3 +56,4 @@ $lang["edt_allow_dialogue_end_title"] = "Allow ending the subject after this sta
 $lang["edt_end_header"] = "End of scenario";
 $lang["edt_end_title"] = "End the scenario after this statement";
 $lang["edt_playthrough_item_analysis"] = "Playthroughs";
+$lang["edt_snap_to_grid"] = "Snap";

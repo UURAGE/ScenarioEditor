@@ -74,7 +74,8 @@
       "js/elementList.js",
       "js/zoom.js",
       "js/clipboard.js",
-      "js/playthroughItemAnalysis.js"
+      "js/playthroughItemAnalysis.js",
+      "js/snapToGrid.js"
   );
   foreach ($scripts as $script)
   {
@@ -152,6 +153,7 @@
               <button id="toggleDraftScreen" class="subjectButton"><?php echo sIcon("icon-notepad"); sLang("edt_note_pad"); ?></button>
               <button id="toggleElementList" class="globalButton"><?php echo sIcon("icon-element-list"); sLang("edt_list"); ?></button>
               <button id="repositionGraph" class="subjectButton" title="<?php sLang("edt_arrange_title"); ?>"><?php echo sIcon("icon-arrange"); sLang("edt_arrange"); ?></button>
+              <button id="snapGraph" class="globalButton"><?php echo sIcon("icon-snap-to-grid"); sLang("edt_snap_to_grid"); ?></button>
               <button id="delete" class="globalButton"><?php echo sIcon("icon-delete"); sLang("btn_delete"); ?></button>
             </div>
           </div>

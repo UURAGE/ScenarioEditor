@@ -10,6 +10,12 @@
 				<element name="settings">
 					<complexType>
 						<sequence>
+							<element name="grid" minOccurs="0" maxOccurs="1">
+								<complexType>
+								   <attribute name="x" type="int"/>
+								   <attribute name="y" type="int"/>
+								</complexType>
+							</element>
 							<element name="statement" minOccurs="0" maxOccurs="1">
 								<complexType>
 									<sequence>
