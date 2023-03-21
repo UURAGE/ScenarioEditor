@@ -95,7 +95,8 @@ let Types;
         'singleLineContainerLabel': 'singleLineContainerLabel',
         'twoLineLabelContainer': 'twoLineLabelContainer',
         'twoLineContainerLabel': 'twoLineContainerLabel',
-        'container': 'container'
+        'container': 'container',
+        'singleCellContainerLabel': 'singleCellContainerLabel'
     };
 
     Types.valueCategories =
@@ -136,7 +137,10 @@ let Types;
                     const rows = Utils.parseDecimalIntWithDefault(rowsAttr);
                     if (rows > 1)
                     {
-                        type = $.extend({}, type, { controlName: 'textarea' });
+                        type = $.extend({}, type, {
+                            controlName: 'textarea',
+                            labelControlOrder: Types.labelControlOrders.twoLineLabelContainer
+                        });
                         delete type.controlType;
                     }
                     type = $.extend({}, type, { rows: rows });
@@ -408,7 +412,7 @@ let Types;
             name: 'boolean',
             controlName: 'input',
             controlType: 'checkbox',
-            labelControlOrder: Types.labelControlOrders.singleLineContainerLabel,
+            labelControlOrder: Types.labelControlOrders.singleCellContainerLabel,
             defaultValue: false,
             assignmentOperators: [Types.assignmentOperators.assign],
             relationalOperators: [Types.relationalOperators.equalTo, Types.relationalOperators.notEqualTo],

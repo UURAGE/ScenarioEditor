@@ -2358,13 +2358,17 @@ let Main;
                 }
                 else
                 {
-                    const propertyHeader = $('<th>');
                     const controlHtmlId = idPrefix + '-' + propertyItem.id;
                     const controlFirst = propertyItem.type.labelControlOrder === Types.labelControlOrders.singleLineContainerLabel ||
-                                       propertyItem.type.labelControlOrder === Types.labelControlOrders.twoLineContainerLabel;
-                    propertyHeader.append($('<label>', { text: propertyItem.name + (controlFirst ? '' : ':'), 'for': controlHtmlId }));
+                    propertyItem.type.labelControlOrder === Types.labelControlOrders.twoLineContainerLabel ||
+                    propertyItem.type.labelControlOrder === Types.labelControlOrders.singleCellContainerLabel;
+                    const propertyHeaderLabel = $('<label>', { text: propertyItem.name + (controlFirst ? '' : ':'), 'for': controlHtmlId });
+                    const propertyHeader = $('<th>').append(propertyHeaderLabel);
 
-                    const propertyData = $('<td>', { id: idPrefix + '-container-' + propertyItem.id });
+                    const propertyData = $(propertyItem.type.labelControlOrder === 'singleCellContainerLabel' ? '<span>' : '<td>', {
+                        id: idPrefix + '-container-' + propertyItem.id,
+                        colspan: propertyItem.type.labelControlOrder === Types.labelControlOrders.twoLineLabelContainer || propertyItem.type.labelControlOrder === Types.labelControlOrders.twoLineContainerLabel ? 2 : 1
+                    });
                     propertyItem.type.appendControlTo(propertyData, controlHtmlId);
                     propertyItem.type.setInDOM(propertyData, propertyValues[propertyItem.id]);
 
@@ -2397,6 +2401,14 @@ let Main;
                         case Types.labelControlOrders.twoLineContainerLabel:
                             additionalPropertyRow = propertyRow.append(propertyHeader);
                             propertyRow = $('<tr>').append(propertyData);
+                            break;
+                        case Types.labelControlOrders.singleCellContainerLabel:
+                            propertyRow.append(
+                                $('<td>', { colspan: 2 }).append(
+                                    propertyData,
+                                    propertyHeaderLabel
+                                )
+                            );
                             break;
                         default:
                             console.error("Not implemented");
@@ -2732,7 +2744,7 @@ let Main;
     function makeCollapsable()
     {
         // Set the initial state of collapsable and clickable elements:
-        $(".collapsable").css("display", "inline-block");
+        $(".collapsable").css("display", "block");
         $(".collapsable").show();
 
         $(".clicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));

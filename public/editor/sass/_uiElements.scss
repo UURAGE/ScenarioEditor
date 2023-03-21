@@ -67,8 +67,9 @@ button {
   #sidebar & {
     padding-right: 1px;
     padding-left: 1px;
-    font-size: 16px;
+    font-size: inherit;
     color: #666;
+    user-select: none;
   }
 
   #toolbar &,
@@ -277,7 +278,7 @@ tr.ui-sortable-helper {
   svg {
     width: 16px;
     height: 16px;
-    margin: 3px 5px;
+    margin: 3px 5px 3px 0;
     fill: currentColor;
     vertical-align: middle;
   }

@@ -5,16 +5,18 @@
 @use 'base' as *;
 
 #sidebar {
+  $sidebar-control-min-width: 30px;
+
   position: relative;
   width: $sidebar-width;
   height: 100%;
   min-width: 5px; // Grip
-  overflow-y: hidden; // Prevents Edge overflow bug
+  overflow: hidden; // Prevents Edge overflow bug
+  font-size: 11pt;
   color: rgba(black, .6);
   background-color: $col-sidebar;
 
   textarea {
-    width: 300px;
     resize: vertical;
   }
 
@@ -29,8 +31,8 @@
       right: 0;
       bottom: 0;
       left: 0;
-      padding: 5px;
-      overflow: auto;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
   }
 
@@ -56,6 +58,8 @@
   }
 
   input[type=checkbox] {
+    display: inline-block;
+    width: auto;
     margin-right: .5em;
     transform: scale(1.25);
   }
@@ -67,6 +71,14 @@
   // This is the class for sections for property values and parameter effects
   .section {
     margin: 0 auto 15px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &:empty {
+      display: none;
+    }
   }
 
   // This is the class for subsections for property values and parameter effects
@@ -74,16 +86,54 @@
     margin-bottom: 15px;
     margin-left: 15px;
   }
+
+  label {
+    user-select: none;
+  }
+
+  .parameter-effect,
+  .condition:not(.groupcondition) {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+
+    span,
+    .inputgroup,
+    .parameter-effect-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .handle,
+    > select,
+    span,
+    .inputgroup > select {
+      flex: 0 0 auto;
+      overflow: hidden;
+    }
+
+    .parameter-effect-container,
+    .parameter-effect-value-container {
+      min-width: auto;
+    }
+
+    input[type=number] {
+      flex-grow: 1;
+    }
+
+    .parameter-idref-select {
+      flex: 1 1 auto !important;
+      min-width: $sidebar-control-min-width;
+    }
+
+    > .iconButton.delete {
+      margin-right: 0;
+      margin-left: 10px;
+    }
+  }
 }
 
 #properties {
-  display: inline-block;
-  min-width: 100%;
-
-  h1 {
-    font-size: 40px;
-  }
-
   &.player,
   &.situation,
   &.tree {
@@ -139,12 +189,23 @@
   }
 }
 
+.header,
+.sub-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $sidebar-padding;
+}
+
 .header {
   h1 {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    font-size: 55px;
+    margin: 0;
+    overflow: hidden;
+    font-size: 1.25em;
+    font-weight: 600;
+    text-overflow: ellipsis;
     white-space: nowrap;
+    user-select: none;
   }
 
   img {
@@ -153,9 +214,9 @@
   }
 
   svg {
-    width: 48px;
-    height: 48px;
-    padding: 0 10px;
+    width: 32px;
+    height: 32px;
+    margin-right: 5px;
     fill: currentColor;
     vertical-align: middle;
   }
@@ -163,10 +224,13 @@
 
 .sub-header {
   h2 {
-    margin-top: 7px;
-    margin-bottom: 7px;
-    font-size: 20px;
+    margin: 0;
+    overflow: hidden;
+    font-size: 1.1em;
+    font-weight: 600;
+    text-overflow: ellipsis;
     white-space: nowrap;
+    user-select: none;
 
     label {
       line-height: 1em;
@@ -180,21 +244,23 @@
   }
 
   svg {
-    width: 32px;
-    height: 32px;
-    padding: 0 10px;
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
     fill: currentColor;
     vertical-align: middle;
   }
 }
 
 .sidebarSection {
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-top: 2px solid white;
+  border-top: 1px solid rgba(black, .1);
 
-  &.withMarginTop {
-    margin-top: 5px;
+  h3 {
+    margin-top: .5em;
+    margin-bottom: .25em;
+    font-size: 1em;
+    font-weight: 600;
+    user-select: none;
   }
 }
 
@@ -250,11 +316,18 @@
 
 .clicktag,
 .masterclicktag {
+  flex: 0 0 auto;
+
   svg {
     width: 16px;
     height: 16px;
     padding: 0;
+    margin: 0;
     fill: currentColor;
     opacity: .75;
   }
+}
+
+.collapsable {
+  padding: $sidebar-padding;
 }

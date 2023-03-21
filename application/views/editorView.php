@@ -217,20 +217,20 @@
           </div>
           <div id="properties" class="hidden">
             <div id="headerSubject" class="header clickable collapseAll">
-              <h1><span class="masterclicktag"><?php echo sIcon("icon-closed"); ?></span><?php echo sIcon("icon-subject"); sLang('edt_subject');?></h1>
+              <h1><?php echo sIcon("icon-subject"); sLang('edt_subject');?></h1><span class="masterclicktag"><?php echo sIcon("icon-closed"); ?></span>
             </div>
             <div id="headerPlayer" class="header clickable collapseAll">
-              <h1><span class="masterclicktag"><?php echo sIcon("icon-closed"); ?></span><?php echo sIcon("icon-nodeplayer"); sLang('edt_player');?></h1>
+              <h1><?php echo sIcon("icon-nodeplayer"); sLang('edt_player');?></h1><span class="masterclicktag"><?php echo sIcon("icon-closed"); ?></span>
             </div>
             <div id="headerComputer" class="header clickable collapseAll">
-              <h1><span class="masterclicktag"><?php echo sIcon("icon-closed"); ?></span><?php echo sIcon("icon-nodecomputer"); sLang('edt_computer');?></h1>
+              <h1><?php echo sIcon("icon-nodecomputer"); sLang('edt_computer');?></h1><span class="masterclicktag"><?php echo sIcon("icon-closed"); ?></span>
             </div>
             <div id="headerSituation" class="header clickable collapseAll">
-              <h1><span class="masterclicktag"><?php echo sIcon("icon-closed"); ?></span><?php echo sIcon("icon-nodesituation"); sLang('edt_situation');?></h1>
+              <h1><?php echo sIcon("icon-nodesituation"); sLang('edt_situation');?></h1><span class="masterclicktag"><?php echo sIcon("icon-closed"); ?></span>
             </div>
             <div id="characterSection" class="sidebarSection">
               <div class="sub-header clickable">
-                <h2><span class="clicktag"><?php echo sIcon("icon-closed"); ?></span><?php echo sIcon("icon-character"); sLang('edt_character');?></h2>
+                <h2><?php echo sIcon("icon-character"); sLang('edt_character');?></h2><span class="clicktag"><?php echo sIcon("icon-closed"); ?></span>
               </div>
               <div class="collapsable">
                 <select name="characterSelection" id="characterSelection" class="subjectButton"></select>
@@ -246,22 +246,22 @@
             </div>
             <div id="propertyValuesSection" class="sidebarSection">
               <div class="sub-header clickable">
-                <h2 title="<?php sLang('edt_property_values_title');?>"><span class="clicktag"><?php echo sIcon("icon-closed"); ?></span><?php echo sIcon("icon-properties"); sLang('edt_property_values');?></h2>
+                <h2 title="<?php sLang('edt_property_values_title');?>"><?php echo sIcon("icon-properties"); sLang('edt_property_values');?></h2><span class="clicktag"><?php echo sIcon("icon-closed"); ?></span>
               </div>
               <div class="collapsable">
                 <div id="node-property-values" class="section"></div>
                 <div id="node-character-property-values" class="section"></div>
               </div>
             </div>
-            <div id="preconditionsSection" class="sidebarSection withMarginTop">
+            <div id="preconditionsSection" class="sidebarSection">
               <div class="sub-header clickable">
-                <h2 title="<?php sLang('edt_preconditions_title');?>"><span class="clicktag"><?php echo sIcon("icon-closed"); ?></span><?php echo sIcon("icon-preconditions"); sLang('edt_preconditions');?></h2>
+                <h2 title="<?php sLang('edt_preconditions_title');?>"><?php echo sIcon("icon-preconditions"); sLang('edt_preconditions');?></h2><span class="clicktag"><?php echo sIcon("icon-closed"); ?></span>
               </div>
               <div id="preconditionsDiv" class="collapsable"></div>
             </div>
             <div id="effectsSection" class="sidebarSection">
               <div class="sub-header clickable">
-                <h2 title="<?php sLang('edt_parameter_effects_title');?>"><span class="clicktag"><?php echo sIcon("icon-closed"); ?></span><?php echo sIcon("icon-parameters"); sLang('edt_parameter_effects');?></h2>
+                <h2 title="<?php sLang('edt_parameter_effects_title');?>"><?php echo sIcon("icon-parameters"); sLang('edt_parameter_effects');?></h2><span class="clicktag"><?php echo sIcon("icon-closed"); ?></span>
               </div>
               <div class="collapsable">
                 <div>
@@ -279,7 +279,7 @@
             </div>
             <div id="commentSection" class="sidebarSection">
               <div class="sub-header clickable">
-                <h2><span class="clicktag"><?php echo sIcon("icon-closed"); ?></span><?php echo sIcon("icon-note"); sLang('edt_authors_note');?></h2>
+                <h2><?php echo sIcon("icon-note"); sLang('edt_authors_note');?></h2><span class="clicktag"><?php echo sIcon("icon-closed"); ?></span>
               </div>
               <div class="collapsable">
                 <textarea id="comment"></textarea>

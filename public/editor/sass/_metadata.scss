@@ -137,7 +137,7 @@ $margin-items: .25em;
     // Editor labelControlOrder
 
     &.singleLineLabelContainer,
-    &.singleLineContainerLabel {
+    &.singleCellContainerLabel {
       flex-direction: row;
 
       > * { width: 50%; }
@@ -152,7 +152,7 @@ $margin-items: .25em;
       }
     }
 
-    &.singleLineContainerLabel {
+    &.singleCellContainerLabel {
       > *:first-child {
         order: 1;
       }

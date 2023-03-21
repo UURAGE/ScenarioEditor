@@ -115,8 +115,11 @@ button img {
 #properties button, #sidebar button {
   padding-right: 1px;
   padding-left: 1px;
-  font-size: 16px;
+  font-size: inherit;
   color: #666;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 #toolbar button, #properties button, #sidebar button, #parameters button, #evaluations button, .enumeration-values-container button {
   background: none;
@@ -300,7 +303,7 @@ textarea:focus + .markdown-tooltip, input:focus + .markdown-tooltip {
 .iconButton svg {
   width: 16px;
   height: 16px;
-  margin: 3px 5px;
+  margin: 3px 5px 3px 0;
   fill: currentColor;
   vertical-align: middle;
 }
@@ -783,12 +786,12 @@ select:focus {
   width: 475px;
   height: 100%;
   min-width: 5px;
-  overflow-y: hidden;
+  overflow: hidden;
+  font-size: 11pt;
   color: rgba(0, 0, 0, 0.6);
   background-color: rgba(106, 151, 205, 0.075);
 }
 #sidebar textarea {
-  width: 300px;
   resize: vertical;
 }
 #sidebar > div {
@@ -802,8 +805,8 @@ select:focus {
   right: 0;
   bottom: 0;
   left: 0;
-  padding: 5px;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 #sidebar .grip {
   position: absolute;
@@ -824,6 +827,8 @@ select:focus {
   opacity: 0.5;
 }
 #sidebar input[type=checkbox] {
+  display: inline-block;
+  width: auto;
   margin-right: 0.5em;
   transform: scale(1.25);
 }
@@ -833,18 +838,68 @@ select:focus {
 #sidebar .section {
   margin: 0 auto 15px;
 }
+#sidebar .section:last-child {
+  margin-bottom: 0;
+}
+#sidebar .section:empty {
+  display: none;
+}
 #sidebar .subsection {
   margin-bottom: 15px;
   margin-left: 15px;
 }
+#sidebar label {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+#sidebar .parameter-effect,
+#sidebar .condition:not(.groupcondition) {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+#sidebar .parameter-effect span,
+#sidebar .parameter-effect .inputgroup,
+#sidebar .parameter-effect .parameter-effect-container,
+#sidebar .condition:not(.groupcondition) span,
+#sidebar .condition:not(.groupcondition) .inputgroup,
+#sidebar .condition:not(.groupcondition) .parameter-effect-container {
+  display: flex;
+  align-items: center;
+}
+#sidebar .parameter-effect .handle,
+#sidebar .parameter-effect > select,
+#sidebar .parameter-effect span,
+#sidebar .parameter-effect .inputgroup > select,
+#sidebar .condition:not(.groupcondition) .handle,
+#sidebar .condition:not(.groupcondition) > select,
+#sidebar .condition:not(.groupcondition) span,
+#sidebar .condition:not(.groupcondition) .inputgroup > select {
+  flex: 0 0 auto;
+  overflow: hidden;
+}
+#sidebar .parameter-effect .parameter-effect-container,
+#sidebar .parameter-effect .parameter-effect-value-container,
+#sidebar .condition:not(.groupcondition) .parameter-effect-container,
+#sidebar .condition:not(.groupcondition) .parameter-effect-value-container {
+  min-width: auto;
+}
+#sidebar .parameter-effect input[type=number],
+#sidebar .condition:not(.groupcondition) input[type=number] {
+  flex-grow: 1;
+}
+#sidebar .parameter-effect .parameter-idref-select,
+#sidebar .condition:not(.groupcondition) .parameter-idref-select {
+  flex: 1 1 auto !important;
+  min-width: 30px;
+}
+#sidebar .parameter-effect > .iconButton.delete,
+#sidebar .condition:not(.groupcondition) > .iconButton.delete {
+  margin-right: 0;
+  margin-left: 10px;
+}
 
-#properties {
-  display: inline-block;
-  min-width: 100%;
-}
-#properties h1 {
-  font-size: 40px;
-}
 #properties.player > #headerComputer,
 #properties.player > #characterSection, #properties.situation > #headerComputer,
 #properties.situation > #characterSection, #properties.tree > #headerComputer,
@@ -878,29 +933,47 @@ select:focus {
   display: none;
 }
 
+.header,
+.sub-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+}
+
 .header h1 {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  font-size: 55px;
+  margin: 0;
+  overflow: hidden;
+  font-size: 1.25em;
+  font-weight: 600;
+  text-overflow: ellipsis;
   white-space: nowrap;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .header img {
   margin-right: 10px;
   vertical-align: middle;
 }
 .header svg {
-  width: 48px;
-  height: 48px;
-  padding: 0 10px;
+  width: 32px;
+  height: 32px;
+  margin-right: 5px;
   fill: currentColor;
   vertical-align: middle;
 }
 
 .sub-header h2 {
-  margin-top: 7px;
-  margin-bottom: 7px;
-  font-size: 20px;
+  margin: 0;
+  overflow: hidden;
+  font-size: 1.1em;
+  font-weight: 600;
+  text-overflow: ellipsis;
   white-space: nowrap;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 .sub-header h2 label {
   line-height: 1em;
@@ -911,20 +984,24 @@ select:focus {
   vertical-align: middle;
 }
 .sub-header svg {
-  width: 32px;
-  height: 32px;
-  padding: 0 10px;
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
   fill: currentColor;
   vertical-align: middle;
 }
 
 .sidebarSection {
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-top: 2px solid white;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
-.sidebarSection.withMarginTop {
-  margin-top: 5px;
+.sidebarSection h3 {
+  margin-top: 0.5em;
+  margin-bottom: 0.25em;
+  font-size: 1em;
+  font-weight: 600;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 
 #propertyValuesSection table,
@@ -974,13 +1051,22 @@ select:focus {
   white-space: nowrap;
 }
 
+.clicktag,
+.masterclicktag {
+  flex: 0 0 auto;
+}
 .clicktag svg,
 .masterclicktag svg {
   width: 16px;
   height: 16px;
   padding: 0;
+  margin: 0;
   fill: currentColor;
   opacity: 0.75;
+}
+
+.collapsable {
+  padding: 5px;
 }
 
 #tabDock {
@@ -1829,23 +1915,23 @@ td.dragHandle {
 #metadata .item > .itemLabel {
   margin: 0.25em;
 }
-#metadata .item.singleLineLabelContainer, #metadata .item.singleLineContainerLabel {
+#metadata .item.singleLineLabelContainer, #metadata .item.singleCellContainerLabel {
   flex-direction: row;
 }
-#metadata .item.singleLineLabelContainer > *, #metadata .item.singleLineContainerLabel > * {
+#metadata .item.singleLineLabelContainer > *, #metadata .item.singleCellContainerLabel > * {
   width: 50%;
 }
-#metadata .item.singleLineLabelContainer > *:nth-child(2), #metadata .item.singleLineContainerLabel > *:nth-child(2) {
+#metadata .item.singleLineLabelContainer > *:nth-child(2), #metadata .item.singleCellContainerLabel > *:nth-child(2) {
   flex: 1 1 auto;
   align-self: center;
 }
-#metadata .item.singleLineLabelContainer > *:first-child, #metadata .item.singleLineContainerLabel > *:first-child {
+#metadata .item.singleLineLabelContainer > *:first-child, #metadata .item.singleCellContainerLabel > *:first-child {
   flex: 1 1 auto;
 }
-#metadata .item.singleLineContainerLabel > *:first-child {
+#metadata .item.singleCellContainerLabel > *:first-child {
   order: 1;
 }
-#metadata .item.singleLineContainerLabel input[type=checkbox]:nth-child(2) {
+#metadata .item.singleCellContainerLabel input[type=checkbox]:nth-child(2) {
   flex: 0 0 auto;
   align-self: flex-start;
   width: auto;
