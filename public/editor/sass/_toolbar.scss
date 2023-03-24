@@ -171,6 +171,17 @@
   .dropdownButton {
     height: 32px;
   }
+
+  kbd {
+    float: right;
+    padding: 2px 3px;
+    margin-left: 2px;
+    opacity: .75;
+
+    &:last-of-type {
+      margin-left: 10px;
+    }
+  }
 }
 
 #toolbar,

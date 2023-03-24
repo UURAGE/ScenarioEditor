@@ -634,6 +634,15 @@ select:focus {
 #menus .dropdownButton {
   height: 32px;
 }
+#menus kbd {
+  float: right;
+  padding: 2px 3px;
+  margin-left: 2px;
+  opacity: 0.75;
+}
+#menus kbd:last-of-type {
+  margin-left: 10px;
+}
 
 #toolbar svg use,
 #menus svg use {

@@ -101,22 +101,22 @@
               <button id="fileButton" class="globalButton dropdownButton"><?php sLang("edt_file"); ?></button>
               <div id="fileDropdown" class="dropdownItems">
                 <button id="importScenario" class="globalButton" title="<?php sLang('edt_import_scenario_title'); ?>">
-                    <?php echo sIcon("icon-sm-import"); sLang("edt_import_scenario"); ?>...
+                    <?php echo sIcon("icon-sm-import"); sLang("edt_import_scenario"); ?>...<kbd>I</kbd>
                 </button>
                 <button id="exportScenario" class="globalButton" title="<?php sLang('edt_export_scenario_title'); ?>">
-                    <?php echo sIcon("icon-sm-export"); sLang("edt_export_scenario"); ?>...
+                    <?php echo sIcon("icon-sm-export"); sLang("edt_export_scenario"); ?>...<kbd>O</kbd>
                 </button>
                 <hr/>
-                <button id="print" class="globalButton"><?php echo sIcon("icon-sm-print"); sLang("edt_print"); ?>...</button>
+                <button id="print" class="globalButton"><?php echo sIcon("icon-sm-print"); sLang("edt_print"); ?>...<kbd>P</kbd><kbd>Ctrl</kbd></button>
               </div>
           </div>
           <div class="buttonGroup dropdown" id="scenario">
           <!-- Scenario -->
             <button id="scenarioButton" class="globalButton dropdownButton"><?php sLang("edt_scenario"); ?></button>
             <div id="scenarioDropdown" class="dropdownItems">
-              <button id="editMetadata" class="globalButton" title="<?php sLang('edt_properties_title'); ?>"><?php echo sIcon("icon-sm-properties"); sLang("edt_properties"); ?>...</button>
-              <button id="editParameters" class="globalButton" title="<?php sLang('edt_parameters_title'); ?>"><?php echo sIcon("icon-sm-parameters"); sLang("edt_parameters"); ?>...</button>
-              <button id="editEvaluations" class="globalButton" title="<?php sLang('edt_evaluations_title'); ?>"><?php echo sIcon("icon-sm-evaluations"); sLang("edt_evaluations"); ?>...</button>
+              <button id="editMetadata" class="globalButton" title="<?php sLang('edt_properties_title'); ?>"><?php echo sIcon("icon-sm-properties"); sLang("edt_properties"); ?>...<kbd>B</kbd></button>
+              <button id="editParameters" class="globalButton" title="<?php sLang('edt_parameters_title'); ?>"><?php echo sIcon("icon-sm-parameters"); sLang("edt_parameters"); ?>...<kbd>P</kbd></button>
+              <button id="editEvaluations" class="globalButton" title="<?php sLang('edt_evaluations_title'); ?>"><?php echo sIcon("icon-sm-evaluations"); sLang("edt_evaluations"); ?>...<kbd>X</kbd></button>
             </div>
           </div>
           <div id="scenarioNameTab">
@@ -145,16 +145,16 @@
           <div class="buttonGroup" id="edit">
             <!-- Edit -->
             <div class="big-buttons">
-              <button id="newTree" class="globalButton"><?php echo sIcon("icon-add-subject"); sLang("edt_subject"); ?></button>
-              <button id="newPlayerNode" class="subjectButton"><?php echo sIcon("icon-add-player"); sLang("edt_player"); ?></button>
-              <button id="newComputerNode" class="subjectButton"><?php echo sIcon("icon-add-computer"); sLang("edt_computer"); ?></button>
-              <button id="newSituationNode" class="subjectButton"><?php echo sIcon("icon-add-situation"); sLang("edt_situation"); ?></button>
-              <button id="newChildNode" class="nodeButton"><?php echo sIcon("icon-child"); sLang("edt_child"); ?></button>
+              <button id="newTree" class="globalButton" title="T"><?php echo sIcon("icon-add-subject"); sLang("edt_subject"); ?></button>
+              <button id="newPlayerNode" class="subjectButton" title="Q"><?php echo sIcon("icon-add-player"); sLang("edt_player"); ?></button>
+              <button id="newComputerNode" class="subjectButton" title="W"><?php echo sIcon("icon-add-computer"); sLang("edt_computer"); ?></button>
+              <button id="newSituationNode" class="subjectButton" title="E"><?php echo sIcon("icon-add-situation"); sLang("edt_situation"); ?></button>
+              <button id="newChildNode" class="nodeButton" title="R"><?php echo sIcon("icon-child"); sLang("edt_child"); ?></button>
               <button id="toggleDraftScreen" class="subjectButton"><?php echo sIcon("icon-notepad"); sLang("edt_note_pad"); ?></button>
               <button id="toggleElementList" class="globalButton"><?php echo sIcon("icon-element-list"); sLang("edt_list"); ?></button>
               <button id="repositionGraph" class="subjectButton" title="<?php sLang("edt_arrange_title"); ?>"><?php echo sIcon("icon-arrange"); sLang("edt_arrange"); ?></button>
               <button id="snapGraph" class="globalButton"><?php echo sIcon("icon-snap-to-grid"); sLang("edt_snap_to_grid"); ?></button>
-              <button id="delete" class="globalButton"><?php echo sIcon("icon-delete"); sLang("btn_delete"); ?></button>
+              <button id="delete" class="globalButton" title="Del"><?php echo sIcon("icon-delete"); sLang("btn_delete"); ?></button>
             </div>
           </div>
           <div class="buttonGroup" id="clipboard">
@@ -168,8 +168,8 @@
           <div class="buttonGroup" id="view">
             <!-- View -->
             <div class="big-buttons">
-              <button id="highlightAncestors" class="subjectButton"><?php echo sIcon("icon-ancestors"); sLang("edt_ancestors"); ?></button>
-              <button id="highlightDescendants" class="subjectButton"><?php echo sIcon("icon-descendants"); sLang("edt_descendants"); ?></button>
+              <button id="highlightAncestors" class="subjectButton" title="A"><?php echo sIcon("icon-ancestors"); sLang("edt_ancestors"); ?></button>
+              <button id="highlightDescendants" class="subjectButton" title="D"><?php echo sIcon("icon-descendants"); sLang("edt_descendants"); ?></button>
               <button id="toggleColors" class="subjectButton"><?php echo sIcon("icon-palette"); sLang("edt_toggle_colors"); ?></button>
             </div>
           </div>
@@ -181,7 +181,7 @@
           <div class="buttonGroup" id="validate">
             <!-- Validate -->
             <div class="big-buttons">
-              <button id="validation" class="globalButton"><?php echo sIcon("icon-validate"); sLang("edt_validate"); ?></button>
+              <button id="validation" class="globalButton" title="V"><?php echo sIcon("icon-validate"); sLang("edt_validate"); ?></button>
             </div>
           </div>
         </div>
