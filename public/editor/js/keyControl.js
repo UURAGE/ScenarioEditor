@@ -52,6 +52,14 @@ let KeyControl;
                 highlightAncestorsButton.trigger('click');
             }
         },
+        D: function()
+        {
+            const highlightDescendantsButton = $("#highlightDescendants");
+            if (!highlightDescendantsButton.is(":disabled"))
+            {
+                highlightDescendantsButton.trigger('click');
+            }
+        },
         B: function()
         {
             Metadata.dialog();
