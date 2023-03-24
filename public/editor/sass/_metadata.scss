@@ -236,10 +236,10 @@ $margin-items: .25em;
 
   input[type=checkbox] {
     display: inline-block;
-    width: auto;
+    width: 20px !important;
+    height: 20px;
     margin: 0 10px 0 5px;
     margin-top: .1em;
-    transform: scale(1.5);
   }
 
   select {

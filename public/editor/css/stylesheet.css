@@ -1906,10 +1906,10 @@ td.dragHandle {
 }
 #metadata input[type=checkbox] {
   display: inline-block;
-  width: auto;
+  width: 20px !important;
+  height: 20px;
   margin: 0 10px 0 5px;
   margin-top: 0.1em;
-  transform: scale(1.5);
 }
 #metadata select {
   background-color: rgba(0, 0, 0, 0.01);
