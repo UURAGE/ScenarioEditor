@@ -3,7 +3,7 @@
 	targetNamespace="http://uurage.github.io/ScenarioEditor/config/namespace"
 	xmlns:tns="http://uurage.github.io/ScenarioEditor/config/namespace"
 	elementFormDefault="qualified"
-	version="4.19.0">
+	version="6.4.0">
 	<element name="config">
 		<complexType>
 			<sequence>
