@@ -3,6 +3,10 @@
 // © Utrecht University and DialogueTrainer
 
 #tabDock {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 5px; // Grip
   margin-top: 1px;
   background: linear-gradient(to bottom, #FAFAFA 0, #FFF 100%);
   border: 1px solid rgba(black, .1);
@@ -10,13 +14,12 @@
   > *:not(.ui-widget-header) {
     position: relative;
     display: none;
-    max-height: 200px;
+    flex: 1;
     padding: 0 20px;
     overflow: auto;
   }
 
   > div {
-    max-height: 250px;
     overflow: auto;
     background-color: inherit;
   }
@@ -126,6 +129,24 @@
           border-radius: 0 5px 5px 0;
         }
       }
+    }
+  }
+
+  .grip {
+    position: absolute;
+    top: -5px;
+    right: 0;
+    left: 0;
+    z-index: 100;
+    display: block !important;
+    height: 10px;
+    cursor: ns-resize;
+    background: black;
+    opacity: 0;
+
+    &:hover {
+      opacity: .25;
+      transition: 0s opacity .1s linear;
     }
   }
 }

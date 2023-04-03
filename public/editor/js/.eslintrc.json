@@ -37,6 +37,7 @@
         "SaveIndicator": "readonly",
         "ElementList": "readonly",
         "SnapToGrid": "readonly",
+        "Resize": "readonly",
         "site_url": "readonly",
         "editor_url": "readonly",
         "languageCode": "readonly"

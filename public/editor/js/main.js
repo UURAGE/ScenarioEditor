@@ -420,7 +420,25 @@ let Main;
             }
         });
 
-        initialiseSidebar();
+        Resize.initialize(
+        {
+            containerSelector: "#sidebar",
+            dimensionKey: "sidebarWidth",
+            collapsedKey: "sidebarCollapsed",
+            minDimension: 100,
+            maxDimension: 475,
+            direction: 'horizontal',
+            enableCollapse: true
+        });
+
+        Resize.initialize(
+        {
+            containerSelector: "#tabDock",
+            dimensionKey: "tabDockWidth",
+            minDimension: 50,
+            maxDimension: 600,
+            direction: 'vertical'
+        });
     });
 
     $(window).on('beforeunload', function()
@@ -533,85 +551,6 @@ let Main;
             {
                 closeMenu.call($(this).closest(".dropdown").find(".dropdownButton"));
             });
-    }
-
-    function initialiseSidebar()
-    {
-        if (Utils.parseBool(localStorage.getItem('sidebarCollapsed')))
-        {
-            collapseSidebar(true);
-        }
-        else if (localStorage.getItem('sidebarWidth'))
-        {
-            setSidebarWidth(localStorage.getItem('sidebarWidth'));
-        }
-
-        const domSidebarGrip = $('#sidebar').find('.grip');
-        let mouseX = 0;
-
-        const mouseMoveHandler = function(event)
-        {
-            const width = $(window).width() - event.pageX + mouseX;
-            setSidebarWidth(width);
-        };
-
-        const mouseUpHandler = function()
-        {
-            $(document).off("mousemove", mouseMoveHandler);
-            $(document).off("mouseup", mouseUpHandler);
-            $('#sidebar').removeClass('dragging');
-        };
-
-        $(domSidebarGrip).mousedown(function(event)
-        {
-            // Clear selection so browser doesn't try to drag selected items
-            // Copied from: http://stackoverflow.com/a/3169849/1765330
-            if (window.getSelection().empty)
-            { // Chrome
-                window.getSelection().empty();
-            }
-            else if (window.getSelection().removeAllRanges)
-            { // Firefox
-                window.getSelection().removeAllRanges();
-            }
-
-            const parentOffset = $(this).offset();
-            mouseX = (event.pageX - parentOffset.left) / 2;
-            $(document).on("mousemove", mouseMoveHandler);
-            $(document).on("mouseup", mouseUpHandler);
-            $('#sidebar').addClass('dragging');
-        });
-
-        $(domSidebarGrip).dblclick(function()
-        {
-            collapseSidebar();
-        });
-    }
-
-    function setSidebarWidth(width)
-    {
-        const minWidth = 100;
-        let maxWidth = $(window).width() / 3;
-        if (maxWidth < 475) maxWidth = 475;
-        const w = Math.min(Math.max(width, minWidth), maxWidth);
-        $('#sidebar').css('width', w + 'px');
-        localStorage.setItem('sidebarWidth', w);
-        localStorage.setItem('sidebarCollapsed', false);
-    }
-
-    function collapseSidebar(set)
-    {
-        set = set || false; // Dont toggle, just collapse
-        if (set || localStorage.getItem('sidebarCollapsed') === "false")
-        {
-            $('#sidebar').css('width', $('#sidebar').css('min-width'));
-            localStorage.setItem('sidebarCollapsed', 'true');
-        }
-        else if (localStorage.getItem('sidebarCollapsed') === "true")
-        {
-            setSidebarWidth(1000);
-            localStorage.setItem('sidebarCollapsed', 'false');
-        }
     }
 
     function createEmptyTree(id, leftPos, topPos)

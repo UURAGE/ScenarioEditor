@@ -75,7 +75,8 @@
       "js/zoom.js",
       "js/clipboard.js",
       "js/playthroughItemAnalysis.js",
-      "js/snapToGrid.js"
+      "js/snapToGrid.js",
+      "js/resize.js"
   );
   foreach ($scripts as $script)
   {
@@ -190,6 +191,7 @@
         <div id="gridIndicator" class="gridded"></div>
       </div>
       <div id="tabDock" style="display: none" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <div class="grip noSelect"></div>
         <div class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
           <span class="title"></span>
           <div class="controls"></div>

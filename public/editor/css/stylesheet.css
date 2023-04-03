@@ -1070,6 +1070,10 @@ select:focus {
 }
 
 #tabDock {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 5px;
   margin-top: 1px;
   background: linear-gradient(to bottom, #FAFAFA 0, #FFF 100%);
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -1077,12 +1081,11 @@ select:focus {
 #tabDock > *:not(.ui-widget-header) {
   position: relative;
   display: none;
-  max-height: 200px;
+  flex: 1;
   padding: 0 20px;
   overflow: auto;
 }
 #tabDock > div {
-  max-height: 250px;
   overflow: auto;
   background-color: inherit;
 }
@@ -1176,6 +1179,22 @@ select:focus {
 }
 #tabDock .controls .buttonGroup button:last-child {
   border-radius: 0 5px 5px 0;
+}
+#tabDock .grip {
+  position: absolute;
+  top: -5px;
+  right: 0;
+  left: 0;
+  z-index: 100;
+  display: block !important;
+  height: 10px;
+  cursor: ns-resize;
+  background: black;
+  opacity: 0;
+}
+#tabDock .grip:hover {
+  opacity: 0.25;
+  transition: 0s opacity 0.1s linear;
 }
 
 #validationReport .level-error a {
@@ -1360,11 +1379,6 @@ td.dragHandle {
   display: inline-block;
   width: 15%;
   text-align: center;
-}
-
-#tableSizeFixer {
-  max-height: 140px;
-  overflow-y: auto;
 }
 
 .disabled .disabled-text {
