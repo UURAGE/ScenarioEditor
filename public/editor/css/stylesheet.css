@@ -1080,7 +1080,6 @@ select:focus {
 }
 #tabDock > *:not(.ui-widget-header) {
   position: relative;
-  display: none;
   flex: 1;
   padding: 0 20px;
   overflow: auto;
@@ -1292,7 +1291,22 @@ select:focus {
   color: #2A3;
 }
 
+#draftScreen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  gap: 5px;
+}
+#draftScreen .tableScrollContainer {
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
 #draftTable {
+  width: 100%;
   padding: 0;
   margin: 0;
   overflow-y: auto;
@@ -1337,35 +1351,31 @@ select:focus {
 #draftTable tr:nth-child(even) td:hover {
   background-color: rgba(0, 0, 0, 0.025);
 }
+#draftTable th {
+  position: sticky;
+  top: 2px;
+  z-index: 1;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+}
+#draftTable #draftDragAll {
+  color: #111;
+  text-align: center;
+  cursor: move;
+  background-color: #EEE;
+}
+#draftTable #draftDragAll:hover {
+  background-color: #E5E5E5;
+}
 
 td.dragHandle {
   text-align: center;
   cursor: move;
 }
 
-#draftTableHeaders th {
-  background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.4);
-}
-#draftTableHeaders #draftDragAll {
-  color: #111;
-  text-align: center;
-  cursor: move;
-  background-color: rgba(0, 0, 0, 0.05);
-}
-#draftTableHeaders #draftDragAll:hover {
-  background-color: rgba(0, 0, 0, 0.025);
-}
-
 #addDraftItem {
   width: 100%;
-  color: #EEE;
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-#addDraftItem:hover {
-  color: white;
-  background-color: rgba(0, 0, 0, 0.3);
 }
 
 #itemControls {

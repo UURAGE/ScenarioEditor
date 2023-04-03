@@ -22,34 +22,27 @@
     $(function()
     {
         $("#draftScreen").append($('<div>', { id: "itemControls" }).append($('<button>', { class: "clear", text: i18next.t('draft:delete_all') })));
-        $("#draftScreen").append($('<table>', { style: "width:100%" })
-            .append($('<tr>').append($('<table>', { id: "draftTableHeaders", style: "width:100%" })
+        $("#draftScreen").append($('<div>', { class: "tableScrollContainer" }).append(
+            $('<table>', { id: "draftTable", data: { properties: "type,statement" } })
                 .append($('<colgroup>')
                     .append($('<col>', { span: 1, style: "width: 15%;" }))
                     .append($('<col>', { span: 1, style: "width: 7.5%;" }))
                     .append($('<col>', { span: 1, style: "width: 35%;" }))
                     .append($('<col>', { span: 1, style: "width: 15%;" }))
                     .append($('<col>', { span: 1, style: "width: 10%;" }))
-                    .append($('<col>', { span: 1, style: "width: 12.5%" })))
-                .append($('<tr>'))
-                .append($('<th>', { class: "dragHandle noSelect", id: "draftDragAll", title: i18next.t('draft:drag_all'), text: "[[::]]" }))
-                .append($('<th>',
+                    .append($('<col>', { span: 1, style: "width: 12.5%" }))
+                )
+                .append($('<tr>')
+                    .append($('<th>', { class: "dragHandle noSelect", id: "draftDragAll", title: i18next.t('draft:drag_all'), text: "[[::]]" }))
+                    .append($('<th>',
                         {
                             class: "col0",
                             title: i18next.t('common:player') + ' / ' + i18next.t('common:computer') + ' / ' + i18next.t('common:situation'),
                             text: i18next.t('draft:letter.player') + '/' + i18next.t('draft:letter.computer') + '/' + i18next.t('draft:letter.situation')
                         }))
-                .append($('<th>', { class: "col1", text: i18next.t('common:statement') }))))
-            .append($('<tr>').append($('<div>', { id: "tableSizeFixer" }).append($('<table>', { id: "draftTable", data: { properties: "type,statement" }, style: "width: 100%;" })
-                .append($('<colgroup>')
-                    .append($('<col>', { span: 1, style: "width: 15%;" }))
-                    .append($('<col>', { span: 1, style: "width: 7.5%;" }))
-                    .append($('<col>', { span: 1, style: "width: 35%;" }))
-                    .append($('<col>', { span: 1, style: "width: 15%;" }))
-                    .append($('<col>', { span: 1, style: "width: 10%;" }))
-                    .append($('<col>', { span: 1, style: "width: 12.5%" })))))));
+                    .append($('<th>', { class: "col1", text: i18next.t('common:statement') })))
+        ));
         $("#draftScreen").append($('<button>', { id: "addDraftItem", class: "add", text: i18next.t('draft:add_item') }));
-
 
         propEditors.statement = '<textarea ' + 'maxlength=' + Config.container.settings.statement.type.maxLength + ' tabindex="1"></textarea>';
         itemProperties = $('#draftTable').data("properties").split(',');

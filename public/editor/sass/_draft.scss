@@ -2,7 +2,23 @@
 
 // © Utrecht University and DialogueTrainer
 
+#draftScreen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  gap: 5px;
+
+  .tableScrollContainer {
+    flex: 1;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+}
+
 #draftTable {
+  width: 100%;
   padding: 0;
   margin: 0;
   overflow-y: auto;
@@ -57,15 +73,11 @@
       }
     }
   }
-}
 
-td.dragHandle {
-  text-align: center;
-  cursor: move;
-}
-
-#draftTableHeaders {
   th {
+    position: sticky;
+    top: 2px;
+    z-index: 1;
     background-color: white;
     border: 1px solid rgba(black, .4);
   }
@@ -74,24 +86,22 @@ td.dragHandle {
     color: #111;
     text-align: center;
     cursor: move;
-    background-color: rgba(black, .05);
+    background-color: #EEE;
 
     &:hover {
-      background-color: rgba(black, .025);
+      background-color: #E5E5E5;
     }
   }
 }
 
+td.dragHandle {
+  text-align: center;
+  cursor: move;
+}
+
 #addDraftItem {
   width: 100%;
-  color: #EEE;
   text-align: center;
-  background-color: rgba(black, .4);
-
-  &:hover {
-    color: white;
-    background-color: rgba(black, .3);
-  }
 }
 
 #itemControls {
