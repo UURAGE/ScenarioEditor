@@ -560,7 +560,7 @@ let Types;
                 const appendValue = function(value)
                 {
                     // The value of an enumeration can not be the empty string
-                    if (value)
+                    if (value && value.trim())
                     {
                         const deleteButton = Parts.deleteButton();
                         deleteButton.on('click', function()
@@ -648,8 +648,13 @@ let Types;
             },
             loadTypeFromDOM: function(typeEl, defaultValueContainer)
             {
+                const valuesContainer = typeEl.find(".enumeration-values-container");
                 const options = { sequence: [] };
-                typeEl.find(".enumeration-values-container").children().not(":last-child").each(function(index, valueItem)
+                if (valuesContainer.find("input[type=text]").val())
+                {
+                    valuesContainer.find(".add-enumeration-value").trigger("click");
+                }
+                valuesContainer.children().not(":last-child").each(function(index, valueItem)
                 {
                     const option = { text: $(valueItem).children('span').text() };
                     options.sequence.push(option);
@@ -702,6 +707,7 @@ let Types;
                     valuesContainer.children().last().children('input').val(option.text);
                     addValueButton.trigger('click');
                 });
+                valuesContainer.children().last().children('input').val("");
             },
             appendControlTo: function(containerEl, htmlId)
             {
