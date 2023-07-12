@@ -114,6 +114,12 @@
         "no-bitwise": [
             "error"
         ],
+        "no-empty-function": [
+            "error",
+            {
+                "allow": ["functions"]
+            }
+        ],
         "no-eval": [
             "error"
         ],
