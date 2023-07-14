@@ -237,9 +237,16 @@ tr.ui-sortable-helper {
     pointer-events: none;
   }
 
-  textarea:focus + &,
-  input:focus + & {
+  textarea:focus + & {
     display: block;
+  }
+
+  input:focus + & {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    width: 0;
+    transform: translate(3px, 0);
   }
 }
 
