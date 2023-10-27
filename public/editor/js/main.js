@@ -946,7 +946,7 @@ let Main;
             const parentPosition = Utils.cssPosition(parentDiv);
             const position =
             {
-                top: parentPosition.top + parentDiv.height() + 55,
+                top: parentPosition.top + parentDiv.height() + 150,
                 left: parentPosition.left
             };
             let node;
