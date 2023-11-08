@@ -1,13 +1,13 @@
 **/Thumbs.db
 **/.DS_Store
 
-/application/cache/*
-!/application/cache/index.html
-!/application/cache/.htaccess
+/.env
 
-/application/logs/*
-!/application/logs/index.html
-!/application/logs/.htaccess
+/writable/cache/*
+!/writable/cache/index.html
+
+/writable/logs/*
+!/writable/logs/index.html
 
 .sass-cache/
 node_modules/

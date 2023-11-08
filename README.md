@@ -8,7 +8,7 @@ The UURAGE Scenario Editor is a web application component for editing communicat
 
 ## Prerequisites
 
-A server stack that includes PHP >= 7.
+A server stack that includes PHP >= 7.4.
 
 For online use, any small web hosting package should do; Linux environments are more common and better supported than Windows servers. For offline, local use on Windows, XAMPP is a reasonable option.
 
