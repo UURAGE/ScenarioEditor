@@ -941,19 +941,30 @@ let Main;
         if (parentNodeID in Main.nodes)
         {
             const parent = Main.nodes[parentNodeID];
-
             const parentDiv = $('#' + parentNodeID);
             const parentPosition = Utils.cssPosition(parentDiv);
+
+            const childNodeIDs = getChildNodeIDs(parentNodeID);
+            let newChildNodePositionLeft = parentPosition.left;
+            childNodeIDs.forEach(childNodeID =>
+            {
+                const childNodeDiv = $('#' + childNodeID);
+                const tentativeNewChildNodePositionLeft = Utils.cssPosition(childNodeDiv).left + childNodeDiv.width() + 150;
+                if (tentativeNewChildNodePositionLeft >= newChildNodePositionLeft)
+                {
+                    newChildNodePositionLeft = tentativeNewChildNodePositionLeft;
+                }
+            });
+
             const position =
             {
                 top: parentPosition.top + parentDiv.height() + 150,
-                left: parentPosition.left
+                left: newChildNodePositionLeft
             };
             let node;
-            const firstChildNodeId = getFirstChildIdOrNull(parentNodeID);
-            if (firstChildNodeId)
+            if (childNodeIDs.length > 0)
             {
-                node = addNewNode(Main.nodes[firstChildNodeId].type, "", position, true);
+                node = addNewNode(Main.nodes[childNodeIDs[0]].type, "", position, true);
             }
             else
             {
@@ -2677,6 +2688,11 @@ let Main;
     {
         const connections = Main.getPlumbInstanceByNodeID(sourceId).getConnections({ source: sourceId });
         return connections.length === 0 ? null : connections[0].targetId;
+    }
+
+    function getChildNodeIDs(parentNodeID)
+    {
+        return Main.getPlumbInstanceByNodeID(parentNodeID).getConnections({ source: parentNodeID }).map(({ targetId }) => targetId);
     }
 
     // Make .collapsable div sections collapse and expand when .clickable sibling element is clicked
