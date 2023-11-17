@@ -1,13 +1,13 @@
 /*!
- * jQuery UI Selectable 1.12.1-patch4
+ * jQuery UI Selectable 1.13.2-patch4
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
- * Base: c6f1735249295bb37153861aa97e5b3e38d46b02
- *   (https://github.com/jquery/jquery-ui/blob/1.12.1/ui/widgets/selectable.js)
+ * Base: d6c028cc2e214a4f9f3a787313ef03a17a33a008
+ *   (https://github.com/jquery/jquery-ui/blob/1.13.2/ui/widgets/selectable.js)
  * Patch 1: fix helper position when using appendTo
  * Patch 2: do not start when mouseStart event is on scrollbar
  * Patch 3: fix helper origin position when scrolling
@@ -22,6 +22,8 @@
 //>>css.structure: ../../themes/base/selectable.css
 
 ( function( factory ) {
+	"use strict";
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -36,12 +38,14 @@
 		// Browser globals
 		factory( jQuery );
 	}
-}( function( $ ) {
+} )( function( $ ) {
+"use strict";
+
 // Necessary for making the prefix for the selectable events "selectable"
 var base = $.ui.selectable ? $.ui.selectable : $.ui.mouse;
 
 return $.widget( "ui.selectable", base, {
-	version: "1.12.1-patch4",
+	version: "1.13.2-patch4",
 	options: {
 		appendTo: "body",
 		autoRefresh: true,
@@ -118,8 +122,8 @@ return $.widget( "ui.selectable", base, {
 		helperLeft = event.pageX - leftDelta,
 		helperTop = event.pageY - topDelta;
 
-		this.elementPos = $( this.element[ 0 ] ).offset();
 		this.opos = [ helperLeft, helperTop ];
+		this.elementPos = $( this.element[ 0 ] ).offset();
 
 		if ( this.options.disabled ) {
 			return;
@@ -211,8 +215,12 @@ return $.widget( "ui.selectable", base, {
 			x2 = event.pageX - leftDelta,
 			y2 = event.pageY - topDelta;
 
-		if ( x1 > x2 ) { tmp = x2; x2 = x1; x1 = tmp; }
-		if ( y1 > y2 ) { tmp = y2; y2 = y1; y1 = tmp; }
+		if ( x1 > x2 ) {
+			tmp = x2; x2 = x1; x1 = tmp;
+		}
+		if ( y1 > y2 ) {
+			tmp = y2; y2 = y1; y1 = tmp;
+		}
 		this.helper.css( { left: x1, top: y1, width: x2 - x1, height: y2 - y1 } );
 
 		this.selectees.each( function() {
@@ -335,4 +343,4 @@ return $.widget( "ui.selectable", base, {
 
 } );
 
-} ) );
+} );
