@@ -26,6 +26,7 @@ return [
     "edt_computer" => "Computer",
     "edt_character" => "Character",
     "edt_child" => "Child",
+    "edt_sibling" => "Sibling",
     "edt_ancestors" => "Before",
     "edt_descendants" => "After",
     "edt_toggle_colors" => "Colors",

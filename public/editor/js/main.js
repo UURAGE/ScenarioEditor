@@ -44,6 +44,7 @@ let Main;
         updateNodeGraphics: updateNodeGraphics,
         mousePositionToDialoguePosition: mousePositionToDialoguePosition,
         createChildNode: createChildNode,
+        createSiblingNode: createSiblingNode,
         createEmptyTree: createEmptyTree,
         createAndReturnNode: createAndReturnNode,
         deleteAllSelected: deleteAllSelected,
@@ -288,6 +289,10 @@ let Main;
         $("#newChildNode").on('click', function()
         {
             createChildNode(Main.selectedElement);
+        });
+        $("#newSiblingNode").on('click', function()
+        {
+            createSiblingNode(Main.selectedElement);
         });
         $("#delete").on('click', function()
         {
@@ -992,7 +997,32 @@ let Main;
                 return;
             }
 
+            updateButtons();
+
             return node;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    function createSiblingNode(nodeID)
+    {
+        if (nodeID in Main.nodes)
+        {
+            const plumbInstance = Main.getPlumbInstanceByNodeID(nodeID);
+            const connections = plumbInstance.getConnections(
+            {
+                target: nodeID
+            });
+            if (connections.length === 0) return null;
+
+            const siblingNode = createChildNode(connections[0].sourceId);
+            connections.slice(1).forEach(function(connection)
+            {
+                makeConnection(connection.sourceId, siblingNode.id, plumbInstance);
+            });
         }
         else
         {
@@ -1545,29 +1575,36 @@ let Main;
     {
         const subjectButtons = document.getElementsByClassName("subjectButton");
         const nodeButtons = document.getElementsByClassName("nodeButton");
+        const nodeWithParentButtons = document.getElementsByClassName("nodeWithParentButton");
 
-        hideButtons(subjectButtons);
-        hideButtons(nodeButtons);
+        disableButtons(subjectButtons);
+        disableButtons(nodeButtons);
+        disableButtons(nodeWithParentButtons);
 
         if (Zoom.isZoomed())
         {
-            showButtons(subjectButtons);
+            enableButtons(subjectButtons);
 
             if (Main.selectedElement !== null)
             {
                 // A node is selected, because a tree is zoomed
-                showButtons(nodeButtons);
+                enableButtons(nodeButtons);
+
+                if (Main.getPlumbInstanceByNodeID(Main.selectedElement).getConnections({ target: Main.selectedElement }).length > 0)
+                {
+                    enableButtons(nodeWithParentButtons);
+                }
             }
         }
     }
-    function hideButtons(buttons)
+    function disableButtons(buttons)
     {
         for (let i = 0, len = buttons.length; i < len; i++)
         {
             buttons[i].disabled = true;
         }
     }
-    function showButtons(buttons)
+    function enableButtons(buttons)
     {
         for (let i = 0, len = buttons.length; i < len; i++)
         {

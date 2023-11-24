@@ -37,6 +37,13 @@ let KeyControl;
                 Main.createChildNode(Main.selectedElement);
             }
         },
+        G: function()
+        {
+            if (Zoom.isZoomed() && Main.selectedElement)
+            {
+                Main.createSiblingNode(Main.selectedElement);
+            }
+        },
         T: function()
         {
             if (!Zoom.isZoomed() && Main.isMousePositionWithinEditingCanvas())

@@ -150,6 +150,7 @@
               <button id="newComputerNode" class="subjectButton" title="W"><?php echo sIcon("icon-add-computer"); sLang("edt_computer"); ?></button>
               <button id="newSituationNode" class="subjectButton" title="E"><?php echo sIcon("icon-add-situation"); sLang("edt_situation"); ?></button>
               <button id="newChildNode" class="nodeButton" title="R"><?php echo sIcon("icon-child"); sLang("edt_child"); ?></button>
+              <button id="newSiblingNode" class="nodeWithParentButton" title="G"><?php echo sIcon("icon-add-sibling"); sLang("edt_sibling"); ?></button>
               <button id="toggleDraftScreen" class="subjectButton"><?php echo sIcon("icon-notepad"); sLang("edt_note_pad"); ?></button>
               <button id="toggleElementList" class="globalButton"><?php echo sIcon("icon-element-list"); sLang("edt_list"); ?></button>
               <button id="repositionGraph" class="subjectButton" title="<?php sLang("edt_arrange_title"); ?>"><?php echo sIcon("icon-arrange"); sLang("edt_arrange"); ?></button>
