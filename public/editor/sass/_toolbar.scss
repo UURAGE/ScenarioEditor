@@ -94,7 +94,7 @@
 #menus {
   display: flex;
   background-color: $col-menu-bar;
-  border-bottom: 1px solid rgba(black, .1);
+  border-bottom: 1px solid rgba(black, .08);
 
   > * {
     flex: 0 0 auto;
@@ -201,7 +201,7 @@
     // Conforms the ::after element to border radius
     overflow: hidden;
     background-color: white;
-    border: 1px solid rgba(black, .1);
+    border: 1px solid rgba(black, .08);
   }
 
   button {
@@ -285,7 +285,7 @@
   min-width: 0;
   padding: 0 5px;
   font-size: 1.1em;
-  gap: 5px;
+  gap: 4px;
 
   > *, &::after {
     flex-shrink: 0;

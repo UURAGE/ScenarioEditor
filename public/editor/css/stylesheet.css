@@ -55,7 +55,7 @@ body {
 #main {
   position: relative;
   overflow: auto;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   outline: none;
   box-sizing: border-box;
 }
@@ -581,7 +581,7 @@ select:focus {
 #menus {
   display: flex;
   background-color: rgba(255, 255, 255, 0.25);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 #menus > * {
   flex: 0 0 auto;
@@ -668,7 +668,7 @@ select:focus {
   flex: 0 1 auto;
   overflow: hidden;
   background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 #ribbon button {
   padding: 2px;
@@ -739,7 +739,7 @@ select:focus {
   min-width: 0;
   padding: 0 5px;
   font-size: 1.1em;
-  gap: 5px;
+  gap: 4px;
 }
 #scenarioNameTab > *, #scenarioNameTab::after {
   flex-shrink: 0;
@@ -999,7 +999,7 @@ select:focus {
 }
 
 .sidebarSection {
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 .sidebarSection h3 {
   margin-top: 0.5em;
@@ -1083,7 +1083,7 @@ select:focus {
   min-height: 5px;
   margin-top: 1px;
   background: linear-gradient(to bottom, #FAFAFA 0, #FFF 100%);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 #tabDock > *:not(.ui-widget-header) {
   position: relative;
@@ -1304,7 +1304,7 @@ select:focus {
   height: 100%;
   padding-top: 10px !important;
   padding-bottom: 10px !important;
-  gap: 5px;
+  gap: 4px;
 }
 #draftScreen .tableScrollContainer {
   flex: 1;
@@ -1933,7 +1933,7 @@ td.dragHandle {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 #metadata .item:last-child {
   border-bottom: none !important;
