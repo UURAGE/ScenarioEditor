@@ -1,4 +1,4 @@
-/* © Utrecht University and DialogueTrainer */
+// © DialogueTrainer
 
 /* exported Types */
 let Types;

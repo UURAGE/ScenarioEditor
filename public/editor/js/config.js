@@ -1,4 +1,4 @@
-/* © Utrecht University and DialogueTrainer */
+// © DialogueTrainer
 
 /* exported Config */
 let Config;

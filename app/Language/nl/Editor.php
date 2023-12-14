@@ -1,5 +1,6 @@
 <?php
-/* © Utrecht University and DialogueTrainer */
+// © DialogueTrainer
+
 return [
     "edt_manual" => "Handleiding",
     "edt_file" => "File",

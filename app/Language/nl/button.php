@@ -1,5 +1,6 @@
 <?php
-/* © Utrecht University and DialogueTrainer */
+// © DialogueTrainer
+
 return [
     "btn_cancel" => "Annuleren",
     "btn_delete" => "Verwijderen",

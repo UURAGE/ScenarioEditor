@@ -1,4 +1,4 @@
-/* © Utrecht University and DialogueTrainer */
+// © DialogueTrainer
 
 /* exported KeyControl */
 let KeyControl;

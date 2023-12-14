@@ -1,5 +1,6 @@
 @charset "UTF-8";
-/* © Utrecht University and DialogueTrainer */
+/* © DialogueTrainer */
+/* © DialogueTrainer */
 @font-face {
   font-family: "Open Sans";
   font-style: normal;
@@ -24,6 +25,12 @@
   font-weight: 700;
   src: local("Open Sans Bold"), local("OpenSans-Bold"), url("../fonts/open-sans-v17-latin-ext_greek-ext_greek_cyrillic_latin-700.woff2") format("woff2"), url("../fonts/open-sans-v17-latin-ext_greek-ext_greek_cyrillic_latin-700.woff") format("woff");
 }
+/* © DialogueTrainer */
+/* © DialogueTrainer */
+/* © DialogueTrainer */
+/* © DialogueTrainer */
+/* © DialogueTrainer */
+/* © DialogueTrainer */
 html,
 body {
   min-height: 100%;
@@ -64,6 +71,8 @@ body {
   flex: 1 0 auto;
 }
 
+/* © DialogueTrainer */
+/* © DialogueTrainer */
 .ui-widget {
   font-family: inherit !important;
 }
@@ -377,6 +386,8 @@ select:focus {
   margin-left: 20px;
 }
 
+/* © DialogueTrainer */
+/* © DialogueTrainer */
 .zoomTreeButton {
   width: 50px;
   font-size: 0;
@@ -500,6 +511,8 @@ select:focus {
   box-sizing: border-box;
 }
 
+/* © DialogueTrainer */
+/* © DialogueTrainer */
 #logo {
   position: relative;
   width: 32px;
@@ -788,6 +801,8 @@ select:focus {
   border-radius: 100%;
 }
 
+/* © DialogueTrainer */
+/* © DialogueTrainer */
 #sidebar {
   position: relative;
   width: 475px;
@@ -1076,6 +1091,7 @@ select:focus {
   padding: 5px;
 }
 
+/* © DialogueTrainer */
 #tabDock {
   position: relative;
   display: flex;
@@ -1203,6 +1219,8 @@ select:focus {
   transition: 0s opacity 0.1s linear;
 }
 
+/* © DialogueTrainer */
+/* © DialogueTrainer */
 #validationReport .level-error a {
   color: #8a111c;
   background-color: rgba(206, 25, 42, 0.05);
@@ -1298,6 +1316,7 @@ select:focus {
   color: #2A3;
 }
 
+/* © DialogueTrainer */
 #draftScreen {
   display: flex;
   flex-direction: column;
@@ -1408,6 +1427,7 @@ td.dragHandle {
   background-color: inherit;
 }
 
+/* © DialogueTrainer */
 .hasStyledTable table {
   width: 100%;
   border: hidden;
@@ -1493,6 +1513,8 @@ td.dragHandle {
   display: none;
 }
 
+/* © DialogueTrainer */
+/* © DialogueTrainer */
 #elementList .label.computer {
   color: #a11321;
   background-color: rgba(206, 25, 42, 0.1);
@@ -1631,6 +1653,8 @@ td.dragHandle {
   background-color: rgba(243, 120, 18, 0.35);
 }
 
+/* © DialogueTrainer */
+/* © DialogueTrainer */
 #miniwrap {
   display: none;
 }
@@ -1667,6 +1691,8 @@ td.dragHandle {
   overflow: hidden;
 }
 
+/* © DialogueTrainer */
+/* © DialogueTrainer */
 .evaluation-expression,
 .scale-expression,
 .expression {
@@ -1731,6 +1757,7 @@ td.dragHandle {
   display: block;
 }
 
+/* © DialogueTrainer */
 #colorPicker {
   z-index: 51;
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
@@ -1769,6 +1796,8 @@ td.dragHandle {
     transform: translate(-50%, -50%) scale(1);
   }
 }
+/* © DialogueTrainer */
+/* © DialogueTrainer */
 .long::after {
   content: "";
   position: absolute;
@@ -1848,6 +1877,8 @@ td.dragHandle {
   pointer-events: none;
 }
 
+/* © DialogueTrainer */
+/* © DialogueTrainer */
 #metadata {
   display: flex;
   width: 600px;
@@ -2080,6 +2111,7 @@ td.dragHandle {
   border-color: #d4930e;
 }
 
+/* © DialogueTrainer */
 .print progress {
   width: 100%;
   margin-top: 10em;

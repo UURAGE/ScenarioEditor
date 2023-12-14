@@ -4,7 +4,7 @@
 @use 'variables' as *;
 @use 'colors' as *;
 
-// © Utrecht University and DialogueTrainer
+/* © DialogueTrainer */
 
 @mixin nodePropertyGradient($element, $col) {
   #{$element} {

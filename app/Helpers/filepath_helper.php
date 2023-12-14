@@ -1,4 +1,5 @@
 <?php
+// © DialogueTrainer
 
 if (!function_exists('editor_path'))
 {

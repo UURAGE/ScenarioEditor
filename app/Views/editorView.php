@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<!-- © Utrecht University (Department of Information and Computing Sciences) -->
+<!-- © DialogueTrainer -->
 
 <html>
 <head>

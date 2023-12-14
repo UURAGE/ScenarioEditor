@@ -1,5 +1,5 @@
 <?php
-// an extension of the original url helper
+// © DialogueTrainer
 
 if (!function_exists('editor_url'))
 {

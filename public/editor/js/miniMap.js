@@ -1,4 +1,4 @@
-/* © Utrecht University and DialogueTrainer */
+// © DialogueTrainer
 
 /*
     This file contains all functionality pertaining to the mini map shown in the upper right corner in the editor

@@ -1,5 +1,5 @@
 <?php
-/* © Utrecht University and DialogueTrainer */
+// © DialogueTrainer
 
 namespace App\Controllers;
 
