@@ -373,6 +373,73 @@ let Expression;
                 expression.scale.expression.kind.handleParameterRemoval(parameterId, type, expression.scale.expression);
             }
         },
+        divide:
+        {
+            name: 'divide',
+            appendControlTo: function(container, type)
+            {
+                const dividendContainer = $('<span>', { class: "dividend" });
+                Expression.appendControlsTo(dividendContainer, type);
+                container.append(dividendContainer);
+
+                container.append($('<hr>'));
+
+                const divisorContainer = $('<span>', { class: "divisor" });
+                Expression.appendControlsTo(divisorContainer, type);
+                container.append(divisorContainer);
+            },
+            getFromDOM: function(container, type)
+            {
+                return {
+                    dividend: Expression.getFromDOM(container.children('.dividend'), type),
+                    divisor: Expression.getFromDOM(container.children('.divisor'), type)
+                };
+            },
+            setInDOM: function(container, type, divide)
+            {
+                Expression.setInDOM(container.children('.dividend'), type, divide.dividend);
+                Expression.setInDOM(container.children('.divisor'), type, divide.divisor);
+            },
+            fromXML: function(divideXML, type)
+            {
+                return {
+                    dividend: Expression.fromXML($(divideXML).children('dividend').children()[0], type),
+                    divisor: Expression.fromXML($(divideXML).children('divisor').children()[0], type)
+                };
+            },
+            toXML: function(expressionXML, type, divide)
+            {
+                const divideXML = Utils.appendChild(expressionXML, this.name);
+                Expression.toXML(Utils.appendChild(divideXML, 'dividend'), type, divide.dividend);
+                Expression.toXML(Utils.appendChild(divideXML, 'divisor'), type, divide.divisor);
+            },
+            isAvailableFor: function(type)
+            {
+                return type.name === Types.primitives.integer.name;
+            },
+            handleTypeChange: function(previousType, newType, expression)
+            {
+                if (this.isAvailableFor(newType))
+                {
+                    expression.divide.dividend.kind.handleTypeChange(previousType, newType, expression.divide.dividend);
+                    expression.divide.divisor.kind.handleTypeChange(previousType, newType, expression.divide.divisor);
+                }
+                else
+                {
+                    replaceExpressionWithDefaultLiteral(expression, newType);
+                }
+            },
+            handleParameterTypeChange: function(oldParameter, newParameter, type, expression)
+            {
+                expression.divide.dividend.kind.handleParameterTypeChange(oldParameter, newParameter, type, expression.divide.dividend);
+                expression.divide.divisor.kind.handleParameterTypeChange(oldParameter, newParameter, type, expression.divide.divisor);
+            },
+            handleParameterRemoval: function(parameterId, type, expression)
+            {
+                expression.divide.dividend.kind.handleParameterRemoval(parameterId, type, expression.divide.dividend);
+                expression.divide.divisor.kind.handleParameterRemoval(parameterId, type, expression.divide.divisor);
+            }
+        },
         choose:
         {
             name: 'choose',

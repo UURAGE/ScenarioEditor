@@ -21,6 +21,7 @@
         "reference": "Reference",
         "sum": "Sum",
         "scale": "Scale",
+        "divide": "Divide",
         "choose": "Choose",
         "score": "Score"
     },
