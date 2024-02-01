@@ -338,6 +338,11 @@ let ElementList;
                         Parameters.container.byId[selectedParameterId];
                     const categoriseValue = selectedParameter.type.categoriseValue;
                     nodeElement.addClass('highlight-value-' + (categoriseValue ? categoriseValue(summaryEffect.value) : 'neutral'));
+                    nodeElement.append($('<div>',
+                    {
+                        text: Types.assignmentOperators[summaryEffect.operator].uiName + ' ' + summaryEffect.value,
+                        class: 'highlight-effect-badge indicator'
+                    }));
                 }
                 else
                 {
@@ -354,6 +359,7 @@ let ElementList;
 
     function dehighlightNodes(nodeElements)
     {
+        nodeElements.find('.highlight-effect-badge').remove();
         nodeElements
             .removeClass(['highlight', 'highlight-no-effect'])
             .removeClass(Object.keys(Types.valueCategories).map(function(name) { return 'highlight-value-' + name; }))
