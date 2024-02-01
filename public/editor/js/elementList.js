@@ -202,7 +202,11 @@ let ElementList;
 
     function processSelectedParameterEffects(parameterEffectsCell, node, row)
     {
-        let selectedParameterEffects = node.parameterEffects.userDefined;
+        let selectedParameterEffects = [
+            ...Object.values(node.parameterEffects.fixed.perCharacter).flatMap(characterParameterEffects => characterParameterEffects.sequence),
+            ...node.parameterEffects.fixed.characterIndependent.sequence,
+            ...node.parameterEffects.userDefined
+        ];
         if (selectedParameterId !== true)
         {
             selectedParameterEffects = selectedParameterEffects.filter(function(parameterEffect)
@@ -216,7 +220,9 @@ let ElementList;
             let text = Types.assignmentOperators[parameterEffect.operator].uiName + ' ' + parameterEffect.value;
             if (selectedParameterId === true)
             {
-                text = Parameters.container.byId[parameterEffect.idRef].name + ' ' + text;
+                let parameter = Config.findParameterById(parameterEffect.idRef);
+                if (!parameter) parameter = Parameters.container.byId[parameterEffect.idRef];
+                text = parameter.name + ' ' + text;
             }
             parameterEffectsCell.append($('<div>',
             {
@@ -233,13 +239,14 @@ let ElementList;
             }
             else
             {
-                const selectedParameterType = Parameters.container.byId[selectedParameterId].type;
-                let summaryEffect = selectedParameterType.summariseEffects ?
-                    selectedParameterType.summariseEffects(selectedParameterEffects) :
+                let selectedParameter = Config.findParameterById(selectedParameterId);
+                if (!selectedParameter) selectedParameter = Parameters.container.byId[selectedParameterId];
+                let summaryEffect = selectedParameter.type.summariseEffects ?
+                    selectedParameter.type.summariseEffects(selectedParameterEffects) :
                     selectedParameterEffects[selectedParameterEffects.length - 1];
-                if (selectedParameterType.simplifyEffect)
+                if (selectedParameter.type.simplifyEffect)
                 {
-                    summaryEffect = selectedParameterType.simplifyEffect(summaryEffect);
+                    summaryEffect = selectedParameter.type.simplifyEffect(summaryEffect);
                 }
                 row.data('summaryEffect', summaryEffect);
             }
@@ -254,6 +261,7 @@ let ElementList;
     {
         parameterSelect.append($('<option>', { value: 'false', text: i18next.t('common:none'), class: 'system' }));
         parameterSelect.append($('<option>', { value: 'true', text: i18next.t('common:all'), class: 'system' }));
+        Config.insertParametersInto(parameterSelect, undefined, 'v');
         Parameters.container.sequence.forEach(function(parameter)
         {
             parameterSelect.append($('<option>', { value: 'v' + parameter.id, text: parameter.name }));
@@ -326,7 +334,9 @@ let ElementList;
                 if (selectedParameterId !== true)
                 {
                     nodeElement.addClass('highlight-operator-' + summaryEffect.operator);
-                    const categoriseValue = Parameters.container.byId[selectedParameterId].type.categoriseValue;
+                    let selectedParameter = Config.findParameterById(selectedParameterId);
+                    if (!selectedParameter) selectedParameter = Parameters.container.byId[selectedParameterId];
+                    const categoriseValue = selectedParameter.type.categoriseValue;
                     nodeElement.addClass('highlight-value-' + (categoriseValue ? categoriseValue(summaryEffect.value) : 'neutral'));
                 }
                 else

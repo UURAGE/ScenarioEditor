@@ -324,7 +324,7 @@ let Config;
     }
 
     // If the type is given, only inserts parameters with the same type
-    function insertParametersInto(idRefSelect, type)
+    function insertParametersInto(idRefSelect, type, valuePrefix)
     {
         const appendParameter = function(parameterItem)
         {
@@ -334,7 +334,9 @@ let Config;
             }
             else if (!type || parameterItem.type.equals(type))
             {
-                idRefSelect.append($('<option>', { value: parameterItem.id, text: parameterItem.name }));
+                let value = parameterItem.id;
+                if (valuePrefix !== undefined) value = valuePrefix + value;
+                idRefSelect.append($('<option>', { value, text: parameterItem.name }));
             }
         };
         Config.container.parameters.sequence.forEach(appendParameter);
