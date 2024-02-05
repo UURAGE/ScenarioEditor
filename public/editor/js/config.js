@@ -289,14 +289,13 @@ let Config;
 
     function findParameterById(parameterId, characterId)
     {
-        let parameter;
         if (!characterId && parameterId in Config.container.parameters.byId)
         {
-            parameter = Config.container.parameters.byId[parameterId];
+            return Config.container.parameters.byId[parameterId];
         }
         else if (parameterId in Config.container.characters.parameters.byId)
         {
-            parameter = Config.container.characters.parameters.byId[parameterId];
+            return Config.container.characters.parameters.byId[parameterId];
         }
         else
         {
@@ -304,23 +303,20 @@ let Config;
             {
                 if (parameterId in Config.container.characters.byId[characterId].parameters.byId)
                 {
-                    parameter = Config.container.characters.byId[characterId].parameters.byId[parameterId];
+                    return Config.container.characters.byId[characterId].parameters.byId[parameterId];
                 }
             }
             else
             {
-                Config.container.characters.sequence.some(function(character)
+                for (const character of Config.container.characters.sequence)
                 {
                     if (parameterId in Config.container.characters.byId[character.id].parameters.byId)
                     {
-                        parameter = Config.container.characters.byId[character.id].parameters.byId[parameterId];
-                        return true;
+                        return Config.container.characters.byId[character.id].parameters.byId[parameterId];
                     }
-                    return false;
-                });
+                }
             }
         }
-        return parameter;
     }
 
     // If the type is given, only inserts parameters with the same type

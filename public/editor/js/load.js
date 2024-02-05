@@ -232,7 +232,7 @@ let Load;
                 tree.dragDiv.find('.subjectName').text(tree.subject); // Set subject in HTML
                 tree.dragDiv.find('.subjectNameInput').val(tree.subject); // Set subject in HTML
 
-                plumbInstance.batch(function()
+                plumbInstance.batch(() =>
                 {
                     $(this).children('statements').children().each(function()
                     {
@@ -263,7 +263,7 @@ let Load;
                             connection.setParameter('color', target.colorValue);
                         });
                     });
-                }.bind(this), true);
+                }, true);
             });
         });
     }
@@ -443,13 +443,13 @@ let Load;
         {
             // Save all the connections. We will create the connections when all nodes have been added.
             connections[id] = [];
-            for (let m = 0; m < targets.length; m++)
+            for (const target of targets)
             {
-                let targetID = targets[m].attributes.idref.value.replace(/\./g, '_');
+                let targetID = target.attributes.idref.value.replace(/\./g, '_');
                 if (!/^edit_\d+$/.test(targetID)) targetID = 'ext_' + targetID;
                 const connection = { id: targetID };
 
-                const annotationValues = $(targets[m]).children('annotationValues');
+                const annotationValues = $(target).children('annotationValues');
                 if (annotationValues.length > 0)
                 {
                     connection.colorValue = ColorPicker.colorFromXML(annotationValues.eq(0));

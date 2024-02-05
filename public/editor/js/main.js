@@ -2572,8 +2572,8 @@ let Main;
                             {
                                 node.parameterEffects.fixed.perCharacter[characterId].sequence.forEach(function(effect)
                                 {
-                                    let parameter = Config.container.characters.parameters.byId[effect.idRef];
-                                    if (!parameter) parameter = Config.container.characters.byId[newCharacterIdRef].parameters.byId[effect.idRef];
+                                    const parameter = Config.container.characters.parameters.byId[effect.idRef] ??
+                                        Config.container.characters.byId[newCharacterIdRef].parameters.byId[effect.idRef];
 
                                     if (parameter)
                                     {

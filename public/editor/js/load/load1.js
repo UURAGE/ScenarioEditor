@@ -41,12 +41,12 @@ let Load1;
             // Makes the connections between the nodes.
             $.each(connections, function(sourceId, targets)
             {
-                for (let i = 0; i < targets.length; i++)
+                for (const target of targets)
                 {
                     tree.plumbInstance.connect(
                     {
                         source: sourceId,
-                        target: targets[i]
+                        target: target
                     });
                 }
             });

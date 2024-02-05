@@ -593,7 +593,7 @@ let Types;
             loadType: function(typeXML, id, kind, scopes)
             {
                 const options = { sequence: [] };
-                const addOption = function(index, optionXML)
+                typeXML.children('option').each((index, optionXML) =>
                 {
                     const value = $(optionXML).attr('value');
                     let text = optionXML.textContent;
@@ -614,8 +614,7 @@ let Types;
                         options.byValue[option.value] = option;
                     }
                     options.sequence.push(option);
-                };
-                typeXML.children('option').each(addOption.bind(this));
+                });
 
                 let defaultValue = options.byValue ? options.sequence[0].value : options.sequence[0].text;
                 const defaultEl = typeXML.children('default');
@@ -682,7 +681,7 @@ let Types;
             insertType: function(typeXML, detailed)
             {
                 const enumerationXML = Utils.appendChild(typeXML, this.name);
-                const appendOptionChild = function(option)
+                this.options.sequence.forEach(option =>
                 {
                     const optionXML = Utils.appendChild(enumerationXML, 'option');
                     if (this.options.byValue && detailed)
@@ -694,8 +693,7 @@ let Types;
                     {
                         this.toXML(optionXML, this.options.byValue ? option.value : option.text);
                     }
-                };
-                this.options.sequence.forEach(appendOptionChild.bind(this));
+                });
                 return enumerationXML;
             },
             insertTypeIntoDOM: function(typeEl)

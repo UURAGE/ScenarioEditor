@@ -47,8 +47,8 @@ let Condition;
                     const parameterIdRef = $(this).find(".parameter-idref-select").val();
                     const characterIdRef = $(this).find(".character-idref-select").val();
 
-                    let parameter = Config.findParameterById(parameterIdRef, characterIdRef);
-                    if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
+                    const parameter = Config.findParameterById(parameterIdRef, characterIdRef) ??
+                        Parameters.container.byId[parameterIdRef];
 
                     subcondition = {};
                     subcondition.idRef = parameterIdRef;
@@ -109,8 +109,8 @@ let Condition;
                 {
                     parentContainer = parentContainer.children(".groupConditionDiv");
                 }
-                let parameter = Config.findParameterById(condition.idRef, condition.characterIdRef);
-                if (!parameter) parameter = Parameters.container.byId[condition.idRef];
+                const parameter = Config.findParameterById(condition.idRef, condition.characterIdRef) ??
+                    Parameters.container.byId[condition.idRef];
 
                 const conditionContainer = appendCondition(parentContainer, allowReferenceConditions);
                 conditionContainer.find(".parameter-idref-select").val(condition.idRef).trigger('change');
@@ -137,8 +137,8 @@ let Condition;
                 characterIdRef = conditionXML.attributes.characteridref.value;
             }
 
-            let parameter = Config.findParameterById(parameterIdRef, characterIdRef);
-            if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
+            const parameter = Config.findParameterById(parameterIdRef, characterIdRef) ??
+                Parameters.container.byId[parameterIdRef];
 
             if (parameter)
             {
@@ -179,8 +179,8 @@ let Condition;
         }
         else
         {
-            let parameter = Config.findParameterById(condition.idRef, condition.characterIdRef);
-            if (!parameter) parameter = Parameters.container.byId[condition.idRef];
+            const parameter = Config.findParameterById(condition.idRef, condition.characterIdRef) ??
+                Parameters.container.byId[condition.idRef];
 
             const isReferenceCondition = condition.operator in Types.unaryOperators;
 
@@ -306,8 +306,8 @@ let Condition;
 
         const changeTestType = function(parameterIdRef)
         {
-            let parameter = Config.findParameterById(parameterIdRef);
-            if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
+            const parameter = Config.findParameterById(parameterIdRef) ??
+                Parameters.container.byId[parameterIdRef];
 
             if (Config.isCharacterParameter(parameterIdRef))
             {

@@ -454,9 +454,9 @@ let Validator;
         visited[currentNode] = true;
         const plumbInstance = Main.getPlumbInstanceByNodeID(currentNode);
         const connections = plumbInstance.getConnections({ source: currentNode });
-        for (let i = 0; i < connections.length; i++)
+        for (const connection of connections)
         {
-            if (!visited[connections[i].targetId] && testCycleDFS(connections[i].targetId, nodeToFind, visited)) return true;
+            if (!visited[connection.targetId] && testCycleDFS(connection.targetId, nodeToFind, visited)) return true;
         }
 
         return false;

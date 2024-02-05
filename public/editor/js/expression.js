@@ -64,8 +64,8 @@ let Expression;
                     }
 
                     container.children('.reference-calculate').remove();
-                    let parameter = Config.findParameterById(parameterIdRef);
-                    if (!parameter) parameter = Parameters.container.byId[parameterIdRef];
+                    const parameter = Config.findParameterById(parameterIdRef) ??
+                        Parameters.container.byId[parameterIdRef];
                     if (parameter.type.name === Types.primitives.integer.name &&
                         'maximum' in parameter.type && 'minimum' in parameter.type)
                     {

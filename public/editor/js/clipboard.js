@@ -439,9 +439,8 @@
                 };
                 node.preconditions = Condition.filter(function(condition)
                 {
-                    let parameter = Config.findParameterById(condition.idRef, condition.characterIdRef);
-                    if (!parameter) parameter = getEqualParameter(definitions.parameters.userDefined.byId[condition.idRef]);
-                    return parameter;
+                    return Config.findParameterById(condition.idRef, condition.characterIdRef) ??
+                        getEqualParameter(definitions.parameters.userDefined.byId[condition.idRef]);
                 }, node.preconditions, onConditionPreservation, onConditionRemoval);
             }
 

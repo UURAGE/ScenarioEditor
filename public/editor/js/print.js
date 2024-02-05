@@ -58,7 +58,7 @@ let Print;
         // Create a step for each tree
         const steps = $('#main > .treeContainer').map(function()
         {
-            return function()
+            return () =>
             {
                 // Zoom in and out to create correct HTML for nodes and connections
                 if (!Main.trees[this.id].zoomedInBefore)
@@ -115,7 +115,7 @@ let Print;
                     }
                 });
                 treeContainer.style.height = maxHeight + 'px';
-            }.bind(this);
+            };
         }).get();
 
         // Add a step for showing the result and opening the print dialog

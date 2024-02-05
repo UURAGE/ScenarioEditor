@@ -60,7 +60,7 @@ let Load3;
                 tree.dragDiv.find('.subjectName').text(tree.subject); // Set subject in HTML
                 tree.dragDiv.find('.subjectNameInput').val(tree.subject); // Set subject in HTML
 
-                plumbInstance.batch(function()
+                plumbInstance.batch(() =>
                 {
                     $(this).children().each(function()
                     { // Parse the tree in the container
@@ -81,16 +81,16 @@ let Load3;
                     // Makes the connections between the nodes.
                     $.each(connections, function(sourceId, targets)
                     {
-                        for (let i = 0; i < targets.length; i++)
+                        for (const target of targets)
                         {
                             plumbInstance.connect(
                             {
                                 source: sourceId,
-                                target: targets[i]
+                                target: target
                             });
                         }
                     });
-                }.bind(this), true);
+                }, true);
             });
         });
 
@@ -186,18 +186,15 @@ let Load3;
         let targets;
         if (type === Main.playerType)
         {
-            const pEffEl = $(statement).find('parameterEffects');
-            const pEffs = pEffEl.children(); // All parameter effects of the node.
-            for (let j = 0; j < pEffs.length; j++)
+            $(statement).find('parameterEffects').children().each(function()
             {
-                const parameter = pEffs[j];
                 parameterEffects.userDefined.push(
                 {
-                    idRef: parameter.attributes.idref.value,
-                    operator: parameter.attributes.changeType.value == "delta" ? Types.assignmentOperators.addAssign.name : Types.assignmentOperators.assign.name,
-                    value: parseInt(parameter.attributes.value.value)
+                    idRef: this.attributes.idref.value,
+                    operator: this.attributes.changeType.value == "delta" ? Types.assignmentOperators.addAssign.name : Types.assignmentOperators.assign.name,
+                    value: parseInt(this.attributes.value.value)
                 });
-            }
+            });
 
             const intents = $(statement).children('intents');
             if (intents.length > 0)
@@ -219,9 +216,9 @@ let Load3;
         {
             // Save all the connections. We will create the connections when all nodes have been added.
             connections[id] = [];
-            for (let m = 0; m < targets.length; m++)
+            for (const target of targets)
             {
-                let targetID = targets[m].attributes.idref.value.replace(/\./g, '_');
+                let targetID = target.attributes.idref.value.replace(/\./g, '_');
                 if (!/^edit_\d+$/.test(targetID)) targetID = 'ext_' + targetID;
                 connections[id].push(targetID);
             }
@@ -261,26 +258,25 @@ let Load3;
         const preconditionType = preconditionXMLElement.nodeName;
         const preconditionsArray = [];
 
-        const preconditionChildren = $(preconditionXMLElement).children();
-        for (let i = 0; i < preconditionChildren.length; i++)
+        $(preconditionXMLElement).children().each(function()
         {
-            if (preconditionChildren[i].nodeName == "condition")
+            if (this.nodeName == "condition")
             {
-                if (preconditionChildren[i].attributes.idref.value in Parameters.container.byId)
+                if (this.attributes.idref.value in Parameters.container.byId)
                 {
                     preconditionsArray.push(
                     {
-                        idRef: preconditionChildren[i].attributes.idref.value,
-                        operator: preconditionChildren[i].attributes.test.value,
-                        value: parseInt(preconditionChildren[i].attributes.value.value)
+                        idRef: this.attributes.idref.value,
+                        operator: this.attributes.test.value,
+                        value: parseInt(this.attributes.value.value)
                     });
                 }
             }
             else
             {
-                preconditionsArray.push(loadPreconditions(preconditionChildren[i]));
+                preconditionsArray.push(loadPreconditions(this));
             }
-        }
+        });
         return {
             type: preconditionType,
             subconditions: preconditionsArray
@@ -397,9 +393,9 @@ let Load3;
         if (targets.length > 0)
         {
             // Save all the connections so we can expand the conversation later on and connect the expanded nodes
-            for (let m = 0; m < targets.length; m++)
+            for (const target of targets)
             {
-                let targetID = targets[m].attributes.idref.value.replace(/\./g, '_');
+                let targetID = target.attributes.idref.value.replace(/\./g, '_');
                 if (!/^edit_\d+$/.test(targetID)) targetID = 'ext_' + targetID;
                 conversations[id].connections.push(targetID);
             }

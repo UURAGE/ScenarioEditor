@@ -220,8 +220,8 @@ let ElementList;
             let text = Types.assignmentOperators[parameterEffect.operator].uiName + ' ' + parameterEffect.value;
             if (selectedParameterId === true)
             {
-                let parameter = Config.findParameterById(parameterEffect.idRef);
-                if (!parameter) parameter = Parameters.container.byId[parameterEffect.idRef];
+                const parameter = Config.findParameterById(parameterEffect.idRef) ??
+                    Parameters.container.byId[parameterEffect.idRef];
                 text = parameter.name + ' ' + text;
             }
             parameterEffectsCell.append($('<div>',
@@ -239,8 +239,8 @@ let ElementList;
             }
             else
             {
-                let selectedParameter = Config.findParameterById(selectedParameterId);
-                if (!selectedParameter) selectedParameter = Parameters.container.byId[selectedParameterId];
+                const selectedParameter = Config.findParameterById(selectedParameterId) ??
+                    Parameters.container.byId[selectedParameterId];
                 let summaryEffect = selectedParameter.type.summariseEffects ?
                     selectedParameter.type.summariseEffects(selectedParameterEffects) :
                     selectedParameterEffects[selectedParameterEffects.length - 1];
@@ -334,8 +334,8 @@ let ElementList;
                 if (selectedParameterId !== true)
                 {
                     nodeElement.addClass('highlight-operator-' + summaryEffect.operator);
-                    let selectedParameter = Config.findParameterById(selectedParameterId);
-                    if (!selectedParameter) selectedParameter = Parameters.container.byId[selectedParameterId];
+                    const selectedParameter = Config.findParameterById(selectedParameterId) ??
+                        Parameters.container.byId[selectedParameterId];
                     const categoriseValue = selectedParameter.type.categoriseValue;
                     nodeElement.addClass('highlight-value-' + (categoriseValue ? categoriseValue(summaryEffect.value) : 'neutral'));
                 }

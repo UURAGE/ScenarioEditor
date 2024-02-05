@@ -118,13 +118,13 @@ let Evaluations;
                     text: i18next.t('common:confirm'),
                     click: function()
                     {
-                        save(evaluationsContainer).then(function(saved)
+                        save(evaluationsContainer).then(saved =>
                         {
                             if (saved)
                             {
                                 $(this).dialog('close');
                             }
-                        }.bind(this));
+                        });
                     }
                 },
                 {

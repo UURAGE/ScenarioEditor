@@ -118,13 +118,13 @@ let Parameters;
                     text: i18next.t('common:confirm'),
                     click: function()
                     {
-                        save(parametersContainer).then(function(saved)
+                        save(parametersContainer).then(saved =>
                         {
                             if (saved)
                             {
                                 $(this).dialog('close');
                             }
-                        }.bind(this));
+                        });
                     }
                 },
                 {

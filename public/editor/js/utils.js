@@ -140,10 +140,9 @@ let Utils;
     // This includes elements that are focusable by default, like <input> and <select>.
     function focusFirstTabindexedDescendant(element)
     {
-        const descendants = $(element).find('*');
-        for (let i = 0; i < descendants.length; i++)
+        for (const descendant of $(element).find('*'))
         {
-            const toTest = $(descendants[i]);
+            const toTest = $(descendant);
             if (toTest.prop('tabIndex') >= 0)
             {
                 return toTest.focus();
