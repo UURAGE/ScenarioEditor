@@ -1,6 +1,5 @@
 @charset "UTF-8";
 /* © DialogueTrainer */
-/* © DialogueTrainer */
 @font-face {
   font-family: "Open Sans";
   font-style: normal;
@@ -25,12 +24,9 @@
   font-weight: 700;
   src: local("Open Sans Bold"), local("OpenSans-Bold"), url("../fonts/open-sans-v17-latin-ext_greek-ext_greek_cyrillic_latin-700.woff2") format("woff2"), url("../fonts/open-sans-v17-latin-ext_greek-ext_greek_cyrillic_latin-700.woff") format("woff");
 }
+/* © DialogueTrainer */ /* © DialogueTrainer */
 /* © DialogueTrainer */
-/* © DialogueTrainer */
-/* © DialogueTrainer */
-/* © DialogueTrainer */
-/* © DialogueTrainer */
-/* © DialogueTrainer */
+/* © DialogueTrainer */ /* © DialogueTrainer */
 html,
 body {
   min-height: 100%;
@@ -71,7 +67,6 @@ body {
   flex: 1 0 auto;
 }
 
-/* © DialogueTrainer */
 /* © DialogueTrainer */
 .ui-widget {
   font-family: inherit !important;
@@ -387,7 +382,6 @@ select:focus {
 }
 
 /* © DialogueTrainer */
-/* © DialogueTrainer */
 .zoomTreeButton {
   width: 50px;
   font-size: 0;
@@ -511,7 +505,6 @@ select:focus {
   box-sizing: border-box;
 }
 
-/* © DialogueTrainer */
 /* © DialogueTrainer */
 #logo {
   position: relative;
@@ -801,7 +794,6 @@ select:focus {
   border-radius: 100%;
 }
 
-/* © DialogueTrainer */
 /* © DialogueTrainer */
 #sidebar {
   position: relative;
@@ -1220,7 +1212,6 @@ select:focus {
 }
 
 /* © DialogueTrainer */
-/* © DialogueTrainer */
 #validationReport .level-error a {
   color: #8a111c;
   background-color: rgba(206, 25, 42, 0.05);
@@ -1514,7 +1505,6 @@ td.dragHandle {
 }
 
 /* © DialogueTrainer */
-/* © DialogueTrainer */
 #elementList .label.computer {
   color: #a11321;
   background-color: rgba(206, 25, 42, 0.1);
@@ -1654,7 +1644,6 @@ td.dragHandle {
 }
 
 /* © DialogueTrainer */
-/* © DialogueTrainer */
 #miniwrap {
   display: none;
 }
@@ -1691,7 +1680,6 @@ td.dragHandle {
   overflow: hidden;
 }
 
-/* © DialogueTrainer */
 /* © DialogueTrainer */
 .evaluation-expression,
 .scale-expression,
@@ -1797,7 +1785,6 @@ td.dragHandle {
   }
 }
 /* © DialogueTrainer */
-/* © DialogueTrainer */
 .long::after {
   content: "";
   position: absolute;
@@ -1877,7 +1864,6 @@ td.dragHandle {
   pointer-events: none;
 }
 
-/* © DialogueTrainer */
 /* © DialogueTrainer */
 #metadata {
   display: flex;
@@ -2121,4 +2107,6 @@ td.dragHandle {
   height: 1px;
   page-break-after: always;
 }
+
+/* © DialogueTrainer */
 /*# sourceMappingURL=stylesheet.css.map */

@@ -1,10 +1,7 @@
 @charset "UTF-8";
+/* © DialogueTrainer */ /* © DialogueTrainer */
 /* © DialogueTrainer */
-/* © DialogueTrainer */
-/* © DialogueTrainer */
-/* © DialogueTrainer */
-/* © DialogueTrainer */
-/* © DialogueTrainer */
+/* © DialogueTrainer */ /* © DialogueTrainer */
 .w {
   position: absolute;
   z-index: 4;
@@ -226,8 +223,11 @@
 .w.highlight-no-effect > .ep::before {
   border-color: rgba(121, 152, 190, 0.35);
 }
-.w.highlight-operator-addAssign > .ep::before {
+.w.highlight-operator-addAssign > .ep::before, .w.highlight-operator-subtractAssign > .ep::before {
   border-style: dashed;
+}
+.w.highlight-operator-subtractAssign > .ep::before {
+  border-color: rgba(206, 25, 42, 0.35);
 }
 
 .allowInterleaveNode:hover::before, .allowDialogueEndNode:hover::before, .endNode:hover::before, .openResponse:hover::before {

@@ -372,24 +372,28 @@ let Types;
             },
             simplifyEffect: function(effect)
             {
-                if (effect.operator === Types.assignmentOperators.addAssign.name)
+                if (effect.operator === Types.assignmentOperators.assign.name)
                 {
-                    if (effect.value === 0) return null;
                     return effect;
-                }
-                else if (effect.operator === Types.assignmentOperators.subtractAssign.name)
-                {
-                    if (effect.value === 0) return null;
-                    return { operator: Types.assignmentOperators.addAssign.name, value: -effect.value };
                 }
                 else
                 {
-                    return effect;
+                    if (effect.value > 0) return effect;
+                    else if (effect.value === 0) return null;
+                    else
+                    {
+                        return {
+                            operator: (effect.operator === Types.assignmentOperators.subtractAssign.name ?
+                                Types.assignmentOperators.addAssign : Types.assignmentOperators.subtractAssign).name,
+                            value: -effect.value
+                        };
+                    }
                 }
             },
             summariseEffects: function(effects)
             {
                 if (effects.length === 0) return null;
+                else if (effects.length === 1) return effects[0];
                 return effects.reduce(function(summary, current)
                 {
                     if (current.operator === Types.assignmentOperators.assign.name)
@@ -404,7 +408,7 @@ let Types;
                     {
                         return { operator: summary.operator, value: summary.value - current.value };
                     }
-                });
+                }, { operator: Types.assignmentOperators.addAssign, value: 0 });
             }
         },
         'boolean':

@@ -241,8 +241,13 @@
     border-color: rgba(desaturate($col-editor, 65%), .35);
   }
 
-  &.highlight-operator-addAssign > .ep::before {
+  &.highlight-operator-addAssign > .ep::before,
+  &.highlight-operator-subtractAssign > .ep::before {
     border-style: dashed;
+  }
+
+  &.highlight-operator-subtractAssign > .ep::before {
+    border-color: rgba($col-negative, .35);
   }
 }
 
