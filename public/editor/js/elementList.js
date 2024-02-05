@@ -246,7 +246,7 @@ let ElementList;
                     selectedParameterEffects[selectedParameterEffects.length - 1];
                 if (selectedParameter.type.simplifyEffect)
                 {
-                    summaryEffect = selectedParameter.type.simplifyEffect(summaryEffect);
+                    summaryEffect = selectedParameter.type.simplifyEffect(summaryEffect) || false;
                 }
                 row.data('summaryEffect', summaryEffect);
             }
