@@ -23,8 +23,10 @@
         "scale": "Schaal",
         "divide": "Deling",
         "choose": "Selectie",
-        "score": "Score"
+        "score": "Score",
+        "profileScore": "Profielscore"
     },
+    "compared_with": " vergeleken met ",
     "as_percentage": "%",
     "as_value": "#",
     "when": "Als",

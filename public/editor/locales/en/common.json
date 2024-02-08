@@ -23,8 +23,10 @@
         "scale": "Scale",
         "divide": "Divide",
         "choose": "Choose",
-        "score": "Score"
+        "score": "Score",
+        "profileScore": "Profile score"
     },
+    "compared_with": " compared with ",
     "as_percentage": "%",
     "as_value": "#",
     "when": "When",

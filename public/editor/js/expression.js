@@ -47,7 +47,7 @@ let Expression;
         reference:
         {
             name: 'reference',
-            appendControlTo: function(container, type)
+            appendControlTo: function(container, type, hideCalculateControl)
             {
                 const parameterSelect = $('<select>', { class: "parameter-idref" });
                 Parameters.insertInto(parameterSelect, type);
@@ -66,7 +66,7 @@ let Expression;
                     container.children('.reference-calculate').remove();
                     const parameter = Config.findParameterById(parameterIdRef) ??
                         Parameters.container.byId[parameterIdRef];
-                    if (parameter.type.name === Types.primitives.integer.name &&
+                    if (!hideCalculateControl && parameter.type.name === Types.primitives.integer.name &&
                         'maximum' in parameter.type && 'minimum' in parameter.type)
                     {
                         const calculateSelect = $('<select>', { class: "reference-calculate" });
@@ -737,6 +737,176 @@ let Expression;
                     return scoreItem.reference.parameterIdRef !== parameterId;
                 });
                 if (expression.score.length === 0)
+                {
+                    replaceExpressionWithDefaultLiteral(expression, type);
+                }
+            }
+        },
+        profileScore:
+        {
+            name: 'profileScore',
+            appendControlTo: function(container, type)
+            {
+                const referenceContainer = $('<span>', { class: "profile-reference" });
+                kinds.reference.appendControlTo(referenceContainer, type, true);
+                container.append(referenceContainer);
+
+                container.append($('<span>', { text: i18next.t('common:compared_with') }));
+
+                const comparisonReferencesContainer = $('<ul>');
+                const addButton = Parts.addButton("", "add-profile-comparison-reference");
+                const appendComparisonReferenceContainer = function()
+                {
+                    const comparisonReferenceContainer = $('<li>');
+
+                    const referenceContainer = $('<span>', { class: "profile-comparison-reference" });
+                    kinds.reference.appendControlTo(referenceContainer, type, true);
+                    comparisonReferenceContainer.append(referenceContainer);
+
+                    if (comparisonReferencesContainer.children().length >= 1)
+                    {
+                        const deleteButton = Parts.deleteButton();
+                        deleteButton.on('click', function()
+                        {
+                            comparisonReferenceContainer.remove();
+                        });
+                        comparisonReferenceContainer.append(deleteButton);
+                    }
+
+                    comparisonReferencesContainer.append(comparisonReferenceContainer);
+                };
+                addButton.on('click', appendComparisonReferenceContainer);
+                container.append(comparisonReferencesContainer);
+                container.append(addButton);
+                appendComparisonReferenceContainer();
+            },
+            getFromDOM: function(container, type)
+            {
+                return {
+                    reference: kinds.reference.getFromDOM(container.children('.profile-reference'), type),
+                    comparisonReferences: container.children('ul').children('li').map(function()
+                    {
+                        return {
+                            reference: kinds.reference.getFromDOM($(this).children('.profile-comparison-reference'), type)
+                        };
+                    }).get()
+                };
+            },
+            setInDOM: function(container, type, profileScore)
+            {
+                kinds.reference.setInDOM(container.children('.profile-reference'), type, profileScore.reference);
+                const comparisonReferencesContainer = container.children('ul').empty();
+                profileScore.comparisonReferences.forEach(function(comparisonReference)
+                {
+                    const addButton = container.children('.add-profile-comparison-reference');
+                    addButton.trigger('click');
+                    const comparisonReferenceContainer = comparisonReferencesContainer.children('li').last();
+                    kinds.reference.setInDOM(comparisonReferenceContainer.children('.profile-comparison-reference'), type, comparisonReference.reference);
+                });
+            },
+            adopt: function(expression)
+            {
+                if (!(expression.kind.name === kinds.divide.name &&
+                    expression.divide.dividend.kind.name === kinds.scale.name &&
+                    expression.divide.dividend.scale.expression.kind.name === kinds.reference.name &&
+                    expression.divide.dividend.scale.operator === 'scalar' &&
+                    expression.divide.dividend.scale.value === 100 &&
+                    expression.divide.divisor.kind.name === kinds.sum.name &&
+                    expression.divide.divisor.sum.every(item => item.kind.name === kinds.reference.name) &&
+                    expression.divide.divisor.sum.some(item =>
+                        item.reference.parameterIdRef === expression.divide.dividend.scale.expression.reference.parameterIdRef &&
+                        item.reference.characterIdRef === expression.divide.dividend.scale.expression.reference.characterIdRef
+                    )))
+                {
+                    return null;
+                }
+
+                return {
+                    kind: this,
+                    profileScore: {
+                        reference: expression.divide.dividend.scale.expression.reference,
+                        comparisonReferences: expression.divide.divisor.sum.slice(1)
+                    }
+                };
+            },
+            fromXML: function()
+            {
+                return null;
+            },
+            toXML: function(expressionXML, type, profileScore)
+            {
+                const profileScoreReferenceExpression = {
+                    kind: kinds.reference,
+                    reference: profileScore.reference
+                };
+                const divideExpression =
+                {
+                    kind: kinds.divide,
+                    divide: {
+                        dividend: {
+                            kind: kinds.scale,
+                            scale:
+                            {
+                                expression: profileScoreReferenceExpression,
+                                operator: 'scalar',
+                                value: 100
+                            }
+                        },
+                        divisor:
+                        {
+                            kind: kinds.sum,
+                            sum: [
+                                profileScoreReferenceExpression,
+                                ...profileScore.comparisonReferences.map(comparisonReference =>
+                                    ({
+                                        kind: kinds.reference,
+                                        reference: comparisonReference.reference
+                                    }))
+                            ]
+                        }
+                    }
+                };
+                Expression.toXML(expressionXML, type, divideExpression);
+            },
+            isAvailableFor: function(type)
+            {
+                return kinds.divide.isAvailableFor(type) && kinds.sum.isAvailableFor(type) && kinds.reference.isAvailableFor(type);
+            },
+            handleTypeChange: function(previousType, newType, expression)
+            {
+                if (!this.isAvailableFor(newType))
+                {
+                    replaceExpressionWithDefaultLiteral(expression, newType);
+                }
+            },
+            handleParameterTypeChange: function(oldParameter, newParameter, type, expression)
+            {
+                if (newParameter.type.name !== Types.primitives.integer.name)
+                {
+                    this.handleParameterRemoval(newParameter.id, type, expression);
+                }
+                if (expression.kind.name === kinds.profileScore.name)
+                {
+                    kinds.reference.handleParameterTypeChange(oldParameter, newParameter, type, expression.profileScore);
+                    expression.profileScore.comparisonReferences.forEach(function(comparisonReference)
+                    {
+                        kinds.reference.handleParameterTypeChange(oldParameter, newParameter, type, comparisonReference);
+                    });
+                }
+            },
+            handleParameterRemoval: function(parameterId, type, expression)
+            {
+                if (expression.profileScore.reference.parameterIdRef === parameterId)
+                {
+                    replaceExpressionWithDefaultLiteral(expression, type);
+                    return;
+                }
+
+                expression.profileScore.comparisonReferences = expression.profileScore.comparisonReferences.filter(function(comparisonReference)
+                {
+                    return comparisonReference.reference.parameterIdRef !== parameterId;
+                });
+                if (expression.profileScore.comparisonReferences.length === 0)
                 {
                     replaceExpressionWithDefaultLiteral(expression, type);
                 }
