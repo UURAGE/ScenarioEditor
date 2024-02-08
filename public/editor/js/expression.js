@@ -146,7 +146,10 @@ let Expression;
             },
             handleTypeChange: function(previousType, newType, expression)
             {
-                replaceExpressionWithDefaultLiteral(expression, newType);
+                if (!newType.equals(previousType))
+                {
+                    replaceExpressionWithDefaultLiteral(expression, newType);
+                }
             },
             handleParameterTypeChange: function(oldParameter, newParameter, type, expression)
             {
