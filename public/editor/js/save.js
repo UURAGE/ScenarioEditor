@@ -14,7 +14,7 @@ let Save;
     };
 
     const scenarioNameSpace = "http://uudsl.github.io/scenario/namespace";
-    const schemaVersion = "4.8.0";
+    const schemaVersion = "4.12.0";
 
     $(function()
     {
