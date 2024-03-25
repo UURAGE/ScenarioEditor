@@ -361,3 +361,29 @@ select {
 .indent {
   margin-left: 20px;
 }
+
+.listType {
+  padding-inline-start: 0;
+
+  li {
+    display: flex;
+    align-items: center;
+    margin-bottom: .25em;
+    gap: 5px;
+
+    &::before {
+      content: '•';
+      display: inline;
+    }
+
+    .control {
+      flex-grow: 1;
+    }
+  }
+
+  &.string {
+    li {
+      align-items: flex-start;
+    }
+  }
+}

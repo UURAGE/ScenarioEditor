@@ -257,55 +257,68 @@
 			</extension>
 		</simpleContent>
 	</complexType>
-	<group name="typeGroup">
-		<sequence>
-			<element name="type">
+	<complexType name="type">
+		<choice>
+			<element name="boolean">
 				<complexType>
-					<choice>
-						<element name="boolean">
-							<complexType>
-								<sequence>
-									<element name="default" type="boolean" minOccurs="0" maxOccurs="1"/>
-								</sequence>
-							</complexType>
-						</element>
-						<element ref="tns:string"></element>
-						<element name="integer">
-							<complexType>
-								<sequence>
-									<element name="default" type="int" minOccurs="0" maxOccurs="1"/>
-								</sequence>
-								<attribute name="minimum" type="int" use="optional"></attribute>
-								<attribute name="maximum" type="int" use="optional"></attribute>
-							</complexType>
-						</element>
-						<element name="enumeration">
-							<complexType>
-								<sequence>
-									<element name="option" minOccurs="1" maxOccurs="unbounded">
-										<complexType>
-											<simpleContent>
-												<extension base="string">
-													<attribute name="value" type="NCName" use="optional" />
-												</extension>
-											</simpleContent>
-										</complexType>
-									</element>
-									<element name="default" minOccurs="0" maxOccurs="1">
-										<complexType>
-											<simpleContent>
-												<extension base="string">
-													<attribute name="value" type="NCName" use="optional" />
-												</extension>
-											</simpleContent>
-										</complexType>
-									</element>
-								</sequence>
-							</complexType>
-						</element>
-					</choice>
+					<sequence>
+						<element name="default" type="boolean" minOccurs="0" maxOccurs="1"/>
+					</sequence>
 				</complexType>
 			</element>
+			<element ref="tns:string"></element>
+			<element name="integer">
+				<complexType>
+					<sequence>
+						<element name="default" type="int" minOccurs="0" maxOccurs="1"/>
+					</sequence>
+					<attribute name="minimum" type="int" use="optional"></attribute>
+					<attribute name="maximum" type="int" use="optional"></attribute>
+				</complexType>
+			</element>
+			<element name="enumeration">
+				<complexType>
+					<sequence>
+						<element name="option" minOccurs="1" maxOccurs="unbounded">
+							<complexType>
+								<simpleContent>
+									<extension base="string">
+										<attribute name="value" type="NCName" use="optional" />
+									</extension>
+								</simpleContent>
+							</complexType>
+						</element>
+						<element name="default" minOccurs="0" maxOccurs="1">
+							<complexType>
+								<simpleContent>
+									<extension base="string">
+										<attribute name="value" type="NCName" use="optional" />
+									</extension>
+								</simpleContent>
+							</complexType>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="list">
+				<complexType>
+					<sequence>
+						<element name="itemType" type="tns:type" />
+						<element name="default" minOccurs="0" maxOccurs="1">
+							<complexType>
+								<sequence>
+									<element name="item" type="anyType" minOccurs="0" maxOccurs="unbounded" />
+								</sequence>
+							</complexType>
+						</element>
+					</sequence>
+				</complexType>
+			</element>
+		</choice>
+	</complexType>
+	<group name="typeGroup">
+		<sequence>
+			<element name="type" type="tns:type" />
 		</sequence>
 	</group>
 	<element name="string">

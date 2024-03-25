@@ -10,6 +10,7 @@ let Config;
     // eslint-disable-next-line no-global-assign
     Config =
     {
+        nameSpace: "http://uurage.github.io/ScenarioEditor/config/namespace",
         additionalNameSpaces: {},
         atLeastOneParameter: atLeastOneParameter,
         container: {},
@@ -21,8 +22,6 @@ let Config;
         getNewDefaultParameterEffects: getNewDefaultParameterEffects,
         getNewDefaultPropertyValues: getNewDefaultPropertyValues
     };
-
-    const configNameSpace = "http://uurage.github.io/ScenarioEditor/config/namespace";
 
     // The default scopes used when there is no statementScope attribute specified for the property in the config
     const defaultPropertyScopes = { statementScope: 'independent' };
@@ -75,7 +74,7 @@ let Config;
         {
             if (settingXML.length > 0)
             {
-                return { type: loadType(settingXML.children('type').children()) };
+                return { type: Types.loadType(settingXML.children('type').children()) };
             }
             else
             {
@@ -141,7 +140,7 @@ let Config;
                 name: name,
                 description: description,
                 scopes: nodeScopes,
-                type: loadType($(nodeXML).children('type').children(), id, nodeName, nodeScopes)
+                type: Types.loadType($(nodeXML).children('type').children(), id, nodeName, nodeScopes)
             };
         }
         else if (nodeXML.nodeName === nodeName + "Section")
@@ -204,15 +203,6 @@ let Config;
                 localScopes[scopeName] = parentScopes[scopeName];
             }
         }
-    }
-
-    function loadType(typeXML, id, kind, scopes)
-    {
-        const nameSpace = typeXML[0].namespaceURI;
-        const type = nameSpace === configNameSpace ?
-            Types.primitives[typeXML[0].localName] :
-            Types.extensions[nameSpace][typeXML[0].localName];
-        return type.loadType(typeXML, id, kind, scopes);
     }
 
     function loadCharacterCollection(collectionXML)

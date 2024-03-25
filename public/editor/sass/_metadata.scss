@@ -306,3 +306,9 @@ $margin-items: .25em;
     border-color: darken($color-warning, 15%);
   }
 }
+
+.iconButton.delete {
+  background: transparent;
+  border: none;
+  appearance: none;
+}

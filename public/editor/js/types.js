@@ -17,9 +17,10 @@ let Types;
         unaryOperators: {},
         labelControlOrders: {},
         valueCategories: {},
-        appendControlsTo: appendControlsTo,
-        insertIntoDOM: insertIntoDOM,
-        attachDefinitionTooltip: attachDefinitionTooltip
+        loadType,
+        appendControlsTo,
+        insertIntoDOM,
+        attachDefinitionTooltip
     };
 
     Types.assignmentOperators =
@@ -733,14 +734,116 @@ let Types;
                 return valueXML.textContent;
             },
             toXML: toXMLSimple
+        },
+        'list':
+        {
+            name: 'list',
+            controlName: 'ul',
+            labelControlOrder: Types.labelControlOrders.twoLineLabelContainer,
+            get defaultValue() { return []; },
+            assignmentOperators: [Types.assignmentOperators.assign],
+            relationalOperators: [Types.relationalOperators.equalTo, Types.relationalOperators.notEqualTo],
+            unaryOperators: [],
+            equals: function(otherType)
+            {
+                return this.name === otherType.name && this.itemType.equals(otherType.itemType);
+            },
+            appendTypeControlsTo: undefined,
+            loadType: function(typeXML, id, kind, scopes)
+            {
+                // Object.assign only copies values, not accessors such as get
+                const type = Object.create(this);
+                type.itemType = Types.loadType(typeXML.children('itemType').children(), undefined, kind, scopes);
+                return type;
+            },
+            loadTypeFromDOM: undefined,
+            castFrom: function()
+            {
+                return this.defaultValue;
+            },
+            insertType: function(typeXML)
+            {
+                const listXML = Utils.appendChild(typeXML, this.name);
+                const itemTypeXML = Utils.appendChild(listXML, 'itemType');
+                this.itemType.insertType(itemTypeXML);
+                return listXML;
+            },
+            insertTypeIntoDOM: undefined,
+            appendControlTo: function(containerEl, htmlId)
+            {
+                const control = $('<' + this.controlName + '>', { id: htmlId, class: "listType" });
+                const addItemButton = Parts.addButton("", "add-item");
+                addItemButton.on('click', () =>
+                {
+                    const itemEl = $('<li>');
+                    const deleteButton = Parts.deleteButton();
+                    deleteButton.on('click', function()
+                    {
+                        itemEl.remove();
+                    });
+                    const controlEl = $('<div>', { class: "control" }).appendTo(itemEl);
+                    this.itemType.appendControlTo(controlEl);
+                    control.addClass(this.itemType.name);
+                    itemEl.append(deleteButton);
+                    control.append(itemEl);
+                });
+                containerEl.append(control);
+                containerEl.append(addItemButton);
+            },
+            getFromDOM: function(containerEl)
+            {
+                const value = this.defaultValue;
+                containerEl.children(this.controlName).children().each((_, itemEl) =>
+                {
+                    value.push(this.itemType.getFromDOM($(itemEl).children('.control')));
+                });
+                return value;
+            },
+            setInDOM: function(containerEl, value)
+            {
+                containerEl.children(this.controlName).empty();
+                const addValueButton = containerEl.children(".add-item").eq(0);
+                value.forEach((itemValue) =>
+                {
+                    addValueButton.trigger('click');
+                    this.itemType.setInDOM(containerEl.children(this.controlName).children().last().children('.control'), itemValue);
+                });
+            },
+            fromXML: function(valueXML)
+            {
+                const value = this.defaultValue;
+                $(valueXML).children().each((_, itemXML) =>
+                {
+                    value.push(this.itemType.fromXML($(itemXML)));
+                });
+                return value;
+            },
+            toXML: function(valueXML, value)
+            {
+                value.forEach(item =>
+                {
+                    const itemXML = Utils.appendChild(valueXML, 'item');
+                    this.itemType.toXML(itemXML, item);
+                });
+            }
         }
     };
+
+    function loadType(typeXML, id, kind, scopes)
+    {
+        const nameSpace = typeXML[0].namespaceURI;
+        const type = nameSpace === Config.nameSpace ?
+            Types.primitives[typeXML[0].localName] :
+            Types.extensions[nameSpace][typeXML[0].localName];
+        return type.loadType(typeXML, id, kind, scopes);
+    }
 
     function appendControlsTo(containerEl, titleClassSelector, htmlClass, handleChange)
     {
         const typeSelect = $('<select>', { class: htmlClass });
         for (const typeName in Types.primitives)
         {
+            if (!Types.primitives[typeName].loadTypeFromDOM) continue;
             typeSelect.append($('<option>', { value: typeName, text: i18next.t('types:primitives.' + typeName + '.translation') }));
         }
 

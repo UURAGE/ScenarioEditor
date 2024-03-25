@@ -381,6 +381,26 @@ select:focus {
   margin-left: 20px;
 }
 
+.listType {
+  padding-inline-start: 0;
+}
+.listType li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25em;
+  gap: 5px;
+}
+.listType li::before {
+  content: "•";
+  display: inline;
+}
+.listType li .control {
+  flex-grow: 1;
+}
+.listType.string li {
+  align-items: flex-start;
+}
+
 /* © DialogueTrainer */
 .zoomTreeButton {
   width: 50px;
@@ -2095,6 +2115,14 @@ td.dragHandle {
   color: #a4720b;
   background-color: rgba(242, 182, 61, 0.25);
   border-color: #d4930e;
+}
+
+.iconButton.delete {
+  background: transparent;
+  border: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
 
 /* © DialogueTrainer */
