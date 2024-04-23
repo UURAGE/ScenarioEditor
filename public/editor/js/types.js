@@ -814,7 +814,7 @@ let Types;
                 const value = this.defaultValue;
                 $(valueXML).children().each((_, itemXML) =>
                 {
-                    value.push(this.itemType.fromXML($(itemXML)));
+                    value.push(this.itemType.fromXML(itemXML));
                 });
                 return value;
             },
