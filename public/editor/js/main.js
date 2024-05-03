@@ -373,7 +373,10 @@ let Main;
             if (e.target == this && isMainClickAction)
             {
                 $(this).focus();
-                selectElement(null);
+                if (!(e.ctrlKey || e.metaKey))
+                {
+                    selectElement(null);
+                }
             }
             isMainClickAction = false;
         });
@@ -575,7 +578,10 @@ let Main;
             if (e.target == this && isClickAction)
             {
                 $("#main").focus();
-                selectElement(null);
+                if (!(e.ctrlKey || e.metaKey))
+                {
+                    selectElement(null);
+                }
             }
             isClickAction = false;
         });
