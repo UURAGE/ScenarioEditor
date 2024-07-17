@@ -32,38 +32,34 @@ let Load;
         importDialog.dialog(
         {
             title: i18next.t('load:import_title'),
-            height: Utils.fitDialogHeightToWindow(Utils.dialogSizes.small),
             width: Utils.fitDialogWidthToWindow(Utils.dialogSizes.small),
             modal: true,
-            buttons:
-            [{
-                text: i18next.t('load:import'),
-                click: function()
+            closeOnBackdropClick: true,
+            closeOnEscape: false,
+            closeButton: false,
+            buttons: [
                 {
-                    if (SaveIndicator.getSavedChanges())
+                    text: i18next.t('load:import'),
+                    class: 'col-primary roundedPill medium',
+                    click: function()
                     {
-                        importScenario(importContainer);
-                    }
-                    else
-                    {
-                        Utils.confirmDialog(i18next.t('load:import_warning'), 'warning').then(function(confirmed)
+                        if (SaveIndicator.getSavedChanges()) importScenario(importContainer);
+                        else
                         {
-                            if (confirmed)
+                            Utils.confirmDialog(i18next.t('load:import_warning'), 'warning').then(function(confirmed)
                             {
-                                importScenario(importContainer);
-                            }
-                        });
+                                if (confirmed)importScenario(importContainer);
+                            });
+                        }
+                        $(this).dialog('close');
                     }
-                    $(this).dialog('close');
-                }
-            },
-            {
-                text: i18next.t('common:cancel'),
-                click: function()
+                },
                 {
-                    $(this).dialog('close');
+                    text: i18next.t('common:close'),
+                    class: 'col-dim roundedPill medium',
+                    click: function() { $(this).dialog('close'); }
                 }
-            }],
+            ],
             close: function()
             {
                 $("#main").focus();
@@ -186,6 +182,13 @@ let Load;
         {
             Zoom.zoomIn(trees[0]);
         }
+        else if (trees.length > 1 && Zoom.isZoomed)
+        {
+            trees.forEach(function(tree)
+            {
+                Main.updateTreePreview(tree);
+            });
+        }
 
         SaveIndicator.setSavedChanges(true);
         MiniMap.update(true);
@@ -224,7 +227,7 @@ let Load;
 
                 tree.optional = Utils.parseBool($(this).attr('optional'));
                 const iconDiv = tree.dragDiv.find('.icons');
-                if (tree.optional) iconDiv.html(Utils.sIcon('icon-tree-is-optional'));
+                if (tree.optional) iconDiv.html(Utils.sIcon('mdi-axis-arrow'));
                 $(tree.dragDiv).toggleClass('optional', tree.optional);
 
                 tree.comment = editingDataXML.children('comment').text();
@@ -466,9 +469,9 @@ let Load;
             parameterEffects: parameterEffects,
             propertyValues: propertyValues,
             comment: comment,
-            endNode: endNode,
             allowDialogueEndNode: allowDialogueEndNode,
             allowInterleaveNode: allowInterleaveNode,
+            endNode: endNode,
             id: id,
             parent: treeID
         };
@@ -591,4 +594,3 @@ let Load;
         return propertyValues;
     }
 })();
-

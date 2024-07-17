@@ -46,13 +46,36 @@ let Metadata;
     {
         const metadataDialog = $('<div>', { id: "metadata" });
 
-        const metadataIndex = $('<div>', { class: "index" }).append();
-        const metadataIndexList = $('<ul>');
-        metadataIndex.append(metadataIndexList);
+        const metadataIndex = $('<div>', { class: "index" });
+        const metadataSearch = $('<input>', { type: 'text', placeholder: i18next.t('common:search'), id: "metadataSearch", class: "search", autofocus: true });
 
-        const metadataContainer = $('<div>', { class: "content" });
-        const generalCategory = $('<div>', { class: "category", id: "general" })
-            .append($('<h1>', { text: i18next.t('metadata:general') }));
+        const metadataIndexList = $('<ul>');
+        metadataIndex.append(metadataSearch, metadataIndexList);
+
+        const metadataContent = $('<div>', { class: "content" });
+
+        metadataSearch.on('input',
+            Utils.debounce(function()
+            {
+                metadataContent.find('.item').hide()
+                    .parents('.container').hide()
+                    .parents('.category').hide();
+
+                const searchValue = metadataSearch.val().toLowerCase();
+
+                $('#authors.category').toggle(!searchValue);
+
+                metadataContent.find('.item').each(function()
+                {
+                    if ($(this).text().toLowerCase().indexOf(searchValue) > -1 || $(this).parents('.container').parents('.category').children(':header').text().toLowerCase().indexOf(searchValue) > -1)
+                    {
+                        $(this).show().parents('.container').show().parents('.category').show();
+                    }
+                });
+            }, 50)
+        );
+
+        const generalCategory = $('<div>', { class: "category", id: "general" }).append($('<h2>', { text: i18next.t('metadata:general') }));
         metadataIndexList.append($('<li>').append($('<a>', { href: "#general", text: i18next.t('metadata:general') })));
 
         const generalContainer = $('<div>', { class: "container" });
@@ -60,9 +83,7 @@ let Metadata;
         generalContainer.append(
             $('<div>', { class: "item" })
                 .append(
-                    $('<div>', { class: "itemLabel" })
-                        .append(
-                            $('<label>', { for: "scenarioName", text: i18next.t('metadata:scenario_name') })),
+                    $('<div>', { class: "itemLabel" }).append($('<label>', { for: "scenarioName", text: i18next.t('metadata:scenario_name') })),
                     $('<input>', { type: 'text', id: "scenarioName" })));
 
         if (Config.container.settings.languages.sequence.length > 0)
@@ -96,34 +117,35 @@ let Metadata;
         scenarioDescription.attr('rows', Config.container.settings.description.type.rows);
 
         generalContainer.append($('<div>', { class: "item" })
-            .append(
-                $('<div>', { class: "itemLabel" })
-                    .append(
-                        $('<label>', { for: "scenarioDescription", text: i18next.t('common:description') })),
-                scenarioDescription));
+            .append($('<div>', { class: "itemLabel" })
+                .append($('<label>', { for: "scenarioDescription", text: i18next.t('common:description') })),
+            scenarioDescription));
 
         if (Config.container.settings.description.type.markdown) Utils.attachMarkdownTooltip(scenarioDescription);
         generalCategory.append(generalContainer);
-        metadataContainer.append(generalCategory);
+        metadataContent.append(generalCategory);
 
         const authorsCategory = $('<div>', { class: "category", id: "authors" })
-            .append($('<h1>', { text: i18next.t('metadata:authors') }));
+            .append($('<h2>', { text: i18next.t('metadata:authors') }));
 
-        const authorsContainer = $('<table>', { class: "container" })
-            .append($('<thead>').append($('<tr>')
-                .append($('<th>', { text: i18next.t('common:name'), class: "fill" }))
-                .append($('<th>', { text: i18next.t('metadata:start_date') }))
-                .append($('<th>', { text: i18next.t('metadata:end_date') }))));
+        const authorsContainer = $('<div>', { class: "container table" }).append(
+            $('<table>')
+                .append($('<thead>').append($('<tr>')
+                    .append($('<th>', { text: i18next.t('common:name'), class: "fill" }))
+                    .append($('<th>', { text: i18next.t('metadata:start_date') }))
+                    .append($('<th>', { text: i18next.t('metadata:end_date') })))
+                )
+        );
 
         authorsCategory.append(authorsContainer);
-        metadataContainer.append(authorsCategory);
+        metadataContent.append(authorsCategory);
 
-        metadataContainer.append($('<div>', { id: "meta-property-values" }));
+        metadataContent.append($('<div>', { id: "meta-property-values" }));
 
         const firstCharacter = Config.container.characters.sequence[0];
         const characterSectionHeader = Config.container.characters.sequence.length > 1 ?
             i18next.t('common:characters') : firstCharacter.name ? firstCharacter.name : firstCharacter.id;
-        const characterCategory = $('<div>', { class: "category", id: "characters" }).append($('<h1>', { text: characterSectionHeader })
+        const characterCategory = $('<div>', { class: "category", id: "characters" }).append($('<h2>', { text: characterSectionHeader })
         );
 
         const characterContainer = $('<div>', { id: "meta-character-property-values", class: "container" }).append(
@@ -131,20 +153,20 @@ let Metadata;
         );
         characterCategory.append(characterContainer);
 
-        metadataContainer.append(characterCategory);
+        metadataContent.append(characterCategory);
         metadataDialog.append(metadataIndex);
-        metadataDialog.append(metadataContainer);
+        metadataDialog.append(metadataContent);
 
         metadataDialog.dialog(
         {
             title: i18next.t('metadata:title'),
-            height: Utils.fitDialogHeightToWindow(Utils.dialogSizes.medium),
             width: Utils.fitDialogWidthToWindow(Utils.dialogSizes.medium),
             modal: true,
-            buttons:
-            [
+            grid: true,
+            buttons: [
                 {
                     text: i18next.t('common:confirm'),
+                    class: 'col-primary roundedPill medium',
                     click: function()
                     {
                         save();
@@ -153,10 +175,8 @@ let Metadata;
                 },
                 {
                     text: i18next.t('common:cancel'),
-                    click: function()
-                    {
-                        $(this).dialog('close');
-                    }
+                    class: 'col-dim roundedPill medium',
+                    click: function() { $(this).dialog('close'); }
                 }
             ],
             close: function()
@@ -184,7 +204,7 @@ let Metadata;
                 authorContainer.append($('<td>', { text: author.name }).append($('<span>', { text: author.email ? author.email : "" })));
                 authorContainer.append($('<td>', { text: author.startDate }));
                 authorContainer.append($('<td>', { text: author.endDate ? author.endDate : "" }));
-                authorsContainer.append(authorContainer);
+                authorsContainer.children('table').append(authorContainer);
             });
         }
         else
@@ -193,7 +213,7 @@ let Metadata;
         }
 
         let anyPropertyShown = false;
-        const hStartLevel = 3;
+        const hStartLevel = 2;
 
         const propertyValuesEl = $('#meta-property-values');
         const showPropertyItem = function(propertyItem, hLevel, container, idPrefix, isTopLevel)
@@ -257,12 +277,12 @@ let Metadata;
 
             Config.container.characters.properties.sequence.forEach(function(propertyItem)
             {
-                showPropertyItem(propertyItem, hStartLevel, characterTab, characterTabId, true);
+                showPropertyItem(propertyItem, hStartLevel + 1, characterTab, characterTabId, true);
             });
 
             Config.container.characters.byId[character.id].properties.sequence.forEach(function(propertyItem)
             {
-                showPropertyItem(propertyItem, hStartLevel, characterTab, characterTabId);
+                showPropertyItem(propertyItem, hStartLevel + 1, characterTab, characterTabId);
             });
         });
 
@@ -397,18 +417,46 @@ let Metadata;
 
     function loadIndex(indexElement, dialog)
     {
-        const topMenu = indexElement,
-            menuItems = topMenu.find("a");
+        const menuItems = indexElement.find("a");
 
         // Smooth scrolling animation
         menuItems.click(function(e)
         {
-            const href = $(this).attr("href"),
-                offsetTop = $(href).position().top + $(dialog).scrollTop();
-            $(dialog).stop().animate({
-                scrollTop: offsetTop
-            }, 300);
+            const href = $(this).attr("href");
+            scrollToSection(dialog, href);
             e.preventDefault();
         });
+
+        const observer = new IntersectionObserver(entries =>
+        {
+            entries.forEach(entry =>
+            {
+                if (entry.isIntersecting)
+                {
+                    const menuItem = $($(entry.target).prop('menuItem'));
+                    menuItems.removeClass('active');
+                    menuItem.addClass('active');
+                }
+            });
+        }, {
+            root: dialog.find('.content').get(0),
+            rootMargin: "0px 0px -50% 0px"
+        });
+
+        menuItems.each(function()
+        {
+            const section = $($(this).attr('href'));
+            section.prop('menuItem', this);
+            observer.observe(section.get(0));
+        });
+    }
+
+    function scrollToSection(dialog, href)
+    {
+        let offsetTop = $(href).position().top + $(dialog).find('.content').scrollTop();
+        offsetTop -= $(dialog).siblings('.header').outerHeight();
+        $(dialog).find('.content').stop().animate({
+            scrollTop: offsetTop
+        }, 300);
     }
 })();

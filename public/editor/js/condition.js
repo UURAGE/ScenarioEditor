@@ -364,7 +364,7 @@ let Condition;
     function appendGroupCondition(container, allowReferenceConditions)
     {
         const groupCondition = $('<div>', { class: "condition groupcondition empty" });
-        groupCondition.append($('<div>', { class: "emptyLabel", text: i18next.t('condition:empty_group') }));
+        groupCondition.append($('<label>', { class: "emptyLabel", text: i18next.t('condition:empty_group') }));
         groupCondition.append($('<div>', { class: "singleLabel hidden", text: i18next.t('condition:one_condition_group') }));
 
         const groupConditionRadio = $('<div>', { class: "groupConditionRadioDiv" });
@@ -385,6 +385,8 @@ let Condition;
 
         Utils.makeSortable(subconditionsContainer);
 
+        const buttonsWrapper = $('<div>', { class: "flexbox gap-1 flexWrap buttonsWrapper" });
+
         const addConditionButton = Parts.addButton(i18next.t('condition:add_condition'));
         addConditionButton.on('click', function()
         {
@@ -398,7 +400,7 @@ let Condition;
                 Utils.alertDialog(i18next.t('condition:error.no_test'), 'error');
             }
         });
-        groupCondition.append(addConditionButton);
+        buttonsWrapper.append(addConditionButton);
 
         const addGroupConditionButton = Parts.addButton(i18next.t('condition:add_group'));
         addGroupConditionButton.on('click', function()
@@ -413,9 +415,11 @@ let Condition;
                 Utils.alertDialog(i18next.t('condition:error.no_test'), 'error');
             }
         });
-        groupCondition.append(addGroupConditionButton);
+        buttonsWrapper.append(addGroupConditionButton);
+        groupCondition.append(buttonsWrapper);
 
         const deleteButton = Parts.deleteButton();
+        deleteButton.removeClass('buttonIcon');
         deleteButton.append(i18next.t('condition:delete_group'));
         deleteButton.on('click', function()
         {

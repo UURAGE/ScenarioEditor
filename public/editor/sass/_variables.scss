@@ -4,7 +4,48 @@
 
 $yiq-contrasted-threshold:  150 !default;
 
-$sidebar-width: 475px !default;
-$sidebar-padding: 5px !default;
+$toolbar-height: 48px !default;
+$tab-dock-height: 36px !default;
+$sidebar-width: 425px !default;
+$dropzone-size: 200px;
 
-$buttongroup-margin: 1px !default;
+$input-height: 28px;
+
+$spacing-0: 0;
+$spacing-1: 4px;
+$spacing-2: 8px;
+$spacing-3: 12px;
+$spacing-4: 16px;
+$spacing-5: 20px;
+$spacing-6: 24px;
+$spacing-7: 28px;
+$spacing-8: 32px;
+$spacing-9: 36px;
+$spacing-10: 40px;
+$spacing-11: 44px;
+$spacing-12: 48px;
+$spacing-13: 52px;
+$spacing-14: 56px;
+$spacing-15: 60px;
+$spacing-16: 64px;
+$spacing-17: 68px;
+$spacing-18: 72px;
+$spacing-19: 76px;
+$spacing-20: 80px;
+
+$rounded-none: 0;
+$rounded-sm: 2px;
+$rounded-base: 4px;
+$rounded-lg: 8px;
+$rounded-g: 12px;
+$rounded-xl: 16px;
+$rounded-xxl: 24px;
+$rounded-pill: 9999px;
+$rounded-circle: 50%;
+
+$shadow-sm-soft: 0 1px 2px rgba(black, .06), 0 1px 3px rgba(black, .05);
+$shadow-sm-mild: 0 1px 2px rgba(black, .1), 0 2px 3px rgba(black, .14);
+$shadow-md-soft: 0 1px 2px rgba(black, .06), 0 4px 10px rgba(black, .04);
+$shadow-md-mild: 0 1px 2px rgba(black, .1), 0 4px 12px rgba(black, .1);
+$shadow-lg-soft: 0 1px 2px rgba(black, .06), 0 6px 30px rgba(black, .06);
+$shadow-lg-mild: 0 1px 2px rgba(black, .1), 0 6px 30px rgba(black, .12);

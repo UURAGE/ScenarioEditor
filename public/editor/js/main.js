@@ -17,6 +17,11 @@ let Main;
         computerType: "computer",
         playerType: "player",
         situationType: "situation",
+        typeIcons: {
+            computer: "icon-add-computer",
+            player: "mdi-comment-account-outline",
+            situation: "icon-add-situation"
+        },
         ancestorHighlightSettings:
         {
             nearKeyword: "target",
@@ -42,6 +47,8 @@ let Main;
         addNewTree: addNewTree,
         applyChanges: applyChanges,
         updateNodeGraphics: updateNodeGraphics,
+        updateNodeDecorations: updateNodeDecorations,
+        updateTreePreview: updateTreePreview,
         mousePositionToDialoguePosition: mousePositionToDialoguePosition,
         createChildNode: createChildNode,
         createSiblingNode: createSiblingNode,
@@ -52,11 +59,13 @@ let Main;
         getGridIndicatorPosition: getGridIndicatorPosition,
         checkGridAvailable: checkGridAvailable,
         getPlumbInstanceByNodeID: getPlumbInstanceByNodeID,
+        getSelectableInstanceByNodeID: getSelectableInstanceByNodeID,
         getStartNodeIDs: getStartNodeIDs,
         getInterleaves: getInterleaves,
         highlightLinealRelatives: highlightLinealRelatives,
         isEditingInCanvas: isEditingInCanvas,
         isMousePositionWithinEditingCanvas: isMousePositionWithinEditingCanvas,
+        isNodePositionWithinCanvasView: isNodePositionWithinCanvasView,
         makeConnection: makeConnection,
         selectElements: selectElements,
         selectElement: selectElement,
@@ -64,7 +73,7 @@ let Main;
         startEditingNode: startEditingNode,
         stopEditingNode: stopEditingNode,
         triggerSubjectNameInput: triggerSubjectNameInput,
-        updateButtons: updateButtons,
+        updateToolbar: updateToolbar,
         updateDocumentTitle: updateDocumentTitle
     };
 
@@ -73,7 +82,9 @@ let Main;
     // Tree dragging
     let firstDragTreeID = null, invalidateTreeClick = false, minimumCoordinatesByTree = {};
     // Selecting and panning
-    let ctrlDown = false, spaceDown = false, isSelecting = false, isPanning = false;
+    let spaceDown = false, isSelecting = false, isPanning = false;
+
+    let themeConfiguration;
 
     // Copied from: http://stackoverflow.com/a/22079985/1765330
     $.fn.attachDragger = function()
@@ -96,7 +107,7 @@ let Main;
             .on("mousemove", function(e)
             {
                 if (!isPanning) return;
-                if (spaceDown)
+                if (spaceDown && !isSelecting)
                 {
                     position = [e.clientX, e.clientY];
                     difference = [ position[0] - lastPosition[0], position[1] - lastPosition[1] ];
@@ -121,7 +132,7 @@ let Main;
 
         MiniMap.initialise();
 
-        updateButtons();
+        updateToolbar();
 
         $("#main").focus();
 
@@ -183,17 +194,6 @@ let Main;
         scenarioNameInputSpan.hide();
 
         $('#scenarioNameTab').append(scenarioNameInputSpan);
-
-        $('#scenarioNameTab .scenarioName').on('dblclick', function()
-        {
-            $(this).hide();
-
-            const nameInputSpan = $('#scenarioNameTab .scenarioNameInput');
-            const nameInput = nameInputSpan.children('input');
-            nameInput.val(Metadata.container.name);
-            nameInputSpan.show();
-            nameInput.focus();
-        });
 
         // Handle movement of the div indicating which grid cell youre hovering over
         $('#main').on('mousemove', function(e)
@@ -290,6 +290,18 @@ let Main;
         {
             createChildNode(Main.selectedElement);
         });
+        $("#newPlayerChildNode").on('click', function()
+        {
+            createChildNode(Main.selectedElement, Main.playerType);
+        });
+        $("#newComputerChildNode").on('click', function()
+        {
+            createChildNode(Main.selectedElement, Main.computerType);
+        });
+        $("#newSituationChildNode").on('click', function()
+        {
+            createChildNode(Main.selectedElement, Main.situationType);
+        });
         $("#newSiblingNode").on('click', function()
         {
             createSiblingNode(Main.selectedElement);
@@ -300,6 +312,10 @@ let Main;
 
             $("#main").focus();
         });
+        setupThemeSwitchingForElement($("#toolbar"));
+        setupThemeSwitchingForElement($("#canvas"));
+        setupThemeSwitchingForElement($("#sidebar"));
+        setupThemeSwitchingForElement($("#tabDock"));
         $("#highlightAncestors").on('click', function()
         {
             if ($(this).hasClass("enabled"))
@@ -362,10 +378,10 @@ let Main;
             $("#gridIndicator").show();
         });
 
-        // $("#main").on('mouseleave', function()
-        // {
-        //     $("#gridIndicator").hide();
-        // });
+        $("#main").on('mouseleave', function()
+        {
+            $("#gridIndicator").hide();
+        });
 
         let isMainClickAction = false;
         $("#main").on('click', function(e)
@@ -381,43 +397,28 @@ let Main;
             isMainClickAction = false;
         });
 
-        // Used for selecting multiple nodes.
-        $("#main").selectable(
-        {
-            distance: 5,
-            filter: ".w", // Only select the nodes.
-            cancel: "#main *",
-            appendTo: "#main"
-        });
-
-        $("#main").on('mousedown', function(event)
+        $("#main").on('mousedown', function()
         {
             isMainClickAction = true;
-            ctrlDown = event.ctrlKey || event.metaKey;
         });
-        $("#main").on('selectablestart', function()
-        {
-            $(this).focus();
-            if (!ctrlDown) selectElement(null);
-        });
-        $("#main").on('selectableselected', function(event, element)
-        {
-            const id = element.selected.id;
 
-            const isZoomed = Zoom.isZoomed();
-            const isTree = id in Main.trees;
-            if ((isZoomed && !isTree) || (!isZoomed && isTree))
-            {
-                Main.selectedElements.push(id);
-            }
+        // Used for selecting multiple nodes.
+        const selectable = new Selectable(
+        {
+            container: "#main",
+            filter: ".w.treeContainer", // Only select the trees.
         });
-        $("#main").on('selectablestop', function()
+
+        selectable.on('start', function(event)
+        {
+            $("#main").focus();
+            if (!(event.ctrlKey || event.metaKey)) selectElement(null);
+        });
+        selectable.on('end', function(event, selected, unselected)
         {
             isMainClickAction = false;
-
-            selectElements(Main.selectedElements);
-
-            MiniMap.update(true);
+            if (selected.length === 0 && unselected.length === 0) return;
+            selectElements(selectable.getSelectedItems().map(item => item.node.id));
         });
 
         $(document).on('keydown', function(e)
@@ -434,7 +435,7 @@ let Main;
             dimensionKey: "sidebarWidth",
             collapsedKey: "sidebarCollapsed",
             minDimension: 100,
-            maxDimension: 475,
+            maxDimension: 500,
             direction: 'horizontal',
             enableCollapse: true
         });
@@ -445,7 +446,11 @@ let Main;
             dimensionKey: "tabDockWidth",
             minDimension: 50,
             maxDimension: 600,
-            direction: 'vertical'
+            direction: 'vertical',
+            afterResize()
+            {
+                MiniMap.update(false);
+            }
         });
     });
 
@@ -467,7 +472,7 @@ let Main;
             {
                 const zoomedTree = Zoom.getZoomed();
                 spaceDown = true;
-                zoomedTree.div.selectable('disable');
+                zoomedTree.div.get(0)._selectable.disable();
                 zoomedTree.div.addClass('dragging');
             }
         }
@@ -480,10 +485,131 @@ let Main;
             const zoomedTree = Zoom.getZoomed();
             spaceDown = false;
             isPanning = false;
-            zoomedTree.div.selectable('enable');
+            zoomedTree.div.get(0)._selectable.enable();
             zoomedTree.div.removeClass('dragging');
         }
     });
+
+    function setupThemeSwitchingForElement(element)
+    {
+        element = $(element);
+        const elementId = element.prop('id');
+        const themeElementControl = $("#theme-" + elementId);
+        const key = "editor-theme";
+
+        try
+        {
+            const data = window.localStorage.getItem(key);
+            const newConfig = JSON.parse(data);
+
+            themeConfiguration = newConfig;
+            if (!(elementId in themeConfiguration))
+            {
+                themeConfiguration[elementId] = element.hasClass("dark") ? 'dark' : 'light';
+            }
+            else
+            {
+                element.toggleClass('dark', themeConfiguration[elementId] === 'dark');
+            }
+        }
+        catch
+        {
+            themeConfiguration = {
+                [elementId]: element.hasClass("dark") ? 'dark' : 'light'
+            };
+        }
+
+        if (element.hasClass("dark")) themeElementControl.addClass("enabled");
+        themeElementControl.on('click', function()
+        {
+            if ($(this).hasClass("enabled"))
+            {
+                $(this).removeClass("enabled");
+                element.removeClass('dark');
+                themeConfiguration[elementId] = 'light';
+                window.localStorage.setItem(key, JSON.stringify(themeConfiguration));
+            }
+            else
+            {
+                $(this).addClass("enabled");
+                element.addClass('dark');
+                themeConfiguration[elementId] = 'dark';
+                window.localStorage.setItem(key, JSON.stringify(themeConfiguration));
+            }
+            $("#main").focus();
+        });
+    }
+
+    function initialiseSplitButtons()
+    {
+        const key = "editor-splitbuttons";
+        const storageData = localStorage.getItem(key);
+        const storageConfig = storageData ? JSON.parse(storageData) : {};
+        const config = {};
+
+        const switchSplitButton = function(dropdown, newButton)
+        {
+            const button = dropdown.find('.buttons button:not(".dropdownButton")');
+            button.data('button-id', newButton.attr('id'));
+
+            button.attr('title', newButton.text());
+
+            const SVGHTML = newButton.children('svg')[0].outerHTML;
+            button.empty().append($(SVGHTML));
+            button.attr('class', newButton.attr('class'));
+            button.attr('disabled', newButton.attr('disabled'));
+
+            const dropdownID = dropdown.attr('id');
+            const newButtonID = newButton.attr('id');
+            if (dropdownID && newButtonID)
+            {
+                config[dropdownID] = newButtonID;
+                localStorage.setItem(key, JSON.stringify(config));
+            }
+        };
+
+        // Setting up the split button dropdowns.
+        $('.dropdown.splitButton').each(function()
+        {
+            const dropdown = $(this);
+            const dropdownID = dropdown.attr('id');
+            const dropdownButtons = dropdown.find('.dropdownItems button:not(.secondary)');
+            const allItemsHaveID = dropdownButtons.toArray().every(item => item.id);
+            if (!allItemsHaveID)
+            {
+                console.warn("Some split button drop down menu items have no ID", dropdown);
+            }
+
+            if (!dropdownID)
+            {
+                console.warn("Split button has no ID", dropdown);
+            }
+            else
+            {
+                config[dropdownID] = storageConfig[dropdownID] ?? dropdownButtons.eq(0).attr('id');
+
+                // Check if the element still exists, otherwise set config to id of first dropdown item
+                if (dropdownButtons.filter("#" + storageConfig[dropdownID]).length === 0)
+                {
+                    config[dropdownID] = dropdownButtons.eq(0).attr('id');
+                }
+            }
+
+            switchSplitButton(dropdown, dropdownButtons.filter("#" + config[dropdownID]));
+
+            dropdownButtons.on('click', function()
+            {
+                switchSplitButton(dropdown, $(this));
+            });
+
+            const button = dropdown.find('.buttons button:not(".dropdownButton")');
+            button.on('click', function()
+            {
+                const buttonToBeClickedID = $(this).data('button-id');
+                dropdownButtons.filter(`#${buttonToBeClickedID}`).trigger('click');
+            });
+        });
+    }
 
     function initialiseMenuBar()
     {
@@ -548,6 +674,8 @@ let Main;
                 handler.call(this);
             });
 
+        initialiseSplitButtons();
+
         $(".dropdownItems")
             .on("mouseup", "button", function(e)
             {
@@ -570,7 +698,7 @@ let Main;
             SaveIndicator.setSavedChanges(false);
         }
 
-        const treeDiv = $('<div>', { class: "treeDiv noSelect" });
+        const treeDiv = $('<div>', { class: "treeDiv noSelect backgroundPattern" });
 
         let isClickAction = false;
         treeDiv.on("click", function(e)
@@ -578,7 +706,7 @@ let Main;
             if (e.target == this && isClickAction)
             {
                 $("#main").focus();
-                if (!(e.ctrlKey || e.metaKey))
+                if (!(e.ctrlKey || e.metaKey || (spaceDown && !isSelecting)))
                 {
                     selectElement(null);
                 }
@@ -591,23 +719,29 @@ let Main;
             isClickAction = true;
         });
 
-        treeDiv.selectable(
+        const selectable = new Selectable(
         {
-            distance: 5,
-            filter: ".w", // Only select the nodes.
-            appendTo: treeDiv,
-            start: function()
-            {
-                isSelecting = true;
-            },
-            stop: function()
-            {
-                isSelecting = false;
-                isClickAction = false;
-            }
+            container: treeDiv.get(0),
+            filter: ".w.player, .w.computer, w.situation", // Only select the nodes
         });
-        treeDiv.selectable('disable'); // Box selection only useful in zoomed state
+        selectable.disable(); // Box selection only useful in zoomed state
         treeDiv.attachDragger();
+
+        selectable.on('start', function(event)
+        {
+            isSelecting = true;
+
+            $("#main").focus();
+            if (!(event.ctrlKey || event.metaKey)) selectElement(null);
+        });
+
+        selectable.on('end', function(event, selected, unselected)
+        {
+            isSelecting = false;
+            if (selected.length === 0 && unselected.length === 0) return;
+            isClickAction = false;
+            selectElements(selectable.getSelectedItems().map(item => item.node.id));
+        });
 
         const defaultName = i18next.t('main:default_subject');
         const changeNameInput = $('<input type="text" class="subjectNameInput">');
@@ -649,19 +783,6 @@ let Main;
             }
         });
 
-        const zoomTreeButton = $('<div>', { html: Utils.sIcon('icon-plus'), class: "zoomTreeButton button" });
-        zoomTreeButton.on("click", function()
-        {
-            if (!DragBox.dragging())
-            {
-                // Open/close tree
-                Main.trees[id].subject = changeNameInput.val();
-                $("#" + id).find('.subjectName').text(Main.trees[id].subject);
-                Zoom.toggleZoom(Main.trees[id]);
-                MiniMap.update(true);
-            }
-        });
-
         const subjectContainer = $('<div>', { class: "subjectTextContainer" });
         const subjTextSpan = $('<span>', { text: defaultName, class: "subjectName" });
 
@@ -671,7 +792,6 @@ let Main;
         const iconDiv = $('<div>', { class: "icons" });
 
         const subjectDiv = $('<div>', { class: "subjectDiv noSelect" });
-        subjectDiv.prepend(zoomTreeButton);
 
         subjectDiv.append(subjectContainer);
         subjectDiv.append(iconDiv);
@@ -696,12 +816,10 @@ let Main;
             }
         });
 
-        subjectDiv.on("dblclick", function(e)
+        subjectDiv.on("dblclick", function()
         {
-            if ($(e.target).hasClass("zoomTreeButton")) return;
-            const selectAllInput = false;
-            triggerSubjectNameInput(id, selectAllInput);
-            e.stopPropagation();
+            // Open/close tree
+            Zoom.toggleZoom(Main.trees[id]);
         });
 
         const dragDiv = $('<div>', { class: "w treeContainer gridded selectable", id: id });
@@ -738,7 +856,8 @@ let Main;
         let minimumPosition = null;
         jsPlumb.draggable(dragDiv,
         {
-            filter: ".zoomTreeButton, .zoomTreeButton *",
+            filter: ".subjectDiv, .subjectDiv *",
+            filterExclude: false,
 
             // The constrain function returns the array with coordinates that will be assigned to the dragged element
             constrain: function(currentCoordinates, el)
@@ -846,6 +965,8 @@ let Main;
         // Attach minimap scroll event listener to treeDiv
         MiniMap.attachScrollListener(treeDiv);
 
+        $("#main").get(0)._selectable.add(dragDiv.get(0));
+
         return Main.trees[id];
     }
 
@@ -920,9 +1041,9 @@ let Main;
             preconditions: null,
             propertyValues: Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef),
             comment: "",
-            endNode: false,
             allowDialogueEndNode: false,
             allowInterleaveNode: false,
+            endNode: false,
             id: id,
             parent: tree.id
         };
@@ -1003,7 +1124,7 @@ let Main;
                 return;
             }
 
-            updateButtons();
+            updateToolbar();
 
             return node;
         }
@@ -1050,6 +1171,7 @@ let Main;
 
         Main.trees[parentID].nodes.push(id);
         const plumbInstance = Main.trees[parentID].plumbInstance;
+        const selectable = Main.trees[parentID].div.get(0)._selectable;
 
         // Add the node to the html.
         const node = document.createElement('div');
@@ -1075,17 +1197,122 @@ let Main;
         textDiv.classList.add('statementText');
         nodeContent.appendChild(textDiv);
 
-        const imgDiv = document.createElement('div');
-        imgDiv.classList.add('imgDiv');
-        nodeContent.appendChild(imgDiv);
+        const iconsContainer = document.createElement('div');
+        iconsContainer.classList.add('iconsContainer');
+        nodeContent.appendChild(iconsContainer);
+
+        const sideMenu = document.createElement('div');
+        sideMenu.classList.add('sideMenu');
+
+        const sideMenuTippy = document.createElement('div');
+        sideMenu.appendChild(sideMenuTippy);
+
+        const sideMenuDropdown = document.createElement('ul');
+        sideMenuDropdown.classList.add('sideMenuDropdown');
+
+        // Open/close the side menu on click
+        const sideMenuOpenIcon = document.createElement('button');
+        sideMenuOpenIcon.classList.add('sideMenuOpenIcon');
+        sideMenuOpenIcon.innerHTML = Utils.sIcon('mdi-dots-horizontal');
+
+        const openNodeMenu = (event) =>
+        {
+            event.stopPropagation(); // Avoids opening sidebar
+
+            sideMenuDropdown.innerHTML = "";
+
+            // Create the list items for the side menu
+            const createSideMenuItemLink = ({ icon, text, title, className, property, onClick }) =>
+            {
+                const sideMenuItem = document.createElement('li');
+
+                sideMenuItem.classList.add('sideMenuItem');
+                const button = document.createElement('button');
+
+                const iconDiv = document.createElement('div');
+                iconDiv.classList.add('iconDiv');
+                if (className) iconDiv.classList.add(className);
+                iconDiv.innerHTML = Utils.sIcon(icon);
+                if (title) button.title = title;
+                button.append(iconDiv, text);
+                sideMenuItem.appendChild(button);
+
+                const node = Main.nodes[id];
+                if (property)
+                {
+                    button.classList.toggle('clicked', node[property]);
+                }
+
+                button.onclick = (e) =>
+                {
+                    e.stopPropagation(); // Avoids opening sidebar
+                    if (property)
+                    {
+                        node[property] = !node[property];
+                        button.classList.toggle('clicked');
+                    }
+                    if (onClick) onClick();
+                    updateNodeDecorations(id);
+                    sideMenuDropdown.classList.remove('visible'); // Close dropdown menu
+                };
+                // Prevent db-clicks on link to enter edit mode in nodes
+                button.ondblclick = (e) => e.stopPropagation();
+                return sideMenuItem;
+            };
+
+            const sideMenuItems = [
+                createSideMenuItemLink({
+                    icon: 'icon-node-jump-subject',
+                    text: i18next.t('common:special_node.allowInterleaveNode.header'),
+                    title: i18next.t('common:special_node.allowInterleaveNode.title'),
+                    className: 'nodeEndKinds',
+                    property: 'allowInterleaveNode'
+                }),
+                createSideMenuItemLink({
+                    icon: 'mdi-middleware-outline',
+                    text: i18next.t('common:special_node.allowDialogueEndNode.header'),
+                    title: i18next.t('common:special_node.allowInterleaveNode.title'),
+                    className: 'nodeEndKinds',
+                    property: 'allowDialogueEndNode'
+                }),
+                createSideMenuItemLink({
+                    icon: 'mdi-arrow-collapse-right',
+                    text: i18next.t('common:special_node.endNode.header'),
+                    title: i18next.t('common:special_node.allowInterleaveNode.title'),
+                    className: 'nodeEndKinds',
+                    property: 'endNode'
+                }),
+            ];
+
+            sideMenuDropdown.append(...sideMenuItems);
+            // Add the list to the side menu
+            sideMenu.append(sideMenuDropdown);
+
+            const instance = tippy(sideMenuTippy, {
+                content: sideMenuDropdown,
+                trigger: 'manual',
+                interactive: true,
+                placement: 'right-start',
+                arrow: false,
+                onShow()
+                {
+                    node.style.zIndex = 100;
+                },
+                onHidden()
+                {
+                    node.style.zIndex = null;
+                }
+            });
+
+            instance.show();
+        };
+
+        sideMenuOpenIcon.onclick = openNodeMenu;
+        nodeContent.appendChild(sideMenuOpenIcon);
+        nodeContent.appendChild(sideMenu);
 
         // Expands node container using overflow when moving a node closer to the bounds of the container
         const scrollOffset = 50;
-        const expander = document.createElement('div');
-        expander.classList.add('expander');
-        expander.style.right = -(scrollOffset - 1) + "px";
-        expander.style.bottom = -(scrollOffset - 1) + "px";
-        nodeContent.appendChild(expander);
 
         node.appendChild(nodeContent);
 
@@ -1093,6 +1320,14 @@ let Main;
         {
             startEditingNode(id);
         }, false);
+
+        node.addEventListener('contextmenu', function(event)
+        {
+            if (event.target == node.getElementsByClassName('nodestatement')[0]) return false;
+
+            event.preventDefault();
+            openNodeMenu(event);
+        });
 
         endpoint.addEventListener('mousemove', function(e)
         {
@@ -1112,6 +1347,9 @@ let Main;
         // Initialise draggable elements.
         plumbInstance.draggable(node,
         {
+            filter: ".sideMenu, .sideMenu *, .sideMenuOpenIcon",
+            filterExclude: true,
+
             constrain: function(currentCoordinates)
             {
                 return [Math.max(0, currentCoordinates[0]), Math.max(0, currentCoordinates[1])];
@@ -1219,6 +1457,7 @@ let Main;
         }, false);
 
         parent[0].appendChild(node);
+        selectable.add(node);
 
         return $(node);
     }
@@ -1269,15 +1508,15 @@ let Main;
             if ((e.ctrlKey || e.metaKey) && e.keyCode === 13) // Enter
             {
                 stopEditingNode(node.id, false);
-                e.stopPropagation();
                 $("#main").focus();
             }
             if (e.keyCode === 27) // Escape
             {
                 stopEditingNode(node.id, true);
-                e.stopPropagation();
                 $("#main").focus();
             }
+
+            e.stopPropagation();
         });
 
         inputDiv.prepend(txtArea);
@@ -1296,6 +1535,7 @@ let Main;
         if (nodeDiv.width() < 128) nodeDiv.width(128);
         // Don't show overflow ellipsis while editing
         nodeDiv.removeClass("long");
+        nodeDiv.find('.iconExpand').remove();
 
         inputDiv.height("100%");
 
@@ -1333,6 +1573,11 @@ let Main;
     function getPlumbInstanceByNodeID(nodeID)
     {
         return Main.trees[Main.nodes[nodeID].parent].plumbInstance;
+    }
+
+    function getSelectableInstanceByNodeID(nodeID)
+    {
+        return Main.trees[Main.nodes[nodeID].parent].div.get(0)._selectable;
     }
 
     function getStartNodeIDs(tree)
@@ -1388,6 +1633,7 @@ let Main;
         subDiv.find('.subjectName').hide();
 
         const input = subDiv.find('.subjectNameInput');
+        input.val(Main.trees[id].subject).trigger('change');
         input.show();
         input.focus();
         if (selectAllInput) input.select();
@@ -1459,7 +1705,8 @@ let Main;
             Main.selectedElements = elementIds.slice();
             elementIds.forEach(function(elementId)
             {
-                $("#" + elementId).addClass("ui-selected");
+                const selectable = elementId in Main.nodes ? Main.getSelectableInstanceByNodeID(elementId) : $("#main").get(0)._selectable;
+                selectable.select($("#" + elementId).get(0));
                 const plumbInstance = elementId in Main.nodes ? Main.getPlumbInstanceByNodeID(elementId) : jsPlumb;
                 plumbInstance.addToDragSelection(elementId);
             });
@@ -1480,6 +1727,7 @@ let Main;
                     }
                 });
             }
+            updateToolbar();
         }
     }
 
@@ -1514,11 +1762,11 @@ let Main;
             applyChanges();
         }
 
-        // Currently selected node(s) should now not be selected.
-        $(".selected").removeClass("selected");
-        $(".ui-selected").removeClass("ui-selected");
-        Main.selectedElements = [];
         const zoomedTree = Zoom.getZoomed();
+        // Currently selected node(s) should now not be selected.
+        const selectable = zoomedTree ? zoomedTree.div.get(0)._selectable : $("#main").get(0)._selectable;
+        selectable.clear();
+        Main.selectedElements = [];
         const plumbInstance = zoomedTree ? zoomedTree.plumbInstance : jsPlumb;
         plumbInstance.clearDragSelection();
         dehighlightLinealRelativesIncludingDirect(Main.ancestorHighlightSettings);
@@ -1536,9 +1784,9 @@ let Main;
         // Only make a node selected if it isn't null.
         if (Main.selectedElement !== null)
         {
-            $("#" + Main.selectedElement).addClass("selected");
             Main.selectedElements.push(Main.selectedElement);
-            $("#" + nodeID).addClass("ui-selected");
+            selectable.select($("#" + Main.selectedElement).get(0));
+
             if ($("#highlightAncestors").hasClass("enabled"))
             {
                 highlightLinealRelativesIncludingDirect(nodeID, Main.ancestorHighlightSettings);
@@ -1551,7 +1799,7 @@ let Main;
 
         // Update the side bar, so it displays the selected node.
         updateSideBar();
-        updateButtons();
+        updateToolbar();
     }
 
     function deselectConnection(plumbInstance, selectedConnections, connectionId)
@@ -1567,7 +1815,7 @@ let Main;
         {
             let paintStyle = PlumbGenerator.defaultPaintStyle;
             const colorValue = cs[0].getParameter("color");
-            if (colorValue && ColorPicker.areColorsEnabled())
+            if (colorValue)
             {
                 paintStyle = $.extend({}, paintStyle, { stroke: colorValue, outlineStroke: "transparent" });
             }
@@ -1577,44 +1825,155 @@ let Main;
         delete selectedConnections[connectionId];
     }
 
-    function updateButtons()
+    function updateToolbar()
     {
         const subjectButtons = document.getElementsByClassName("subjectButton");
         const nodeButtons = document.getElementsByClassName("nodeButton");
+        const clipboardToolButtons = document.getElementsByClassName("clipboardToolButton");
         const nodeWithParentButtons = document.getElementsByClassName("nodeWithParentButton");
+        const nodeWithoutChildrenButtons = document.getElementsByClassName("nodeWithoutChildrenButton");
+        const scenarioNameTab = $('#scenarioNameTab');
+        const slashDivider = $('<span>', { class: 'slashDivider', text: '/' });
 
         disableButtons(subjectButtons);
         disableButtons(nodeButtons);
         disableButtons(nodeWithParentButtons);
+        disableButtons(nodeWithoutChildrenButtons);
+        scenarioNameTab.show();
+        scenarioNameTab.find('.subjectName').remove();
+        scenarioNameTab.find('.slashDivider').remove();
+        scenarioNameTab.find('.subjectNameInputSpan').remove();
+        scenarioNameTab.find('.scenarioName').off('dblclick');
+
+        // If there are multiple selected elements, show (copy, cut, paste, delete) buttons
+        if (Main.selectedElements.length > 1)
+        {
+            enableButtons(clipboardToolButtons);
+            scenarioNameTab.hide();
+        }
 
         if (Zoom.isZoomed())
         {
             enableButtons(subjectButtons);
+            scenarioNameTab.append(slashDivider, $('<span>', { class: "subjectName", text: Zoom.getZoomed().subject }));
+            scenarioNameTab.find('.scenarioName').on("click", function()
+            {
+                Zoom.zoomOut();
+            });
+
+            const subjectNameInput = $('<input>', { type: 'text' });
+            const subjectNameInputSpan = $('<span>', { class: "subjectNameInputSpan" }).append(subjectNameInput);
+            subjectNameInputSpan.on('focusout', function(e, cancel)
+            {
+                if (!cancel)
+                {
+                    const tree = Zoom.getZoomed();
+                    const inputName = Metadata.formatScenarioName(subjectNameInput.val());
+                    if (inputName !== tree.subject)
+                    {
+                        tree.subject = inputName;
+                        tree.dragDiv.find('.subjectDiv').find('.subjectName').text(tree.subject);
+                        scenarioNameTab.find('.subjectName').text(tree.subject);
+                        SaveIndicator.setSavedChanges(false);
+                    }
+                }
+
+                $(this).hide();
+                $('#scenarioNameTab .subjectName').show();
+            });
+            subjectNameInputSpan.on('keydown', function(e)
+            {
+                if (e.keyCode === 13) // Enter
+                {
+                    $(this).trigger('focusout', [false]);
+                }
+                if (e.keyCode === 27) // Escape
+                {
+                    $(this).trigger('focusout', [true]);
+                }
+            });
+            subjectNameInputSpan.hide();
+            scenarioNameTab.append(subjectNameInputSpan);
+            scenarioNameTab.find('.subjectName').on('dblclick', function()
+            {
+                $(this).hide();
+
+                const nameInputSpan = scenarioNameTab.find('.subjectNameInputSpan');
+                const nameInput = nameInputSpan.children('input');
+                nameInput.val(Zoom.getZoomed().subject);
+                nameInputSpan.show();
+                nameInput.focus();
+            });
 
             if (Main.selectedElement !== null)
             {
                 // A node is selected, because a tree is zoomed
                 enableButtons(nodeButtons);
+                scenarioNameTab.hide();
 
                 if (Main.getPlumbInstanceByNodeID(Main.selectedElement).getConnections({ target: Main.selectedElement }).length > 0)
                 {
                     enableButtons(nodeWithParentButtons);
                 }
+
+                if (getChildNodeIDs(Main.selectedElement).length === 0)
+                {
+                    enableButtons(nodeWithoutChildrenButtons);
+                }
+            }
+        }
+        else
+        {
+            // If tree is selected only show copy, cut, paste, delete buttons
+            if (Main.selectedElement in Main.trees)
+            {
+                enableButtons(clipboardToolButtons);
+                scenarioNameTab.hide();
+            }
+            // Otherwise show scenario name
+            else
+            {
+                scenarioNameTab.find('.scenarioName').on('dblclick', function()
+                {
+                    $(this).hide();
+
+                    const nameInputSpan = scenarioNameTab.find('.scenarioNameInput');
+                    const nameInput = nameInputSpan.children('input');
+                    nameInput.val(Metadata.container.name);
+                    nameInputSpan.show();
+                    nameInput.focus();
+                });
             }
         }
     }
+
     function disableButtons(buttons)
     {
         for (let i = 0, len = buttons.length; i < len; i++)
         {
-            buttons[i].disabled = true;
+            if (buttons[i].tagName === 'DIV' && buttons[i].classList.contains('splitButton'))
+            {
+                buttons[i].classList.add('disabled');
+            }
+            else
+            {
+                buttons[i].disabled = true;
+            }
         }
     }
+
     function enableButtons(buttons)
     {
         for (let i = 0, len = buttons.length; i < len; i++)
         {
-            buttons[i].disabled = false;
+            if (buttons[i].tagName === 'DIV' && buttons[i].classList.contains('splitButton'))
+            {
+                buttons[i].classList.remove('disabled');
+            }
+            else
+            {
+                buttons[i].disabled = false;
+            }
         }
     }
 
@@ -1733,10 +2092,6 @@ let Main;
             }
         }
 
-        // Save other items.
-        node.endNode = $("#endNodeCheckbox").prop("checked");
-        node.allowDialogueEndNode = $("#allowDialogueEndNodeCheckbox").prop("checked");
-        node.allowInterleaveNode = $("#allowInterleaveNodeCheckbox").prop("checked");
         node.comment = $("textarea#comment").val();
 
         stopEditingNode(node.id, false);
@@ -1842,14 +2197,17 @@ let Main;
             selectElement(null);
             return;
         }
-        const clone = $("#clone");
-        if (clone.length !== 0)
-        { // Jsplumb creates clones when nodes are being dragged. if one exists this event is on drop of a node and should not fire
-            return;
-        }
 
-        $(".selected").removeClass("selected");
-        $(".ui-selected").removeClass("ui-selected");
+        // Update input value in sidebar to reflect the one of selected subject
+        const inputSubjectName = $("#sidebar").find('#inputSubjectName');
+        inputSubjectName.val(Main.trees[id].subject);
+        inputSubjectName.on('keydown', function(e)
+        {
+            if (e.keyCode === 13) applyTreeChanges(); // Enter
+        });
+
+        const selectable = $("#main").get(0)._selectable;
+        selectable.clear();
         Main.selectedElements = [];
         const zoomedTree = Zoom.getZoomed();
         const plumbInstance = zoomedTree ? zoomedTree.plumbInstance : jsPlumb;
@@ -1857,13 +2215,12 @@ let Main;
 
         const dragDiv = Main.trees[id].dragDiv;
 
-        dragDiv.addClass("selected");
         Main.selectedElement = id;
-
-        dragDiv.addClass("ui-selected");
+        selectable.select(dragDiv.get(0));
         Main.selectedElements.push(Main.selectedElement);
 
         updateSideBar();
+        updateToolbar();
 
         $("#main").focus();
     }
@@ -1917,11 +2274,13 @@ let Main;
         if (longNode)
         {
             nodeHTML.addClass("long");
+            nodeHTML.append(Utils.sIcon("mdi-arrow-expand", 'iconExpand'));
             nodeHTML.width(150 + "px");
         }
         else
         {
             nodeHTML.removeClass("long");
+            nodeHTML.find('.iconExpand').remove();
             nodeHTML.width(width + "em");
         }
 
@@ -1943,51 +2302,36 @@ let Main;
         const node = Main.nodes[nodeID];
         const nodeHTML = $('#' + nodeID);
         // Fill div that can hold the images that visualize if the node has certain settings
-        const imageDiv = nodeHTML.find('.imgDiv');
-        imageDiv.empty();
+        const iconsContainer = nodeHTML.find('.iconsContainer');
+        iconsContainer.empty();
 
-        const appendNodePropertyImageIfHasValue = function(imgName, propertyValue, showTooltip)
+        const appendNodePropertyIcon = function(propertyValue, { icon, showTooltip = false, className = '', title = '' })
         {
-            if (propertyValue)
+            if (!propertyValue) return;
+
+            // Span wrapping required for relative tooltip position.
+            const nodePropertyIcon = $('<span>', { html: Utils.sIcon(icon), class: className, title }).appendTo(iconsContainer);
+            if (showTooltip)
             {
-                // Span wrapping required for relative tooltip position.
-                const nodePropertyImage = $('<span>', { html: Utils.sIcon("icon-" + imgName) }).appendTo(imageDiv);
-                if (showTooltip)
+                nodePropertyIcon.tooltip(
                 {
-                    nodePropertyImage.tooltip(
-                    {
-                        items: "span:hover",
-                        content: Utils.escapeHTML(propertyValue),
-                        // Taken from: http://stackoverflow.com/a/15014759
-                        create: function() { $(this).data("ui-tooltip").liveRegion.remove(); },
-                        close: function(event, ui)
-                        {
-                            ui.tooltip.hover(
-                                function()
-                                {
-                                    $(this).stop(true).fadeIn();
-                                },
-                                function()
-                                {
-                                    $(this).fadeOut(function() { $(this).remove(); });
-                                }
-                            );
-                        }
-                    });
-                }
+                    content: Utils.escapeHTML(propertyValue),
+                    interactive: true
+                });
             }
+            return nodePropertyIcon;
         };
 
-        appendNodePropertyImageIfHasValue("node-has-preconditions", node.preconditions);
-        appendNodePropertyImageIfHasValue("node-has-comments", node.comment, true);
+        appendNodePropertyIcon(node.comment, { icon: "mdi-note-text-outline", showTooltip: true });
+        appendNodePropertyIcon(node.preconditions, { icon: "mdi-list-status", className: 'nodePreConditions' });
 
-        appendNodePropertyImageIfHasValue("node-has-jump", node.allowInterleaveNode);
-        appendNodePropertyImageIfHasValue("node-has-premature-end", node.allowDialogueEndNode);
-        appendNodePropertyImageIfHasValue("node-has-end", node.endNode);
+        appendNodePropertyIcon(node.allowInterleaveNode, { icon: "icon-node-jump-subject", className: 'nodeEndKinds', title: i18next.t('common:special_node.allowInterleaveNode.title') });
+        appendNodePropertyIcon(node.allowDialogueEndNode, { icon: "mdi-middleware-outline", className: 'nodeEndKinds', title: i18next.t('common:special_node.allowDialogueEndNode.title') });
+        appendNodePropertyIcon(node.endNode, { icon: "mdi-arrow-collapse-right", className: 'nodeEndKinds', title: i18next.t('common:special_node.endNode.title') });
 
         nodeHTML.toggleClass('allowInterleaveNode', node.allowInterleaveNode);
         nodeHTML.toggleClass('allowDialogueEndNode', node.allowDialogueEndNode);
-        nodeHTML.toggleClass("endNode", node.endNode);
+        nodeHTML.toggleClass('endNode', node.endNode);
 
         ElementList.handleNodeDecorationsUpdate(node);
     }
@@ -2013,6 +2357,8 @@ let Main;
 
         if (treeID === Main.selectedElement) selectElement(null);
 
+        $("#main").get(0)._selectable.remove(Main.trees[treeID].dragDiv.get(0));
+
         Main.trees[treeID].dragDiv.remove();
 
         delete Main.trees[treeID];
@@ -2037,7 +2383,9 @@ let Main;
 
         // Delete the node of our object and remove it from the graph.
         delete Main.nodes[nodeID];
-        parentTree.plumbInstance.remove($('#' + nodeID));
+        const nodeElement = $('#' + nodeID);
+        parentTree.div.get(0)._selectable.remove(nodeElement.get(0));
+        parentTree.plumbInstance.remove(nodeElement);
 
         ElementList.handleNodeDeletion(node);
     }
@@ -2053,23 +2401,56 @@ let Main;
         tree.optional = newTreeOptional;
         $(Main.trees[Main.selectedElement].dragDiv).toggleClass("optional", tree.optional);
         const treeIcons = tree.dragDiv.find('.icons').empty();
-        if (tree.optional) treeIcons.html(Utils.sIcon('icon-tree-is-optional'));
+        if (tree.optional) treeIcons.html(Utils.sIcon('mdi-axis-arrow'));
 
         const newTreeComment = $("textarea#comment").val();
         hasChanges = hasChanges || tree.comment !== newTreeComment;
         tree.comment = newTreeComment;
 
+        // Update tree subject name if it has changed
+        tree.subject = $('#inputSubjectName').val();
+        tree.dragDiv.find('.subjectDiv').find('.subjectName').text(tree.subject);
+
         SaveIndicator.setSavedChanges(!hasChanges);
+    }
+
+    function updateTreePreview(tree)
+    {
+        const startNodesList = Main.getStartNodeIDs(tree);
+
+        const subject = $(tree.dragDiv[0]).find('.subjectDiv');
+
+        let startNodePreview;
+        startNodePreview = subject.find('.startNodePreview');
+        if (startNodePreview.length === 0) startNodePreview = $('<div>', { class: 'startNodePreview' });
+
+        startNodePreview.empty();
+        subject.append(startNodePreview);
+
+        const nodeCount = $('<div>', { class: 'nodeCount' }).append(
+            $('<div>', { class: 'nodeEl' }),
+            $('<p>', { text: tree.nodes.length })
+        );
+        startNodePreview.append(nodeCount);
+
+        startNodesList.forEach(function(nodeId)
+        {
+            const nodeType = Main.nodes[nodeId].type;
+            const nodeEl = $('<div>', { class: `nodeEl ${nodeType}` });
+            startNodePreview.append(nodeEl);
+        });
     }
 
     // Updates the side bar to show the selected node.
     function updateSideBar()
     {
         // Clear everything in the sidebar.
-        $(
+        $("#sidebar").find(
             "#preconditionsDiv, #userDefinedParameterEffects, #node-property-values, #node-character-property-values, #node-computer-own-property-values," +
             "#fixed-parameter-effects, #fixed-character-parameter-effects, #node-computer-own-parameter-effects"
         ).children().remove();
+
+        $("#sidebarType").toggle(Main.selectedElement !== null);
 
         // Don't show properties if no node or tree is selected. Display the minimap
         if (Main.selectedElement === null)
@@ -2083,10 +2464,9 @@ let Main;
             const node = Main.nodes[Main.selectedElement];
             let addedDiv;
 
-            MiniMap.deactivate();
-
             // Show the correct divs for the type.
-            $("#properties").attr("class", node.type);
+            $("#sidebarType").attr("class", node.type);
+            $("#properties").attr("class", node.type + ' sidebarContent');
 
             // Insert the preconditions in the sidebar
             const preconditionsContainer = $("#preconditionsDiv");
@@ -2245,8 +2625,7 @@ let Main;
                 // Show the sections for all per-character fixed parameter effects
                 const fixedCharacterParameterEffectsEl = $("#fixed-character-parameter-effects");
                 const characterClassPrefix = fixedCharacterParameterEffectsEl.attr('id');
-                const accordionDiv = $('<div>');
-                fixedCharacterParameterEffectsEl.append(accordionDiv);
+
                 let anyCharacterParameterShown = false;
                 // Accumulator for mapping a character parameter id to its effects container
                 const idRefToCharacterEffectsContainer = {};
@@ -2254,7 +2633,7 @@ let Main;
                 {
                     const characterHeader = $('<h' + hStartLevel + '>', { value: character.id, text: character.name ? character.name : character.id });
                     const characterDiv = $('<div>');
-                    accordionDiv.append(characterHeader).append(characterDiv);
+                    fixedCharacterParameterEffectsEl.append(characterHeader).append(characterDiv);
 
                     const classCharacterPrefix = characterClassPrefix + '-' + character.id;
 
@@ -2290,12 +2669,12 @@ let Main;
                     {
                         fixedCharacterParameterEffectsEl.prepend($('<h3>', { text: i18next.t('common:characters') }));
                         // Set the heightStyle to "content", because the content changes dynamically
-                        accordionDiv.accordion({ active: false, collapsible: true, heightStyle: "content" });
+                        fixedCharacterParameterEffectsEl.accordion({ active: false, collapsible: true, heightStyle: "content" });
                     }
                 }
                 else
                 {
-                    accordionDiv.remove();
+                    fixedCharacterParameterEffectsEl.remove();
                 }
 
                 // Add the per-character effects that were previously defined
@@ -2321,28 +2700,24 @@ let Main;
             }
 
             // Show the node's property values
-            const showPropertyItem = function(propertyValues, acceptableScopes, propertyItem, hLevel, tableBody, idPrefix)
+            const showPropertyItem = function(propertyValues, acceptableScopes, propertyItem, hLevel, divBody, idPrefix)
             {
                 if (!acceptableScopes.includes(propertyItem.scopes.statementScope)) return;
                 if (propertyItem.kind === 'section')
                 {
-                    const sectionTable = $('<table>');
+                    const sectionContainer = $('<div>');
 
-                    const sectionTableHeader = $('<thead>').append($('<th colspan="2">').append($('<h' + hLevel + '>', { text: propertyItem.name })));
-                    sectionTable.append(sectionTableHeader);
+                    const sectionHeader = $('<h' + hLevel + '>', { text: propertyItem.name });
+                    sectionContainer.append(sectionHeader);
 
-                    const sectionTableBody = $('<tbody>');
-                    sectionTable.append(sectionTableBody);
-
-                    const sectionContainer = $('<div>').append(sectionTable);
-                    if (hLevel === hStartLevel) sectionContainer.addClass("section");
+                    if (hLevel === hStartLevel) sectionContainer.addClass("sidebarRow");
                     else sectionContainer.addClass("subsection");
-                    tableBody.append($('<tr>').append($('<td colspan="2">').append(sectionContainer)));
+                    divBody.append(sectionContainer);
 
                     let anyPropertyShown = false;
                     propertyItem.sequence.forEach(function(subItem)
                     {
-                        if (showPropertyItem(propertyValues, acceptableScopes, subItem, hLevel + 1, sectionTableBody, idPrefix))
+                        if (showPropertyItem(propertyValues, acceptableScopes, subItem, hLevel + 1, sectionContainer, idPrefix))
                         {
                             anyPropertyShown = true;
                         }
@@ -2355,12 +2730,10 @@ let Main;
                     const controlFirst = propertyItem.type.labelControlOrder === Types.labelControlOrders.singleLineContainerLabel ||
                     propertyItem.type.labelControlOrder === Types.labelControlOrders.twoLineContainerLabel ||
                     propertyItem.type.labelControlOrder === Types.labelControlOrders.singleCellContainerLabel;
-                    const propertyHeaderLabel = $('<label>', { text: propertyItem.name + (controlFirst ? '' : ':'), 'for': controlHtmlId });
-                    const propertyHeader = $('<th>').append(propertyHeaderLabel);
 
-                    const propertyData = $(propertyItem.type.labelControlOrder === 'singleCellContainerLabel' ? '<span>' : '<td>', {
-                        id: idPrefix + '-container-' + propertyItem.id,
-                        colspan: propertyItem.type.labelControlOrder === Types.labelControlOrders.twoLineLabelContainer || propertyItem.type.labelControlOrder === Types.labelControlOrders.twoLineContainerLabel ? 2 : 1
+                    const propertyHeader = $('<label>', { text: propertyItem.name + (controlFirst ? '' : ':'), 'for': controlHtmlId });
+                    const propertyData = $(propertyItem.type.labelControlOrder === 'singleCellContainerLabel' ? '<span>' : '<div>', {
+                        id: idPrefix + '-container-' + propertyItem.id
                     });
                     propertyItem.type.appendControlTo(propertyData, controlHtmlId);
                     propertyItem.type.setInDOM(propertyData, propertyValues[propertyItem.id]);
@@ -2371,59 +2744,61 @@ let Main;
                         propertyItem.type.autoCompleteControl(propertyData, propertyItem.autoCompleteList);
                     }
 
-                    let propertyRow = $('<tr>');
+                    let propertyRow = $('<div>', { class: 'sidebarRow' });
                     let additionalPropertyRow;
                     switch (propertyItem.type.labelControlOrder)
                     {
                         case Types.labelControlOrders.singleLineLabelContainer:
-                            propertyRow.append(propertyHeader);
-                            propertyRow.append(propertyData);
+                            propertyRow.append(propertyHeader, propertyData);
+                            propertyRow.addClass('flexbox gap-2 flexWrap');
                             break;
                         case Types.labelControlOrders.singleLineContainerLabel:
-                            propertyRow.append(propertyHeader);
-                            propertyRow.prepend(propertyData);
+                            propertyRow.append(propertyHeader, propertyData);
                             break;
                         case Types.labelControlOrders.container:
-                            propertyData.prop('colspan', "2");
                             propertyRow.append(propertyData);
                             break;
                         case Types.labelControlOrders.twoLineLabelContainer:
-                            propertyRow.append(propertyHeader);
-                            additionalPropertyRow = $('<tr>').append(propertyData);
+                            propertyRow.append(propertyHeader, propertyData);
                             break;
                         case Types.labelControlOrders.twoLineContainerLabel:
                             additionalPropertyRow = propertyRow.append(propertyHeader);
-                            propertyRow = $('<tr>').append(propertyData);
+                            propertyRow = $('<div>').append(propertyData);
                             break;
                         case Types.labelControlOrders.singleCellContainerLabel:
-                            propertyRow.append(
-                                $('<td>', { colspan: 2 }).append(
-                                    propertyData,
-                                    propertyHeaderLabel
-                                )
-                            );
+                            propertyRow.append(propertyData, propertyHeader);
+                            propertyRow.addClass('flexbox flexWrap');
                             break;
                         default:
                             console.error("Not implemented");
                             break;
                     }
-                    tableBody.append(propertyRow);
-                    if (additionalPropertyRow) tableBody.append(additionalPropertyRow);
+                    divBody.append(propertyRow);
+                    if (additionalPropertyRow) divBody.append(additionalPropertyRow);
+
+                    if (propertyItem.type.name === 'string' && propertyItem.type.controlName === 'textarea' && !propertyValues[propertyItem.id])
+                    {
+                        propertyData.find('textarea').hide();
+                        propertyRow.addClass('flexbox').append($('<button>', { html: Utils.sIcon('mdi-pencil-plus'), class: 'buttonIcon text' }).on('click', function()
+                        {
+                            propertyRow.removeClass('flexbox');
+                            propertyData.find('textarea').show().focus();
+                            $(this).remove();
+                        }));
+                    }
 
                     return true;
                 }
             };
             const nodePropertyValuesEl = $('#node-property-values');
-            const nodePropertyValuesTable = $('<table>');
             let anyNodePropertyShown = false;
             Config.container.properties.sequence.forEach(function(subItem)
             {
-                if (showPropertyItem(node.propertyValues.characterIndependent, scopes, subItem, hStartLevel, nodePropertyValuesTable, nodePropertyValuesEl.attr('id')))
+                if (showPropertyItem(node.propertyValues.characterIndependent, scopes, subItem, hStartLevel, nodePropertyValuesEl, nodePropertyValuesEl.attr('id')))
                 {
                     anyNodePropertyShown = true;
                 }
             });
-            nodePropertyValuesEl.append(nodePropertyValuesTable);
 
             const nodeCharacterPropertyValuesEl = $('#node-character-property-values');
             if (node.type !== Main.computerType || Config.container.characters.sequence.length > 1)
@@ -2434,7 +2809,7 @@ let Main;
                 Config.container.characters.sequence.forEach(function(character)
                 {
                     const characterHeader = $('<h' + hStartLevel + '>', { value: character.id, text: character.name ? character.name : character.id });
-                    const characterTab = $('<table>');
+                    const characterTab = $('<div>');
                     characterAccordion.append(characterHeader).append($('<div>').append(characterTab));
 
                     const containerIdPrefix = nodeCharacterPropertyValuesEl.attr('id') + '-' + character.id;
@@ -2531,21 +2906,19 @@ let Main;
 
                     const computerOwnPropertyValuesEl = $("#node-computer-own-property-values");
                     computerOwnPropertyValuesEl.children().remove();
-                    const computerOwnPropertyValuesTable = $('<table>');
-                    computerOwnPropertyValuesEl.append(computerOwnPropertyValuesTable);
                     // The same id prefix as the other character property values, so they can be easily retrieved
                     const containerIdPrefix = nodeCharacterPropertyValuesEl.attr('id') + '-' + node.characterIdRef;
                     let anyPropertyShown = false;
                     Config.container.characters.properties.sequence.forEach(function(propertyItem)
                     {
-                        if (showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], acceptableScopes, propertyItem, hStartLevel + 1, computerOwnPropertyValuesTable, containerIdPrefix))
+                        if (showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], acceptableScopes, propertyItem, hStartLevel + 1, computerOwnPropertyValuesEl, containerIdPrefix))
                         {
                             anyPropertyShown = true;
                         }
                     });
                     Config.container.characters.byId[node.characterIdRef].properties.sequence.forEach(function(propertyItem)
                     {
-                        if (showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], acceptableScopes, propertyItem, hStartLevel + 1, computerOwnPropertyValuesTable, containerIdPrefix))
+                        if (showPropertyItem(node.propertyValues.perCharacter[node.characterIdRef], acceptableScopes, propertyItem, hStartLevel + 1, computerOwnPropertyValuesEl, containerIdPrefix))
                         {
                             anyPropertyShown = true;
                         }
@@ -2635,17 +3008,12 @@ let Main;
                 updateSideBarCharacterSection();
             }
 
-            $("#endNodeCheckbox").prop("checked", node.endNode);
-            $("#allowDialogueEndNodeCheckbox").prop("checked", node.allowDialogueEndNode);
-            $("#allowInterleaveNodeCheckbox").prop("checked", node.allowInterleaveNode);
-
             $("textarea#comment").val(node.comment);
         }
         else if (Main.selectedElement in Main.trees)
         {
-            MiniMap.deactivate();
-
-            $('#properties').attr("class", "tree");
+            $("#sidebarType").attr("class", "tree");
+            $('#properties').attr("class", "tree sidebarContent");
 
             $("#optionalCheckbox").prop("checked", Main.trees[Main.selectedElement].optional);
 
@@ -2742,68 +3110,27 @@ let Main;
     function makeCollapsable()
     {
         // Set the initial state of collapsable and clickable elements:
-        $(".collapsable").css("display", "block");
+        $(".collapsable").css("display", "flex");
         $(".collapsable").show();
 
-        $(".clicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
-        $(".masterclicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
+        $(".clicktag").removeClass("collapsed").html(Utils.sIcon("mdi-chevron-down"));
 
         // Click element header to toggle slide property elements
         $(".clickable").on("click", function(e)
         {
-            // The main header was clicked, it can collapse all the property elements
-            if ($(this).hasClass("collapseAll"))
+            const clickTag = $(this).find(".clicktag");
+            // An element was opened
+            if (clickTag.hasClass("collapsed"))
             {
-                // If there is at least one collapsable element open, close all
-                let result = 0;
-                $(".collapsable").each(function()
-                {
-                    if ($(this).css("display") != "none")
-                    {
-                        $("#properties").find(".collapsable").slideUp(400);
-                        $(".clicktag").addClass("collapsed").html(Utils.sIcon("icon-closed"));
-                        $(".masterclicktag").addClass("collapsed").html(Utils.sIcon("icon-closed"));
-                        result++;
-                        return false;
-                    }
-                });
-                // If there are no collapsable elements open, open all
-                if (result === 0)
-                {
-                    $("#properties").find(".collapsable").slideDown(400);
-                    $(".clicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
-                    $(".masterclicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
-                }
+                clickTag.removeClass("collapsed").html(Utils.sIcon("mdi-chevron-down"));
             }
-            // A property element header was clicked
+            // An element was closed
             else
             {
-                const clickTag = $(this).find(".clicktag");
-                // An element was opened
-                if (clickTag.hasClass("collapsed"))
-                {
-                    clickTag.removeClass("collapsed").html(Utils.sIcon("icon-open"));
-                    $(".masterclicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
-                }
-                // An element was closed
-                else
-                {
-                    clickTag.addClass("collapsed").html(Utils.sIcon("icon-closed"));
-
-                    $(".clickable").each(function()
-                    {
-                        // Check if there is at least one element open
-                        if (!$(this).find(".clicktag").hasClass("collapsed"))
-                        {
-                            $(".masterclicktag").removeClass("collapsed").html(Utils.sIcon("icon-open"));
-                            return false;
-                        }
-                        else $(".masterclicktag").addClass("collapsed").html(Utils.sIcon("icon-closed"));
-                    });
-                }
-                // Close or open a single element
-                $(this).parent().closest("div").find(".collapsable").slideToggle(400);
+                clickTag.addClass("collapsed").html(Utils.sIcon("mdi-chevron-right"));
             }
+            // Close or open a single element
+            $(this).parent().closest("div").find(".collapsable").slideToggle(400);
             e.stopPropagation();
         });
 
@@ -2842,7 +3169,7 @@ let Main;
 
     function isEditingInCanvas()
     {
-        const inModal = $(document.body).children(".ui-widget-overlay.ui-front").length > 0;
+        const inModal = $(document.body).children("dialog.modal[open]").length > 0;
         return !inModal && window.getSelection().isCollapsed &&
             ($("#main").closest(document.activeElement).length > 0 || document.activeElement === null);
     }
@@ -2858,6 +3185,20 @@ let Main;
             Main.mousePosition.y >= offset.top &&
             Main.mousePosition.x < offset.left + width &&
             Main.mousePosition.y < offset.top + height;
+    }
+
+    function isNodePositionWithinCanvasView(nodeID)
+    {
+        if (!nodeID || !(nodeID in Main.nodes) || !Zoom.isZoomed()) return false;
+
+        const nodePos = Utils.cssPosition($("#" + nodeID));
+        const zoomedTree = Zoom.getZoomed();
+        const canvas = zoomedTree.div;
+
+        return nodePos.left >= canvas.scrollLeft() &&
+            nodePos.top >= canvas.scrollTop() &&
+            nodePos.left < canvas.scrollLeft() + canvas.width() &&
+            nodePos.top < canvas.scrollTop() + canvas.height();
     }
 
     function updateDocumentTitle()

@@ -6,14 +6,17 @@
 
 /* © DialogueTrainer */
 
-@mixin nodePropertyGradient($element, $col) {
-  #{$element} {
-    border-bottom-color: darken($col, 15%) !important;
-    border-left-color: darken($col, 15%) !important;
+@mixin nodeTypeBackgroundColor() {
+  &.computer {
+    background-color: $col-node-computer;
+  }
 
-    &:hover::before {
-      background: linear-gradient(-135deg, transparent 50%, $col 50%);
-    }
+  &.player {
+    background-color: $col-node-player;
+  }
+
+  &.situation {
+    background-color: $col-node-situation;
   }
 }
 

@@ -4,6 +4,8 @@
 
 @use 'base' as *;
 
+$toolbar-button-width: 44px;
+
 #logo {
   position: relative;
   width: 32px;
@@ -26,316 +28,382 @@
   }
 }
 
-#languages {
-  align-self: center;
-  padding-right: 10px;
-  color: rgba(black, .25);
-}
-
 #toolbar {
+  display: grid;
+  height: $toolbar-height;
   padding: 0;
   margin: 0;
-  background-color: $col-toolbar;
-  border-right: 1px solid rgba(darken($col-toolbar, 25%), .1);
-
-  :disabled {
-    color: $col-text-dark;
-    cursor: default !important;
-    background-color: transparent;
-    border-color: transparent;
-    outline: none;
-    opacity: .3;
-
-    &:not(.enabled):hover {
-      color: $col-text-dark;
-      cursor: default !important;
-      background-color: transparent;
-      border-color: transparent;
-      outline: none;
-      opacity: .3;
-    }
-  }
-
-  #manual {
-    width: 25px;
-    height: 25px;
-    margin: 5px;
-    overflow: hidden;
-    border-radius: 100%;
-
-    img,
-    div {
-      width: 25px;
-      height: 25px;
-      padding: 0;
-      margin: 0;
-    }
-  }
+  color: var(--t-fg-highlight);
+  background-color: var(--t-bg-default);
+  grid-area: toolbar;
+  grid-template-columns: 1fr minmax(260px, 1fr) 1fr;
 
   hr {
     height: 1px;
     padding: 0;
-    margin: 5px 0;
-    background-color: rgba(black, .1);
+    margin: 0;
+    background-color: var(--t-fg-dim);
     border: none;
+    opacity: .25;
   }
 
-  #clipboard button {
-    cursor: help;
+  .left, .center, .right {
+    display: flex;
   }
 
-  #menus button.dropdownButton, #ribbon button {
-    font-size: 12px;
-    font-weight: 600;
-    color: lighten($col-text-dark, 15%);
-  }
-}
-
-#menus {
-  display: flex;
-  background-color: $col-menu-bar;
-  border-bottom: 1px solid rgba(black, .08);
-
-  > * {
-    flex: 0 0 auto;
+  .center {
+    justify-content: center;
+    padding-inline: $spacing-2;
   }
 
-  #scenarioNameTab {
-    // Stretch element to available width
-    flex: 1 1 auto;
+  .right {
+    justify-content: flex-end;
   }
 
-  svg {
-    width: 16px;
-    height: 16px;
-    margin: 0 3px;
-    fill: #777;
-    vertical-align: middle;
-  }
+  // The toggle switch - box around the slider "dot"
+  .switch {
+    position: absolute;
+    top: 20%;
+    right: $spacing-1;
+    width: 14px;
+    height: 8px;
 
-  button {
-    height: auto;
-    text-align: left;
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      border-radius: $rounded-pill;
+      outline: 1px solid var(--t-fg-dim);
+      transition: outline .3s;
+      inset: 0;
 
-    &:hover,
-    &.dropped {
-      background-color: rgba(black, .05);
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 1px;
+        left: 1px;
+        width: 6px;
+        height: 6px;
+        background-color: var(--t-fg-dim);
+        border-radius: inherit;
+        transition: left .3s, background-color .3s;
+      }
     }
   }
 
-  .buttonGroup {
-    margin: 0;
+  button svg {
+    width: 18px;
+    height: 18px;
+  }
 
-    &::after {
+  // Buttons directly on toolbar, inside .right, .center or .left
+  > div > button, > div > div > #themeSwitchButton {
+    width: $toolbar-button-width;
+    color: var(--t-fg-default);
+    text-align: center;
+    transition: background-color .3s ease-in-out;
+
+    &#newPlayerNode {
+      color: $col-node-player;
+    }
+
+    &#newComputerNode {
+      color: $col-node-computer;
+    }
+
+    &#newSituationNode {
+      color: $col-node-situation;
+    }
+
+    &:enabled:hover {
+      background-color: var(--t-bg-dim);
+    }
+
+    &.buttonSwitch {
+      position: relative;
+
+      svg {
+        margin-left: -$spacing-1;
+      }
+
+      &.enabled .slider {
+        outline-color: var(--t-fg-highlight);
+
+        &::before {
+          left: calc(100% - 6px - 1px);
+          background-color: var(--t-fg-highlight);
+        }
+      }
+    }
+
+    &:disabled {
       display: none;
+    }
+  }
+
+  > div > .splitButton {
+    &.disabled {
+      display: none;
+      pointer-events: none;
+    }
+
+    &:not(.disabled):hover .buttons {
+      background-color: var(--t-bg-dim);
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      width: $toolbar-button-width + $spacing-2;
+      height: 100%;
+      color: var(--t-fg-default);
+      transition: background-color .2s ease-in-out;
+
+      button, .dropdownButton {
+        padding-inline: 0;
+        color: inherit;
+      }
+
+      button:not(.dropdownButton) {
+        padding-left: $spacing-2;
+      }
+
+      .dropdownButton svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+
+  #themeSwitchDropdown > button {
+    // The toggle switch - box around the slider "dot"
+
+    .switch {
+      position: relative;
+      top: unset;
+      right: unset;
+      width: 36px;
+      height: 20px;
+      margin-left: auto;
+
+      .slider::before {
+        bottom: 2px;
+        left: 4px;
+        width: 16px;
+        height: 16px;
+        background-color: var(--t-fg-dim);
+        mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.55 19.09L4.96 20.5L6.76 18.71L5.34 17.29M12 6C8.69 6 6 8.69 6 12S8.69 18 12 18 18 15.31 18 12C18 8.68 15.31 6 12 6M20 13H23V11H20M17.24 18.71L19.04 20.5L20.45 19.09L18.66 17.29M20.45 5L19.04 3.6L17.24 5.39L18.66 6.81M13 1H11V4H13M6.76 5.39L4.96 3.6L3.55 5L5.34 6.81L6.76 5.39M1 13H4V11H1M13 20H11V23H13" /></svg>');
+        mask-repeat: no-repeat;
+        mask-position: center;
+      }
+    }
+
+    &.enabled .slider {
+      outline-color: var(--t-fg-highlight);
+
+      &::before {
+        left: calc(100% - 18px - 1px);
+        background-color: var(--t-fg-highlight);
+        mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.75,4.09L15.22,6.03L16.13,9.09L13.5,7.28L10.87,9.09L11.78,6.03L9.25,4.09L12.44,4L13.5,1L14.56,4L17.75,4.09M21.25,11L19.61,12.25L20.2,14.23L18.5,13.06L16.8,14.23L17.39,12.25L15.75,11L17.81,10.95L18.5,9L19.19,10.95L21.25,11M18.97,15.95C19.8,15.87 20.69,17.05 20.16,17.8C19.84,18.25 19.5,18.67 19.08,19.07C15.17,23 8.84,23 4.94,19.07C1.03,15.17 1.03,8.83 4.94,4.93C5.34,4.53 5.76,4.17 6.21,3.85C6.96,3.32 8.14,4.21 8.06,5.04C7.79,7.9 8.75,10.87 10.95,13.06C13.14,15.26 16.1,16.22 18.97,15.95M17.33,17.97C14.5,17.81 11.7,16.64 9.53,14.5C7.36,12.31 6.2,9.5 6.04,6.68C3.23,9.82 3.34,14.64 6.35,17.66C9.37,20.67 14.19,20.78 17.33,17.97Z" /></svg>');
+      }
     }
   }
 
   .dropdown {
     width: auto;
-    height: auto;
+    height: 100%;
     margin-top: 0;
-    background-color: transparent;
     border-radius: 0;
 
     button {
-      display: block;
       width: 100%;
-      padding: 5px 8px;
-    }
+      height: 100%;
 
-    svg {
-      margin-right: 10px;
+      &#fileButton, &#scenarioButton {
+        color: white;
+        padding-inline: $spacing-3;
+      }
+
+      &#fileButton {
+        background-color: $col-editor;
+      }
+
+      &#scenarioButton {
+        background-color: darken($col-editor, 12%);
+      }
     }
 
     .dropdownItems {
       position: absolute;
-      z-index: 52;
+      z-index: 200;
       display: none;
-      width: auto;
+      width: min(170px, 100%);
       height: auto;
-      min-width: 150px;
-      padding: 1px;
-      margin: 0;
-      background: #FEFEFE;
-      border: 1px solid rgba(black, .25);
-      box-shadow: 1px 2px 3px rgba(black, .5);
+      margin-top: $spacing-2;
+      color: var(--t-fg-default);
+      background: var(--t-bg-default);
+      box-shadow: $shadow-md-soft;
       box-sizing: border-box;
 
-      button {
-        padding: 5px 7px;
+      // top arrow of the dropdown
+      &::before {
+        content: '';
+        position: absolute;
+        top: -$spacing-2;
+        left: 16%;
+        width: 0;
+        height: 0;
+        border: $spacing-2 solid transparent;
+        border-top: none;
+        border-bottom-color: var(--t-bg-default);
+        transform: translateX(-50%);
       }
-    }
-  }
 
-  .dropdownButton {
-    height: 32px;
-  }
+      button {
+        display: flex;
+        justify-content: flex-start;
+        padding: $spacing-3 $spacing-2;
+        color: inherit;
+        white-space: nowrap;
+        gap: $spacing-2;
 
-  kbd {
-    float: right;
-    padding: 2px 3px;
-    margin-left: 2px;
-    opacity: .75;
+        &:enabled:hover {
+          background-color: var(--t-bg-dim);
+        }
 
-    &:last-of-type {
-      margin-left: 10px;
-    }
-  }
-}
+        &:disabled {
+          opacity: .3;
+        }
+      }
 
-#toolbar,
-#menus {
-  svg use {
-    pointer-events: none;
-  }
-}
+      span, kbd {
+        margin-left: auto;
 
-#ribbon {
-  display: flex;
-  flex-wrap: wrap;
-  padding: $buttongroup-margin;
+        + span, kbd {
+          margin-left: $spacing-1;
+        }
+      }
 
-  .buttonGroup {
-    flex: 0 1 auto;
-    // Conforms the ::after element to border radius
-    overflow: hidden;
-    background-color: white;
-    border: 1px solid rgba(black, .08);
-  }
+      kbd {
+        padding: 2px $spacing-1;
+        opacity: .8;
+      }
 
-  button {
-    padding: 2px;
-    margin: 1px;
-    border: 1px solid transparent;
+      .flexbox button {
+        // If the first button has any enabled addChildButtons next to it
+        &:has(~ button.addChildButton:enabled) {
+          padding: $spacing-2 $spacing-1;
+          margin: $spacing-1;
+          border-radius: $rounded-base;
+        }
 
-    &:hover {
-      cursor: pointer;
-      background-color: rgba($col-ribbon, .05);
-      border-color: rgba($col-ribbon, .25);
-    }
-  }
+        &.addChildButton {
+          @include nodeTypeBackgroundColor;
 
-  button.enabled {
-    background-color: rgba(desaturate($col-ribbon, 75%), .05);
-    border-color: rgba($col-ribbon, .5);
-  }
+          flex: 0 0 auto;
+          width: 18px;
+          height: 18px;
+          padding: 0 !important;
+          margin: 0 !important;
+          border-radius: $rounded-pill !important;
 
-  .big-buttons {
-    padding: 1px;
+          &:disabled {
+            display: none;
+          }
 
-    * {
-      margin: 0;
-    }
-
-    button {
-      padding: 2px 3px;
-    }
-
-    img {
-      display: block;
-      width: 30px;
-      height: 30px;
-      margin: auto;
-      margin-bottom: 5px;
-    }
-
-    svg {
-      display: block;
-      width: 30px;
-      width: 32px;
-      height: 30px;
-      height: 32px;
-      margin: auto;
-      margin-bottom: 5px;
-      fill: $col-toolbar-icons;
-    }
-  }
-
-  .small-buttons {
-    padding: 1px;
-
-    * {
-      padding: 2px;
-      margin: 0;
-    }
-
-    button {
-      display: block;
-      height: 26px;
-      margin: 1px 0;
-      text-align: left;
-    }
-
-    img,
-    svg {
-      width: 16px;
-      height: 16px;
-      margin: 0 3px;
-      fill: rgba(black, .5);
-      vertical-align: middle;
+          &:last-child {
+            margin-right: $spacing-2 !important;
+          }
+        }
+      }
     }
   }
 }
 
 #scenarioNameTab {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   min-width: 0;
-  padding: 0 5px;
-  font-size: 1.1em;
-  gap: 4px;
+  padding: 0 $spacing-1;
+  font-size: .9em;
+  gap: $spacing-1;
 
-  > *, &::after {
+  > * {
     flex-shrink: 0;
   }
 
-  .scenarioName,
-  .scenarioNameInput {
+  @keyframes fade {
+    to { opacity: 0; }
+  }
+
+  &.unsavedChanges::before {
+    content: '';
+    position: absolute;
+    top: $spacing-3;
+    left: -$spacing-1;
+    width: 8px;
+    height: 8px;
+    background: $col-negative;
+    border-radius: 100%;
+
+    .saving & {
+      animation: fade 1s infinite alternate;
+    }
+  }
+
+  .subjectName {
+    flex-grow: 1;
+    width: auto;
+    max-width: 200px;
+  }
+
+  .slashDivider {
+    color: var(--t-fg-dim);
+  }
+
+  .scenarioName, .scenarioNameInput {
     flex-shrink: 1;
   }
-}
 
-.scenarioName {
-  padding: 0 5px;
-  overflow: hidden;
-  text-align: center;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  border: 1px solid transparent;
-  border-radius: 5px;
-
-  &:hover,
-  &:empty {
-    color: #101010;
-    background-color: rgba($col-editor, .1);
-    border-color: $col-editor;
+  .scenarioName {
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
   }
 
-  &:empty {
-    min-width: 50px;
-    min-height: 1.25em;
+  // makes scenarioName color softer when you are in the subject view
+  &:has(.subjectName) {
+    .scenarioName {
+      color: var(--t-fg-dim);
+    }
   }
-}
 
-.scenarioNameInput {
-  flex-grow: 1;
+  .scenarioName, .subjectName {
+    white-space: nowrap;
+    border: 1px solid transparent;
+    border-radius: 4px;
 
-  input {
-    width: 100%;
-    height: 100%;
-    font: inherit;
-    box-sizing: border-box;
+    &:empty {
+      min-width: 50px;
+      min-height: 1.25em;
+    }
+
+    &:hover,
+    &:empty {
+      background-color: rgba($col-editor, .1);
+      border-color: $col-editor;
+    }
   }
-}
 
-.unsavedChanges::after {
-  content: '';
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  vertical-align: middle;
-  background: $col-unsaved-changes;
-  border-radius: 100%;
+  .scenarioNameInput {
+    flex-grow: 1;
+
+    input {
+      width: 100%;
+      height: 100%;
+      font: inherit;
+      box-sizing: border-box;
+    }
+  }
 }

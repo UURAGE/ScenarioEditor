@@ -10,7 +10,8 @@ let SnapToGrid;
     // eslint-disable-next-line no-global-assign
     SnapToGrid =
     {
-        roundPosition: roundPosition
+        roundPosition: roundPosition,
+        getGridSize: getGridSize
     };
 
     $(function()
@@ -18,6 +19,12 @@ let SnapToGrid;
         if (!Config.container.settings.grid)
         {
             $("#snapGraph").hide();
+        }
+        else
+        {
+            const gridSize = getGridSize();
+            document.body.style.setProperty('--dot-space-x', gridSize.x + 'px');
+            document.body.style.setProperty('--dot-space-y', gridSize.y + 'px');
         }
 
         $("#snapGraph").on('click', function()
@@ -54,7 +61,7 @@ let SnapToGrid;
 
     function roundPosition(position)
     {
-        const gridSize = Config.container.settings.grid;
+        const gridSize = getGridSize();
         if (!gridSize) return position;
 
         return {
@@ -67,5 +74,10 @@ let SnapToGrid;
     {
         const oldPos = Utils.cssPosition($('#' + nodeID));
         Utils.cssPosition($('#' + nodeID), roundPosition(oldPos));
+    }
+
+    function getGridSize()
+    {
+        return Config.container.settings.grid;
     }
 })();

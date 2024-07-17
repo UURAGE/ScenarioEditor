@@ -54,7 +54,7 @@ let Load3;
 
                 tree.optional = Utils.parseBool($(this).attr('optional'));
                 const iconDiv = tree.dragDiv.find('.icons');
-                if (tree.optional) iconDiv.html(Utils.sIcon('icon-tree-is-optional'));
+                if (tree.optional) iconDiv.html(Utils.sIcon('mdi-axis-arrow'));
                 $(tree.dragDiv).toggleClass('optional', tree.optional);
 
                 tree.dragDiv.find('.subjectName').text(tree.subject); // Set subject in HTML
@@ -423,9 +423,9 @@ let Load3;
             preconditions: preconditionsJS,
             propertyValues: Config.getNewDefaultPropertyValues(acceptableScopes, characterIdRef),
             comment: comment,
-            endNode: endNode,
             allowDialogueEndNode: false,
             allowInterleaveNode: false,
+            endNode: endNode,
             id: id,
             parent: treeID
         };

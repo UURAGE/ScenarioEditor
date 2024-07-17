@@ -34,42 +34,39 @@
 
             const container = $('<div>');
 
-            container.append($('<p>', { text: i18next.t('playthroughItemAnalysis:explanation') }));
-
             container.append($('<p>', { text: i18next.t('playthroughItemAnalysis:experimental_warning'), class: 'warning alert' }));
 
-            const fileInputContainer = $('<div>', { style: 'margin-top: 20px;' }).appendTo(container);
+            const fileInputContainer = $('<div>', { class: 'flexbox gap-2' }).appendTo(container);
             fileInputContainer.append($('<label>', { text: i18next.t('playthroughItemAnalysis:import_playthroughs') + ' ' }));
             const fileInput = $('<input>', { type: 'file', accept: 'application/json' }).appendTo(fileInputContainer);
 
-            const itemAnalysisTypeContainer = $('<div>', { style: 'margin-top: 20px;' }).appendTo(container);
+            const itemAnalysisTypeContainer = $('<div>', { class: 'flexbox gap-2' }).appendTo(container);
             itemAnalysisTypeContainer.append($('<label>', { text: i18next.t('common:type') + ' ' }));
             const itemAnalysisType = $('<select>').appendTo(itemAnalysisTypeContainer);
             itemAnalysisType.append($('<option>', { value: 'frequency', text: i18next.t('playthroughItemAnalysis:frequency') }));
             itemAnalysisType.append($('<option>', { value: 'difficulty', text: i18next.t('playthroughItemAnalysis:difficulty') }));
             itemAnalysisType.append($('<option>', { value: 'discrimination', text: i18next.t('playthroughItemAnalysis:discrimination') }));
 
-            const detailsContainer = $('<div>').appendTo(container);
+            $('<hr>', { class: 'divider' }).appendTo(container);
+
+            const detailsContainer = $('<div>', { class: 'flexColumn gap-2' }).appendTo(container);
 
             let percentageCalculation = null;
             const addPercentageCalculationContainer = function()
             {
                 const scope = i18next.t('playthroughItemAnalysis:percentage_calculation_scope.' + (Main.selectedElements.length > 0 ? 'selected' : 'all'));
-                percentageCalculation = $('<select>')
-                    .append(['playthroughs', 'nodes'].map(function(kind)
-                    {
-                        return $('<option>', { value: kind, text: i18next.t('playthroughItemAnalysis:percentage_calculation_kind.' + kind, { scope: scope }) });
-                    }));
+                percentageCalculation = $('<select>', { class: 'fullWidth' })
+                    .append(['playthroughs', 'nodes'].map((kind) => $('<option>', {
+                        value: kind, text: i18next.t('playthroughItemAnalysis:percentage_calculation_kind.' + kind, { scope: scope })
+                    })));
                 detailsContainer.append(
-                    $('<div>', { style: 'margin-top: 20px;' }).append(
-                        $('<div>', { text: i18next.t('playthroughItemAnalysis:percentage_calculation') }),
-                        $('<div>', { class: 'indent' }).append(
-                            $('<div>', { text: i18next.t('playthroughItemAnalysis:number_of_node_occurrences') }),
-                            $('<div>', { class: 'indent', text: i18next.t('playthroughItemAnalysis:divided_by') }),
-                            $('<div>', { text: i18next.t('playthroughItemAnalysis:number_of') + ' ' }).append(percentageCalculation)
-                        )
-                    )
-                );
+                    $('<p>', {
+                        class: 'label',
+                        text: `${i18next.t('playthroughItemAnalysis:percentage_calculation')}
+                        ${i18next.t('playthroughItemAnalysis:number_of_node_occurrences')}
+                        ${i18next.t('playthroughItemAnalysis:divided_by')}
+                        ${i18next.t('playthroughItemAnalysis:number_of')}` })
+                ).append(percentageCalculation);
             };
 
             let correctNodeSelect = null;
@@ -140,13 +137,14 @@
             container.dialog(
             {
                 title: i18next.t('playthroughItemAnalysis:title'),
-                height: 'auto',
-                width: 480,
+                subtitle: i18next.t('playthroughItemAnalysis:explanation'),
+                width: Utils.fitDialogWidthToWindow(Utils.dialogSizes.small),
                 modal: true,
-                buttons:
-                [
+                closeOnBackdropClick: true,
+                buttons: [
                     {
                         text: i18next.t('common:confirm'),
+                        class: 'col-primary roundedPill medium',
                         click: function()
                         {
                             if (fileInput[0].files.length === 0) return;
@@ -270,16 +268,13 @@
                     },
                     {
                         text: i18next.t('common:close'),
+                        class: 'col-dim roundedPill medium',
                         click: function()
                         {
                             $(this).dialog('close');
                         }
                     }
                 ],
-                close: function()
-                {
-                    $(this).remove();
-                }
             });
         });
     });

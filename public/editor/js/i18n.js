@@ -11,7 +11,6 @@
         'common',
         'condition',
         'configXML',
-        'draft',
         'evaluations',
         'load',
         'main',

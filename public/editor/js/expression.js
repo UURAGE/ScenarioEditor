@@ -187,7 +187,7 @@ let Expression;
             appendControlTo: function(container, type)
             {
                 const sumExpressionsContainer = $('<ul>');
-                const addButton = Parts.addButton("", "add-sum-expression");
+                const addButton = Parts.addButton("", "add-sum-expression buttonIcon");
                 addButton.on('click', function()
                 {
                     const sumExpressionAndDeleteButtonContainer = $('<li>');
@@ -201,7 +201,7 @@ let Expression;
                     {
                         sumExpressionAndDeleteButtonContainer.remove();
                     });
-                    sumExpressionAndDeleteButtonContainer.append(deleteButton);
+                    sumExpressionContainer.append(deleteButton);
 
                     sumExpressionsContainer.append(sumExpressionAndDeleteButtonContainer);
                 });
@@ -446,14 +446,19 @@ let Expression;
             appendControlTo: function(container, type)
             {
                 const whensContainer = $('<ul>');
-                const addButton = Parts.addButton("", "add-when");
+                const addButton = Parts.addButtonIcon("add-when text extraSmall");
                 addButton.on('click', function()
                 {
                     const whenAndDeleteButtonContainer = $('<li>');
 
-                    const whenContainer = $('<span>', { class: "when", text: i18next.t('common:when') + ' ' });
+                    const whenContainer = $('<div>', { class: "when" });
+                    whenContainer.append($('<label>', { text: i18next.t('common:when') + ' ' }));
+
                     Condition.appendControlsTo(whenContainer, true);
-                    Expression.appendControlsTo(whenContainer, type);
+
+                    const flexContainer = $('<div>', { class: "flexbox gap-1" });
+                    Expression.appendControlsTo(flexContainer, type);
+                    whenContainer.append(flexContainer);
                     whenAndDeleteButtonContainer.append(whenContainer);
 
                     const deleteButton = Parts.deleteButton();
@@ -461,7 +466,7 @@ let Expression;
                     {
                         whenAndDeleteButtonContainer.remove();
                     });
-                    whenAndDeleteButtonContainer.append(deleteButton);
+                    flexContainer.append(deleteButton);
 
                     whensContainer.append(whenAndDeleteButtonContainer);
                 });
@@ -469,8 +474,11 @@ let Expression;
 
                 container.append(addButton);
 
-                const otherwiseContainer = $('<div>', { class: "otherwise", text: i18next.t('common:otherwise') + ' ' });
-                Expression.appendControlsTo(otherwiseContainer, type);
+                const otherwiseContainer = $('<div>', { class: "otherwise" }).append($('<label>', { text: i18next.t('common:otherwise') + ' ' }));
+
+                const flexContainer = $('<div>', { class: "flexbox gap-1" });
+                Expression.appendControlsTo(flexContainer, type);
+                otherwiseContainer.append(flexContainer);
                 container.append(otherwiseContainer);
             },
             getFromDOM: function(container, type)
@@ -478,7 +486,7 @@ let Expression;
                 const choose =
                 {
                     whens: [],
-                    otherwise: Expression.getFromDOM(container.children('.otherwise'), type)
+                    otherwise: Expression.getFromDOM(container.children('.otherwise').children('.flexbox'), type)
                 };
 
                 container.children('ul').children('li').each(function()
@@ -490,7 +498,7 @@ let Expression;
                         choose.whens.push(
                         {
                             condition: condition,
-                            expression: Expression.getFromDOM(whenContainer, type)
+                            expression: Expression.getFromDOM(whenContainer.children('.flexbox'), type)
                         });
                     }
                 });
@@ -505,9 +513,9 @@ let Expression;
                     addButton.trigger('click');
                     const whenContainer = container.children('ul').children('li').last().children('.when');
                     Condition.setInDOM(whenContainer, when.condition, true);
-                    Expression.setInDOM(whenContainer, type, when.expression);
+                    Expression.setInDOM(whenContainer.children('.flexbox'), type, when.expression);
                 });
-                Expression.setInDOM(container.children('.otherwise'), type, choose.otherwise);
+                Expression.setInDOM(container.children('.otherwise').children('.flexbox'), type, choose.otherwise);
             },
             fromXML: function(chooseXML, type)
             {
@@ -938,10 +946,11 @@ let Expression;
         }
         expressionSelect.on('change', function()
         {
-            container.children('.expression').remove();
-            const expressionContainer = $('<span>', { class: "expression" });
+            const existingExpressionContainer = container.children('.expression');
+            const expressionContainer = existingExpressionContainer.length ?
+                existingExpressionContainer.empty() :
+                $('<span>', { class: "expression" }).appendTo(container);
             kinds[$(this).val()].appendControlTo(expressionContainer, type);
-            container.append(expressionContainer);
         });
         container.append(expressionSelect);
         expressionSelect.trigger('change');

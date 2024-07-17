@@ -6,9 +6,13 @@
     },
     "extends": "eslint:recommended",
     "globals": {
+        "Selectable": "readonly",
+        "Sortable": "readonly",
         "i18next": "readonly",
         "jsPlumb": "readonly",
+        "makeDialogDraggable": "readonly",
         "saveAs": "readonly",
+        "tippy": "readonly",
         "Utils": "readonly",
         "Types": "readonly",
         "Config": "readonly",

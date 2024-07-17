@@ -4,47 +4,51 @@
 
 @use 'base' as *;
 
-.zoomTreeButton {
-  width: 50px;
-  font-size: 0;
-  text-align: center;
-  cursor: pointer;
-
-  svg {
-    width: 32px;
-    height: 32px;
-    fill: currentColor;
-    vertical-align: middle;
-  }
-}
-
 /* Warning: initialiseGrid looks up this rule using the exact selector text.
  * If you change the selector, change the lookup too!
  */
-
 .gridded {
   position: absolute;
-  width: 250px;
-  height: 50px;
-  border-radius: 1px !important;
+  width: 240px;
+  height: 120px;
 }
 
 #gridIndicator {
-  display: none;
-  pointer-events: none;
-  background-color: rgba($col-subject, .5);
-  opacity: .2;
   // start invisible, main.js will show on mouse enter of #main
+  padding: $spacing-3 $spacing-2;
+  pointer-events: none;
+  box-sizing: border-box;
+
+  .gridIndicatorInner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    border: 2px dashed var(--t-fg-dim);
+    border-radius: $rounded-lg;
+    opacity: .2;
+  }
+
+  .addIcon {
+    display: flex;
+    align-items: center;
+
+    svg {
+      width: 32px;
+      height: 32px;
+      fill: var(--t-fg-default);
+    }
+  }
 }
 
 .w.treeContainer {
-  padding: 0;
+  padding: $spacing-3 $spacing-2;
   overflow: hidden;
-  background-position: center right 15px;
-  background-repeat: no-repeat;
-  background-size: 20px 20px;
-  border-color: rgba(black, .5);
-  box-shadow: 0 0 0 1px rgba(black, .3);
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  opacity: 1;
+  box-shadow: none;
   box-sizing: border-box;
 
   &.zoom {
@@ -53,28 +57,18 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
+    padding: 0;
     overflow: hidden;
     color: $col-text-dark;
     cursor: default;
-    background-color: white;
     background-image: none;
     border-color: transparent;
     opacity: 1;
     box-shadow: none;
 
-    &:hover {
-      cursor: default;
-      background-color: white;
-    }
-
     .treeDiv {
       display: block;
       flex: 1 1;
-    }
-
-    .subjectDiv {
-      background: rgba(darken($col-subject, 25%), .01);
-      border-bottom: 1px solid rgba(darken($col-subject, 25%), .1);
     }
 
     .subjectNameInput {
@@ -83,34 +77,106 @@
   }
 
   .subjectDiv {
+    position: relative;
     display: flex;
-    align-items: center;
-    padding-right: 15px;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
     overflow: hidden;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: bold;
-    line-height: 50px;
     white-space: nowrap;
-
-    .zoomTreeButton {
-      flex: 0 0 auto;
-    }
+    background-color: var(--t-bg-default);
+    border: 2px dashed var(--t-fg-dim);
+    border-radius: $rounded-lg;
+    padding-inline: $spacing-3;
+    gap: $spacing-1;
 
     .subjectTextContainer {
-      flex: 1 1 auto;
+      flex: 0 1 auto;
+      width: 100%;
       overflow: hidden;
     }
 
     .icons {
-      flex: 0 0 auto;
-      padding-left: 10px;
+      position: absolute;
+      top: $spacing-1;
+      right: $spacing-1;
+      display: flex;
+      align-items: center;
+      color: var(--t-fg-dim);
 
       svg {
         width: 16px;
         height: 16px;
-        padding: 0 2px;
         fill: currentColor;
-        vertical-align: middle;
+      }
+    }
+
+    .startNodePreview {
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      gap: $spacing-1;
+
+      // add a gradient at the end of startNodePreview to cover up/hide nodeEl
+      &::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        flex-shrink: 0;
+        width: 30%;
+        height: 100%;
+        background: linear-gradient(to right, transparent, var(--t-bg-default));
+        border-radius: $rounded-pill;
+      }
+
+      .nodeEl {
+        @include nodeTypeBackgroundColor;
+
+        flex-shrink: 0;
+        width: 7px;
+        height: 7px;
+        background-color: var(--t-fg-dim);
+        border-radius: $rounded-pill;
+      }
+
+      .nodeCount {
+        display: flex;
+        align-items: center;
+        padding: 2px $spacing-1;
+        border: 1px solid var(--t-fg-dim);
+        border-radius: $rounded-base;
+        gap: $spacing-1;
+
+        p {
+          margin: 0;
+          font-size: .65em;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  &:not(.zoom) {
+    .subjectDiv:hover {
+      background-color: var(--t-bg-highlight);
+
+      .startNodePreview::after {
+        background: linear-gradient(to right, transparent, var(--t-bg-highlight));
+      }
+    }
+
+    &.ui-selected, &.ui-selecting {
+      .subjectDiv {
+        color: white;
+        background-color: $slate-600;
+        border-color: $slate-400;
+
+        .startNodePreview::after {
+          background: linear-gradient(to right, transparent, $slate-600);
+        }
       }
     }
   }
@@ -120,7 +186,18 @@
   position: relative;
   display: none;
   overflow: auto;
-  background-color: white;
+
+  &.backgroundPattern {
+    background: radial-gradient(circle, var(--dot-color) var(--dot-radius), transparent var(--dot-radius)) center / var(--dot-space-x) var(--dot-space-y),
+      var(--bg-color);
+    background-attachment: local;
+    background-color: var(--bg-color);
+    background-position: calc(var(--dot-space-x) / 2) calc(var(--dot-space-y) / 2);
+
+    --dot-color: var(--t-grid-dot-color);
+    --bg-color: var(--t-bg-dim);
+    --dot-radius: 1px;
+  }
 
   &.dragging {
     cursor: move;

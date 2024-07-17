@@ -1,0 +1,72 @@
+@charset "UTF-8";
+
+/* © DialogueTrainer */
+
+@use 'base' as *;
+
+.accordion {
+  $header-height: 40px;
+
+  display: grid;
+  overflow: hidden;
+  border: 1px solid $slate-300;
+  border-radius: $rounded-lg;
+  transition: grid-template-rows .5s;
+  grid-template-rows: $header-height 0fr;
+
+  .header {
+    display: flex;
+    align-items: center;
+    background-color: $slate-300;
+    transition: filter .2s ease-in-out;
+
+    input[type=text] {
+      flex: 1;
+      margin-inline: $spacing-2;
+
+      &:disabled {
+        background-color: $slate-200;
+        opacity: .5;
+      }
+    }
+
+    // Reduce margin of the button if it's present with the input in the same container
+    &:has(input[type=text]) button.delete {
+      margin-inline-start: -$spacing-2;
+    }
+
+    .arrow {
+      transition: transform .5s;
+
+      svg {
+        width: 24px;
+        height: 24px;
+        pointer-events: none;
+      }
+    }
+  }
+
+  .content {
+    display: grid;
+    padding: 0 $spacing-4;
+    overflow: hidden;
+    transition: padding .5s;
+    gap: $spacing-2;
+
+    > button {
+      width: fit-content;
+    }
+  }
+
+  &.open {
+    grid-template-rows: $header-height 1fr;
+
+    > .header .arrow {
+      transform: rotate(180deg);
+    }
+
+    > .content {
+      padding: $spacing-4;
+    }
+  }
+}

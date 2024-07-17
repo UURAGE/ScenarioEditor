@@ -17,9 +17,7 @@ let ColorPicker;
         colorFromXML: colorFromXML,
         colorToXML: colorToXML,
         showFor: showFor,
-        areColorsEnabled: areColorsEnabled,
-        applyColors: applyColors,
-        removeColors: removeColors
+        applyColors: applyColors
     };
 
     const colorAnnotationId = "colour.c1";
@@ -111,9 +109,6 @@ let ColorPicker;
     $(function()
     {
         resetKey();
-
-        $("#toggleColors").on('click', toggleColors);
-        $("#toggleColors").addClass("enabled");
     });
 
     function resetKey()
@@ -248,96 +243,97 @@ let ColorPicker;
         keyContainer.dialog(
         {
             title: i18next.t('colorPicker:key_title'),
-            height: Utils.fitDialogHeightToWindow(Utils.dialogSizes.medium),
             width: Config.container.settings.colorKeyEntry.type.rows ? 360 : 320,
             modal: true,
-            buttons:
-            [{
-                class: "confirmColors",
-                text: i18next.t('common:confirm'),
-                click: function()
+            buttons: [
                 {
-                    const justDisabledColors = {};
-                    const newColorKeySequence = keyBody.children().map(function()
+                    text: i18next.t('common:confirm'),
+                    class: 'confirmColors col-primary roundedPill medium',
+                    click: function()
                     {
-                        const value = $(this).find('.color').data("color");
-                        const enabled = value === ColorPicker.defaultColor || $(this).find('.enable').children('input').prop("checked");
-                        if (!enabled && enabled !== ColorPicker.key.byColor[value].enabled)
+                        const justDisabledColors = {};
+                        const newColorKeySequence = keyBody.children().map(function()
                         {
-                            justDisabledColors[value] = 0;
-                        }
-                        return {
-                            value: value,
-                            enabled: enabled,
-                            entry: Config.container.settings.colorKeyEntry.type.getFromDOM($(this).find('.entry'))
+                            const value = $(this).find('.color').data("color");
+                            const enabled = value === ColorPicker.defaultColor || $(this).find('.enable').children('input').prop("checked");
+                            if (!enabled && enabled !== ColorPicker.key.byColor[value].enabled)
+                            {
+                                justDisabledColors[value] = 0;
+                            }
+                            return {
+                                value: value,
+                                enabled: enabled,
+                                entry: Config.container.settings.colorKeyEntry.type.getFromDOM($(this).find('.entry'))
+                            };
+                        }).get();
+
+                        const changedConnections = Object.values(Main.trees)
+                            .flatMap(function(tree)
+                            {
+                                return tree.plumbInstance.getAllConnections();
+                            })
+                            .filter(function(connection)
+                            {
+                                return connection.getParameter('color') in justDisabledColors;
+                            });
+
+                        const consideredSaveColorKey = function()
+                        {
+                            SaveIndicator.setSavedChanges(false);
+
+                            ColorPicker.key.sequence = newColorKeySequence;
+                            ColorPicker.key.byColor = newColorKeySequence.reduce(function(byColor, color)
+                            {
+                                byColor[color.value] = color;
+                                return byColor;
+                            }, {});
+
+                            changedConnections.forEach(function(connection)
+                            {
+                                connection.setParameter('color', null);
+                                removeColor(connection);
+                            });
+
+                            keyContainer.dialog('close');
                         };
-                    }).get();
-
-                    const changedConnections = Object.values(Main.trees)
-                        .flatMap(function(tree)
-                        {
-                            return tree.plumbInstance.getAllConnections();
-                        })
-                        .filter(function(connection)
-                        {
-                            return connection.getParameter('color') in justDisabledColors;
-                        });
-
-                    const consideredSaveColorKey = function()
-                    {
-                        SaveIndicator.setSavedChanges(false);
-
-                        ColorPicker.key.sequence = newColorKeySequence;
-                        ColorPicker.key.byColor = newColorKeySequence.reduce(function(byColor, color)
-                        {
-                            byColor[color.value] = color;
-                            return byColor;
-                        }, {});
 
                         changedConnections.forEach(function(connection)
                         {
-                            connection.setParameter('color', null);
-                            removeColor(connection);
+                            justDisabledColors[connection.getParameter('color')]++;
                         });
 
-                        keyContainer.dialog('close');
-                    };
-
-                    changedConnections.forEach(function(connection)
-                    {
-                        justDisabledColors[connection.getParameter('color')]++;
-                    });
-
-                    if (changedConnections.length > 0)
-                    {
-                        const warningContainer = $('<div>');
-                        warningContainer.append($('<div>', { text: i18next.t('colorPicker:disable_colors_warning') }));
-                        warningContainer.append($('<br>'));
-                        for (const colorValue in justDisabledColors)
+                        if (changedConnections.length > 0)
                         {
-                            warningContainer.append($('<div>', { text: i18next.t('colorPicker:colors.' + colorValue) + ": " + justDisabledColors[colorValue] + "x" }));
-                        }
-                        Utils.confirmDialog(warningContainer, 'warning').then(function(confirmed)
-                        {
-                            if (confirmed)
+                            const warningContainer = $('<div>');
+                            warningContainer.append($('<div>', { text: i18next.t('colorPicker:disable_colors_warning') }));
+                            warningContainer.append($('<br>'));
+                            for (const colorValue in justDisabledColors)
                             {
-                                consideredSaveColorKey();
+                                warningContainer.append($('<div>', { text: i18next.t('colorPicker:colors.' + colorValue) + ": " + justDisabledColors[colorValue] + "x" }));
                             }
-                        });
+                            Utils.confirmDialog(warningContainer, 'warning').then(function(confirmed)
+                            {
+                                if (confirmed)
+                                {
+                                    consideredSaveColorKey();
+                                }
+                            });
+                        }
+                        else
+                        {
+                            consideredSaveColorKey();
+                        }
                     }
-                    else
-                    {
-                        consideredSaveColorKey();
-                    }
-                }
-            },
-            {
-                text: i18next.t('common:close'),
-                click: function()
+                },
                 {
-                    $(this).dialog('close');
+                    text: i18next.t('common:close'),
+                    click: function()
+                    {
+                        $(this).dialog('close');
+                    },
+                    class: 'col-dim roundedPill medium',
                 }
-            }],
+            ],
             close: function()
             {
                 $("#main").focus();
@@ -348,7 +344,7 @@ let ColorPicker;
 
     function showFor(connection)
     {
-        if ($("#colorPicker").length > 0 || !ColorPicker.areColorsEnabled()) return;
+        if ($("#colorPicker").length > 0) return;
 
         const sourcePosition = connection.connector.canvas.getBoundingClientRect();
         const x = Math.abs(Main.mousePosition.x - sourcePosition.left);
@@ -417,7 +413,7 @@ let ColorPicker;
 
                     const picker = $('<div>', { id: "colorPicker" });
                     const colorRings = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-                    $(colorRings).on('mouseover', function(e)
+                    $(colorRings).on('mouseover mousedown', function(e)
                     {
                         e.stopPropagation();
                     });
@@ -521,19 +517,13 @@ let ColorPicker;
                                 if (cs.length > 0)
                                 {
                                     cs[0].setParameter("color", colorValue);
-                                    if (ColorPicker.areColorsEnabled())
-                                    {
-                                        applyColor(cs[0], dialogue);
-                                    }
+                                    applyColor(cs[0], dialogue);
                                 }
                             }
                             if (!(connection.id in selectedConnections))
                             {
                                 connection.setParameter("color", colorValue);
-                                if (ColorPicker.areColorsEnabled())
-                                {
-                                    applyColor(connection, dialogue);
-                                }
+                                applyColor(connection, dialogue);
                             }
 
                             closeColorPicker(e);
@@ -545,7 +535,7 @@ let ColorPicker;
                     const editIcon = Utils.appendChild(innerCircle, "use");
                     const editIconSize = 20;
                     const editIconOffset = pickerRadius - editIconSize / 2;
-                    editIcon.setAttributeNS(xlinkns, "href", "#icon-edit");
+                    editIcon.setAttributeNS(xlinkns, "href", "#mdi-pencil");
                     editIcon.setAttribute("x", editIconOffset);
                     editIcon.setAttribute("y", editIconOffset);
                     editIcon.setAttribute("width", editIconSize);
@@ -577,7 +567,7 @@ let ColorPicker;
                     const closeIconSize = 20;
                     const closeIconOffsetX = 1.75 * pickerRadius - ringPadding;
                     const closeIconOffsetY = ringPadding;
-                    closeIcon.setAttributeNS(xlinkns, "href", "#icon-close");
+                    closeIcon.setAttributeNS(xlinkns, "href", "#mdi-close");
                     closeIcon.setAttribute("x", closeIconOffsetX);
                     closeIcon.setAttribute("y", closeIconOffsetY);
                     closeIcon.setAttribute("width", closeIconSize);
@@ -609,28 +599,6 @@ let ColorPicker;
                 id: "color-picker"
             }
         ]);
-    }
-
-    function areColorsEnabled()
-    {
-        return $("#toggleColors").hasClass("enabled");
-    }
-
-    function toggleColors()
-    {
-        const toggleColorsButton = $("#toggleColors");
-        if (toggleColorsButton.hasClass("enabled"))
-        {
-            toggleColorsButton.removeClass("enabled");
-            removeColors();
-        }
-        else
-        {
-            toggleColorsButton.addClass("enabled");
-            applyColors();
-        }
-
-        $("#main").focus();
     }
 
     function applyColor(connection, dialogue)
@@ -670,14 +638,5 @@ let ColorPicker;
             connection.setPaintStyle(PlumbGenerator.defaultPaintStyle);
         }
         connection.setHoverPaintStyle(PlumbGenerator.defaultHoverPaintStyle);
-    }
-
-    function removeColors()
-    {
-        const dialogue = Zoom.getZoomed();
-        dialogue.plumbInstance.getAllConnections().forEach(function(connection)
-        {
-            removeColor(connection, dialogue);
-        });
     }
 })();

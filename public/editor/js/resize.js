@@ -16,6 +16,8 @@ let Resize;
     function initialize(options)
     {
         const domSidebarGrip = $(options.containerSelector).find('.grip');
+        const sidebar = options.containerSelector === "#sidebar" ? $(options.containerSelector) : null;
+        const sidebarTypeHeaderIcon = $(options.containerSelector).find('#sidebarType .header');
         let mouseCoordinate = 0;
 
         const setContainerDimension = dimension =>
@@ -33,6 +35,7 @@ let Resize;
             {
                 if (options.direction === 'horizontal')
                 {
+                    sidebar.addClass('collapsed');
                     $(options.containerSelector).css('width', $(options.containerSelector).css('min-width'));
                 }
                 else
@@ -62,6 +65,7 @@ let Resize;
             $(document).off("mousemove", mouseMoveHandler);
             $(document).off("mouseup", mouseUpHandler);
             $(options.containerSelector).removeClass('dragging');
+            if (options.afterResize) options.afterResize();
         };
 
         $(domSidebarGrip).on('mousedown', function(event)
@@ -86,6 +90,12 @@ let Resize;
 
         if (options.enableCollapse)
         {
+            $(sidebarTypeHeaderIcon).on('click', function()
+            {
+                sidebar.toggleClass('collapsed');
+                collapseContainer();
+            });
+
             $(domSidebarGrip).on('dblclick', function()
             {
                 collapseContainer();

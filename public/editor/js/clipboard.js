@@ -31,21 +31,18 @@
                 handleClipboardEvent(e, e.originalEvent.clipboardData, action);
             });
 
-            // Show hint for the clipboard buttons
-            $('#' + action).tooltip(
-            {
-                items: '#' + action,
-                content: i18next.t('clipboard:hint', { key: key, action: action }),
-                create: function() { $(this).data("ui-tooltip").liveRegion.remove(); }
-            });
             $('#' + action).on('click', function()
             {
                 $("#main").focus();
             });
         });
+
+        $('#copy').on('click', () => copy());
+        $('#cut').on('click', () => cut());
+        $('#paste').on('click', () => paste());
     });
 
-    function copy(clipboard, format)
+    async function copy(clipboard, format)
     {
         const hasSelectedText = window.getSelection().type !== 'Range';
         if (!hasSelectedText) return false;
@@ -54,13 +51,26 @@
         if (copiedElement === null) return false;
 
         const dataAsText = JSON.stringify($.extend(copiedElement, { target: 'scenario', configIdRef: Config.container.id }));
-        clipboard.setData(format, dataAsText);
+
+        if (clipboard) clipboard.setData(format, dataAsText);
+        else
+        {
+            try
+            {
+                await navigator.clipboard.writeText(dataAsText);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         return true;
     }
 
-    function cut(clipboard, format)
+    async function cut(clipboard, format)
     {
-        const hasCopied = copy(clipboard, format);
+        const hasCopied = await copy(clipboard, format);
         if (hasCopied)
         {
             Main.deleteAllSelected();
@@ -70,29 +80,36 @@
 
     function paste(clipboard, format)
     {
-        if (Main.isMousePositionWithinEditingCanvas())
+        if (clipboard)
         {
-            let data;
-            try
-            {
-                data = JSON.parse(clipboard.getData(format));
-            }
-            catch (_)
-            {
-                return false;
-            }
+            verifyDataFormatAndConfigVersion(clipboard.getData(format));
+        }
+        else
+        {
+            navigator.clipboard.readText().then(verifyDataFormatAndConfigVersion);
+        }
+    }
 
-            if (data && data.target === 'scenario' && data.configIdRef && data.type && data.definitions && data.content)
-            {
-                if (data.configIdRef !== Config.container.id)
-                {
-                    Utils.alertDialog("The config id of the pasted content does not match the config id referred to in the scenario", 'warning');
-                }
-                return considerPasting(data.type, data.definitions, data.content);
-            }
+    function verifyDataFormatAndConfigVersion(inputData)
+    {
+        let data;
+        try
+        {
+            data = JSON.parse(inputData);
+        }
+        catch
+        {
+            return false;
         }
 
-        return false;
+        if (data && data.target === 'scenario' && data.configIdRef && data.type && data.definitions && data.content)
+        {
+            if (data.configIdRef !== Config.container.id)
+            {
+                Utils.alertDialog("The config id of the pasted content does not match the config id referred to in the scenario", 'warning');
+            }
+            return considerPasting(data.type, data.definitions, data.content);
+        }
     }
 
     function copyElement()
@@ -274,10 +291,7 @@
                         });
                     });
 
-                    if (ColorPicker.areColorsEnabled())
-                    {
-                        ColorPicker.applyColors();
-                    }
+                    ColorPicker.applyColors();
                 });
 
                 // Select all nodes just pasted
@@ -322,7 +336,7 @@
         newTree.subject = i18next.t('clipboard:copy_of', { name: toCopy.subject });
         newTree.optional = toCopy.optional;
         const iconDiv = newTree.dragDiv.find('.icons');
-        if (newTree.optional) iconDiv.html(Utils.sIcon('icon-tree-is-optional'));
+        if (newTree.optional) iconDiv.html(Utils.sIcon('mdi-axis-arrow'));
         newTree.dragDiv.toggleClass('optional', newTree.optional);
 
         newTree.leftScroll = toCopy.leftScroll;
@@ -490,7 +504,32 @@
 
         if (canPaste)
         {
-            const anchorPosition = Zoom.isZoomed() ? Main.mousePositionToDialoguePosition(Main.mousePosition) : undefined;
+            let anchorPosition = Main.mousePositionToDialoguePosition(Main.mousePosition);
+
+            if (anchorPosition === null)
+            {
+                const offset = SnapToGrid.getGridSize();
+                if (Main.selectedElement in Main.nodes && Main.isNodePositionWithinCanvasView(Main.selectedElement))
+                {
+                    // When a node is selected and in viewport, place pasted nodes one grid size next to selected node
+                    const nodePosition = Utils.cssPosition($("#" + Main.selectedElement));
+                    anchorPosition = {
+                        left: nodePosition.left + offset.x,
+                        top: nodePosition.top + offset.y
+                    };
+                }
+                else if (Zoom.isZoomed())
+                {
+                    // Place node some distance from top left corner of current viewport
+                    const zoomedTree = Zoom.getZoomed();
+                    const canvas = zoomedTree.div;
+                    anchorPosition = {
+                        left: canvas.scrollLeft() + offset.x,
+                        top: canvas.scrollTop() + offset.y
+                    };
+                }
+            }
+
             if (Object.keys(missingParameterIds).length > 0)
             {
                 const warning = $('<div>');

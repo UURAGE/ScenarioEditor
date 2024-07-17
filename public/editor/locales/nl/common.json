@@ -40,9 +40,21 @@
     "info": "Info",
     "warning": "Waarschuwing",
     "error": "Fout",
-    "special_node":
-    {
-        "allowInterleaveNode": "Sta onderwerpverandering toe",
-        "allowDialogueEndNode": "Sta einde onderwerp toe"
-    }
+    "special_node": {
+        "allowInterleaveNode": {
+            "header": "Sta onderwerpverandering toe",
+            "title": "Na deze uitspraak toestaan om van onderwerp te veranderen"
+        },
+        "allowDialogueEndNode": {
+            "header": "Sta einde onderwerp toe",
+            "title": "Na deze uitspraak toestaan om het onderwerp te beëindigen"
+        },
+        "endNode": {
+            "header": "Einde van scenario",
+            "title": "Scenario na deze uitspraak beëindigen"
+        }
+    },
+    "collapse_all": "Alles inklappen",
+    "expand_all": "Alles uitklappen",
+    "search": "Zoeken..."
 }

@@ -4,17 +4,25 @@
 
 @use 'base' as *;
 
-.evaluation-expression,
+.evaluationExpression,
 .scale-expression,
 .expression {
   display: block;
-  padding: 3px;
-  padding-right: 1px;
-  margin-right: 1px;
+  padding: $spacing-1;
   background: rgba($col-expression-background, .2);
   border: 1px solid rgba(darken($col-expression-background, 25%), .25);
-  border-radius: 3px;
+  border-radius: $rounded-base;
   box-sizing: border-box;
+
+  ul {
+    padding-inline-start: $spacing-6;
+    margin: 0;
+  }
+}
+
+.sum-expression {
+  display: flex;
+  align-items: center;
 }
 
 .scale-expression,
@@ -29,31 +37,26 @@
     cursor: pointer;
     opacity: .6;
   }
-
-  svg {
-    margin-right: 5px;
-    margin-left: 5px;
-  }
 }
 
 .groupConditionDiv {
   padding: 0;
-  padding-left: 10px;
+  padding-left: $spacing-2;
   margin: 0;
-  margin-left: 12px;
+  margin-left: $spacing-2;
   border-left: 2px solid rgba(black, .1);
 
   .when & {
     border-left: 2px solid cornflowerblue;
   }
+
+  .condition {
+    margin-bottom: $spacing-1;
+  }
 }
 
 .condition {
   > {
-    button {
-      display: block;
-    }
-
     .condition-test-container + button {
       display: inline-block;
     }
@@ -78,4 +81,9 @@
 
 .condition.multiple > .groupConditionRadioDiv {
   display: block;
+  margin-bottom: $spacing-1;
+
+  input {
+    width: auto !important;
+  }
 }

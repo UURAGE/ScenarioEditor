@@ -4,36 +4,88 @@
 
 @use 'base' as *;
 
-#sidebar {
+:where(#sidebar) {
   $sidebar-control-min-width: 30px;
 
   position: relative;
   width: $sidebar-width;
-  height: 100%;
-  min-width: 5px; // Grip
-  overflow: hidden; // Prevents Edge overflow bug
+  min-width: 0;
+  min-height: 0;
   font-size: 11pt;
-  color: rgba(black, .6);
-  background-color: $col-sidebar;
+  color: var(--t-fg-default);
+  background-color: var(--t-bg-default);
+  grid-area: sidebar;
+
+  input, textarea, select, button {
+    color-scheme: light;
+  }
+
+  // form input, textarea, select
+  input[type=text], textarea {
+    color: var(--t-fg-highlight);
+    background-color: var(--t-bg-contrast);
+    border-color: var(--t-bg-dim);
+  }
 
   textarea {
     resize: vertical;
   }
 
-  > div {
+  button {
+    color: var(--theme-fg-sidebar-button);
+    background-color: var(--theme-bg-sidebar-button);
+
+    &.add-item svg {
+      fill: $col-editor;
+    }
+
+    &.add-item, &.delete {
+      padding: $spacing-0;
+      background-color: transparent;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  #sidebarType {
+    position: absolute;
+    top: $spacing-20;
+    left: -$spacing-10;
+    z-index: 100;
+    border-radius: $rounded-lg 0 0 $rounded-lg;
+    box-shadow: inset -2px 0 10px rgba(#000, .1);
+
+    &.tree { background-color: $col-subject; }
+    &.player { background-color: $col-node-player; }
+    &.computer { background-color: $col-node-computer; }
+    &.situation { background-color: $col-node-situation; }
+
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 32px;
+      height: 28px;
+      padding: $spacing-1;
+
+      svg {
+        width: 24px;
+        height: 24px;
+        fill: white;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .sidebarContent {
     position: relative;
     width: 100%;
     height: 100%;
-
-    > div {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      overflow-x: hidden;
-      overflow-y: auto;
-    }
+    overflow-y: scroll;
+    box-shadow: $shadow-md-soft;
   }
 
   .grip {
@@ -57,57 +109,61 @@
     opacity: .5;
   }
 
-  input[type=checkbox] {
-    display: inline-block;
-    width: auto;
-    margin-right: .5em;
-    transform: scale(1.25);
-  }
-
   .inputgroup {
-    display: inline-block;
+    display: flex;
+    gap: $spacing-1;
+    align-items: center;
+
+    button {
+      padding: $spacing-1;
+    }
   }
 
   // This is the class for sections for property values and parameter effects
   .section {
-    margin: 0 auto 15px;
+    display: contents;
+  }
 
-    &:last-child {
-      margin-bottom: 0;
-    }
+  .collapsable {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
 
-    &:empty {
-      display: none;
+    // Needed for button inside ' <div id="effectsSection"></div> in editorView.php ' to avoid being full width
+    button {
+      width: max-content;
     }
   }
 
   // This is the class for subsections for property values and parameter effects
   .subsection {
-    margin-bottom: 15px;
-    margin-left: 15px;
+    margin-bottom: $spacing-4;
+    margin-left: $spacing-4;
   }
 
   label {
+    line-height: 1.6;
     user-select: none;
   }
 
-  .parameter-effect,
-  .condition:not(.groupcondition) {
+  .parameter-effect, .condition:not(.groupcondition) {
     display: flex;
     align-items: center;
+    margin-bottom: $spacing-1;
     overflow: hidden;
+    gap: $spacing-1;
 
-    span,
-    .inputgroup,
-    .parameter-effect-container {
-      display: flex;
-      align-items: center;
+    &:last-child {
+      margin-bottom: $spacing-2;
     }
 
-    .handle,
-    > select,
-    span,
-    .inputgroup > select {
+    span, .inputgroup, .parameter-effect-container {
+      display: flex;
+      align-items: center;
+      gap: $spacing-1;
+    }
+
+    .handle, > select, span, .inputgroup > select {
       flex: 0 0 auto;
       overflow: hidden;
     }
@@ -125,32 +181,62 @@
       flex: 1 1 auto !important;
       min-width: $sidebar-control-min-width;
     }
+  }
 
-    > .iconButton.delete {
-      margin-right: 0;
-      margin-left: 10px;
+  .buttonsWrapper {
+    margin-top: $spacing-2;
+    margin-bottom: $spacing-1;
+  }
+}
+
+#sidebar {
+  .sidebarShrinkExpand svg.expand {
+    display: none;
+  }
+
+  &.collapsed {
+    .sidebarShrinkExpand svg.shrink {
+      display: none;
+    }
+
+    .sidebarShrinkExpand svg.expand {
+      display: block;
+    }
+  }
+
+  #sidebarType {
+    cursor: pointer;
+
+    .sidebarShrinkExpand {
+      display: none;
+    }
+
+    &:hover {
+      // Hide all other icons in the sidebar that display node type
+      .header {
+        display: none;
+      }
+
+      // Show the shrink/expand icon
+      .sidebarShrinkExpand {
+        display: flex;
+      }
     }
   }
 }
 
-#properties {
-  &.player,
-  &.situation,
-  &.tree {
+#properties, #sidebarType {
+  &.player, &.situation, &.tree {
     > {
-      #headerComputer,
-      #characterSection {
+      #headerComputer, #characterSection {
         display: none;
       }
     }
   }
 
-  &.player,
-  &.situation,
-  &.computer {
+  &.player, &.situation, &.computer {
     > {
-      #headerSubject,
-      #optionalSubject {
+      #headerSubject, #subjectName {
         display: none;
       }
     }
@@ -169,8 +255,7 @@
   }
 
   &.computer > {
-    #headerPlayer,
-    #headerSituation {
+    #headerPlayer, #headerSituation {
       display: none;
     }
   }
@@ -179,22 +264,11 @@
     #headerPlayer,
     #headerSituation,
     #preconditionsSection,
-    #endNode,
     #effectsSection,
-    #propertyValuesSection,
-    #allowInterleaveNode,
-    #allowDialogueEndNode {
+    #propertyValuesSection {
       display: none;
     }
   }
-}
-
-.header,
-.sub-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: $sidebar-padding;
 }
 
 .header {
@@ -209,20 +283,17 @@
   }
 
   img {
-    margin-right: 10px;
-    vertical-align: middle;
-  }
-
-  svg {
-    width: 32px;
-    height: 32px;
-    margin-right: 5px;
-    fill: currentColor;
+    margin-right: $spacing-3;
     vertical-align: middle;
   }
 }
 
 .sub-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--t-fg-highlight);
+
   h2 {
     margin: 0;
     overflow: hidden;
@@ -242,25 +313,48 @@
     margin-right: 5px;
     vertical-align: middle;
   }
-
-  svg {
-    width: 16px;
-    height: 16px;
-    margin-right: 5px;
-    fill: currentColor;
-    vertical-align: middle;
-  }
 }
 
 .sidebarSection {
-  border-top: 1px solid rgba(black, .08);
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-3;
+  border-top: 1px solid var(--theme-sidebar-section-border);
+  gap: $spacing-3;
+
+  &:last-child {
+    padding-bottom: $spacing-6;
+  }
 
   h3 {
-    margin-top: .5em;
-    margin-bottom: .25em;
-    font-size: 1em;
+    margin-block: .5em;
+    font-size: .9em;
     font-weight: 600;
     user-select: none;
+  }
+}
+
+.sidebarRow {
+  // These are not present in our current config
+  ul.listType {
+    margin-block-start: $spacing-1;
+    margin-block-end: 0;
+  }
+
+  li:first-of-type + div {
+    display: block;
+    margin-bottom: $spacing-1;
+  }
+  // *******************************************
+
+  .buttonIcon {
+    margin-left: auto;
+    color: $slate-400;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 }
 
@@ -287,9 +381,7 @@
       width: 70%;
     }
 
-    input,
-    select,
-    textarea {
+    input, select, textarea {
       width: 100%;
       box-sizing: border-box;
     }
@@ -300,34 +392,20 @@
   }
 }
 
-.ui-accordion {
-  .ui-accordion-header {
-    margin-bottom: 0;
-  }
-
-  .ui-accordion-content {
-    padding: .5em 1em !important;
-  }
-}
-
 #preconditionsSection {
   white-space: nowrap;
 }
 
-.clicktag,
-.masterclicktag {
-  flex: 0 0 auto;
+.clicktag {
+  padding: 0;
+  opacity: .7;
+
+  &:enabled:hover {
+    opacity: 1;
+  }
 
   svg {
-    width: 16px;
-    height: 16px;
-    padding: 0;
-    margin: 0;
-    fill: currentColor;
-    opacity: .75;
+    width: 20px;
+    height: 20px;
   }
-}
-
-.collapsable {
-  padding: $sidebar-padding;
 }

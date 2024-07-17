@@ -1,0 +1,69 @@
+@charset "UTF-8";
+
+/* © DialogueTrainer */
+
+@use 'sass:math';
+@use 'base' as *;
+
+.progressbar {
+  $height: 4px;
+  $col-foreground: $col-editor;
+  $col-background: white;
+  $distance: 20px;
+  $angle: 135deg;
+
+  position: relative;
+  display: grid;
+  width: 100%;
+  margin-block: $spacing-1;
+  overflow: hidden;
+
+  progress {
+    width: 100%;
+    height: $height;
+    overflow: hidden;
+    border-radius: $rounded-pill;
+    box-shadow: 0 1px 2px rgba(black, .04);
+
+    &::-webkit-progress-bar {
+      background-color: $col-background;
+    }
+
+    // Don't merge these selectors!
+    &::-webkit-progress-value {
+      background-color: $col-foreground;
+    }
+
+    &::-moz-progress-bar {
+      background-color: $col-foreground;
+    }
+
+    // Indeterminate progress
+    &:not([value]) {
+      background: repeating-linear-gradient($angle, $col-foreground, $col-foreground .25 * $distance, lighten($col-foreground, 14%) .25 * $distance, lighten($col-foreground, 14%) .5 * $distance, lighten($col-foreground, 14%) .75 * $distance, $col-foreground .75 * $distance, $col-foreground $distance);
+      background-size: math.ceil(math.div($distance, math.sin($angle))) 100%;
+      animation: slide 1s infinite linear;
+
+      // Don't merge these selectors!
+      &::-webkit-progress-bar {
+        background-color: transparent;
+      }
+
+      &::-moz-progress-bar {
+        background-color: transparent;
+      }
+    }
+
+    @keyframes slide {
+      100% {
+        background-position: math.div($distance, math.sin($angle)) 0;
+      }
+    }
+  }
+
+  .progressLabel {
+    margin-top: 2px;
+    font-size: .7em;
+    opacity: .5;
+  }
+}

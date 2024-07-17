@@ -1,0 +1,139 @@
+@charset "UTF-8";
+
+/* © DialogueTrainer */
+
+@use 'base' as *;
+
+@mixin buttonStyle($color, $background-color) {
+  color: $color;
+  background-color: $background-color;
+
+  &.outline {
+    color: $background-color;
+    border-color: $background-color;
+  }
+
+  &.text {
+    color: $background-color;
+  }
+}
+
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  background: none;
+  border: 1px solid transparent;
+  transition: opacity .2s ease-in-out;
+  appearance: none;
+  user-select: none;
+  gap: $spacing-1;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    vertical-align: middle;
+    transform: scale(1);
+  }
+
+  img {
+    vertical-align: middle;
+  }
+
+  &:enabled {
+    cursor: pointer;
+
+    &:hover {
+      opacity: .8;
+    }
+  }
+
+  &:disabled {
+    opacity: .4;
+  }
+
+  // size
+  &.sizeHalf {
+    flex-grow: 1;
+    flex-basis: 50%;
+  }
+
+  &.extraSmall {
+    padding: 2px;
+  }
+
+  &.small {
+    padding: $spacing-1 $spacing-2;
+  }
+
+  &.medium {
+    padding: $spacing-2 $spacing-4;
+  }
+
+  &.buttonIcon {
+    height: $input-height;
+    color: $col-text-primary-dark;
+    background-color: white;
+    border-radius: $rounded-base;
+    box-shadow: $shadow-sm-soft;
+    aspect-ratio: 1;
+
+    &.extraSmall {
+      padding: 2px;
+    }
+
+    &.small {
+      padding: $spacing-1;
+    }
+
+    &.medium {
+      padding: 6px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  // border radius
+  &.roundedPill {
+    border-radius: $rounded-pill;
+  }
+
+  &.roundedBase {
+    border-radius: $rounded-base;
+  }
+
+  // colors
+  &.col-highlight {
+    @include buttonStyle(white, $slate-700);
+  }
+
+  &.col-default {
+    @include buttonStyle(white, $slate-500);
+  }
+
+  &.col-dim {
+    @include buttonStyle(white, $slate-400);
+  }
+
+  &.col-primary {
+    @include buttonStyle(white, $col-editor);
+  }
+
+  &.col-danger {
+    @include buttonStyle(white, $col-negative);
+  }
+
+  &.col-time {
+    @include buttonStyle(white, $col-positive);
+  }
+
+  &.text, &.outline {
+    background-color: transparent;
+    box-shadow: none;
+  }
+}

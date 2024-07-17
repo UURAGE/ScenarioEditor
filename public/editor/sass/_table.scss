@@ -2,17 +2,7 @@
 
 /* © DialogueTrainer */
 
-@mixin tableLabel($kind, $color) {
-  &.#{$kind} {
-    color: darken($color, 10%);
-    background-color: rgba($color, .1);
-    border-color: rgba($color, .25);
-
-    svg {
-      fill: currentColor;
-    }
-  }
-}
+@use 'base' as *;
 
 .hasStyledTable {
   table {
@@ -22,8 +12,6 @@
     border-spacing: 0;
 
     tbody {
-      border: 2px dashed rgba(black, .1);
-
       &:not(:last-child)::after, &:not(:first-child)::before {
         content: '';
         display: table-row;
@@ -43,77 +31,29 @@
       }
     }
 
-    tr {
-      border: 1px solid rgba(black, .05);
+    tr > td {
+      padding: 2px;
 
-      > td {
-        padding: 2px;
-
-        &:not(.fill) {
-          width: .1%;
-          white-space: nowrap;
-        }
+      &:not(.fill) {
+        width: .1%;
+        white-space: nowrap;
       }
-    }
 
-    tr:hover {
-      background-color: rgba(white, .75);
-    }
-  }
-
-  .label {
-    display: block;
-    height: 22px;
-    padding: 2px 4px;
-    margin-right: 10px;
-    font-weight: 500;
-    line-height: 16px;
-    background: grey;
-    border: 1px solid black;
-    border-radius: 12px;
-    box-sizing: border-box;
-
-    svg:first-child {
-      margin-right: 5px;
-      margin-left: 5px;
-    }
-  }
-
-  .jumpControl {
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-    background: none;
-    border: none;
-
-    svg {
-      vertical-align: middle;
-      opacity: .5;
-
-      &:hover {
-        opacity: 1;
+      &:first-child {
+        padding-inline-start: $spacing-2;
       }
-    }
 
-    &.canJump {
-      svg {
-        cursor: pointer;
-        opacity: .5;
-
-        &:hover {
-          opacity: 1;
-        }
+      &:last-child {
+        padding-inline-end: $spacing-2;
       }
     }
   }
 
   .highlight {
-    padding: 1px;
-    margin: 3px;
-    margin-left: -1px;
-    background-color: white;
-    border-radius: 3px;
-    filter: drop-shadow(0 0 1px rgba(black, .5));
+    padding: $spacing-1;
+    color: var(--t-bg-highlight);
+    background-color: var(--t-fg-highlight);
+    border-radius: $rounded-base;
 
     &:empty {
       display: none;

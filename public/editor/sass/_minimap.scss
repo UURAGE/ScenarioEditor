@@ -4,40 +4,52 @@
 
 @use 'base' as *;
 
+#canvas.dark #minimap {
+  border: 1px solid rgba(white, .1);
+}
+
 #miniwrap {
-  display: none;
-}
-
-#minimap {
-  position: relative;
-  float: right;
-  width: 296px;
-  height: 296px;
-  padding: 0;
-  margin: 10px;
-  overflow: hidden;
-  background-color: white;
-
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-#minimapSelector {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 296px;
-  height: 296px;
-  border: 2px solid darken(desaturate($col-editor, 75%), 15%);
-  border-radius: 1px;
-  box-sizing: border-box;
-}
-
-#scaledDiv {
+  top: $spacing-18;
+  bottom: $spacing-16;
+  display: grid;
+  width: 300px;
   pointer-events: none;
+  box-sizing: border-box;
+  place-items: end;
 
-  * {
+  #minimap {
+    position: relative;
+    padding: 0;
     overflow: hidden;
+    pointer-events: all;
+    background-color: var(--t-bg-contrast);
+    box-shadow: $shadow-md-mild;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    .treeDiv {
+      background-color: rgba(black, .05);
+    }
+
+    #scaledDiv {
+      pointer-events: none;
+
+      * {
+        overflow: hidden;
+      }
+    }
+
+    #minimapSelector {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 296px;
+      height: 296px;
+      background-color: rgba($col-editor, .1);
+      border: 2px solid $col-editor;
+      box-sizing: border-box;
+    }
   }
 }

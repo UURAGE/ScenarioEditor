@@ -7,12 +7,12 @@
 @mixin validation-cell($sel, $color) {
   #{$sel} {
     a {
-      color: darken($color, 15%);
-      background-color: rgba($color, .05);
-      border-color: rgba($color, .1);
+      color: lighten($color, 15%);
+      background-color: rgba($color, .1);
+      border-color: rgba($color, .4);
 
       &:hover {
-        background-color: rgba($color, .01);
+        background-color: rgba($color, .15);
         border-color: rgba($color, .5);
       }
     }
@@ -28,64 +28,25 @@
   @include validation-cell('.level-warning',  $col-warning);
   @include validation-cell('.level-info',     $col-info);
 
-  > * {
-    margin: 20px 0;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-
-    tr {
-      border-bottom: 1px solid rgba(black, .05);
-      box-sizing: content-box;
-
-      &:last-of-type {
-        margin-bottom: 0;
-        border-bottom: none;
-      }
-    }
-
-    td {
-      padding: 5px;
-      box-sizing: content-box;
-    }
-
-    tr td {
-      vertical-align: baseline;
-
-      &:nth-child(1) {
-        width: 1%;
-        text-align: right;
-        white-space: nowrap;
-      }
-
-      &:nth-child(2) {
-        width: 100%;
-      }
-    }
-  }
-
   .badge {
     display: inline-block;
-    padding: 5px 7px;
+    padding: $spacing-1 $spacing-2;
     font-size: .9em;
     font-weight: 400;
     color: white;
-    border-radius: 3px;
-    box-shadow: 0 2px 1px rgba(black, .05);
+    border-radius: $rounded-base;
   }
 
   a {
     display: inline-block;
-    padding: 2px 5px;
+    padding: 2px $spacing-1;
     text-decoration: none;
     border: 1px solid black;
-    border-radius: 3px;
+    border-radius: $rounded-base;
 
     &::after {
       content: '↗';
-      margin-left: 5px;
+      margin-left: $spacing-1;
       font-weight: bold;
       opacity: .75;
     }
@@ -99,5 +60,6 @@
 
   .no-problems {
     color: $col-positive;
+    padding-inline: $spacing-4;
   }
 }

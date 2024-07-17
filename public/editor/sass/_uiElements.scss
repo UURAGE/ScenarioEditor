@@ -5,81 +5,19 @@
 @use 'base' as *;
 $font-family: 'Open Sans', 'Frutiger', 'Helvetica', 'Arial', sans-serif;
 
-.ui-widget {
-  font-family: inherit !important;
-
-  input, select, textarea, button {
-    font-family: inherit !important;
-  }
-}
-
-.ui-widget-header {
-  border: 0 !important;
-
-  &.ui-tabs-nav {
-    color: #444;
-    background: #EEE !important;
-
-    .ui-icon {
-      background-image: url('vendor/jquery-ui/images/ui-icons_444444_256x240.png');
-    }
-  }
-}
-
-.ui-tabs {
-  padding: 0 !important;
-
-  .ui-tabs-nav {
-    li {
-      margin: 0 3px 0 0 !important;
-    }
-
-    .ui-tabs-anchor {
-      text-align: center;
-      outline: none;
-    }
-
-    .ui-tabs-active {
-      padding-bottom: 0 !important;
-      margin-bottom: 0 !important;
-    }
-  }
-}
-
-.ui-dialog {
-  padding: 0 !important;
-}
-
-.ui-dialog .ui-dialog-buttonpane {
-  margin-top: 0 !important;
-}
-
 input, select, textarea, button {
   font-family: $font-family;
 }
 
-button {
-  img {
+svg {
+  // Fixes SVG subpixel rendering in Firefox
+  transform: scale(1);
+
+  &.icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
     vertical-align: middle;
-  }
-
-  #properties &,
-  #sidebar & {
-    padding-right: 1px;
-    padding-left: 1px;
-    font-size: inherit;
-    color: #666;
-    user-select: none;
-  }
-
-  #toolbar &,
-  #properties &,
-  #sidebar &,
-  #parameters &,
-  #evaluations &,
-  .enumeration-values-container & {
-    background: none;
-    border: 0;
   }
 }
 
@@ -96,20 +34,6 @@ kbd {
   box-shadow: inset 0 -1px 0 #C6CBD1;
 }
 
-svg {
-  // Fixes SVG subpixel rendering in Firefox
-  transform: scale(1);
-
-  &.icon {
-    width: 16px;
-    height: 16px;
-  }
-}
-
-textarea {
-  resize: none;
-}
-
 a[data-disabled] {
   text-decoration: line-through;
 }
@@ -124,12 +48,6 @@ a[data-disabled] {
 
 a.clickable {
   text-decoration: underline;
-}
-
-.expander {
-  position: absolute;
-  width: 1px;
-  height: 1px;
 }
 
 .hidden {
@@ -163,59 +81,7 @@ a.clickable {
   }
 }
 
-input[type=checkbox][disabled] {
-  color: #CCC;
-  opacity: .8;
-
-  + label {
-    color: #CCC;
-    opacity: .8;
-  }
-}
-
-.ui-dialog-titlebar {
-  &.info {
-    color: #{color-yiq($col-ui-title-info)};
-    background: $col-ui-title-info;
-  }
-
-  &.warning {
-    color: #{color-yiq($col-ui-title-warning)};
-    background: $col-ui-title-warning;
-  }
-
-  &.error {
-    color: #{color-yiq($col-ui-title-error)};
-    background: $col-ui-title-error;
-  }
-}
-
-.ui-resizable-n {
-  height: 10px;
-}
-
-.ui-autocomplete {
-  max-height: 135px;
-  // prevent horizontal scrollbar
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.ui-tooltip-content {
-  font-size: 10pt;
-}
-
-tr.ui-sortable-helper {
-  display: table;
-}
-
-.buttonGroup {
-  margin: $buttongroup-margin;
-  word-wrap: break-word;
-  vertical-align: top;
-}
-
-.markdown-tooltip {
+.attachment-container {
   position: relative;
   display: none;
   height: 0;
@@ -250,53 +116,26 @@ tr.ui-sortable-helper {
   }
 }
 
-.markdownUITooltip {
+.tippy-box {
+  text-align: left;
+
+  a[href] {
+    color: lighten($col-editor, 25%);
+  }
+}
+
+.tippy-box[data-theme~=markdown] {
   code {
     white-space: nowrap;
   }
 }
 
-.enumeration-values-container {
-  li {
-    clear: both;
-  }
-
-  span,
-  input {
-    float: left;
-  }
-
-  button {
-    float: right;
-  }
-}
-
 #statement,
-#comment,
-#treeNameBox {
+#inputSubjectName,
+#comment {
   display: block;
   width: 100%;
   box-sizing: border-box;
-}
-
-.iconButton {
-  cursor: pointer;
-
-  svg {
-    width: 16px;
-    height: 16px;
-    margin: 3px 5px 3px 0;
-    fill: currentColor;
-    vertical-align: middle;
-  }
-
-  &.add svg {
-    fill: $col-icon-button-add;
-  }
-
-  &.delete svg {
-    fill: $col-icon-button-delete;
-  }
 }
 
 // For reordering
@@ -305,43 +144,12 @@ tr.ui-sortable-helper {
   cursor: grab;
   user-select: none;
 
-  .ui-sortable-helper & {
-    cursor: move;
-    cursor: grabbing;
-  }
-
   .parameter-effect & {
     padding: 0 5px;
   }
 
   .condition & {
     padding-right: 5px;
-  }
-}
-
-select {
-  position: relative;
-
-  &:focus {
-    // This fixes a rendering issue in Chrome where the options appear completely black.
-    z-index: 1;
-  }
-}
-
-.evaluation-type {
-  width: 80%;
-
-  ~ .define-type {
-    width: 20%;
-    padding: 0;
-  }
-}
-
-.ui-dialog-content {
-  select,
-  input,
-  textarea {
-    max-width: 100%;
   }
 }
 
@@ -356,10 +164,6 @@ select {
   border: 1px solid $col-editor;
   border-radius: 3px;
   box-shadow: 0 2px 1px rgba(0, 0, 0, .07);
-}
-
-.indent {
-  margin-left: 20px;
 }
 
 .listType {
@@ -386,4 +190,25 @@ select {
       align-items: flex-start;
     }
   }
+}
+
+input[type=text].search {
+  padding-right: $spacing-7;
+  margin-bottom: $spacing-2;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat right 10px center;
+  border: 1px solid $slate-300;
+  border-radius: $rounded-base;
+
+  &:hover {
+    border-color: $slate-400;
+  }
+
+  &:focus {
+    background-color: $slate-100;
+    outline: none;
+  }
+}
+
+.ui-lasso {
+  pointer-events: none;
 }

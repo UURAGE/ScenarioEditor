@@ -18,11 +18,14 @@ let Validator;
 
     $(function()
     {
-        // Event handlers.
-        $("#validation").on('click', function()
+        TabDock.register('validation', function(errors)
         {
-            const errors = validate();
-            show(errors);
+            render(errors ?? validate());
+        });
+
+        $('#toolbar').find("button#validation").on('click', function()
+        {
+            show(validate());
         });
     });
 
@@ -386,9 +389,9 @@ let Validator;
         return validationReport;
     }
 
-    function show(errors)
+    function render(errors)
     {
-        TabDock.close();
+        $('#validationReport').empty();
 
         let hasErrors = false;
         let hasWarningsOrInfo = false;
@@ -400,16 +403,16 @@ let Validator;
 
         if (!hasErrors && !hasWarningsOrInfo)
         {
-            $('#validationReport').append($('<p>').addClass('no-problems').text(i18next.t('validator:no_problems')));
+            $('#validationReport').append($('<p>', { class: 'no-problems', text: i18next.t('validator:no_problems') }));
         }
         else
         {
-            const table = $('<table>');
+            const container = $('<ul>');
             errors.forEach(function(e)
             {
-                const row = $('<tr>').addClass('level-' + e.level);
-                const error = $('<td>').append($('<span>', { class: "badge", text: i18next.t('common:' + e.level) }));
-                const message = $('<td>').html(e.message);
+                const row = $('<li>').addClass('flexbox gap-2 level-' + e.level);
+                const error = $('<span>', { class: "badge", text: i18next.t('common:' + e.level) });
+                const message = $('<span>').html(e.message);
                 message.find('a').each(function(index, linkEl)
                 {
                     $(linkEl).addClass('clickable').on('click', function()
@@ -419,20 +422,22 @@ let Validator;
                     });
                 });
                 row.append(error).append(message);
-                table.append(row);
+                container.append(row);
             });
-            $('#validationReport').append(table);
+            $('#validationReport').append(container);
         }
         $('#validationReport').show();
         TabDock.closeHandler = function()
         {
             $('#validationReport').empty();
         };
-        $('#tabDock')
-            .find('.title').text(i18next.t('validator:validator_title')).end()
-            .find('.controls').empty().end()
-            .show();
+        $('#tabDock').find('.controls').empty();
         $("#main").focus();
+    }
+
+    function show(errors)
+    {
+        TabDock.switchTo('validation', errors);
     }
 
     // Checks if there is a cycle in the graph.

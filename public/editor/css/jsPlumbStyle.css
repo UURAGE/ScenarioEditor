@@ -7,13 +7,10 @@
   z-index: 4;
   padding: 0.5em 1em;
   font-size: 11px;
+  color: var(--t-fg-default);
   cursor: move;
-  background-color: white;
-  border: 1px solid black;
+  background-color: var(--t-bg-highlight);
   border-radius: 0.5em;
-  opacity: 0.8;
-  filter: alpha(opacity=80);
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05), 0 1px 10px rgba(0, 0, 0, 0.05);
   transition: background-color 0.15s ease-out, color 0.15s ease-out, border-bottom-width 0.1s linear, border-top-width 0.1s linear;
 }
 .w ul {
@@ -101,6 +98,9 @@
   color: #222;
   background-color: #fcd9bc;
 }
+.w.selected, .w.ui-selected, .w.jtk-drag-selected {
+  z-index: 5;
+}
 .w.selected.computer, .w.ui-selected.computer, .w.jtk-drag-selected.computer {
   color: white;
   background-color: #e94a59;
@@ -125,33 +125,14 @@
   color: #222;
   background-color: #f4862a;
 }
-.w.treeContainer:not(.zoom):hover {
-  background-color: #3892FF;
-}
-.w.treeContainer:not(.zoom):hover .subjectDiv {
-  color: white;
-}
-.w.treeContainer:not(.zoom).selected, .w.treeContainer:not(.zoom).ui-selected {
-  background-color: #0053b8;
-}
-.w.treeContainer:not(.zoom).selected .subjectDiv, .w.treeContainer:not(.zoom).ui-selected .subjectDiv {
-  color: white;
-}
-.w.treeContainer:not(.zoom).ui-selecting {
-  background-color: #0053b8;
-}
-.w.treeContainer:not(.zoom).ui-selecting .subjectDiv {
-  color: white;
-}
 .w:not(.jtk-drag):not(.jtk-drag-active) > .ep {
   position: absolute;
   top: -10px;
   right: -10px;
   bottom: -10px;
   left: -10px;
-  z-index: -1;
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 12px;
   transition: box-shadow 0.15s ease-in, color 0.15s ease-in;
 }
 .w:not(.jtk-drag):not(.jtk-drag-active) > .ep:hover {
@@ -230,56 +211,10 @@
   border-color: rgba(206, 25, 42, 0.35);
 }
 
-.allowInterleaveNode:hover::before, .allowDialogueEndNode:hover::before, .endNode:hover::before, .openResponse:hover::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: block;
-}
-
-.allowInterleaveNode {
-  border-bottom-color: #9c31af !important;
-  border-left-color: #9c31af !important;
-}
-.allowInterleaveNode:hover::before {
-  background: linear-gradient(-135deg, transparent 50%, #BF5CD1 50%);
-}
-
-.allowDialogueEndNode {
-  border-bottom-color: #24778f !important;
-  border-left-color: #24778f !important;
-}
-.allowDialogueEndNode:hover::before {
-  background: linear-gradient(-135deg, transparent 50%, #3AC 50%);
-}
-
-.endNode {
-  border-bottom-color: black !important;
-  border-left-color: black !important;
-}
-.endNode:hover::before {
-  background: linear-gradient(-135deg, transparent 50%, #212121 50%);
-}
-
-.openResponse {
-  border-bottom-color: #237d58 !important;
-  border-left-color: #237d58 !important;
-}
-.openResponse:hover::before {
-  background: linear-gradient(-135deg, transparent 50%, #34B982 50%);
-}
-
 .color-label.jtk-hover,
 .jtk-source-hover,
 .jtk-target-hover {
   color: white;
-}
-
-#clone {
-  opacity: 0.5;
 }
 
 .color-label {

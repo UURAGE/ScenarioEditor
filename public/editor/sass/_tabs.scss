@@ -1,0 +1,56 @@
+@charset "UTF-8";
+
+/* © DialogueTrainer */
+
+@use 'base' as *;
+
+.tabs {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin: 0 $spacing-4;
+  list-style-type: none;
+  gap: $spacing-2;
+
+  li {
+    &.selected a {
+      background-color: darken($slate-200, 2%);
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      padding: $spacing-2 $spacing-3;
+      color: $col-text-primary-dark;
+      text-decoration: none;
+      cursor: pointer;
+      background-color: rgba($slate-200, .5);
+      border-radius: $rounded-lg $rounded-lg 0 0;
+      gap: $spacing-1;
+      transition: background-color .2s ease-in-out;
+    }
+
+    &:not(.selected) a:hover {
+      background-color: $slate-200;
+    }
+  }
+}
+
+// Used for tabs content below the "links"
+.tabsContent {
+  padding: $spacing-2;
+  background-color: darken($slate-200, 2%);
+  border-radius: $rounded-lg;
+
+  // Remove padding and background color from main, when .skeleton is present
+  &:has(.skeleton) {
+    padding: 0;
+    background-color: transparent;
+  }
+
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+}

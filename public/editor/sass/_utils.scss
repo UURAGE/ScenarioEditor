@@ -1,0 +1,50 @@
+@charset "UTF-8";
+
+/* © DialogueTrainer */
+
+@use 'base' as *;
+
+.alignMiddle {
+  vertical-align: middle;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+}
+
+.flexbox {
+  display: flex;
+  align-items: center;
+
+  &.flexWrap {
+    flex-wrap: wrap;
+  }
+}
+
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+// Justify content
+.justifyCenter {
+  justify-content: center;
+}
+
+.spaceBetween {
+  justify-content: space-between;
+}
+
+@for $i from 1 through 10 {
+  .gap-#{$i} {
+    gap: #{$i * 4}px;
+  }
+}
+
+.system {
+  font-style: italic;
+}

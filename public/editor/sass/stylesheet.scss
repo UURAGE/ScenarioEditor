@@ -2,17 +2,26 @@
 
 /* © DialogueTrainer */
 
+@use 'variables';
+@use 'colors';
+@use 'mixins';
+@use 'theme';
 @use 'fonts';
 @use 'layout';
+@use 'buttons';
+@use 'forms';
+@use 'dialog';
+@use 'tabs';
+@use 'accordion';
+@use 'progress';
+@use 'utils';
 @use 'uiElements';
 @use 'tree';
 @use 'toolbar';
 @use 'sidebar';
 @use 'tabDock';
 @use 'validation';
-@use 'draft';
 @use 'table';
-@use 'elementList';
 @use 'minimap';
 @use 'expression';
 @use 'colorPicker';

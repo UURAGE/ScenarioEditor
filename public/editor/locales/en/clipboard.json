@@ -3,6 +3,5 @@
     "copy": "copy",
     "cut": "cut",
     "paste": "paste",
-    "hint": "Please use <kbd>CTRL</kbd>+<kbd>{{key}}</kbd> or <kbd>CMD</kbd>+<kbd>{{key}}</kbd> to $t(clipboard:{{action}}) content.",
     "referrer_warning": "The parameter effects and conditions referring to the following missing parameters will be deleted: "
 }

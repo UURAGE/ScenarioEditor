@@ -24,10 +24,8 @@ let ElementList;
 
     $(function()
     {
-        // Event handlers.
-        $("#toggleElementList").on('click', function()
+        TabDock.register('elementList', function()
         {
-            TabDock.close();
             reset();
             listElements();
             TabDock.closeHandler = reset;
@@ -41,7 +39,7 @@ let ElementList;
         selectedEffectCategory = 'all';
         selectedTypes = null;
         $('#elementList').empty();
-        dehighlightNodes($('.highlight'));
+        dehighlightNodes($('.w.highlight'));
     }
 
     function listElements()
@@ -95,16 +93,16 @@ let ElementList;
             selectParameter(parameterId, effectCategorySelect.val());
         });
 
-        const typeButtons = $('<span>', { class: 'typeButtons buttonGroup' });
-        if (selectedTypes === null) typeButtons.addClass('initial');
+        const typeButtons = $('<div>', { class: 'typeButtons flexbox gap-1' });
         const allTypes = [Main.playerType, Main.computerType, Main.situationType];
         allTypes.forEach(function(buttonType)
         {
+            const icon = Main.typeIcons[buttonType];
             const button = $('<button>',
             {
                 class: buttonType,
-                text: i18next.t('common:' + buttonType)[0],
                 title: i18next.t('common:' + buttonType),
+                html: Utils.sIcon(icon),
                 click: function()
                 {
                     if (selectedTypes === null)
@@ -115,14 +113,12 @@ let ElementList;
                             selectedTypes[type] = false;
                         });
                         selectedTypes[buttonType] = true;
-                        typeButtons.removeClass('initial');
                         $(this).addClass('selectedType');
                     }
                     else if (Object.keys(selectedTypes)
                         .every(function(type) { return selectedTypes[type] === (type === buttonType); }))
                     {
                         selectedTypes = null;
-                        typeButtons.addClass('initial');
                         $(this).removeClass('selectedType');
                     }
                     else
@@ -144,10 +140,7 @@ let ElementList;
         });
 
         $('#elementList').empty().append(table).show();
-        $('#tabDock')
-            .find('.title').text(i18next.t('elementList:element_list_title')).end()
-            .find('.controls').empty().append(parameterSelect, effectCategorySelect, typeButtons).end()
-            .show();
+        $('#tabDock').find('.controls').empty().append(parameterSelect, effectCategorySelect, typeButtons);
         $("#main").focus();
     }
 
@@ -158,26 +151,25 @@ let ElementList;
 
     function createRow(tree, node)
     {
+        const icon = Main.typeIcons[node.type];
         const hiddenFor = {};
         const row = $('<tr>', { id: 'element-list-' + node.id, data: { nodeID: node.id, hiddenFor: hiddenFor } });
         row.append(
             $('<td>').append($('<button>',
                 {
-                    html: $(Utils.sIcon('icon-jump')),
-                    class: "jumpControl",
+                    html: $(Utils.sIcon('mdi-arrow-left-bottom')),
                     click: function()
                     {
                         Zoom.zoomIn(tree);
                         Main.selectNode(node.id);
-                        $('#' + node.id)[0].scrollIntoView(false);
+                        $('#' + node.id)[0].scrollIntoView({ block: "center", inline: "center" });
                     }
                 })),
-            $('<td>').append($('<span>',
+            $('<td>').append($('<div>',
                 {
                     class: 'label ' + node.type,
-                    text: i18next.t('common:' + node.type)[0],
                     title: i18next.t('common:' + node.type)
-                })),
+                }).append($(Utils.sIcon(icon)))),
             $('<td>',
                 {
                     text: node.text,

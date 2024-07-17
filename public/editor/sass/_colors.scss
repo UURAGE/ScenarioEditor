@@ -2,30 +2,33 @@
 
 /* © DialogueTrainer */
 
-$col-editor:                  #3892FF !default;
+$slate-50: #F8FAFC;
+$slate-100: #F1F5F9;
+$slate-200: #E2E8F0;
+$slate-300: #CBD5E1;
+$slate-400: #94A3B8;
+$slate-500: #64748B;
+$slate-600: #475569;
+$slate-700: #334155;
+$slate-800: #1E293B;
+$slate-900: #0F172A;
+$slate-950: #020617;
 
-$col-menu-bar:                rgba(white, .25) !default;
-$col-toolbar:                 rgba(desaturate($col-editor, 50%), .05) !default;
-$col-toolbar-icons:           darken(desaturate($col-editor, 75%), 15%) !default;
-$col-sidebar:                 rgba(desaturate($col-editor, 50%), .075) !default;
-$col-ribbon:                  $col-editor !default;
+$col-editor:                  #3892FF !default;
 
 $col-node-player:             #196CCE !default;
 $col-node-computer:           #CE192A !default;
 $col-node-situation:          #F37812 !default;
 $col-subject:                 $col-editor !default;
 
-$col-allow-interleave:        #BF5CD1 !default;
-$col-end-node:                #212121 !default;
-$col-open-response:           #34B982 !default;
-$col-allow-dialogue-end:      #3AC !default;
+$col-allow-interleave:        #E680E4 !default;
+$col-end-node:                $slate-600 !default;
+$col-allow-dialogue-end:      #09C4C4 !default;
 
 $col-positive:                #2A3 !default;
 $col-warning:                 #F37812 !default;
 $col-negative:                #CE192A !default;
 $col-info:                    #0080BF !default;
-
-$col-unsaved-changes:         rgba($col-negative, .75) !default;
 
 $col-dragbox:                 #FAFAFA !default;
 $col-dragbox-error:           desaturate(lighten($col-negative, 10%), 25%) !default;
@@ -34,10 +37,12 @@ $col-ui-title-info:           lighten($col-info, 25%) !default;
 $col-ui-title-warning:        lighten($col-warning, 25%) !default;
 $col-ui-title-error:          lighten($col-negative, 25%) !default;
 
-$col-icon-button-add:         $col-info !default;
-$col-icon-button-delete:      $col-negative !default;
-
 $col-expression-background:   #F2B63D !default;
 
 $col-text-dark:               #222 !default;
 $col-text-light:              white !default;
+
+$col-text-primary-dark:         $slate-700 !default;
+$col-text-secondary-dark:       $slate-500 !default;
+$col-text-primary-light:        $slate-50 !default;
+$col-text-secondary-light:      $slate-300 !default;

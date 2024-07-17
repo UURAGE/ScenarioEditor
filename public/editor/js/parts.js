@@ -11,21 +11,32 @@ let Parts;
     Parts =
     {
         addButton: addButton,
+        addButtonIcon: addButtonIcon,
         deleteButton: deleteButton
     };
 
     function deleteButton()
     {
-        return $('<button>', { type: "button", class: "iconButton delete", title: i18next.t('common:delete') })
-            .append(Utils.sIcon('icon-minus'));
+        // Keep 'delete' as a class name for JS code to work in other files for deleting elements
+        return $('<button>', { type: "button", class: "buttonIcon col-danger text delete", title: i18next.t('common:delete') })
+            .append(Utils.sIcon('mdi-minus-circle-outline'));
     }
 
     function addButton(text, className)
     {
-        let classNames = "iconButton add";
+        let classNames = "col-default roundedPill ";
+        classNames += text ? "medium " : "small ";
         if (className) classNames += " " + className;
         return $('<button>', { type: "button", class: classNames, title: i18next.t('common:add') })
-            .append(Utils.sIcon('icon-plus'))
+            .append(Utils.sIcon(text ? 'mdi-plus' : 'mdi-plus-circle-outline'))
             .append(text ? text : "");
+    }
+
+    function addButtonIcon(className)
+    {
+        let classNames = "col-default roundedPill buttonIcon";
+        if (className) classNames += " " + className;
+        return $('<button>', { type: "button", class: classNames, title: i18next.t('common:add') })
+            .append(Utils.sIcon('mdi-plus-circle-outline'));
     }
 })();

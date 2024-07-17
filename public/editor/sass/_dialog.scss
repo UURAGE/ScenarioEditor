@@ -1,0 +1,265 @@
+@charset "UTF-8";
+
+/* © DialogueTrainer */
+
+@use 'base' as *;
+
+dialog {
+  position: fixed; // Centers the dialog on screen.
+  inset: 0;
+  z-index: 100;
+  flex-direction: column;
+  min-width: 300px;
+  padding: 0;
+  overflow: hidden;
+  color: $col-text-primary-dark;
+  background-color: $slate-100;
+  border: none;
+  border-radius: $rounded-xl;
+
+  &[open] {
+    display: flex;
+  }
+
+  &::backdrop {
+    background-color: rgba(black, .4);
+  }
+
+  // Type of Dialog / theme
+  &.warning {
+    h1, h2, h3, h4, .title {
+      color: $col-warning;
+    }
+  }
+
+  &.error {
+    h1, h2, h3, h4, .title {
+      color: $col-negative;
+    }
+  }
+
+  &.highlight {
+    inset: unset;
+    top: $spacing-20;
+    left: $spacing-12;
+    color: $slate-400;
+    background-color: $slate-700;
+    box-shadow: $shadow-lg-mild;
+
+    h1, h2, h3, h4, .title, button.close, input[type=checkbox]::before {
+      color: white;
+    }
+
+    .content#analyseParameterValueRanges {
+      overflow: hidden;
+
+      ul#parameterValueRanges {
+        max-height: calc(100vh - 200px);
+        overflow-y: scroll;
+      }
+    }
+  }
+
+  &.actionsDark {
+    > .content {
+      padding-bottom: $spacing-4;
+    }
+
+    .actions {
+      background-color: $slate-300;
+      padding-block: $spacing-3;
+    }
+  }
+
+  // Layout
+  &.grid {
+    height: 100%;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: auto 1fr;
+    // stylelint-disable-next-line declaration-block-no-redundant-longhand-properties
+    grid-template-areas: 'index-sidebar header'
+      'index-sidebar content'
+      'index-sidebar actions';
+
+    &[open] {
+      display: grid;
+    }
+
+    > .header {
+      padding-block: $spacing-3;
+      grid-area: header;
+    }
+
+    > .content {
+      display: contents !important;
+
+      > .index {
+        height: 100%;
+        padding: $spacing-4;
+        background-color: white;
+        grid-area: index-sidebar;
+      }
+
+      > .content {
+        width: min-content;
+        width: 100%;
+        overflow: auto;
+        background-color: white;
+        grid-area: content;
+      }
+    }
+
+    > .actions {
+      grid-area: actions;
+    }
+  }
+
+  .header[data-dialog-draggable] {
+    cursor: move;
+  }
+
+  h1, h2, h3, h4, p, .title {
+    margin: 0;
+    color: $col-text-primary-dark;
+  }
+
+  h1, h2, h3 {
+    font-weight: 600;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    // font-size: 1.2em;
+    font-size: 19px;
+  }
+
+  h3 {
+    // font-size: .95em;
+    font-size: 15px;
+  }
+
+  h4 {
+    // font-size: .95em;
+    font-size: 13px;
+  }
+
+  > .header, > .content, > .actions {
+    display: flex;
+    padding-inline: $spacing-5;
+  }
+
+  > .header, > .content {
+    flex-direction: column;
+  }
+
+  > .header {
+    justify-content: space-between;
+    padding-block: $spacing-5;
+    gap: $spacing-1;
+
+    .title {
+      padding-right: $spacing-5;
+      font-size: 18px;
+
+      svg.icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 2px;
+        fill: currentColor;
+        vertical-align: middle;
+      }
+    }
+
+    p {
+      color: $slate-400;
+    }
+
+    button.close {
+      position: absolute;
+      top: $spacing-2;
+      right: $spacing-3;
+      padding: $spacing-1;
+      fill: $slate-900;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  > .content {
+    overflow: auto;
+    padding-block: 0;
+    scrollbar-width: thin;
+    gap: $spacing-4;
+  }
+
+  // if .actions is not present in dialog, add padding bottom to .content
+  &:not(:has(.actions)) > .content {
+    padding-block-end: $spacing-7;
+  }
+
+  > .actions {
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    align-items: center;
+    gap: $spacing-1;
+    padding-block: $spacing-5;
+  }
+
+  table thead th {
+    font-size: .8em;
+    font-weight: 600;
+    color: $slate-400;
+    text-align: left;
+  }
+
+  .emotionsWrapper div {
+    min-height: 24px;
+  }
+
+  #initialEmotionSuperContainer {
+    padding-block-start: $spacing-4;
+    border-top: 1px solid $slate-200;
+
+    fieldset {
+      width: 100%;
+    }
+
+    .flexbox {
+      justify-content: space-between;
+    }
+  }
+
+  .filterConnectionColor {
+    width: min-content;
+  }
+
+  p.buttonsWrapperLabel {
+    font-weight: 600;
+    border-top: 1px solid $slate-200;
+    padding-block-start: $spacing-4;
+  }
+
+  // Inside Parameters dialog, when you create a parameter of type Enumeration
+  .enumeration-values-container {
+    margin: 0;
+
+    li {
+      clear: both;
+    }
+
+    span,
+    input {
+      float: left;
+    }
+
+    button {
+      float: right;
+    }
+  }
+}

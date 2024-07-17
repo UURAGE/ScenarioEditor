@@ -1,0 +1,88 @@
+@charset "UTF-8";
+
+/* © DialogueTrainer */
+
+@use 'base' as *;
+
+:root {
+  --t-bg-default: #{$slate-100};
+  --t-bg-highlight: #{$slate-50};
+  --t-bg-dim: #{$slate-200};
+  --t-fg-default: #{$slate-700};
+  --t-fg-highlight: #{$slate-900};
+  --t-fg-dim: #{$slate-400};
+  --t-bg-contrast: var(--t-bg-highlight);
+  --t-grid-dot-color: #{$slate-400};
+
+  color-scheme: light;
+
+  #tabDock li:hover, #tabDock tr:hover {
+    background-color: rgba(black, .03);
+  }
+
+  #themeSettings {
+    background-color: var(--t-bg-dim);
+  }
+
+  #sidebar {
+    --t-bg-default: #{$slate-50};
+    --t-bg-highlight: white;
+    --t-bg-dim: #{$slate-200};
+    --t-fg-default: #{$slate-700};
+    --t-fg-highlight: #{$slate-900};
+    --t-fg-dim: #{$slate-400};
+    --t-bg-contrast: var(--t-bg-highlight);
+    // Unique
+    --theme-sidebar-section-border: var(--t-bg-dim);
+    --theme-bg-sidebar-button: #{$slate-300};
+    --theme-fg-sidebar-button: #{$col-text-primary-dark};
+  }
+}
+
+#sidebar, #toolbar, #tabDock {
+  &.dark {
+    color-scheme: dark;
+
+    #themeSettings {
+      background-color: var(--t-bg-highlight);
+    }
+  }
+}
+
+#tabDock.dark li:hover, #tabDock.dark tr:hover {
+  background-color: rgba(white, .05);
+}
+
+#sidebar {
+  &.dark {
+    --t-bg-default: #{$slate-700};
+    --t-bg-highlight: #{$slate-600};
+    --t-bg-dim: #{$slate-800};
+    --t-fg-default: #{$slate-100};
+    --t-fg-highlight: #{$slate-50};
+    --t-fg-dim: #{$slate-400};
+    --t-bg-contrast: var(--t-bg-dim);
+    // Unique
+    --theme-sidebar-section-border: var(--t-bg-highlight);
+    --theme-bg-sidebar-button: #{$slate-500};
+    --theme-fg-sidebar-button: #{$col-text-primary-light};
+  }
+}
+
+.dark {
+  --t-bg-default: #{$slate-800};
+  --t-bg-highlight: #{$slate-700};
+  --t-bg-dim: #{$slate-900};
+  --t-fg-default: #{$slate-100};
+  --t-fg-highlight: #{$slate-50};
+  --t-fg-dim: #{$slate-400};
+  --t-bg-contrast: var(--t-bg-dim);
+  --t-grid-dot-color: #{$slate-700};
+
+  color-scheme: dark;
+
+  .treeDiv .w:not(.ui-selected) {
+    color: var(--t-bg-dim);
+    background-color: var(--t-fg-default);
+  }
+}

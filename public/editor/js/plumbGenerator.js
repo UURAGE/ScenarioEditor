@@ -54,14 +54,11 @@ let PlumbGenerator;
         // On mouseover, show the color key entry
         instance.bind("mouseover", function(connection)
         {
-            if (ColorPicker.areColorsEnabled())
+            const colorValue = connection.getParameter("color");
+            if (colorValue in ColorPicker.key.byColor && ColorPicker.key.byColor[colorValue].entry)
             {
-                const colorValue = connection.getParameter("color");
-                if (colorValue in ColorPicker.key.byColor && ColorPicker.key.byColor[colorValue].entry)
-                {
-                    // This uses the innerHTML property, so escape the HTML!
-                    connection.addOverlay([ "Label", { id: "color-label", label: Utils.escapeHTML(ColorPicker.key.byColor[colorValue].entry), cssClass: "color-label" }]);
-                }
+                // This uses the innerHTML property, so escape the HTML!
+                connection.addOverlay([ "Label", { id: "color-label", label: Utils.escapeHTML(ColorPicker.key.byColor[colorValue].entry), cssClass: "color-label" }]);
             }
         });
 
@@ -161,7 +158,7 @@ let PlumbGenerator;
 
         const colorValue = connection.getParameter("color");
         let paintStyle = PlumbGenerator.defaultSelectedPaintStyle;
-        if (colorValue && ColorPicker.areColorsEnabled())
+        if (colorValue)
         {
             paintStyle = $.extend({}, paintStyle, { stroke: colorValue, outlineStroke: colorValue });
         }

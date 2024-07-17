@@ -89,8 +89,7 @@ let KeyControl;
         },
         V: function()
         {
-            const errors = Validator.validate();
-            Validator.show(errors);
+            Validator.show();
         }
     };
 
@@ -187,10 +186,6 @@ let KeyControl;
 
     // All events for keyboard controls with normal letters and ctrl pressed.
     const ctrlLetterControl = {
-        A: function()
-        {
-            selectAll();
-        },
         S: function()
         {
             Save.exportScenario();
@@ -329,13 +324,15 @@ let KeyControl;
                 const selectedElementID = Main.selectedElements[0];
                 Main.selectElement(null);
                 Main.selectedElements.push(selectedElementID);
-                $("#" + selectedElementID).addClass("ui-selected");
+                const selectable = selectedElementID in Main.nodes ? Main.getSelectableInstanceByNodeID(selectedElementID) : $("#main").get(0)._selectable;
+                selectable.select($("#" + selectedElementID).get(0));
                 plumbInstance = selectedElementID in Main.nodes ? Main.getPlumbInstanceByNodeID(selectedElementID) : jsPlumb;
                 plumbInstance.addToDragSelection(selectedElementID);
             }
 
             Main.selectedElements.push(elementID);
-            $("#" + elementID).addClass("ui-selected");
+            const selectable = elementID in Main.nodes ? Main.getSelectableInstanceByNodeID(elementID) : $("#main").get(0)._selectable;
+            selectable.select($("#" + elementID).get(0));
             plumbInstance = elementID in Main.nodes ? Main.getPlumbInstanceByNodeID(elementID) : jsPlumb;
             plumbInstance.addToDragSelection(elementID);
         }
@@ -346,6 +343,8 @@ let KeyControl;
     {
         if (elementID === null) return;
 
+        const selectable = elementID in Main.nodes ? Main.getSelectableInstanceByNodeID(elementID) : $("#main").get(0)._selectable;
+        selectable.deselect($("#" + elementID).get(0));
         const plumbInstance = elementID in Main.nodes ? Main.getPlumbInstanceByNodeID(elementID) : jsPlumb;
         plumbInstance.removeFromDragSelection(elementID);
 
@@ -355,7 +354,6 @@ let KeyControl;
         }
         else
         {
-            $("#" + elementID).removeClass("ui-selected");
             Main.selectedElements = Main.selectedElements.filter(function(value)
             {
                 return value != elementID;
@@ -480,19 +478,6 @@ let KeyControl;
         {
             Main.selectElement(selectID);
         }
-    }
-
-    function selectAll()
-    {
-        if (Zoom.isZoomed())
-        {
-            Main.selectElements(Zoom.getZoomed().nodes);
-        }
-        else
-        {
-            Main.selectElements(Object.keys(Main.trees));
-        }
-        MiniMap.update(true);
     }
 
     // Select the lowest parent from the current selected node.

@@ -116,6 +116,7 @@ let Evaluations;
             [
                 {
                     text: i18next.t('common:confirm'),
+                    class: 'col-highlight roundedPill medium',
                     click: function()
                     {
                         save(evaluationsContainer).then(saved =>
@@ -129,6 +130,7 @@ let Evaluations;
                 },
                 {
                     text: i18next.t('common:cancel'),
+                    class: 'col-dim roundedPill medium',
                     click: function()
                     {
                         $(this).dialog('close');

@@ -1,0 +1,188 @@
+@charset "UTF-8";
+
+/* © DialogueTrainer */
+
+@use 'base' as *;
+
+$inputSelectors: 'input:not([type=checkbox], [type=radio], [type=range]), textarea, select';
+
+label, .label {
+  user-select: none;
+
+  dialog & {
+    font-size: .85em;
+    color: $col-text-secondary-dark;
+  }
+}
+
+input, textarea, select {
+  color: $col-text-primary-dark;
+  border-radius: $rounded-base;
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+// Form input, textarea
+input:not([type=checkbox], [type=radio], [type=range]), textarea {
+  width: 100%;
+  padding: $spacing-1;
+  background-color: $slate-50;
+  border: 1px solid $slate-300;
+  box-sizing: border-box;
+
+  &:focus-visible {
+    border-color: $slate-400;
+  }
+}
+
+#{$inputSelectors} {
+  min-height: $input-height;
+}
+
+textarea {
+  resize: none;
+}
+
+input[type=checkbox] {
+  position: relative;
+  width: $spacing-5;
+  height: $spacing-5;
+  margin: 0;
+  margin-right: $spacing-1;
+  font-size: 2rem;
+  vertical-align: middle;
+  border: 2px solid $slate-400;
+  transition: border-color .3s ease-in-out;
+  appearance: none;
+
+  &:enabled {
+    cursor: pointer;
+
+    &:hover {
+      border-color: $slate-300;
+    }
+  }
+
+  &:disabled, &:disabled + label {
+    color: #CCC;
+    opacity: .8;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: none;
+    width: 22px;
+    height: 22px;
+    background-color: #4ADE80;
+    clip-path: polygon(28% 38%, 41% 53%, 75% 24%, 86% 38%, 40% 78%, 15% 50%);
+    transform: translate(-50%, -50%); // Center both horizontally and vertically
+  }
+
+  &:checked::before {
+    display: block;
+  }
+}
+
+input[type=radio] {
+  margin: 0;
+  margin-right: 2px;
+}
+
+select, input[type=date] {
+  padding: $spacing-1;
+  background-color: white;
+  border-width: 0;
+  box-shadow: $shadow-sm-soft;
+  transition: opacity .3s ease-in-out;
+
+  &:enabled:hover {
+    opacity: .7;
+  }
+}
+
+select {
+  position: relative;
+
+  &:focus {
+    // This fixes a rendering issue in Chrome where the options appear completely black.
+    z-index: 1;
+  }
+}
+
+.radioInput {
+  display: flex;
+  align-items: center;
+
+  label {
+    font-size: .9em;
+    color: $col-text-primary-dark;
+  }
+}
+
+hr.divider {
+  width: 100%;
+  height: 1px;
+  margin: 0;
+  background-color: $slate-200;
+  border: none;
+}
+
+dialog .dropzone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: $dropzone-size - 60px;
+  font-weight: 400;
+  color: $slate-300;
+  border: 1px dashed $slate-300;
+  border-radius: 5px;
+  transition-duration: .3s;
+  transition-property: color, border-color, background-color;
+  transition-timing-function: ease-in-out;
+
+  &:hover {
+    color: $slate-200;
+    background-color: rgba($slate-300, .1);
+    border-color: $slate-200;
+
+    .icon {
+      fill: $slate-200;
+    }
+  }
+
+  &.dark:hover {
+    color: $slate-400;
+    background-color: rgba($slate-400, .1);
+    border-color: $slate-400;
+
+    .icon {
+      fill: $slate-400;
+    }
+  }
+
+  input {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    opacity: 0;
+  }
+
+  &.active {
+    border: 2px solid white;
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+    fill: $slate-300;
+    transition: fill .3s ease-in-out; // Transition the fill color over 0.3 seconds
+  }
+}

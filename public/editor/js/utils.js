@@ -33,12 +33,13 @@ let Utils;
         sIcon: sIcon,
         dialogSizes:
         {
-            extraSmall: 320,
+            extraSmall: 360,
             small: 500,
             medium: 800,
             large: 1024,
             extraLarge: 1200
-        }
+        },
+        debounce: debounce
     };
 
     // Taken from stackoverflow
@@ -154,32 +155,18 @@ let Utils;
     // Attaches a tooltip to an element, only works when the element has a parent
     function attachMarkdownTooltip(elem)
     {
-        const tooltipIcon = $('<span>', { class: "markdown-tooltip" });
-        tooltipIcon.append($('<span>').append($(Utils.sIcon('icon-markdown'))));
+        let attachmentContainer = elem.next('.attachment-container');
+        if (attachmentContainer.length === 0)
+        {
+            attachmentContainer = $('<span>', { class: "attachment-container" });
+            attachmentContainer.insertAfter(elem);
+        }
+        const tooltipIcon = $('<span>', { class: "markdown-tooltip" }).append($(Utils.sIcon('mdi-information-slab-circle-outline')));
         tooltipIcon.tooltip(
         {
-            items: ":hover",
             content: i18next.t('utils:markdown_tooltip'),
-            classes:
-            {
-                "ui-tooltip": "markdownUITooltip"
-            },
-            // Taken from: http://stackoverflow.com/a/15014759
-            create: function() { $(this).data("ui-tooltip").liveRegion.remove(); },
-            close: function(event, ui)
-            {
-                ui.tooltip.hover(
-                    function()
-                    {
-                        $(this).stop(true).fadeIn();
-                    },
-                    function()
-                    {
-                        $(this).fadeOut(function() { $(this).remove(); });
-                    }
-                );
-            }
-
+            theme: "markdown",
+            interactive: true
         });
         tooltipIcon.insertAfter(elem);
     }
@@ -189,38 +176,33 @@ let Utils;
         elem.next('.markdown-tooltip').remove();
     }
 
-    function makeSortable(container)
+    function makeSortable(container, connectWith, items)
     {
-        container.sortable({
-            handle: ".handle",
-            axis: "y",
-            forceHelperSize: true,
-            containment: container,
-            start: function(e, ui)
-            {
-                // Taken from: https://stackoverflow.com/a/36554073
-                // Makes the containment area larger so that the element can be sorted into the top and bottom
-                const sort = $(this).sortable('instance');
-                ui.placeholder.height(ui.helper.height());
-                sort.containment[3] += ui.helper.height() * 1.5 - sort.offset.click.top;
-                sort.containment[1] -= sort.offset.click.top;
-            },
-            helper: function(e, helper)
-            {
-                $(helper).children().each(function()
-                {
-                    $(this).width($(this).width());
-                });
-                return helper;
-            },
-            beforeStop: function(e, ui)
-            {
-                $(ui.helper).children().each(function()
-                {
-                    $(this).width("");
-                });
-            }
-        });
+        const options = {
+            handle: '.handle',
+            direction: 'vertical',
+            animation: 150,
+        };
+
+        if (connectWith) options.group = connectWith;
+        if (items) options.draggable = items;
+
+        Sortable.create(container.get(0), options);
+    }
+
+    function getDialogIcon(type)
+    {
+        let icon = '';
+        switch (type)
+        {
+            case 'warning':
+                icon = 'mdi-alert';
+                break;
+            case 'error':
+                icon = 'mdi-alert-circle';
+                break;
+        }
+        return icon;
     }
 
     function alertDialog(content, type)
@@ -228,25 +210,18 @@ let Utils;
         return new Promise(function(resolve)
         {
             const container = $('<div>');
-            container.append(content).dialog(
+            container.append($('<p>', { html: content })).dialog(
             {
+                icon: getDialogIcon(type),
                 title: i18next.t('common:' + type),
-                classes:
-                {
-                    "ui-dialog-titlebar": type
-                },
-                height: 'auto',
-                maxHeight: 768,
-                width: 400,
+                classes: type,
+                width: Utils.fitDialogWidthToWindow(Utils.dialogSizes.extraSmall),
                 modal: true,
-                buttons:
-                [
+                buttons: [
                     {
                         text: i18next.t('common:close'),
-                        click: function()
-                        {
-                            $(this).dialog('close');
-                        }
+                        class: 'col-dim roundedPill medium',
+                        click: function() { $(this).dialog('close'); }
                     }
                 ],
                 close: function()
@@ -263,21 +238,18 @@ let Utils;
         return new Promise(function(resolve)
         {
             const container = $('<div>');
-            container.append(content).dialog(
+            container.append($('<p>', { html: content })).dialog(
             {
+                icon: getDialogIcon(type),
                 title: i18next.t('common:' + type),
-                classes:
-                {
-                    "ui-dialog-titlebar": type
-                },
-                height: 'auto',
-                maxHeight: 768,
-                width: 400,
+                classes: type,
+                width: Utils.fitDialogWidthToWindow(Utils.dialogSizes.extraSmall),
                 modal: true,
                 buttons:
                 [
                     {
                         text: i18next.t('common:confirm'),
+                        class: 'col-highlight roundedPill medium',
                         click: function()
                         {
                             resolve(true);
@@ -286,10 +258,8 @@ let Utils;
                     },
                     {
                         text: i18next.t('common:cancel'),
-                        click: function()
-                        {
-                            $(this).dialog('close');
-                        }
+                        class: 'col-dim roundedPill medium',
+                        click: function() { $(this).dialog('close'); }
                     }
                 ],
                 close: function()
@@ -380,5 +350,19 @@ let Utils;
     {
         if (typeof extraClass === 'undefined') { extraClass = ''; }
         return '<svg xmlns="http://www.w3.org/2000/svg" class="icon ' + extraClass + '"><use xlink:href="#' + icon + '"></use></svg>';
+    }
+
+    function debounce(f, ms)
+    {
+        let timeout;
+        return (...args) =>
+        {
+            clearTimeout(timeout);
+            timeout = setTimeout(() =>
+            {
+                timeout = null;
+                f(...args);
+            }, ms);
+        };
     }
 })();

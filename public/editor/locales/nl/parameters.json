@@ -2,6 +2,7 @@
     "title": "Parameters",
     "time": "Tijd",
     "add_time_title": "Parameter tijd +1 toevoegen aan elke knoop",
+    "empty_state": "Er zijn momenteel geen parameters ingesteld, klik op de knop hieronder om een nieuwe parameter toe te voegen.",
     "missing_name_warning": "Sommige parameters zullen niet opgeslagen worden, omdat een parameter een naam nodig heeft. Weet je zeker dat je wilt doorgaan?",
     "removal_warning": "Je hebt de volgende $t(parameters:parameter, { 'count': {{count}} }) verwijderd. Weet je zeker dat je door wil gaan?",
     "parameter_one": "parameter",

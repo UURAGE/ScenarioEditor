@@ -39,6 +39,10 @@ let Parameters;
     {
         const parametersDialog = $('<div>', { id: "parameters" });
 
+        const parametersEmptyState = $('<p>', { style: 'opacity: .5', text: i18next.t('parameters:empty_state') });
+        parametersDialog.append(parametersEmptyState);
+
+        const parametersTable = $('<table>');
         const parametersTableHead = $('<thead>')
             .append($('<th>')) // For the sortable handle
             .append($('<th>', { text: i18next.t('common:name') }))
@@ -46,18 +50,22 @@ let Parameters;
             .append($('<th>', { text: i18next.t('common:evaluated') }))
             .append($('<th>', { text: i18next.t('common:initial_value') }))
             .append($('<th>', { text: i18next.t('common:description') }));
-        const parametersContainer = $('<tbody>').appendTo($('<table>').append(parametersTableHead).appendTo(parametersDialog));
 
-        const addParameterButton = Parts.addButton();
+        parametersTable.append(parametersTableHead).appendTo(parametersDialog);
+        const parametersContainer = $('<tbody>').appendTo(parametersTable);
+
+        const actionButtons = $('<div>', { class: "flexbox gap-1" });
+        const addParameterButton = Parts.addButton('', 'buttonIcon');
         addParameterButton.on('click', function()
         {
             const parameterContainer = addDefaultDefinition(parametersContainer);
             Utils.focusFirstTabindexedDescendant(parameterContainer);
-            parametersTableHead.show();
+            parametersTable.show();
+            parametersEmptyState.hide();
         });
-        parametersDialog.append(addParameterButton);
+        actionButtons.append(addParameterButton);
 
-        const addTimeParameterButton = $('<button>', { type: 'button', class: 'iconButton time', title: i18next.t('parameters:add_time_title') }).append(Utils.sIcon('icon-time'));
+        const addTimeParameterButton = $('<button>', { type: 'button', class: 'buttonIcon col-time roundedPill small', title: i18next.t('parameters:add_time_title') }).append(Utils.sIcon('mdi-timer-outline'));
         addTimeParameterButton.on('click', function()
         {
             const isTime = parametersContainer.find(".isT").length;
@@ -72,69 +80,56 @@ let Parameters;
 
                 Utils.focusFirstTabindexedDescendant(parametersContainer.children().last());
                 addTimeParameterButton.hide();
-                parametersTableHead.show();
+                parametersTable.show();
             }
         });
-        parametersDialog.append(addTimeParameterButton);
-
-        parametersContainer.on("focus", ".parameter-description", function()
-        {
-            $(this).animate({ height: "10em" }, 500);
-        });
-        parametersContainer.on("focusout", ".parameter-description", function()
-        {
-            $(this).animate({ height: "1.25em" }, 500);
-        });
+        actionButtons.append(addTimeParameterButton);
+        parametersDialog.append(actionButtons);
+        // Animate textareas to expand on click
+        parametersContainer.on("focus", ".parameter-description", function() { $(this).animate({ height: "10em" }, 500); });
+        parametersContainer.on("focusout", ".parameter-description", function() { $(this).animate({ height: "2.2em" }, 500); });
+        // Delete table row
         parametersContainer.on('click', '.delete', function()
         {
             const tr = $(this).closest('tr');
             tr.addClass("removedParameter");
-            if (tr[0].id === "t" && tr.not(".removedParameter"))
+            // For time parameter: make visible when Time-parameter has been removed
+            if (tr[0].id === "t" && tr.not(".removedParameter")) addTimeParameterButton.show();
+            if (parametersContainer.children().not(".removedParameter").length === 0)
             {
-                // For time parameter: make visible when Time-parameter has been removed
-                addTimeParameterButton.show();
+                parametersTable.hide();
+                parametersEmptyState.show();
             }
-            if (parametersContainer.children().not(".removedParameter").length === 0) parametersTableHead.hide();
         });
 
-        if (Parameters.timeId !== null)
-        {
-            addTimeParameterButton.hide();
-        }
-        else
-        {
-            addTimeParameterButton.show();
-        }
+        if (Parameters.timeId !== null) addTimeParameterButton.hide();
+        else addTimeParameterButton.show();
 
         parametersDialog.dialog(
         {
             title: i18next.t('parameters:title'),
-            height: Utils.fitDialogHeightToWindow(Utils.dialogSizes.medium),
-            width: Utils.fitDialogWidthToWindow(Utils.dialogSizes.large),
+            width: Utils.fitDialogWidthToWindow(Utils.dialogSizes.medium),
             modal: true,
-            buttons:
-            [
+            grid: false,
+            buttons: [{
+                text: i18next.t('common:confirm'),
+                class: 'col-primary roundedPill medium',
+                click: function()
                 {
-                    text: i18next.t('common:confirm'),
-                    click: function()
+                    save(parametersContainer).then(saved =>
                     {
-                        save(parametersContainer).then(saved =>
+                        if (saved)
                         {
-                            if (saved)
-                            {
-                                $(this).dialog('close');
-                            }
-                        });
-                    }
-                },
-                {
-                    text: i18next.t('common:cancel'),
-                    click: function()
-                    {
-                        $(this).dialog('close');
-                    }
+                            $(this).dialog('close');
+                        }
+                    });
                 }
-            ],
+            },
+            {
+                text: i18next.t('common:cancel'),
+                class: 'col-dim roundedPill medium',
+                click: function() { $(this).dialog('close'); }
+            }],
             close: function()
             {
                 $("#main").focus();
@@ -142,19 +137,15 @@ let Parameters;
             }
         });
 
-        parametersTableHead.toggle(Parameters.container.sequence.length > 0);
+        // Handle empty state and/or table head visibility
+        parametersEmptyState.toggle(!Parameters.container.sequence.length > 0);
+        parametersTable.toggle(Parameters.container.sequence.length > 0);
 
         Parameters.container.sequence.forEach(function(parameter)
         {
             let parameterContainer;
-            if (parameter.id === "t")
-            {
-                parameterContainer = addTimeParameterDefinition(parametersContainer);
-            }
-            else
-            {
-                parameterContainer = addDefaultDefinition(parametersContainer);
-            }
+            if (parameter.id === "t") parameterContainer = addTimeParameterDefinition(parametersContainer);
+            else parameterContainer = addDefaultDefinition(parametersContainer);
 
             parameterContainer.removeClass("newParameter").addClass("existingParameter");
 
@@ -178,15 +169,18 @@ let Parameters;
 
     function addDefaultDefinition(parametersContainer)
     {
-        const typeSelectContainer = $('<td>');
+        const parameterContainer = $('<tr>', { class: "newParameter" });
 
-        const nameInput = $('<input>', { type: 'text', class: "name", style: "width: 197px;" });
+        const typeSelectContainerInner = $('<div>', { class: "flexbox gap-1" });
+        const typeSelectContainer = $('<td>').append(typeSelectContainerInner);
+
+        const nameInput = $('<input>', { type: 'text', class: "name" });
 
         const initialValueContainer = $('<span>', { class: "parameter-initial-value-container" });
 
-        const description = $('<textarea>', { class: "parameter-description", style: "height:1.25em;" });
+        const description = $('<textarea>', { class: "parameter-description alignMiddle", style: "height:2.2em;" });
 
-        const evaluated = $('<input>', { type: 'checkbox', class: "parameter-evaluated" });
+        const evaluated = $('<input>', { type: 'checkbox', class: "parameter-evaluated alignMiddle" });
         evaluated.on('change', function()
         {
             if ($(this).prop('checked'))
@@ -205,7 +199,7 @@ let Parameters;
             }
         });
 
-        const parameterContainer = $('<tr>', { class: "newParameter" })
+        parameterContainer
             .append($('<td>', { class: "handle", text: "↕" }))
             .append($('<td>').append(nameInput))
             .append(typeSelectContainer)
@@ -225,11 +219,11 @@ let Parameters;
             const type = Types.primitives[newTypeName].loadTypeFromDOM(parameterContainer, initialValueContainer);
             type.appendControlTo(initialValueContainer);
             if (previousType) type.setInDOM(initialValueContainer, type.castFrom(previousType, initialValue));
-            Types.attachDefinitionTooltip(typeSelectContainer, type);
+            Types.attachDefinitionTooltip(typeSelectContainerInner, type);
             previousType = type;
         };
 
-        Types.appendControlsTo(typeSelectContainer, '.name', 'parameter-type-select', handleParameterTypeChange);
+        Types.appendControlsTo(typeSelectContainerInner, '.name', 'parameter-type-select', handleParameterTypeChange);
 
         parameterContainer.removeClass("changedTypeParameter");
 
@@ -351,15 +345,8 @@ let Parameters;
                     Evaluations.handleParameterTypeChange(oldParameter, newParameter);
                 }
 
-                if ((oldParameter.evaluated || false) !== (newParameter.evaluated || false))
-                {
-                    Evaluations.handleParameterEvaluatedChange(newParameter);
-                }
-
-                if (newParameter.evaluated)
-                {
-                    Evaluations.handleEvaluatedParameterChange(newParameter);
-                }
+                if ((oldParameter.evaluated || false) !== (newParameter.evaluated || false)) Evaluations.handleParameterEvaluatedChange(newParameter);
+                if (newParameter.evaluated) Evaluations.handleEvaluatedParameterChange(newParameter);
 
                 $.extend(oldParameter, newParameter);
             });
@@ -400,27 +387,20 @@ let Parameters;
                         const node = Main.nodes[nodeId];
                         if (node.type === Main.playerType)
                         {
-                            if (node.parameterEffects.userDefined === undefined || node.parameterEffects.userDefined === null)
-                            {
-                                node.parameterEffects.userDefined = [];
-                            }
+                            if (node.parameterEffects.userDefined === undefined || node.parameterEffects.userDefined === null) node.parameterEffects.userDefined = [];
                             node.parameterEffects.userDefined.push(timeEffect);
                         }
                     }
                 }
 
-                if (newParameter.evaluated)
-                {
-                    Evaluations.handleParameterEvaluatedChange(newParameter);
-                }
+                if (newParameter.evaluated) Evaluations.handleParameterEvaluatedChange(newParameter);
             });
 
             // Save parameters in UI order.
-            Parameters.container.sequence =
-                parametersContainer.find(".existingParameter").map(function()
-                {
-                    return Parameters.container.byId[$(this).prop('id')];
-                }).get();
+            Parameters.container.sequence = parametersContainer.find(".existingParameter").map(function()
+            {
+                return Parameters.container.byId[$(this).prop('id')];
+            }).get();
 
 
             ElementList.handleParametersChange();
@@ -433,19 +413,10 @@ let Parameters;
             let noNameCounter = 0;
             parametersContainer.find(".newParameter").not(".removedParameter").each(function()
             {
-                if (!$(this).find(".name").val())
-                {
-                    noNameCounter++;
-                }
+                if (!$(this).find(".name").val()) noNameCounter++;
             });
-            if (noNameCounter > 0)
-            {
-                return Utils.confirmDialog(i18next.t('parameters:missing_name_warning'), 'warning');
-            }
-            else
-            {
-                return Promise.resolve(true);
-            }
+            if (noNameCounter > 0) return Utils.confirmDialog(i18next.t('parameters:missing_name_warning'), 'warning');
+            else return Promise.resolve(true);
         };
 
         const confirmRemovedParametersRemoval = function()
@@ -466,10 +437,7 @@ let Parameters;
                 content.append(removedParameterList);
                 return Utils.confirmDialog(content, 'warning');
             }
-            else
-            {
-                return Promise.resolve(true);
-            }
+            else return Promise.resolve(true);
         };
 
         return confirmParametersWithoutNameRemoval().then(function(confirmed)
@@ -478,17 +446,11 @@ let Parameters;
             {
                 return confirmRemovedParametersRemoval().then(function(confirmed)
                 {
-                    if (confirmed)
-                    {
-                        consideredSave();
-                    }
+                    if (confirmed) consideredSave();
                     return Promise.resolve(confirmed);
                 });
             }
-            else
-            {
-                return Promise.resolve(false);
-            }
+            else return Promise.resolve(false);
         });
     }
 
@@ -502,10 +464,7 @@ let Parameters;
     {
         Parameters.container.sequence.forEach(function(parameter)
         {
-            if (!type || parameter.type.equals(type))
-            {
-                container.append($('<option>', { value: parameter.id, text: parameter.name }));
-            }
+            if (!type || parameter.type.equals(type)) container.append($('<option>', { value: parameter.id, text: parameter.name }));
         });
     }
 

@@ -3,6 +3,5 @@
     "copy": "kopiëren",
     "cut": "knippen",
     "paste": "plakken",
-    "hint": "Gebruik <kbd>CTRL</kbd>+<kbd>{{key}}</kbd> of <kbd>CMD</kbd>+<kbd>{{key}}</kbd> om content te $t(clipboard:{{action}}).",
     "referrer_warning": "De effecten en condities die verwijzen naar de volgende parameters die niet bestaan zullen worden verwijderd:"
 }

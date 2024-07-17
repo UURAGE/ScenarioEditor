@@ -862,11 +862,11 @@ let Types;
                     typeDefinitionContainer.empty();
                     definitionButton.remove();
 
-                    definitionButton = $('<button>', { class: "define-type" });
-                    definitionButton.html(Utils.sIcon(newTypeName === Types.primitives.enumeration.name ? "icon-list" : "icon-cog"));
+                    definitionButton = $('<button>', { class: "define-type buttonIcon text" });
+                    definitionButton.html(Utils.sIcon(newTypeName === Types.primitives.enumeration.name ? "mdi-format-list-bulleted-square" : "mdi-cog"));
                     definitionButton.on('click', function()
                     {
-                        const title = containerEl.parent().find(titleClassSelector).val();
+                        const title = containerEl.parent().parent().find(titleClassSelector).val();
                         dialog(title, typeDefinitionContainer, typeSelect, previousTypeName, newTypeName, handleChange, false);
                     });
                     containerEl.append(definitionButton);
@@ -878,7 +878,7 @@ let Types;
                 if (userTypeChange && newTypeName === Types.primitives.enumeration.name)
                 {
                     typeDefinitionContainer.show();
-                    const title = containerEl.parent().find(titleClassSelector).val();
+                    const title = containerEl.parent().parent().find(titleClassSelector).val();
                     dialog(title, typeDefinitionContainer, typeSelect, previousTypeName, newTypeName, handleChange, true);
                 }
                 else if (newTypeName !== Types.primitives.enumeration.name || type.options.sequence.length > 0)
@@ -938,9 +938,8 @@ let Types;
         {
             defineTypeButton.tooltip(
             {
-                items: 'button:hover',
                 content: tooltipContent,
-                create: function() { $(this).data("ui-tooltip").liveRegion.remove(); }
+                interactive: true
             });
         }
     }
@@ -958,13 +957,11 @@ let Types;
         containerEl.dialog(
         {
             title: title || i18next.t('types:primitives.' + newTypeName + '.definition.title'),
-            height: 'auto',
-            width: 'auto',
             modal: true,
-            buttons:
-            [
+            buttons: [
                 {
                     text: i18next.t('common:confirm'),
+                    class: 'col-primary roundedPill medium',
                     click: function()
                     {
                         if (newTypeName === Types.primitives.enumeration.name)
@@ -980,6 +977,7 @@ let Types;
                 },
                 {
                     text: i18next.t('common:cancel'),
+                    class: 'col-dim roundedPill medium',
                     click: function()
                     {
                         confirmed = false;

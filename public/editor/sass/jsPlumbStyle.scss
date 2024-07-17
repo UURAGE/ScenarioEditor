@@ -4,18 +4,17 @@
 
 @use 'base' as *;
 
+$node-z-index: 4;
+
 .w {
   position: absolute;
-  z-index: 4;
+  z-index: $node-z-index;
   padding: .5em 1em;
   font-size: 11px;
+  color: var(--t-fg-default);
   cursor: move;
-  background-color: white;
-  border: 1px solid black;
+  background-color: var(--t-bg-highlight);
   border-radius: .5em;
-  opacity: .8;
-  filter: alpha(opacity=80);
-  box-shadow: 0 2px 2px rgba(black, .05), 0 1px 10px rgba(black, .05);
   transition: background-color .15s ease-out, color .15s ease-out, border-bottom-width .1s linear, border-top-width .1s linear;
 
   ul {
@@ -107,35 +106,10 @@
   &.jtk-drag-selected {
     @include lighterTypeColors(15%);
 
+    z-index: $node-z-index + 1;
+
     &.ui-selecting {
       @include lighterTypeColors(5%);
-    }
-  }
-
-  &.treeContainer:not(.zoom) {
-    &:hover {
-      background-color: $col-subject;
-
-      .subjectDiv {
-        color: color-yiq($col-subject);
-      }
-    }
-
-    &.selected,
-    &.ui-selected {
-      background-color: darken($col-subject, 25%);
-
-      .subjectDiv {
-        color: color-yiq(darken($col-subject, 25%));
-      }
-    }
-
-    &.ui-selecting {
-      background-color: darken($col-subject, 25%);
-
-      .subjectDiv {
-        color: color-yiq(darken($col-subject, 25%));
-      }
     }
   }
 
@@ -146,9 +120,8 @@
       right: -10px;
       bottom: -10px;
       left: -10px;
-      z-index: -1;
       cursor: pointer;
-      border-radius: 10px;
+      border-radius: 12px;
       transition: box-shadow .15s ease-in, color .15s ease-in;
 
       &:hover {
@@ -251,37 +224,10 @@
   }
 }
 
-$nodeOverlays: (
-  '.allowInterleaveNode':		$col-allow-interleave,
-  '.allowDialogueEndNode':	$col-allow-dialogue-end,
-  '.endNode':					$col-end-node,
-  '.openResponse':			$col-open-response
-);
-
-#{map-keys($nodeOverlays)} {
-  &:hover::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: block;
-  }
-}
-
-@each $nodeType, $nodeColor in $nodeOverlays {
-  @include nodePropertyGradient($nodeType, $nodeColor);
-}
-
 .color-label.jtk-hover,
 .jtk-source-hover,
 .jtk-target-hover {
   color: white;
-}
-
-#clone {
-  opacity: .5;
 }
 
 .color-label {

@@ -17,6 +17,15 @@ let Zoom;
         isZoomed: isZoomed
     };
 
+    $(function()
+    {
+        const backButton = $('#canvas .backButton');
+        backButton.on("click", function()
+        {
+            Zoom.zoomOut();
+        });
+    });
+
     // Tree (the object, not the id) contains a div and original positions before zoom
     function toggleZoom(tree)
     {
@@ -38,6 +47,9 @@ let Zoom;
             Object.values(Main.trees).forEach(zoomOut);
 
             tree.dragDiv.addClass("zoom");
+
+            tree.dragDiv.find('.subjectDiv').hide();
+
             // Ensure it looks right
             // Hide overflowing content
             parent.css({ "overflow": "hidden" });
@@ -45,17 +57,13 @@ let Zoom;
             Utils.cssPosition(tree.dragDiv, { "top": parent.scrollTop(), "left": parent.scrollLeft() });
             // Make it undraggable
             jsPlumb.setDraggable(tree.dragDiv, false);
-            // Remove default disable-draggable-style
-            tree.dragDiv.removeClass("ui-state-disabled");
 
             // Return to the last scroll position
             tree.div.scrollLeft(tree.leftScroll);
             tree.div.scrollTop(tree.topScroll);
 
-            tree.div.selectable('enable');
-
-            const zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
-            zoomTreeButton.html(Utils.sIcon('icon-minus'));
+            $("#main").get(0)._selectable.disable();
+            tree.div.get(0)._selectable.enable();
 
             jsPlumb.setSuspendDrawing(false);
 
@@ -72,19 +80,15 @@ let Zoom;
 
                     tree.zoomedInBefore = true;
                 }
-
-                if (ColorPicker.areColorsEnabled())
-                {
-                    ColorPicker.applyColors();
-                }
-                else
-                {
-                    ColorPicker.removeColors();
-                }
+                ColorPicker.applyColors();
             });
+
+            $('#canvas').removeClass('wSpacing');
+            $('#canvas .backButton').css('display', '');
         }
 
-        Main.updateButtons();
+        MiniMap.update(true);
+        Main.updateToolbar();
     }
 
     function zoomOut(tree)
@@ -100,7 +104,6 @@ let Zoom;
             const parent = tree.dragDiv.parent();
 
             TabDock.handleZoomOut();
-            MiniMap.deactivate();
 
             // Scroll position needs to 0 when the dom manipulation happens to keep jsPlumb from messing up
             tree.leftScroll = tree.div.scrollLeft();
@@ -115,15 +118,20 @@ let Zoom;
             tree.dragDiv.removeClass("zoom");
             Utils.cssPosition(tree.dragDiv, { "top": tree.topPos * Main.gridY, "left": tree.leftPos * Main.gridX });
             jsPlumb.setDraggable(tree.dragDiv, true);
-            tree.div.selectable('disable');
+            tree.div.get(0)._selectable.disable();
+            $("#main").get(0)._selectable.enable();
 
-            const zoomTreeButton = tree.dragDiv.find('.zoomTreeButton');
-            zoomTreeButton.html(Utils.sIcon('icon-plus'));
+            tree.dragDiv.find('.subjectDiv').show();
 
             parent.css({ "overflow": "auto" });
             jsPlumb.setSuspendDrawing(true);
 
-            Main.updateButtons();
+            $('#canvas').addClass('wSpacing');
+            $('#canvas .backButton').css('display', 'none');
+
+            MiniMap.update(true);
+            Main.updateToolbar();
+            Main.updateTreePreview(tree);
         }
     }
 

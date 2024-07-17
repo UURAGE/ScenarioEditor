@@ -4,13 +4,18 @@
 
 @use 'base' as *;
 
-html,
-body {
+html, body {
   min-height: 100%;
   padding: 0;
   margin: 0;
   font-family: 'Open Sans', Frutiger, Helvetica, Arial, sans-serif;
-  color: $col-text-dark;
+  color: $col-text-primary-dark;
+}
+
+body {
+  #canvas, .treeDiv {
+    background-color: var(--t-bg-dim);
+  }
 }
 
 #wrap {
@@ -22,25 +27,99 @@ body {
 }
 
 #content {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 100%;
-  align-items: stretch;
+  display: grid;
+  width: 100%;
   min-width: 0;
+  overflow: hidden;
+  grid-template-columns: 1fr min-content;
+  grid-template-rows: min-content 1fr auto;
+  // stylelint-disable-next-line declaration-block-no-redundant-longhand-properties
+  grid-template-areas: 'toolbar toolbar'
+    'canvas sidebar'
+    'tab-dock tab-dock';
+}
 
-  > div:nth-child(2) {
-    flex: 1 1;
+#canvas {
+  position: relative;
+  grid-area: canvas;
+
+  &.wSpacing {
+    padding-top: $spacing-8;
+    padding-left: $spacing-8;
+  }
+
+  .bottomButtons, .backButton, #miniwrap {
+    position: absolute;
+    right: $spacing-5;
+    z-index: 100;
+  }
+
+  .bottomButtons {
+    bottom: $spacing-5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: $spacing-2;
+
+    button {
+      font-weight: 600;
+      color: var(--t-fg-highlight);
+      background-color: var(--t-bg-default);
+      border-radius: $rounded-lg;
+      opacity: .8;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .backButton {
+    top: $spacing-3;
+    right: unset;
+    left: -$spacing-2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: $spacing-2;
+    color: var(--t-fg-highlight);
+    cursor: pointer;
+    background-color: var(--t-bg-default);
+    border-radius: 0 $rounded-pill $rounded-pill 0;
+    transition: background-color .3s ease-in-out, shadow .3s ease-in-out;
+
+    &:hover {
+      box-shadow: $shadow-md-soft;
+    }
+
+    svg {
+      width: 28px;
+      height: 28px;
+    }
   }
 }
 
 #main {
   position: relative;
+  height: 100%;
   overflow: auto;
-  border: 1px solid rgba(black, .08);
   outline: none;
   box-sizing: border-box;
 }
 
-#sidebar {
-  flex: 1 0 auto;
+.alert {
+  padding: $spacing-1;
+  font-size: .75em;
+  border: 1px solid black;
+  border-radius: $rounded-base;
+
+  a {
+    color: inherit;
+  }
+
+  &.warning {
+    color: darken($col-warning, 20%);
+    background-color: rgba($col-warning, .5);
+    border-color: $col-warning;
+  }
 }

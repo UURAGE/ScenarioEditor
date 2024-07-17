@@ -2,150 +2,193 @@
 
 /* © DialogueTrainer */
 
+@use 'base' as *;
+
+@mixin elementListLabel($kind, $color) {
+  &.#{$kind} {
+    background-color: rgba($color, .2);
+    border-color: $color;
+
+    svg {
+      width: 18px;
+      height: 18px;
+      fill: $color;
+    }
+
+    &.selectedType {
+      background-color: $color;
+
+      &:hover { opacity: 1; }
+
+      svg { fill: white; }
+    }
+  }
+}
+
+// used for buttons in the ul list and the header controls
+#tabDock .typeButtons, #tabDock #elementList {
+  button, .label {
+    @include elementListLabel('computer', $col-node-computer);
+    @include elementListLabel('player', $col-node-player);
+    @include elementListLabel('situation', $col-node-situation);
+
+    padding: $spacing-1;
+    border-radius: $rounded-pill;
+  }
+}
+
 #tabDock {
   position: relative;
+  z-index: 100;
   display: flex;
   flex-direction: column;
-  min-height: 5px; // Grip
-  margin-top: 1px;
-  background: linear-gradient(to bottom, #FAFAFA 0, #FFF 100%);
-  border: 1px solid rgba(black, .08);
+  min-height: $tab-dock-height;
+  color: var(--t-fg-highlight);
+  background-color: var(--t-bg-default);
+  grid-area: tab-dock;
 
-  > *:not(.ui-widget-header) {
-    position: relative;
-    flex: 1;
-    padding: 0 20px;
-    overflow: auto;
-  }
+  &.closed {
+    height: auto !important; // Ignore user set height
 
-  > div {
-    overflow: auto;
-    background-color: inherit;
-  }
-
-  .ui-tabs-nav {
-    display: flex;
-    align-items: center;
-    padding: 0;
-    margin: 1px;
-    user-select: none;
-
-    > * {
-      flex: 0 0 auto;
+    .header .tabs > button {
+      opacity: 1;
     }
 
-    .title {
-      flex: 1 1 100%;
-      padding: 3px 0;
-      margin-left: 5px;
+    .grip {
+      display: none;
     }
   }
 
-  #closeTabDock {
-    margin-right: 5px;
-    cursor: pointer;
+  &:not(.closed) .content {
+    padding-block: $spacing-1;
   }
 
-  .controls {
-    align-self: stretch;
-    margin-right: 5px;
-    overflow: hidden;
-
-    > * {
-      margin-right: 3px;
-
-      &:last-child {
-        margin-right: 0;
-      }
-    }
-
-    button,
-    select {
-      height: 100%;
-      padding: 0 5px;
-      font-size: .9em;
-      font-weight: 600;
-      line-height: 20px;
-      color: rgba(black, .75);
-      vertical-align: middle;
-      border-width: 1px;
-
-      &:not(:disabled) {
-        cursor: pointer;
-      }
-    }
-
-    button {
-      background: transparent;
-      border: 1px solid transparent;
-      border-width: 0 1px;
-
-      &:hover {
-        color: rgba(black, .9);
-        background: rgba(black, .025);
-        border-color: rgba(black, .05);
-      }
-
-      &:active {
-        color: black;
-        background: rgba(black, .1);
-        border-color: rgba(black, .15);
-      }
-
-      svg {
-        width: 16px;
-        height: 16px;
-        margin-right: 5px;
-        fill: currentColor;
-        vertical-align: middle;
-      }
-    }
-
-    select {
-      top: 1px;
-      height: calc(100% - 4px);
-      border-color: rgba(black, .15);
-
-      &:hover {
-        border-color: rgba(black, .25);
-      }
-    }
-
-    .buttonGroup {
-      button {
-        height: calc(100% - 4px);
-        margin-top: 2px;
-        margin-left: -1px;
-        line-height: 18px;
-        border-color: rgba(black, .1);
-        border-width: 1px;
-
-        &:first-child {
-          border-radius: 5px 0 0 5px;
-        }
-
-        &:last-child {
-          border-radius: 0 5px 5px 0;
-        }
-      }
-    }
+  // .tabs buttons & buttons inside td, li
+  button {
+    color: var(--t-fg-highlight);
   }
 
   .grip {
     position: absolute;
-    top: -5px;
+    top: -$spacing-1;
     right: 0;
     left: 0;
     z-index: 100;
-    display: block !important;
     height: 10px;
     cursor: ns-resize;
-    background: black;
+    background: var(--t-bg-dim);
     opacity: 0;
 
     &:hover {
       opacity: .25;
       transition: 0s opacity .1s linear;
+    }
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    height: $tab-dock-height;
+    background-color: inherit;
+    gap: $spacing-1;
+    padding-inline: $spacing-1;
+    box-shadow: $shadow-md-soft;
+
+    .tabs {
+      height: 100%;
+      margin-inline: 0;
+
+      > button {
+        position: relative;
+        height: 100%;
+        padding: $spacing-1;
+        color: var(--t-fg-highlight);
+        border-bottom: 2px solid transparent;
+        opacity: .4;
+
+        &:hover {
+          opacity: .7;
+        }
+
+        &.active {
+          border-bottom: 2px solid var(--t-fg-dim);
+          opacity: 1;
+        }
+      }
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+      gap: $spacing-2;
+
+      button {
+        color: var(--t-fg-dim);
+
+        &.active {
+          color: $col-editor;
+        }
+      }
+
+      select {
+        min-height: $spacing-6;
+        padding: 2px;
+      }
+    }
+
+    #closeTabDock {
+      padding: 2px;
+    }
+  }
+
+  > .content {
+    position: relative;
+    flex: 1;
+    overflow: auto;
+    font-size: .9em;
+
+    input, textarea, select, button {
+      color-scheme: light;
+    }
+
+    td, ul {
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .label {
+        display: flex;
+        align-items: center;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: $rounded-pill;
+      }
+    }
+
+    #elementList .label {
+      margin-inline-end: $spacing-1;
+    }
+
+    > div, ul {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      margin: 0;
+      fill: var(--t-fg-highlight);
+
+      li {
+        min-height: $spacing-7;
+        padding: $spacing-1 $spacing-2;
+      }
+
+      // Icons at end of rows
+      .actionsContainer, .nodeIcons {
+        display: flex;
+        justify-content: flex-end;
+        gap: $spacing-1;
+      }
     }
   }
 }
