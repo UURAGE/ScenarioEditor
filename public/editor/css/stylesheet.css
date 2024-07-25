@@ -1,7 +1,12 @@
 @charset "UTF-8";
-/* © DialogueTrainer */ /* © DialogueTrainer */
 /* © DialogueTrainer */
-/* © DialogueTrainer */ /* © DialogueTrainer */
+/* © DialogueTrainer */
+/* © DialogueTrainer */
+/* © DialogueTrainer */
+/* © DialogueTrainer */
+/* © DialogueTrainer */
+/* © DialogueTrainer */
+/* © DialogueTrainer */
 :root {
   --t-bg-default: #F1F5F9;
   --t-bg-highlight: #F8FAFC;
@@ -97,6 +102,7 @@
   font-weight: 700;
   src: local("Open Sans Bold"), local("OpenSans-Bold"), url("../fonts/open-sans-v17-latin-ext_greek-ext_greek_cyrillic_latin-700.woff2") format("woff2"), url("../fonts/open-sans-v17-latin-ext_greek-ext_greek_cyrillic_latin-700.woff") format("woff");
 }
+/* © DialogueTrainer */
 /* © DialogueTrainer */
 html, body {
   min-height: 100%;
@@ -203,6 +209,7 @@ body #canvas, body .treeDiv {
   border-color: #F37812;
 }
 
+/* © DialogueTrainer */
 /* © DialogueTrainer */
 button {
   display: flex;
@@ -351,6 +358,7 @@ button.text, button.outline {
 }
 
 /* © DialogueTrainer */
+/* © DialogueTrainer */
 label, .label {
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -421,8 +429,7 @@ input[type=checkbox]::before {
   width: 22px;
   height: 22px;
   background-color: #4ADE80;
-  -webkit-clip-path: polygon(28% 38%, 41% 53%, 75% 24%, 86% 38%, 40% 78%, 15% 50%);
-          clip-path: polygon(28% 38%, 41% 53%, 75% 24%, 86% 38%, 40% 78%, 15% 50%);
+  clip-path: polygon(28% 38%, 41% 53%, 75% 24%, 86% 38%, 40% 78%, 15% 50%);
   transform: translate(-50%, -50%);
 }
 input[type=checkbox]:checked::before {
@@ -517,6 +524,7 @@ dialog .dropzone .icon {
   transition: fill 0.3s ease-in-out;
 }
 
+/* © DialogueTrainer */
 /* © DialogueTrainer */
 dialog {
   position: fixed;
@@ -719,6 +727,7 @@ dialog .enumeration-values-container button {
 }
 
 /* © DialogueTrainer */
+/* © DialogueTrainer */
 .tabs {
   display: flex;
   align-items: center;
@@ -761,6 +770,7 @@ dialog .enumeration-values-container button {
   list-style: none;
 }
 
+/* © DialogueTrainer */
 /* © DialogueTrainer */
 .accordion {
   display: grid;
@@ -817,6 +827,7 @@ dialog .enumeration-values-container button {
 }
 
 /* © DialogueTrainer */
+/* © DialogueTrainer */
 .progressbar {
   position: relative;
   display: grid;
@@ -862,6 +873,7 @@ dialog .enumeration-values-container button {
   opacity: 0.5;
 }
 
+/* © DialogueTrainer */
 /* © DialogueTrainer */
 .alignMiddle {
   vertical-align: middle;
@@ -940,6 +952,7 @@ dialog .enumeration-values-container button {
   font-style: italic;
 }
 
+/* © DialogueTrainer */
 /* © DialogueTrainer */
 input, select, textarea, button {
   font-family: "Open Sans", "Frutiger", "Helvetica", "Arial", sans-serif;
@@ -1131,6 +1144,7 @@ input[type=text].search:focus {
   pointer-events: none;
 }
 
+/* © DialogueTrainer */
 /* © DialogueTrainer */
 /* Warning: initialiseGrid looks up this rule using the exact selector text.
  * If you change the selector, change the lookup too!
@@ -1324,6 +1338,7 @@ input[type=text].search:focus {
   box-sizing: border-box;
 }
 
+/* © DialogueTrainer */
 /* © DialogueTrainer */
 #logo {
   position: relative;
@@ -1664,6 +1679,7 @@ input[type=text].search:focus {
 }
 
 /* © DialogueTrainer */
+/* © DialogueTrainer */
 :where(#sidebar) {
   position: relative;
   width: 425px;
@@ -2003,6 +2019,7 @@ input[type=text].search:focus {
 }
 
 /* © DialogueTrainer */
+/* © DialogueTrainer */
 #tabDock .typeButtons button, #tabDock .typeButtons .label, #tabDock #elementList button, #tabDock #elementList .label {
   padding: 4px;
   border-radius: 9999px;
@@ -2190,6 +2207,7 @@ input[type=text].search:focus {
 }
 
 /* © DialogueTrainer */
+/* © DialogueTrainer */
 #validationReport .level-error a {
   color: #e94a59;
   background-color: rgba(206, 25, 42, 0.1);
@@ -2256,6 +2274,7 @@ input[type=text].search:focus {
 }
 
 /* © DialogueTrainer */
+/* © DialogueTrainer */
 .hasStyledTable table {
   width: 100%;
   border: hidden;
@@ -2299,6 +2318,7 @@ input[type=text].search:focus {
   display: none;
 }
 
+/* © DialogueTrainer */
 /* © DialogueTrainer */
 #canvas.dark #minimap {
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -2344,6 +2364,7 @@ input[type=text].search:focus {
   box-sizing: border-box;
 }
 
+/* © DialogueTrainer */
 /* © DialogueTrainer */
 .evaluationExpression,
 .scale-expression,
@@ -2457,6 +2478,7 @@ input[type=text].search:focus {
     transform: translate(-50%, -50%) scale(1);
   }
 }
+/* © DialogueTrainer */
 /* © DialogueTrainer */
 .w.allowInterleaveNode, .w.allowDialogueEndNode, .w.endNode {
   outline: 5px solid transparent;
@@ -2590,8 +2612,7 @@ input[type=text].search:focus {
   width: 16px;
   height: 16px;
   background-color: #14B8A6;
-  -webkit-clip-path: polygon(28% 38%, 41% 53%, 75% 24%, 86% 38%, 40% 78%, 15% 50%);
-          clip-path: polygon(28% 38%, 41% 53%, 75% 24%, 86% 38%, 40% 78%, 15% 50%);
+  clip-path: polygon(28% 38%, 41% 53%, 75% 24%, 86% 38%, 40% 78%, 15% 50%);
 }
 .sideMenu .sideMenuDropdown .sideMenuItem button .iconDiv {
   padding: 2px;
@@ -2653,6 +2674,7 @@ input[type=text].search:focus {
   border-color: #CBD5E1;
 }
 
+/* © DialogueTrainer */
 /* © DialogueTrainer */
 #metadata {
   width: -moz-min-content;
@@ -2829,7 +2851,4 @@ input[type=text].search:focus {
   position: relative;
   height: 1px;
   page-break-after: always;
-}
-
-/* © DialogueTrainer */
-/*# sourceMappingURL=stylesheet.css.map */
+}/*# sourceMappingURL=stylesheet.css.map */
