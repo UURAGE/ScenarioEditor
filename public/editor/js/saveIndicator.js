@@ -21,7 +21,7 @@ let SaveIndicator;
         if (value === savedChanges) return;
 
         savedChanges = value;
-        $('#scenarioNameTab').toggleClass('unsavedChanges', !savedChanges);
+        $('#saveButton').toggleClass('unsavedChanges', !savedChanges);
         Main.updateDocumentTitle();
     }
 

@@ -1618,24 +1618,6 @@ input[type=text].search:focus {
 #scenarioNameTab > * {
   flex-shrink: 0;
 }
-@keyframes fade {
-  to {
-    opacity: 0;
-  }
-}
-#scenarioNameTab.unsavedChanges::before {
-  content: "";
-  position: absolute;
-  top: 12px;
-  left: -4px;
-  width: 8px;
-  height: 8px;
-  background: #CE192A;
-  border-radius: 100%;
-}
-.saving #scenarioNameTab.unsavedChanges::before {
-  animation: fade 1s infinite alternate;
-}
 #scenarioNameTab .subjectName {
   flex-grow: 1;
   width: auto;
@@ -1676,6 +1658,30 @@ input[type=text].search:focus {
   height: 100%;
   font: inherit;
   box-sizing: border-box;
+}
+
+#saveButton {
+  position: relative;
+}
+@keyframes fade {
+  to {
+    opacity: 0;
+  }
+}
+#saveButton.unsavedChanges::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 8px;
+  z-index: 1;
+  width: 8px;
+  height: 8px;
+  background: #CE192A;
+  border: 2px solid var(--t-bg-default);
+  border-radius: 100%;
+}
+.saving #saveButton.unsavedChanges::before {
+  animation: fade 1s infinite alternate;
 }
 
 /* © DialogueTrainer */

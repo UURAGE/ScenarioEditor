@@ -333,25 +333,6 @@ $toolbar-button-width: 44px;
     flex-shrink: 0;
   }
 
-  @keyframes fade {
-    to { opacity: 0; }
-  }
-
-  &.unsavedChanges::before {
-    content: '';
-    position: absolute;
-    top: $spacing-3;
-    left: -$spacing-1;
-    width: 8px;
-    height: 8px;
-    background: $col-negative;
-    border-radius: 100%;
-
-    .saving & {
-      animation: fade 1s infinite alternate;
-    }
-  }
-
   .subjectName {
     flex-grow: 1;
     width: auto;
@@ -404,6 +385,31 @@ $toolbar-button-width: 44px;
       height: 100%;
       font: inherit;
       box-sizing: border-box;
+    }
+  }
+}
+
+#saveButton {
+  position: relative;
+
+  @keyframes fade {
+    to { opacity: 0; }
+  }
+
+  &.unsavedChanges::before {
+    content: '';
+    position: absolute;
+    top: $spacing-3;
+    left: $spacing-2;
+    z-index: 1;
+    width: 8px;
+    height: 8px;
+    background: $col-negative;
+    border: 2px solid var(--t-bg-default);
+    border-radius: 100%;
+
+    .saving & {
+      animation: fade 1s infinite alternate;
     }
   }
 }
