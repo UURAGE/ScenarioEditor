@@ -482,13 +482,12 @@ let ColorPicker;
                             closeColorPicker(e);
                         }
                     };
-                    $(document).on('click', onClickOutside);
+                    document.addEventListener('click', onClickOutside, true);
 
-                    closeColorPicker = function(e)
+                    closeColorPicker = function()
                     {
                         connection.removeOverlay("color-picker");
-                        $(document).off('click', onClickOutside);
-                        e.stopPropagation();
+                        document.removeEventListener('click', onClickOutside, true);
                     };
 
                     /* eslint-enable prefer-const */
