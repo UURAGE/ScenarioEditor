@@ -1347,7 +1347,7 @@ let Main;
         // Initialise draggable elements.
         plumbInstance.draggable(node,
         {
-            filter: ".sideMenu, .sideMenu *, .sideMenuOpenIcon",
+            filter: ".sideMenu, .sideMenu *, .sideMenuOpenIcon, .sideMenuOpenIcon *",
             filterExclude: true,
 
             constrain: function(currentCoordinates)
