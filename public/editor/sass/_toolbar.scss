@@ -413,3 +413,10 @@ $toolbar-button-width: 44px;
     }
   }
 }
+
+#languages {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+}

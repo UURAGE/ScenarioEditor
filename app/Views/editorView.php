@@ -189,18 +189,12 @@
             <div id="languages">
               <?php
               $languages = scandir(APPPATH . 'Language');
-              $isFirst = true;
               foreach ($languages as $code)
               {
                   if (!ctype_alnum($code)) continue;
-
-                  if (!$isFirst) echo ' | ';
-
                   echo '<a href="' . site_url('language/changeLanguage/' . $code) . '">';
                   echo '<img src="' . flag_url($code) . '" alt="' . $code . '">';
                   echo '</a>';
-
-                  $isFirst = false;
               }
               ?>
             </div>

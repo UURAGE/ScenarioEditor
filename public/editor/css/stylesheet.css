@@ -1684,6 +1684,13 @@ input[type=text].search:focus {
   animation: fade 1s infinite alternate;
 }
 
+#languages {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+}
+
 /* © DialogueTrainer */
 /* © DialogueTrainer */
 :where(#sidebar) {
