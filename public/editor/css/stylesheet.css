@@ -1532,8 +1532,9 @@ input[type=text].search:focus {
   position: absolute;
   z-index: 200;
   display: none;
-  width: min(170px, 100%);
+  width: auto;
   height: auto;
+  min-width: 170px;
   margin-top: 8px;
   color: var(--t-fg-default);
   background: var(--t-bg-default);
@@ -1553,7 +1554,6 @@ input[type=text].search:focus {
   transform: translateX(-50%);
 }
 #toolbar .dropdown .dropdownItems button {
-  display: flex;
   justify-content: flex-start;
   padding: 12px 8px;
   color: inherit;
@@ -1565,6 +1565,9 @@ input[type=text].search:focus {
 }
 #toolbar .dropdown .dropdownItems button:disabled {
   opacity: 0.3;
+}
+#toolbar .dropdown .dropdownItems button svg {
+  flex-shrink: 0;
 }
 #toolbar .dropdown .dropdownItems span, #toolbar .dropdown .dropdownItems kbd {
   margin-left: auto;

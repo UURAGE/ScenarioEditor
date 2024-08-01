@@ -236,8 +236,9 @@ $toolbar-button-width: 44px;
       position: absolute;
       z-index: 200;
       display: none;
-      width: min(170px, 100%);
+      width: auto;
       height: auto;
+      min-width: 170px;
       margin-top: $spacing-2;
       color: var(--t-fg-default);
       background: var(--t-bg-default);
@@ -259,7 +260,6 @@ $toolbar-button-width: 44px;
       }
 
       button {
-        display: flex;
         justify-content: flex-start;
         padding: $spacing-3 $spacing-2;
         color: inherit;
@@ -272,6 +272,10 @@ $toolbar-button-width: 44px;
 
         &:disabled {
           opacity: .3;
+        }
+
+        svg {
+          flex-shrink: 0;
         }
       }
 
