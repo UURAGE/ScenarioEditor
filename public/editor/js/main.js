@@ -2203,10 +2203,7 @@ let Main;
         // Update input value in sidebar to reflect the one of selected subject
         const inputSubjectName = $("#sidebar").find('#inputSubjectName');
         inputSubjectName.val(Main.trees[id].subject);
-        inputSubjectName.on('keydown', function(e)
-        {
-            if (e.keyCode === 13) applyTreeChanges(); // Enter
-        });
+        inputSubjectName.data('initialValue', Main.trees[id].subject);
 
         const selectable = $("#main").get(0)._selectable;
         selectable.clear();
@@ -2409,9 +2406,12 @@ let Main;
         hasChanges = hasChanges || tree.comment !== newTreeComment;
         tree.comment = newTreeComment;
 
-        // Update tree subject name if it has changed
-        tree.subject = $('#inputSubjectName').val();
-        tree.dragDiv.find('.subjectDiv').find('.subjectName').text(tree.subject);
+        const newSubject = $('#inputSubjectName').val();
+        if (newSubject !== $('#inputSubjectName').data('initialValue'))
+        {
+            tree.subject = newSubject;
+            tree.dragDiv.find('.subjectDiv').find('.subjectName').text(newSubject);
+        }
 
         SaveIndicator.setSavedChanges(!hasChanges);
     }
