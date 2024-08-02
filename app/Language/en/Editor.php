@@ -33,7 +33,6 @@ return [
     "edt_validate" => "Validate",
     "edt_minimap" => "Minimap",
     "edt_toggle_minimap" => "Turn the minimap on/off",
-    "edt_subject_name" => "Subject name",
     "edt_situation" => "Situation",
     "edt_preconditions" => "Preconditions",
     "edt_preconditions_title" => "Make this node's availability depend on parameters",
@@ -44,8 +43,6 @@ return [
     "edt_add_effect" => "Add effect",
     "edt_add" => "Add",
     "edt_authors_note" => "Author's note",
-    "edt_optional_header" => "Optional subject",
-    "edt_optional_title" => "Allow this subject to be skipped",
     "edt_playthrough_item_analysis" => "Playthroughs",
     "edt_snap_to_grid" => "Snap",
     "edt_back" => "Back"

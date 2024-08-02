@@ -1071,7 +1071,6 @@ input:focus + .attachment-container {
 }
 
 #statement,
-#inputSubjectName,
 #comment {
   display: block;
   width: 100%;
@@ -1181,13 +1180,15 @@ input[type=text].search:focus {
 
 .w.treeContainer {
   padding: 12px 8px;
-  overflow: hidden;
   background-color: transparent;
   border: none;
   border-radius: 0;
   opacity: 1;
   box-shadow: none;
   box-sizing: border-box;
+}
+.w.treeContainer:hover {
+  z-index: 5;
 }
 .w.treeContainer.zoom {
   z-index: 50;
@@ -1217,7 +1218,6 @@ input[type=text].search:focus {
   flex-direction: column;
   justify-content: center;
   height: 100%;
-  overflow: hidden;
   font-size: 16px;
   font-weight: bold;
   white-space: nowrap;
@@ -1882,7 +1882,7 @@ input[type=text].search:focus {
 #properties.player > #headerComputer, #properties.player > #characterSection, #properties.situation > #headerComputer, #properties.situation > #characterSection, #properties.tree > #headerComputer, #properties.tree > #characterSection, #sidebarType.player > #headerComputer, #sidebarType.player > #characterSection, #sidebarType.situation > #headerComputer, #sidebarType.situation > #characterSection, #sidebarType.tree > #headerComputer, #sidebarType.tree > #characterSection {
   display: none;
 }
-#properties.player > #headerSubject, #properties.player > #subjectName, #properties.situation > #headerSubject, #properties.situation > #subjectName, #properties.computer > #headerSubject, #properties.computer > #subjectName, #sidebarType.player > #headerSubject, #sidebarType.player > #subjectName, #sidebarType.situation > #headerSubject, #sidebarType.situation > #subjectName, #sidebarType.computer > #headerSubject, #sidebarType.computer > #subjectName {
+#properties.player > #headerSubject, #properties.situation > #headerSubject, #properties.computer > #headerSubject, #sidebarType.player > #headerSubject, #sidebarType.situation > #headerSubject, #sidebarType.computer > #headerSubject {
   display: none;
 }
 #properties.player > #headerSituation, #sidebarType.player > #headerSituation {
@@ -2562,86 +2562,6 @@ input[type=text].search:focus {
   box-sizing: border-box;
 }
 
-.sideMenuOpenIcon, .sideMenu {
-  position: absolute;
-  top: 5%;
-  left: 100%;
-  z-index: 100;
-}
-.sideMenuOpenIcon svg, .sideMenu svg {
-  fill: white;
-}
-
-.sideMenuOpenIcon {
-  margin-left: 3px;
-  font-size: 0;
-  background-color: #1E293B;
-  border-radius: 0 4px 4px 0;
-  opacity: 0;
-  transition: background-color 0.3s ease-in-out;
-  padding-inline: 2px;
-}
-.sideMenuOpenIcon:hover {
-  background-color: #334155;
-}
-.nodeContent:hover .sideMenuOpenIcon {
-  opacity: 1;
-}
-
-.sideMenu .tippy-box {
-  font-size: revert;
-  color: revert;
-  background-color: revert;
-}
-.sideMenu .tippy-content {
-  padding: 0;
-}
-.sideMenu .sideMenuDropdown {
-  flex-direction: column;
-  overflow: hidden;
-  list-style-type: none;
-  background-color: #1E293B;
-  border-radius: 4px;
-  transition: background-color 0.3s ease-in-out;
-}
-.sideMenu .sideMenuDropdown .sideMenuItem button {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
-  padding: 8px;
-  font-size: 11px;
-  color: white;
-  white-space: nowrap;
-  background-color: #1E293B;
-  border: none;
-  transition: background-color 0.3s ease-in-out;
-  gap: 8px;
-}
-.sideMenu .sideMenuDropdown .sideMenuItem button:enabled:hover {
-  background-color: #334155;
-}
-.sideMenu .sideMenuDropdown .sideMenuItem button.clicked::after {
-  content: "";
-  position: relative;
-  left: -4px;
-  width: 16px;
-  height: 16px;
-  background-color: #14B8A6;
-  clip-path: polygon(28% 38%, 41% 53%, 75% 24%, 86% 38%, 40% 78%, 15% 50%);
-}
-.sideMenu .sideMenuDropdown .sideMenuItem button .iconDiv {
-  padding: 2px;
-  font-size: 0;
-  background-color: transparent;
-  border: 1px solid transparent;
-  border-radius: 4px;
-}
-.sideMenu .sideMenuDropdown .sideMenuItem button .iconDiv svg {
-  width: 14px;
-  height: 14px;
-}
-
 .iconsContainer {
   position: absolute;
   bottom: -16px;
@@ -2867,4 +2787,91 @@ input[type=text].search:focus {
   position: relative;
   height: 1px;
   page-break-after: always;
+}
+
+/* © DialogueTrainer */
+/* © DialogueTrainer */
+.sideMenu, .sideMenuOpenIcon {
+  position: absolute;
+  top: 5%;
+  left: 100%;
+  z-index: 100;
+}
+.sideMenu svg, .sideMenuOpenIcon svg {
+  fill: white;
+}
+.subjectDiv > .sideMenu, .subjectDiv > .sideMenuOpenIcon {
+  margin-left: 2px;
+}
+
+.sideMenu .tippy-box {
+  font-size: revert;
+  color: revert;
+  background-color: revert;
+}
+.sideMenu .tippy-content {
+  padding: 0;
+}
+.sideMenu .sideMenuDropdown {
+  flex-direction: column;
+  overflow: hidden;
+  list-style-type: none;
+  background-color: #1E293B;
+  border-radius: 4px;
+  transition: background-color 0.3s ease-in-out;
+}
+.sideMenu .sideMenuDropdown .sideMenuItem button {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  padding: 8px;
+  font-size: 11px;
+  color: white;
+  white-space: nowrap;
+  background-color: #1E293B;
+  border: none;
+  transition: background-color 0.3s ease-in-out;
+  gap: 8px;
+}
+.sideMenu .sideMenuDropdown .sideMenuItem button:enabled:hover {
+  background-color: #334155;
+}
+.sideMenu .sideMenuDropdown .sideMenuItem button.clicked::after {
+  content: "";
+  position: relative;
+  left: -4px;
+  width: 16px;
+  height: 16px;
+  background-color: #14B8A6;
+  clip-path: polygon(28% 38%, 41% 53%, 75% 24%, 86% 38%, 40% 78%, 15% 50%);
+}
+.sideMenu .sideMenuDropdown .sideMenuItem button .iconDiv {
+  padding: 2px;
+  font-size: 0;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.sideMenu .sideMenuDropdown .sideMenuItem button .iconDiv svg {
+  width: 14px;
+  height: 14px;
+}
+
+.sideMenuOpenIcon {
+  margin-left: 3px;
+  font-size: 0;
+  background-color: #1E293B;
+  border-radius: 0 4px 4px 0;
+  opacity: 0;
+  transition: background-color 0.3s ease-in-out;
+}
+.sideMenuOpenIcon:hover {
+  background-color: #334155;
+}
+.sideMenuOpenIcon svg {
+  pointer-events: none;
+}
+.nodeContent:hover .sideMenuOpenIcon, .subjectDiv:hover > .sideMenuOpenIcon {
+  opacity: 1;
 }/*# sourceMappingURL=stylesheet.css.map */

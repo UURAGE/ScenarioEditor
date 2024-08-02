@@ -8,5 +8,7 @@
     "pending_changes": "This scenario may contain unsaved changes. Are you sure you want to leave the page?",
     "default_subject": "Subject name",
     "no_parameters_to_affect": "There are no user-defined parameters to affect.",
-    "add_effect": "Add effect"
+    "add_effect": "Add effect",
+    "optional_subject_header": "Optional",
+    "optional_subject_title": "Allow this subject to be skipped"
 }

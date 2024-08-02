@@ -236,7 +236,7 @@
 
   &.player, &.situation, &.computer {
     > {
-      #headerSubject, #subjectName {
+      #headerSubject {
         display: none;
       }
     }

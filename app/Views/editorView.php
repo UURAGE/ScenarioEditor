@@ -301,17 +301,6 @@
               <div id="fixed-character-parameter-effects"></div>
             </div>
           </div>
-          <div class="sidebarSection" id="subjectName">
-            <div class="sub-header">
-              <h2><?php sLang('edt_subject_name'); ?></h2>
-            </div>
-            <div class="collapsable">
-              <input id="inputSubjectName" />
-              <div class="flexbox">
-                <input type="checkbox" id="optionalCheckbox" /><label for="optionalCheckbox" title="<?php sLang('edt_optional_title'); ?>"><?php sLang('edt_optional_header'); ?></label>
-              </div>
-            </div>
-          </div>
           <div class="sidebarSection" id="commentSection">
             <div class="sub-header clickable">
               <h2><?php sLang('edt_authors_note'); ?></h2><button class="clicktag text"><?php echo sIcon("mdi-chevron-right"); ?></button>

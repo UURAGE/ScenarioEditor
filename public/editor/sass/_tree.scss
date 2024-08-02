@@ -43,13 +43,16 @@
 
 .w.treeContainer {
   padding: $spacing-3 $spacing-2;
-  overflow: hidden;
   background-color: transparent;
   border: none;
   border-radius: 0;
   opacity: 1;
   box-shadow: none;
   box-sizing: border-box;
+
+  &:hover {
+    z-index: 5;
+  }
 
   &.zoom {
     z-index: 50;
@@ -82,7 +85,6 @@
     flex-direction: column;
     justify-content: center;
     height: 100%;
-    overflow: hidden;
     font-size: 16px;
     font-weight: bold;
     white-space: nowrap;

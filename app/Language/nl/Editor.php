@@ -33,7 +33,6 @@ return [
     "edt_validate" => "Valideren",
     "edt_minimap" => "Minimap",
     "edt_toggle_minimap" => "Zet de minimap aan/uit",
-    "edt_subject_name" => "Naam Onderwerp",
     "edt_situation" => "Situatie",
     "edt_preconditions" => "Precondities",
     "edt_preconditions_title" => "Knoop beschikbaar maken afhankelijk van parameters",
@@ -44,8 +43,6 @@ return [
     "edt_add_effect" => "Effect toevoegen",
     "edt_add" => "Toevoegen",
     "edt_authors_note" => "Commentaar",
-    "edt_optional_header" => "Optioneel onderwerp",
-    "edt_optional_title" => "Onderwerp overslaan toestaan",
     "edt_playthrough_item_analysis" => "Speelsessies",
     "edt_snap_to_grid" => "Uitlijnen",
     "edt_back" => "Terug"

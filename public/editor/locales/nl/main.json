@@ -8,5 +8,7 @@
     "pending_changes": "Dit scenario heeft mogelijk veranderingen die niet zijn opgeslagen. Weet u zeker dat u de pagina wilt verlaten?",
     "default_subject": "Naam onderwerp",
     "no_parameters_to_affect": "Error: er zijn gebruikers gedefinieerde geen parameters.",
-    "add_effect": "Effect toevoegen"
+    "add_effect": "Effect toevoegen",
+    "optional_subject_header": "Optioneel",
+    "optional_subject_title": "Onderwerp overslaan toestaan"
 }

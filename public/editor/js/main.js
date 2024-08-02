@@ -689,6 +689,104 @@ let Main;
             });
     }
 
+    function createSideMenu(container, elementToBeShownOnTop, getSideMenuItems, ignoreClass)
+    {
+        const sideMenu = document.createElement('div');
+        sideMenu.classList.add('sideMenu');
+
+        const sideMenuTippy = document.createElement('div');
+        sideMenu.appendChild(sideMenuTippy);
+
+        const sideMenuDropdown = document.createElement('ul');
+        sideMenuDropdown.classList.add('sideMenuDropdown');
+
+        // Open/close the side menu on click
+        const sideMenuOpenIcon = document.createElement('button');
+        sideMenuOpenIcon.classList.add('sideMenuOpenIcon');
+        sideMenuOpenIcon.innerHTML = Utils.sIcon('mdi-dots-horizontal');
+
+        const openMenu = (event) =>
+        {
+            event.stopPropagation(); // Prevents selecting element
+
+            sideMenuDropdown.innerHTML = "";
+
+            getSideMenuItems().forEach(({ nodeID, treeID, icon, text, title, className, property, disabled, onClick }) =>
+            {
+                const sideMenuItem = document.createElement('li');
+                sideMenuItem.classList.add('sideMenuItem');
+
+                const button = document.createElement('button');
+                const iconDiv = document.createElement('div');
+                iconDiv.classList.add('iconDiv');
+                if (className) iconDiv.classList.add(className);
+                iconDiv.innerHTML = Utils.sIcon(icon);
+                if (title) button.title = title;
+                button.append(iconDiv, text);
+                sideMenuItem.appendChild(button);
+
+                const element = nodeID ? Main.nodes[nodeID] : Main.trees[treeID];
+
+                if (property) button.classList.toggle('clicked', element[property]);
+                if (disabled) button.disabled = true;
+
+                button.onclick = (e) =>
+                {
+                    e.stopPropagation(); // Avoids selecting element
+                    if (property)
+                    {
+                        element[property] = !element[property];
+                        button.classList.toggle('clicked');
+                    }
+                    if (onClick)
+                    {
+                        const stayOpen = onClick();
+                        if (!stayOpen || property)
+                        {
+                            const instance = sideMenuTippy._tippy;
+                            instance.hide();
+                        }
+                    }
+                    nodeID ? updateNodeDecorations(nodeID) : updateTreeDecorations(treeID);
+                };
+                // Prevent db-clicks on link to enter edit mode in nodes
+                button.ondblclick = (e) => e.stopPropagation();
+                sideMenuDropdown.append(sideMenuItem);
+            });
+            sideMenu.append(sideMenuDropdown);
+
+            const instance = tippy(sideMenuTippy, {
+                content: sideMenuDropdown,
+                trigger: 'manual',
+                interactive: true,
+                placement: 'right-start',
+                arrow: false,
+                onShow()
+                {
+                    elementToBeShownOnTop.style.zIndex = 100;
+                },
+                onHidden()
+                {
+                    elementToBeShownOnTop.style.zIndex = null;
+                }
+            });
+
+            instance.show();
+        };
+
+        sideMenuOpenIcon.onclick = openMenu;
+        container.appendChild(sideMenuOpenIcon);
+        container.appendChild(sideMenu);
+
+        container.addEventListener('contextmenu', function(event)
+        {
+            if (event.target.classList.contains(ignoreClass)) return false;
+
+            event.preventDefault();
+            openMenu(event);
+        });
+    }
+
     function createEmptyTree(id, leftPos, topPos)
     {
         if (!id)
@@ -766,11 +864,11 @@ let Main;
                 subjectName.text(Main.trees[id].subject);
                 SaveIndicator.setSavedChanges(false);
             }
-
-            updateSideBar();
         });
         changeNameInput.on('keydown', function(e)
         {
+            e.stopPropagation(); // Prevent zooming when confirming name change
+
             if (e.keyCode === 13) // Enter
             {
                 changeNameInput.trigger('focusout', [false]);
@@ -793,8 +891,7 @@ let Main;
 
         const subjectDiv = $('<div>', { class: "subjectDiv noSelect" });
 
-        subjectDiv.append(subjectContainer);
-        subjectDiv.append(iconDiv);
+        subjectDiv.append(subjectContainer, iconDiv);
 
         subjectDiv.on("click", function(e)
         {
@@ -853,10 +950,33 @@ let Main;
             plumbInstance: PlumbGenerator.genJsPlumbInstance(treeDiv)
         };
 
+        createSideMenu(subjectDiv.get(0), dragDiv.get(0), () =>
+        {
+            return [
+                {
+                    treeID: id,
+                    icon: 'mdi-rename',
+                    text: i18next.t('common:rename'),
+                    onClick: () =>
+                    {
+                        selectTree(id);
+                        triggerSubjectNameInput(id, true);
+                    }
+                },
+                {
+                    treeID: id,
+                    icon: 'mdi-axis-arrow',
+                    text: i18next.t('main:optional_subject_header'),
+                    title: i18next.t('main:optional_subject_title'),
+                    property: 'optional'
+                },
+            ];
+        }, 'treeDiv');
+
         let minimumPosition = null;
         jsPlumb.draggable(dragDiv,
         {
-            filter: ".subjectDiv, .subjectDiv *",
+            filter: ".subjectDiv, .subjectDiv *:not(.sideMenuOpenIcon)",
             filterExclude: false,
 
             // The constrain function returns the array with coordinates that will be assigned to the dragged element
@@ -1201,115 +1321,35 @@ let Main;
         iconsContainer.classList.add('iconsContainer');
         nodeContent.appendChild(iconsContainer);
 
-        const sideMenu = document.createElement('div');
-        sideMenu.classList.add('sideMenu');
-
-        const sideMenuTippy = document.createElement('div');
-        sideMenu.appendChild(sideMenuTippy);
-
-        const sideMenuDropdown = document.createElement('ul');
-        sideMenuDropdown.classList.add('sideMenuDropdown');
-
-        // Open/close the side menu on click
-        const sideMenuOpenIcon = document.createElement('button');
-        sideMenuOpenIcon.classList.add('sideMenuOpenIcon');
-        sideMenuOpenIcon.innerHTML = Utils.sIcon('mdi-dots-horizontal');
-
-        const openNodeMenu = (event) =>
+        createSideMenu(nodeContent, node, () =>
         {
-            event.stopPropagation(); // Avoids opening sidebar
-
-            sideMenuDropdown.innerHTML = "";
-
-            // Create the list items for the side menu
-            const createSideMenuItemLink = ({ icon, text, title, className, property, onClick }) =>
-            {
-                const sideMenuItem = document.createElement('li');
-
-                sideMenuItem.classList.add('sideMenuItem');
-                const button = document.createElement('button');
-
-                const iconDiv = document.createElement('div');
-                iconDiv.classList.add('iconDiv');
-                if (className) iconDiv.classList.add(className);
-                iconDiv.innerHTML = Utils.sIcon(icon);
-                if (title) button.title = title;
-                button.append(iconDiv, text);
-                sideMenuItem.appendChild(button);
-
-                const node = Main.nodes[id];
-                if (property)
+            return [
                 {
-                    button.classList.toggle('clicked', node[property]);
-                }
-
-                button.onclick = (e) =>
-                {
-                    e.stopPropagation(); // Avoids opening sidebar
-                    if (property)
-                    {
-                        node[property] = !node[property];
-                        button.classList.toggle('clicked');
-                    }
-                    if (onClick) onClick();
-                    updateNodeDecorations(id);
-                    sideMenuDropdown.classList.remove('visible'); // Close dropdown menu
-                };
-                // Prevent db-clicks on link to enter edit mode in nodes
-                button.ondblclick = (e) => e.stopPropagation();
-                return sideMenuItem;
-            };
-
-            const sideMenuItems = [
-                createSideMenuItemLink({
+                    nodeID: id,
                     icon: 'icon-node-jump-subject',
                     text: i18next.t('common:special_node.allowInterleaveNode.header'),
                     title: i18next.t('common:special_node.allowInterleaveNode.title'),
                     className: 'nodeEndKinds',
                     property: 'allowInterleaveNode'
-                }),
-                createSideMenuItemLink({
+                },
+                {
+                    nodeID: id,
                     icon: 'mdi-middleware-outline',
                     text: i18next.t('common:special_node.allowDialogueEndNode.header'),
                     title: i18next.t('common:special_node.allowInterleaveNode.title'),
                     className: 'nodeEndKinds',
                     property: 'allowDialogueEndNode'
-                }),
-                createSideMenuItemLink({
+                },
+                {
+                    nodeID: id,
                     icon: 'mdi-arrow-collapse-right',
                     text: i18next.t('common:special_node.endNode.header'),
                     title: i18next.t('common:special_node.allowInterleaveNode.title'),
                     className: 'nodeEndKinds',
                     property: 'endNode'
-                }),
-            ];
-
-            sideMenuDropdown.append(...sideMenuItems);
-            // Add the list to the side menu
-            sideMenu.append(sideMenuDropdown);
-
-            const instance = tippy(sideMenuTippy, {
-                content: sideMenuDropdown,
-                trigger: 'manual',
-                interactive: true,
-                placement: 'right-start',
-                arrow: false,
-                onShow()
-                {
-                    node.style.zIndex = 100;
                 },
-                onHidden()
-                {
-                    node.style.zIndex = null;
-                }
-            });
-
-            instance.show();
-        };
-
-        sideMenuOpenIcon.onclick = openNodeMenu;
-        nodeContent.appendChild(sideMenuOpenIcon);
-        nodeContent.appendChild(sideMenu);
+            ];
+        }, 'nodestatement');
 
         // Expands node container using overflow when moving a node closer to the bounds of the container
         const scrollOffset = 50;
@@ -1320,14 +1360,6 @@ let Main;
         {
             startEditingNode(id);
         }, false);
-
-        node.addEventListener('contextmenu', function(event)
-        {
-            if (event.target == node.getElementsByClassName('nodestatement')[0]) return false;
-
-            event.preventDefault();
-            openNodeMenu(event);
-        });
 
         endpoint.addEventListener('mousemove', function(e)
         {
@@ -2200,11 +2232,6 @@ let Main;
             return;
         }
 
-        // Update input value in sidebar to reflect the one of selected subject
-        const inputSubjectName = $("#sidebar").find('#inputSubjectName');
-        inputSubjectName.val(Main.trees[id].subject);
-        inputSubjectName.data('initialValue', Main.trees[id].subject);
-
         const selectable = $("#main").get(0)._selectable;
         selectable.clear();
         Main.selectedElements = [];
@@ -2395,25 +2422,20 @@ let Main;
 
         const tree = Main.trees[Main.selectedElement];
 
-        const newTreeOptional = $('#optionalCheckbox').prop('checked');
-        hasChanges = hasChanges || tree.optional !== newTreeOptional;
-        tree.optional = newTreeOptional;
-        $(Main.trees[Main.selectedElement].dragDiv).toggleClass("optional", tree.optional);
-        const treeIcons = tree.dragDiv.find('.icons').empty();
-        if (tree.optional) treeIcons.html(Utils.sIcon('mdi-axis-arrow'));
-
         const newTreeComment = $("textarea#comment").val();
         hasChanges = hasChanges || tree.comment !== newTreeComment;
         tree.comment = newTreeComment;
 
-        const newSubject = $('#inputSubjectName').val();
-        if (newSubject !== $('#inputSubjectName').data('initialValue'))
-        {
-            tree.subject = newSubject;
-            tree.dragDiv.find('.subjectDiv').find('.subjectName').text(newSubject);
-        }
-
         SaveIndicator.setSavedChanges(!hasChanges);
+
+        updateTreeDecorations(tree.id);
+    }
+
+    function updateTreeDecorations(treeID)
+    {
+        const tree = Main.trees[treeID];
+        const treeIcons = tree.dragDiv.find('.icons').empty();
+        if (tree.optional) treeIcons.html(Utils.sIcon('mdi-axis-arrow'));
     }
 
     function updateTreePreview(tree)
@@ -2435,9 +2457,9 @@ let Main;
         );
         startNodePreview.append(nodeCount);
 
-        startNodesList.forEach(function(nodeId)
+        startNodesList.forEach(function(nodeID)
         {
-            const nodeType = Main.nodes[nodeId].type;
+            const nodeType = Main.nodes[nodeID].type;
             const nodeEl = $('<div>', { class: `nodeEl ${nodeType}` });
             startNodePreview.append(nodeEl);
         });
@@ -3016,8 +3038,6 @@ let Main;
         {
             $("#sidebarType").attr("class", "tree");
             $('#properties').attr("class", "tree sidebarContent");
-
-            $("#optionalCheckbox").prop("checked", Main.trees[Main.selectedElement].optional);
 
             $("textarea#comment").val(Main.trees[Main.selectedElement].comment);
         }
