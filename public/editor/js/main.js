@@ -737,6 +737,7 @@ let Main;
                     {
                         element[property] = !element[property];
                         button.classList.toggle('clicked');
+                        SaveIndicator.setSavedChanges(false);
                     }
                     if (onClick)
                     {
