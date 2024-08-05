@@ -881,6 +881,11 @@ let Main;
                 $("#main").focus();
             }
         });
+        changeNameInput.on('mousedown', function(event)
+        {
+            // Prevents selecting node when clicking
+            event.stopPropagation();
+        });
 
         const subjectContainer = $('<div>', { class: "subjectTextContainer" });
         const subjTextSpan = $('<span>', { text: defaultName, class: "subjectName" });
