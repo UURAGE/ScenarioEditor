@@ -2869,9 +2869,6 @@ input[type=text].search:focus {
 .sideMenuOpenIcon:hover {
   background-color: #334155;
 }
-.sideMenuOpenIcon svg {
-  pointer-events: none;
-}
 .nodeContent:hover .sideMenuOpenIcon, .subjectDiv:hover > .sideMenuOpenIcon {
   opacity: 1;
 }/*# sourceMappingURL=stylesheet.css.map */

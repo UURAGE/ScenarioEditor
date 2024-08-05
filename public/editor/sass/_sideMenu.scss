@@ -94,10 +94,6 @@
     background-color: $slate-700;
   }
 
-  svg {
-    pointer-events: none;
-  }
-
   .nodeContent:hover &, .subjectDiv:hover > & {
     opacity: 1;
   }

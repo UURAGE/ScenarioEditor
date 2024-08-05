@@ -779,6 +779,10 @@ let Main;
         container.appendChild(sideMenuOpenIcon);
         container.appendChild(sideMenu);
 
+        const stopPropagationHandler = function(event) { event.stopPropagation(); };
+        sideMenuOpenIcon.addEventListener('mousedown', stopPropagationHandler);
+        sideMenu.addEventListener('mousedown', stopPropagationHandler);
+
         container.addEventListener('contextmenu', function(event)
         {
             if (event.target.classList.contains(ignoreClass)) return false;
