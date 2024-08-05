@@ -101,7 +101,7 @@ let Load3;
     function loadMetadata(metadata)
     {
         Metadata.container.name = Utils.unEscapeHTML($(metadata).find('name').text());
-        $('#scenarioNameTab .scenarioName').text(Metadata.container.name);
+        $('#breadcrumbs .scenarioName span').text(Metadata.container.name);
         Main.updateDocumentTitle();
         Metadata.container.description = Utils.unEscapeHTML($(metadata).find('description').text());
         Metadata.container.difficulty = $(metadata).find('difficulty').text();

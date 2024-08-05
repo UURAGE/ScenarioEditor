@@ -323,73 +323,76 @@ $toolbar-button-width: 44px;
   }
 }
 
-#scenarioNameTab {
+#breadcrumbs {
+  $min-width: 30px;
+
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 0;
-  padding: 0 $spacing-1;
+  padding: $spacing-1 $spacing-2;
+  overflow: hidden;
   font-size: .9em;
-  gap: $spacing-1;
+  grid-area: breadcrumbs;
+  gap: 2px;
 
-  > * {
-    flex-shrink: 0;
-  }
+  .scenarioName, .subjectName {
+    flex: 0 1 auto;
+    min-width: $min-width;
+    font-weight: 600;
+    white-space: nowrap;
 
-  .subjectName {
-    flex-grow: 1;
-    width: auto;
-    max-width: 200px;
+    &:not(.editing) {
+      > span:hover {
+        background-color: rgba($col-editor, .1);
+        border-color: $col-editor;
+      }
+    }
+
+    > span {
+      display: inline-block;
+      min-width: $min-width;
+      max-width: 100%;
+      padding: 0 $spacing-1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      box-sizing: border-box;
+      user-select: none;
+
+      &:empty {
+        min-height: 1.25em;
+        text-align: center;
+        background-color: rgba($col-editor, .1);
+        border-color: $col-editor;
+
+        &::after {
+          content: '...';
+        }
+      }
+    }
   }
 
   .slashDivider {
-    color: var(--t-fg-dim);
+    flex-shrink: 0;
+    opacity: .5;
   }
 
-  .scenarioName, .scenarioNameInput {
-    flex-shrink: 1;
+  .editing {
+    width: 100%;
   }
 
   .scenarioName {
-    overflow: hidden;
-    text-align: center;
-    text-overflow: ellipsis;
+    flex-shrink: 2;
   }
 
-  // makes scenarioName color softer when you are in the subject view
-  &:has(.subjectName) {
-    .scenarioName {
-      color: var(--t-fg-dim);
-    }
-  }
-
-  .scenarioName, .subjectName {
-    white-space: nowrap;
-    border: 1px solid transparent;
-    border-radius: 4px;
-
-    &:empty {
-      min-width: 50px;
-      min-height: 1.25em;
-    }
-
-    &:hover,
-    &:empty {
-      background-color: rgba($col-editor, .1);
-      border-color: $col-editor;
-    }
-  }
-
-  .scenarioNameInput {
-    flex-grow: 1;
-
-    input {
-      width: 100%;
-      height: 100%;
-      font: inherit;
-      box-sizing: border-box;
-    }
+  // Dims scenario name when in subject
+  &.zoomed .scenarioName {
+    font-weight: 400;
+    opacity: .65;
   }
 }
 

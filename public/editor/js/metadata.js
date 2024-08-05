@@ -339,7 +339,7 @@ let Metadata;
 
         // Save all values in the dialog to the metaObject
         Metadata.container.name = formatScenarioName($("#scenarioName").val());
-        $('#scenarioNameTab .scenarioName').text(Metadata.container.name);
+        $('#breadcrumbs .scenarioName span').text(Metadata.container.name);
         Main.updateDocumentTitle();
         const languageCode = $("#scenarioLanguage").val();
         if (languageCode) Metadata.container.language = Config.container.settings.languages.byCode[languageCode];

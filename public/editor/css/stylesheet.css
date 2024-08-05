@@ -37,6 +37,14 @@
   --theme-fg-sidebar-button: #334155;
 }
 
+#breadcrumbs {
+  color: var(--t-fg-default);
+  background-color: var(--t-bg-default);
+}
+#breadcrumbs.dark {
+  background-color: #3d4d65;
+}
+
 #sidebar.dark, #toolbar.dark, #tabDock.dark {
   color-scheme: dark;
 }
@@ -126,8 +134,8 @@ body #canvas, body .treeDiv {
   min-width: 0;
   overflow: hidden;
   grid-template-columns: 1fr min-content;
-  grid-template-rows: min-content 1fr auto;
-  grid-template-areas: "toolbar toolbar" "canvas sidebar" "tab-dock tab-dock";
+  grid-template-rows: min-content min-content 1fr auto;
+  grid-template-areas: "toolbar toolbar" "breadcrumbs sidebar" "canvas sidebar" "tab-dock tab-dock";
 }
 
 #canvas {
@@ -1320,14 +1328,13 @@ input[type=text].search:focus {
   cursor: move;
 }
 
-.subjectName {
+.subjectDiv .subjectName {
   display: block;
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-.subjectNameInput {
+.subjectDiv .subjectNameInput {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -1604,59 +1611,65 @@ input[type=text].search:focus {
   margin-right: 8px !important;
 }
 
-#scenarioNameTab {
+#breadcrumbs {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 0;
-  padding: 0 4px;
-  font-size: 0.9em;
-  gap: 4px;
-}
-#scenarioNameTab > * {
-  flex-shrink: 0;
-}
-#scenarioNameTab .subjectName {
-  flex-grow: 1;
-  width: auto;
-  max-width: 200px;
-}
-#scenarioNameTab .slashDivider {
-  color: var(--t-fg-dim);
-}
-#scenarioNameTab .scenarioName, #scenarioNameTab .scenarioNameInput {
-  flex-shrink: 1;
-}
-#scenarioNameTab .scenarioName {
+  padding: 4px 8px;
   overflow: hidden;
-  text-align: center;
-  text-overflow: ellipsis;
+  font-size: 0.9em;
+  grid-area: breadcrumbs;
+  gap: 2px;
 }
-#scenarioNameTab:has(.subjectName) .scenarioName {
-  color: var(--t-fg-dim);
-}
-#scenarioNameTab .scenarioName, #scenarioNameTab .subjectName {
+#breadcrumbs .scenarioName, #breadcrumbs .subjectName {
+  flex: 0 1 auto;
+  min-width: 30px;
+  font-weight: 600;
   white-space: nowrap;
-  border: 1px solid transparent;
-  border-radius: 4px;
 }
-#scenarioNameTab .scenarioName:empty, #scenarioNameTab .subjectName:empty {
-  min-width: 50px;
-  min-height: 1.25em;
-}
-#scenarioNameTab .scenarioName:hover, #scenarioNameTab .scenarioName:empty, #scenarioNameTab .subjectName:hover, #scenarioNameTab .subjectName:empty {
+#breadcrumbs .scenarioName:not(.editing) > span:hover, #breadcrumbs .subjectName:not(.editing) > span:hover {
   background-color: rgba(56, 146, 255, 0.1);
   border-color: #3892FF;
 }
-#scenarioNameTab .scenarioNameInput {
-  flex-grow: 1;
-}
-#scenarioNameTab .scenarioNameInput input {
-  width: 100%;
-  height: 100%;
-  font: inherit;
+#breadcrumbs .scenarioName > span, #breadcrumbs .subjectName > span {
+  display: inline-block;
+  min-width: 30px;
+  max-width: 100%;
+  padding: 0 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 4px;
   box-sizing: border-box;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+#breadcrumbs .scenarioName > span:empty, #breadcrumbs .subjectName > span:empty {
+  min-height: 1.25em;
+  text-align: center;
+  background-color: rgba(56, 146, 255, 0.1);
+  border-color: #3892FF;
+}
+#breadcrumbs .scenarioName > span:empty::after, #breadcrumbs .subjectName > span:empty::after {
+  content: "...";
+}
+#breadcrumbs .slashDivider {
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+#breadcrumbs .editing {
+  width: 100%;
+}
+#breadcrumbs .scenarioName {
+  flex-shrink: 2;
+}
+#breadcrumbs.zoomed .scenarioName {
+  font-weight: 400;
+  opacity: 0.65;
 }
 
 #saveButton {

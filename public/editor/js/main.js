@@ -159,41 +159,7 @@ let Main;
             $("#characterSelection").remove();
         }
 
-        const scenarioNameInput = $('<input>', { type: 'text' });
-        const scenarioNameInputSpan = $('<span>', { class: "scenarioNameInput" }).append(scenarioNameInput);
-        scenarioNameInputSpan.on('focusout', function(e, cancel)
-        {
-            const nameInput = $('#scenarioNameTab .scenarioNameInput input');
-
-            if (!cancel)
-            {
-                const inputName = Metadata.formatScenarioName(nameInput.val());
-                if (inputName !== Metadata.container.name)
-                {
-                    Metadata.container.name = inputName;
-                    $('#scenarioNameTab .scenarioName').text(Metadata.container.name);
-                    Main.updateDocumentTitle();
-                    SaveIndicator.setSavedChanges(false);
-                }
-            }
-
-            $(this).hide();
-            $('#scenarioNameTab .scenarioName').show();
-        });
-        scenarioNameInputSpan.on('keydown', function(e)
-        {
-            if (e.keyCode === 13) // Enter
-            {
-                $(this).trigger('focusout', [false]);
-            }
-            if (e.keyCode === 27) // Escape
-            {
-                $(this).trigger('focusout', [true]);
-            }
-        });
-        scenarioNameInputSpan.hide();
-
-        $('#scenarioNameTab').append(scenarioNameInputSpan);
+        setupBreadcrumbs();
 
         // Handle movement of the div indicating which grid cell youre hovering over
         $('#main').on('mousemove', function(e)
@@ -494,6 +460,8 @@ let Main;
     {
         element = $(element);
         const elementId = element.prop('id');
+        const testElement = element;
+        if (elementId === 'canvas') element = element.add('#breadcrumbs');
         const themeElementControl = $("#theme-" + elementId);
         const key = "editor-theme";
 
@@ -505,7 +473,7 @@ let Main;
             themeConfiguration = newConfig;
             if (!(elementId in themeConfiguration))
             {
-                themeConfiguration[elementId] = element.hasClass("dark") ? 'dark' : 'light';
+                themeConfiguration[elementId] = testElement.hasClass("dark") ? 'dark' : 'light';
             }
             else
             {
@@ -515,11 +483,11 @@ let Main;
         catch
         {
             themeConfiguration = {
-                [elementId]: element.hasClass("dark") ? 'dark' : 'light'
+                [elementId]: testElement.hasClass("dark") ? 'dark' : 'light'
             };
         }
 
-        if (element.hasClass("dark")) themeElementControl.addClass("enabled");
+        if (testElement.hasClass("dark")) themeElementControl.addClass("enabled");
         themeElementControl.on('click', function()
         {
             if ($(this).hasClass("enabled"))
@@ -1879,84 +1847,26 @@ let Main;
         const clipboardToolButtons = document.getElementsByClassName("clipboardToolButton");
         const nodeWithParentButtons = document.getElementsByClassName("nodeWithParentButton");
         const nodeWithoutChildrenButtons = document.getElementsByClassName("nodeWithoutChildrenButton");
-        const scenarioNameTab = $('#scenarioNameTab');
-        const slashDivider = $('<span>', { class: 'slashDivider', text: '/' });
 
         disableButtons(subjectButtons);
         disableButtons(nodeButtons);
         disableButtons(nodeWithParentButtons);
         disableButtons(nodeWithoutChildrenButtons);
-        scenarioNameTab.show();
-        scenarioNameTab.find('.subjectName').remove();
-        scenarioNameTab.find('.slashDivider').remove();
-        scenarioNameTab.find('.subjectNameInputSpan').remove();
-        scenarioNameTab.find('.scenarioName').off('dblclick');
 
         // If there are multiple selected elements, show (copy, cut, paste, delete) buttons
         if (Main.selectedElements.length > 1)
         {
             enableButtons(clipboardToolButtons);
-            scenarioNameTab.hide();
         }
 
         if (Zoom.isZoomed())
         {
             enableButtons(subjectButtons);
-            scenarioNameTab.append(slashDivider, $('<span>', { class: "subjectName", text: Zoom.getZoomed().subject }));
-            scenarioNameTab.find('.scenarioName').on("click", function()
-            {
-                Zoom.zoomOut();
-            });
-
-            const subjectNameInput = $('<input>', { type: 'text' });
-            const subjectNameInputSpan = $('<span>', { class: "subjectNameInputSpan" }).append(subjectNameInput);
-            subjectNameInputSpan.on('focusout', function(e, cancel)
-            {
-                if (!cancel)
-                {
-                    const tree = Zoom.getZoomed();
-                    const inputName = Metadata.formatScenarioName(subjectNameInput.val());
-                    if (inputName !== tree.subject)
-                    {
-                        tree.subject = inputName;
-                        tree.dragDiv.find('.subjectDiv').find('.subjectName').text(tree.subject);
-                        scenarioNameTab.find('.subjectName').text(tree.subject);
-                        SaveIndicator.setSavedChanges(false);
-                    }
-                }
-
-                $(this).hide();
-                $('#scenarioNameTab .subjectName').show();
-            });
-            subjectNameInputSpan.on('keydown', function(e)
-            {
-                if (e.keyCode === 13) // Enter
-                {
-                    $(this).trigger('focusout', [false]);
-                }
-                if (e.keyCode === 27) // Escape
-                {
-                    $(this).trigger('focusout', [true]);
-                }
-            });
-            subjectNameInputSpan.hide();
-            scenarioNameTab.append(subjectNameInputSpan);
-            scenarioNameTab.find('.subjectName').on('dblclick', function()
-            {
-                $(this).hide();
-
-                const nameInputSpan = scenarioNameTab.find('.subjectNameInputSpan');
-                const nameInput = nameInputSpan.children('input');
-                nameInput.val(Zoom.getZoomed().subject);
-                nameInputSpan.show();
-                nameInput.focus();
-            });
 
             if (Main.selectedElement !== null)
             {
                 // A node is selected, because a tree is zoomed
                 enableButtons(nodeButtons);
-                scenarioNameTab.hide();
 
                 if (Main.getPlumbInstanceByNodeID(Main.selectedElement).getConnections({ target: Main.selectedElement }).length > 0)
                 {
@@ -1975,22 +1885,103 @@ let Main;
             if (Main.selectedElement in Main.trees)
             {
                 enableButtons(clipboardToolButtons);
-                scenarioNameTab.hide();
             }
-            // Otherwise show scenario name
-            else
-            {
-                scenarioNameTab.find('.scenarioName').on('dblclick', function()
-                {
-                    $(this).hide();
+        }
 
-                    const nameInputSpan = scenarioNameTab.find('.scenarioNameInput');
-                    const nameInput = nameInputSpan.children('input');
-                    nameInput.val(Metadata.container.name);
-                    nameInputSpan.show();
-                    nameInput.focus();
-                });
+        updateBreadcrumbs();
+    }
+
+    function setupBreadcrumbs()
+    {
+        const breadcrumbs = $('#breadcrumbs');
+        const scenarioName = breadcrumbs.children('.scenarioName');
+        const subjectName = breadcrumbs.children('.subjectName');
+
+        const setupNameWithInput = function(inputSpan, handler)
+        {
+            const textSpan = inputSpan.children('span');
+            const nameInput = inputSpan.children('input');
+            inputSpan.on('focusout', function(e, cancel)
+            {
+                if (!inputSpan.hasClass('editing')) return; // Prevents double trigger
+                nameInput.hide();
+                inputSpan.removeClass('editing');
+                if (!cancel)
+                {
+                    const newValue = handler(e);
+                    if (typeof newValue !== 'undefined')
+                    {
+                        textSpan.text(newValue);
+                        SaveIndicator.setSavedChanges(false);
+                    }
+                }
+                textSpan.show();
+            });
+            nameInput.on('keydown', function(e)
+            {
+                if (e.keyCode === 13) // Enter
+                {
+                    $(this).trigger('focusout', [false]);
+                }
+                if (e.keyCode === 27) // Escape
+                {
+                    $(this).trigger('focusout', [true]);
+                }
+            });
+            nameInput.hide();
+            textSpan.on('dblclick', function()
+            {
+                inputSpan.addClass('editing');
+                $(this).hide();
+                nameInput.val(textSpan.text());
+                nameInput.show();
+                nameInput.focus();
+            });
+        };
+
+        setupNameWithInput(scenarioName, function()
+        {
+            const inputName = Metadata.formatScenarioName(scenarioName.children('input').val());
+            if (inputName !== Metadata.container.name)
+            {
+                Metadata.container.name = inputName;
+                Main.updateDocumentTitle();
+                return inputName;
             }
+        });
+
+        setupNameWithInput(subjectName, function()
+        {
+            const tree = Zoom.getZoomed();
+            const inputName = Metadata.formatScenarioName(subjectName.children('input').val());
+            if (inputName !== tree.subject)
+            {
+                tree.subject = inputName;
+                tree.dragDiv.find('.subjectDiv').find('.subjectName').text(tree.subject);
+                return inputName;
+            }
+        });
+    }
+
+    function updateBreadcrumbs()
+    {
+        const breadcrumbs = $('#breadcrumbs');
+        breadcrumbs.toggleClass('zoomed', Zoom.isZoomed());
+        breadcrumbs.find('.slashDivider').toggle(Zoom.isZoomed());
+        breadcrumbs.find('.subjectName').toggle(Zoom.isZoomed());
+        const zoomOutHandler = function(e)
+        {
+            e.stopImmediatePropagation();
+            Zoom.zoomOut();
+        };
+
+        const scenarioName = breadcrumbs.find('.scenarioName');
+        scenarioName.off('click', zoomOutHandler);
+
+        if (Zoom.isZoomed())
+        {
+            breadcrumbs.find('.subjectName span').text(Zoom.getZoomed().subject);
+            scenarioName.on('click', zoomOutHandler);
         }
     }
 

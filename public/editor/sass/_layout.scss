@@ -32,9 +32,10 @@ body {
   min-width: 0;
   overflow: hidden;
   grid-template-columns: 1fr min-content;
-  grid-template-rows: min-content 1fr auto;
+  grid-template-rows: min-content min-content 1fr auto;
   // stylelint-disable-next-line declaration-block-no-redundant-longhand-properties
   grid-template-areas: 'toolbar toolbar'
+    'breadcrumbs sidebar'
     'canvas sidebar'
     'tab-dock tab-dock';
 }

@@ -206,16 +206,18 @@
   }
 }
 
-.subjectName {
-  display: block;
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.subjectDiv {
+  .subjectName {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-.subjectNameInput {
-  position: relative;
-  z-index: 1; // Ensures positive z-index on Chromebooks.
-  width: 100%;
-  box-sizing: border-box;
+  .subjectNameInput {
+    position: relative;
+    z-index: 1; // Ensures positive z-index on Chromebooks.
+    width: 100%;
+    box-sizing: border-box;
+  }
 }

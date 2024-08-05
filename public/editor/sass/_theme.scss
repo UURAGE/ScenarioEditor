@@ -39,6 +39,15 @@
   }
 }
 
+#breadcrumbs {
+  color: var(--t-fg-default);
+  background-color: var(--t-bg-default);
+
+  &.dark {
+    background-color: lighten($slate-700, 5%);
+  }
+}
+
 #sidebar, #toolbar, #tabDock {
   &.dark {
     color-scheme: dark;

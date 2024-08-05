@@ -155,9 +155,6 @@
           </div>
 
           <div class="center">
-            <div id="scenarioNameTab">
-              <span class="scenarioName"></span>
-            </div>
             <!-- Child node creation -->
             <div class="dropdown splitButton nodeButton" id="addNode">
               <div class="buttons">
@@ -199,6 +196,18 @@
               ?>
             </div>
           </div>
+      </div>
+
+      <div id="breadcrumbs">
+        <div class="scenarioName">
+          <span></span>
+          <input type="text"/>
+        </div>
+        <div class="slashDivider">/</div>
+        <div class="subjectName">
+          <span></span>
+          <input type="text"/>
+        </div>
       </div>
 
       <div id="canvas" class="fullscreen wSpacing">
