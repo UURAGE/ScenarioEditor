@@ -1189,7 +1189,7 @@ let Main;
         return Main.nodes[id];
     }
 
-    function createChildNode(parentNodeID)
+    function createChildNode(parentNodeID, type)
     {
         if (parentNodeID in Main.nodes)
         {
@@ -1214,26 +1214,30 @@ let Main;
                 top: parentPosition.top + parentDiv.height() + 150,
                 left: newChildNodePositionLeft
             };
-            let node;
-            if (childNodeIDs.length > 0)
+            if (!type)
             {
-                node = addNewNode(Main.nodes[childNodeIDs[0]].type, "", position, true);
-            }
-            else
-            {
-                switch (parent.type)
+                if (childNodeIDs.length > 0)
                 {
-                    case Main.playerType:
-                        node = addNewNode(Main.computerType, "", position, true);
-                        break;
-                    case Main.computerType:
-                        node = addNewNode(Main.playerType, "", position, true);
-                        break;
-                    case Main.situationType:
-                        node = addNewNode(Main.playerType, "", position, true);
-                        break;
+                    type = Main.nodes[childNodeIDs[0]].type;
+                }
+                else
+                {
+                    switch (parent.type)
+                    {
+                        case Main.playerType:
+                            type = Main.computerType;
+                            break;
+                        case Main.computerType:
+                            type = Main.playerType;
+                            break;
+                        case Main.situationType:
+                            type = Main.playerType;
+                            break;
+                    }
                 }
             }
+
+            const node = addNewNode(type, "", position, true);
 
             // If there are errors (cycles, invalid pairs, existing connections)
             // regarding the connection to be created, delete the new node and cancel.
