@@ -368,6 +368,21 @@ let Main;
             isMainClickAction = true;
         });
 
+        $("#main").on('keydown', function(e)
+        {
+            if (!((e.ctrlKey || e.metaKey) && e.keyCode === 65)) return; // A
+            if (Zoom.isZoomed())
+            {
+                Main.selectElements(Zoom.getZoomed().nodes);
+            }
+            else
+            {
+                Main.selectElements(Object.keys(Main.trees));
+            }
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
         // Used for selecting multiple nodes.
         const selectable = new Selectable(
         {
