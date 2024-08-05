@@ -750,8 +750,6 @@ let Main;
                     }
                     nodeID ? updateNodeDecorations(nodeID) : updateTreeDecorations(treeID);
                 };
-                // Prevent db-clicks on link to enter edit mode in nodes
-                button.ondblclick = (e) => e.stopPropagation();
                 sideMenuDropdown.append(sideMenuItem);
             });
             sideMenu.append(sideMenuDropdown);
@@ -782,6 +780,7 @@ let Main;
         const stopPropagationHandler = function(event) { event.stopPropagation(); };
         sideMenuOpenIcon.addEventListener('mousedown', stopPropagationHandler);
         sideMenu.addEventListener('mousedown', stopPropagationHandler);
+        sideMenu.addEventListener('dblclick', stopPropagationHandler);
 
         container.addEventListener('contextmenu', function(event)
         {
