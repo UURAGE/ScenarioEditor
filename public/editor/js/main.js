@@ -1357,7 +1357,7 @@ let Main;
                     nodeID: id,
                     icon: 'mdi-arrow-collapse-right',
                     text: i18next.t('common:special_node.endNode.header'),
-                    title: i18next.t('common:special_node.allowInterleaveNode.title'),
+                    title: i18next.t('common:special_node.endNode.title'),
                     className: 'nodeEndKinds',
                     property: 'endNode'
                 },
