@@ -80,9 +80,4 @@
   --t-grid-dot-color: #{$slate-700};
 
   color-scheme: dark;
-
-  .treeDiv .w:not(.ui-selected) {
-    color: var(--t-bg-dim);
-    background-color: var(--t-fg-default);
-  }
 }

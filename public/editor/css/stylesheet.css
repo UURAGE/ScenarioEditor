@@ -72,10 +72,6 @@
   --t-grid-dot-color: #334155;
   color-scheme: dark;
 }
-.dark .treeDiv .w:not(.ui-selected) {
-  color: var(--t-bg-dim);
-  background-color: var(--t-fg-default);
-}
 
 /* © DialogueTrainer */
 @font-face {
