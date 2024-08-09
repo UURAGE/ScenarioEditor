@@ -21,7 +21,7 @@ let SaveIndicator;
         if (value === savedChanges) return;
 
         savedChanges = value;
-        $('#saveButton').toggleClass('unsavedChanges', !savedChanges);
+        $('#export').toggleClass('unsavedChanges', !savedChanges);
         Main.updateDocumentTitle();
     }
 

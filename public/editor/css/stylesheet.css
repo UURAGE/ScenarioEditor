@@ -1672,7 +1672,7 @@ input[type=text].search:focus {
   opacity: 0.65;
 }
 
-#saveButton {
+#export {
   position: relative;
 }
 @keyframes fade {
@@ -1680,7 +1680,7 @@ input[type=text].search:focus {
     opacity: 0;
   }
 }
-#saveButton.unsavedChanges::before {
+#export.unsavedChanges::before {
   content: "";
   position: absolute;
   top: 12px;
@@ -1692,7 +1692,7 @@ input[type=text].search:focus {
   border: 2px solid var(--t-bg-default);
   border-radius: 100%;
 }
-.saving #saveButton.unsavedChanges::before {
+.saving #export.unsavedChanges::before {
   animation: fade 1s infinite alternate;
 }
 

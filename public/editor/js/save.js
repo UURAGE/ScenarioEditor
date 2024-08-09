@@ -19,6 +19,7 @@ let Save;
     $(function()
     {
         $("#exportScenario").on('click', exportScenario);
+        $("#export").on('click', exportScenario);
     });
 
     // Generates the XML

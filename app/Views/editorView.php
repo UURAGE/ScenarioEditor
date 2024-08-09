@@ -182,7 +182,7 @@
             <button id="togglePlaythroughsScreen" class="globalButton" title="<?php sLang("edt_playthrough_item_analysis") ?>"><?php echo sIcon("mdi-selection-search") ?></button>
             <!-- Validate -->
             <button id="validation" class="globalButton" title="<?php sLang("edt_validate") ?>"><?php echo sIcon("icon-validate") ?></button>
-            <button id="saveButton" class="globalButton editingOnly" title="<?php sLang("edt_save") ?>"><?php echo sIcon("mdi-content-save") ?></button>
+            <button id="export" class="globalButton editingOnly" title="<?php sLang("edt_export_scenario") ?>"><?php echo sIcon("mdi-download") ?></button>
             <div id="languages">
               <?php
               $languages = scandir(APPPATH . 'Language');
