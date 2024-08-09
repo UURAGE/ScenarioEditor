@@ -2748,7 +2748,7 @@ let Main;
                 if (!acceptableScopes.includes(propertyItem.scopes.statementScope)) return;
                 if (propertyItem.kind === 'section')
                 {
-                    const sectionContainer = $('<div>');
+                    const sectionContainer = $('<div>', { id: "section-" + propertyItem.id });
 
                     const sectionHeader = $('<h' + hLevel + '>', { text: propertyItem.name });
                     sectionContainer.append(sectionHeader);
