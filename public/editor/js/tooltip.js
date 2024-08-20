@@ -52,6 +52,7 @@
                 },
             };
 
+            if (options.appendTo) tippyOptions.appendTo = options.appendTo;
             const instance = tippy(tooltipElement, tippyOptions);
 
             $(this).data('tippy-instance', instance);

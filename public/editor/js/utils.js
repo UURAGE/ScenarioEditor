@@ -162,12 +162,18 @@ let Utils;
             attachmentContainer.insertAfter(elem);
         }
         const tooltipIcon = $('<span>', { class: "markdown-tooltip" }).append($(Utils.sIcon('mdi-information-slab-circle-outline')));
-        tooltipIcon.tooltip(
-        {
+        const tooltipOptions = {
             content: i18next.t('utils:markdown_tooltip'),
             theme: "markdown",
             interactive: true
-        });
+        };
+
+        if (attachmentContainer.closest('dialog').length > 0)
+        {
+            tooltipOptions.appendTo = attachmentContainer.closest('dialog').get(0);
+        }
+
+        tooltipIcon.tooltip(tooltipOptions);
         attachmentContainer.append(tooltipIcon);
     }
 
