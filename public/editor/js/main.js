@@ -2668,7 +2668,8 @@ let Main;
                 // Show the sections for all per-character fixed parameter effects
                 const fixedCharacterParameterEffectsEl = $("#fixed-character-parameter-effects");
                 const characterClassPrefix = fixedCharacterParameterEffectsEl.attr('id');
-
+                const accordionDiv = $('<div>');
+                fixedCharacterParameterEffectsEl.append(accordionDiv);
                 let anyCharacterParameterShown = false;
                 // Accumulator for mapping a character parameter id to its effects container
                 const idRefToCharacterEffectsContainer = {};
@@ -2676,7 +2677,7 @@ let Main;
                 {
                     const characterHeader = $('<h' + hStartLevel + '>', { value: character.id, text: character.name ? character.name : character.id });
                     const characterDiv = $('<div>');
-                    fixedCharacterParameterEffectsEl.append(characterHeader).append(characterDiv);
+                    accordionDiv.append(characterHeader).append(characterDiv);
 
                     const classCharacterPrefix = characterClassPrefix + '-' + character.id;
 
@@ -2712,12 +2713,12 @@ let Main;
                     {
                         fixedCharacterParameterEffectsEl.prepend($('<h3>', { text: i18next.t('common:characters') }));
                         // Set the heightStyle to "content", because the content changes dynamically
-                        fixedCharacterParameterEffectsEl.accordion({ active: false, collapsible: true, heightStyle: "content" });
+                        accordionDiv.accordion({ active: false, collapsible: true, heightStyle: "content" });
                     }
                 }
                 else
                 {
-                    fixedCharacterParameterEffectsEl.remove();
+                    accordionDiv.remove();
                 }
 
                 // Add the per-character effects that were previously defined

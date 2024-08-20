@@ -7,17 +7,15 @@
 .accordion {
   $header-height: 40px;
 
-  display: grid;
-  overflow: hidden;
-  border: 1px solid $slate-300;
-  border-radius: $rounded-lg;
-  transition: grid-template-rows .5s;
-  grid-template-rows: $header-height 0fr;
-
   .header {
     display: flex;
     align-items: center;
+    min-height: $header-height;
+    margin: 0;
+    margin-top: $spacing-2;
     background-color: $slate-300;
+    border: 1px solid $slate-300;
+    border-radius: $rounded-lg;
     transition: filter .2s ease-in-out;
 
     input[type=text] {
@@ -44,29 +42,38 @@
         pointer-events: none;
       }
     }
-  }
 
-  .content {
-    display: grid;
-    padding: 0 $spacing-4;
-    overflow: hidden;
-    transition: padding .5s;
-    gap: $spacing-2;
+    &.open {
+      border-radius: $rounded-lg $rounded-lg 0 0;
 
-    > button {
-      width: fit-content;
-    }
-  }
+      .arrow {
+        transform: rotate(180deg);
+      }
 
-  &.open {
-    grid-template-rows: $header-height 1fr;
-
-    > .header .arrow {
-      transform: rotate(180deg);
+      + * {
+        padding: $spacing-4;
+        grid-template-rows: 1fr;
+        border: 1px solid $slate-300;
+        border-radius: 0 0 $rounded-lg $rounded-lg;
+      }
     }
 
-    > .content {
-      padding: $spacing-4;
+    + * {
+      // Accordion content
+      display: grid;
+      padding: 0 $spacing-4;
+      overflow: hidden;
+      transition: grid-template-rows .5s, padding .5s;
+      gap: $spacing-2;
+      grid-template-rows: 0fr;
+
+      > * {
+        min-height: 0;
+
+        > button {
+          width: fit-content;
+        }
+      }
     }
   }
 }

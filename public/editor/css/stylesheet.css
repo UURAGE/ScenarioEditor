@@ -776,18 +776,15 @@ dialog .enumeration-values-container button {
 
 /* © DialogueTrainer */
 /* © DialogueTrainer */
-.accordion {
-  display: grid;
-  overflow: hidden;
-  border: 1px solid #CBD5E1;
-  border-radius: 8px;
-  transition: grid-template-rows 0.5s;
-  grid-template-rows: 40px 0fr;
-}
 .accordion .header {
   display: flex;
   align-items: center;
+  min-height: 40px;
+  margin: 0;
+  margin-top: 8px;
   background-color: #CBD5E1;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
   transition: filter 0.2s ease-in-out;
 }
 .accordion .header input[type=text] {
@@ -809,25 +806,32 @@ dialog .enumeration-values-container button {
   height: 24px;
   pointer-events: none;
 }
-.accordion .content {
+.accordion .header.open {
+  border-radius: 8px 8px 0 0;
+}
+.accordion .header.open .arrow {
+  transform: rotate(180deg);
+}
+.accordion .header.open + * {
+  padding: 16px;
+  grid-template-rows: 1fr;
+  border: 1px solid #CBD5E1;
+  border-radius: 0 0 8px 8px;
+}
+.accordion .header + * {
   display: grid;
   padding: 0 16px;
   overflow: hidden;
-  transition: padding 0.5s;
+  transition: grid-template-rows 0.5s, padding 0.5s;
   gap: 8px;
+  grid-template-rows: 0fr;
 }
-.accordion .content > button {
+.accordion .header + * > * {
+  min-height: 0;
+}
+.accordion .header + * > * > button {
   width: -moz-fit-content;
   width: fit-content;
-}
-.accordion.open {
-  grid-template-rows: 40px 1fr;
-}
-.accordion.open > .header .arrow {
-  transform: rotate(180deg);
-}
-.accordion.open > .content {
-  padding: 16px;
 }
 
 /* © DialogueTrainer */
