@@ -168,12 +168,17 @@ let Utils;
             theme: "markdown",
             interactive: true
         });
-        tooltipIcon.insertAfter(elem);
+        attachmentContainer.append(tooltipIcon);
     }
 
     function detachMarkdownTooltip(elem)
     {
-        elem.next('.markdown-tooltip').remove();
+        const attachmentContainer = elem.next('.attachment-container');
+        attachmentContainer.children('.markdown-tooltip').remove();
+        if (attachmentContainer.children().length === 0)
+        {
+            attachmentContainer.remove();
+        }
     }
 
     function makeSortable(container, connectWith, items)

@@ -87,32 +87,31 @@ a.clickable {
   height: 0;
   text-align: right;
 
-  > span {
+  textarea:focus + * + &,
+  input:focus + * + &,
+  textarea:focus + &,
+  input:focus + & {
+    position: relative;
+    z-index: 1;
+    display: block;
+    transform: translate(3px, 0);
+  }
+
+  > .markdown-tooltip {
     display: inline-block;
     padding: 5px;
     line-height: 0;
     background: rgba(white, .95);
     border: 1px solid rgba(black, .25);
-    border-radius: 3px;
+    border-radius: 6px;
     box-shadow: 0 1px 2px rgba(black, .15);
-  }
 
-  svg {
-    width: 10px;
-    height: 10px;
-    pointer-events: none;
-  }
-
-  textarea:focus + & {
-    display: block;
-  }
-
-  input:focus + & {
-    position: relative;
-    z-index: 1;
-    display: inline-block;
-    width: 0;
-    transform: translate(3px, 0);
+    svg {
+      width: 10px;
+      height: 10px;
+      fill: rgba(black, .75);
+      pointer-events: none;
+    }
   }
 }
 
