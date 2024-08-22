@@ -24,14 +24,13 @@ let Resize;
         {
             const d = Math.min(Math.max(dimension, options.minDimension), options.maxDimension);
             $(options.containerSelector).css(options.direction === 'horizontal' ? 'width' : 'height', d + 'px');
-            localStorage.setItem(options.dimensionKey, d);
-            localStorage.setItem(options.collapsedKey, false);
+            trySetInStorage(options.dimensionKey, d);
+            trySetInStorage(options.collapsedKey, 'false');
         };
 
         const collapseContainer = set =>
         {
-            set = set || false; // Don't toggle, just collapse
-            if (set || localStorage.getItem(options.collapsedKey) === "false")
+            if (set || tryGetFromStorage(options.collapsedKey) === "false")
             {
                 if (options.direction === 'horizontal')
                 {
@@ -43,12 +42,11 @@ let Resize;
                     $(options.containerSelector).css('height', $(options.containerSelector).css('min-height'));
                 }
 
-                localStorage.setItem(options.collapsedKey, 'true');
+                trySetInStorage(options.collapsedKey, 'true');
             }
-            else if (localStorage.getItem(options.collapsedKey) === "true")
+            else if (tryGetFromStorage(options.collapsedKey) === "true")
             {
                 setContainerDimension(options.maxDimension);
-                localStorage.setItem(options.collapsedKey, 'false');
             }
         };
 
@@ -101,14 +99,50 @@ let Resize;
                 collapseContainer();
             });
 
-            if (Utils.parseBool(localStorage.getItem(options.collapsedKey)))
+            if (Utils.parseBool(tryGetFromStorage(options.collapsedKey)))
             {
                 collapseContainer(true);
             }
         }
-        else if (localStorage.getItem(options.dimensionKey))
+
+        if (options.dimensionKey)
         {
-            setContainerDimension(localStorage.getItem(options.dimensionKey));
+            const dimension = tryGetFromStorage(options.dimensionKey);
+            if (dimension) setContainerDimension(dimension);
+        }
+    }
+
+    const storage = {};
+
+    function tryGetFromStorage(key)
+    {
+        const storageItem = storage[key];
+        if (storageItem !== undefined) return storageItem;
+
+        try
+        {
+            return localStorage.getItem(key);
+        }
+        catch (e)
+        {
+            // Local storage is an enhancement
+            console.error(e);
+            return null;
+        }
+    }
+
+    function trySetInStorage(key, value)
+    {
+        storage[key] = value;
+
+        try
+        {
+            localStorage.setItem(key, value);
+        }
+        catch (e)
+        {
+            // Local storage is an enhancement
+            console.error(e);
         }
     }
 })();

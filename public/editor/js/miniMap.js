@@ -220,8 +220,16 @@ let MiniMap;
 
     function recallShown()
     {
-        const recalledShown = localStorage.getItem('MiniMap.shown');
-        if (recalledShown !== null) shown = Boolean(JSON.parse(recalledShown));
+        try
+        {
+            const recalledShown = localStorage.getItem('MiniMap.shown');
+            if (recalledShown !== null) shown = Boolean(JSON.parse(recalledShown));
+        }
+        catch (e)
+        {
+            // Local storage is an enhancement
+            console.error(e);
+        }
     }
 
     function setAndStoreShown(newShown)
@@ -233,7 +241,8 @@ let MiniMap;
         }
         catch (e)
         {
-            // Storage is an enhancement, so ignore failure
+            // Local storage is an enhancement
+            console.error(e);
         }
     }
 

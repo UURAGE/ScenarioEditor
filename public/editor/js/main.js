@@ -483,7 +483,7 @@ let Main;
         try
         {
             const data = window.localStorage.getItem(key);
-            const newConfig = JSON.parse(data);
+            const newConfig = data ? JSON.parse(data) : {};
 
             themeConfiguration = newConfig;
             if (!(elementId in themeConfiguration))
@@ -510,14 +510,21 @@ let Main;
                 $(this).removeClass("enabled");
                 element.removeClass('dark');
                 themeConfiguration[elementId] = 'light';
-                window.localStorage.setItem(key, JSON.stringify(themeConfiguration));
             }
             else
             {
                 $(this).addClass("enabled");
                 element.addClass('dark');
                 themeConfiguration[elementId] = 'dark';
+            }
+            try
+            {
                 window.localStorage.setItem(key, JSON.stringify(themeConfiguration));
+            }
+            catch (e)
+            {
+                // Local storage is an enhancement
+                console.error(e);
             }
             $("#main").focus();
         });
@@ -525,10 +532,19 @@ let Main;
 
     function initialiseSplitButtons()
     {
-        const key = "editor-splitbuttons";
-        const storageData = localStorage.getItem(key);
-        const storageConfig = storageData ? JSON.parse(storageData) : {};
         const config = {};
+        const key = "editor-splitbuttons";
+        let storageConfig = {};
+        try
+        {
+            const storageData = localStorage.getItem(key);
+            if (storageData) storageConfig = JSON.parse(storageData);
+        }
+        catch (e)
+        {
+            // Local storage is an enhancement
+            console.error(e);
+        }
 
         const switchSplitButton = function(dropdown, newButton)
         {
@@ -547,7 +563,15 @@ let Main;
             if (dropdownID && newButtonID)
             {
                 config[dropdownID] = newButtonID;
-                localStorage.setItem(key, JSON.stringify(config));
+                try
+                {
+                    localStorage.setItem(key, JSON.stringify(config));
+                }
+                catch (e)
+                {
+                    // Local storage is an enhancement
+                    console.error(e);
+                }
             }
         };
 
