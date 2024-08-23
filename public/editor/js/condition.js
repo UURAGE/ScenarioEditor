@@ -296,8 +296,17 @@ let Condition;
         const deleteButton = Parts.deleteButton();
         deleteButton.on('click', function()
         {
-            condition.remove();
-            updateGroupConditionCounter(container.closest(".groupcondition"));
+            Utils.showExpressionDeletionWarning(
+                condition,
+                i18next.t('condition:delete_warning')
+            ).then(function(confirmed)
+            {
+                if (confirmed)
+                {
+                    condition.remove();
+                    updateGroupConditionCounter(container.closest(".groupcondition"));
+                }
+            });
         });
         condition.append(deleteButton);
 
@@ -364,8 +373,13 @@ let Condition;
     function appendGroupCondition(container, allowReferenceConditions)
     {
         const groupCondition = $('<div>', { class: "condition groupcondition empty" });
+
+        if (container.closest('.condition').length > 0)
+        {
+            const handle = $('<span>', { class: "handle", text: "↕" });
+            groupCondition.append(handle);
+        }
         groupCondition.append($('<label>', { class: "emptyLabel", text: i18next.t('condition:empty_group') }));
-        groupCondition.append($('<div>', { class: "singleLabel hidden", text: i18next.t('condition:one_condition_group') }));
 
         const groupConditionRadio = $('<div>', { class: "groupConditionRadioDiv" });
         const andLabel = $('<label>').append($('<input>', { type: 'radio', value: 'and', checked: 'checked' }));
@@ -383,9 +397,15 @@ let Condition;
         const subconditionsContainer = $('<div>', { class: "groupConditionDiv" });
         groupCondition.append(subconditionsContainer);
 
-        Utils.makeSortable(subconditionsContainer);
+        Utils.makeSortable(subconditionsContainer, '.condition', undefined, {
+            onSort: function(event)
+            {
+                updateGroupConditionCounter($(event.from).closest(".groupcondition"));
+                updateGroupConditionCounter($(event.to).closest(".groupcondition"));
+            },
+        });
 
-        const buttonsWrapper = $('<div>', { class: "flexbox gap-1 flexWrap buttonsWrapper" });
+        const buttonsWrapper = $('<div>', { class: "buttons" });
 
         const addConditionButton = Parts.addButton(i18next.t('condition:add_condition'));
         addConditionButton.on('click', function()
@@ -419,12 +439,20 @@ let Condition;
         groupCondition.append(buttonsWrapper);
 
         const deleteButton = Parts.deleteButton();
-        deleteButton.removeClass('buttonIcon');
-        deleteButton.append(i18next.t('condition:delete_group'));
         deleteButton.on('click', function()
         {
-            groupCondition.remove();
-            updateGroupConditionCounter(container.closest(".groupcondition"));
+            const count = subconditionsContainer.children().length;
+            Utils.showExpressionDeletionWarning(
+                groupCondition,
+                i18next.t('condition:delete_group_warning', { count })
+            ).then(function(confirmed)
+            {
+                if (confirmed)
+                {
+                    groupCondition.remove();
+                    updateGroupConditionCounter(container.closest(".groupcondition"));
+                }
+            });
         });
         groupCondition.append(deleteButton);
 

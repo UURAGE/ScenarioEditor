@@ -39,7 +39,8 @@ let Utils;
             large: 1024,
             extraLarge: 1200
         },
-        debounce: debounce
+        debounce: debounce,
+        showExpressionDeletionWarning: showExpressionDeletionWarning
     };
 
     // Taken from stackoverflow
@@ -187,12 +188,13 @@ let Utils;
         }
     }
 
-    function makeSortable(container, connectWith, items)
+    function makeSortable(container, connectWith, items, additonalOptions)
     {
         const options = {
             handle: '.handle',
             direction: 'vertical',
             animation: 150,
+            ...additonalOptions
         };
 
         if (connectWith) options.group = connectWith;
@@ -375,5 +377,47 @@ let Utils;
                 f(...args);
             }, ms);
         };
+    }
+
+    function showExpressionDeletionWarning(container, message)
+    {
+        return new Promise(resolve =>
+        {
+            container.addClass('candidateForDeletion');
+
+            const previouslyEnabledElements = container.find(':enabled').not('button.delete').prop('disabled', true);
+            const deleteButton = container.children('button.delete').removeClass('col-danger');
+            const deleteDialog = $('<div>', { class: 'deleteDialog' });
+            const messageElement = $('<span>', { text: message });
+            const confirmButton = $('<button>', { class: "highlight", text: i18next.t('common:delete') });
+            const cancelButton = $('<button>', { text: i18next.t('common:cancel') });
+            const deleteIconUse = deleteButton.find('use');
+            const originalDeleteIcon = deleteIconUse.attr('xlink:href');
+            deleteIconUse.attr('xlink:href', '#mdi-arrow-left');
+
+            const cancelHandler = event =>
+            {
+                event.stopImmediatePropagation();
+                container.removeClass('candidateForDeletion');
+                previouslyEnabledElements.prop('disabled', false);
+                deleteButton.addClass('col-danger').get(0).removeEventListener('click', cancelHandler, true);
+                deleteIconUse.attr('xlink:href', originalDeleteIcon);
+                deleteDialog.remove();
+                resolve(false);
+            };
+
+            confirmButton.on('click', () => { resolve(true); });
+            cancelButton.on('click', cancelHandler);
+            deleteButton.get(0).addEventListener('click', cancelHandler, true); // Capturing!
+
+            deleteDialog.append(
+                $('<div>', { class: 'container' }).append(
+                    messageElement,
+                    $('<div>').append(confirmButton, cancelButton)
+                )
+            );
+
+            container.append(deleteDialog);
+        });
     }
 })();

@@ -3,5 +3,13 @@
     "missing_name_warning": "Some evaluations will not be saved, because an evaluation needs a name. Are you sure you want to continue?",
     "removal_warning": "You removed the following $t(evaluations:evaluation, { 'count': {{count}} }). Are you sure you want to continue?",
     "evaluation_one": "evaluation",
-    "evaluation_other": "evaluations"
+    "evaluation_other": "evaluations",
+    "add_when": "Add when",
+    "delete_when": "Delete 'when' with all contents?",
+    "add_to_sum": "Add item",
+    "delete_from_sum": "Delete '{{kind}}' from sum?",
+    "add_to_score": "Add item",
+    "delete_from_score": "Delete item from score?",
+    "add_to_profile_score": "Add comparison",
+    "delete_from_profile_score": "Delete comparison from profile score?"
 }

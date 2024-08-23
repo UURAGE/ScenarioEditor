@@ -31,6 +31,7 @@
     "as_percentage": "%",
     "as_value": "#",
     "when": "Als",
+    "then": "Dan",
     "otherwise": "Anders",
     "minimum": "Minimum",
     "maximum": "Maximum",

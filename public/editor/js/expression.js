@@ -187,7 +187,7 @@ let Expression;
             appendControlTo: function(container, type)
             {
                 const sumExpressionsContainer = $('<ul>');
-                const addButton = Parts.addButton("", "add-sum-expression buttonIcon");
+                const addButton = Parts.addButton(i18next.t('evaluations:add_to_sum'), "add-sum-expression add");
                 addButton.on('click', function()
                 {
                     const sumExpressionAndDeleteButtonContainer = $('<li>');
@@ -199,7 +199,19 @@ let Expression;
                     const deleteButton = Parts.deleteButton();
                     deleteButton.on('click', function()
                     {
-                        sumExpressionAndDeleteButtonContainer.remove();
+                        const expressionKind = Object.keys(kinds).find(kind => sumExpressionContainer.hasClass(kind));
+                        const translatedKind = i18next.t(`common:kinds.${expressionKind}`);
+
+                        Utils.showExpressionDeletionWarning(
+                            sumExpressionContainer,
+                            i18next.t('evaluations:delete_from_sum', { kind: translatedKind })
+                        ).then(function(confirmed)
+                        {
+                            if (confirmed)
+                            {
+                                sumExpressionAndDeleteButtonContainer.remove();
+                            }
+                        });
                     });
                     sumExpressionContainer.append(deleteButton);
 
@@ -290,6 +302,7 @@ let Expression;
 
                 const scaleValueContainer = $('<span>', { class: "scale-value" });
                 type.appendControlTo(scaleValueContainer);
+                scaleValueContainer.children('input').val(1); // Default scale by 1
                 container.append(scaleValueContainer);
             },
             getFromDOM: function(container, type)
@@ -446,27 +459,39 @@ let Expression;
             appendControlTo: function(container, type)
             {
                 const whensContainer = $('<ul>');
-                const addButton = Parts.addButtonIcon("add-when text extraSmall");
+                const addButton = Parts.addButton(i18next.t('evaluations:add_when'), "add-when");
                 addButton.on('click', function()
                 {
                     const whenAndDeleteButtonContainer = $('<li>');
 
                     const whenContainer = $('<div>', { class: "when" });
-                    whenContainer.append($('<label>', { text: i18next.t('common:when') + ' ' }));
+                    whenContainer.append($('<label>', { text: i18next.t('common:when') }));
+                    const deleteButton = Parts.deleteButton();
+                    whenContainer.append(deleteButton);
 
                     Condition.appendControlsTo(whenContainer, true);
 
-                    const flexContainer = $('<div>', { class: "flexbox gap-1" });
-                    Expression.appendControlsTo(flexContainer, type);
-                    whenContainer.append(flexContainer);
+                    const thenContainer = $('<div>', { class: 'then' });
+                    thenContainer.append($('<label>', { text: i18next.t('common:then') }));
+                    const expressionContainer = $('<div>');
+                    Expression.appendControlsTo(expressionContainer, type);
+                    thenContainer.append(expressionContainer);
+                    whenContainer.append(thenContainer);
                     whenAndDeleteButtonContainer.append(whenContainer);
 
-                    const deleteButton = Parts.deleteButton();
                     deleteButton.on('click', function()
                     {
-                        whenAndDeleteButtonContainer.remove();
+                        Utils.showExpressionDeletionWarning(
+                            whenContainer,
+                            i18next.t('evaluations:delete_when')
+                        ).then(function(confirmed)
+                        {
+                            if (confirmed)
+                            {
+                                whenAndDeleteButtonContainer.remove();
+                            }
+                        });
                     });
-                    flexContainer.append(deleteButton);
 
                     whensContainer.append(whenAndDeleteButtonContainer);
                 });
@@ -476,9 +501,9 @@ let Expression;
 
                 const otherwiseContainer = $('<div>', { class: "otherwise" }).append($('<label>', { text: i18next.t('common:otherwise') + ' ' }));
 
-                const flexContainer = $('<div>', { class: "flexbox gap-1" });
-                Expression.appendControlsTo(flexContainer, type);
-                otherwiseContainer.append(flexContainer);
+                const expressionContainer = $('<div>');
+                Expression.appendControlsTo(expressionContainer, type);
+                otherwiseContainer.append(expressionContainer);
                 container.append(otherwiseContainer);
             },
             getFromDOM: function(container, type)
@@ -486,7 +511,7 @@ let Expression;
                 const choose =
                 {
                     whens: [],
-                    otherwise: Expression.getFromDOM(container.children('.otherwise').children('.flexbox'), type)
+                    otherwise: Expression.getFromDOM(container.children('.otherwise').children('div'), type)
                 };
 
                 container.children('ul').children('li').each(function()
@@ -498,7 +523,7 @@ let Expression;
                         choose.whens.push(
                         {
                             condition: condition,
-                            expression: Expression.getFromDOM(whenContainer.children('.flexbox'), type)
+                            expression: Expression.getFromDOM(whenContainer.children('.then').children('div'), type)
                         });
                     }
                 });
@@ -513,9 +538,9 @@ let Expression;
                     addButton.trigger('click');
                     const whenContainer = container.children('ul').children('li').last().children('.when');
                     Condition.setInDOM(whenContainer, when.condition, true);
-                    Expression.setInDOM(whenContainer.children('.flexbox'), type, when.expression);
+                    Expression.setInDOM(whenContainer.children('.then').children('div'), type, when.expression);
                 });
-                Expression.setInDOM(container.children('.otherwise').children('.flexbox'), type, choose.otherwise);
+                Expression.setInDOM(container.children('.otherwise').children('div'), type, choose.otherwise);
             },
             fromXML: function(chooseXML, type)
             {
@@ -592,7 +617,7 @@ let Expression;
             appendControlTo: function(container, type)
             {
                 const scoreItemsContainer = $('<ul>');
-                const addButton = Parts.addButton("", "add-score-item");
+                const addButton = Parts.addButton(i18next.t('evaluations:add_to_score'), "add-score-item");
                 addButton.on('click', function()
                 {
                     const scoreItemAndDeleteButtonContainer = $('<li>');
@@ -602,6 +627,7 @@ let Expression;
                     scoreItemAndDeleteButtonContainer.append(referenceContainer);
 
                     const weightContainer = $('<span>', { class: "score-weight" });
+                    weightContainer.append($('<span>', { text: "*" }));
                     Types.primitives.integer.appendControlTo(weightContainer);
                     Types.primitives.integer.setInDOM(weightContainer, 1);
                     scoreItemAndDeleteButtonContainer.append(weightContainer);
@@ -609,7 +635,16 @@ let Expression;
                     const deleteButton = Parts.deleteButton();
                     deleteButton.on('click', function()
                     {
-                        scoreItemAndDeleteButtonContainer.remove();
+                        Utils.showExpressionDeletionWarning(
+                            scoreItemAndDeleteButtonContainer,
+                            i18next.t('evaluations:delete_from_score')
+                        ).then(function(confirmed)
+                        {
+                            if (confirmed)
+                            {
+                                scoreItemAndDeleteButtonContainer.remove();
+                            }
+                        });
                     });
                     scoreItemAndDeleteButtonContainer.append(deleteButton);
 
@@ -762,7 +797,7 @@ let Expression;
                 container.append($('<span>', { text: i18next.t('common:compared_with') }));
 
                 const comparisonReferencesContainer = $('<ul>');
-                const addButton = Parts.addButton("", "add-profile-comparison-reference");
+                const addButton = Parts.addButton(i18next.t('evaluations:add_to_profile_score'), "add-profile-comparison-reference");
                 const appendComparisonReferenceContainer = function()
                 {
                     const comparisonReferenceContainer = $('<li>');
@@ -776,7 +811,16 @@ let Expression;
                         const deleteButton = Parts.deleteButton();
                         deleteButton.on('click', function()
                         {
-                            comparisonReferenceContainer.remove();
+                            Utils.showExpressionDeletionWarning(
+                                comparisonReferenceContainer,
+                                i18next.t('evaluations:delete_from_profile_score')
+                            ).then(function(confirmed)
+                            {
+                                if (confirmed)
+                                {
+                                    comparisonReferenceContainer.remove();
+                                }
+                            });
                         });
                         comparisonReferenceContainer.append(deleteButton);
                     }
@@ -936,6 +980,7 @@ let Expression;
 
     function appendControlsTo(container, type)
     {
+        container.addClass('expressionWrapper').addClass(type.name);
         const expressionSelect = $('<select>', { class: "expression-kind" });
         for (const kindName in kinds)
         {
@@ -951,6 +996,9 @@ let Expression;
                 existingExpressionContainer.empty() :
                 $('<span>', { class: "expression" }).appendTo(container);
             kinds[$(this).val()].appendControlTo(expressionContainer, type);
+            const classes = Object.keys(kinds);
+            expressionContainer.parent().removeClass(classes).
+                addClass($(this).val());
         });
         container.append(expressionSelect);
         expressionSelect.trigger('change');
@@ -1011,6 +1059,7 @@ let Expression;
         {
             const expression = getFromDOM(container, previousType);
             expression.kind.handleTypeChange(previousType, newType, expression);
+            container.removeClass(previousType.name);
             container.empty();
             appendControlsTo(container, newType);
             setInDOM(container, newType, expression);

@@ -1,11 +1,14 @@
 {
     "empty_group": "Empty group",
-    "one_condition_group": "Group with one condition",
     "all_true": "all true",
     "one_true": "at least one true",
     "add_condition": "Add condition",
     "add_group": "Add group",
     "delete_group": "Delete group",
+    "delete_warning": "Delete condition?",
+    "delete_group_warning_zero": "Delete empty group condition?",
+    "delete_group_warning_one": "Delete group condition with {{count}} item?",
+    "delete_group_warning_other": "Delete group condition with all {{count}} items?",
     "error": {
         "no_test": "There are no parameters to test on."
     }

@@ -1092,9 +1092,6 @@ textarea:focus + * + .attachment-container, input:focus + * + .attachment-contai
 .parameter-effect .handle {
   padding: 0 5px;
 }
-.condition .handle {
-  padding-right: 5px;
-}
 
 .indicator {
   position: absolute;
@@ -2392,77 +2389,337 @@ input[type=text].search:focus {
 
 /* © DialogueTrainer */
 /* © DialogueTrainer */
-.evaluationExpression,
+.evaluation-expression,
 .scale-expression,
 .expression {
-  display: block;
-  padding: 4px;
-  background: rgba(242, 182, 61, 0.2);
-  border: 1px solid rgba(164, 114, 11, 0.25);
-  border-radius: 4px;
   box-sizing: border-box;
 }
-.evaluationExpression ul,
+.evaluation-expression ul,
 .scale-expression ul,
 .expression ul {
-  padding-inline-start: 24px;
-  margin: 0;
-}
-
-.sum-expression {
-  display: flex;
-  align-items: center;
-}
-
-.scale-expression,
-.expression {
-  display: inline-block;
-}
-
-.define-type {
-  vertical-align: middle;
-}
-.define-type:hover {
-  cursor: pointer;
-  opacity: 0.6;
-}
-
-.groupConditionDiv {
   padding: 0;
-  padding-left: 8px;
-  margin: 0;
-  margin-left: 8px;
-  border-left: 2px solid rgba(0, 0, 0, 0.1);
+  margin: 4px 0;
+  list-style-type: none;
 }
-.when .groupConditionDiv {
-  border-left: 2px solid cornflowerblue;
-}
-.groupConditionDiv .condition {
-  margin-bottom: 4px;
-}
-
-.condition > .condition-test-container + button {
-  display: inline-block;
-}
-.condition > .emptyLabel,
-.condition > .singleLabel,
-.condition > .multipleLabel {
+.evaluation-expression ul:empty,
+.scale-expression ul:empty,
+.expression ul:empty {
   display: none;
 }
-.condition.empty > .emptyLabel, .condition.single > .singleLabel, .condition.multiple > .multipleLabel {
+.evaluation-expression select, .evaluation-expression input, .evaluation-expression textarea, .evaluation-expression button,
+.scale-expression select,
+.scale-expression input,
+.scale-expression textarea,
+.scale-expression button,
+.expression select,
+.expression input,
+.expression textarea,
+.expression button {
+  transition: none;
+}
+.evaluation-expression textarea,
+.scale-expression textarea,
+.expression textarea {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+  resize: vertical;
+}
+
+.expressionWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  accent-color: var(--color-expression);
+}
+.expressionWrapper.literal {
+  --color-expression: #777;
+}
+.expressionWrapper.reference {
+  --color-expression: #9424CC;
+}
+.expressionWrapper.sum {
+  --color-expression: #14A450;
+}
+.expressionWrapper.scale, .expressionWrapper.divide {
+  --color-expression: #3F73DB;
+}
+.expressionWrapper.choose {
+  --color-expression: #F2A007;
+}
+.expressionWrapper.score, .expressionWrapper.profileScore {
+  --color-expression: #C7402D;
+}
+.expressionWrapper.literal:not(.string), .expressionWrapper.reference:not(.string) {
+  flex-direction: row;
+}
+.expressionWrapper.literal:not(.string) .expression, .expressionWrapper.reference:not(.string) .expression {
+  flex-grow: 1;
+}
+.expressionWrapper .expression {
+  align-self: stretch;
+}
+.expressionWrapper button.col-default.roundedPill {
+  padding: 4px 8px;
+  background-color: var(--color-expression);
+}
+.expressionWrapper select {
+  width: -moz-min-content;
+  width: min-content;
+}
+
+.expressionWrapper,
+.condition .condition,
+.when,
+.score li,
+.profileScore li {
+  padding: 8px;
+  padding-inline-end: 0;
+  margin-bottom: 1px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-inline-end-width: 0;
+  border-radius: 4px 0 0 4px;
+  gap: 8px;
+}
+
+.expressionWrapper,
+.score li,
+.profileScore li {
+  border-left-color: var(--color-expression);
+  border-left-width: 4px;
+}
+
+.reference .reference-calculate {
+  margin-inline-start: 8px;
+}
+
+.sum .sum-expression {
+  display: grid;
+  grid-template-areas: "kind . delete" "expression expression expression";
+  grid-template-columns: min-content 1fr min-content;
+}
+.sum .sum-expression > .expression-kind {
+  grid-area: kind;
+}
+.sum .sum-expression > button.delete {
+  grid-area: delete;
+}
+.sum .sum-expression > .expression {
+  grid-area: expression;
+}
+.sum .sum-expression.literal, .sum .sum-expression.reference {
+  display: flex;
+}
+
+.scale .scale-expression {
+  margin-block-end: 8px;
+}
+.scale .scale-operator {
+  margin-inline-end: 8px;
+}
+
+.divide hr {
+  border-bottom-color: currentColor;
+  border-bottom-style: solid;
+  opacity: 0.35;
+}
+
+.choose .when {
+  display: grid;
+  grid-template-areas: "label delete" "condition condition" "then then";
+  grid-template-columns: 1fr min-content;
+}
+.choose .when > label:first-child {
+  grid-area: label;
+}
+.choose .when button.delete {
+  grid-area: delete;
+}
+.choose .when .groupcondition {
+  grid-area: condition;
+}
+.choose .when .then {
+  grid-area: then;
+}
+.choose .when label {
+  align-self: center;
+}
+.choose .then > label, .choose .otherwise > label {
   display: block;
+  margin-bottom: 8px;
+}
+.choose .otherwise {
+  margin-top: 4px;
+}
+
+.score li,
+.profileScore li {
+  display: grid;
+  grid-template-areas: "kind weight delete";
+  grid-template-columns: min-content 1fr min-content;
+  border-left-color: rgba(0, 0, 0, 0.15);
+  border-left-width: 1px;
+}
+.score li > .expression-kind,
+.profileScore li > .expression-kind {
+  grid-area: kind;
+}
+.score li > button.delete,
+.profileScore li > button.delete {
+  grid-area: delete;
+}
+
+.score .score-reference,
+.score .score-weight {
+  display: flex;
+  gap: 8px;
+}
+.score .score-weight {
+  grid-area: weight;
+}
+
+.candidateForDeletion {
+  position: relative;
+  overflow: hidden;
+  background: repeating-linear-gradient(45deg, #fde7d4, #fde7d4 5px, #fdecde 5px, #fdecde 10px);
+}
+.candidateForDeletion > *:not(.deleteDialog, .delete) {
+  opacity: 0.25;
+  filter: blur(3px) saturate(0);
+}
+.candidateForDeletion > .delete {
+  position: relative;
+  z-index: 1;
+}
+.candidateForDeletion .deleteDialog {
+  position: absolute;
+  padding-inline: 8px;
+  inset: 0;
+  padding-inline-end: 36px;
+  display: grid;
+  place-items: center;
+}
+.candidateForDeletion .deleteDialog .container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  -moz-column-gap: 16px;
+       column-gap: 16px;
+  text-align: center;
+}
+.candidateForDeletion .deleteDialog .container div {
+  display: flex;
+  gap: 4px;
+}
+.candidateForDeletion .deleteDialog span {
+  font-size: 0.9em;
+}
+.candidateForDeletion .deleteDialog button {
+  padding: 0 8px;
+  border-radius: 9999px;
+}
+.candidateForDeletion .deleteDialog button:enabled:hover {
+  background-color: rgba(243, 120, 18, 0.25);
+}
+.candidateForDeletion .deleteDialog button.highlight {
+  color: white;
+  background-color: #F37812;
+}
+.candidateForDeletion .deleteDialog button.highlight:enabled:hover {
+  background-color: #e06c0b;
+}
+
+.evaluation-expression {
+  min-width: 200px;
+  border-inline-end-width: 1px;
+  border-radius: 8px;
+}
+
+.condition {
+  display: flex;
+  justify-content: space-between;
+}
+.condition.empty > .emptyLabel {
+  display: block;
+}
+.condition .emptyLabel {
+  display: none;
+}
+.condition .handle {
+  align-self: auto;
+  padding-inline-end: 4px;
+}
+.condition .parameter-idref-select {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.condition .condition-test-container {
+  white-space: nowrap;
+}
+.condition .condition-test-container > *:not(:first-child) {
+  margin-inline-start: 8px;
+}
+.condition .buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.groupcondition {
+  display: grid;
+  grid-template-areas: "handle labels delete" "conditions conditions conditions" "buttons buttons buttons";
+  grid-template-columns: min-content 1fr min-content;
+}
+.groupcondition .handle {
+  grid-area: handle;
+}
+.groupcondition .emptyLabel, .groupcondition .groupConditionRadioDiv {
+  grid-area: labels;
+}
+.groupcondition button.delete {
+  grid-area: delete;
+}
+.groupcondition .buttons {
+  grid-area: buttons;
+}
+.groupcondition .groupConditionDiv {
+  margin: 4px 0;
+  grid-area: conditions;
+}
+.groupcondition .groupConditionDiv:empty {
+  min-height: 16px;
+  border: 1px dashed currentColor;
+  border-radius: 4px 0 0 4px;
+  border-inline-end-width: 0;
 }
 
 .groupConditionRadioDiv {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.condition:not(.multiple) > .groupConditionRadioDiv {
   display: none;
 }
-
-.condition.multiple > .groupConditionRadioDiv {
-  display: block;
-  margin-bottom: 4px;
+.groupConditionRadioDiv label {
+  display: flex;
+  align-items: center;
 }
-.condition.multiple > .groupConditionRadioDiv input {
-  width: auto !important;
+.groupConditionRadioDiv input {
+  width: auto;
+}
+
+#preconditionsDiv > .groupcondition > .groupConditionDiv .condition {
+  padding: 4px;
+  border-color: var(--t-fg-dim);
+}
+#preconditionsDiv > .groupcondition > .groupConditionDiv > .condition {
+  border-radius: 4px;
+  border-inline-end-width: 1px;
+  padding-inline-end: 0;
 }
 
 /* © DialogueTrainer */

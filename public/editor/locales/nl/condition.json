@@ -1,11 +1,14 @@
 {
     "empty_group": "Lege groep",
-    "one_condition_group": "Groep met één conditie",
     "all_true": "alles waar",
     "one_true": "minstens één waar",
     "add_condition": "Conditie toevoegen",
     "add_group": "Groep toevoegen",
     "delete_group": "Groep verwijderen",
+    "delete_warning": "Conditie verwijderen?",
+    "delete_group_warning_zero": "Lege groep met condities verwijderen?",
+    "delete_group_warning_one": "Groep met condities verwijderen met {{count}} item?",
+    "delete_group_warning_other": "Groep met condities verwijderen met alle {{count}} items?",
     "error": {
         "no_test": "Er zijn geen parameters. Dus er is niks waar deze knoop op kan testen."
     }

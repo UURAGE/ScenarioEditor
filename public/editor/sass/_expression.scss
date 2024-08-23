@@ -4,86 +4,362 @@
 
 @use 'base' as *;
 
-.evaluationExpression,
+$default-border-with: 1px;
+$default-border-color: rgba(black, .15);
+
+.evaluation-expression,
 .scale-expression,
 .expression {
-  display: block;
-  padding: $spacing-1;
-  background: rgba($col-expression-background, .2);
-  border: 1px solid rgba(darken($col-expression-background, 25%), .25);
-  border-radius: $rounded-base;
   box-sizing: border-box;
 
   ul {
-    padding-inline-start: $spacing-6;
-    margin: 0;
-  }
-}
+    padding: 0;
+    margin: $spacing-1 0;
+    list-style-type: none;
 
-.sum-expression {
-  display: flex;
-  align-items: center;
-}
-
-.scale-expression,
-.expression {
-  display: inline-block;
-}
-
-.define-type {
-  vertical-align: middle;
-
-  &:hover {
-    cursor: pointer;
-    opacity: .6;
-  }
-}
-
-.groupConditionDiv {
-  padding: 0;
-  padding-left: $spacing-2;
-  margin: 0;
-  margin-left: $spacing-2;
-  border-left: 2px solid rgba(black, .1);
-
-  .when & {
-    border-left: 2px solid cornflowerblue;
-  }
-
-  .condition {
-    margin-bottom: $spacing-1;
-  }
-}
-
-.condition {
-  > {
-    .condition-test-container + button {
-      display: inline-block;
-    }
-
-    .emptyLabel,
-    .singleLabel,
-    .multipleLabel {
+    &:empty {
       display: none;
     }
   }
 
-  &.empty > .emptyLabel,
-  &.single > .singleLabel,
-  &.multiple > .multipleLabel {
+  select, input, textarea, button {
+    transition: none;
+  }
+
+  textarea {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+    resize: vertical;
+  }
+}
+
+.expressionWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  accent-color: var(--color-expression);
+
+  &.literal { --color-expression: #777; }
+  &.reference { --color-expression: #9424CC; }
+  &.sum { --color-expression: #14A450; }
+  &.scale, &.divide { --color-expression: #3F73DB; }
+  &.choose { --color-expression: #F2A007; }
+  &.score, &.profileScore { --color-expression: #C7402D; }
+
+  &.literal,
+  &.reference {
+    // Make strings appear 'block' in 'inline' expression kinds
+    &:not(.string) {
+      flex-direction: row;
+
+      .expression {
+        // Aligns delete button to right
+        flex-grow: 1;
+      }
+    }
+  }
+
+  .expression {
+    align-self: stretch;
+  }
+
+  button.col-default.roundedPill {
+    padding: $spacing-1 $spacing-2;
+    background-color: var(--color-expression);
+  }
+
+  select {
+    width: min-content;
+  }
+}
+
+.expressionWrapper,
+.condition .condition,
+.when,
+.score li,
+.profileScore li {
+  padding: $spacing-2;
+  padding-inline-end: 0;
+  margin-bottom: 1px;
+  border: $default-border-with solid $default-border-color;
+  border-inline-end-width: 0;
+  border-radius: $rounded-base 0 0 $rounded-base;
+  gap: $spacing-2;
+}
+
+.expressionWrapper,
+.score li,
+.profileScore li {
+  border-left-color: var(--color-expression);
+  border-left-width: 4px;
+}
+
+.reference {
+  .reference-calculate {
+    margin-inline-start: $spacing-2;
+  }
+}
+
+.sum .sum-expression {
+  display: grid;
+  grid-template-areas: 'kind . delete'
+    'expression expression expression';
+  grid-template-columns: min-content 1fr min-content;
+
+  > {
+    .expression-kind { grid-area: kind; }
+    button.delete { grid-area: delete; }
+    .expression { grid-area: expression; }
+  }
+
+  &.literal,
+  &.reference {
+    display: flex;
+  }
+}
+
+.scale {
+  .scale-expression {
+    margin-block-end: $spacing-2;
+  }
+
+  .scale-operator {
+    margin-inline-end: $spacing-2;
+  }
+}
+
+.divide {
+  hr {
+    border-bottom-color: currentColor;
+    border-bottom-style: solid;
+    opacity: .35;
+  }
+}
+
+.choose {
+  .when {
+    display: grid;
+    grid-template-areas: 'label delete'
+      'condition condition'
+      'then then';
+    grid-template-columns: 1fr min-content;
+
+    > label:first-child { grid-area: label; }
+    button.delete { grid-area: delete; }
+    .groupcondition { grid-area: condition; }
+    .then { grid-area: then; }
+
+    label {
+      align-self: center;
+    }
+  }
+
+  .then, .otherwise {
+    > label {
+      display: block;
+      margin-bottom: $spacing-2;
+    }
+  }
+
+  .otherwise {
+    margin-top: $spacing-1;
+  }
+}
+
+.score,
+.profileScore {
+  li {
+    display: grid;
+    grid-template-areas: 'kind weight delete';
+    grid-template-columns: min-content 1fr min-content;
+    border-left-color: $default-border-color;
+    border-left-width: $default-border-with;
+
+    > {
+      .expression-kind { grid-area: kind; }
+      button.delete { grid-area: delete; }
+    }
+  }
+}
+
+.score {
+  .score-reference,
+  .score-weight {
+    display: flex;
+    gap: $spacing-2;
+  }
+
+  .score-weight {
+    grid-area: weight;
+  }
+}
+
+.candidateForDeletion {
+  position: relative;
+  overflow: hidden;
+  background: repeating-linear-gradient(
+    45deg,
+    lighten($col-warning, 40%),
+    lighten($col-warning, 40%) 5px,
+    lighten($col-warning, 42%) 5px,
+    lighten($col-warning, 42%) 10px
+  );
+
+  > *:not(.deleteDialog, .delete) {
+    opacity: .25;
+    filter: blur(3px) saturate(0);
+  }
+
+  > .delete {
+    position: relative;
+    z-index: 1; // Place over dialog when acting as back button
+  }
+
+  .deleteDialog {
+    position: absolute;
+    padding-inline: $spacing-2;
+    inset: 0;
+    padding-inline-end: $spacing-2 + 28px; // Delete button width
+    display: grid;
+    place-items: center;
+
+    .container {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: center;
+      align-items: center;
+      column-gap: $spacing-4;
+      text-align: center;
+
+      div {
+        display: flex;
+        gap: $spacing-1;
+      }
+    }
+
+    span {
+      font-size: .9em;
+    }
+
+    button {
+      padding: 0 $spacing-2;
+      border-radius: $rounded-pill;
+
+      &:enabled:hover {
+        background-color: rgba($col-warning, .25);
+      }
+
+      &.highlight {
+        color: white;
+        background-color: $col-warning;
+
+        &:enabled:hover {
+          background-color: darken($col-warning, 5%);
+        }
+      }
+    }
+  }
+}
+
+.evaluation-expression {
+  min-width: 200px;
+  border-inline-end-width: $default-border-with;
+  border-radius: $rounded-lg;
+}
+
+.condition {
+  display: flex;
+  justify-content: space-between;
+
+  &.empty > .emptyLabel {
     display: block;
+  }
+
+  .emptyLabel {
+    display: none;
+  }
+
+  .handle {
+    align-self: auto;
+    padding-inline-end: $spacing-1;
+  }
+
+  .parameter-idref-select {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .condition-test-container {
+    white-space: nowrap;
+
+    > *:not(:first-child) {
+      margin-inline-start: $spacing-2;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $spacing-1;
+  }
+}
+
+.groupcondition {
+  display: grid;
+  grid-template-areas: 'handle labels delete'
+    'conditions conditions conditions'
+    'buttons buttons buttons';
+  grid-template-columns: min-content 1fr min-content;
+
+  .handle { grid-area: handle; }
+  .emptyLabel, .groupConditionRadioDiv { grid-area: labels; }
+  button.delete { grid-area: delete; }
+  .buttons { grid-area: buttons; }
+
+  .groupConditionDiv {
+    margin: $spacing-1 0;
+    grid-area: conditions;
+
+    &:empty {
+      min-height: $spacing-4;
+      border: 1px dashed currentColor;
+      border-radius: $rounded-base 0 0 $rounded-base;
+      border-inline-end-width: 0;
+    }
   }
 }
 
 .groupConditionRadioDiv {
-  display: none;
-}
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
 
-.condition.multiple > .groupConditionRadioDiv {
-  display: block;
-  margin-bottom: $spacing-1;
+  .condition:not(.multiple) > & {
+    display: none;
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+  }
 
   input {
-    width: auto !important;
+    width: auto;
+  }
+}
+
+#preconditionsDiv > .groupcondition > .groupConditionDiv {
+  .condition {
+    padding: $spacing-1;
+    border-color: var(--t-fg-dim);
+  }
+
+  > .condition {
+    border-radius: $rounded-base;
+    border-inline-end-width: $default-border-with;
+    padding-inline-end: 0;
   }
 }

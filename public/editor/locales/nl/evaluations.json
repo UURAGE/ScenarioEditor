@@ -3,5 +3,13 @@
     "missing_name_warning": "Sommige evaluaties zullen niet opgeslagen worden, omdat een evaluatie een naam nodig heeft. Weet je zeker dat je door wil gaan?",
     "removal_warning": "Je hebt de volgende $t(evaluations:evaluation, { 'count': {{count}} }) verwijderd. Weet je zeker dat je door wil gaan?",
     "evaluation_one": "evaluatie",
-    "evaluation_other": "evaluaties"
+    "evaluation_other": "evaluaties",
+    "add_when": "Als toevoegen",
+    "delete_when": "'Als' verwijderen met alle inhoud?",
+    "add_to_sum": "Regel toevoegen",
+    "delete_from_sum": "'{{kind}}' uit som verwijderen?",
+    "add_to_score": "Regel toevoegen",
+    "delete_from_score": "Regel van score verwijderen?",
+    "add_to_profile_score": "Vergelijking toevoegen",
+    "delete_from_profile_score": "Vergelijking van profielscore verwijderen?"
 }
