@@ -2592,10 +2592,11 @@ input[type=text].search:focus {
 }
 .candidateForDeletion .deleteDialog {
   position: absolute;
+  display: grid;
+  color: #334155;
   padding-inline: 8px;
   inset: 0;
   padding-inline-end: 36px;
-  display: grid;
   place-items: center;
 }
 .candidateForDeletion .deleteDialog .container {

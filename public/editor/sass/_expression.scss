@@ -217,10 +217,11 @@ $default-border-color: rgba(black, .15);
 
   .deleteDialog {
     position: absolute;
+    display: grid;
+    color: $col-text-primary-dark;
     padding-inline: $spacing-2;
     inset: 0;
     padding-inline-end: $spacing-2 + 28px; // Delete button width
-    display: grid;
     place-items: center;
 
     .container {
