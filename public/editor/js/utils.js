@@ -40,7 +40,8 @@ let Utils;
             extraLarge: 1200
         },
         debounce: debounce,
-        showExpressionDeletionWarning: showExpressionDeletionWarning
+        showExpressionDeletionWarning: showExpressionDeletionWarning,
+        scrollIntoView: scrollIntoView
     };
 
     // Taken from stackoverflow
@@ -419,5 +420,15 @@ let Utils;
 
             container.append(deleteDialog);
         });
+    }
+
+    // This replacement for element.scrollIntoView only scrolls the direct parent instead of recursively scrolling every scrollable parent
+    // https://github.com/w3c/csswg-drafts/issues/9452
+    function scrollIntoView(element, behavior = 'smooth')
+    {
+        const parent = element.parent();
+        const scrollTop = element.get(0).offsetTop - parent.height() / 2 + element.height() / 2;
+        const scrollLeft = element.get(0).offsetLeft - parent.width() / 2 + element.width() / 2;
+        parent.get(0).scrollTo({ top: scrollTop, left: scrollLeft, behavior });
     }
 })();

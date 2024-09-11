@@ -1593,7 +1593,7 @@ let Main;
 
         getPlumbInstanceByNodeID(node.id).revalidate(node.id);
 
-        nodeDiv[0].scrollIntoView(false);
+        Utils.scrollIntoView(nodeDiv);
 
         txtArea.focus();
     }

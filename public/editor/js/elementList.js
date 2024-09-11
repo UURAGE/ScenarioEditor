@@ -162,7 +162,7 @@ let ElementList;
                     {
                         Zoom.zoomIn(tree);
                         Main.selectNode(node.id);
-                        $('#' + node.id)[0].scrollIntoView({ block: "center", inline: "center" });
+                        Utils.scrollIntoView($('#' + node.id));
                     }
                 })),
             $('<td>').append($('<div>',

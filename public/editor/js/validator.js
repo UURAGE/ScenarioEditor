@@ -88,7 +88,7 @@ let Validator;
                 const firstNodeContainer = $("#" + nodeIDs[0]);
                 if (firstNodeContainer.length > 0)
                 {
-                    firstNodeContainer[0].scrollIntoView(false);
+                    Utils.scrollIntoView(firstNodeContainer);
                 }
             };
         };
