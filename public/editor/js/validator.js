@@ -431,7 +431,15 @@ let Validator;
         {
             $('#validationReport').empty();
         };
-        $('#tabDock').find('.controls').empty();
+
+        const refreshValidationsButton = $('<button>', { class: "text", text: i18next.t('common:refresh') }).prepend($(Utils.sIcon('mdi-refresh')));
+        refreshValidationsButton.on('click', function()
+        {
+            render(validate());
+        });
+
+        $('#tabDock').find('.controls').empty().append(refreshValidationsButton);
+
         $("#main").focus();
     }
 
