@@ -134,6 +134,10 @@
       select {
         min-height: $spacing-6;
         padding: 2px;
+
+        &#element-list-parameter-select {
+          max-width: 240px;
+        }
       }
     }
 

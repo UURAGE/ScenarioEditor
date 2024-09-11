@@ -139,8 +139,40 @@ let ElementList;
             typeButtons.append(button);
         });
 
+        const searchContainer = $('<div>', { class: 'searchInput' });
+        const searchIcon = $('<span>', { class: 'searchIcon' }).append(Utils.sIcon('mdi-magnify'));
+        const searchInput = $('<input>', { type: 'search', placeholder: i18next.t('common:search') });
+        const clearSearchIcon = $(Utils.sIcon('mdi-close', 'clearSearchIcon')).hide();
+        searchContainer.append(searchIcon, searchInput, clearSearchIcon);
+
+        function applySearch()
+        {
+            const searchTerm = searchInput.val().toLowerCase();
+            $('#elementList').children('table').find('tr').each(function()
+            {
+                const row = $(this);
+                const text = row.find('td.text').text().toLowerCase();
+                const hiddenFor = row.data('hiddenFor');
+                hiddenFor.search = !text.includes(searchTerm);
+                setRowDisplayAndNodeHighlighting(Main.nodes[row.data('nodeID')], row, hiddenFor);
+            });
+        }
+
+        searchInput.on('input', function()
+        {
+            const searchTerm = $(this).val().toLowerCase();
+            if (searchTerm.length > 0) clearSearchIcon.show();
+            clearSearchIcon.on('click', function()
+            {
+                searchInput.val('');
+                clearSearchIcon.hide();
+                applySearch();
+            });
+            applySearch();
+        });
+
         $('#elementList').empty().append(table).show();
-        $('#tabDock').find('.controls').empty().append(parameterSelect, effectCategorySelect, typeButtons);
+        $('#tabDock').find('.controls').empty().append(searchContainer, parameterSelect, effectCategorySelect, typeButtons);
         $("#main").focus();
     }
 
@@ -312,7 +344,7 @@ let ElementList;
 
     function setRowDisplayAndNodeHighlighting(node, row, hiddenFor)
     {
-        const rowVisible = !(hiddenFor.effectCategory || hiddenFor.type);
+        const rowVisible = !(hiddenFor.effectCategory || hiddenFor.type || hiddenFor.search);
         row.toggle(rowVisible);
 
         const nodeElement = $('#' + node.id);
@@ -370,6 +402,12 @@ let ElementList;
         if (row.length)
         {
             row.find('.text').text(node.text);
+
+            const searchTerm = $('.searchInput input').val().toLowerCase();
+            const hiddenFor = row.data('hiddenFor');
+            const text = node.text.toLowerCase();
+            hiddenFor.search = !text.includes(searchTerm);
+            setRowDisplayAndNodeHighlighting(node, row, hiddenFor);
         }
         else
         {
@@ -428,6 +466,12 @@ let ElementList;
         {
             $('#elementList').children('table').prepend(row);
         }
+
+        const searchTerm = $('.searchInput input').val().toLowerCase();
+        const hiddenFor = row.data('hiddenFor');
+        const text = node.text.toLowerCase();
+        hiddenFor.search = !text.includes(searchTerm);
+        setRowDisplayAndNodeHighlighting(node, row, hiddenFor);
     }
 
     function handleNodeDeletion(node)

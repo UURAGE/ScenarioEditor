@@ -373,27 +373,53 @@ dialog label, dialog .label {
   color: #64748B;
 }
 
-input, textarea, select {
+input, textarea, select, .searchInput {
   color: #334155;
   border-radius: 4px;
 }
-input:focus-visible, textarea:focus-visible, select:focus-visible {
+input:focus-visible, textarea:focus-visible, select:focus-visible, .searchInput:focus-visible {
   outline: none;
 }
 
-input:not([type=checkbox], [type=radio], [type=range]), textarea {
+input:not([type=checkbox], [type=radio], [type=range]), textarea, .searchInput {
   width: 100%;
   padding: 4px;
   background-color: #F8FAFC;
   border: 1px solid #CBD5E1;
   box-sizing: border-box;
 }
-input:not([type=checkbox], [type=radio], [type=range]):focus-visible, textarea:focus-visible {
+input:not([type=checkbox], [type=radio], [type=range]):focus-visible, textarea:focus-visible, .searchInput:focus-visible {
   border-color: #94A3B8;
 }
 
 input:not([type=checkbox], [type=radio], [type=range]), textarea, select {
   min-height: 28px;
+}
+
+.searchInput {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  gap: 4px;
+}
+.searchInput .searchIcon {
+  display: grid;
+  flex: 0 1 auto;
+  height: 28px;
+  background: #CBD5E1;
+  place-items: center;
+  aspect-ratio: 1/1;
+}
+.searchInput .clearSearchIcon {
+  position: absolute;
+  cursor: pointer;
+  inset-inline-end: 2px;
+}
+.searchInput input {
+  min-height: auto;
+  background-color: transparent;
+  border: none;
 }
 
 textarea {
@@ -2185,6 +2211,9 @@ input[type=text].search:focus {
 #tabDock .header .controls select {
   min-height: 24px;
   padding: 2px;
+}
+#tabDock .header .controls select#element-list-parameter-select {
+  max-width: 240px;
 }
 #tabDock .header #closeTabDock {
   padding: 2px;

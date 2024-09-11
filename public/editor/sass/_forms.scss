@@ -15,7 +15,7 @@ label, .label {
   }
 }
 
-input, textarea, select {
+input, textarea, select, .searchInput {
   color: $col-text-primary-dark;
   border-radius: $rounded-base;
 
@@ -25,7 +25,7 @@ input, textarea, select {
 }
 
 // Form input, textarea
-input:not([type=checkbox], [type=radio], [type=range]), textarea {
+input:not([type=checkbox], [type=radio], [type=range]), textarea, .searchInput {
   width: 100%;
   padding: $spacing-1;
   background-color: $slate-50;
@@ -39,6 +39,35 @@ input:not([type=checkbox], [type=radio], [type=range]), textarea {
 
 #{$inputSelectors} {
   min-height: $input-height;
+}
+
+.searchInput {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  gap: $spacing-1;
+
+  .searchIcon {
+    display: grid;
+    flex: 0 1 auto;
+    height: $input-height;
+    background: $slate-300;
+    place-items: center;
+    aspect-ratio: 1 / 1;
+  }
+
+  .clearSearchIcon {
+    position: absolute;
+    cursor: pointer;
+    inset-inline-end: 2px;
+  }
+
+  input {
+    min-height: auto;
+    background-color: transparent;
+    border: none;
+  }
 }
 
 textarea {
