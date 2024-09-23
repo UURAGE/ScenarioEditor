@@ -68,7 +68,7 @@
                     tabs.parent('li').removeClass('selected');
                     clickedTab.addClass('selected');
 
-                    if (options?.activate) options.activate();
+                    if (options?.activate) options.activate(tabContent);
                 });
             });
 
