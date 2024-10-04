@@ -97,7 +97,6 @@
 </head>
 
 <body>
-  <?php echo file_get_contents(editor_path("svg/icons.svg")); ?>
   <?php echo file_get_contents(editor_path("svg/icons-mdi.svg")); ?>
   <?php echo file_get_contents(editor_path("svg/icons-mdi-custom.svg")); ?>
   <div id="wrap">
@@ -148,7 +147,7 @@
             <button id="snapGraph" class="subjectButton" title="<?php sLang("edt_snap_to_grid") ?>"><?php echo sIcon("mdi-magnet") ?></button>
             <!-- View -->
             <button id="highlightAncestors" class="buttonSwitch subjectButton" title="<?php sLang("edt_ancestors") ?>">
-              <?php echo sIcon("icon-ancestors") ?><span class="switch"><span class="slider"></span></span>
+              <?php echo sIcon("mdi-elevator-up") ?><span class="switch"><span class="slider"></span></span>
             </button>
             <button id="highlightDescendants" class="buttonSwitch subjectButton" title="<?php sLang("edt_descendants") ?>">
               <?php echo sIcon("icon-descendants") ?><span class="switch"><span class="slider"></span></span></button>
@@ -163,7 +162,7 @@
               </div>
               <div class="dropdownItems">
                 <div class="flexbox gap-1">
-                  <button id="newChildNode" class="nodeButton editingOnly"><?php echo sIcon("icon-child"); sLang("edt_child"); ?><kbd>R</kbd></button>
+                  <button id="newChildNode" class="nodeButton editingOnly"><?php echo sIcon("mdi-comment-plus-outline"); sLang("edt_child"); ?><kbd>R</kbd></button>
                   <button id="newPlayerChildNode" class="secondary addChildButton player nodeWithoutChildrenButton"></button>
                   <button id="newComputerChildNode" class="secondary addChildButton computer nodeWithoutChildrenButton"></button>
                   <button id="newSituationChildNode" class="secondary addChildButton situation nodeWithoutChildrenButton"></button>
