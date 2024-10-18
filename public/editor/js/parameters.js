@@ -336,6 +336,8 @@ let Parameters;
                     Evaluations.handleParameterTypeChange(oldParameter, newParameter);
                     ElementList.handleParameterTypeChange(oldParameter, newParameter);
 
+                    newParameter.type.finaliseTypeChange?.();
+
                     $(this).removeClass("changedTypeParameter");
                 }
                 // Special case for triggering a type change for a reference calculation update

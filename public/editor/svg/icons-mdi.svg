@@ -20,6 +20,9 @@
   <symbol id="mdi-axis-arrow" viewBox="0 0 24 24">
     <path d="M12,2L16,6H13V13.85L19.53,17.61L21,15.03L22.5,20.5L17,21.96L18.53,19.35L12,15.58L5.47,19.35L7,21.96L1.5,20.5L3,15.03L4.47,17.61L11,13.85V6H8L12,2Z" />
   </symbol>
+  <symbol id="mdi-call-merge" viewBox="0 0 24 24">
+    <path d="M17,20.41L18.41,19L15,15.59L13.59,17M7.5,8H11V13.59L5.59,19L7,20.41L13,14.41V8H16.5L12,3.5" />
+  </symbol>
   <symbol id="mdi-chevron-down" viewBox="0 0 24 24">
     <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
   </symbol>

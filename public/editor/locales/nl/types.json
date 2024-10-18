@@ -21,7 +21,10 @@
                 "title": "Enumeratie",
                 "define": "Definieer enumeratie",
                 "no_values": "Er zijn geen waarden gedefinieerd voor de enumeratie",
-                "values": "Waarden"
+                "values": "Waarden",
+                "value_already_exists": "Waarde bestaat al",
+                "rename_title": "Waarde '{{oldName}}' zal hernoemd worden tot '{{newName}}'.",
+                "merge_title": "Waarde '{{oldName}}' zal samengevoegd worden tot '{{newName}}'."
             }
         }
     },

@@ -391,6 +391,10 @@ input:not([type=checkbox], [type=radio], [type=range]), textarea, .searchInput {
 input:not([type=checkbox], [type=radio], [type=range]):focus-visible, textarea:focus-visible, .searchInput:focus-visible {
   border-color: #94A3B8;
 }
+input:not([type=checkbox], [type=radio], [type=range]):invalid, textarea:invalid, .searchInput:invalid {
+  background-color: #fceaeb;
+  border-color: #CE192A;
+}
 
 input:not([type=checkbox], [type=radio], [type=range]), textarea, select {
   min-height: 28px;
@@ -745,6 +749,9 @@ dialog p.buttonsWrapperLabel {
 dialog .enumeration-values-container {
   margin: 0;
 }
+dialog .enumeration-values-container ul {
+  padding-inline-start: 1em;
+}
 dialog .enumeration-values-container li {
   clear: both;
 }
@@ -754,6 +761,10 @@ dialog .enumeration-values-container input {
 }
 dialog .enumeration-values-container button {
   float: right;
+}
+dialog .enumeration-values-container .infoIcon {
+  opacity: 0.5;
+  margin-inline-start: 2px;
 }
 
 /* © DialogueTrainer */

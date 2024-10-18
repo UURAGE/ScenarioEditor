@@ -72,6 +72,7 @@ let Evaluations;
                 }
                 Expression.handleTypeChange(expressionKindContainer, previousType, newType);
                 Types.attachDefinitionTooltip(typeContainer, newType);
+                newType.finaliseTypeChange?.();
                 previousType = newType;
             };
             Types.appendControlsTo(typeContainer.appendTo(evaluationContainer), '.evaluation-name', 'evaluation-type', handleEvaluationTypeChange);

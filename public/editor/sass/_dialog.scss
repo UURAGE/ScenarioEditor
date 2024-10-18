@@ -249,6 +249,10 @@ dialog {
   .enumeration-values-container {
     margin: 0;
 
+    ul {
+      padding-inline-start: 1em;
+    }
+
     li {
       clear: both;
     }
@@ -260,6 +264,11 @@ dialog {
 
     button {
       float: right;
+    }
+
+    .infoIcon {
+      opacity: .5;
+      margin-inline-start: 2px;
     }
   }
 }

@@ -21,7 +21,10 @@
                 "title": "Enumeration",
                 "define": "Define enumeration",
                 "no_values": "There are no values defined for the enumeration",
-                "values": "Values"
+                "values": "Values",
+                "value_already_exists": "Value already exists",
+                "rename_title": "Value '{{oldName}}' will be renamed to '{{newName}}'.",
+                "merge_title": "Value '{{oldName}}' will be merged into '{{newName}}'."
             }
         }
     },

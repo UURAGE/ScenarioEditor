@@ -35,6 +35,11 @@ input:not([type=checkbox], [type=radio], [type=range]), textarea, .searchInput {
   &:focus-visible {
     border-color: $slate-400;
   }
+
+  &:invalid {
+    background-color: lighten($col-negative, 50%);
+    border-color: $col-negative;
+  }
 }
 
 #{$inputSelectors} {

@@ -562,20 +562,101 @@ let Types;
                 typeEl.append($('<div>', { text: i18next.t('types:primitives.enumeration.definition.values') }));
                 const valuesContainer = $('<ul>', { class: "enumeration-values-container" }).appendTo(typeEl);
                 const valueInput = $('<input>', { autofocus: true, type: 'text' });
+
+                const alreadyExists = (input, excludedElement) => valuesContainer.children().not(excludedElement).toArray().some(item => $(item).text() === input);
+
                 const appendValue = function(value)
                 {
                     // The value of an enumeration can not be the empty string
                     if (value && value.trim())
                     {
+                        if (alreadyExists(value))
+                        {
+                            valueInput.get(0).setCustomValidity(i18next.t('types:primitives.enumeration.definition.value_already_exists'));
+                            return;
+                        }
+
                         const deleteButton = Parts.deleteButton();
                         deleteButton.on('click', function()
                         {
                             $(this).parent().remove();
                             valueInput.focus();
                         });
+                        const valueItem = $('<li>').append($('<span>', { text: value })).data('previousText', value);
+                        const editButton = $('<button>', { type: "button", class: "buttonIcon text", title: i18next.t('common:edit') })
+                            .append(Utils.sIcon('mdi-pencil'));
 
-                        const valueItem = $('<li>').append($('<span>', { text: value }));
-                        valueItem.append(deleteButton);
+                        editButton.on('click', function()
+                        {
+                            const currentValue = valueItem.children('span').text();
+                            valueItem.children().hide();
+
+                            const editInput = $('<input>', { type: 'text', value: currentValue });
+
+                            const hideInputShowText = function()
+                            {
+                                editInput.remove();
+                                valueItem.children().show();
+                            };
+
+                            const commitEdit = function()
+                            {
+                                const newValue = editInput.val();
+
+                                if (newValue && newValue.length && newValue !== currentValue)
+                                {
+                                    valueItem.children('span').text(newValue);
+                                }
+
+                                valuesContainer.find('.infoIcon').remove();
+                                valuesContainer.children().each(function()
+                                {
+                                    if (!$(this).text().length || $(this).text() == $(this).data('previousText')) return;
+
+                                    const isMerge = alreadyExists($(this).text(), this);
+                                    const title = i18next.t(
+                                        isMerge ?
+                                            'types:primitives.enumeration.definition.merge_title' :
+                                            'types:primitives.enumeration.definition.rename_title',
+                                        { oldName: $(this).data('previousText'), newName: $(this).text() }
+                                    );
+
+                                    const infoIcon = $('<i>', {
+                                        class: 'infoIcon',
+                                        title: title
+                                    }).append(
+                                        $(Utils.sIcon(isMerge ? 'mdi-call-merge' : 'mdi-rename'))
+                                    );
+                                    $(this).prepend(infoIcon);
+                                });
+
+                                hideInputShowText();
+                            };
+
+                            editInput.on('keydown', function(e)
+                            {
+                                if (e.which === 13) // ENTER
+                                {
+                                    commitEdit();
+                                }
+                                else if (e.which === 27) // ESC
+                                {
+                                    e.preventDefault(); // Prevent closing dialog
+                                    hideInputShowText();
+                                }
+                                else
+                                {
+                                    valueInput.get(0).setCustomValidity("");
+                                }
+                            });
+
+                            editInput.on('focusout', function() { hideInputShowText(); });
+
+                            valueItem.prepend(editInput);
+                            editInput.focus()[0].select();
+                        });
+
+                        valueItem.append(deleteButton, editButton);
                         valueItem.insertBefore(valuesContainer.children().last());
 
                         valueInput.val("").focus();
@@ -588,6 +669,7 @@ let Types;
                 });
                 valueInput.on('keydown', function(e)
                 {
+                    valueInput.get(0).setCustomValidity("");
                     if (e.which === 13) // ENTER
                     {
                         appendValue(valueInput.val());
@@ -661,6 +743,11 @@ let Types;
                 valuesContainer.children().not(":last-child").each(function(index, valueItem)
                 {
                     const option = { text: $(valueItem).children('span').text() };
+
+                    // Check for and save renames.
+                    const previousText = $(valueItem).data('previousText');
+                    if (option.text !== previousText) option.previousText = previousText;
+
                     options.sequence.push(option);
                 });
                 let defaultValue;
@@ -676,12 +763,23 @@ let Types;
             },
             castFrom: function(type, value)
             {
-                let castValue = this.options.sequence[0].text;
-                this.options.sequence.forEach(function(option)
+                const stringValue = String(value);
+                const option = this.options.sequence.find(option => stringValue === option.previousText) ??
+                    this.options.sequence.find(option => stringValue === option.text) ??
+                    this.options.sequence[0];
+                return option.text;
+            },
+            finaliseTypeChange: function()
+            {
+                const existingOptions = new Set();
+                this.options.sequence = this.options.sequence.map(option =>
                 {
-                    if (option.text === String(value)) castValue = option.text;
-                });
-                return castValue;
+                    if (existingOptions.has(option.text)) return null; // Remove duplicates
+
+                    existingOptions.add(option.text);
+                    delete option.originalValue;
+                    return option;
+                }).filter(option => option !== null);
             },
             insertType: function(typeXML, detailed)
             {
