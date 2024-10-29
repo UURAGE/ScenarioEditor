@@ -8,11 +8,11 @@
     "@types/gulp-sass": "^5.0.4",
     "@typescript-eslint/eslint-plugin": "7.17.0",
     "@typescript-eslint/parser": "7.17.0",
-    "browser-sync": "^3.0.2",
-    "eslint": "8.57.0",
+    "browser-sync": "^3.0.3",
+    "eslint": "8.57.1",
     "gulp": "^5.0.0",
     "gulp-autoprefixer": "^8.0.0",
-    "gulp-eslint-new": "~2.2.0",
+    "gulp-eslint-new": "~2.4.0",
     "gulp-sass": "^5.1.0",
     "gulp-stylelint": "^13.0.0",
     "sass-embedded": "1.77.5",
@@ -20,7 +20,7 @@
     "stylelint-config-standard-scss": "5.0.0",
     "stylelint-order": "5.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
+    "typescript": "^5.6.3"
   },
   "overrides": {
     "gulp-stylelint": {
