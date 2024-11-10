@@ -29,7 +29,7 @@
                 return value;
             }
 
-            const options = optionsOrKey;
+            const options = optionsOrKey ?? tabContainer.data('tabs');
             const tabsContainer = $(this).find('ul').eq(0).addClass('tabs');
             const tabContents = [];
 
@@ -72,7 +72,9 @@
                 });
             });
 
-            tabs.eq(options?.active ?? 0).trigger('click');
+            tabContainer.data('tabs', options);
+            const activeTab = tabs.eq(options?.active ?? 0);
+            (activeTab.length > 0 ? activeTab : tabs.first()).trigger('click');
         }
     });
 })();
