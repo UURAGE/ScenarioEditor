@@ -386,7 +386,7 @@ let Utils;
         {
             container.addClass('candidateForDeletion');
 
-            const previouslyEnabledElements = container.find(':enabled').not('button.delete').prop('disabled', true);
+            const inertedElements = container.children().not('button.delete').not('[inert]').prop('inert', true);
             const deleteButton = container.children('button.delete').removeClass('col-danger');
             const deleteDialog = $('<div>', { class: 'deleteDialog' });
             const messageElement = $('<span>', { text: message });
@@ -400,7 +400,7 @@ let Utils;
             {
                 event.stopImmediatePropagation();
                 container.removeClass('candidateForDeletion');
-                previouslyEnabledElements.prop('disabled', false);
+                inertedElements.prop('inert', false);
                 deleteButton.addClass('col-danger').get(0).removeEventListener('click', cancelHandler, true);
                 deleteIconUse.attr('xlink:href', originalDeleteIcon);
                 deleteDialog.remove();
