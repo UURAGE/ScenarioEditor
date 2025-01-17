@@ -388,6 +388,7 @@ let Main;
         {
             container: "#main",
             filter: ".w.treeContainer", // Only select the trees.
+            ignore: ".tippy-box",
         });
 
         selectable.on('start', function(event)
@@ -832,6 +833,7 @@ let Main;
         {
             container: treeDiv.get(0),
             filter: ".w.player, .w.computer, w.situation", // Only select the nodes
+            ignore: ".tippy-box",
         });
         selectable.disable(); // Box selection only useful in zoomed state
         treeDiv.attachDragger();
@@ -1399,7 +1401,7 @@ let Main;
         // Initialise draggable elements.
         plumbInstance.draggable(node,
         {
-            filter: ".sideMenu, .sideMenu *, .sideMenuOpenIcon, .sideMenuOpenIcon *",
+            filter: ".sideMenu, .sideMenu *, .sideMenuOpenIcon, .sideMenuOpenIcon *, .attachment-container, .attachment-container *",
             filterExclude: true,
 
             constrain: function(currentCoordinates)
@@ -1550,8 +1552,20 @@ let Main;
             event.stopPropagation();
         });
 
-        txtArea.on('focusout', function()
+        txtArea.on('focusout', function(e)
         {
+            if (e.relatedTarget?.classList.contains('tippy-box'))
+            {
+                const tooltipElement = e.relatedTarget;
+                const instance = tooltipElement.parentElement._tippy;
+                instance.setProps({
+                    onHide()
+                    {
+                        txtArea.focus();
+                    },
+                });
+                return;
+            }
             stopEditingNode(node.id, false);
         });
 

@@ -90,7 +90,9 @@ a.clickable {
   textarea:focus + * + &,
   input:focus + * + &,
   textarea:focus + &,
-  input:focus + & {
+  input:focus + &,
+  &:hover,
+  &:focus-within {
     position: relative;
     z-index: 1;
     display: block;
@@ -117,6 +119,9 @@ a.clickable {
 
 .tippy-box {
   text-align: left;
+  pointer-events: all;
+  cursor: auto;
+  user-select: text;
 
   a[href] {
     color: lighten($col-editor, 25%);

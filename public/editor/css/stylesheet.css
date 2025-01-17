@@ -1079,7 +1079,7 @@ a.clickable {
   height: 0;
   text-align: right;
 }
-textarea:focus + * + .attachment-container, input:focus + * + .attachment-container, textarea:focus + .attachment-container, input:focus + .attachment-container {
+textarea:focus + * + .attachment-container, input:focus + * + .attachment-container, textarea:focus + .attachment-container, input:focus + .attachment-container, .attachment-container:hover, .attachment-container:focus-within {
   position: relative;
   z-index: 1;
   display: block;
@@ -1103,6 +1103,11 @@ textarea:focus + * + .attachment-container, input:focus + * + .attachment-contai
 
 .tippy-box {
   text-align: left;
+  pointer-events: all;
+  cursor: auto;
+  -webkit-user-select: text;
+     -moz-user-select: text;
+          user-select: text;
 }
 .tippy-box a[href] {
   color: #b8d8ff;
