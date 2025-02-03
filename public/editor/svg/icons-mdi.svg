@@ -143,4 +143,7 @@
   <symbol id="mdi-upload" viewBox="0 0 24 24">
     <path d="M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z" />
   </symbol>
+  <symbol id="mdi-window-minimize" viewBox="0 0 24 24">
+    <path d="M20,14H4V10H20" />
+  </symbol>
 </svg>

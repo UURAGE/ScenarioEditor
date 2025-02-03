@@ -691,14 +691,21 @@ dialog > .header .title svg.icon {
 dialog > .header p {
   color: #94A3B8;
 }
-dialog > .header button.close {
+dialog > .header .buttonContainer {
   position: absolute;
   top: 8px;
   right: 12px;
+  display: flex;
+  flex-direction: row-reverse;
   padding: 4px;
+  gap: 8px;
+}
+dialog > .header .buttonContainer button.close,
+dialog > .header .buttonContainer button.minimize {
   fill: #0F172A;
 }
-dialog > .header button.close svg {
+dialog > .header .buttonContainer button.close svg,
+dialog > .header .buttonContainer button.minimize svg {
   width: 20px;
   height: 20px;
 }

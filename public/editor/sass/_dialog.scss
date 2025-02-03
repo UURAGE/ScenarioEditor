@@ -177,16 +177,23 @@ dialog {
       color: $slate-400;
     }
 
-    button.close {
+    .buttonContainer {
       position: absolute;
       top: $spacing-2;
       right: $spacing-3;
+      display: flex;
+      flex-direction: row-reverse; // Last added button comes first
       padding: $spacing-1;
-      fill: $slate-900;
+      gap: $spacing-2;
 
-      svg {
-        width: 20px;
-        height: 20px;
+      button.close,
+      button.minimize {
+        fill: $slate-900;
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
       }
     }
   }

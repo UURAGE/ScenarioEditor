@@ -32,12 +32,24 @@
 
             const addCloseButton = (dialog) =>
             {
-                dialog.find('.header').append(
+                dialog.find('.header .buttonContainer').prepend(
                     $('<button>', { class: "close", title: i18next.t('common:close') })
                         .append($(Utils.sIcon('mdi-close-thick')))
                         .on('click', function()
                         {
                             dialog.data('dialog').dialogClose();
+                        })
+                );
+            };
+
+            const addMinimizeButton = (dialog) =>
+            {
+                dialog.find('.header .buttonContainer').append(
+                    $('<button>', { class: "minimize", title: i18next.t('common:minimize') })
+                        .append($(Utils.sIcon('mdi-window-minimize')))
+                        .on('click', function()
+                        {
+                            dialog.data('dialog').dialogMinimize();
                         })
                 );
             };
@@ -100,14 +112,13 @@
                         }
                         else if (option === 'closeButton')
                         {
-                            if (value)
-                            {
-                                addCloseButton(dialog);
-                            }
-                            else
-                            {
-                                dialog.find('.header button.close').remove();
-                            }
+                            dialog.find('.header .buttonContainer button.close').remove();
+                            if (value) addCloseButton(dialog);
+                        }
+                        else if (option === 'minimizeButton')
+                        {
+                            dialog.find('.header .buttonContainer button.minimize').remove();
+                            if (value) addMinimizeButton(dialog);
                         }
 
                         // Rewrite new options
@@ -151,9 +162,11 @@
             let subtitle = null;
             if (options.subtitle) subtitle = $('<p>', { class: 'label', html: options.subtitle });
             if (options.icon) title.prepend(Utils.sIcon(options.icon));
-            dialogHeader.append(title, subtitle);
+            const buttonContainer = $('<div>', { class: 'buttonContainer' });
+            dialogHeader.append(title, subtitle, buttonContainer);
             dialog.append(dialogHeader);
             if (!('closeButton' in options) || options.closeButton) addCloseButton(dialog);
+            if ('minimizeButton' in options && options.minimizeButton) addMinimizeButton(dialog);
 
             dialog.append(dialogContent);
 
@@ -170,19 +183,30 @@
                 dialog.remove();
             };
 
-            const dialogClose = () =>
+            let wayOfClosing = 'close';
+
+            const dialogClose = async () =>
             {
+                wayOfClosing = 'close';
                 if (options.beforeClose)
                 {
-                    if (options.beforeClose() === false) return;
+                    if (await options.beforeClose() === false) return;
                 }
 
                 dialog.get(0).close();
             };
 
+            const dialogMinimize = () =>
+            {
+                wayOfClosing = 'minimize';
+                dialog.get(0).close();
+            };
+
             dialog.on('close', () =>
             {
-                if (options.close) options.close.bind(dialog)();
+                if (wayOfClosing === 'close' && options.close) options.close.bind(dialog)();
+                else if (wayOfClosing === 'minimize' && options.minimize) options.minimize.bind(dialog)();
+
                 // Dialog no longer has content, so let's destroy it.
                 if (dialogContent.parent().length === 0) dialogDestroy();
             });
@@ -205,7 +229,8 @@
                 originalParent,
                 dialogContent,
                 dialogDestroy,
-                dialogClose
+                dialogClose,
+                dialogMinimize
             });
 
             // Place dialog in DOM
