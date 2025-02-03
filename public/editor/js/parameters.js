@@ -342,7 +342,7 @@ let Parameters;
                 }
                 // Special case for triggering a type change for a reference calculation update
                 else if (oldParameter.type.name === Types.primitives.integer.name && newParameter.type.name === Types.primitives.integer.name &&
-                (oldParameter.type.minimum !== newParameter.type.minimum || oldParameter.type.maximum !== newParameter.type.maximum))
+                    (oldParameter.type.minimum !== newParameter.type.minimum || oldParameter.type.maximum !== newParameter.type.maximum))
                 {
                     Evaluations.handleParameterTypeChange(oldParameter, newParameter);
                 }
@@ -403,7 +403,6 @@ let Parameters;
             {
                 return Parameters.container.byId[$(this).prop('id')];
             }).get();
-
 
             ElementList.handleParametersChange();
 

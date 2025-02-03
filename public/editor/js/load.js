@@ -84,7 +84,7 @@ let Load;
             {
                 xml = $.parseXML(reader.result);
             }
-            catch (err)
+            catch
             {
                 Utils.alertDialog(i18next.t('load:invalid_xml'), 'error');
                 return;

@@ -199,7 +199,7 @@ let Validator;
                     {
                         message: i18next.t('validator:empty_subject', { subject: tree.subject }),
                         level: 'error',
-                        jumpToFunctions: [ function() { Zoom.zoomIn(tree); } ]
+                        jumpToFunctions: [function() { Zoom.zoomIn(tree); }]
                     });
                     return;
                 }
@@ -249,7 +249,7 @@ let Validator;
                         {
                             message: i18next.t('validator:no_ending.multiple_subjects', { subject: tree.subject }),
                             level: 'warning',
-                            jumpToFunctions: [ function() { Zoom.zoomIn(tree); } ]
+                            jumpToFunctions: [function() { Zoom.zoomIn(tree); }]
                         });
                     }
                 }

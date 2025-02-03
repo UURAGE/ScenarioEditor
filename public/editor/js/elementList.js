@@ -296,7 +296,7 @@ let ElementList;
     {
         parameterSelect.val(
             (selectedParameterId !== true && selectedParameterId !== false ? 'v' : '') +
-                selectedParameterId
+            selectedParameterId
         );
     }
 

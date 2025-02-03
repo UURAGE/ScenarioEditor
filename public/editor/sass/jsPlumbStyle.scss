@@ -2,6 +2,7 @@
 
 /* © DialogueTrainer */
 
+@use 'sass:color';
 @use 'base' as *;
 
 $node-z-index: 4;
@@ -41,28 +42,25 @@ $node-z-index: 4;
 
   .nodeContent {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     padding: .5em;
     background: transparent;
   }
 
   @mixin lighterTypeColors($lightenAmount) {
     &.computer {
-      color: color-yiq(lighten($col-node-computer, $lightenAmount));
-      background-color: lighten($col-node-computer, $lightenAmount);
+      color: color-yiq(color.adjust($col-node-computer, $lightness: $lightenAmount));
+      background-color: color.adjust($col-node-computer, $lightness: $lightenAmount);
     }
 
     &.player {
-      color: color-yiq(lighten($col-node-player, $lightenAmount));
-      background-color: lighten($col-node-player, $lightenAmount);
+      color: color-yiq(color.adjust($col-node-player, $lightness: $lightenAmount));
+      background-color: color.adjust($col-node-player, $lightness: $lightenAmount);
     }
 
     &.situation {
-      color: color-yiq(lighten($col-node-situation, $lightenAmount));
-      background-color: lighten($col-node-situation, $lightenAmount);
+      color: color-yiq(color.adjust($col-node-situation, $lightness: $lightenAmount));
+      background-color: color.adjust($col-node-situation, $lightness: $lightenAmount);
     }
   }
 
@@ -116,10 +114,7 @@ $node-z-index: 4;
   &:not(.jtk-drag):not(.jtk-drag-active) {
     > .ep {
       position: absolute;
-      top: -10px;
-      right: -10px;
-      bottom: -10px;
-      left: -10px;
+      inset: -10px;
       cursor: pointer;
       border-radius: 12px;
       transition: box-shadow .15s ease-in, color .15s ease-in;
@@ -140,10 +135,7 @@ $node-z-index: 4;
 
       .anchor {
         position: absolute;
-        top: 50%;
-        right: auto;
-        bottom: 50%;
-        left: calc(100% - 10px);
+        inset: 50% auto 50% calc(100% - 10px);
         width: 4px;
         height: 4px;
         pointer-events: none;
@@ -154,10 +146,7 @@ $node-z-index: 4;
         &::after {
           content: '';
           position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 0;
+          inset: 0;
           display: block;
           background-color: black;
           border-radius: 50%;
@@ -211,7 +200,7 @@ $node-z-index: 4;
   }
 
   &.highlight-no-effect > .ep::before {
-    border-color: rgba(desaturate($col-editor, 65%), .35);
+    border-color: rgba(color.adjust($col-editor, $saturation: -65%), .35);
   }
 
   &.highlight-operator-addAssign > .ep::before,

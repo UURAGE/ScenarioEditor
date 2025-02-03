@@ -2,6 +2,7 @@
 
 /* © DialogueTrainer */
 
+@use 'sass:color';
 @use 'base' as *;
 
 $default-border-with: 1px;
@@ -199,10 +200,10 @@ $default-border-color: rgba(black, .15);
   overflow: hidden;
   background: repeating-linear-gradient(
     45deg,
-    lighten($col-warning, 40%),
-    lighten($col-warning, 40%) 5px,
-    lighten($col-warning, 42%) 5px,
-    lighten($col-warning, 42%) 10px
+    color.adjust($col-warning, $lightness: 40%),
+    color.adjust($col-warning, $lightness: 40%) 5px,
+    color.adjust($col-warning, $lightness: 42%) 5px,
+    color.adjust($col-warning, $lightness: 42%) 10px
   );
 
   > *:not(.deleteDialog, .delete) {
@@ -255,7 +256,7 @@ $default-border-color: rgba(black, .15);
         background-color: $col-warning;
 
         &:enabled:hover {
-          background-color: darken($col-warning, 5%);
+          background-color: color.adjust($col-warning, $lightness: -5%);
         }
       }
     }

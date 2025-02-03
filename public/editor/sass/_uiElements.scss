@@ -2,6 +2,7 @@
 
 /* © DialogueTrainer */
 
+@use 'sass:color';
 @use 'base' as *;
 $font-family: 'Open Sans', 'Frutiger', 'Helvetica', 'Arial', sans-serif;
 
@@ -124,7 +125,7 @@ a.clickable {
   user-select: text;
 
   a[href] {
-    color: lighten($col-editor, 25%);
+    color: color.adjust($col-editor, $lightness: 25%);
   }
 }
 

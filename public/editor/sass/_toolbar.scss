@@ -2,6 +2,7 @@
 
 /* © DialogueTrainer */
 
+@use 'sass:color';
 @use 'base' as *;
 
 $toolbar-button-width: 44px;
@@ -16,7 +17,7 @@ $toolbar-button-width: 44px;
   transition: .5s background ease-out;
 
   &:hover {
-    background: lighten($col-editor, 5%);
+    background: color.adjust($col-editor, $lightness: 5%);
     transition: .1s background ease-in-out;
   }
 
@@ -228,7 +229,7 @@ $toolbar-button-width: 44px;
       }
 
       &#scenarioButton {
-        background-color: darken($col-editor, 12%);
+        background-color: color.adjust($col-editor, $lightness: -12%);
       }
     }
 

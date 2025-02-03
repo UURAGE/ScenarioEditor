@@ -23,23 +23,23 @@ let PlumbGenerator;
 
         instance.setContainer(container);
 
-        instance.registerConnectionType("basic", { anchor: [ "Perimeter", { shape: "Rectangle", anchorCount: 80 } ], connector: "StateMachine" });
+        instance.registerConnectionType("basic", { anchor: ["Perimeter", { shape: "Rectangle", anchorCount: 80 }], connector: "StateMachine" });
 
         instance.importDefaults(
         {
             Endpoint: ["Dot", { radius: 2 }],
-            Anchor: [ "Perimeter", { shape: "Rectangle", anchorCount: 80 } ],
+            Anchor: ["Perimeter", { shape: "Rectangle", anchorCount: 80 }],
             HoverPaintStyle: PlumbGenerator.defaultHoverPaintStyle,
-            Connector: [ "StateMachine", { proximityLimit: 120 } ],
+            Connector: ["StateMachine", { proximityLimit: 120 }],
             PaintStyle: PlumbGenerator.defaultPaintStyle,
             ConnectionOverlays: [
-                [ "Arrow", {
+                ["Arrow", {
                     location: 1,
                     id: "arrow",
                     width: 12,
                     length: 10,
                     foldback: 0.8
-                } ]
+                }]
             ]
         });
 
@@ -58,7 +58,7 @@ let PlumbGenerator;
             if (colorValue in ColorPicker.key.byColor && ColorPicker.key.byColor[colorValue].entry)
             {
                 // This uses the innerHTML property, so escape the HTML!
-                connection.addOverlay([ "Label", { id: "color-label", label: Utils.escapeHTML(ColorPicker.key.byColor[colorValue].entry), cssClass: "color-label" }]);
+                connection.addOverlay(["Label", { id: "color-label", label: Utils.escapeHTML(ColorPicker.key.byColor[colorValue].entry), cssClass: "color-label" }]);
             }
         });
 

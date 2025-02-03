@@ -74,7 +74,7 @@ let Expression;
                         calculateSelect.append($('<option>', { value: 'percentage', text: i18next.t('common:as_percentage') }));
                         container.append(calculateSelect);
                         $(this).attr('title', i18next.t('common:minimum') + ': ' + parameter.type.minimum + ', ' +
-                            i18next.t('common:maximum') + ': ' + parameter.type.maximum);
+                        i18next.t('common:maximum') + ': ' + parameter.type.maximum);
                     }
                 });
                 container.append(parameterSelect);
@@ -997,8 +997,7 @@ let Expression;
                 $('<span>', { class: "expression" }).appendTo(container);
             kinds[$(this).val()].appendControlTo(expressionContainer, type);
             const classes = Object.keys(kinds);
-            expressionContainer.parent().removeClass(classes).
-                addClass($(this).val());
+            expressionContainer.parent().removeClass(classes).addClass($(this).val());
         });
         container.append(expressionSelect);
         expressionSelect.trigger('change');

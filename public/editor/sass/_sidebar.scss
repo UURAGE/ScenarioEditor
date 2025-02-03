@@ -337,8 +337,7 @@
 .sidebarRow {
   // These are not present in our current config
   ul.listType {
-    margin-block-start: $spacing-1;
-    margin-block-end: 0;
+    margin-block: $spacing-1 0;
   }
 
   li:first-of-type + div {

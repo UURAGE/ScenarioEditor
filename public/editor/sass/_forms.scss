@@ -2,6 +2,7 @@
 
 /* © DialogueTrainer */
 
+@use 'sass:color';
 @use 'base' as *;
 
 $inputSelectors: 'input:not([type=checkbox], [type=radio], [type=range]), textarea, select';
@@ -37,7 +38,7 @@ input:not([type=checkbox], [type=radio], [type=range]), textarea, .searchInput {
   }
 
   &:invalid {
-    background-color: lighten($col-negative, 50%);
+    background-color: color.adjust($col-negative, $lightness: 50%);
     border-color: $col-negative;
   }
 }

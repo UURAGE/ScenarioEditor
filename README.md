@@ -31,13 +31,12 @@ The purpose of the NPM package is to manage development dependencies. We use tec
 Install [Node.js](https://nodejs.org/) and execute the following commands to install the development dependencies:
 
 ```
-npm install -g gulp-cli
 npm install
 ```
 
 #### Command-line usage
 
-To build, run `gulp build`. To build and watch for file changes, run `gulp`.
+To build, run `npm run gulp build`. To build and watch for file changes, run `npm run gulp`.
 
 #### Visual Studio Code
 
@@ -49,7 +48,7 @@ The Scenario Editor uses a collection of [Sass](http://sass-lang.com) files for 
 
 #### Using Node.js
 
-See "NPM package" above. Run `gulp sass` to compile once.
+See "NPM package" above. Run `npm run gulp sass` to compile once.
 
 #### Using Sass Compiler
 
@@ -57,4 +56,4 @@ When compiling using the [standard Sass compiler](http://sass-lang.com/install),
 
 #### Live-reload
 
-You can live-reload the changes to your stylesheets in your browser by running `gulp stream`, which uses Browsersync and uses `localhost` as the proxy hostname.
+You can live-reload the changes to your stylesheets in your browser by running `npm run gulp stream`, which uses Browsersync and uses `localhost` as the proxy hostname.

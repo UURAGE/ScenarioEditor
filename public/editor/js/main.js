@@ -110,7 +110,7 @@ let Main;
                 if (spaceDown && !isSelecting)
                 {
                     position = [e.clientX, e.clientY];
-                    difference = [ position[0] - lastPosition[0], position[1] - lastPosition[1] ];
+                    difference = [position[0] - lastPosition[0], position[1] - lastPosition[1]];
                     $(this).scrollLeft($(this).scrollLeft() - difference[0]);
                     $(this).scrollTop($(this).scrollTop() - difference[1]);
                     lastPosition = [e.clientX, e.clientY];
@@ -448,7 +448,7 @@ let Main;
     $(window).on('keydown', function(e)
     {
         if ($(document.activeElement).filter('input,textarea').length === 0 &&
-        Zoom.isZoomed() && !isSelecting)
+            Zoom.isZoomed() && !isSelecting)
         {
             if (e.which == 32 && !spaceDown)
             {
@@ -2810,8 +2810,8 @@ let Main;
                 {
                     const controlHtmlId = idPrefix + '-' + propertyItem.id;
                     const controlFirst = propertyItem.type.labelControlOrder === Types.labelControlOrders.singleLineContainerLabel ||
-                    propertyItem.type.labelControlOrder === Types.labelControlOrders.twoLineContainerLabel ||
-                    propertyItem.type.labelControlOrder === Types.labelControlOrders.singleCellContainerLabel;
+                        propertyItem.type.labelControlOrder === Types.labelControlOrders.twoLineContainerLabel ||
+                        propertyItem.type.labelControlOrder === Types.labelControlOrders.singleCellContainerLabel;
 
                     const propertyHeader = $('<label>', { text: propertyItem.name + (controlFirst ? '' : ':'), 'for': controlHtmlId });
                     const propertyData = $(propertyItem.type.labelControlOrder === 'singleCellContainerLabel' ? '<span>' : '<div>', {

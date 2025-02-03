@@ -42,7 +42,7 @@
   background-color: var(--t-bg-default);
 }
 #breadcrumbs.dark {
-  background-color: #3d4d65;
+  background-color: rgb(60.5625, 77.1875, 100.9375);
 }
 
 #sidebar.dark, #toolbar.dark, #tabDock.dark {
@@ -208,7 +208,7 @@ body #canvas, body .treeDiv {
   color: inherit;
 }
 .alert.warning {
-  color: #974908;
+  color: rgb(151.3373493976, 72.7951807229, 7.6626506024);
   background-color: rgba(243, 120, 18, 0.5);
   border-color: #F37812;
 }
@@ -392,7 +392,7 @@ input:not([type=checkbox], [type=radio], [type=range]):focus-visible, textarea:f
   border-color: #94A3B8;
 }
 input:not([type=checkbox], [type=radio], [type=range]):invalid, textarea:invalid, .searchInput:invalid {
-  background-color: #fceaeb;
+  background-color: rgb(252.4025974026, 233.5974025974, 235.3636363636);
   border-color: #CE192A;
 }
 
@@ -785,7 +785,7 @@ dialog .enumeration-values-container .infoIcon {
   gap: 8px;
 }
 .tabs li.selected a {
-  background-color: #dbe3ed;
+  background-color: rgb(219.2772727273, 226.6681818182, 236.5227272727);
 }
 .tabs li a {
   display: flex;
@@ -805,7 +805,7 @@ dialog .enumeration-values-container .infoIcon {
 
 .tabsContent {
   padding: 8px;
-  background-color: #dbe3ed;
+  background-color: rgb(219.2772727273, 226.6681818182, 236.5227272727);
   border-radius: 8px;
 }
 .tabsContent:has(.skeleton) {
@@ -904,7 +904,7 @@ dialog .enumeration-values-container .infoIcon {
   background-color: #3892FF;
 }
 .progressbar progress:not([value]) {
-  background: repeating-linear-gradient(135deg, #3892FF, #3892FF 5px, #7fb9ff 5px, #7fb9ff 10px, #7fb9ff 15px, #3892FF 15px, #3892FF 20px);
+  background: repeating-linear-gradient(135deg, #3892FF, #3892FF 5px, rgb(127.4, 185.1085427136, 255) 5px, rgb(127.4, 185.1085427136, 255) 10px, rgb(127.4, 185.1085427136, 255) 15px, #3892FF 15px, #3892FF 20px);
   background-size: 29px 100%;
   animation: slide 1s infinite linear;
 }
@@ -1074,10 +1074,10 @@ a.clickable {
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1), 1px 1px 2px rgba(0, 0, 0, 0.05);
 }
 #dragBox.add {
-  background-color: #ca505c;
+  background-color: rgb(201.8246753247, 80.1753246753, 91.6009542943);
 }
 #dragBox.error {
-  background-color: #ca505c;
+  background-color: rgb(201.8246753247, 80.1753246753, 91.6009542943);
 }
 
 .attachment-container {
@@ -1117,7 +1117,7 @@ textarea:focus + * + .attachment-container, input:focus + * + .attachment-contai
           user-select: text;
 }
 .tippy-box a[href] {
-  color: #b8d8ff;
+  color: rgb(183.5, 215.8366834171, 255);
 }
 
 .tippy-box[data-theme~=markdown] code {
@@ -1400,7 +1400,7 @@ input[type=text].search:focus {
   transition: 0.5s background ease-out;
 }
 #logo:hover {
-  background: #52a0ff;
+  background: rgb(81.5, 159.9673366834, 255);
   transition: 0.1s background ease-in-out;
 }
 #logo img {
@@ -1576,7 +1576,7 @@ input[type=text].search:focus {
   background-color: #3892FF;
 }
 #toolbar .dropdown button#scenarioButton {
-  background-color: #0071fa;
+  background-color: rgb(0, 112.9748743719, 249.8);
 }
 #toolbar .dropdown .dropdownItems {
   position: absolute;
@@ -2024,8 +2024,7 @@ input[type=text].search:focus {
 }
 
 .sidebarRow ul.listType {
-  margin-block-start: 4px;
-  margin-block-end: 0;
+  margin-block: 4px 0;
 }
 .sidebarRow li:first-of-type + div {
   display: block;
@@ -2284,7 +2283,7 @@ input[type=text].search:focus {
 /* © DialogueTrainer */
 /* © DialogueTrainer */
 #validationReport .level-error a {
-  color: #e94a59;
+  color: rgb(233.0844155844, 74.4155844156, 89.3181818182);
   background-color: rgba(206, 25, 42, 0.1);
   border-color: rgba(206, 25, 42, 0.4);
 }
@@ -2296,7 +2295,7 @@ input[type=text].search:focus {
   background-color: #CE192A;
 }
 #validationReport .level-warning a {
-  color: #f7a15b;
+  color: rgb(246.686746988, 161.4759036145, 90.813253012);
   background-color: rgba(243, 120, 18, 0.1);
   border-color: rgba(243, 120, 18, 0.4);
 }
@@ -2308,7 +2307,7 @@ input[type=text].search:focus {
   background-color: #F37812;
 }
 #validationReport .level-info a {
-  color: #0dafff;
+  color: rgb(12.5, 175.0130890052, 255);
   background-color: rgba(0, 128, 191, 0.1);
   border-color: rgba(0, 128, 191, 0.4);
 }
@@ -2632,7 +2631,7 @@ input[type=text].search:focus {
 .candidateForDeletion {
   position: relative;
   overflow: hidden;
-  background: repeating-linear-gradient(45deg, #fde7d4, #fde7d4 5px, #fdecde 5px, #fdecde 10px);
+  background: repeating-linear-gradient(45deg, rgb(252.8313253012, 230.6024096386, 212.1686746988), rgb(252.8313253012, 230.6024096386, 212.1686746988) 5px, rgb(253.3228915663, 236.1325301205, 221.8771084337) 5px, rgb(253.3228915663, 236.1325301205, 221.8771084337) 10px);
 }
 .candidateForDeletion > *:not(.deleteDialog, .delete) {
   opacity: 0.25;
@@ -2679,7 +2678,7 @@ input[type=text].search:focus {
   background-color: #F37812;
 }
 .candidateForDeletion .deleteDialog button.highlight:enabled:hover {
-  background-color: #e06c0b;
+  background-color: rgb(224.1506024096, 107.8192771084, 11.3493975904);
 }
 
 .evaluation-expression {

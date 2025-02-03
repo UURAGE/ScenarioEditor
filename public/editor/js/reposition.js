@@ -466,8 +466,7 @@
                 width += currentNodeWidth;
             }
             rowWidth.push(width);
-            width += (virtualNodeNetwork[i].length - 1) *
-                horizontalMargin;
+            width += (virtualNodeNetwork[i].length - 1) * horizontalMargin;
             if (maximumMinimalWidth < width)
             {
                 maximumMinimalWidth = width;
@@ -485,8 +484,7 @@
             let marginForThisRow;
             if (widthLeft !== 0)
             {
-                widthLeft += (virtualNodeNetwork[k].length - 1) *
-                    horizontalMargin;
+                widthLeft += (virtualNodeNetwork[k].length - 1) * horizontalMargin;
                 marginForThisRow = widthLeft / virtualNodeNetwork[k].length;
                 // We also add some space at the left and at the right of the row.
                 currentXOffset += marginForThisRow / 2;

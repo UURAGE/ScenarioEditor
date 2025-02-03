@@ -2,6 +2,7 @@
 
 /* © DialogueTrainer */
 
+@use 'sass:color';
 @use 'sass:math';
 @use 'base' as *;
 
@@ -40,7 +41,16 @@
 
     // Indeterminate progress
     &:not([value]) {
-      background: repeating-linear-gradient($angle, $col-foreground, $col-foreground .25 * $distance, lighten($col-foreground, 14%) .25 * $distance, lighten($col-foreground, 14%) .5 * $distance, lighten($col-foreground, 14%) .75 * $distance, $col-foreground .75 * $distance, $col-foreground $distance);
+      background: repeating-linear-gradient(
+        $angle,
+        $col-foreground,
+        $col-foreground .25 * $distance,
+        color.adjust($col-foreground, $lightness: 14%) .25 * $distance,
+        color.adjust($col-foreground, $lightness: 14%) .5 * $distance,
+        color.adjust($col-foreground, $lightness: 14%) .75 * $distance,
+        $col-foreground .75 * $distance,
+        $col-foreground $distance
+      );
       background-size: math.ceil(math.div($distance, math.sin($angle))) 100%;
       animation: slide 1s infinite linear;
 

@@ -2,35 +2,37 @@
   "name": "uurage-scenario-editor",
   "private": true,
   "devDependencies": {
+    "@stylistic/eslint-plugin": "~3.0.1",
+    "@stylistic/stylelint-config": "~2.0.0",
+    "@stylistic/stylelint-plugin": "~3.1.1",
     "@types/browser-sync": "^2.29.0",
     "@types/gulp": "^4.0.17",
     "@types/gulp-autoprefixer": "0.0.37",
     "@types/gulp-sass": "^5.0.4",
-    "@typescript-eslint/eslint-plugin": "7.17.0",
-    "@typescript-eslint/parser": "7.17.0",
+    "@types/gulp-tap": "^1.0.5",
     "browser-sync": "^3.0.3",
-    "eslint": "8.57.1",
+    "eslint": "~9.19.0",
     "gulp": "^5.0.0",
-    "gulp-autoprefixer": "^8.0.0",
+    "gulp-autoprefixer": "^9.0.0",
     "gulp-eslint-new": "~2.4.0",
-    "gulp-sass": "^5.1.0",
-    "gulp-stylelint": "^13.0.0",
-    "sass-embedded": "1.77.5",
-    "stylelint": "^14.16.1",
-    "stylelint-config-standard-scss": "5.0.0",
-    "stylelint-order": "5.0.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
-  },
-  "overrides": {
-    "gulp-stylelint": {
-      "stylelint": ">= 13 < 15"
-    }
+    "gulp-sass": "~6.0.0",
+    "gulp-stylelint-esm": "~3.0.0",
+    "gulp-tap": "^2.0.0",
+    "sass-embedded": "~1.83.4",
+    "stylelint": "~16.12.0",
+    "stylelint-config-standard-scss": "~14.0.0",
+    "stylelint-order": "~6.0.4",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "~8.23.0"
   },
   "browserslist": [
     "defaults",
     "last 3 iOS major versions",
     "last 10 Chrome versions",
     "last 10 Edge versions"
-  ]
+  ],
+  "scripts": {
+    "gulp": "npx --node-options=\"--import tsx\" gulp -f gulpfile.mts"
+  }
 }

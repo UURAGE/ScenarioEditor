@@ -1,9 +1,21 @@
 {
-    "extends": "stylelint-config-standard-scss",
+    "extends": [
+        "stylelint-config-standard-scss",
+        "@stylistic/stylelint-config"
+    ],
     "plugins": [
+        "@stylistic/stylelint-plugin",
         "stylelint-order"
 	],
     "rules": {
+        "@stylistic/color-hex-case": "upper",
+        "@stylistic/declaration-colon-newline-after": null,
+        "@stylistic/declaration-colon-space-after": "always-single-line",
+        "@stylistic/max-line-length": null,
+        "@stylistic/number-leading-zero": "never",
+        "@stylistic/selector-list-comma-newline-after": "always-multi-line",
+        "@stylistic/selector-list-comma-space-after": "always-single-line",
+        "@stylistic/string-quotes": "single",
         "alpha-value-notation": null,
         "at-rule-empty-line-before": [
             "always",
@@ -20,18 +32,12 @@
                 ]
             }
         ],
-        "block-closing-brace-newline-after": "always",
         "color-function-notation": null,
-        "color-hex-case": "upper",
         "declaration-block-single-line-max-declarations": 3,
-        "declaration-colon-newline-after": null,
-        "declaration-colon-space-after": "always",
-        "no-descending-specificity": null,
         "function-url-no-scheme-relative": true,
         "keyframes-name-pattern": null,
-        "max-line-length": null,
+        "no-descending-specificity": null,
         "no-unknown-animations": true,
-        "number-leading-zero": "never",
         "number-max-precision": 3,
         "order/order": [
             "dollar-variables",
@@ -197,9 +203,10 @@
             "unicode-bidi",
             "speak"
         ],
-        "scss/at-mixin-pattern": null,
         "scss/at-if-closing-brace-newline-after": null,
         "scss/at-if-closing-brace-space-after": null,
+        "scss/at-import-partial-extension-disallowed-list": ["scss"],
+        "scss/at-mixin-pattern": null,
         "scss/at-rule-conditional-no-parentheses": null,
         "scss/dollar-variable-colon-space-after": "at-least-one-space",
         "scss/dollar-variable-empty-line-before": null,
@@ -211,10 +218,7 @@
         "selector-attribute-quotes": "never",
         "selector-class-pattern": null,
         "selector-id-pattern": null,
-        "selector-list-comma-newline-after": "always-multi-line",
-        "selector-list-comma-space-after": "always-single-line",
         "selector-not-notation": null,
-        "string-quotes": "single",
         "value-keyword-case": [
             "lower",
             {

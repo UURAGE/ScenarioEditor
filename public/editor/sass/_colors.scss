@@ -2,6 +2,8 @@
 
 /* © DialogueTrainer */
 
+@use 'sass:color';
+
 $slate-50: #F8FAFC;
 $slate-100: #F1F5F9;
 $slate-200: #E2E8F0;
@@ -31,11 +33,11 @@ $col-negative:                #CE192A !default;
 $col-info:                    #0080BF !default;
 
 $col-dragbox:                 #FAFAFA !default;
-$col-dragbox-error:           desaturate(lighten($col-negative, 10%), 25%) !default;
+$col-dragbox-error:           color.adjust($col-negative, $lightness: 10%, $saturation: -25%) !default;
 
-$col-ui-title-info:           lighten($col-info, 25%) !default;
-$col-ui-title-warning:        lighten($col-warning, 25%) !default;
-$col-ui-title-error:          lighten($col-negative, 25%) !default;
+$col-ui-title-info:           color.adjust($col-info, $lightness: 25%) !default;
+$col-ui-title-warning:        color.adjust($col-warning, $lightness: 25%) !default;
+$col-ui-title-error:          color.adjust($col-negative, $lightness: 25%) !default;
 
 $col-text-dark:               #222 !default;
 $col-text-light:              white !default;

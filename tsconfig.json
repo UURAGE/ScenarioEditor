@@ -1,5 +1,8 @@
 {
     "compilerOptions": {
+        "module": "nodenext",
+        "strictNullChecks": true,
+        "noUncheckedIndexedAccess": true,
         "esModuleInterop": true
     }
 }

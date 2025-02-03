@@ -34,36 +34,33 @@
 }
 .w .nodeContent {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   padding: 0.5em;
   background: transparent;
 }
 .w.ancestorOfSelected.computer, .w.descendantOfSelected.computer {
   color: #222;
-  background-color: #fad3d7;
+  background-color: rgb(249.6428571429, 210.8571428571, 214.5);
 }
 .w.ancestorOfSelected.player, .w.descendantOfSelected.player {
   color: #222;
-  background-color: #d3e5fa;
+  background-color: rgb(210.8571428571, 228.6428571429, 249.6428571429);
 }
 .w.ancestorOfSelected.situation, .w.descendantOfSelected.situation {
   color: #222;
-  background-color: #fef4ec;
+  background-color: rgb(254.0602409639, 244.4277108434, 236.4397590361);
 }
 .w.parentOfSelected.computer, .w.childOfSelected.computer {
   color: #222;
-  background-color: #f4a5ad;
+  background-color: rgb(244.1233766234, 165.3766233766, 172.7727272727);
 }
 .w.parentOfSelected.player, .w.childOfSelected.player {
   color: #222;
-  background-color: #a5c9f4;
+  background-color: rgb(165.3766233766, 201.487012987, 244.1233766234);
 }
 .w.parentOfSelected.situation, .w.childOfSelected.situation {
   color: #222;
-  background-color: #fcd9bc;
+  background-color: rgb(251.6024096386, 216.7771084337, 187.8975903614);
 }
 .w.ancestorOfSelected {
   border-bottom-width: 6px;
@@ -79,61 +76,58 @@
 }
 .w:hover.computer, .w.color-label.jtk-hover.computer, .w.jtk-source-hover.computer, .w.jtk-target-hover.computer {
   color: #222;
-  background-color: #f4a5ad;
+  background-color: rgb(244.1233766234, 165.3766233766, 172.7727272727);
 }
 .w:hover.player, .w.color-label.jtk-hover.player, .w.jtk-source-hover.player, .w.jtk-target-hover.player {
   color: #222;
-  background-color: #a5c9f4;
+  background-color: rgb(165.3766233766, 201.487012987, 244.1233766234);
 }
 .w:hover.situation, .w.color-label.jtk-hover.situation, .w.jtk-source-hover.situation, .w.jtk-target-hover.situation {
   color: #222;
-  background-color: #fcd9bc;
+  background-color: rgb(251.6024096386, 216.7771084337, 187.8975903614);
 }
 .w.ui-selecting.computer {
   color: #222;
-  background-color: #f4a5ad;
+  background-color: rgb(244.1233766234, 165.3766233766, 172.7727272727);
 }
 .w.ui-selecting.player {
   color: #222;
-  background-color: #a5c9f4;
+  background-color: rgb(165.3766233766, 201.487012987, 244.1233766234);
 }
 .w.ui-selecting.situation {
   color: #222;
-  background-color: #fcd9bc;
+  background-color: rgb(251.6024096386, 216.7771084337, 187.8975903614);
 }
 .w.selected, .w.ui-selected, .w.jtk-drag-selected {
   z-index: 5;
 }
 .w.selected.computer, .w.ui-selected.computer, .w.jtk-drag-selected.computer {
   color: white;
-  background-color: #e94a59;
+  background-color: rgb(233.0844155844, 74.4155844156, 89.3181818182);
 }
 .w.selected.player, .w.ui-selected.player, .w.jtk-drag-selected.player {
   color: white;
-  background-color: #4a93e9;
+  background-color: rgb(74.4155844156, 147.1753246753, 233.0844155844);
 }
 .w.selected.situation, .w.ui-selected.situation, .w.jtk-drag-selected.situation {
   color: #222;
-  background-color: #f7a15b;
+  background-color: rgb(246.686746988, 161.4759036145, 90.813253012);
 }
 .w.selected.ui-selecting.computer, .w.ui-selected.ui-selecting.computer, .w.jtk-drag-selected.ui-selecting.computer {
   color: white;
-  background-color: #e41d30;
+  background-color: rgb(227.5649350649, 28.9350649351, 47.5909090909);
 }
 .w.selected.ui-selecting.player, .w.ui-selected.ui-selecting.player, .w.jtk-drag-selected.ui-selecting.player {
   color: white;
-  background-color: #1d78e4;
+  background-color: rgb(28.9350649351, 120.0194805195, 227.5649350649);
 }
 .w.selected.ui-selecting.situation, .w.ui-selected.ui-selecting.situation, .w.jtk-drag-selected.ui-selecting.situation {
   color: #222;
-  background-color: #f4862a;
+  background-color: rgb(244.2289156627, 133.8253012048, 42.2710843373);
 }
 .w:not(.jtk-drag):not(.jtk-drag-active) > .ep {
   position: absolute;
-  top: -10px;
-  right: -10px;
-  bottom: -10px;
-  left: -10px;
+  inset: -10px;
   cursor: pointer;
   border-radius: 12px;
   transition: box-shadow 0.15s ease-in, color 0.15s ease-in;
@@ -151,10 +145,7 @@
 }
 .w:not(.jtk-drag):not(.jtk-drag-active) > .ep .anchor {
   position: absolute;
-  top: 50%;
-  right: auto;
-  bottom: 50%;
-  left: calc(100% - 10px);
+  inset: 50% auto 50% calc(100% - 10px);
   width: 4px;
   height: 4px;
   pointer-events: none;
@@ -165,10 +156,7 @@
 .w:not(.jtk-drag):not(.jtk-drag-active) > .ep .anchor::after {
   content: "";
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   display: block;
   background-color: black;
   border-radius: 50%;
@@ -205,7 +193,7 @@
   border-color: rgba(206, 25, 42, 0.35);
 }
 .w.highlight-no-effect > .ep::before {
-  border-color: rgba(121, 152, 190, 0.35);
+  border-color: rgba(120.675, 152.175, 190.325, 0.35);
 }
 .w.highlight-operator-addAssign > .ep::before, .w.highlight-operator-subtractAssign > .ep::before {
   border-style: dashed;

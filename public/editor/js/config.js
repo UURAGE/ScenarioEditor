@@ -371,20 +371,20 @@ let Config;
             return false;
         };
         return Config.container.parameters.sequence.some(checkHasType) ||
-        Config.container.characters.parameters.sequence.some(checkHasType) ||
-        Config.container.characters.sequence.some(function(character)
-        {
-            return character.parameters.sequence.some(checkHasType);
-        });
+            Config.container.characters.parameters.sequence.some(checkHasType) ||
+            Config.container.characters.sequence.some(function(character)
+            {
+                return character.parameters.sequence.some(checkHasType);
+            });
     }
 
     function isCharacterParameter(parameterId)
     {
         return parameterId in Config.container.characters.parameters.byId ||
-        Config.container.characters.sequence.some(function(character)
-        {
-            return parameterId in Config.container.characters.byId[character.id].parameters.byId;
-        });
+            Config.container.characters.sequence.some(function(character)
+            {
+                return parameterId in Config.container.characters.byId[character.id].parameters.byId;
+            });
     }
 
     function getNewDefaultParameterEffects(characterIdRef)
